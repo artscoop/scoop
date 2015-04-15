@@ -1,7 +1,7 @@
 # coding: utf-8
+from __future__ import absolute_import
 import sys
 from os.path import dirname, exists, join
-
 
 class Paths(object):
     """ Classe utilitaire pour les chemins spécifiques au projet """
@@ -9,8 +9,10 @@ class Paths(object):
     @staticmethod
     def get_root_dir(*sublist):
         """ Renvoyer le chemin du répertoire du projet contant manage.py """
-        current_dir = dirname(__file__)
+        import settings
+        current_dir = dirname(settings.__file__)
         while not exists(join(current_dir, 'manage.py')):
+            print current_dir
             current_dir = dirname(current_dir)
         sublist += ('',)
         for item in sublist:

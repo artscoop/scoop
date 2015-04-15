@@ -13,7 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from scoop.user.models.profile import BaseProfile
 
-
 _LOGGER = logging.getLogger(__name__)
 
 

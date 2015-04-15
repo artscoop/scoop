@@ -45,7 +45,6 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
 
-
 logger = logging.getLogger(__name__)
 
 

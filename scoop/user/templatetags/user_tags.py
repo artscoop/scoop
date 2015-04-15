@@ -12,7 +12,6 @@ from scoop.user.models import User, Visit
 from scoop.user.models.profile import BaseProfile
 from scoop.user.util.auth import check_permission
 
-
 register = template.Library()
 
 

@@ -28,8 +28,6 @@ from scoop.core.util.stream.fileutil import auto_open_file, open_zip_file
 from scoop.core.util.stream.urlutil import download_url_resource
 from scoop.location.models import City, CityName, Country, CountryName, Currency, Timezone
 
-
-
 # Codes Feature : http://www.geonames.org/export/codes.html
 # Fichiers Villes : http://download.geonames.org/export/dump/
 # Total des noms alternatifs : http://www.geonames.org/statistics/

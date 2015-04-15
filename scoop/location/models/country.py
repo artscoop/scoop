@@ -17,7 +17,6 @@ from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
 
-
 logger = logging.getLogger(__name__)
 
 

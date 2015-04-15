@@ -15,7 +15,6 @@ from scoop.core.util.data.dateutil import now as now_
 from scoop.core.util.data.dateutil import datetime_round_day, from_now, to_timestamp
 from scoop.core.util.shortcuts import addattr
 
-
 # Constantes
 DELTA = {'minute': 60, 'hour': 3600, 'day': 86400, 'week': 604800, 'year': 31536000}
 

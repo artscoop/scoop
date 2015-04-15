@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:42+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -64,13 +64,11 @@ msgid "Protected from the creation of new topics"
 msgstr "Protégé contre la création de nouveaux sujets"
 
 #: models/forum.py:75
-#| msgid "Locked"
 msgctxt "forum"
 msgid "Locked"
 msgstr "Verrouillé"
 
 #: models/forum.py:76
-#| msgid "Visible"
 msgctxt "forum"
 msgid "Visible"
 msgstr "Visible"
@@ -152,7 +150,6 @@ msgid "Title"
 msgstr "Titre"
 
 #: models/poll.py:39
-#| msgid "Published"
 msgctxt "poll"
 msgid "Published"
 msgstr "Publié"
@@ -170,7 +167,6 @@ msgid "Answers"
 msgstr "Réponses"
 
 #: models/poll.py:43
-#| msgid "Closed"
 msgctxt "poll"
 msgid "Closed"
 msgstr "Fermé"
@@ -208,7 +204,6 @@ msgid "Expiry"
 msgstr "Expiration"
 
 #: models/read.py:60
-#| msgid "Created"
 msgctxt "forum.read"
 msgid "Created"
 msgstr "Créée"
@@ -250,7 +245,6 @@ msgid "Type"
 msgstr "Type"
 
 #: models/sanction.py:37
-#| msgid "Revoked"
 msgctxt "sanction"
 msgid "Revoked"
 msgstr "Révoquée"

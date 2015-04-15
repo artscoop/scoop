@@ -13,7 +13,6 @@ from django.utils.text import slugify
 
 from scoop.user import UserConfig
 
-
 logger = logging.getLogger(__name__)
 
 

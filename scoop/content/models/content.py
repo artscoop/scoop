@@ -44,7 +44,6 @@ from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 
-
 logger = logging.getLogger(__name__)
 
 

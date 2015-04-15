@@ -24,7 +24,6 @@ from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -15,8 +15,8 @@ from scoop.core.templatetags.datetime_tags import is_date_new as tt_is_new
 from scoop.core.templatetags.html_tags import linebreaks_convert as tt_linebreaks
 from scoop.core.templatetags.html_tags import sanitize as tt_sanitize
 from scoop.core.templatetags.html_tags import tags_keep as tt_tags_keep
-from settings.django import root_dir
 from scoop.user.models.user import User
+from settings.django import root_dir
 
 
 @override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',

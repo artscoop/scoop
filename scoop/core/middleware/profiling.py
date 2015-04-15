@@ -15,7 +15,6 @@ from django.template.loader import render_to_string
 
 from scoop.core.util.django.templateutil import render_to_code
 
-
 logger = logging.getLogger(__name__)
 
 

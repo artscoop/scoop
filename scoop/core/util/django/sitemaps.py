@@ -10,7 +10,6 @@ from django.core.urlresolvers import reverse
 
 from scoop.core.util.signals import ping_failed
 
-
 # Liste de moteurs de Ping de sitemap ou RSS
 PING_ENGINES = [
     "http://rpc.pingomatic.com", "http://rpc.twingly.com", "http://api.feedster.com/ping",

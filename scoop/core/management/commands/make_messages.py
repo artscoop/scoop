@@ -15,12 +15,13 @@ class Command(MakeMessages):
     def handle(self, *args, **options):
         """ Exécuter la commande """
         project_path = Paths.get_root_dir()
+        print u"Update locales for project at {path}".format(path=project_path)
         parsable_paths = []
         for root, dirs, _ in os.walk(project_path, topdown=True):
             for directory in dirs:
                 new_directory = os.path.join(root, directory)
                 parsable_paths.append(new_directory)
-        for directory in settings.TEMPLATE_DIRS:
+        for directory in settings.TEMPLATES[0]['DIRS']:
             parsable_paths.append(directory)
         for subdir in parsable_paths:
             os.chdir(subdir)

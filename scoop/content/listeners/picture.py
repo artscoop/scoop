@@ -10,7 +10,6 @@ from scoop.content.models.picture import Picture
 from scoop.content.tasks.picture import generate_aliases
 from scoop.core.util.signals import record
 
-
 TARGET_MODELS_EXCLUDE_FROM_UPDATE = {}
 
 

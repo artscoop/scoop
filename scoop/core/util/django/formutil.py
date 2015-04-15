@@ -13,7 +13,6 @@ from django.views.decorators.http import require_POST
 
 from scoop.core.templatetags.text_tags import humanize_join
 
-
 # Choix Oui/Non et Tout
 CHOICES_NULLBOOLEAN = (('', _(u"All")), (False, _(u"No")), (True, _(u"Yes")))
 

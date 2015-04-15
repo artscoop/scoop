@@ -8,7 +8,6 @@ from django.utils.importlib import import_module
 
 from scoop.user.models import Visit
 
-
 User = get_user_model()
 
 

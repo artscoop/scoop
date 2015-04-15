@@ -59,7 +59,8 @@ class OnlineFilter(SimpleListFilter):
 
     def queryset(self, request, queryset):
         """ Renvoyer les utilisateurs correspondant aux valeurs du filtre """
-        from scoop.user.models import User, BaseProfile
+        from scoop.user.models import User
+        from scoop.user.models.profile import BaseProfile
         # Renvoyer les en-ligne ou hors-ligne
         if issubclass(queryset.model, User):
             if self.value() == 'yes':
@@ -168,7 +169,7 @@ class InitialFilter(FirstLetterFilter):
 
     def queryset(self, request, queryset):
         """ Renvoyer les profils correspondant aux valeurs du filtre """
-        from scoop.user.models import BaseProfile
+        from scoop.user.models.profile import BaseProfile
         # Renvoyer les profils ou les utilisateurs concernés
         value = self.value()
         field_name = 'user__username' if issubclass(queryset.model, BaseProfile) else 'username'

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2013-11-04 23:47+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -55,7 +55,7 @@ msgstr "Je participerai peut-être"
 msgid "I will participate"
 msgstr "Je participerai"
 
-#: models/event/attendance.py:46 models/event/events.py:94
+#: models/event/attendance.py:46 models/event/events.py:100
 msgid "Event"
 msgstr "Événement"
 
@@ -63,8 +63,8 @@ msgstr "Événement"
 msgid "Forecast"
 msgstr "Prévision"
 
-#: models/event/attendance.py:48 models/event/events.py:95
-#: models/group/invite.py:18
+#: models/event/attendance.py:48 models/event/events.py:101
+#: models/group/invite.py:34
 msgid "Status"
 msgstr "État"
 
@@ -86,7 +86,7 @@ msgstr "Public"
 
 #: models/event/eventcategory.py:45 models/event/eventcategory.py:78
 #: models/friend/friendgroup.py:19 models/group/group.py:37
-#: models/rating/rating.py:39 models/rating/rating.py:75
+#: models/rating/rating.py:39 models/rating/rating.py:74
 msgid "Name"
 msgstr "Nom"
 
@@ -95,13 +95,13 @@ msgid "(No name)"
 msgstr "(Sans nom)"
 
 #: models/event/eventcategory.py:53 models/event/eventcategory.py:79
-#: models/event/events.py:66 models/event/events.py:97
-#: models/group/group.py:40 models/rating/rating.py:48
-#: models/rating/rating.py:76
+#: models/event/events.py:66 models/event/events.py:103
+#: models/group/group.py:40 models/rating/rating.py:47
+#: models/rating/rating.py:75
 msgid "Description"
 msgstr "Description"
 
-#: models/event/eventcategory.py:59 models/rating/rating.py:54
+#: models/event/eventcategory.py:59 models/rating/rating.py:53
 msgid "(No description)"
 msgstr "(Pas de description)"
 
@@ -109,7 +109,7 @@ msgstr "(Pas de description)"
 msgid "event categories"
 msgstr "catégories d'événements"
 
-#: models/event/events.py:65 models/event/events.py:96
+#: models/event/events.py:65 models/event/events.py:102
 msgid "Title"
 msgstr "Titre"
 
@@ -117,43 +117,43 @@ msgstr "Titre"
 msgid "Categories"
 msgstr "Catégories"
 
-#: models/event/events.py:68 models/event/events.py:99
+#: models/event/events.py:68 models/event/events.py:105
 msgid "Address"
 msgstr "Adresse"
 
-#: models/event/events.py:69 models/event/events.py:100
+#: models/event/events.py:69 models/event/events.py:106
 msgid "Max attendants"
 msgstr "Participants max"
 
-#: models/event/events.py:82
+#: models/event/events.py:88
 msgid "event"
 msgstr "événement"
 
-#: models/event/events.py:83
+#: models/event/events.py:89
 msgid "events"
 msgstr "événements"
 
-#: models/event/events.py:91
+#: models/event/events.py:97
 msgid "Open"
 msgstr "Ouvert"
 
-#: models/event/events.py:91
+#: models/event/events.py:97
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/event/events.py:91
+#: models/event/events.py:97
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: models/event/events.py:98
+#: models/event/events.py:104
 msgid "Date"
 msgstr ""
 
-#: models/event/events.py:173
+#: models/event/events.py:179
 msgid "event occurrence"
 msgstr ""
 
-#: models/event/events.py:174
+#: models/event/events.py:180
 #, fuzzy
 #| msgid "event categories"
 msgid "event occurrences"
@@ -257,6 +257,10 @@ msgid "Invites only"
 msgstr "Invitations seulement"
 
 #: models/group/group.py:39
+msgid "Define if the group is not in the public listings"
+msgstr ""
+
+#: models/group/group.py:39
 msgid "Discrete group"
 msgstr "Groupe discret"
 
@@ -276,39 +280,39 @@ msgstr "Membres"
 msgid "Applications"
 msgstr "Candidatures"
 
-#: models/group/group.py:105
+#: models/group/group.py:109
 msgid "group"
 msgstr "groupe"
 
-#: models/group/group.py:106
+#: models/group/group.py:110
 msgid "groups"
 msgstr "groupes"
 
-#: models/group/invite.py:15
+#: models/group/invite.py:31
 msgid "Pending"
 msgstr "En attente"
 
-#: models/group/invite.py:15
+#: models/group/invite.py:31
 msgid "Accepted"
 msgstr "Accepté"
 
-#: models/group/invite.py:15
+#: models/group/invite.py:31
 msgid "Denied"
 msgstr "Refusé"
 
-#: models/group/invite.py:15
+#: models/group/invite.py:31
 msgid "Permanently denied"
 msgstr "Refusé définitivement"
 
-#: models/group/invite.py:17
+#: models/group/invite.py:33
 msgid "Target"
 msgstr "Cible"
 
-#: models/group/invite.py:52
+#: models/group/invite.py:61
 msgid "Group invite"
 msgstr "Invitation de groupe"
 
-#: models/group/invite.py:53
+#: models/group/invite.py:62
 msgid "Group invites"
 msgstr "groupes"
 
@@ -328,17 +332,17 @@ msgstr "statut textuel"
 msgid "user shouts"
 msgstr "statuts textuels"
 
-#: models/rating/like.py:67 models/rating/rating.py:104
+#: models/rating/like.py:67 models/rating/rating.py:103
 #: models/rating/score.py:45
 msgid "Author"
 msgstr "Auteur"
 
 #: models/rating/like.py:68 models/rating/rating.py:36
-#: models/rating/rating.py:107
+#: models/rating/rating.py:106
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/rating/like.py:69 models/rating/rating.py:108
+#: models/rating/like.py:69 models/rating/rating.py:107
 msgid "Object Id"
 msgstr "Id de l'objet"
 
@@ -360,42 +364,42 @@ msgstr "mentions j'aime"
 msgid "Slug"
 msgstr "Slug"
 
-#: models/rating/rating.py:63
+#: models/rating/rating.py:62
 #, python-brace-format
 msgid "{name}"
 msgstr ""
 
-#: models/rating/rating.py:67
+#: models/rating/rating.py:66
 msgid "rating axis"
 msgstr "axe de notation"
 
-#: models/rating/rating.py:68
+#: models/rating/rating.py:67
 msgid "rating axes"
 msgstr "axes de notation"
 
-#: models/rating/rating.py:101 models/rating/score.py:43
+#: models/rating/rating.py:100 models/rating/score.py:43
 msgid "General"
 msgstr "Général"
 
-#: models/rating/rating.py:103 models/rating/score.py:47
+#: models/rating/rating.py:102 models/rating/score.py:47
 msgid "Axis"
 msgstr "Axe"
 
-#: models/rating/rating.py:105
+#: models/rating/rating.py:104
 msgid "Rating"
 msgstr "Note"
 
-#: models/rating/rating.py:115
+#: models/rating/rating.py:114
 #, fuzzy, python-brace-format
 #| msgid "%(user)s gave %(item)s %(rating).03f points"
 msgid "{user} gave {item} {rating:.03f} points"
 msgstr "%(user)s a donné %(rating).03f points à %(item)s"
 
-#: models/rating/rating.py:125
+#: models/rating/rating.py:124
 msgid "rating"
 msgstr "note"
 
-#: models/rating/rating.py:126
+#: models/rating/rating.py:125
 msgid "ratings"
 msgstr "notes"
 

@@ -21,7 +21,6 @@ from scoop.user.models.user import User
 from scoop.user.util.auth import get_profile_model
 from scoop.user.util.signals import check_stale, user_demoted
 
-
 logger = logging.getLogger(__name__)
 
 

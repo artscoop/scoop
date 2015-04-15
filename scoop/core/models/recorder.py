@@ -21,7 +21,6 @@ from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.directory import Paths
 
-
 logger = logging.getLogger(__name__)
 
 

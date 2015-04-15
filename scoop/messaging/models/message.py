@@ -21,7 +21,6 @@ from scoop.core.util.shortcuts import addattr
 from scoop.messaging.util.signals import mailable_event, message_check_spam, message_pre_send, message_sent, message_set_spam
 from scoop.messaging.util.text import format_message
 
-
 __all__ = ['Message']
 
 

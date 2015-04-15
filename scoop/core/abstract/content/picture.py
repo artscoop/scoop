@@ -13,19 +13,19 @@ from scoop.core.abstract.core.moderation import ModeratedModel
 
 class PicturedBaseModel(models.Model):
     """ Objet étant lié à des images via ManyToMany ou Generic """
-
+    PICTURE_FILTERING = getattr(settings, 'GENERICRELATION_PICTURE_FILTER', {'moderated': True})
     # Getter
-    def get_pictures(self, exclude=None, filtering=settings.GENERICRELATION_PICTURE_FILTER, reverse=False):
+    def get_pictures(self, exclude=None, filtering=PICTURE_FILTERING, reverse=False):
         """ Renvoyer les images liées à l'objet """
         pictures = self.pictures.order_by('{sign}weight'.format(sign='-' if reverse else '')).filter(**filtering).exclude(**(exclude or {}))
         return pictures
 
-    def get_picture_count(self, exclude=None, filtering=settings.GENERICRELATION_PICTURE_FILTER):
+    def get_picture_count(self, exclude=None, filtering=PICTURE_FILTERING):
         """ Renvoyer le nombre d'images liées à l'objet """
         pictures = self.pictures.filter(**filtering).exclude(**(exclude or {}))
         return pictures.count()
 
-    def has_pictures(self, filtering=settings.GENERICRELATION_PICTURE_FILTER):
+    def has_pictures(self, filtering=PICTURE_FILTERING):
         """ Renvoyer si l'objet est lié à des images """
         return self.pictures.filter(**filtering).exists()
 

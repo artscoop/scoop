@@ -10,7 +10,6 @@ from django.utils.translation import ugettext
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 
-
 # Positions à traduire par défaut
 DEFAULT_NAMES = [_(u"Menu"), _(u"Heading"), _(u"Footer"), _(u"Js"), _(u"Extra head"), ]
 

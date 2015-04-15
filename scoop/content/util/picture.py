@@ -23,7 +23,6 @@ from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import check_file_extension, walk
 from scoop.core.util.stream.urlutil import download_url_resource, get_url_path, unquote_url
 
-
 logger = logging.getLogger(__name__)
 root_dir = Paths.get_root_dir
 
