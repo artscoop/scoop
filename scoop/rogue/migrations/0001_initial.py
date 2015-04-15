@@ -84,7 +84,7 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('name', models.CharField(max_length=96, verbose_name='Name')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'flagtype', to='scoop.rogue.FlagType')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'flagtype', to='rogue.FlagType')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -155,7 +155,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='flag',
             name='type',
-            field=models.ForeignKey(related_name='flags', verbose_name='Type', to='scoop.rogue.FlagType'),
+            field=models.ForeignKey(related_name='flags', verbose_name='Type', to='rogue.FlagType'),
         ),
         migrations.AlterUniqueTogether(
             name='flag',

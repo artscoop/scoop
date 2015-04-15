@@ -10,6 +10,11 @@ from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
 
 
+def get_default_expiry(self):
+    """ Renvoyer la date d'expiration par défaut """
+    return self.make_expiry(days=2, timestamp=False)
+
+
 class SanctionManager(models.Manager):
     """ Manager des sanctions """
 
@@ -24,10 +29,6 @@ class Sanction(DatetimeModel):
     # Constantes
     TYPES = [[0, _(u"Posting disabled")], [1, _(u"Reading disabled")]]
     DURATIONS = [[7200, _(u"2 hours")], [86400, _(u"1 day")], [86400 * 3, _(u"3 days")], [86400 * 7, _(u"1 week")]]
-
-    def get_default_expiry(self):
-        """ Renvoyer la date d'expiration par défaut """
-        return self.make_expiry(days=2, timestamp=False)
 
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='sanctions', verbose_name=_(u"User"))

@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 ('ascii', models.CharField(max_length=200, verbose_name='Name', db_index=True)),
                 ('preferred', models.BooleanField(default=False, verbose_name='Preferred')),
                 ('short', models.BooleanField(default=False, verbose_name='Short version')),
-                ('city', models.ForeignKey(related_name='alternates', verbose_name='City', to='scoop.location.City')),
+                ('city', models.ForeignKey(related_name='alternates', verbose_name='City', to='location.City')),
             ],
             options={
                 'abstract': False,
@@ -96,7 +96,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=200, verbose_name='Name')),
                 ('preferred', models.BooleanField(default=False, verbose_name='Preferred')),
                 ('short', models.BooleanField(default=False, verbose_name='Short version')),
-                ('country', models.ForeignKey(related_name='alternates', verbose_name='Country', to='scoop.location.Country')),
+                ('country', models.ForeignKey(related_name='alternates', verbose_name='Country', to='location.Country')),
             ],
             options={
                 'verbose_name': 'country name',
@@ -155,7 +155,7 @@ class Migration(migrations.Migration):
                 ('full', models.CharField(help_text='Full address, lines separated by semicolons', max_length=250, verbose_name='Full address')),
                 ('url', models.URLField(max_length=160, verbose_name='URL', blank=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('city', models.ForeignKey(related_name='venues', verbose_name='City', to='scoop.location.City')),
+                ('city', models.ForeignKey(related_name='venues', verbose_name='City', to='location.City')),
             ],
             options={
                 'verbose_name': 'venue',
@@ -168,7 +168,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('pictured', models.BooleanField(default=False, db_index=True, verbose_name='\U0001f58c')),
                 ('short_name', models.CharField(max_length=32, verbose_name='Short name', db_index=True)),
-                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', to='scoop.location.VenueType', null=True)),
+                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', to='location.VenueType', null=True)),
             ],
             options={
                 'verbose_name': 'venue type',
@@ -183,34 +183,34 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=48, verbose_name='Name')),
                 ('plural', models.CharField(default=b'__', max_length=48, verbose_name='Plural')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'venuetype', to='scoop.location.VenueType')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'venuetype', to='location.VenueType')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
         migrations.AddField(
             model_name='venue',
             name='type',
-            field=models.ForeignKey(verbose_name='Venue type', to='scoop.location.VenueType', null=True),
+            field=models.ForeignKey(verbose_name='Venue type', to='location.VenueType', null=True),
         ),
         migrations.AddField(
             model_name='country',
             name='currency',
-            field=models.ForeignKey(related_name='countries', verbose_name='Currency', blank=True, to='scoop.location.Currency', null=True),
+            field=models.ForeignKey(related_name='countries', verbose_name='Currency', blank=True, to='location.Currency', null=True),
         ),
         migrations.AddField(
             model_name='city',
             name='country',
-            field=models.ForeignKey(related_name='cities', verbose_name='Country', to='scoop.location.Country'),
+            field=models.ForeignKey(related_name='cities', verbose_name='Country', to='location.Country'),
         ),
         migrations.AddField(
             model_name='city',
             name='parent',
-            field=models.ForeignKey(related_name='children', verbose_name='Parent', to='scoop.location.City', null=True),
+            field=models.ForeignKey(related_name='children', verbose_name='Parent', to='location.City', null=True),
         ),
         migrations.AddField(
             model_name='city',
             name='timezone',
-            field=models.ForeignKey(related_name='cities', verbose_name='Timezone', to='scoop.location.Timezone', null=True, db_index=False),
+            field=models.ForeignKey(related_name='cities', verbose_name='Timezone', to='location.Timezone', null=True, db_index=False),
         ),
         migrations.AlterUniqueTogether(
             name='venue',

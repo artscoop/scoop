@@ -39,9 +39,9 @@ class Migration(migrations.Migration):
                 ('topic_count', models.IntegerField(default=0, verbose_name='Topics count')),
                 ('post_count', models.IntegerField(default=0, verbose_name='Posts count')),
                 ('root', models.BooleanField(default=False, help_text='Appears on the forum index', verbose_name='Root')),
-                ('forums', models.ManyToManyField(related_name='parents', verbose_name='Subforums', to='scoop.forum.Forum', blank=True)),
+                ('forums', models.ManyToManyField(related_name='parents', verbose_name='Subforums', to='forum.Forum', blank=True)),
                 ('moderators', models.ManyToManyField(help_text='Members who can moderate topics in this forum', related_name='moderated_forums', verbose_name='Moderators', to=settings.AUTH_USER_MODEL, blank=True)),
-                ('topics', models.ManyToManyField(related_name='forums', verbose_name='Topics', to='scoop.content.Content', blank=True)),
+                ('topics', models.ManyToManyField(related_name='forums', verbose_name='Topics', to='content.Content', blank=True)),
             ],
             options={
                 'verbose_name': 'forum',
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('slug', autoslug.fields.AutoSlugField(max_length=100, editable=False, blank=True)),
                 ('closed', models.BooleanField(default=False, db_index=True, verbose_name='Closed')),
                 ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
-                ('content', models.ForeignKey(related_name='polls', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Content', blank=True, to='scoop.content.Content', null=True)),
+                ('content', models.ForeignKey(related_name='polls', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Content', blank=True, to='content.Content', null=True)),
             ],
             options={
                 'verbose_name': 'poll',
@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('expiry', models.DateTimeField(default=scoop.forum.util.read.default_expiry, null=True, verbose_name='Expiry')),
                 ('created', models.DateTimeField(auto_now=True, verbose_name='Created')),
-                ('content', models.ForeignKey(related_name='reads', verbose_name='Thread', to='scoop.content.Content')),
+                ('content', models.ForeignKey(related_name='reads', verbose_name='Thread', to='content.Content')),
                 ('user', models.ForeignKey(related_name='content_reads+', verbose_name='User', to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('choice', models.SmallIntegerField(default=None, null=True, verbose_name='Choice')),
                 ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
-                ('poll', models.ForeignKey(related_name='votes', verbose_name='Poll', to='scoop.forum.Poll')),
+                ('poll', models.ForeignKey(related_name='votes', verbose_name='Poll', to='forum.Poll')),
             ],
             options={
                 'verbose_name': 'vote',

@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'mailtype', to='scoop.messaging.MailType')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'mailtype', to='messaging.MailType')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -176,7 +176,7 @@ class Migration(migrations.Migration):
                 ('expires', models.DateTimeField(null=True, verbose_name='Expires', blank=True)),
                 ('expiry_on_read', models.SmallIntegerField(default=365, help_text='Value in days', verbose_name='Expiry on read')),
                 ('author', models.ForeignKey(related_name='threads', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('labels', models.ManyToManyField(to='scoop.messaging.Label', verbose_name='Labels', blank=True)),
+                ('labels', models.ManyToManyField(to='messaging.Label', verbose_name='Labels', blank=True)),
                 ('updater', models.ForeignKey(related_name='threads_where_last', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Last speaker', to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -187,7 +187,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recipient',
             name='thread',
-            field=models.ForeignKey(related_name='recipients', verbose_name='Thread', to='scoop.messaging.Thread'),
+            field=models.ForeignKey(related_name='recipients', verbose_name='Thread', to='messaging.Thread'),
         ),
         migrations.AddField(
             model_name='recipient',
@@ -197,17 +197,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='negotiation',
             name='thread',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Thread', to='scoop.messaging.Thread', null=True),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Thread', to='messaging.Thread', null=True),
         ),
         migrations.AddField(
             model_name='message',
             name='thread',
-            field=models.ForeignKey(related_name='messages', verbose_name='Thread', to='scoop.messaging.Thread'),
+            field=models.ForeignKey(related_name='messages', verbose_name='Thread', to='messaging.Thread'),
         ),
         migrations.AddField(
             model_name='mailevent',
             name='type',
-            field=models.ForeignKey(related_name='events', verbose_name='Mail type', to='scoop.messaging.MailType'),
+            field=models.ForeignKey(related_name='events', verbose_name='Mail type', to='messaging.MailType'),
         ),
         migrations.AlterUniqueTogether(
             name='recipient',

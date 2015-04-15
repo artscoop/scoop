@@ -4,13 +4,11 @@ from __future__ import absolute_import
 from collections import Counter
 
 import Levenshtein
-from cacheops import cached_as
 from django.contrib.auth import get_user_model
 
 __all__ = ['get_user_email_domains', 'replace_user_email_domains', 'find_similar_email_domains']
 
 
-@cached_as(timeout=900)
 def get_user_email_domains(count=256):
     """
     Renvoyer tous les noms de domaine utilisés pour les emails de la base

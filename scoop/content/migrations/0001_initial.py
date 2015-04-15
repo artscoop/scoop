@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                 ('visible', models.BooleanField(default=True, verbose_name='Visible')),
                 ('author', models.ForeignKey(related_name='albums', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
                 ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
-                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', blank=True, to='scoop.content.Album', null=True)),
+                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', blank=True, to='content.Album', null=True)),
             ],
             options={
                 'verbose_name': 'picture album',
@@ -142,7 +142,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=48, verbose_name='Name')),
                 ('plural', models.CharField(default=b'__', max_length=48, verbose_name='Plural')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'category', to='scoop.content.Category')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'category', to='content.Category')),
             ],
             options={
                 'verbose_name': 'translation',
@@ -210,10 +210,10 @@ class Migration(migrations.Migration):
                 ('featured', models.BooleanField(default=False, help_text='Will appear in magazine editorial content', db_index=True, verbose_name='Featured')),
                 ('locked', models.BooleanField(default=False, db_index=True, verbose_name='Locked')),
                 ('authors', models.ManyToManyField(related_name='contents', verbose_name='Authors', to=settings.AUTH_USER_MODEL, blank=True)),
-                ('category', models.ForeignKey(related_name='contents', verbose_name='Category', to='scoop.content.Category')),
+                ('category', models.ForeignKey(related_name='contents', verbose_name='Category', to='content.Category')),
                 ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
                 ('ip', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='IP', to='access.IP', null=True)),
-                ('parent', models.ForeignKey(related_name='children', verbose_name='Follow up of', blank=True, to='scoop.content.Content', null=True)),
+                ('parent', models.ForeignKey(related_name='children', verbose_name='Follow up of', blank=True, to='content.Content', null=True)),
             ],
             options={
                 'ordering': ['-edited'],
@@ -297,8 +297,8 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='Description', blank=True)),
                 ('short_name', autoslug.fields.AutoSlugField(max_length=100, verbose_name='Short name', blank=True)),
                 ('active', models.BooleanField(default=True, verbose_name='Active')),
-                ('category', models.ForeignKey(verbose_name='Category', to='scoop.content.Category', help_text='Category if this tag is specific to one', null=True)),
-                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', blank=True, to='scoop.content.Tag', null=True)),
+                ('category', models.ForeignKey(verbose_name='Category', to='content.Category', help_text='Category if this tag is specific to one', null=True)),
+                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', blank=True, to='content.Tag', null=True)),
             ],
             options={
                 'ordering': ['name'],
@@ -309,22 +309,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='content',
             name='picture',
-            field=models.ForeignKey(related_name='contents', on_delete=django.db.models.deletion.SET_NULL, blank=True, to='scoop.content.Picture', help_text='Main picture', null=True, verbose_name='Picture'),
+            field=models.ForeignKey(related_name='contents', on_delete=django.db.models.deletion.SET_NULL, blank=True, to='content.Picture', help_text='Main picture', null=True, verbose_name='Picture'),
         ),
         migrations.AddField(
             model_name='content',
             name='tags',
-            field=models.ManyToManyField(related_name='contents', verbose_name='Classification tags', to='scoop.content.Tag', blank=True),
+            field=models.ManyToManyField(related_name='contents', verbose_name='Classification tags', to='content.Tag', blank=True),
         ),
         migrations.AddField(
             model_name='animation',
             name='picture',
-            field=models.ForeignKey(related_name='animations', verbose_name='Picture', blank=True, to='scoop.content.Picture', null=True),
+            field=models.ForeignKey(related_name='animations', verbose_name='Picture', blank=True, to='content.Picture', null=True),
         ),
         migrations.AddField(
             model_name='album',
             name='pictures',
-            field=models.ManyToManyField(to='scoop.content.Picture', verbose_name='Pictures', blank=True),
+            field=models.ManyToManyField(to='content.Picture', verbose_name='Pictures', blank=True),
         ),
         migrations.AlterUniqueTogether(
             name='tag',

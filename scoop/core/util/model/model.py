@@ -169,3 +169,12 @@ class SingleDeleteManager(models.Manager):
     def get_queryset(self):
         """ Renvoyer le queryset par défaut """
         return SingleDeleteQuerySet(self.model, using=self._db)
+
+
+class DisableMigrations(object):
+    """ Faux dictionnaire désactivant les migrations pour toutes les applications """
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return "notmigrations"

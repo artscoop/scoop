@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('text', models.TextField(verbose_name='Text')),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'excerpt', to='scoop.editorial.Excerpt')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'excerpt', to='editorial.Excerpt')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 ('anonymous', models.BooleanField(default=True, verbose_name='Anonymous access')),
                 ('authenticated', models.BooleanField(default=True, verbose_name='Authenticated access')),
                 ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
-                ('parent', models.ForeignKey(related_name='children', blank=True, to='scoop.editorial.Page', help_text='Parent page, used in lists and breadcrumbs', null=True, verbose_name='Parent')),
+                ('parent', models.ForeignKey(related_name='children', blank=True, to='editorial.Page', help_text='Parent page, used in lists and breadcrumbs', null=True, verbose_name='Parent')),
             ],
             options={
                 'verbose_name': 'page',
@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(unique=True, max_length=32, verbose_name='Name')),
                 ('path', models.CharField(unique=True, max_length=64, verbose_name='Path')),
                 ('full', models.BooleanField(default=False, help_text='Contains html, head and body tags.', verbose_name='Full page template')),
-                ('positions', models.ManyToManyField(to='scoop.editorial.Position', verbose_name='Positions', blank=True)),
+                ('positions', models.ManyToManyField(to='editorial.Position', verbose_name='Positions', blank=True)),
             ],
             options={
                 'verbose_name': 'template',
@@ -124,22 +124,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='page',
             name='template',
-            field=models.ForeignKey(related_name='pages', verbose_name='Template', to='scoop.editorial.Template'),
+            field=models.ForeignKey(related_name='pages', verbose_name='Template', to='editorial.Template'),
         ),
         migrations.AddField(
             model_name='configuration',
             name='page',
-            field=models.ForeignKey(related_name='configurations', verbose_name='Page', to='scoop.editorial.Page'),
+            field=models.ForeignKey(related_name='configurations', verbose_name='Page', to='editorial.Page'),
         ),
         migrations.AddField(
             model_name='configuration',
             name='position',
-            field=models.ForeignKey(related_name='configurations', verbose_name='Position', to='scoop.editorial.Position'),
+            field=models.ForeignKey(related_name='configurations', verbose_name='Position', to='editorial.Position'),
         ),
         migrations.AddField(
             model_name='configuration',
             name='template',
-            field=models.ForeignKey(related_name='configurations', verbose_name='Template', to='scoop.editorial.Template'),
+            field=models.ForeignKey(related_name='configurations', verbose_name='Template', to='editorial.Template'),
         ),
         migrations.AlterUniqueTogether(
             name='configuration',
