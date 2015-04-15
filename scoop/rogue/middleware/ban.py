@@ -18,7 +18,6 @@ from django.utils import timezone
 
 from scoop.core.util.shortcuts import get_fullname
 
-
 logger = logging.getLogger('django_misery')
 
 # Paramètres de Misery

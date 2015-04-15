@@ -11,7 +11,6 @@ from scoop.content.models.content import Content
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.icon import IconModel
 
-
 __all__ = ['Tag']
 
 

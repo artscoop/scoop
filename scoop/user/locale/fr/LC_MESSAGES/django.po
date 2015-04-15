@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:47+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -35,7 +35,7 @@ msgstr "Par défaut"
 msgid "Data"
 msgstr "Données"
 
-#: admin/filters.py:16 admin/user.py:67
+#: admin/filters.py:16 admin/user.py:69
 msgid "last online"
 msgstr "vu en ligne"
 
@@ -159,80 +159,80 @@ msgstr "première lettre du pseudonyme"
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin/profile.py:30 admin/profile.py:106 admin/user.py:30
+#: admin/profile.py:29 admin/profile.py:105 admin/user.py:31
 #: models/activation.py:73 models/forms.py:58 models/profile.py:52
 #: models/visit.py:70
 msgid "User"
 msgstr "Utilisateur"
 
-#: admin/profile.py:48 admin/user.py:39
+#: admin/profile.py:47 admin/user.py:41
 msgid "Deactivate selected users"
 msgstr "Désactiver les utilisateurs sélectionnés"
 
-#: admin/profile.py:52
+#: admin/profile.py:51
 #, python-format
 msgid "%(count)d users have been successfully deactivated."
 msgstr "%(count)d utilisateurs ont été correctement désactivés."
 
-#: admin/profile.py:54
+#: admin/profile.py:53
 msgid "Reset the selected users pictures"
 msgstr "Réinitialiser les portraits des utilisateurs sélectionnés"
 
-#: admin/profile.py:63
+#: admin/profile.py:62
 msgid "Shuffle profile"
 msgstr "Mélanger les données du profil"
 
-#: admin/profile.py:101
+#: admin/profile.py:100
 msgid "Id"
 msgstr "Id"
 
-#: admin/profile.py:111 forms/registration.py:26 models/user.py:183
+#: admin/profile.py:110 forms/registration.py:26 models/user.py:183
 msgid "Email"
 msgstr "Email"
 
-#: admin/profile.py:117 admin/user.py:92
+#: admin/profile.py:116 admin/user.py:94
 msgid "User picture"
 msgstr "Portrait utilisateur"
 
-#: admin/user.py:30
+#: admin/user.py:31
 msgid "Status"
 msgstr "État"
 
-#: admin/user.py:43
+#: admin/user.py:45
 #, python-brace-format
 msgid "{count} users have been successfully deactivated."
 msgstr "{count} utilisateurs ont été correctement désactivés."
 
-#: admin/user.py:45
+#: admin/user.py:47
 msgid "Disconnect selected users"
 msgstr "Déconnecter les utilisateurs sélectionnés"
 
-#: admin/user.py:51
+#: admin/user.py:53
 #, python-brace-format
 msgid "{count} users have been successfully logged out."
 msgstr "{count} utilisateurs ont été correctement déconnectés."
 
-#: admin/user.py:54
+#: admin/user.py:56
 msgid "date joined"
 msgstr "date d'inscription"
 
-#: admin/user.py:59
+#: admin/user.py:61
 msgid "last login"
 msgstr "dernière connexion"
 
-#: admin/user.py:72
+#: admin/user.py:74
 msgid "Never"
 msgstr "Jamais"
 
-#: admin/user.py:78
+#: admin/user.py:80
 msgid "Groups"
 msgstr "Groupes"
 
-#: admin/user.py:82
+#: admin/user.py:84
 msgid "(None)"
 msgstr "(Aucun(e))"
 
-#: admin/user.py:87
+#: admin/user.py:89
 msgid "Profile"
 msgstr "Profil"
 
@@ -343,8 +343,8 @@ msgstr "Image principale"
 msgid ""
 "Your picture may need to be reviewed by moderators before being visible."
 msgstr ""
-"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être"
-" visible."
+"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être "
+"visible."
 
 #: forms/profile.py:93 models/profile.py:54
 msgid "Gender"
@@ -424,11 +424,8 @@ msgid "Remember me"
 msgstr "Se souvenir de moi"
 
 #: listeners/activation.py:21
-#| msgid ""
-#| "Congratulations! Your account is activated, you can now login."
 msgid "Congratulations! Your account is activated, you are now logged in."
-msgstr ""
-"Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
+msgstr "Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
 
 #: listeners/activation.py:25
 msgid "This activation code is invalid."
@@ -450,7 +447,8 @@ msgstr "Votre session d'imitation a été correctement terminée."
 #: middleware/impersonation.py:57
 #, python-brace-format
 msgid "You are viewing {path} as {name}. <a href=\"?{exit}\">Quit</a>"
-msgstr "Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
+msgstr ""
+"Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
 
 #: middleware/impersonation.py:59
 #, python-brace-format
@@ -466,7 +464,6 @@ msgid "Answer"
 msgstr "Réponse"
 
 #: models/activation.py:78
-#| msgid "Active"
 msgctxt "activation"
 msgid "Active"
 msgstr "Active"
@@ -533,7 +530,6 @@ msgid "All"
 msgstr "Tous"
 
 #: models/profile.py:53
-#| msgid "Updated"
 msgctxt "profile"
 msgid "Updated"
 msgstr "Mis à jour"
@@ -547,13 +543,11 @@ msgid "Picture"
 msgstr "Image"
 
 #: models/profile.py:57
-#| msgid "Banned"
 msgctxt "profile"
 msgid "Banned"
 msgstr "Banni"
 
 #: models/profile.py:58
-#| msgid "Harmful"
 msgctxt "profile"
 msgid "Harmful"
 msgstr "Offensif"
@@ -595,19 +589,16 @@ msgid "Name"
 msgstr "Nom"
 
 #: models/user.py:182
-#| msgid "Bot"
 msgctxt "user"
 msgid "Bot"
 msgstr "Robot"
 
 #: models/user.py:184
-#| msgid "Active"
 msgctxt "user"
 msgid "Active"
 msgstr "Actif"
 
 #: models/user.py:185
-#| msgid "Deleted"
 msgctxt "user"
 msgid "Deleted"
 msgstr "Supprimé"
@@ -615,8 +606,7 @@ msgstr "Supprimé"
 #: models/user.py:186
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
-"Indique si l'utilisateur peut se connecter ou non à ce site "
-"d'administration."
+"Indique si l'utilisateur peut se connecter ou non à ce site d'administration."
 
 #: models/user.py:186
 msgctxt "user"
@@ -628,7 +618,6 @@ msgid "Date joined"
 msgstr "Date d'inscription"
 
 #: models/user.py:188
-#| msgid "Last online"
 msgctxt "user"
 msgid "Last online"
 msgstr "Vu en ligne"
@@ -844,7 +833,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 #~ msgstr "L'anniversaire d'un ami approche"
 
 #~ msgid "A member you follow has updated his publications"
-#~ msgstr "Un membre dont vous suivez l'actualité a mis à jour ses publications"
+#~ msgstr ""
+#~ "Un membre dont vous suivez l'actualité a mis à jour ses publications"
 
 #~ msgid "News have been published"
 #~ msgstr "Des nouveautés ont été publiées"
@@ -883,8 +873,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
 #~ msgid "Creating superuser with login=%(login)s and password=%(password)s"
 #~ msgstr ""
-#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de "
-#~ "passe=%(password)s"
+#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de passe="
+#~ "%(password)s"
 
 #~ msgid "None"
 #~ msgstr "Aucun"
@@ -1005,8 +995,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
 #~ msgid "Configuration settings have been created for user %(user)s (%(id)s)"
 #~ msgstr ""
-#~ "Les informations de configuration ont été créées pour l'utilisateur %(user)s"
-#~ " (%(id)s)"
+#~ "Les informations de configuration ont été créées pour l'utilisateur "
+#~ "%(user)s (%(id)s)"
 
 #~ msgid "logged in"
 #~ msgstr "s'est connecté(e)"
@@ -1230,11 +1220,11 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 #~ msgstr "Bienvenue !"
 
 #~ msgid ""
-#~ "We just sent you an email with a link to confirm you are the owner of your "
-#~ "email address."
+#~ "We just sent you an email with a link to confirm you are the owner of "
+#~ "your email address."
 #~ msgstr ""
-#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui confirmera "
-#~ "que vous êtes bien le détenteur de cette adresse email."
+#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui "
+#~ "confirmera que vous êtes bien le détenteur de cette adresse email."
 
 #~ msgid "%s's profile"
 #~ msgstr "Profil de %s"

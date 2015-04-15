@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:45+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,7 +132,6 @@ msgid "All"
 msgstr "Tout"
 
 #: models/blocklist.py:100
-#| msgid "Blocking"
 msgid "Blocker"
 msgstr "Bloqueur"
 
@@ -194,7 +193,6 @@ msgid "Administration notes"
 msgstr "Notes administratives"
 
 #: models/flag.py:112
-#| msgid "Automatic"
 msgctxt "flag"
 msgid "Automatic"
 msgstr "Automatique"
@@ -346,7 +344,6 @@ msgid "Always harmful"
 msgstr "Toujours dangereux"
 
 #: models/ipblock.py:205
-#| msgid "Active"
 msgctxt "ipblocking"
 msgid "Active"
 msgstr "Actif"
@@ -481,7 +478,6 @@ msgid "Reason"
 msgstr "Motif"
 
 #: models/mailblock.py:61
-#| msgid "Active"
 msgctxt "mailblocking"
 msgid "Active"
 msgstr "Actif"
@@ -496,7 +492,6 @@ msgid "mail blocking"
 msgstr "blocage de courrier"
 
 #: models/profanity.py:26
-#| msgid "Active"
 msgctxt "profanity.filter"
 msgid "Active"
 msgstr "Actif"
@@ -510,7 +505,6 @@ msgid "Regex"
 msgstr "Exp.rég."
 
 #: models/profanity.py:29
-#| msgid "Standalone"
 msgctxt "profanity.filter"
 msgid "Standalone"
 msgstr "Indépendant"

@@ -1,5 +1,6 @@
 # coding: utf-8
 from distutils.core import setup
+
 from setuptools import find_packages
 
 scoop_packages = find_packages('scoop')

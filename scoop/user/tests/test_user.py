@@ -10,10 +10,9 @@ from django.utils.importlib import import_module
 
 from scoop.core.util.data.typeutil import list_contains
 from scoop.messaging.models.mailevent import MailEvent
-from settings.django import root_dir
 from scoop.user.models.activation import Activation
 from scoop.user.templatetags.user_tags import distance_to
-
+from settings.django import root_dir
 
 User = get_user_model()
 

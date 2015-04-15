@@ -8,7 +8,6 @@ from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.location.models.city import City
 from scoop.location.models.country import Country
 
-
 register = template.Library()
 
 

@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from scoop.content.models.advertisement import Advertisement
 
-
 register = template.Library()
 
 

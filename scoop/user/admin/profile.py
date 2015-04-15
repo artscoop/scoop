@@ -9,12 +9,12 @@ from django.contrib.admin.options import StackedInline
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
+from dating.models.profile import Profile
 from scoop.content.admin.inline import PictureInlineAdmin
 from scoop.core.abstract.user.authored import UseredModelAdmin
 from scoop.core.util.data.dateutil import ages_dates, random_date
 from scoop.core.util.model.model import shuffle_model
 from scoop.core.util.shortcuts import addattr
-from dating.models.profile import Profile
 from scoop.user.admin.filters import AgeFilter, ImageFilter, InitialFilter, OnlineFilter
 from scoop.user.forms.profile import ProfileAdminForm, ProfileInlineAdminForm
 from scoop.user.models.profile import BaseProfile

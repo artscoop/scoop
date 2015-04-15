@@ -29,7 +29,6 @@ from scoop.core.util.stream.request import default_context
 from scoop.messaging.models.label import LabelableModel
 from scoop.messaging.util.signals import thread_created, thread_pre_create
 
-
 logger = logging.getLogger(__name__)
 
 __all__ = ['Thread', 'ThreadManager']

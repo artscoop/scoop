@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:41+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.6\n"
 
-#: __init__.py:10 admin/content.py:40
+#: __init__.py:8 admin/content.py:40
 msgid "Content"
 msgstr "Contenu"
 
@@ -168,7 +168,6 @@ msgid "The selected pictures' thumbnails have been cleaned."
 msgstr "Les miniatures des images sélectionnées ont été nettoyées."
 
 #: admin/picture.py:63
-#| msgid "Delete picture(s)"
 msgid "Delete picture(s) permanently"
 msgstr "Supprimer les images définitivement"
 
@@ -209,7 +208,6 @@ msgid "The selected pictures have been converted to basic sRGB."
 msgstr "Les images sélectionnées ont été converties au profil sRGB."
 
 #: admin/picture.py:99
-#| msgid "Optimize size of picture"
 msgid "Optimize file size"
 msgstr "Optimiser la taille du fichier"
 
@@ -235,7 +233,6 @@ msgstr "Les images sélectionnées ont été quantifiées."
 
 #: admin/picture.py:120
 #, python-brace-format
-#| msgid "Smart resize %(number)d percent"
 msgid "Smart resize {number} percent"
 msgstr "Redimensionnement adaptatif à {number} pour cent"
 
@@ -288,7 +285,6 @@ msgid "Rotate 90 degrees counter-clockwise"
 msgstr "Tourner à 90 degrés dans le sens contraire des aiguilles d'une montre"
 
 #: admin/picture.py:176
-#| msgid "Mirror around the y axis (horizontally)"
 msgid "Mirror along the y axis (horizontally)"
 msgstr "Miroir autour de l'axe y (horizontalement)"
 
@@ -297,7 +293,6 @@ msgid "The selected pictures have been mirrored."
 msgstr "Les images sélectionnées ont été retournées."
 
 #: admin/picture.py:183
-#| msgid "Mirror around the x axis (vertically)"
 msgid "Mirror along the x axis (vertically)"
 msgstr "Miroir autour de l'axe x (verticalement)"
 
@@ -318,7 +313,6 @@ msgid "Empty media folders have been deleted."
 msgstr "Les dossiers de médias vides ont été supprimés."
 
 #: admin/picture.py:203
-#| msgid "Clear orphaned images and thumbnails"
 msgid "Clear orphaned files and thumbnails"
 msgstr "Nettoyer les images et miniatures orphelines"
 
@@ -470,7 +464,6 @@ msgid "Parent"
 msgstr "Parent"
 
 #: models/album.py:59
-#| msgid "Visible"
 msgctxt "album"
 msgid "Visible"
 msgstr "Visible"
@@ -513,7 +506,6 @@ msgid "Loop"
 msgstr "Lire en boucle"
 
 #: models/animation.py:81 models/picture.py:182
-#| msgid "Deleted"
 msgctxt "picture"
 msgid "Deleted"
 msgstr "Supprimée"
@@ -578,7 +570,6 @@ msgid "Object Id"
 msgstr "Id de l'objet"
 
 #: models/attachment.py:89
-#| msgid "Orphaned"
 msgctxt "attachment"
 msgid "Orphaned"
 msgstr "Orpheline"
@@ -604,7 +595,6 @@ msgid "Short name"
 msgstr "Nom court"
 
 #: models/classification.py:31
-#| msgid "Active"
 msgctxt "tag"
 msgid "Active"
 msgstr "Active"
@@ -644,7 +634,6 @@ msgid "Updater"
 msgstr "Mis à jour par"
 
 #: models/comment.py:88
-#| msgid "Visible"
 msgctxt "comment"
 msgid "Visible"
 msgstr "Visible"
@@ -654,7 +643,6 @@ msgid "When visible, mark as removed"
 msgstr "Si visible, marquer explicitement comme masqué"
 
 #: models/comment.py:89
-#| msgid "Removed"
 msgctxt "comment"
 msgid "Removed"
 msgstr "Effacé"
@@ -665,7 +653,6 @@ msgstr "Anonyme"
 
 #: models/comment.py:150
 #, python-brace-format
-#| msgid "{name} says: \"{teaser}...\" "
 msgid "{name} says: \"{teaser}...\""
 msgstr "{name} dit : « {teaser}... »"
 
@@ -722,7 +709,6 @@ msgid "Classification tags"
 msgstr "Étiquettes de classement"
 
 #: models/content.py:262
-#| msgid "Deleted"
 msgctxt "content"
 msgid "Deleted"
 msgstr "Supprimé"
@@ -751,7 +737,6 @@ msgid "Unpublish when"
 msgstr "Dépublier le"
 
 #: models/content.py:269
-#| msgid "Published"
 msgctxt "content"
 msgid "Published"
 msgstr "Publié"
@@ -761,7 +746,6 @@ msgid "Will stay on top of lists"
 msgstr "Demeurera en tête des listes"
 
 #: models/content.py:270
-#| msgid "Sticky"
 msgctxt "content"
 msgid "Sticky"
 msgstr "Épinglé"
@@ -771,13 +755,11 @@ msgid "Will appear in magazine editorial content"
 msgstr "Apparaîtra dans le contenu éditorial du magazine"
 
 #: models/content.py:271
-#| msgid "Featured"
 msgctxt "content"
 msgid "Featured"
 msgstr "À la une"
 
 #: models/content.py:272
-#| msgid "Locked"
 msgctxt "content"
 msgid "Locked"
 msgstr "Verrouillé"
@@ -963,7 +945,6 @@ msgid "Code"
 msgstr "Code"
 
 #: models/picture.py:183
-#| msgid "Animated"
 msgctxt "picture"
 msgid "Animated"
 msgstr "Animée"
@@ -1255,8 +1236,8 @@ msgstr "Flux RSS"
 #~ msgstr "%(image)s"
 
 #~ msgid ""
-#~ "Similarity can only be calculated with model instances having title and body"
-#~ " attributes."
+#~ "Similarity can only be calculated with model instances having title and "
+#~ "body attributes."
 #~ msgstr ""
 #~ "La similarité ne peut être calculée qu'entre instances de Model ayant des "
 #~ "attributs title et body."

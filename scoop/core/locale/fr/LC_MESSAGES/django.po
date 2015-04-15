@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:42+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -372,7 +372,7 @@ msgstr "première lettre"
 msgid "random"
 msgstr "aléatoire"
 
-#: admin/filters.py:40 util/django/formutil.py:18
+#: admin/filters.py:40 util/django/formutil.py:17
 msgid "Yes"
 msgstr "Oui"
 
@@ -524,7 +524,7 @@ msgstr "Type de la cible"
 msgid "Target Id"
 msgstr "Id de la cible"
 
-#: models/recorder.py:109 util/django/admin.py:22
+#: models/recorder.py:109 util/django/admin.py:20
 msgid "Target"
 msgstr "Cible"
 
@@ -721,25 +721,25 @@ msgstr "%(join)s et %(rest)d %(unit)s"
 msgid "{join} and {last}"
 msgstr "{join} et {last}"
 
-#: util/django/admin.py:32
+#: util/django/admin.py:30
 msgctxt "target"
 msgid "None"
 msgstr "Aucune"
 
-#: util/django/admin.py:34
+#: util/django/admin.py:32
 msgid "Type"
 msgstr "Type"
 
-#: util/django/admin.py:39
+#: util/django/admin.py:37
 msgctxt "type"
 msgid "None"
 msgstr "Aucun"
 
-#: util/django/formutil.py:18
+#: util/django/formutil.py:17
 msgid "All"
 msgstr "Tout"
 
-#: util/django/formutil.py:18
+#: util/django/formutil.py:17
 msgid "No"
 msgstr "Non"
 
@@ -783,8 +783,6 @@ msgstr "Aucun fichier nommé %(file)s n'a été trouvé dans %(path)s"
 
 #: util/stream/urlutil.py:33
 #, python-format
-#| msgid ""
-#| "The resource at %(path)s was still unavailable after several attempts."
 msgid "The resource at %(path)s was unavailable."
 msgstr "La ressource à %(path)s est indisponible."
 
@@ -1006,8 +1004,8 @@ msgstr ""
 #~ "MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"
 #~ msgstr ""
 #~ "Aucun chemin par défaut pour les portraits utilisateurs. Définissez un "
-#~ "chemin de dossier relatif à MEDIA_URL dans "
-#~ "settings.USER_DEFAULT_PICTURE_PATH"
+#~ "chemin de dossier relatif à MEDIA_URL dans settings."
+#~ "USER_DEFAULT_PICTURE_PATH"
 
 #~ msgid "Updating locale messages for %(dir)s"
 #~ msgstr "Mise à jour des messages pour %(dir)s"
@@ -1064,7 +1062,8 @@ msgstr ""
 #~ msgstr "Utilisé"
 
 #~ msgid "%(viewname)r is not callable"
-#~ msgstr "%(viewname)r n'est pas un 'callable' et ne peut donc pas être exécuté"
+#~ msgstr ""
+#~ "%(viewname)r n'est pas un 'callable' et ne peut donc pas être exécuté"
 
 #~ msgid "Help text"
 #~ msgstr "Texte d'aide"

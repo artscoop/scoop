@@ -14,7 +14,6 @@ from scoop.location.models import Venue
 from scoop.location.models.currency import Currency
 from scoop.location.models.timezone import Timezone
 
-
 logger = logging.getLogger(__name__)
 
 __all__ = ['VenueAdmin', 'CurrencyAdmin', 'TimezoneAdmin']

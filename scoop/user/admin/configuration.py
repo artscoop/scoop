@@ -10,7 +10,6 @@ from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.shortcuts import addattr
 from scoop.user.models.forms import FormConfiguration
 
-
 __all__ = ['ConfigurationAdmin']
 
 

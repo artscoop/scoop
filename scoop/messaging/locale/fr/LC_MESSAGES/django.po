@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:44+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -160,13 +160,11 @@ msgid "Items"
 msgstr "Éléments"
 
 #: models/alert.py:77
-#| msgid "Read"
 msgctxt "alert"
 msgid "Read"
 msgstr "Lue"
 
 #: models/alert.py:78
-#| msgid "Read"
 msgctxt "alert.time"
 msgid "Read"
 msgstr "Lecture"
@@ -213,7 +211,6 @@ msgid "Mail type"
 msgstr "Type de courrier"
 
 #: models/mailevent.py:131
-#| msgid "Delivery time"
 msgid "Queue time"
 msgstr "Heure de remise"
 
@@ -226,7 +223,6 @@ msgid "Force sending"
 msgstr "Forcer l'envoi"
 
 #: models/mailevent.py:134
-#| msgid "Sent"
 msgctxt "mailevent"
 msgid "Sent"
 msgstr "Envoyé"
@@ -348,7 +344,6 @@ msgid "Spam level"
 msgstr "Niveau de spam"
 
 #: models/message.py:127
-#| msgid "Deleted"
 msgctxt "message"
 msgid "Deleted"
 msgstr "Supprimé"
@@ -390,13 +385,11 @@ msgid "Status"
 msgstr "Statut"
 
 #: models/negotiation.py:62
-#| msgid "Closed"
 msgctxt "negotiation"
 msgid "Closed"
 msgstr "Fermée"
 
 #: models/negotiation.py:63
-#| msgid "Updated"
 msgctxt "negotiation"
 msgid "Updated"
 msgstr "Mise à jour"
@@ -431,7 +424,6 @@ msgid "message quotas"
 msgstr "quotas de messages"
 
 #: models/recipient.py:103
-#| msgid "Is active"
 msgctxt "recipient"
 msgid "Is active"
 msgstr "Est actif"
@@ -450,7 +442,6 @@ msgid "Message count"
 msgstr "Nombre de messages"
 
 #: models/recipient.py:107
-#| msgid "Acknowledged"
 msgctxt "thread"
 msgid "Acknowledged"
 msgstr "Pris connaissance"
@@ -484,13 +475,11 @@ msgid "Topic"
 msgstr "Sujet"
 
 #: models/thread.py:277
-#| msgid "Was started"
 msgctxt "thread"
 msgid "Was started"
 msgstr "Démarré"
 
 #: models/thread.py:278
-#| msgid "Updated"
 msgctxt "thread"
 msgid "Updated"
 msgstr "Mis à jour"
@@ -500,7 +489,6 @@ msgid "Last speaker"
 msgstr "Dernier participant"
 
 #: models/thread.py:280
-#| msgid "Deleted"
 msgctxt "thread"
 msgid "Deleted"
 msgstr "Supprimé"
@@ -510,7 +498,6 @@ msgid "Recipient count"
 msgstr "Nombre de destinataires"
 
 #: models/thread.py:283
-#| msgid "Closed"
 msgctxt "thread"
 msgid "Closed"
 msgstr "Fermé"

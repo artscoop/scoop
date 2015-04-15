@@ -12,9 +12,9 @@ from scoop.messaging.models.negotiation import Negotiation
 from scoop.messaging.models.quota import Quota
 from scoop.messaging.models.thread import Thread
 from scoop.rogue.models.blocklist import Blocklist
-from settings.django import root_dir
 from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
+from settings.django import root_dir
 
 
 @override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',

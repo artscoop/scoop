@@ -15,7 +15,6 @@ from scoop.content.models.comment import Comment
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr
 
-
 __all__ = ['CommentAdmin']
 
 

@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"POT-Creation-Date: 2015-04-15 11:44+0000\n"
 "PO-Revision-Date: 2015-04-11 14:43+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -24,7 +24,6 @@ msgid "Location"
 msgstr "Lieu"
 
 #: admin/admin.py:34
-#| msgid "Fetch pictures for selected cities"
 msgid "Fetch pictures for selected venues"
 msgstr "Récupérer des images pour les lieux sélectionnés"
 
@@ -329,7 +328,6 @@ msgid "Safe"
 msgstr "Sûr"
 
 #: models/country.py:84
-#| msgid "Last update"
 msgctxt "country"
 msgid "Last update"
 msgstr "Dernière mise à jour"

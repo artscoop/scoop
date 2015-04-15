@@ -20,7 +20,6 @@ from magic import Magic
 
 from scoop.core.util.data.typeutil import make_iterable
 
-
 logger = logging.getLogger(__name__)
 
 

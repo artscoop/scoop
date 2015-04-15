@@ -16,7 +16,6 @@ from scoop.core.util.data.textutil import text_to_list_of_lists
 from scoop.messaging.util.signals import mailable_event
 from scoop.user.util.signals import user_activated
 
-
 logger = logging.getLogger(__name__)
 
 

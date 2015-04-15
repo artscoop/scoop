@@ -13,7 +13,6 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 
-
 DEFAULT_LIST = 'blacklist'
 
 

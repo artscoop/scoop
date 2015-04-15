@@ -25,7 +25,6 @@ from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
 from scoop.user.access.util.access import STATUS_CHOICES, reverse_lookup
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -11,7 +11,6 @@ from pytz import timezone as _tz
 
 from scoop.core.util.data.dateutil import is_new as dt_is_new
 
-
 register = template.Library()
 
 
