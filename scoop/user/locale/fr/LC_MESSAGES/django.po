@@ -1,0 +1,1249 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Steve Kossouho <steve.kossouho@gmail.com>, 2012.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"PO-Revision-Date: 2015-04-11 14:47+0009\n"
+"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"Language-Team: français <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translated-Using: django-rosetta 0.7.6\n"
+
+#: admin/activation.py:23
+msgid "Activate selected users"
+msgstr "Activer les utilisateurs sélectionnés"
+
+#: admin/configuration.py:28 models/forms.py:60
+msgid "Version"
+msgstr "Version"
+
+#: admin/configuration.py:31
+msgid "Default"
+msgstr "Par défaut"
+
+#: admin/configuration.py:33 models/forms.py:61
+msgid "Data"
+msgstr "Données"
+
+#: admin/filters.py:16 admin/user.py:67
+msgid "last online"
+msgstr "vu en ligne"
+
+#: admin/filters.py:22
+msgid "today"
+msgstr "aujourd'hui"
+
+#: admin/filters.py:23
+msgid "since yesterday"
+msgstr "depuis hier"
+
+#: admin/filters.py:24
+msgid "since three days"
+msgstr "depuis trois jours"
+
+#: admin/filters.py:25
+msgid "since five days"
+msgstr "depuis cinq jours"
+
+#: admin/filters.py:26
+msgid "since two weeks"
+msgstr "depuis deux semaines"
+
+#: admin/filters.py:27
+msgid "since one month"
+msgstr "depuis un mois"
+
+#: admin/filters.py:50 admin/filters.py:56
+msgid "online"
+msgstr "en ligne"
+
+#: admin/filters.py:57
+msgid "offline"
+msgstr "hors ligne"
+
+#: admin/filters.py:82
+msgid "age"
+msgstr "âge"
+
+#: admin/filters.py:88
+msgid "0 to 11"
+msgstr "0 à 11"
+
+#: admin/filters.py:89
+msgid "12 to 17"
+msgstr "12 à 17"
+
+#: admin/filters.py:90
+msgid "18 to 24"
+msgstr "18 à 24"
+
+#: admin/filters.py:91
+msgid "25 to 34"
+msgstr "25 à 34"
+
+#: admin/filters.py:92
+msgid "35 to 44"
+msgstr "35 à 44"
+
+#: admin/filters.py:93
+msgid "45 to 54"
+msgstr "45 à 54"
+
+#: admin/filters.py:94
+msgid "55 and greater"
+msgstr "55 et plus"
+
+#: admin/filters.py:108
+msgid "mail service"
+msgstr "service de courrier"
+
+#: admin/filters.py:114
+msgid "Microsoft Live Mail"
+msgstr "Microsoft Live Mail"
+
+#: admin/filters.py:115
+msgid "Yahoo! Mail"
+msgstr "Yahoo! Mail"
+
+#: admin/filters.py:116
+msgid "Google GMail"
+msgstr "Google GMail"
+
+#: admin/filters.py:117
+msgid "SFR"
+msgstr "SFR"
+
+#: admin/filters.py:118
+msgid "Free"
+msgstr "Free"
+
+#: admin/filters.py:119
+msgid "Yandex"
+msgstr "Yandex"
+
+#: admin/filters.py:120
+msgid "Orange"
+msgstr "Orange"
+
+#: admin/filters.py:121
+msgid "Bouygues"
+msgstr "Bouygues"
+
+#: admin/filters.py:146
+msgid "picture"
+msgstr "image"
+
+#: admin/filters.py:152
+msgid "Has pictures"
+msgstr "A des images"
+
+#: admin/filters.py:153
+msgid "Has no picture"
+msgstr "N'a pas d'image"
+
+#: admin/filters.py:166
+msgid "first username letter"
+msgstr "première lettre du pseudonyme"
+
+#: admin/group.py:25
+msgid "Permissions"
+msgstr "Permissions"
+
+#: admin/profile.py:30 admin/profile.py:106 admin/user.py:30
+#: models/activation.py:73 models/forms.py:58 models/profile.py:52
+#: models/visit.py:70
+msgid "User"
+msgstr "Utilisateur"
+
+#: admin/profile.py:48 admin/user.py:39
+msgid "Deactivate selected users"
+msgstr "Désactiver les utilisateurs sélectionnés"
+
+#: admin/profile.py:52
+#, python-format
+msgid "%(count)d users have been successfully deactivated."
+msgstr "%(count)d utilisateurs ont été correctement désactivés."
+
+#: admin/profile.py:54
+msgid "Reset the selected users pictures"
+msgstr "Réinitialiser les portraits des utilisateurs sélectionnés"
+
+#: admin/profile.py:63
+msgid "Shuffle profile"
+msgstr "Mélanger les données du profil"
+
+#: admin/profile.py:101
+msgid "Id"
+msgstr "Id"
+
+#: admin/profile.py:111 forms/registration.py:26 models/user.py:183
+msgid "Email"
+msgstr "Email"
+
+#: admin/profile.py:117 admin/user.py:92
+msgid "User picture"
+msgstr "Portrait utilisateur"
+
+#: admin/user.py:30
+msgid "Status"
+msgstr "État"
+
+#: admin/user.py:43
+#, python-brace-format
+msgid "{count} users have been successfully deactivated."
+msgstr "{count} utilisateurs ont été correctement désactivés."
+
+#: admin/user.py:45
+msgid "Disconnect selected users"
+msgstr "Déconnecter les utilisateurs sélectionnés"
+
+#: admin/user.py:51
+#, python-brace-format
+msgid "{count} users have been successfully logged out."
+msgstr "{count} utilisateurs ont été correctement déconnectés."
+
+#: admin/user.py:54
+msgid "date joined"
+msgstr "date d'inscription"
+
+#: admin/user.py:59
+msgid "last login"
+msgstr "dernière connexion"
+
+#: admin/user.py:72
+msgid "Never"
+msgstr "Jamais"
+
+#: admin/user.py:78
+msgid "Groups"
+msgstr "Groupes"
+
+#: admin/user.py:82
+msgid "(None)"
+msgstr "(Aucun(e))"
+
+#: admin/user.py:87
+msgid "Profile"
+msgstr "Profil"
+
+#: forms/auth.py:15
+msgid "User name or email"
+msgstr "Nom d'utilisateur ou email"
+
+#: forms/auth.py:15
+msgid "Identifier"
+msgstr "Identifiant"
+
+#: forms/auth.py:16 forms/user.py:73
+msgid "Password"
+msgstr "Mot de passe"
+
+#: forms/auth.py:31
+msgid "You must provide an username or email and a password."
+msgstr ""
+"Vous devez fournir un nom d'utilisateur ou email ainsi qu'un mot de passe."
+
+#: forms/configuration.py:19 forms/configuration.py:20
+msgid "15 minutes"
+msgstr "15 minutes"
+
+#: forms/configuration.py:19
+msgid "30 minutes"
+msgstr "30 minutes"
+
+#: forms/configuration.py:19
+msgid "3 hours"
+msgstr "3 heures"
+
+#: forms/configuration.py:19
+msgid "3 days"
+msgstr "3 jours"
+
+#: forms/configuration.py:19
+msgid "30 days"
+msgstr "30 jours"
+
+#: forms/configuration.py:20
+msgid "5 minutes"
+msgstr "5 minutes"
+
+#: forms/configuration.py:20
+msgid "1 hour"
+msgstr "1 heure"
+
+#: forms/configuration.py:20
+msgid "6 hours"
+msgstr "6 heures"
+
+#: forms/configuration.py:20
+msgid "2 days"
+msgstr "2 jours"
+
+#: forms/configuration.py:21
+msgid "Home page"
+msgstr "Page d'accueil"
+
+#: forms/configuration.py:21
+msgid "My profile"
+msgstr "Mon profil"
+
+#: forms/configuration.py:21
+msgid "My messages"
+msgstr "Mes messages"
+
+#: forms/configuration.py:24
+msgid "Stay connected for"
+msgstr "Rester connecté pendant"
+
+#: forms/configuration.py:25
+msgid "Destination upon login"
+msgstr "Destination après connexion"
+
+#: forms/configuration.py:26
+msgid "Receive emails"
+msgstr "Recevoir des emails"
+
+#: forms/configuration.py:27
+msgid "Max reception rate"
+msgstr "Fréquence maximum de réception"
+
+#: forms/configuration.py:29
+msgid "Receive when a user sends you a message"
+msgstr "Recevoir lorsqu'un utilisateur vous envoie un message"
+
+#: forms/configuration.py:30
+msgid "Receive when a staff member sends you a message"
+msgstr "Recevoir lorsqu'un membre du personnel vous envoie un message"
+
+#: forms/profile.py:34
+#, python-brace-format
+msgid "You must be {age:d} or older."
+msgstr "Vous devez avoir au moins {age:d} ans."
+
+#: forms/profile.py:75
+#, python-format
+msgid "%(input)s <span class='pull-right'>%(checkbox)s Remove picture</span>"
+msgstr "%(input)s <span class='pull-right'>%(checkbox)s Enlever</span>"
+
+#: forms/profile.py:75
+msgid "Main picture"
+msgstr "Image principale"
+
+#: forms/profile.py:82
+msgid ""
+"Your picture may need to be reviewed by moderators before being visible."
+msgstr ""
+"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être"
+" visible."
+
+#: forms/profile.py:93 models/profile.py:54
+msgid "Gender"
+msgstr "Sexe"
+
+#: forms/registration.py:25 forms/user.py:72
+msgid "User name"
+msgstr "Nom d'utilisateur"
+
+#: forms/registration.py:27
+msgid "Retype email"
+msgstr "Saisissez encore l'email"
+
+#: forms/registration.py:28
+msgid "Retype password"
+msgstr "Saisissez encore le mot de passe"
+
+#: forms/registration.py:35
+#, python-brace-format
+msgid "Your password should be at least {min} characters long"
+msgstr "Votre mot de passe doit faire au moins {min} caractères"
+
+#: forms/registration.py:42
+msgid "The password must be identical in both fields."
+msgstr "Le mot de passe doit être identique dans les deux champs."
+
+#: forms/registration.py:50
+msgid "This e-mail address is already in use."
+msgstr "L'adresse email est déjà utilisée."
+
+#: forms/registration.py:59
+msgid "The email addresses must be identical."
+msgstr "Les adresses email doivent être identiques."
+
+#: forms/registration.py:67
+#, python-brace-format
+msgid "Your first name must not exceed {max} characters"
+msgstr "Votre prénom doit faire {max} caractères au maximum"
+
+#: forms/registration.py:77
+msgid "This nickname is already in use."
+msgstr "Ce pseudonyme est déjà utilisé."
+
+#: forms/registration.py:81
+#, python-brace-format
+msgid "Your nickname should be between {min} and {max} characters long."
+msgstr "Votre pseudonyme doit faire entre {min} et {max} caractères."
+
+#: forms/registration.py:88
+msgid "You must accept our EULA to proceed."
+msgstr "Vous devez accepter nos CGU pour continuer."
+
+#: forms/registration.py:104 forms/registration.py:111
+#, python-brace-format
+msgid "By ticking this checkbox, I abide to the {website} license agreement"
+msgstr ""
+"En cochant cette case, j'accepte les conditions d'utilisation de {website}"
+
+#: forms/registration.py:105 forms/registration.py:112
+msgid "EULA"
+msgstr "CGU"
+
+#: forms/registration.py:118
+msgid "Original"
+msgstr "Original"
+
+#: forms/user.py:39
+msgid "You cannot edit this user."
+msgstr "Vous ne pouvez pas modifier cet utilisateur."
+
+#: forms/user.py:41
+msgid "Wrong password"
+msgstr "Mauvais mot de passe"
+
+#: forms/user.py:74
+msgid "Remember me"
+msgstr "Se souvenir de moi"
+
+#: listeners/activation.py:21
+#| msgid ""
+#| "Congratulations! Your account is activated, you can now login."
+msgid "Congratulations! Your account is activated, you are now logged in."
+msgstr ""
+"Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
+
+#: listeners/activation.py:25
+msgid "This activation code is invalid."
+msgstr "Ce code d'activation est invalide."
+
+#: listeners/user.py:56
+#, python-format
+msgid "Hello, %(name)s!"
+msgstr "Bonjour, %(name)s !"
+
+#: listeners/user.py:64
+msgid "Thanks for visiting."
+msgstr "Merci de votre visite."
+
+#: middleware/impersonation.py:51
+msgid "Your impersonation session has been properly shut down."
+msgstr "Votre session d'imitation a été correctement terminée."
+
+#: middleware/impersonation.py:57
+#, python-brace-format
+msgid "You are viewing {path} as {name}. <a href=\"?{exit}\">Quit</a>"
+msgstr "Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
+
+#: middleware/impersonation.py:59
+#, python-brace-format
+msgid "There is no active user with the username {name}."
+msgstr "Aucun utilisateur actif trouvé avec le nom {name}."
+
+#: models/activation.py:75
+msgid "Secret question"
+msgstr "Question secrète"
+
+#: models/activation.py:76
+msgid "Answer"
+msgstr "Réponse"
+
+#: models/activation.py:78
+#| msgid "Active"
+msgctxt "activation"
+msgid "Active"
+msgstr "Active"
+
+#: models/activation.py:79
+msgid "Updates"
+msgstr "Mises à jour"
+
+#: models/activation.py:80
+msgid "Mail send count"
+msgstr "Nombre d'emails envoyés"
+
+#: models/activation.py:81
+msgid "Admin details"
+msgstr "Détails admin"
+
+#: models/activation.py:126
+msgid "{}'s activation data"
+msgstr "Activation utilisateur pour {}"
+
+#: models/activation.py:139
+msgid "user activation"
+msgstr "activation utilisateur"
+
+#: models/activation.py:140
+msgid "user activations"
+msgstr "activations utilisateur"
+
+#: models/forms.py:59
+msgid "Form name"
+msgstr "Nom du formulaire"
+
+#: models/forms.py:60
+msgid "Variation name"
+msgstr "Variation"
+
+#: models/forms.py:62
+msgid "Description"
+msgstr "Description"
+
+#: models/forms.py:73
+msgid "user configuration"
+msgstr "configuration utilisateur"
+
+#: models/forms.py:74
+msgid "user configurations"
+msgstr "configurations utilisateurs"
+
+#: models/profile.py:46
+msgid "Male"
+msgstr "Homme"
+
+#: models/profile.py:46
+msgid "Female"
+msgstr "Femme"
+
+#: models/profile.py:46
+msgid "Other"
+msgstr "Autre"
+
+#: models/profile.py:48
+msgctxt "gender"
+msgid "All"
+msgstr "Tous"
+
+#: models/profile.py:53
+#| msgid "Updated"
+msgctxt "profile"
+msgid "Updated"
+msgstr "Mis à jour"
+
+#: models/profile.py:55
+msgid "Select the main profile picture"
+msgstr "Choisissez la photo principale du profil"
+
+#: models/profile.py:56
+msgid "Picture"
+msgstr "Image"
+
+#: models/profile.py:57
+#| msgid "Banned"
+msgctxt "profile"
+msgid "Banned"
+msgstr "Banni"
+
+#: models/profile.py:58
+#| msgid "Harmful"
+msgctxt "profile"
+msgid "Harmful"
+msgstr "Offensif"
+
+#: models/profile.py:59
+msgid "City"
+msgstr "Ville"
+
+#: models/profile.py:62
+msgid "New"
+msgstr "Nouveau"
+
+#: models/profile.py:101
+msgid ""
+"No default path for user pictures. Add a directory path relative to "
+"MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"
+msgstr ""
+"Pas de chemin par défaut pour les imamges utilisateur. Ajoutez un chemin "
+"relatif à MEDIA_URL dans settings.USER_DEFAULT_PICTURE_PATH"
+
+#: models/user.py:179
+msgid ""
+"Your name must start with a letter and can only contain letters, digits and "
+"underscores"
+msgstr ""
+"Votre nom doit commencer par une lettre et ne contenir que des lettres, des "
+"chiffres et des tirets bas (_)"
+
+#: models/user.py:180
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: models/user.py:181
+msgid "Your name can only contain letters"
+msgstr "Votre nom ne peut contenir que des lettres"
+
+#: models/user.py:181
+msgid "Name"
+msgstr "Nom"
+
+#: models/user.py:182
+#| msgid "Bot"
+msgctxt "user"
+msgid "Bot"
+msgstr "Robot"
+
+#: models/user.py:184
+#| msgid "Active"
+msgctxt "user"
+msgid "Active"
+msgstr "Actif"
+
+#: models/user.py:185
+#| msgid "Deleted"
+msgctxt "user"
+msgid "Deleted"
+msgstr "Supprimé"
+
+#: models/user.py:186
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+"Indique si l'utilisateur peut se connecter ou non à ce site "
+"d'administration."
+
+#: models/user.py:186
+msgctxt "user"
+msgid "Staff"
+msgstr "Équipe"
+
+#: models/user.py:187
+msgid "Date joined"
+msgstr "Date d'inscription"
+
+#: models/user.py:188
+#| msgid "Last online"
+msgctxt "user"
+msgid "Last online"
+msgstr "Vu en ligne"
+
+#: models/user.py:189
+msgid "Next possible mail for user"
+msgstr "Prochain courrier possible pour l'utilisateur"
+
+#: models/user.py:198
+msgid "Robot"
+msgstr "Robot"
+
+#: models/user.py:223
+msgid "The value passed has no login value"
+msgstr "La valeur passée ne contient pas d'information d'identification"
+
+#: models/user.py:231
+msgid "Bad username and/or password."
+msgstr "Mauvais nom d'utilisateur et/ou mot de passe."
+
+#: models/user.py:233
+msgid "This account is currently not active."
+msgstr "Ce compte est actuellement inactif."
+
+#: models/user.py:235
+msgid "This user cannot log in."
+msgstr "Cet utilisateur ne peut pas se connecter."
+
+#: models/user.py:242
+#: templates/user/display/user/templatetag/online-status.html:26
+msgid "Online"
+msgstr "En ligne"
+
+#: models/user.py:251
+#: templates/user/display/user/templatetag/online-status.html:24
+msgid "Away"
+msgstr "Absent(e)"
+
+#: models/user.py:256
+msgid "Online time"
+msgstr "En ligne depuis"
+
+#: models/user.py:262
+msgid "Time online"
+msgstr "en ligne"
+
+#: models/user.py:495
+msgid "user"
+msgstr "utilisateur"
+
+#: models/user.py:496 templates/user/dashboard/online.html:5
+msgid "users"
+msgstr "utilisateurs"
+
+#: models/visit.py:69
+msgid "Visitor"
+msgstr "Visiteur"
+
+#: models/visit.py:80
+msgid "profile visit"
+msgstr "visite de profil"
+
+#: models/visit.py:81
+msgid "profile visits"
+msgstr "visites de profils"
+
+#: templates/admin/user/configuration/edit_inline/stacked.html:65
+#: templates/admin/user/configuration/edit_inline/tabular.html:101
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr "Ajouter un autre %(verbose_name)s"
+
+#: templates/admin/user/configuration/edit_inline/stacked.html:68
+#: templates/admin/user/configuration/edit_inline/tabular.html:104
+msgid "Remove"
+msgstr "Supprimer"
+
+#: templates/admin/user/configuration/edit_inline/tabular.html:16
+msgid "Delete?"
+msgstr "Effacer ?"
+
+#: templates/user/dashboard/online.html:6
+msgid "add"
+msgstr "ajouter"
+
+#: templates/user/dashboard/online.html:7
+msgid "profiles"
+msgstr "profils"
+
+#: templates/user/dashboard/online.html:8
+msgid "groups"
+msgstr "groupes"
+
+#: templates/user/dashboard/online.html:16
+msgid "Active users"
+msgstr "Utilisateurs actifs"
+
+#: templates/user/dashboard/online.html:18
+#, python-format
+msgid "%(men)s man"
+msgid_plural "%(men)s men"
+msgstr[0] "%(men)s homme"
+msgstr[1] "%(men)s hommes"
+
+#: templates/user/dashboard/online.html:19
+#, python-format
+msgid "%(women)s woman"
+msgid_plural "%(women)s women"
+msgstr[0] "%(women)s femme"
+msgstr[1] "%(women)s femmes"
+
+#: templates/user/dashboard/online.html:22
+msgid "Online status"
+msgstr "Statut en ligne"
+
+#: templates/user/dashboard/online.html:23
+#, python-format
+msgid "%(count)s user is currently online"
+msgid_plural "%(count)s users are currently online"
+msgstr[0] "%(count)s utilisateur est actuellement en ligne"
+msgstr[1] "%(count)s utilisateurs sont actuellement en ligne"
+
+#: templates/user/dashboard/online.html:35
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/user/dashboard/online.html:36
+msgid "View"
+msgstr "View"
+
+#: templates/user/data/activate-question-choices.txt:2
+msgid "What is your mother's maiden name ?"
+msgstr "Quel est le nom de jeune fille de votre mère ?"
+
+#: templates/user/data/activate-question-choices.txt:3
+msgid "What was your first home telephone number ?"
+msgstr "Quel était votre premier numéro de téléphone fixe ?"
+
+#: templates/user/data/activate-question-choices.txt:4
+msgid "What was your first cell phone number ?"
+msgstr "Quel était votre premier numéro de téléphone portable ?"
+
+#: templates/user/data/activate-question-choices.txt:5
+msgid "What was the name of your first pet ?"
+msgstr "Quel était le nom de votre premier animal de compagnie ?"
+
+#: templates/user/data/activate-question-choices.txt:6
+msgid "What is your city of birth ?"
+msgstr "Quelle est votre ville de naissance ?"
+
+#: templates/user/data/activate-question-choices.txt:7
+msgid "What is the PIN code of your cell phone ?"
+msgstr "Quel est le code PIN de votre téléphone portable ?"
+
+#: templates/user/data/activate-question-choices.txt:8
+msgid "What is your client number for your energy bill ?"
+msgstr "Quel est votre numéro client sur votre facture d'électricité ?"
+
+#: templates/user/data/activate-question-choices.txt:9
+msgid "What are the 4 last digits on your credit card ?"
+msgstr "Quels sont les 4 derniers chiffres de votre carte de crédit ?"
+
+#: templates/user/data/activate-question-choices.txt:10
+msgid "What is your favorite movie ?"
+msgstr "Quelle est votre film préféré ?"
+
+#: templates/user/data/activate-question-choices.txt:11
+msgid "What is the worst movie to you ?"
+msgstr "Quel est le pire film au monde selon vous ?"
+
+#: templates/user/data/activate-question-choices.txt:12
+msgid "Your secret code with no question"
+msgstr "Votre code secret sans question"
+
+#: templates/user/data/activate-question-choices.txt:13
+msgid "A word that is not in the dictionary"
+msgstr "Mot n'appartenant pas au dictionnaire"
+
+#: templates/user/data/activate-question-choices.txt:13
+msgid "(Recommended)"
+msgstr "(Recommandé)"
+
+#: templates/user/display/user/templatetag/online-status.html:29
+msgid "Offline"
+msgstr "Hors ligne"
+
+#: util/auth.py:83
+msgid "You have no permission over this user."
+msgstr "Vous n'avez pas de permissions sur cet utilisateur."
+
+#~ msgid "Staff status"
+#~ msgstr "État équipe"
+
+#~ msgid "Fix every missing object"
+#~ msgstr "Réparer tous les objets manquants"
+
+#~ msgid "Received a message from a user"
+#~ msgstr "Reçu un message d'un utilisateur"
+
+#~ msgid "Received a message from a staff member"
+#~ msgstr "Reçu un message du personnel"
+
+#~ msgid "A user has begun following you"
+#~ msgstr "Un utilisateur suit votre actualité"
+
+#~ msgid "A user likes you and your content"
+#~ msgstr "Un utilisateur aime votre contenu"
+
+#~ msgid "A user has made a friendship request"
+#~ msgstr "Un utilisateur a demandé à être votre ami"
+
+#~ msgid "A friend's birthday is approaching"
+#~ msgstr "L'anniversaire d'un ami approche"
+
+#~ msgid "A member you follow has updated his publications"
+#~ msgstr "Un membre dont vous suivez l'actualité a mis à jour ses publications"
+
+#~ msgid "News have been published"
+#~ msgstr "Des nouveautés ont été publiées"
+
+#~ msgid "Various notifications"
+#~ msgstr "Notifications diverses"
+
+#~ msgid "Session duration"
+#~ msgstr "Durée de la session"
+
+#~ msgid "Interval between mails"
+#~ msgstr "Intervalle entre les mails"
+
+#~ msgid "Ghost mode"
+#~ msgstr "Mode fantôme"
+
+#~ msgid "User theme"
+#~ msgstr "Thème utilisateur"
+
+#~ msgid "Configuration for {}"
+#~ msgstr "Configuration pour {}"
+
+#~ msgid "user setup"
+#~ msgstr "configuration utilisateur"
+
+#~ msgid "user setups"
+#~ msgstr "configurations utilisateur"
+
+#~ msgid "The email addresses do not match."
+#~ msgstr "Les adresses email ne correspondent pas."
+
+#~ msgid "Cannot send activation info, mail type is not configured yet."
+#~ msgstr ""
+#~ "Impossible d'envoyer les informations d'activation : le type de courrier "
+#~ "associé n'a pas encore été configuré."
+
+#~ msgid "Creating superuser with login=%(login)s and password=%(password)s"
+#~ msgstr ""
+#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de "
+#~ "passe=%(password)s"
+
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#~ msgid "Display"
+#~ msgstr "Afficher"
+
+#~ msgid "%d IP adresses were successfully updated."
+#~ msgstr "%d adresses IP ont été correctement mises à jour."
+
+#~ msgid "Update selected IPs"
+#~ msgstr "Mettre à jour les IP sélectionnées"
+
+#~ msgid "Purge selected access log entries"
+#~ msgstr "Purger les entrées sélectionnées du journal d'accès"
+
+#~ msgid "Country"
+#~ msgstr "Pays"
+
+#~ msgid "ISP"
+#~ msgstr "FAI"
+
+#~ msgid "Page"
+#~ msgstr "Page"
+
+#~ msgid "Referrer"
+#~ msgstr "Référent"
+
+#~ msgid "%(who)s has visited %(what)s"
+#~ msgstr "%(who)s a visité %(what)s"
+
+#~ msgid "access"
+#~ msgstr "accès"
+
+#~ msgid "accesses"
+#~ msgstr "accès"
+
+#~ msgid "Decimal"
+#~ msgstr "Décimal"
+
+#~ msgid "String"
+#~ msgstr "Chaîne"
+
+#~ msgid "Reverse"
+#~ msgstr "Inversé"
+
+#~ msgid "Reverse status"
+#~ msgstr "État inversé"
+
+#~ msgid "Harm"
+#~ msgstr "Danger"
+
+#~ msgid "Blocked"
+#~ msgstr "Bloqué"
+
+#~ msgctxt "ip"
+#~ msgid "Updated"
+#~ msgstr "Mise à jour"
+
+#~ msgid "Short reverse"
+#~ msgstr "Inversé court"
+
+#~ msgid "Hexadecimal"
+#~ msgstr "Sexagésimal"
+
+#~ msgid "Icon"
+#~ msgstr "Icône"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Path"
+#~ msgstr "Chemin"
+
+#~ msgid "site page"
+#~ msgstr "page de site"
+
+#~ msgid "site pages"
+#~ msgstr "pages de site"
+
+#~ msgid "%(user)s@%(ip)s"
+#~ msgstr "%(user)s@%(ip)s"
+
+#~ msgid "user IP"
+#~ msgstr "IP utilisateur"
+
+#~ msgid "user IPs"
+#~ msgstr "IP utilisateur"
+
+#~ msgid "ips"
+#~ msgstr "ips"
+
+#~ msgid "Who"
+#~ msgstr "Qui"
+
+#~ msgid "Ok"
+#~ msgstr "Ok"
+
+#~ msgid "Timed out"
+#~ msgstr "A expiré"
+
+#~ msgid "Empty answer"
+#~ msgstr "Réponse vide"
+
+#~ msgid "Broken NS"
+#~ msgstr "Serveur de noms cassé"
+
+#~ msgid "Domain not found"
+#~ msgstr "Domaine introuvable"
+
+#~ msgid "A profile has been created for user %(user)s (%(id)s)"
+#~ msgstr "Un profil a été créé pour l'utilisateur %(user)s (%(id)s)"
+
+#~ msgid "Activation information has been created for user %(user)s (%(id)s)"
+#~ msgstr ""
+#~ "Les informations d'activation on été créées pour l'utilisateur %(user)s "
+#~ "(%(id)s)"
+
+#~ msgid "Configuration settings have been created for user %(user)s (%(id)s)"
+#~ msgstr ""
+#~ "Les informations de configuration ont été créées pour l'utilisateur %(user)s"
+#~ " (%(id)s)"
+
+#~ msgid "logged in"
+#~ msgstr "s'est connecté(e)"
+
+#~ msgid "logged out"
+#~ msgstr "s'est déconnecté(e)"
+
+#~ msgid "Can become stealth"
+#~ msgstr "Peut visiter en mode fantôme"
+
+#~ msgid "Can visit stealth"
+#~ msgstr "Peut visiter en mode fantôme"
+
+#~ msgid "Wrong activation code."
+#~ msgstr "Mauvais code d'activation."
+
+#~ msgid "Congratulations, you may now login with your personal credentials."
+#~ msgstr ""
+#~ "Félicitations, vous pouvez désormais vous connecter avec vos identifiants "
+#~ "personnels."
+
+#~ msgid "Activate user"
+#~ msgstr "Utilisateurs actifs"
+
+#~ msgid "Activation user"
+#~ msgstr "Utilisateur de l'activation"
+
+#~ msgid "Is online"
+#~ msgstr "En ligne"
+
+#~ msgid "Is away"
+#~ msgstr "Absent"
+
+#~ msgid "Hello!"
+#~ msgstr "Bonjour !"
+
+#~ msgid "Group"
+#~ msgstr "Groupes"
+
+#~ msgid "Expires"
+#~ msgstr "Expire"
+
+#~ msgid "Could not add an IP to the database: %(error)s"
+#~ msgstr "Impossible d'ajouter une IP à la base de données : %(error)s"
+
+#~ msgid "profile"
+#~ msgstr "profil"
+
+#~ msgid "Can edit Birthdate"
+#~ msgstr "Peut éditer la date de naissance"
+
+#~ msgid "Can edit Gender"
+#~ msgstr "Peut éditer le sexe"
+
+#~ msgid "Can edit another user"
+#~ msgstr "Peut éditer un autre utilisateur"
+
+#~ msgid "Register"
+#~ msgstr "S'inscrire"
+
+#~ msgid "Nickname"
+#~ msgstr "Pseudonyme"
+
+#~ msgid "Your email"
+#~ msgstr "Votre adresse email"
+
+#~ msgid "Fake picture"
+#~ msgstr "Fausse photo"
+
+#~ msgid "Harmful picture"
+#~ msgstr "Photo choquante"
+
+#~ msgid "Harmful profile"
+#~ msgstr "Profil offensant"
+
+#~ msgid "Bot profile"
+#~ msgstr "Profil automatique"
+
+#~ msgid "Mad flagger"
+#~ msgstr "Signaleur fou"
+
+#~ msgid "Empty account"
+#~ msgstr "Compte vide"
+
+#~ msgid "Doubt"
+#~ msgstr "Doute"
+
+#~ msgid "IP 1"
+#~ msgstr "IP 1"
+
+#~ msgid "IP 2"
+#~ msgstr "IP 2"
+
+#~ msgid "Single address"
+#~ msgstr "Adresse unique"
+
+#~ msgid "Address range"
+#~ msgstr "Plage d'adresses"
+
+#~ msgid "Partial host"
+#~ msgstr "Hôte partiel"
+
+#~ msgid "Partial host with exclusion"
+#~ msgstr "Hôte partiel avec exclusion"
+
+#~ msgid "ISP with host exclusion"
+#~ msgstr "FAI avec exclusion"
+
+#~ msgid "Country code"
+#~ msgstr "Code pays"
+
+#~ msgid "General"
+#~ msgstr "Général"
+
+#~ msgid "Proxy"
+#~ msgstr "Proxy"
+
+#~ msgid "Server"
+#~ msgstr "Serveur"
+
+#~ msgid "Tor network"
+#~ msgstr "Réseau Tor"
+
+#~ msgid "Anonymous network"
+#~ msgstr "Réseau anonyme"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Category"
+#~ msgstr "Catégorie"
+
+#~ msgid "Host name"
+#~ msgstr "Nom d'hôte"
+
+#~ msgid "Exclude host name"
+#~ msgstr "Exclure nom d'hôte"
+
+#~ msgid "IP count"
+#~ msgstr "Nombre d'IP"
+
+#~ msgid "Blocking of %(ip)s"
+#~ msgstr "Blocage de %(ip)s"
+
+#~ msgid "Blocking of IPs from %(ip1)s to %(ip2)s"
+#~ msgstr "Blocage des IP entre %(ip1)s et %(ip2)s"
+
+#~ msgid "Blocking of reverse %(reverse)s"
+#~ msgstr "Blocage du reverse %(reverse)s"
+
+#~ msgid "Blocking of reverse %(reverse)s without %(exclude)s"
+#~ msgstr "Blocage du reverse %(reverse)s, sauf %(exclude)s"
+
+#~ msgid "Blocking of ISP %(isp)s"
+#~ msgstr "Blocage du FAI %(isp)s"
+
+#~ msgid "Blocking of country with code %(code)s"
+#~ msgstr "Blocage du pays ayant le code %(code)s"
+
+#~ msgid "IP blocking"
+#~ msgstr "Blocage d'IP"
+
+#~ msgid "Email address"
+#~ msgstr "Adresse email"
+
+#~ msgid "Reason"
+#~ msgstr "Raison"
+
+#~ msgid "Blocking of email %(mail)s"
+#~ msgstr "Blocage de l'adresse électronique %(mail)s"
+
+#~ msgid "mail blocking"
+#~ msgstr "blocage d'email"
+
+#~ msgid "IP %(ip)s (%(reverse)s) is blocked"
+#~ msgstr "L'IP %(ip)s (%(reverse)s) a été bloquée"
+
+#~ msgid "%(total)s users"
+#~ msgstr "%(total)s utilisateurs"
+
+#~ msgid "%s's setup"
+#~ msgstr "Configuration de %s"
+
+#~ msgid "Welcome"
+#~ msgstr "Bienvenue"
+
+#~ msgid "Hour"
+#~ msgstr "Heure"
+
+#~ msgid "Login count"
+#~ msgstr "Nombre de connexions"
+
+#~ msgid "Logout count"
+#~ msgstr "Nombre de déconnexions"
+
+#~ msgid "User creation count"
+#~ msgstr "Nombre de comptes créés"
+
+#~ msgid "User deletion count"
+#~ msgstr "Nombre de comptes supprimés"
+
+#~ msgid "Statistics : %(hour)s"
+#~ msgstr "Statistiques : %(hour)s"
+
+#~ msgid "Users statistics"
+#~ msgstr "Statistiques utilisateur"
+
+#~ msgid "Your last name must not exceed %(max)d characters"
+#~ msgstr "Votre nom de famille doit faire %(max)d caractères au maximum"
+
+#~ msgid "%(first)s %(last)s"
+#~ msgstr "%(first)s %(last)s"
+
+#~ msgid "Receive newsletter"
+#~ msgstr "Recevoir la newsletter"
+
+#~ msgid "Result"
+#~ msgstr "Résultat"
+
+#~ msgid "Welcome!"
+#~ msgstr "Bienvenue !"
+
+#~ msgid ""
+#~ "We just sent you an email with a link to confirm you are the owner of your "
+#~ "email address."
+#~ msgstr ""
+#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui confirmera "
+#~ "que vous êtes bien le détenteur de cette adresse email."
+
+#~ msgid "%s's profile"
+#~ msgstr "Profil de %s"
+
+#~ msgid "N/D"
+#~ msgstr "N/D"
+
+#~ msgid "N/A"
+#~ msgstr "N/D"
+
+#~ msgid "Fixing"
+#~ msgstr "Remise en état"

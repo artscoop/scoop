@@ -1,0 +1,50 @@
+{% load i18n endless %}
+{% paginate 10 blogs %}
+<p class="dashboard-buttons text-right">
+	<span class="btn-group text-right" style="display: inline-block;">
+		<a class="btn btn-mini btn-primary" href="{% url 'admin:content_content_changelist' %}" title="{% trans 'contents' %}"><b class="icon-book"></b></a>
+		<a class="btn btn-mini btn-primary" href="{% url 'admin:content_content_add' %}" title="{% trans 'add' %}"><b class="icon-plus-sign"></b></a>
+		<a class="btn btn-mini" href="{% url 'admin:content_category_changelist' %}" title="{% trans 'content types' %}"><b class="icon-list"></b></a>
+	</span>
+</p>
+<div class="table-div">
+    <table class="table table-bordered table-condensed table-striped condensed-table">
+        <thead>
+        <tr>
+            <th>{% trans "Title" %}</th>
+            <th width="80">{% trans "Authors" %}</th>
+            <th width="1"><i class="icon-comments"></i></th>
+            <th width="80">{% trans "Date" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>
+                    <a href="{% url "admin:content_content_change" blog.id %}">{{ blog }}</a>
+                    {% if blog.sticky %}<u class="icon-pushpin"></u>{% endif %}
+                    {% if not blog.is_published %}<u class="icon-eye-close"></u>{% endif %}
+                    {% if not blog.is_commentable %}<u class="icon-lock"></u>{% endif %}
+                </td>
+                <td>
+                    <span class="badge badge-inverse">{{ blog.get_author_count }}</span>
+                    {% for author in blog.get_authors %}
+                        <a href="{{ author.get_absolute_url }}" title="{{ author }}"><u class="icon-user"></u></a>
+                    {% endfor %}
+                </td>
+                <td><span class="badge badge-inverse">{{ blog.get_comment_count }}</span></td>
+                <td>{{ blog.updated|date:'d N Y' }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">{% blocktrans %}There are no blog entries in this database yet.{% endblocktrans %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% get_pages %}
+{% if pages.is_paginated %}
+    <div class="pagination">{% show_pages %}</div>
+{% endif %}

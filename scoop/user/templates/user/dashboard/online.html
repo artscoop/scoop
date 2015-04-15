@@ -1,0 +1,58 @@
+{% load i18n endless picture_tags user_tags type_tags %}
+{% paginate 24 users using 'onl_p' %}
+<p class="dashboard-buttons text-right">
+	<span class="btn-group text-right" style="display: inline-block;">
+		<a class="btn btn-mini btn-primary" href="{% url 'admin:user_user_changelist' %}" title="{% trans 'users' %}"><b class="icon-group"></b></a>
+		<a class="btn btn-mini btn-primary" href="{% url 'admin:user_user_add' %}" title="{% trans 'add' %}"><b class="icon-plus-sign"></b></a>
+		<a class="btn btn-mini btn-primary" href="{% url 'admin:dating_profile_changelist' %}" title="{% trans 'profiles' %}"><i class="icon-group"></i>{% trans 'profiles' %}</a>
+		<a class="btn btn-mini" href="{% url 'admin:auth_group_changelist' %}" title="{% trans 'groups' %}"><i class="icon-group"></i>{% trans 'groups' %}</a>
+	</span>
+</p>
+
+<div id="dashboard-online">
+	<div class="table-div">
+		<table class="table table-bordered table-striped table-condensed">
+			<tr>
+				<th width="120">{% trans "Active users" %}</th>
+				<td class="emphasis"><span>{{total|si_suffix}}</span></td>
+				<td><span class="badge badge-male">{% blocktrans count numbers.men|round_left:2|si_suffix as men %}{{men}} man{% plural %}{{men}} men{% endblocktrans%}</span> <span class="muted pull-right">{{numbers.men|to_percent:total|floatformat:1}}%</span></td>
+				<td><span class="badge badge-female">{% blocktrans count numbers.women|round_left:2|si_suffix as women %}{{women}} woman{% plural %}{{women}} women{% endblocktrans%}</span> <span class="muted pull-right">{{numbers.women|to_percent:total|floatformat:1}}%</span></td>
+			</tr>
+			<tr>
+				<th>{% trans "Online status" %}</th>
+				<td colspan="3">{% blocktrans count count as count %}{{count}} user is currently online{% plural %}{{count}} users are currently online{% endblocktrans %}</td>
+			</tr>
+		</table>
+		<div class="row-fluid">
+			{% for user in users %}
+			<div class="span2 overlay-container{% if user.is_away %} dimmed{% endif %}">
+				{% image user|picture alias="i96x64" %}
+				<div class="overlay-status">
+					<span class="badge">{{user}}</span>
+				</div>
+				<div class="overlay-caption">
+					<span class="badge badge-inverse">
+						<a title="{% trans "Edit" %}" href="{% url "admin:user_user_change" user.id %}"><b class="icon-cog"></b></a>
+						<a title="{% trans "View" %}" class="modal-action" href="{% url "user:profile-view" uid=user.id name=user.username %}"><u class="icon-user"></u></a>
+					</span>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% get_pages %}
+{% if pages.is_paginated %}
+<div class="pagination">{% show_pages %}</div>
+{% endif %}
+
+<script type="text/javascript">
+	// Refresh des données du dashboard
+	var online_dashboard_refresh = 60000;
+	function refresh_online_dashboard() {
+		$('#dashboard-online').load("{% url 'user:online-dashboard' %}?onl_p={{request.GET.onl_p}} #dashboard-online", function(resp, status, xhr){
+			setTimeout(refresh_online_dashboard, online_dashboard_refresh);
+		}) }
+	if (undefined == online_dashboard_flag) { setTimeout(refresh_online_dashboard, online_dashboard_refresh); var online_dashboard_flag = true;}
+</script>

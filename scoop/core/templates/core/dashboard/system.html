@@ -1,0 +1,90 @@
+{% load i18n type_tags %}
+<style>
+	.cpubar {
+		display:inline-block;
+		height:1em !important;
+		background-color:#f21;
+		border:1px solid #610;
+		border-radius:2px;
+		padding:0;
+	}
+	.cpu-div {
+		padding:0 0.5em;
+	}
+</style>
+
+<div id="dashboard-system">
+	<div class="cpu-div">
+		<table class="table table-bordered table-striped table-condensed condensed-table" width="100%">
+			<thead>
+				<th>{% trans "CPU" %}</th>
+				<th>{% trans "Load" %}</th>
+			</thead>
+			{% for cpu in cpu_usage %}
+			{% if cpu >= 0 %}
+			<tr>
+				<td width="88">
+					<strong><i class="icon-cog"></i> {{forloop.counter}}/{{cpu_usage|length}}</strong>
+				</td> 
+				<td width="88">
+					{{cpu}}%
+				</td>
+				<td>
+					<div class="progress progress-{{cpu|percent_status}}" style="margin-bottom:0;">
+						<div class="bar" style="width:{{cpu|safe}}% !important;">&nbsp;</div>
+					</div>
+				</td>
+			</tr>
+			{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+	<div class="cpu-div">
+		<table class="table table-bordered table-striped table-condensed condensed-table" width="100%">
+			<tr>
+				<td width="88"><strong>{% trans "Memory" %}</strong></td> 
+				<td width="88">{% blocktrans with memory.programs|floatformat:1 as used and memory.total|floatformat:1 as total %}{{used}} of {{total}}Gb{% endblocktrans %}</td>
+				<td>
+					<div class="progress progress-{{memory.percent|percent_status}}" style="margin-bottom:0;">
+						<div class="bar" title="{{memory.percent}}%" style=" width:{{memory.percent|safe}}% !important;">{{memory.percent|floatformat:1}}%</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<strong>{% trans "Disk free" %}</strong>
+				</td>
+				<td>
+					{{disk.free|floatformat:1}}{% trans "Gb" %}
+				</td>
+				<td>
+					<div class="progress progress-{{disk.status}}" style="margin-bottom:0;">
+						<div class="bar" style="width:{{disk.percent|safe}}% !important;">{{disk.percent|floatformat:1}}%</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="cpu-div" id="process-list">
+		<table class="table table-bordered table-striped table-condensed condensed-table" width="100%">
+			{% for process in processes %}
+			<tr>
+				<th width="1">{{process.pid}}</th>
+				<td>{{process.name|truncatechars:28}}</td>
+				<td width="88"><i class="icon-hdd"></i>{{process.get_memory_info.rss|filesizeformat}}</td>
+				<td width="88"><i class="icon-cog"></i>{{process.cpu_percent|floatformat:2}}%</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+	// Refresh des données du dashboard
+	var system_dashboard_refresh = 5000;
+	function refresh_system_dashboard() {
+		$('#dashboard-system').load("{% url 'core:system-dashboard' %} #dashboard-system", function(resp, status, xhr){ 
+			setTimeout(refresh_system_dashboard, system_dashboard_refresh);
+		}) }
+	if (undefined == system_dashboard_flag) { setTimeout(refresh_system_dashboard, system_dashboard_refresh); var system_dashboard_flag = true;}
+</script>

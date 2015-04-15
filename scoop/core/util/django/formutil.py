@@ -1,0 +1,212 @@
+# coding: utf-8
+from __future__ import absolute_import
+
+import os
+import tempfile
+from os.path import join
+
+from django.contrib import messages
+from django.forms.models import ModelForm
+from django.http.response import HttpResponse
+from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_POST
+
+from scoop.core.templatetags.text_tags import humanize_join
+
+
+# Choix Oui/Non et Tout
+CHOICES_NULLBOOLEAN = (('', _(u"All")), (False, _(u"No")), (True, _(u"Yes")))
+
+
+class ModelFormUtil:
+    """
+    Mise à jour d'un objet de type Model avec certains champs d'un ModelForm
+    - instance : objet dérivé de models.Model
+    - form : objet de type forms.ModelForm dont la classe ciblée est celle de instance
+    - fieldnames : liste de noms de champs à mettre à jour dans le modèle
+    """
+
+    @staticmethod
+    def is_field_valid(form, fieldnames):
+        """ Renvoyer si un champ d'un formulaire est valide """
+        for fieldname in fieldnames:
+            # Récupérer le champ
+            field = form.fields[fieldname]
+            # Récupérer les données du champ et valider
+            data = field.widget.value_from_datadict(form.data, form.files, form.add_prefix(fieldname))
+            try:
+                if not hasattr(form, 'cleaned_data'):
+                    form.cleaned_data = {}
+                form.cleaned_data[fieldname] = field.clean(data)
+                if hasattr(form, 'clean_%s' % fieldname):
+                    value = getattr(form, 'clean_%s' % fieldname)()
+                    form.cleaned_data[fieldname] = value
+            except Exception:
+                return False
+        return True
+
+    def update_from_form(self, form, fieldnames, update=True, **kwargs):
+        """
+        Mettre à jour les champs de l'objet selon l'état d'un formulaire
+        - La validation ne se fait que sur les champs sélectionnés et valides
+        :param fieldnames: itérable contenant le nom des champs à mettre à jour
+            Si None, met à jour l'instance via form.save.
+        :type fieldnames: list or tuple or set or NoneType
+        """
+        if isinstance(fieldnames, (list, tuple, set)):
+            for fieldname in fieldnames:
+                if ModelFormUtil.is_field_valid(form, [fieldname]):
+                    setattr(self, fieldname, form.cleaned_data[fieldname])
+        elif fieldnames is None:
+            self = form.save(commit=False)
+        else:
+            raise AttributeError(u"You must pass a field names iterable or None.")
+        # Terminer en sauvegardant l'objet si demandé
+        if update:
+            self.update(save=True, **kwargs)
+        return self
+
+
+class Validation(object):
+    """ État de validation d'un ou plusieurs formulaires """
+
+    def __init__(self, success=False, code=0, message='', *args, **kwargs):
+        """ Initialiser l'objet """
+        self.success = success
+        self.code = code
+        self.message = message
+
+    # Getter
+    def is_successful(self):
+        """ Renvoyer si la validation a été un succès """
+        return bool(self.success)
+
+    def get_code(self):
+        """ Renvoyer le code de retour de la validation """
+        return self.code
+
+
+@require_POST
+def handle_upload(request):
+    """
+    Traitement des uploads, Ajax, directs ou fragmentés
+    Utilisation :
+    - Vous utilisez une vue AJAX qui est appelée pour l'upload progressif
+    - Récupérer le résultat de handle_upload dans la vue AJAX
+    - Si le résultat est un nom de fichier, l'upload est terminé.
+    Vous pouvez ensuite, gérer ce résultat (par exemple) :
+      picture.image.save(unidecode(result['name']), File(open(result['path'])))
+    """
+    # Traiter la requête s'il y a un fichier à remonter
+    if request.FILES:
+        image_file = request.FILES[request.FILES.keys()[0]]
+        image_name = image_file.name if 'name' not in request.POST else request.POST['name']
+        # Par défaut, créer ou écrire à la fin du fichier existant
+        file_mask = os.O_APPEND | os.O_WRONLY | os.O_CREAT if int(request.POST.get('chunk', 0)) > 0 else os.O_RDWR | os.O_CREAT | os.O_TRUNC
+        file_path = join(tempfile.gettempdir(), image_name)  # Chemin dans le répertoire temporaire de l'OS
+        # Ouvrir le fichier et écrire les morceaux
+        fd = os.open(file_path, file_mask)
+        for chunk in image_file.chunks():
+            os.write(fd, chunk)
+        os.close(fd)
+        # Renvoyer le nom du fichier si le dernier chunk a été écrit
+        # Ou renvoyer None si la vue appelante ne doit pas effectuer d'action
+        if int(request.POST.get('chunk', 0)) + 1 == int(request.POST.get('chunks', 1)):
+            return {'path': file_path, 'name': image_name}
+        else:
+            return HttpResponse()
+
+
+def has_post(request, action=None):
+    """
+    Dire si l'objet HttpRequest est en mode POST
+    Et contient un paramètre passé (en général le nom de l'action du formulaire')
+    """
+    posted = (request.method == 'POST')
+    if posted and action is not None:
+        return posted and (action in request.POST)
+    return posted
+
+
+def form(classnamelist, request, initial=None, instances=None, postdata=None):
+    """
+    Créer un formulaire prenant en compte la requête.
+    Si la request est en mode POST, créer le formulaire avec les données POST,
+    sinon créer un formulaire par défaut.
+    La requête prend en paramètre une liste de Classes dérivées de Form, ou
+    un nom de classe seul dérivé de Form.
+    Il est possible alors de faire
+    a, b, c = default_form ([A, B, C], request)
+    a = default_form (A, request)
+    Il est possible de passer les valeurs initiales de formulaire si classnamelist
+    n'est pas une liste.
+    """
+    forms = []
+    if request and request.has_post():
+        if isinstance(classnamelist, list):
+            for idx, classname in enumerate(classnamelist):
+                if issubclass(classname, ModelForm):
+                    forms.append(classname(request.POST, request.FILES, instance=instances[idx] if len(instances) > idx else None))
+                else:
+                    forms.append(classname(request.POST, request.FILES))
+        else:
+            forms = [classnamelist(request.POST, request.FILES, initial=initial or {})]
+    else:
+        if isinstance(classnamelist, list):
+            for idx, classname in enumerate(classnamelist):
+                if issubclass(classname, ModelForm):
+                    forms.append(classname(postdata, instance=instances[idx] if instances and len(instances) > idx else None))
+                else:
+                    forms.append(classname(postdata))
+        else:
+            if issubclass(classnamelist, ModelForm):
+                forms = [classnamelist(postdata, initial=initial, instance=instances or None)]
+            else:
+                forms = [classnamelist(postdata, initial=initial)]
+    for form in forms:
+        form.request = request
+    # Recréer les formulaires sans option lorsqu'une erreur de initial se produit
+    for idx, form in enumerate(forms):
+        try:
+            form.as_p()
+        except TypeError:
+            forms[idx] = type(form)()
+    if len(forms) == 1:
+        return forms[0]
+    else:
+        return forms
+
+
+def are_valid(forms):
+    """ Renvoyer si tous les formulaires passés sont valides """
+    if not isinstance(forms, list):
+        forms = [forms]
+    valid = all([form.is_valid() for form in forms])
+    return valid
+
+
+def any_valid(forms):
+    """ Renvoyer si un seul des formulaires passés est valide """
+    if not isinstance(forms, list):
+        forms = [forms]
+    valid = any([form.is_valid() for form in forms])
+    return valid
+
+
+def has_valid_changes(form):
+    """ Renvoyer si un formulaire est valide a été modifié """
+    return form.is_valid() and form.has_changed()
+
+
+def message_on_invalid(form, request, message, level=None, extra_tags=None):
+    """ Afficher un message à l'utilisateur si un formulaire n'est pas valide """
+    if not form.is_valid():
+        messages.add_message(request, level or messages.SUCCESS, message, extra_tags=extra_tags)
+
+
+def error_labels(form):
+    """ Renvoyer la liste des étiquettes de champs pour les erreurs d'un formulaire """
+    if form.errors:
+        labels = [field.label for field in form if field.errors]
+        return humanize_join(labels, 10, "field;fields")
+    return None

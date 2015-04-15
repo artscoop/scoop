@@ -1,0 +1,8 @@
+{% load i18n %}
+{% if style == "link" %}
+    <a href={{content.get_absolute_url}}>{{content.title}}</a>
+{% elif style == "teaser" %}
+    {{content.get_teaser}} <a href={{content.get_absolute_url}}>{% trans "Read more" %}</a>
+{% elif style == "full" %}
+
+{% endif %}

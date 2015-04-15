@@ -1,0 +1,3 @@
+{{object.name|striptags}}
+{{object.details|striptags}}
+{{object.url}}

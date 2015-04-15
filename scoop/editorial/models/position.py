@@ -1,0 +1,73 @@
+# coding: utf-8
+from __future__ import absolute_import
+
+from django.contrib.auth.models import AnonymousUser
+from django.db import models
+from django.template.defaultfilters import capfirst
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
+
+from scoop.core.abstract.core.datetime import DatetimeModel
+from scoop.core.abstract.core.icon import IconModel
+
+
+# Positions à traduire par défaut
+DEFAULT_NAMES = [_(u"Menu"), _(u"Heading"), _(u"Footer"), _(u"Js"), _(u"Extra head"), ]
+
+
+class Position(DatetimeModel, IconModel):
+    """ Emplacement dans un template """
+    # Champs
+    name = models.SlugField(max_length=64, unique=True, blank=False, help_text=_(u"Name used for the position block in a template"), verbose_name=_(u"Name"))
+    title = models.CharField(max_length=64, blank=False, verbose_name=_(u"Title"))
+    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    # Accès
+    anonymous = models.BooleanField(default=True, blank=True, verbose_name=_(u"Anonymous access"))
+    authenticated = models.BooleanField(default=True, blank=True, verbose_name=_(u"Authenticated access"))
+    groups = models.ManyToManyField('auth.Group', blank=True, verbose_name=_(u"Access for groups"))
+
+    # Getter
+    @staticmethod
+    def get(name):
+        """ Renvoyer une position par son nom """
+        position = Position.objects.get_or_create(name=name.lower())
+        if isinstance(position, tuple):
+            position = position[0]
+        position.auto_title()
+        return position
+
+    def has_access(self, user):
+        """ Renvoyer si un utilisateur a accès à ce contenu """
+        # Pour les anonymes
+        if user == AnonymousUser:
+            return self.anonymous
+        # Pour les enregistrés
+        elif user.is_authenticated() and self.authenticated:
+            return True
+        # Pour les enregistrés de certains groupes
+        elif self.groups.filter(user=user).exists():
+            return True
+        return False
+
+    # Setter
+    def auto_title(self):
+        """ Définir un titre automatique à partir du nom """
+        if not self.title:
+            self.title = capfirst(self.name.replace('_', ' '))
+            self.save()
+        return self.title
+
+    # Overrides
+    def __unicode__(self):
+        """ Renvoyer la représentation unicode de l'objet """
+        return ugettext(self.auto_title())
+
+    def save(self, *args, **kwargs):
+        """ Enregistrer l'objet dans la base de données """
+        super(Position, self).save(*args, **kwargs)
+
+    # Métadonnées
+    class Meta:
+        verbose_name = _(u"position")
+        verbose_name_plural = _(u"positions")
+        app_label = 'editorial'

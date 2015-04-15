@@ -1,0 +1,1 @@
+{{SITE}} Notifications <{{settings.MESSAGING_MAIL_SENDER}}>

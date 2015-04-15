@@ -1,0 +1,9 @@
+{% if count %}
+<p>{{count}} {{count|pluralize:"requête,requêtes"}} en {{time}} secondes :</p>
+{% endif %}
+{% for sql in sqllog %}
+	<strong>[{{forloop.counter}}]</strong> en {{sql.time|floatformat:3}}s :	<small style="font-size:80%; opacity:0.5;" title="{{sql.sql}}">{{sql.sql|truncatechars:80}}</small>
+	{% if not forloop.last %}<br>{% endif %}
+{% empty %}
+    <strong>No query executed</strong>
+{% endfor %}
