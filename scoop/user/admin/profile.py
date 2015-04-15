@@ -9,7 +9,6 @@ from django.contrib.admin.options import StackedInline
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 
-from dating.models.profile import Profile
 from scoop.content.admin.inline import PictureInlineAdmin
 from scoop.core.abstract.user.authored import UseredModelAdmin
 from scoop.core.util.data.dateutil import ages_dates, random_date
@@ -18,6 +17,7 @@ from scoop.core.util.shortcuts import addattr
 from scoop.user.admin.filters import AgeFilter, ImageFilter, InitialFilter, OnlineFilter
 from scoop.user.forms.profile import ProfileAdminForm, ProfileInlineAdminForm
 from scoop.user.models.profile import BaseProfile
+from scoop.user.util.auth import get_profile_model
 
 
 class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
@@ -28,7 +28,7 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
     exclude = ()
     fieldsets = ((_(u"User"), {'fields': ('picture', 'gender', 'birth', 'city', 'doubt', 'banned',)}),)
     filter_horizontal = []
-    form = make_ajax_form(Profile, {'city': 'citypm', 'picture': 'picture'}, ProfileAdminForm)
+    form = make_ajax_form(get_profile_model(), {'city': 'citypm', 'picture': 'picture'}, ProfileAdminForm)
     formfield_overrides = {}
     inlines = [PictureInlineAdmin]
     list_display = ['get_id', 'get_user_link', 'get_image', 'gender', 'get_age', 'is_new', 'get_email', 'pictured', 'get_picture_set']
@@ -131,7 +131,7 @@ class ProfileAdminFormset(BaseInlineFormSet):
 
 class ProfileInlineAdmin(StackedInline):
     """ Inline d'administration de profil """
-    model = Profile
+    model = get_profile_model()
     formset = ProfileAdminFormset
     formfield_overrides = {}
     template = 'admin/dating/profile/edit_inline/stacked.html'

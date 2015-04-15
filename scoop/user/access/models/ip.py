@@ -76,8 +76,11 @@ class IPManager(models.Manager):
         super(IPManager, self).__init__(*args, **kwargs)
         # Initialiser l'outil GeoIP dans le manager
         if not hasattr(self, 'geoip'):
-            self.geoip = GeoIP(settings.GEOIP_PATH)
-            self.geoisp = GeoIP(settings.GEOISP_PATH)
+            try:
+                self.geoip = GeoIP(settings.GEOIP_PATH)
+                self.geoisp = GeoIP(settings.GEOISP_PATH)
+            except AttributeError:
+                pass
 
 
 class IP(DatetimeModel, CoordinatesModel):

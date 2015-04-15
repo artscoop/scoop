@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('name', models.CharField(max_length=80, verbose_name='Name')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'optiongroup', to='scoop.core.OptionGroup')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'optiongroup', to='core.OptionGroup')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('name', models.CharField(max_length=120, verbose_name='Name')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'option', to='scoop.core.Option')),
+                ('model', models.ForeignKey(related_name='translations', verbose_name=b'option', to='core.Option')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
                 ('container_name', models.CharField(max_length=80, verbose_name='Container name')),
                 ('container_type', models.ForeignKey(related_name='container_record', verbose_name='Container type', to='contenttypes.ContentType', null=True)),
                 ('target_type', models.ForeignKey(related_name='target_record', verbose_name='Target type', to='contenttypes.ContentType', null=True)),
-                ('type', models.ForeignKey(related_name='records', verbose_name='Action type', to='scoop.core.ActionType')),
+                ('type', models.ForeignKey(related_name='records', verbose_name='Action type', to='core.ActionType')),
                 ('user', models.ForeignKey(related_name='action_records', on_delete=django.db.models.deletion.SET_NULL, verbose_name='User', to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
@@ -137,12 +137,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='option',
             name='group',
-            field=models.ForeignKey(related_name='options', verbose_name='Group', to='scoop.core.OptionGroup'),
+            field=models.ForeignKey(related_name='options', verbose_name='Group', to='core.OptionGroup'),
         ),
         migrations.AddField(
             model_name='option',
             name='parent',
-            field=models.ForeignKey(related_name='children', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Parent', blank=True, to='scoop.core.Option', null=True),
+            field=models.ForeignKey(related_name='children', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Parent', blank=True, to='core.Option', null=True),
         ),
         migrations.AlterUniqueTogether(
             name='option',
