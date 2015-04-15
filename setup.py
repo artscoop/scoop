@@ -1,14 +1,15 @@
+#!/usr/bin/env python
 # coding: utf-8
 from distutils.core import setup
 
 from setuptools import find_packages
 
-scoop_packages = find_packages('.')
 
 setup(
     name='scoop',
     version='2015.4.15',
-    packages=scoop_packages,
+    packages=find_packages('.'),
+    include_package_data=True,
     url='',
     license='',
     author='Steve Kossouho',
