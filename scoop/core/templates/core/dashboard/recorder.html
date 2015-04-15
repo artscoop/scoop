@@ -1,0 +1,48 @@
+{% load i18n endless sorting_tags prettytimes_tags picture_tags user_tags type_tags %}
+{% autosort records %}
+{% paginate 10 records using 'rec_p' %}
+
+<div id="dashboard-records">
+	<p class="dashboard-buttons text-right">
+		<span class="btn-group text-right" style="display: inline-block;">
+			<a class="btn btn-mini btn-primary" href="{% url 'admin:core_record_changelist' %}"><b class="icon-circle"></b></a>
+			<a class="btn btn-mini btn-primary" href="{% url 'admin:core_actiontype_changelist' %}"><b class="icon-tags"></b></a>
+		</span>
+	</p>
+	<div class="table-div">
+		<table class="table table-striped table-condensed" width="100%">
+			<thead>
+				<th>{% anchor created _("When") %}</th>
+				<th colspan="3">{% anchor type _("What") %}</th>
+				<th><i class="icon-tag" title="{% trans "Actions with same type in time frame" %}"></i></th>
+				<th><i class="icon-user" title="{% trans "Same actions from same user in time frame" %}"></i></th>
+			</thead>
+			{% for record in records %}
+				<tr>
+					<th width="64" title="{{record.created|date:"d F Y H:i:s"}}">{{record.created|date:"H:i"}}</th>
+					<td width="1">{{record.get_color_legend|safe}}</td>
+					<td width="32">{% image record.user|picture alias="i20x20c" %}</td>
+					<td><span title="{{record}}">{{record|truncatechars:28}}</span></td>
+					<td width="1">
+						{% with record.get_type_count as count %}
+						{% if count > 0 %}
+						<span class="label label-info">{{count}}</span>
+						{% endif %}
+						{% endwith %}
+					</td>
+					<td width="1">
+						{% with record.get_duplicate_count as count %}
+						{% if count > 0 %}
+						<span class="label{% if count > 4 %} label-important{% endif %}">{{count}}</span>
+						{% endif %}
+						{% endwith %}
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+{% get_pages %}
+{% if pages.paginated %}
+<div class="pagination">{% show_pages %}</div>
+{% endif %}

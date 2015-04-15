@@ -1,0 +1,10 @@
+{% load prettytimes_tags location_tags %}<h4>Prévisions météo pour {{city}}, {{city|area}}</h4>
+{% for period in forecast.list %}
+	{% for weather in period.weather %}
+	<div class="col-xs-4">
+		<div class="text-center">
+			<img class="img-responsive" src="{{STATIC_URL}}theme/{{THEME}}/image/icons/weather/{{weather.icon}}.png" rel="tooltip" title="{% autoescape off %}<h4 class='text-margin'>{{period.dt|date:"d F"}}</h4><p class='text-center'>{{period.dt|relative_time}}<br>{{weather.description}}</p> <p class='text-center'>{{period.temp.day|floatformat:1}}°C / {{period.temp.night|floatformat:1}}°C</p>{% endautoescape%}	">
+		</div>
+	</div>
+	{% endfor %}
+{% endfor %}

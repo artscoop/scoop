@@ -1,0 +1,14 @@
+{% load i18n %}
+=====================================================
+Orphaned media files cleaner
+=====================================================
+Fields checked
+-----------------------------------------------------
+{% for field in fields %}{{forloop.counter}}) {{field.2}}.{{field.1}}
+{% endfor %}
+
+Results
+-----------------------------------------------------
+{{counter}} files total
+{{deleted}} files deleted
+

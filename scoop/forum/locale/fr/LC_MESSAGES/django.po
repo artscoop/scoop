@@ -1,0 +1,323 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Steve Kossouho <steve.kossouho@gmail.com>, 2012.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"PO-Revision-Date: 2015-04-11 14:42+0009\n"
+"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"Language-Team: français <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translated-Using: django-rosetta 0.7.6\n"
+
+#: __init__.py:6 admin/forum.py:31
+msgid "Forum"
+msgstr "Forum"
+
+#: admin/forum.py:31
+msgid "Settings"
+msgstr "Paramètres"
+
+#: admin/forum.py:34
+msgid "Update topic count"
+msgstr "Mettre à jour le décompte de sujets"
+
+#: admin/forum.py:39
+msgid "Forum topic counts have been updated."
+msgstr "Le nombre de sujets des forums a été mis à jour."
+
+#: admin/forum.py:42
+msgid "Picture"
+msgstr "Image"
+
+#: admin/forum.py:47
+msgid "Found in"
+msgstr "Trouvé dans"
+
+#: admin/poll.py:18 models/vote.py:27
+msgid "Poll"
+msgstr "Sondage"
+
+#: models/forum.py:28
+msgid "Forum index"
+msgstr "Index du forum"
+
+#: models/forum.py:73
+msgid "Name"
+msgstr "Nom"
+
+#: models/forum.py:74 models/poll.py:38 models/sanction.py:35
+msgid "Description"
+msgstr "Description"
+
+#: models/forum.py:75
+msgid "Protected from the creation of new topics"
+msgstr "Protégé contre la création de nouveaux sujets"
+
+#: models/forum.py:75
+#| msgid "Locked"
+msgctxt "forum"
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: models/forum.py:76
+#| msgid "Visible"
+msgctxt "forum"
+msgid "Visible"
+msgstr "Visible"
+
+#: models/forum.py:79
+msgid "Topics count"
+msgstr "Nombre de sujets"
+
+#: models/forum.py:80
+msgid "Posts count"
+msgstr "Nombre de messages"
+
+#: models/forum.py:82
+msgid "Appears on the forum index"
+msgstr "Fait partie de l'index des forums"
+
+#: models/forum.py:82
+msgid "Root"
+msgstr "Racine"
+
+#: models/forum.py:83
+msgid "Subforums"
+msgstr "Sous-forums"
+
+#: models/forum.py:85 models/forum.py:132 models/forum.py:144
+msgid "Topics"
+msgstr "Sujets"
+
+#: models/forum.py:87
+msgid "Members who can moderate topics in this forum"
+msgstr "Membres autorisés à modérer les sujets de ce forum"
+
+#: models/forum.py:88
+msgid "Moderators"
+msgstr "Modérateurs"
+
+#: models/forum.py:149
+msgid "Posts"
+msgstr "Messages"
+
+#: models/forum.py:165
+msgid "Has forums"
+msgstr "A des forums"
+
+#: models/forum.py:170
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: models/forum.py:175
+msgid "Group"
+msgstr "Groupe"
+
+#: models/forum.py:184
+msgid "Circular"
+msgstr "Circulaire"
+
+#: models/forum.py:232
+msgid "forum"
+msgstr "forum"
+
+#: models/forum.py:233
+msgid "forums"
+msgstr "forums"
+
+#: models/ignorelist.py:18 models/read.py:58 models/sanction.py:33
+msgid "User"
+msgstr "Utilisateur"
+
+#: models/ignorelist.py:58
+msgid "ignore list"
+msgstr "liste d'ignorés"
+
+#: models/ignorelist.py:59
+msgid "ignore lists"
+msgstr "listes d'ignorés"
+
+#: models/poll.py:37
+msgid "Title"
+msgstr "Titre"
+
+#: models/poll.py:39
+#| msgid "Published"
+msgctxt "poll"
+msgid "Published"
+msgstr "Publié"
+
+#: models/poll.py:40
+msgid "Expires"
+msgstr "Expire"
+
+#: models/poll.py:41
+msgid "Enter one answer per line"
+msgstr "Entrez une réponse par ligne"
+
+#: models/poll.py:41
+msgid "Answers"
+msgstr "Réponses"
+
+#: models/poll.py:43
+#| msgid "Closed"
+msgctxt "poll"
+msgid "Closed"
+msgstr "Fermé"
+
+#: models/poll.py:44
+msgid "Content"
+msgstr "Contenu"
+
+#: models/poll.py:64
+msgid "Has votes"
+msgstr "A des votes"
+
+#: models/poll.py:91
+msgid "Expired"
+msgstr "Expiré"
+
+#: models/poll.py:96
+msgid "Open"
+msgstr "Ouvert"
+
+#: models/poll.py:116
+msgid "poll"
+msgstr "sondage"
+
+#: models/poll.py:117
+msgid "polls"
+msgstr "sondages"
+
+#: models/read.py:57
+msgid "Thread"
+msgstr "Fil de discussion"
+
+#: models/read.py:59 models/sanction.py:36
+msgid "Expiry"
+msgstr "Expiration"
+
+#: models/read.py:60
+#| msgid "Created"
+msgctxt "forum.read"
+msgid "Created"
+msgstr "Créée"
+
+#: models/read.py:66
+msgid "topic read"
+msgstr "sujet"
+
+#: models/read.py:67
+msgid "topics read"
+msgstr "sujets"
+
+#: models/sanction.py:25
+msgid "Posting disabled"
+msgstr "Réponses désactivées"
+
+#: models/sanction.py:25
+msgid "Reading disabled"
+msgstr "Lecture désactivée"
+
+#: models/sanction.py:26
+msgid "2 hours"
+msgstr "2 heures"
+
+#: models/sanction.py:26
+msgid "1 day"
+msgstr "1 jour"
+
+#: models/sanction.py:26
+msgid "3 days"
+msgstr "3 jours"
+
+#: models/sanction.py:26
+msgid "1 week"
+msgstr "1 semaine"
+
+#: models/sanction.py:34
+msgid "Type"
+msgstr "Type"
+
+#: models/sanction.py:37
+#| msgid "Revoked"
+msgctxt "sanction"
+msgid "Revoked"
+msgstr "Révoquée"
+
+#: models/sanction.py:53
+msgid "sanction"
+msgstr "sanction"
+
+#: models/sanction.py:54
+msgid "sanctions"
+msgstr "sanctions"
+
+#: models/vote.py:28
+msgid "Choice"
+msgstr "Choix"
+
+#: models/vote.py:34
+#, python-brace-format
+msgid "Vote: {vote} in poll \"{poll}\""
+msgstr "Vote : {vote} dans le sondage « {poll} »"
+
+#: models/vote.py:39
+msgid "vote"
+msgstr "a des votes"
+
+#: models/vote.py:40
+msgid "votes"
+msgstr "votes"
+
+#~ msgid "Root forum"
+#~ msgstr "Forum de l'index"
+
+#~ msgid "Text"
+#~ msgstr "Texte"
+
+#~ msgid "choice"
+#~ msgstr "choix"
+
+#~ msgid "choices"
+#~ msgstr "choix"
+
+#~ msgid "Choices"
+#~ msgstr "Choix"
+
+#~ msgid "Hide"
+#~ msgstr "Cacher"
+
+#~ msgid "Hide tree"
+#~ msgstr "Cacher l'arborescence"
+
+#~ msgid "Replace"
+#~ msgstr "Remplacer"
+
+#~ msgid "Blocker"
+#~ msgstr "Bloqueur"
+
+#~ msgid "Blockee"
+#~ msgstr "Bloqué"
+
+#~ msgid "Recent"
+#~ msgstr "Récent"
+
+#~ msgid "Vote"
+#~ msgstr "Vote"
+
+#~ msgid "Forum groups"
+#~ msgstr "Groupes de forums"
+
+#~ msgid "Forum group"
+#~ msgstr "Groupe de forums"

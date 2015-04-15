@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Steve Kossouho <steve.kossouho@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"PO-Revision-Date: 2013-03-28 16:54+0009\n"
+"Last-Translator: Anonymous User <steve@localhost.local>\n"
+"Language-Team: français <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translated-Using: django-rosetta 0.7.15-compat\n"
+
+#: admin/admin.py:23
+#, fuzzy
+msgid "Close selected tickets"
+msgstr "Ticket en rapport"
+
+#: admin/admin.py:28
+msgid "Selected tickets have been successfully closed."
+msgstr ""
+
+#: models/resolution.py:10
+msgid "Name"
+msgstr "Nom"
+
+#: models/resolution.py:11
+msgid "Short name"
+msgstr "Nom court"
+
+#: models/resolution.py:12 models/ticket.py:45
+msgid "Description"
+msgstr "Description"
+
+#: models/resolution.py:13
+msgid "Does this mean ticket closure ?"
+msgstr "Équivaut à une fermeture de ticket ?"
+
+#: models/resolution.py:13
+msgid "Closing"
+msgstr "Fermeture"
+
+#: models/resolution.py:22
+#, fuzzy
+msgid "resolution status"
+msgstr "Statut de résolution"
+
+#: models/resolution.py:23
+#, fuzzy
+msgid "resolution statuses"
+msgstr "Statuts de résolution"
+
+#: models/ticket.py:39
+msgid "New"
+msgstr ""
+
+#: models/ticket.py:39 models/ticket.py:46
+msgid "Closed"
+msgstr "Fermé"
+
+#: models/ticket.py:43
+msgid "Author"
+msgstr "Auteur"
+
+#: models/ticket.py:44
+msgid "Title"
+msgstr "Titre"
+
+#: models/ticket.py:47
+msgid "Updated"
+msgstr "Mis à jour"
+
+#: models/ticket.py:49 models/update.py:26
+msgid "Status"
+msgstr "État"
+
+#: models/ticket.py:50
+#, fuzzy
+msgid "Related tickets"
+msgstr "Ticket en rapport"
+
+#: models/ticket.py:52
+msgid "Administrators"
+msgstr "Administrateurs"
+
+#: models/ticket.py:104
+#, fuzzy
+msgid "ticket"
+msgstr "Ticket"
+
+#: models/ticket.py:105
+#, fuzzy
+msgid "tickets"
+msgstr "Tickets"
+
+#: models/ticket.py:106
+msgid "Can close a ticket"
+msgstr "Peut clôturer un ticket"
+
+#: models/update.py:25
+msgid "Ticket"
+msgstr "Ticket"
+
+#: models/update.py:27
+msgid "Body"
+msgstr "Corps"
+
+#: models/update.py:32
+#, fuzzy
+msgid "ticket update"
+msgstr "Mise à jour de ticket"
+
+#: models/update.py:33
+#, fuzzy
+msgid "ticket updates"
+msgstr "Mises à jour de tickets"
+
+#~ msgid "Location"
+#~ msgstr "Lieu"

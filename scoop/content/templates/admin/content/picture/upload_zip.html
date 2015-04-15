@@ -1,0 +1,39 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_modify %}
+
+{% block breadcrumbs %}
+{% if not is_popup %}
+../../../|{% trans "Home" %}
+../../|{% with app_label|capfirst|escape as label %}{% trans label %}{% endwith %}
+*../|{{ opts.verbose_name_plural|capfirst }}
+*{% trans "Upload a zip archive" %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<h3 class="well page-top">{% trans "Upload a zip archive" %}</h3>
+<form method="post" action="" enctype="multipart/form-data" name="upload" class="form-horizontal">
+	{% csrf_token %}
+	<div class="well">
+		{% for field in adminform %}
+	      <div class="control-group{% if field.errors %} error{% endif %}">
+	          <label class="control-label">{{ field.label }}</label>
+	              <div class="controls">
+                      {{ field }}
+                      {{ field.errors }}
+	                {% if field.field.help_text %}
+	                    <span class="help-inline">{{ field.field.help_text|safe }}</span>
+	                {% endif %}
+	              </div>
+	      </div>
+		{% endfor %}
+
+		</div>
+	<div class="form-actions">
+		<div class="pull-right">
+			<input type="submit" class="btn btn-primary" value="{% trans "Submit" %}">
+		</div>
+	</div>
+</form>
+
+{% endblock %}

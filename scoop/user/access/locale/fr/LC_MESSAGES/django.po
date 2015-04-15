@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"PO-Revision-Date: 2015-01-24 18:04+0009\n"
+"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.7.5\n"
+
+#: admin/access.py:28
+msgid "Purge selected access log entries"
+msgstr "Purger les entrées sélectionnées du journal d'accès"
+
+#: admin/access.py:34 admin/filters.py:11 admin/filters.py:32 models/ip.py:93
+#: models/ip.py:133 models/ip.py:139 models/ip.py:148
+msgid "Country"
+msgstr "Pays"
+
+#: admin/access.py:39
+msgid "User picture"
+msgstr "Portrait utilisateur"
+
+#: admin/filters.py:18 admin/filters.py:39
+#: templates/access/dashboard/ips.html:26
+msgid "None"
+msgstr "Aucun"
+
+#: admin/ip.py:33
+msgid "Update selected IPs"
+msgstr "Mettre à jour les IP sélectionnées"
+
+#: admin/ip.py:40
+msgid "{} IP adresses were successfully updated."
+msgstr "{} adresses IP ont été correctement mises à jour."
+
+#: admin/userip.py:28
+msgid "Harmful"
+msgstr "Dangereux"
+
+#: admin/userip.py:33 models/ip.py:92 models/ip.py:168
+#: templates/access/dashboard/ips.html:17
+msgid "ISP"
+msgstr "FAI"
+
+#: models/access.py:101 models/userip.py:69
+msgid "User"
+msgstr "Utilisateur"
+
+#: models/access.py:102
+msgid "Page"
+msgstr "Page"
+
+#: models/access.py:103
+msgid "Referrer"
+msgstr "Référent"
+
+#: models/access.py:109
+#, python-brace-format
+msgid "{who} has visited {what}"
+msgstr "{who} à visité {what}"
+
+#: models/access.py:118
+msgid "access"
+msgstr "accès"
+
+#: models/access.py:119
+msgid "accesses"
+msgstr "accès"
+
+#: models/ip.py:88
+msgid "Decimal"
+msgstr "Décimal"
+
+#: models/ip.py:89
+msgid "String"
+msgstr "Chaîne"
+
+#: models/ip.py:90 models/ip.py:179 templates/access/dashboard/ips.html:16
+msgid "Reverse"
+msgstr "Inversé"
+
+#: models/ip.py:91
+msgid "Reverse status"
+msgstr "Statut inversé"
+
+#: models/ip.py:94
+msgid "Harm"
+msgstr "Danger"
+
+#: models/ip.py:95
+msgid "Blocked"
+msgstr "Bloqué"
+
+#: models/ip.py:96
+msgctxt "ip"
+msgid "Updated"
+msgstr "Mise à jour"
+
+#: models/ip.py:97
+msgid "Dynamic"
+msgstr "Dynamique"
+
+#: models/ip.py:98 models/ip.py:174
+msgid "City name"
+msgstr "Nom de ville"
+
+#: models/ip.py:110
+msgid "Class"
+msgstr "Classe"
+
+#: models/ip.py:177
+msgid "N/D"
+msgstr "N/D"
+
+#: models/ip.py:186
+msgid "Short reverse"
+msgstr "Reverse court"
+
+#: models/ip.py:200
+msgid "Hexadecimal"
+msgstr "Hexadécimal"
+
+#: models/ip.py:209
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: models/ip.py:215
+msgid "Number of users"
+msgstr "Nombre d'utilisateurs"
+
+#: models/ip.py:289
+msgid "Icon"
+msgstr "Icône"
+
+#: models/page.py:28
+msgid "Path"
+msgstr "Chemin"
+
+#: models/page.py:48
+msgid "site page"
+msgstr "page de site"
+
+#: models/page.py:49
+msgid "site pages"
+msgstr "pages de site"
+
+#: models/userip.py:80
+#, python-brace-format
+msgid "{user}@{ip}"
+msgstr "{user}@{ip}"
+
+#: models/userip.py:88
+msgid "user IP"
+msgstr "IP utilisateur"
+
+#: models/userip.py:89
+msgid "user IPs"
+msgstr "IP utilisateurs"
+
+#: templates/access/dashboard/ips.html:5
+msgid "ips"
+msgstr "ips"
+
+#: templates/access/dashboard/ips.html:14
+msgid "Who"
+msgstr "Qui"
+
+#: util/access.py:17
+msgid "Ok"
+msgstr "Ok"
+
+#: util/access.py:18
+msgid "Timed out"
+msgstr "Temps dépassé"
+
+#: util/access.py:19
+msgid "Empty answer"
+msgstr "Réponse vide"
+
+#: util/access.py:20
+msgid "Broken NS"
+msgstr "Serveur de nom cassé"
+
+#: util/access.py:21
+msgid "Domain not found"
+msgstr "Domaine introuvable"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "%(user)s@%(ip)s"
+#~ msgstr "%(user)s@%(ip)s"

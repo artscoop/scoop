@@ -1,0 +1,586 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Steve Kossouho <steve.kossouho@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-11 14:35+0200\n"
+"PO-Revision-Date: 2013-11-04 23:47+0009\n"
+"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"Language-Team: français <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translated-Using: django-rosetta 0.7.3\n"
+
+#: admin/admin.py:64
+msgid "Translation"
+msgstr "Traduction"
+
+#: admin/admin.py:65
+msgid "Translations"
+msgstr "Traductions"
+
+#: admin/admin.py:81 models/event/eventcategory.py:70
+msgid "event category"
+msgstr "catégorie d'événement"
+
+#: models/event/attendance.py:41
+msgid "I was there"
+msgstr "J'y étais"
+
+#: models/event/attendance.py:41
+msgid "I was not there"
+msgstr "Je n'y étais pas"
+
+#: models/event/attendance.py:41
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: models/event/attendance.py:42
+msgid "I will not participate"
+msgstr "Je ne participerai apas"
+
+#: models/event/attendance.py:42
+msgid "I might participate"
+msgstr "Je participerai peut-être"
+
+#: models/event/attendance.py:42
+msgid "I will participate"
+msgstr "Je participerai"
+
+#: models/event/attendance.py:46 models/event/events.py:94
+msgid "Event"
+msgstr "Événement"
+
+#: models/event/attendance.py:47
+msgid "Forecast"
+msgstr "Prévision"
+
+#: models/event/attendance.py:48 models/event/events.py:95
+#: models/group/invite.py:18
+msgid "Status"
+msgstr "État"
+
+#: models/event/attendance.py:66
+msgid "attendance"
+msgstr "participation"
+
+#: models/event/attendance.py:67
+msgid "attendances"
+msgstr "participations"
+
+#: models/event/eventcategory.py:40
+msgid "Parent"
+msgstr "Parent"
+
+#: models/event/eventcategory.py:41
+msgid "Public"
+msgstr "Public"
+
+#: models/event/eventcategory.py:45 models/event/eventcategory.py:78
+#: models/friend/friendgroup.py:19 models/group/group.py:37
+#: models/rating/rating.py:39 models/rating/rating.py:75
+msgid "Name"
+msgstr "Nom"
+
+#: models/event/eventcategory.py:51 models/rating/rating.py:45
+msgid "(No name)"
+msgstr "(Sans nom)"
+
+#: models/event/eventcategory.py:53 models/event/eventcategory.py:79
+#: models/event/events.py:66 models/event/events.py:97
+#: models/group/group.py:40 models/rating/rating.py:48
+#: models/rating/rating.py:76
+msgid "Description"
+msgstr "Description"
+
+#: models/event/eventcategory.py:59 models/rating/rating.py:54
+msgid "(No description)"
+msgstr "(Pas de description)"
+
+#: models/event/eventcategory.py:71
+msgid "event categories"
+msgstr "catégories d'événements"
+
+#: models/event/events.py:65 models/event/events.py:96
+msgid "Title"
+msgstr "Titre"
+
+#: models/event/events.py:67
+msgid "Categories"
+msgstr "Catégories"
+
+#: models/event/events.py:68 models/event/events.py:99
+msgid "Address"
+msgstr "Adresse"
+
+#: models/event/events.py:69 models/event/events.py:100
+msgid "Max attendants"
+msgstr "Participants max"
+
+#: models/event/events.py:82
+msgid "event"
+msgstr "événement"
+
+#: models/event/events.py:83
+msgid "events"
+msgstr "événements"
+
+#: models/event/events.py:91
+msgid "Open"
+msgstr "Ouvert"
+
+#: models/event/events.py:91
+msgid "Closed"
+msgstr "Fermé"
+
+#: models/event/events.py:91
+msgid "Cancelled"
+msgstr "Annulé"
+
+#: models/event/events.py:98
+msgid "Date"
+msgstr ""
+
+#: models/event/events.py:173
+msgid "event occurrence"
+msgstr ""
+
+#: models/event/events.py:174
+#, fuzzy
+#| msgid "event categories"
+msgid "event occurrences"
+msgstr "catégories d'événements"
+
+#: models/friend/friendgroup.py:16
+msgid "Family"
+msgstr "Famille"
+
+#: models/friend/friendgroup.py:16
+msgid "Friends"
+msgstr "Amis"
+
+#: models/friend/friendgroup.py:16
+msgid "Colleagues"
+msgstr "Collègues"
+
+#: models/friend/friendgroup.py:16
+msgid "Acquaitances"
+msgstr "Connaissances"
+
+#: models/friend/friendgroup.py:16
+msgid "Friends 2"
+msgstr "Amis 2"
+
+#: models/friend/friendgroup.py:16
+msgid "Friends 3"
+msgstr "Amis 3"
+
+#: models/friend/friendgroup.py:18 models/friend/friendlist.py:48
+#: models/rating/score.py:46 people/models/person.py:30
+msgid "User"
+msgstr "Utilisateur"
+
+#: models/friend/friendgroup.py:38
+msgid "Friend count"
+msgstr "Nombre d'amis"
+
+#: models/friend/friendgroup.py:68
+msgid "friend group"
+msgstr "groupe d'amis"
+
+#: models/friend/friendgroup.py:69
+msgid "friend groups"
+msgstr "groupes d'amis"
+
+#: models/friend/friendgroupgrant.py:24
+msgid "Group"
+msgstr "Groupe"
+
+#: models/friend/friendgroupgrant.py:34
+msgid "friend group grant"
+msgstr "autorisation aux groupes d'amis"
+
+#: models/friend/friendgroupgrant.py:35
+msgid "friend group grants"
+msgstr "autorisations aux groupes d'amis"
+
+#: models/friend/friendlist.py:46
+#, fuzzy
+#| msgid "Friends"
+msgid "Friend"
+msgstr "Amis"
+
+#: models/friend/friendlist.py:46
+#, fuzzy
+#| msgid "Cancelled"
+msgid "Cancel request"
+msgstr "Annulé"
+
+#: models/friend/friendlist.py:46
+#, fuzzy
+#| msgid "Pending friends"
+msgid "Add to friends"
+msgstr "Amis en attente"
+
+#: models/friend/friendlist.py:230
+#, fuzzy, python-brace-format
+#| msgid "Friendship status for %(user)s"
+msgid "Friendship status for {user}"
+msgstr "État des amitiés pour %(user)s"
+
+#: models/friend/friendlist.py:238
+msgid "friend status"
+msgstr "statut d'amitié"
+
+#: models/friend/friendlist.py:239
+msgid "friend statuses"
+msgstr "statuts d'amitié"
+
+#: models/group/group.py:35
+msgid "Anyone can join"
+msgstr "Tout le monde peut s'inscrire"
+
+#: models/group/group.py:35
+msgid "Administrators must confirm first"
+msgstr "Les administrateurs doivent d'abord confirmer"
+
+#: models/group/group.py:35
+msgid "Invites only"
+msgstr "Invitations seulement"
+
+#: models/group/group.py:39
+msgid "Discrete group"
+msgstr "Groupe discret"
+
+#: models/group/group.py:41
+msgid "Membership type"
+msgstr "Type d'adhésion"
+
+#: models/group/group.py:43
+msgid "Moderators"
+msgstr ""
+
+#: models/group/group.py:44
+msgid "Members"
+msgstr "Membres"
+
+#: models/group/group.py:45
+msgid "Applications"
+msgstr "Candidatures"
+
+#: models/group/group.py:105
+msgid "group"
+msgstr "groupe"
+
+#: models/group/group.py:106
+msgid "groups"
+msgstr "groupes"
+
+#: models/group/invite.py:15
+msgid "Pending"
+msgstr "En attente"
+
+#: models/group/invite.py:15
+msgid "Accepted"
+msgstr "Accepté"
+
+#: models/group/invite.py:15
+msgid "Denied"
+msgstr "Refusé"
+
+#: models/group/invite.py:15
+msgid "Permanently denied"
+msgstr "Refusé définitivement"
+
+#: models/group/invite.py:17
+msgid "Target"
+msgstr "Cible"
+
+#: models/group/invite.py:52
+msgid "Group invite"
+msgstr "Invitation de groupe"
+
+#: models/group/invite.py:53
+msgid "Group invites"
+msgstr "groupes"
+
+#: models/post.py:42
+msgid "Text"
+msgstr "Texte"
+
+#: models/post.py:43
+msgid "Deleted"
+msgstr ""
+
+#: models/post.py:54
+msgid "user shout"
+msgstr "statut textuel"
+
+#: models/post.py:55
+msgid "user shouts"
+msgstr "statuts textuels"
+
+#: models/rating/like.py:67 models/rating/rating.py:104
+#: models/rating/score.py:45
+msgid "Author"
+msgstr "Auteur"
+
+#: models/rating/like.py:68 models/rating/rating.py:36
+#: models/rating/rating.py:107
+msgid "Content type"
+msgstr "Type de contenu"
+
+#: models/rating/like.py:69 models/rating/rating.py:108
+msgid "Object Id"
+msgstr "Id de l'objet"
+
+#: models/rating/like.py:82
+#, fuzzy, python-brace-format
+#| msgid "%(user)s likes %(target)s"
+msgid "{user} likes {target}"
+msgstr "%(user)s aime %(target)s"
+
+#: models/rating/like.py:86
+msgid "like"
+msgstr "mention j'aime"
+
+#: models/rating/like.py:87
+msgid "likes"
+msgstr "mentions j'aime"
+
+#: models/rating/rating.py:34
+msgid "Slug"
+msgstr "Slug"
+
+#: models/rating/rating.py:63
+#, python-brace-format
+msgid "{name}"
+msgstr ""
+
+#: models/rating/rating.py:67
+msgid "rating axis"
+msgstr "axe de notation"
+
+#: models/rating/rating.py:68
+msgid "rating axes"
+msgstr "axes de notation"
+
+#: models/rating/rating.py:101 models/rating/score.py:43
+msgid "General"
+msgstr "Général"
+
+#: models/rating/rating.py:103 models/rating/score.py:47
+msgid "Axis"
+msgstr "Axe"
+
+#: models/rating/rating.py:105
+msgid "Rating"
+msgstr "Note"
+
+#: models/rating/rating.py:115
+#, fuzzy, python-brace-format
+#| msgid "%(user)s gave %(item)s %(rating).03f points"
+msgid "{user} gave {item} {rating:.03f} points"
+msgstr "%(user)s a donné %(rating).03f points à %(item)s"
+
+#: models/rating/rating.py:125
+msgid "rating"
+msgstr "note"
+
+#: models/rating/rating.py:126
+msgid "ratings"
+msgstr "notes"
+
+#: models/rating/score.py:48
+msgid "Score"
+msgstr "Score"
+
+#: models/rating/score.py:53
+msgid "user score"
+msgstr "score utilisateur"
+
+#: models/rating/score.py:54
+msgid "user points"
+msgstr "points utilisateur"
+
+#: people/models/person.py:28
+msgid "Mister"
+msgstr "Monsieur"
+
+#: people/models/person.py:28
+msgid "Miss'ess"
+msgstr "Madame"
+
+#: people/models/person.py:28
+msgid "Miss"
+msgstr "Mademoiselle"
+
+#: people/models/person.py:28
+msgid "Doctor"
+msgstr ""
+
+#: people/models/person.py:31
+msgid "Full name"
+msgstr "Nom complet"
+
+#: people/models/person.py:32
+msgid "Prefix"
+msgstr "Titre civil"
+
+#: people/models/person.py:33 people/models/person.py:34
+msgid "Name given at birth"
+msgstr "Prénom"
+
+#: people/models/person.py:35
+msgid "Family name"
+msgstr "Nom de famille"
+
+#: people/models/person.py:36
+msgid "Nickname"
+msgstr "Surnom"
+
+#: people/models/person.py:37
+msgid "Personal page"
+msgstr "Page personnelle"
+
+#: people/models/person.py:38
+msgid "Email"
+msgstr "Email"
+
+#: people/models/person.py:39
+msgid "ex. Home:1114567, Fax:1114568, 1114569"
+msgstr "ex. Domicile:0123456789, Fax:0123456788, 0123456787"
+
+#: people/models/person.py:39
+msgid "Phone numbers"
+msgstr "Numéros de téléphone"
+
+#: people/models/person.py:40
+msgid "Additional notes"
+msgstr "Notes supplémentaires"
+
+#: people/models/person.py:42
+msgid "Street number, name and appartment/suite"
+msgstr "Numéro de voie, nom et appartement"
+
+#: people/models/person.py:42
+msgid "Street address"
+msgstr "Adresse (rue)"
+
+#: people/models/person.py:43
+msgid "City"
+msgstr "Ville"
+
+#: people/models/person.py:44
+msgid "Postal code"
+msgstr "Code postal"
+
+#: people/models/person.py:60
+msgid "person"
+msgstr "personne"
+
+#: people/models/person.py:61
+msgid "persons"
+msgstr "personnes"
+
+#~ msgid "%(name)s"
+#~ msgstr "%(name)s"
+
+#~ msgid "Friends IDs"
+#~ msgstr "IDs des amis"
+
+#~ msgid "Pending friends IDs"
+#~ msgstr "IDs d'amis en attente"
+
+#~ msgid "Count"
+#~ msgstr "Total"
+
+#~ msgid "Pending friends"
+#~ msgstr "Amis en attente"
+
+#~ msgid "Pending count"
+#~ msgstr "En attente"
+
+#~ msgid "Start time"
+#~ msgstr "Heure de départ"
+
+#~ msgid "End time"
+#~ msgstr "Heure de fin"
+
+#~ msgid "Expires"
+#~ msgstr "Expire"
+
+#~ msgid "Your friend request has been successfully sent."
+#~ msgstr "Votre demande d'amitié a bien été envoyée."
+
+#~ msgid "Birth date"
+#~ msgstr "Date de naissance"
+
+#~ msgid "[%(language)s] %(name)s"
+#~ msgstr "[%(language)s] %(name)s"
+
+#~ msgid "vote"
+#~ msgstr "vote"
+
+#~ msgid "votes"
+#~ msgstr "votes"
+
+#~ msgid "Social"
+#~ msgstr "Réseau social"
+
+#~ msgid "Can join groups"
+#~ msgstr "Peut rejoindre des groupes"
+
+#, fuzzy
+#~ msgid "Location"
+#~ msgstr "Candidatures"
+
+#, fuzzy
+#~ msgid "Selected tickets have been successfully closed."
+#~ msgstr "Votre demande d'amitié a bien été envoyée."
+
+#, fuzzy
+#~ msgid "Short name"
+#~ msgstr "(Sans nom)"
+
+#, fuzzy
+#~ msgid "Closing"
+#~ msgstr "Fermé"
+
+#, fuzzy
+#~ msgid "resolution status"
+#~ msgstr "statut d'amitié"
+
+#, fuzzy
+#~ msgid "resolution statuses"
+#~ msgstr "statuts d'amitié"
+
+#~ msgid "Updated"
+#~ msgstr "Mis à jour"
+
+#, fuzzy
+#~ msgid "ticket update"
+#~ msgstr "Date de naissance"
+
+#~ msgid "Asker"
+#~ msgstr "Demandeur"
+
+#~ msgid "is now a friend of"
+#~ msgstr "est désormais ami(e) avec"
+
+#~ msgid "friend"
+#~ msgstr "ami"
+
+#~ msgid "Added"
+#~ msgstr "Ajouté"
+
+#~ msgid "Shout"
+#~ msgstr "Shout"

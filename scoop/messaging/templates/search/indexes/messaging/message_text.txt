@@ -1,0 +1,2 @@
+{{object.text|safe}}
+{{object.author|safe}}

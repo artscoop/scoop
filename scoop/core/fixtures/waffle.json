@@ -1,0 +1,1 @@
+[{"fields": {"active": true, "note": "Enregistrer ou non les logs d'acc\u00e8s.", "name": "access.log", "modified": "2014-12-16T13:11:13.122Z", "created": "2014-12-16T13:10:17Z"}, "model": "waffle.switch", "pk": 1}]

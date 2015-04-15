@@ -1,0 +1,106 @@
+[
+{
+    "pk": 1, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "suis"
+    }
+},
+{
+    "pk": 2, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "poule"
+    }
+},
+{
+    "pk": 3, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "une"
+    }
+},
+{
+    "pk": 4, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "haricot"
+    }
+},
+{
+    "pk": 5, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "bonjour"
+    }
+},
+{
+    "pk": 6, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "peux"
+    }
+},
+{
+    "pk": 7, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "faire"
+    }
+},
+{
+    "pk": 8, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "connaissance"
+    }
+},
+{
+    "pk": 9, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "cela"
+    }
+},
+{
+    "pk": 10, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "d\u00e9range"
+    }
+},
+{
+    "pk": 11, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "..."
+    }
+},
+{
+    "pk": 12, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "gender=femme"
+    }
+},
+{
+    "pk": 13, 
+    "model": "classify.feature", 
+    "fields": {
+        "status": 0, 
+        "name": "age=30"
+    }
+}
+]

@@ -1,0 +1,4 @@
+{{object.title|striptags}}
+{{object.body|striptags}}
+{{object.teaser|striptags}}
+{{object.get_terms|join:" "}}

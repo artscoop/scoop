@@ -1,0 +1,13 @@
+{% load i18n %}
+0:{% trans "What is your mother's maiden name ?" %}
+1:{% trans "What was your first home telephone number ?" %}
+2:{% trans "What was your first cell phone number ?" %}
+3:{% trans "What was the name of your first pet ?" %}
+4:{% trans "What is your city of birth ?" %}
+5:{% trans "What is the PIN code of your cell phone ?" %}
+6:{% trans "What is your client number for your energy bill ?" %}
+7:{% trans "What are the 4 last digits on your credit card ?" %}
+8:{% trans "What is your favorite movie ?" %}
+9:{% trans "What is the worst movie to you ?" %}
+10:{% trans "Your secret code with no question" %}
+11:{% trans "A word that is not in the dictionary" %} {% trans "(Recommended)" %}

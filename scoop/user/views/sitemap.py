@@ -1,0 +1,21 @@
+# coding: utf-8
+from __future__ import absolute_import
+
+from django.conf import settings
+from django.contrib.sitemaps import Sitemap
+
+from scoop.user.models.user import User
+
+
+class ProfileSitemap(Sitemap):
+    """ Sitemap des profils utilisateurs """
+    limit = getattr(settings, 'SITEMAPS_ITEMS_PER_PAGE', 50000)
+
+    # Getter
+    def items(self):
+        """ Renvoyer les objets du sitemap """
+        return User.objects.only('id', 'username').active()
+
+    def location(self, obj):
+        """ Renvoyer l'URL d'un profil du sitemap """
+        return obj.get_absolute_url()

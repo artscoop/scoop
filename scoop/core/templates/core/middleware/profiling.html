@@ -1,0 +1,23 @@
+{% load i18n%}
+<h2>{% trans "Total time:" %} {{total_time}}s</h2>
+<h3>{% trans "Function calls:" %} {{total_calls}}</h3>
+<table class="table table-condensed table-striped table-bordered">
+    <thead>
+        <th>{% trans "Path" %}</th>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Calls" %}</th>
+        <th>{% trans "Time" %}</th>
+        <th>{% trans "Inline" %}</th>
+    </thead>
+    <tbody>
+        {% for item in stats %}
+        <tr>
+            <td><span rel="tooltip" title="{{item.code.co_filename}}">...</span></td>
+            <td>{% if item.code.co_name %}{{item.code.co_name}}{% else %}{{item.code}}{% endif %}</td>
+            <td>{{item.callcount}}</td>
+            <td>{{item.totaltime|floatformat:3}}</td>
+            <td>{{item.inlinetime|floatformat:6}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

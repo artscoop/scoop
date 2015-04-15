@@ -1,0 +1,4 @@
+{{object.title}}
+{{object.description}}
+{{object.image}}
+{{object.get_dimension_string}}

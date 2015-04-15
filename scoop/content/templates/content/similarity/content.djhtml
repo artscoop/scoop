@@ -1,0 +1,11 @@
+{% block title %}
+{{content.title}}
+{% endblock %}
+
+{% block body %}
+{{content.html|striptags}}
+{% endblock %}
+
+{% block tags %}
+{{content.get_terms|join:", "}}
+{% endblock %}
