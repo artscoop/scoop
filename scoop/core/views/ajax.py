@@ -15,18 +15,24 @@ def validate_form(request, *args, **kwargs):
     """
     Vue de validation de formulaire (AJAX)
     Valider ou non un formulaire et renvoyer des données AJAX des erreurs
-    kwargs:form_classes -> classe de formulaire à valider
-    kwargs:alias -> alias de chemin de classe de settings.FORM_ALIASES
-    La validation onsite se fait avec le plugin jQuery.LiveValidation.js
-    (se trouve dans les plugins jQuery/One)
+    :param form_classes: classe de formulaire à valider
+    :param alias: alias de chemin de classe de settings.FORM_ALIASES
+    La validation AJAX frontend se fait via le plugin jQuery.LiveValidation.js
+    (se trouve dans static/tool/jQuery/One).
+    Le paramètre Django FORM_ALIASES est de la forme :
+    - Dictionnaire {alias: [FQN de classes de formulaires]}
+    - Dictionnaire {alias: FQN de classe de formulaire}
     """
     # Initialisation
     if kwargs.get('form_classes', False):
         Forms = kwargs['form_classes']
     elif kwargs.get('alias', False):
         alias, aliases = kwargs.get('alias'), getattr(settings, 'FORM_ALIASES', dict())
-        form_name = aliases.get(alias)
-        Forms = [import_fullname(subname) for subname in form_name.split(';') if '.' in subname]
+        form_names = aliases.get(alias)
+        if isinstance(form_names, (list, tuple)):
+            Forms = [import_fullname(form_name) for form_name in form_names if '.' in form_name]
+        else:
+            Forms = [import_fullname(form_names)]
     else:
         return HttpResponseBadRequest(u"You need to send a form or a form alias")
     output = {'valid': True, '_all_': []}

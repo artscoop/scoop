@@ -1,7 +1,9 @@
 # coding: utf-8
 from __future__ import absolute_import
+
 import sys
 from os.path import dirname, exists, join
+
 
 class Paths(object):
     """ Classe utilitaire pour les chemins spécifiques au projet """

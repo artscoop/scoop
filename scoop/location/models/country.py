@@ -115,7 +115,6 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
         """ Renvoyer une icône du pays """
         return get_country_icon_html(self.code2, self.get_name())
 
-    # ---------------------------------------------------- Renvoyer la superficie
     @addattr(admin_order_field='area', short_description=pgettext_lazy('country', u"Area"))
     def get_area(self, unit=None):
         """ Renvoyer la superficie du pays, en m² ou en mi² """

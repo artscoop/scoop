@@ -13,7 +13,9 @@ from scoop.core.abstract.core.moderation import ModeratedModel
 
 class PicturedBaseModel(models.Model):
     """ Objet étant lié à des images via ManyToMany ou Generic """
+    # Constantes
     PICTURE_FILTERING = getattr(settings, 'GENERICRELATION_PICTURE_FILTER', {'moderated': True})
+
     # Getter
     def get_pictures(self, exclude=None, filtering=PICTURE_FILTERING, reverse=False):
         """ Renvoyer les images liées à l'objet """

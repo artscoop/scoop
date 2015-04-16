@@ -101,14 +101,16 @@ class RegistrationForm(forms_.ModelForm):
 
 class EULAForm(forms_.Form):
     """ Formulaire de validation des CGU """
-    eula = forms_.BooleanField(required=True, help_text=mark_safe(_(u"By ticking this checkbox, I abide to the {website} license agreement").format(website=getattr(settings,'SITE_NAME', 'N/A'))),
+    eula = forms_.BooleanField(required=True,
+                               help_text=mark_safe(_(u"By ticking this checkbox, I abide to the {website} license agreement").format(website=getattr(settings, 'SITE_NAME', 'N/A'))),
                                label=_(u"EULA"))
 
 
 @autostrip
 class RegistrationEULAForm(RegistrationForm):
     """ Formulaire d'inscription avec CGU à valider """
-    eula = forms_.BooleanField(required=True, help_text=mark_safe(_(u"By ticking this checkbox, I abide to the {website} license agreement").format(website=getattr(settings,'SITE_NAME', 'N/A'))),
+    eula = forms_.BooleanField(required=True,
+                               help_text=mark_safe(_(u"By ticking this checkbox, I abide to the {website} license agreement").format(website=getattr(settings, 'SITE_NAME', 'N/A'))),
                                label=_(u"EULA"))
 
 

@@ -47,7 +47,6 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UU
         content = Excerpt.TRANSFORMS.get(self.format, lambda s: s)(self.get_text())
         return content
 
-    # ------------------------------ Renvoyer les icônes des langues de l'extrait
     @addattr(allow_tags=True, short_description=_(u"Languages"))
     def get_language_icons_html(self):
         """ Renvoyer une icone correspondant à la langue de l'extrait """

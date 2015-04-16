@@ -37,7 +37,6 @@ class ActionTypeAdmin(admin.ModelAdmin):
         output += u" &#8226; ".join(codeparts)
         return output
 
-    # -------------------------------------- Renvoyer le nom de code mis en forme
     @addattr(allow_tags=True, admin_order_field='sentence', short_description=_(u"Sentence"))
     def get_sentence(self, obj):
         """ Renvoyer une représentation HTML de la description de l'action """
