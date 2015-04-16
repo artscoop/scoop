@@ -1,7 +1,8 @@
 # coding: utf-8
-from annoying.decorators import render_to
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseNotFound
+
+from scoop.core.util.django.templateutil import render_to
 
 
 @render_to("user/panels/view-user-list-simple.html", string=True)

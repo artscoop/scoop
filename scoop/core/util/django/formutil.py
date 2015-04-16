@@ -1,5 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
+from collections import OrderedDict
 
 import os
 import tempfile
@@ -7,6 +8,7 @@ from os.path import join
 
 from django.contrib import messages
 from django.forms.models import ModelForm
+from django.http.request import QueryDict
 from django.http.response import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -14,6 +16,9 @@ from django.views.decorators.http import require_POST
 from scoop.core.templatetags.text_tags import humanize_join
 
 # Choix Oui/Non et Tout
+from scoop.core.util.data.typeutil import make_iterable
+
+
 CHOICES_NULLBOOLEAN = (('', _(u"All")), (False, _(u"No")), (True, _(u"Yes")))
 
 
@@ -127,53 +132,45 @@ def has_post(request, action=None):
     return posted
 
 
-def form(classnamelist, request, initial=None, instances=None, postdata=None):
+def form(request, config, initial=None):
     """
-    Créer un formulaire prenant en compte la requête.
-    Si la request est en mode POST, créer le formulaire avec les données POST,
-    sinon créer un formulaire par défaut.
-    La requête prend en paramètre une liste de Classes dérivées de Form, ou
-    un nom de classe seul dérivé de Form.
-    Il est possible alors de faire
-    a, b, c = default_form ([A, B, C], request)
-    a = default_form (A, request)
-    Il est possible de passer les valeurs initiales de formulaire si classnamelist
-    n'est pas une liste.
+    Créer un formulaire initialisé selon l'état de la requête.
+    Si request contient des données POST, créer le formulaire avec ces données.
+    Ex.:
+    >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z}), initial=None)
+    >> a = form(request, {A: {'instance': x}})
+    :param config: Configuration des formulaires
+    :type config: Liste de classes, OrderedDict, tuple de tuples ou dictionnare à une seule clé.
+    :param initial: Valeurs des champs par défaut en l'absence de POST
     """
-    forms = []
-    if request and request.has_post():
-        if isinstance(classnamelist, list):
-            for idx, classname in enumerate(classnamelist):
-                if issubclass(classname, ModelForm):
-                    forms.append(classname(request.POST, request.FILES, instance=instances[idx] if len(instances) > idx else None))
-                else:
-                    forms.append(classname(request.POST, request.FILES))
-        else:
-            forms = [classnamelist(request.POST, request.FILES, initial=initial or {})]
-    else:
-        if isinstance(classnamelist, list):
-            for idx, classname in enumerate(classnamelist):
-                if issubclass(classname, ModelForm):
-                    forms.append(classname(postdata, instance=instances[idx] if instances and len(instances) > idx else None))
-                else:
-                    forms.append(classname(postdata))
-        else:
-            if issubclass(classnamelist, ModelForm):
-                forms = [classnamelist(postdata, initial=initial, instance=instances or None)]
+    forms = list()
+    config = OrderedDict(((item, None) for item in config) if isinstance(config, list) else config)
+    for form_class in config.keys():
+        args, kwargs = list(), dict()
+        # Réunir les arguments d'initialisation du formulaire
+        if request and request.has_post():
+            args.append(request.POST)
+            args.append(request.FILES)
+        elif initial is not None:
+            if isinstance(initial, QueryDict):
+                args.append(initial.dict())
             else:
-                forms = [classnamelist(postdata, initial=initial)]
-    for form in forms:
+                kwargs['initial'] = initial
+        if issubclass(form_class, ModelForm) and config[form_class] is not None:
+            kwargs['instance'] = config[form_class]
+        # Créer le formulaire
+        form = form_class(*args, **kwargs)
         form.request = request
-    # Recréer les formulaires sans option lorsqu'une erreur de initial se produit
-    for idx, form in enumerate(forms):
+        # Vérifier que le formulaire fonctionne avec initial
         try:
             form.as_p()
+            forms.append(form)
         except TypeError:
-            forms[idx] = type(form)()
-    if len(forms) == 1:
-        return forms[0]
-    else:
-        return forms
+            kwargs['initial'] = None
+            args.append(initial)
+            forms.append(form_class(*args, **kwargs))
+    # Renvoyer les formulaires
+    return forms if len(forms) > 1 else forms[0] if forms else None
 
 
 def are_valid(forms):

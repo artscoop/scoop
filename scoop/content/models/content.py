@@ -354,7 +354,6 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer les tags du document """
         return self.tags.all()
 
-    # ---------------- Récupérer les contenus qui sont la suite du contenu actuel
     @addattr(short_description=_(u"Children"))
     def get_children(self):
         """ Renvoyer les contenus enfants, triés par poids/page """
@@ -388,7 +387,6 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Définir le code HTML selon le corps original du document """
         self.html = Content.TRANSFORMS.get(self.format, lambda s: s)(self.body)
 
-    # ---------------------------------- Peupler la liste des contenus similaires
     def _populate_similar(self, repopulate=False, result_count=10, categories=None):
         """
         Définir la liste des documents similaires à ce document

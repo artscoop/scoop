@@ -65,7 +65,7 @@ class RequestAddon():
         latitude = geoip['latitude']
         longitude = geoip['longitude']
         cityname = geoip['city']
-        # --------------------------------- Trouver la ville alentours au bon nom
+        # Trouver la ville alentours au bon nom
         city = City.objects.find_by_name([latitude, longitude], cityname)
         return city
 
@@ -82,9 +82,9 @@ class RequestAddon():
         """ Renvoyer si la requête a une action dans POST """
         return formutil.has_post(self, action)
 
-    def form(self, classnamelist, initial=None, instances=None, postdata=None):
+    def form(self, config, initial=None):
         """ Créer un ou plusieurs formulaires selon l'état de la requête """
-        return formutil.form(classnamelist, self, initial, instances, postdata)
+        return formutil.form(self, config, initial=initial)
 
     def get_id_selection(self, full, selected):
         """
@@ -142,7 +142,6 @@ def save_post_data(name):
             request = args[0]
             if request.has_post():
                 request.save_post(name)
-                return HttpResponseRedirect('')
             return method(*args, **kwargs)
 
         wrapped.__doc__ = method.__doc__

@@ -296,7 +296,6 @@ class IP(DatetimeModel, CoordinatesModel):
             return get_country_icon_html(self.country, self.get_country_name())
 
     # Setter
-    # ------------------------------------------------------ Définir l'adresse IP
     def set_ip_address(self, ip_string, force_lookup=False, save=False):
         """
         Définir l'adresse IP de l'objet

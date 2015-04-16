@@ -76,7 +76,6 @@ class RecordManager(SingleDeleteManager):
             entry.save()
         except ActionType.DoesNotExist:
             logger.warning(u"The action type {type} must be registered in order to create this record.".format(type=codename))
-            # TODO: Dump de la liste des records de plus d'un an
 
 
 class ActionTypeManager(SingleDeleteManager):

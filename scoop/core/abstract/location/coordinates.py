@@ -112,7 +112,6 @@ class CoordinatesModel(models.Model):
         result = cardinal_modes.get(mode, None)
         return result[angle_tick] if result else int(angle)
 
-    # ----- Trier un queryset d'objets à coordonnées par leur distance à un point
     def order_by_distance(self, queryset, reverse=False, as_queryset=True, related={'field': None, 'model': None}, add_field_only=False):
         """
         Trier un queryset de CoordinatesModel par leur distance à cet objet

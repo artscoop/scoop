@@ -142,12 +142,3 @@ def trace(value):
         nom de fichier, numéro de ligne, nom de fonction, texte
     """
     return traceback.extract_tb(value)
-
-
-@register.filter(name='bit_labels')
-def bit_labels(value):
-    """ Renvoyer l'étiquette d'un BitField """
-    # TODO: Supprimer cette fonction si user.Configuration n'existe plus
-    names = [i[0] for i in value if i[1]]
-    labels = [unicode(value.get_label(i)) for i in names]
-    return labels

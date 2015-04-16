@@ -127,14 +127,14 @@ def clean_orphans(output_log=True, delete=False):
 def check_file_extension(filename, resource_path, extensions):
     """ Renvoyer le nom d'un fichier avec l'extension correspondant à son type MIME """
     if os.path.exists(resource_path) and filename:
-        # ------------------------------------ Réparer l'extension de fichier
+        # Réparer l'extension de fichier
         extension_add = True
         extensions = make_iterable(extensions)
         for extension in extensions:
             if filename.lower().endswith(extension.lower()):
                 extension_add = False
         if extension_add:
-            # -------------------------------------------------- Trouver le type MIME
+            # Trouver le type MIME
             mime = Magic(mime=True, keep_going=True)
             mimetype = mime.from_file(resource_path)
             new_extension = guess_extension(mimetype)

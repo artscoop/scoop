@@ -112,7 +112,6 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
         """ Renvoyer l'adresse email de l'utilisateur """
         return obj.user.email
 
-    # ---------------------------------------- Récupérer l'image de l'utilisateur
     @addattr(allow_tags=True, admin_order_field='picture__title', short_description=_(u"User picture"))
     def get_image(self, obj):
         """ Renvoyer une vignette du portrait utilisateur """

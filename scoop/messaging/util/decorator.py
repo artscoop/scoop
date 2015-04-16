@@ -64,7 +64,7 @@ def user_can_send_to(method):
             user = get_user_model().objects.get_by_uuid(uuid, request.user)
         elif len(args) > 0 and isinstance(args[0], get_user_model()):
             user = args[0]
-        # ------ Si la simulation de nouveau thread échoue, alors renvoyer un 404
+        # Si la simulation de nouveau thread échoue, alors renvoyer un 404
         if Thread.objects.simulate(request.user, [user]) is False:
             raise Http404()
         return method(request, *args, **kwargs)

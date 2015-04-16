@@ -32,7 +32,6 @@ class CommentableModel(models.Model):
         comments = self.comments.filter(visible=True).order_by('id')
         return comments.earliest('id') if comments.exists() else None
 
-    # ------------------ Retourner les commentaires du contenu, à l'envers ou non
     @addattr(short_description=mark_safe(u'<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
     def get_comments(self, reverse=False):
         """ Renvoyer les commentaires de l'objet """

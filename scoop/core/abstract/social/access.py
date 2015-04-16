@@ -30,7 +30,7 @@ class PrivacyModel(models.Model):
             return True
         elif self.access == 1:  # Ami avec l'auteur
             from scoop.user.social.models import FriendList
-            # ---
+            # C'est un succès si une amitié existe
             if FriendList.objects.exists(user, self.author):
                 return True
         elif self.access == 2 and user == self.author:  # Seulement moi

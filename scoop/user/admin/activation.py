@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.util.shortcuts import addattr
 from scoop.user.models.activation import Activation
 
+
 __all__ = ['ActivationAdmin']
 
 
@@ -26,5 +27,5 @@ class ActivationAdmin(admin.ModelAdmin):
         for activation in queryset:
             Activation.objects.activate(activation.uuid, activation.user.username, request)
 
-# ------------------------ Enregistrer la liste des classes pour l'administration
+# Enregistrer les classes d'administration
 admin.site.register(Activation, ActivationAdmin)

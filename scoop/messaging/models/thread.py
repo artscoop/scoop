@@ -422,7 +422,6 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         """ Renvoyer le sujet du fil """
         return self.topic or mark_safe(render_to_string('messaging/message/subject/no-subject.txt', {'thread': self}))
 
-    # ------------------------------------------- Récupérer les messages du sujet
     @addattr(short_description=_(u"All messages"))
     def get_messages(self, ghost=False, reverse=False):
         """ Renvoyer les messages du fil """

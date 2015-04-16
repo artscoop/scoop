@@ -85,7 +85,6 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
         else:
             return pgettext('size', u"None")
 
-    # ---------------------------- Indiquer si la pièce jointe ne pointe sur rien
     @addattr(boolean=True, short_description=pgettext_lazy('attachment', u"Orphaned"))
     def is_orphan(self):
         """ Renvoyer si la pièce jointe n'a pas de cible """
