@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-02-23 09:10+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -138,7 +138,7 @@ msgstr "Bibliothèques {% load %} séparées par des virgules"
 msgid "Tag libs"
 msgstr "Bibliothèques de tags"
 
-#: models/excerpt.py:37 models/excerpt.py:73
+#: models/excerpt.py:37 models/excerpt.py:72
 msgid "Text"
 msgstr "Texte"
 
@@ -146,15 +146,15 @@ msgstr "Texte"
 msgid "(No text)"
 msgstr "(Aucun texte)"
 
-#: models/excerpt.py:51
+#: models/excerpt.py:50
 msgid "Languages"
 msgstr "Langues"
 
-#: models/excerpt.py:66
+#: models/excerpt.py:65
 msgid "excerpt"
 msgstr "extrait"
 
-#: models/excerpt.py:67
+#: models/excerpt.py:66
 msgid "excerpts"
 msgstr "extraits"
 

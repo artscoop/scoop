@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-04-11 14:41+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -397,7 +397,7 @@ msgstr "Autre"
 
 #: models/advertisement.py:70 models/album.py:55 models/attachment.py:55
 #: models/attachment.py:75 models/classification.py:27 models/comment.py:81
-#: models/comment.py:101 models/content.py:493 models/content.py:551
+#: models/comment.py:101 models/content.py:491 models/content.py:549
 msgid "Name"
 msgstr "Nom"
 
@@ -427,8 +427,8 @@ msgid "Views"
 msgstr "Affichages"
 
 #: models/advertisement.py:75 models/album.py:56 models/animation.py:78
-#: models/attachment.py:56 models/classification.py:28 models/content.py:509
-#: models/content.py:553 models/link.py:54 models/picture.py:179
+#: models/attachment.py:56 models/classification.py:28 models/content.py:507
+#: models/content.py:551 models/link.py:54 models/picture.py:179
 msgid "Description"
 msgstr "Description"
 
@@ -569,16 +569,16 @@ msgstr "Type de contenu"
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: models/attachment.py:89
+#: models/attachment.py:88
 msgctxt "attachment"
 msgid "Orphaned"
 msgstr "Orpheline"
 
-#: models/attachment.py:138
+#: models/attachment.py:137
 msgid "attachment"
 msgstr "pièce jointe"
 
-#: models/attachment.py:139
+#: models/attachment.py:138
 msgid "attachments"
 msgstr "pièces jointes"
 
@@ -611,7 +611,7 @@ msgstr "tags"
 msgid "Body"
 msgstr "Corps"
 
-#: models/comment.py:83 models/comment.py:93 models/content.py:487
+#: models/comment.py:83 models/comment.py:93 models/content.py:485
 #: models/link.py:47
 msgid "URL"
 msgstr "URL"
@@ -796,59 +796,59 @@ msgstr "A du contenu similaire"
 msgid "Tags"
 msgstr "Tags"
 
-#: models/content.py:358
+#: models/content.py:357
 msgid "Children"
 msgstr "Enfants"
 
-#: models/content.py:474
+#: models/content.py:472
 msgid "content"
 msgstr "contenu"
 
-#: models/content.py:475 templates/content/dashboard/blogs.html:5
+#: models/content.py:473 templates/content/dashboard/blogs.html:5
 msgid "contents"
 msgstr "contenus"
 
-#: models/content.py:486
+#: models/content.py:484
 msgid "Identifier"
 msgstr "Identifiant"
 
-#: models/content.py:487
+#: models/content.py:485
 msgid "e.g. blog, story or article"
 msgstr "ex. blog, story ou article"
 
-#: models/content.py:488
+#: models/content.py:486
 msgid "Has index"
 msgstr "A une page d'index"
 
-#: models/content.py:489
+#: models/content.py:487
 msgid "Visible"
 msgstr "Visible"
 
-#: models/content.py:499 models/content.py:507
+#: models/content.py:497 models/content.py:505
 msgid "(No name)"
 msgstr "(Sans nom)"
 
-#: models/content.py:501 models/content.py:552
+#: models/content.py:499 models/content.py:550
 msgid "Plural"
 msgstr "Pluriel"
 
-#: models/content.py:515
+#: models/content.py:513
 msgid "(No description)"
 msgstr "(Sans description)"
 
-#: models/content.py:543
+#: models/content.py:541
 msgid "content type"
 msgstr "type de contenu"
 
-#: models/content.py:544 templates/content/dashboard/blogs.html:7
+#: models/content.py:542 templates/content/dashboard/blogs.html:7
 msgid "content types"
 msgstr "types de contenu"
 
-#: models/content.py:565
+#: models/content.py:563
 msgid "translation"
 msgstr "traduction"
 
-#: models/content.py:566
+#: models/content.py:564
 msgid "translations"
 msgstr "traductions"
 

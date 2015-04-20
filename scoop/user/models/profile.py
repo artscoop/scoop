@@ -105,7 +105,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
                 return fullpath
         return ''
 
-    def get_pictures(self):
+    def get_pictures(self, *args, **kwargs):
         """ Renvoyer toutes les images du profil sans l'image principale """
         return super(BaseProfile, self).get_pictures(exclude={'id': self.picture.id} if self.picture else {})
 

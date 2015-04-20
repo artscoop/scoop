@@ -56,3 +56,10 @@ def list_contains(t, text):
         if text in i:
             return True
     return False
+
+
+def is_multi_dimensional(value):
+    """ Renvoyer si une liste ou un tuple contient des listes ou des tuples """
+    if isinstance(value, (list, tuple)) and value:
+        return isinstance(value[0], (list, tuple))
+    return False

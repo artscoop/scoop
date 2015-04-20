@@ -1,12 +1,14 @@
 # coding: utf-8
 from __future__ import absolute_import
-from collections import OrderedDict
 
 import os
 import tempfile
+from collections import OrderedDict
+from inspect import isclass
 from os.path import join
 
 from django.contrib import messages
+from django.forms.forms import Form
 from django.forms.models import ModelForm
 from django.http.request import QueryDict
 from django.http.response import HttpResponse
@@ -14,10 +16,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from scoop.core.templatetags.text_tags import humanize_join
-
 # Choix Oui/Non et Tout
-from scoop.core.util.data.typeutil import make_iterable
-
+from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable
 
 CHOICES_NULLBOOLEAN = (('', _(u"All")), (False, _(u"No")), (True, _(u"Yes")))
 
@@ -49,7 +49,7 @@ class ModelFormUtil:
                 return False
         return True
 
-    def update_from_form(self, form, fieldnames, update=True, **kwargs):
+    def update_from_form(self, form, fieldnames, save=True, **kwargs):
         """
         Mettre à jour les champs de l'objet selon l'état d'un formulaire
         - La validation ne se fait que sur les champs sélectionnés et valides
@@ -66,7 +66,7 @@ class ModelFormUtil:
         else:
             raise AttributeError(u"You must pass a field names iterable or None.")
         # Terminer en sauvegardant l'objet si demandé
-        if update:
+        if save:
             self.update(save=True, **kwargs)
         return self
 
@@ -140,11 +140,12 @@ def form(request, config, initial=None):
     >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z}), initial=None)
     >> a = form(request, {A: {'instance': x}})
     :param config: Configuration des formulaires
-    :type config: Liste de classes, OrderedDict, tuple de tuples ou dictionnare à une seule clé.
+    :type config: Form or list[Form] or collections.OrderedDict or tuple[tuple] or dict(len=1) or list[list]
     :param initial: Valeurs des champs par défaut en l'absence de POST
     """
     forms = list()
-    config = OrderedDict(((item, None) for item in config) if isinstance(config, list) else config)
+    config = make_iterable(config, list) if isinstance(config, (ModelForm, Form)) else config
+    config = OrderedDict(((item, None) for item in config) if not is_multi_dimensional(config) else config)
     for form_class in config.keys():
         args, kwargs = list(), dict()
         # Réunir les arguments d'initialisation du formulaire
@@ -156,7 +157,7 @@ def form(request, config, initial=None):
                 args.append(initial.dict())
             else:
                 kwargs['initial'] = initial
-        if issubclass(form_class, ModelForm) and config[form_class] is not None:
+        if isclass(form_class) and issubclass(form_class, ModelForm) and config[form_class] is not None:
             kwargs['instance'] = config[form_class]
         # Créer le formulaire
         form = form_class(*args, **kwargs)
@@ -166,9 +167,11 @@ def form(request, config, initial=None):
             form.as_p()
             forms.append(form)
         except TypeError:
+            print u"Form instantiation: FIX ME!!"
             kwargs['initial'] = None
             args.append(initial)
-            forms.append(form_class(*args, **kwargs))
+            form = form_class(*args, **kwargs)
+            forms.append(form)
     # Renvoyer les formulaires
     return forms if len(forms) > 1 else forms[0] if forms else None
 

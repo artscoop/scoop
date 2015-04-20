@@ -52,7 +52,7 @@ def reverse_lookup(ip):
     return {'name': '', 'status': 99}
 
 
-@lru_cache
+@lru_cache(16)
 def get_local_ip():
     """
     Récupérer l'IP locale, normalement autre que 127.0.0.1, via l'interface

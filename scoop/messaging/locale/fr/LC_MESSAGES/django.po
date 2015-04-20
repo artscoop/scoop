@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-04-11 14:44+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -49,8 +49,8 @@ msgstr "Fil de discussion"
 msgid "Expiry"
 msgstr "Expiration"
 
-#: admin/thread.py:34 admin/thread.py:39 models/thread.py:445
-#: models/thread.py:471
+#: admin/thread.py:34 admin/thread.py:39 models/thread.py:444
+#: models/thread.py:470
 msgid "Recipients"
 msgstr "Destinataires"
 
@@ -506,47 +506,47 @@ msgstr "Fermé"
 msgid "Value in days"
 msgstr "Valeur en jours"
 
-#: models/thread.py:426
+#: models/thread.py:425
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: models/thread.py:433
+#: models/thread.py:432
 msgid "Last message"
 msgstr "Dernier message"
 
-#: models/thread.py:439
+#: models/thread.py:438
 msgid "First message"
 msgstr "Premier message"
 
-#: models/thread.py:463
+#: models/thread.py:462
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: models/thread.py:487
+#: models/thread.py:486
 msgid "Messages"
 msgstr "Messages"
 
-#: models/thread.py:498
+#: models/thread.py:497
 msgid "Unread"
 msgstr "Non lu"
 
-#: models/thread.py:505
+#: models/thread.py:504
 msgid "All read"
 msgstr "Tout lu"
 
-#: models/thread.py:510
+#: models/thread.py:509
 msgid "Staff thread"
 msgstr "Fil administratif"
 
-#: models/thread.py:515
+#: models/thread.py:514
 msgid "Unread count"
 msgstr "Nombre de non lus"
 
-#: models/thread.py:544
+#: models/thread.py:543
 msgid "thread"
 msgstr "fil de discussion"
 
-#: models/thread.py:545
+#: models/thread.py:544
 msgid "threads"
 msgstr "fils de discussion"
 

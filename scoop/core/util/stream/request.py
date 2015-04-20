@@ -4,7 +4,6 @@ from __future__ import absolute_import
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpRequest
-from django.http.response import HttpResponseRedirect
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 
@@ -16,6 +15,7 @@ class RequestAddon():
     Opérations sur l'objet HttpRequest destinées à l'usage avec plusieurs
     applications. Principalement, l'objectif de l'utilitaire est de manipuler
     IP ou autres éléments de requête HTTP.
+    :type RequestAddon: django.http.HttpRequest
     """
     # Constantes
     CHECKS = ['HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR']
@@ -27,7 +27,7 @@ class RequestAddon():
     def get_ip(self):
         """ Renvoyer l'adresse IP de la requête, au format texte"""
         for entry in RequestAddon.CHECKS:
-            if entry in self.META and self.META[entry]:
+            if self.META.get(entry, False):
                 return self.META[entry]
         return '-'
 
@@ -37,7 +37,7 @@ class RequestAddon():
 
     def is_referrer_external(self):
         """ Renvoyer si le référent est externe au site """
-        return not self.get_referrer().startswith(getattr(settings, 'DOMAIN_NAME'))
+        return not self.get_referrer().startswith(getattr(settings, 'DOMAIN_NAME', '--'))
 
     def get_reverse(self):
         """ Renvoyer le reverse de l'IP de la requête """

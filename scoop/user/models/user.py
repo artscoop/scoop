@@ -210,7 +210,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         :param request: Une connexion nécessite une requête
         :param data: Dictionnaire de connexion, login et password
         :param logout: Demander une déconnexion
-        :param fake: Effectuer une simulation de la connexion
+        :param fake: Effectuer une simulation de la connexion uniquement
         :param direct_user: Connecter directement un utilisateur sans identifiants
         """
         if logout is False:
@@ -333,7 +333,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         user_ids = User.get_online_set()
         user_keys = [User.CACHE_KEY['online'].format(user_id) for user_id in user_ids]
         values = cache.get_many(user_keys)
-        online = {key: value is not None and ((value + User.ONLINE_DURATION) >= now) for key, value in values.items()}
+        online = {key: (value is not None and value + User.ONLINE_DURATION >= now) for key, value in values.items()}
         start = count = User.get_online_count()
         for user_id in user_ids:
             user_key = User.CACHE_KEY['online'].format(user_id)
