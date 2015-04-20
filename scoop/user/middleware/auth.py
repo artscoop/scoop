@@ -27,7 +27,7 @@ class LoginMiddleware(object):
     def process_request(self, request):
         """ Traiter la requête """
         if request.user.is_anonymous() and request.has_post('submit-login'):
-            form = request.form(LoginForm)
+            form = request.form([LoginForm])
             if formutil.are_valid([form]):
                 try:
                     from scoop.user.forms.configuration import ConfigurationForm

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-04-11 14:42+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -55,7 +55,7 @@ msgstr "Index du forum"
 msgid "Name"
 msgstr "Nom"
 
-#: models/forum.py:74 models/poll.py:38 models/sanction.py:35
+#: models/forum.py:74 models/poll.py:38 models/sanction.py:36
 msgid "Description"
 msgstr "Description"
 
@@ -133,7 +133,7 @@ msgstr "forum"
 msgid "forums"
 msgstr "forums"
 
-#: models/ignorelist.py:18 models/read.py:58 models/sanction.py:33
+#: models/ignorelist.py:18 models/read.py:58 models/sanction.py:34
 msgid "User"
 msgstr "Utilisateur"
 
@@ -199,7 +199,7 @@ msgstr "sondages"
 msgid "Thread"
 msgstr "Fil de discussion"
 
-#: models/read.py:59 models/sanction.py:36
+#: models/read.py:59 models/sanction.py:37
 msgid "Expiry"
 msgstr "Expiration"
 
@@ -216,44 +216,44 @@ msgstr "sujet"
 msgid "topics read"
 msgstr "sujets"
 
-#: models/sanction.py:25
+#: models/sanction.py:30
 msgid "Posting disabled"
 msgstr "Réponses désactivées"
 
-#: models/sanction.py:25
+#: models/sanction.py:30
 msgid "Reading disabled"
 msgstr "Lecture désactivée"
 
-#: models/sanction.py:26
+#: models/sanction.py:31
 msgid "2 hours"
 msgstr "2 heures"
 
-#: models/sanction.py:26
+#: models/sanction.py:31
 msgid "1 day"
 msgstr "1 jour"
 
-#: models/sanction.py:26
+#: models/sanction.py:31
 msgid "3 days"
 msgstr "3 jours"
 
-#: models/sanction.py:26
+#: models/sanction.py:31
 msgid "1 week"
 msgstr "1 semaine"
 
-#: models/sanction.py:34
+#: models/sanction.py:35
 msgid "Type"
 msgstr "Type"
 
-#: models/sanction.py:37
+#: models/sanction.py:38
 msgctxt "sanction"
 msgid "Revoked"
 msgstr "Révoquée"
 
-#: models/sanction.py:53
+#: models/sanction.py:54
 msgid "sanction"
 msgstr "sanction"
 
-#: models/sanction.py:54
+#: models/sanction.py:55
 msgid "sanctions"
 msgstr "sanctions"
 

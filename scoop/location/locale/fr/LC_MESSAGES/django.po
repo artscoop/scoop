@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-04-11 14:43+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -72,7 +72,7 @@ msgstr "Parent"
 msgid "Code"
 msgstr "Code"
 
-#: admin/country.py:39 models/city.py:120 models/country.py:168
+#: admin/country.py:39 models/city.py:120 models/country.py:167
 msgid "Country"
 msgstr "Pays"
 
@@ -180,7 +180,7 @@ msgid "Feature"
 msgstr "Catégorie"
 
 #: models/city.py:121 models/city.py:233 models/city.py:288 models/city.py:289
-#: models/country.py:71 models/country.py:88 models/country.py:170
+#: models/country.py:71 models/country.py:88 models/country.py:169
 #: models/currency.py:36 models/timezone.py:16 models/venue.py:32
 #: models/venuetype.py:19 models/venuetype.py:56
 msgid "Name"
@@ -223,23 +223,23 @@ msgstr "Arborescence formatée"
 msgid "cities"
 msgstr "villes"
 
-#: models/city.py:285 models/country.py:167
+#: models/city.py:285 models/country.py:166
 msgid "Alternate ID"
 msgstr "ID alternatif"
 
-#: models/city.py:287 models/country.py:169
+#: models/city.py:287 models/country.py:168
 msgid "Language name"
 msgstr "Nom de la langue"
 
-#: models/city.py:290 models/country.py:171
+#: models/city.py:290 models/country.py:170
 msgid "Preferred"
 msgstr "Préféré"
 
-#: models/city.py:291 models/country.py:172
+#: models/city.py:291 models/country.py:171
 msgid "Short version"
 msgstr "Raccourci"
 
-#: models/city.py:312 models/country.py:177
+#: models/city.py:312 models/country.py:176
 msgid "Name for {}"
 msgstr "Nom pour {}"
 
@@ -295,7 +295,7 @@ msgstr "Préfixe téléphonique"
 msgid "Continent"
 msgstr "Continent"
 
-#: models/country.py:77 models/country.py:119
+#: models/country.py:77 models/country.py:118
 msgctxt "country"
 msgid "Area"
 msgstr "Superficie"
@@ -336,19 +336,19 @@ msgstr "Dernière mise à jour"
 msgid "City count"
 msgstr "Nombre de villes"
 
-#: models/country.py:159
+#: models/country.py:158
 msgid "country"
 msgstr "pays"
 
-#: models/country.py:160
+#: models/country.py:159
 msgid "countries"
 msgstr "pays"
 
-#: models/country.py:181
+#: models/country.py:180
 msgid "country name"
 msgstr "nom de pays"
 
-#: models/country.py:182
+#: models/country.py:181
 msgid "country names"
 msgstr "noms de pays"
 

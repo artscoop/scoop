@@ -631,4 +631,5 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         verbose_name = _(u'image')
         verbose_name_plural = _(u'images')
         index_together = [['content_type', 'object_id']]
+        permissions = [['can_upload_picture', u"Can upload a picture"]]
         app_label = 'content'

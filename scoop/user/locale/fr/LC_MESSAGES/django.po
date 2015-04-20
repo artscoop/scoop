@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-04-11 14:47+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.6\n"
 
-#: admin/activation.py:23
+#: admin/activation.py:24
 msgid "Activate selected users"
 msgstr "Activer les utilisateurs sélectionnés"
 
@@ -71,87 +71,87 @@ msgstr "en ligne"
 msgid "offline"
 msgstr "hors ligne"
 
-#: admin/filters.py:82
+#: admin/filters.py:83
 msgid "age"
 msgstr "âge"
 
-#: admin/filters.py:88
+#: admin/filters.py:89
 msgid "0 to 11"
 msgstr "0 à 11"
 
-#: admin/filters.py:89
+#: admin/filters.py:90
 msgid "12 to 17"
 msgstr "12 à 17"
 
-#: admin/filters.py:90
+#: admin/filters.py:91
 msgid "18 to 24"
 msgstr "18 à 24"
 
-#: admin/filters.py:91
+#: admin/filters.py:92
 msgid "25 to 34"
 msgstr "25 à 34"
 
-#: admin/filters.py:92
+#: admin/filters.py:93
 msgid "35 to 44"
 msgstr "35 à 44"
 
-#: admin/filters.py:93
+#: admin/filters.py:94
 msgid "45 to 54"
 msgstr "45 à 54"
 
-#: admin/filters.py:94
+#: admin/filters.py:95
 msgid "55 and greater"
 msgstr "55 et plus"
 
-#: admin/filters.py:108
+#: admin/filters.py:109
 msgid "mail service"
 msgstr "service de courrier"
 
-#: admin/filters.py:114
+#: admin/filters.py:115
 msgid "Microsoft Live Mail"
 msgstr "Microsoft Live Mail"
 
-#: admin/filters.py:115
+#: admin/filters.py:116
 msgid "Yahoo! Mail"
 msgstr "Yahoo! Mail"
 
-#: admin/filters.py:116
+#: admin/filters.py:117
 msgid "Google GMail"
 msgstr "Google GMail"
 
-#: admin/filters.py:117
+#: admin/filters.py:118
 msgid "SFR"
 msgstr "SFR"
 
-#: admin/filters.py:118
+#: admin/filters.py:119
 msgid "Free"
 msgstr "Free"
 
-#: admin/filters.py:119
+#: admin/filters.py:120
 msgid "Yandex"
 msgstr "Yandex"
 
-#: admin/filters.py:120
+#: admin/filters.py:121
 msgid "Orange"
 msgstr "Orange"
 
-#: admin/filters.py:121
+#: admin/filters.py:122
 msgid "Bouygues"
 msgstr "Bouygues"
 
-#: admin/filters.py:146
+#: admin/filters.py:147
 msgid "picture"
 msgstr "image"
 
-#: admin/filters.py:152
+#: admin/filters.py:153
 msgid "Has pictures"
 msgstr "A des images"
 
-#: admin/filters.py:153
+#: admin/filters.py:154
 msgid "Has no picture"
 msgstr "N'a pas d'image"
 
-#: admin/filters.py:166
+#: admin/filters.py:167
 msgid "first username letter"
 msgstr "première lettre du pseudonyme"
 
@@ -190,7 +190,7 @@ msgstr "Id"
 msgid "Email"
 msgstr "Email"
 
-#: admin/profile.py:116 admin/user.py:94
+#: admin/profile.py:115 admin/user.py:94
 msgid "User picture"
 msgstr "Portrait utilisateur"
 
@@ -397,17 +397,17 @@ msgstr "Votre pseudonyme doit faire entre {min} et {max} caractères."
 msgid "You must accept our EULA to proceed."
 msgstr "Vous devez accepter nos CGU pour continuer."
 
-#: forms/registration.py:104 forms/registration.py:111
+#: forms/registration.py:105 forms/registration.py:113
 #, python-brace-format
 msgid "By ticking this checkbox, I abide to the {website} license agreement"
 msgstr ""
 "En cochant cette case, j'accepte les conditions d'utilisation de {website}"
 
-#: forms/registration.py:105 forms/registration.py:112
+#: forms/registration.py:106 forms/registration.py:114
 msgid "EULA"
 msgstr "CGU"
 
-#: forms/registration.py:118
+#: forms/registration.py:120
 msgid "Original"
 msgstr "Original"
 

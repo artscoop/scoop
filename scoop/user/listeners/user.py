@@ -53,7 +53,7 @@ def login_actions(sender, request, user, **kwargs):
     request.session.set_expiry(timedelta(seconds=timeout))
     logins = user.profile.get_data('logins', 0)
     user.profile.set_data('logins', logins + 1, save=True)
-    messages.success(request, _(u"Hello, %(name)s!") % {'name': capfirst(user)})
+    messages.success(request, _(u"Hello, {name}!").format(name=capfirst(user)))
     # Actions publiques et enregistrements
     record.send(None, actor=user, action='user.login')
 

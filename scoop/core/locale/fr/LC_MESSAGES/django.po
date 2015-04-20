@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 11:44+0000\n"
+"POT-Creation-Date: 2015-04-16 19:33+0200\n"
 "PO-Revision-Date: 2015-04-11 14:42+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -47,7 +47,7 @@ msgstr "Réponse acceptée"
 msgid "Commentable"
 msgstr "Commentable"
 
-#: abstract/content/comment.py:21 abstract/content/comment.py:47
+#: abstract/content/comment.py:21 abstract/content/comment.py:46
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -76,11 +76,11 @@ msgstr "Adultes uniquement"
 msgid "Audience rating"
 msgstr "Type de public"
 
-#: abstract/content/picture.py:93 abstract/content/picture.py:104
+#: abstract/content/picture.py:95 abstract/content/picture.py:106
 msgid "🖌"
 msgstr "🖌"
 
-#: abstract/content/picture.py:105
+#: abstract/content/picture.py:107
 msgid "Pictures"
 msgstr "Images"
 
@@ -167,7 +167,7 @@ msgstr "Horodatage"
 
 #: abstract/core/datetime.py:44 abstract/core/datetime.py:49
 #: abstract/core/datetime.py:54 abstract/core/datetime.py:59
-#: models/recorder.py:132
+#: models/recorder.py:131
 msgctxt "datetime"
 msgid "Time"
 msgstr "Heure"
@@ -347,7 +347,7 @@ msgstr "Niveau d'accès"
 msgid "Author"
 msgstr "Auteur"
 
-#: abstract/user/authored.py:34 models/recorder.py:101
+#: abstract/user/authored.py:34 models/recorder.py:100
 msgid "User"
 msgstr "Utilisateur"
 
@@ -372,7 +372,7 @@ msgstr "première lettre"
 msgid "random"
 msgstr "aléatoire"
 
-#: admin/filters.py:40 util/django/formutil.py:17
+#: admin/filters.py:40 util/django/formutil.py:22
 msgid "Yes"
 msgstr "Oui"
 
@@ -447,7 +447,7 @@ msgstr "Nombre d'entrées"
 msgid "Codename"
 msgstr "Nom de code"
 
-#: admin/recorder.py:41 models/recorder.py:183
+#: admin/recorder.py:40 models/recorder.py:182
 msgid "Sentence"
 msgstr "Phrase"
 
@@ -473,7 +473,7 @@ msgid "Parent"
 msgstr "Parent"
 
 #: models/option.py:59 models/option.py:126 models/optiongroup.py:35
-#: models/optiongroup.py:80 models/recorder.py:102
+#: models/optiongroup.py:80 models/recorder.py:101
 #: templates/core/middleware/profiling.html:7
 msgid "Name"
 msgstr "Nom"
@@ -483,7 +483,7 @@ msgid "(No name)"
 msgstr "(sans nom)"
 
 #: models/option.py:67 models/option.py:127 models/optiongroup.py:43
-#: models/optiongroup.py:81 models/recorder.py:120
+#: models/optiongroup.py:81 models/recorder.py:119
 msgid "Description"
 msgstr "Description"
 
@@ -507,80 +507,80 @@ msgstr "groupe d'options"
 msgid "option groups"
 msgstr "groupes d'options"
 
-#: models/recorder.py:103
+#: models/recorder.py:102
 msgid "Action type"
 msgstr "Type d'action"
 
-#: models/recorder.py:104
+#: models/recorder.py:103
 msgctxt "record"
 msgid "Created"
 msgstr "Créé"
 
-#: models/recorder.py:106
+#: models/recorder.py:105
 msgid "Target type"
 msgstr "Type de la cible"
 
-#: models/recorder.py:107
+#: models/recorder.py:106
 msgid "Target Id"
 msgstr "Id de la cible"
 
-#: models/recorder.py:109 util/django/admin.py:20
+#: models/recorder.py:108 util/django/admin.py:20
 msgid "Target"
 msgstr "Cible"
 
-#: models/recorder.py:110
+#: models/recorder.py:109
 msgid "Target name"
 msgstr "Nom de la cible"
 
-#: models/recorder.py:112
+#: models/recorder.py:111
 msgid "Container type"
 msgstr "Type du conteneur"
 
-#: models/recorder.py:113
+#: models/recorder.py:112
 msgid "Container Id"
 msgstr "Id du conteneur"
 
-#: models/recorder.py:115
+#: models/recorder.py:114
 msgid "Container"
 msgstr "Conteneur"
 
-#: models/recorder.py:116
+#: models/recorder.py:115
 msgid "Container name"
 msgstr "Nom du conteneur"
 
-#: models/recorder.py:127
+#: models/recorder.py:126
 msgid "Hour"
 msgstr "Heure"
 
-#: models/recorder.py:149 models/recorder.py:188
+#: models/recorder.py:148 models/recorder.py:187
 msgid "Color"
 msgstr "Couleur"
 
-#: models/recorder.py:174
+#: models/recorder.py:173
 msgid "record"
 msgstr "enregistrement"
 
-#: models/recorder.py:175
+#: models/recorder.py:174
 msgid "records"
 msgstr "enregistrements"
 
-#: models/recorder.py:182
+#: models/recorder.py:181
 msgid "Code name"
 msgstr "Nom de code"
 
-#: models/recorder.py:184
+#: models/recorder.py:183
 msgid "Verb"
 msgstr "Verbe"
 
-#: models/recorder.py:196
+#: models/recorder.py:195
 msgid "Valid"
 msgstr "Valide"
 
-#: models/recorder.py:211
+#: models/recorder.py:210
 msgid "action type"
 msgstr "type d'action"
 
-#: models/recorder.py:212
+#: models/recorder.py:211
 msgid "action types"
 msgstr "types d'actions"
 
@@ -735,11 +735,11 @@ msgctxt "type"
 msgid "None"
 msgstr "Aucun"
 
-#: util/django/formutil.py:17
+#: util/django/formutil.py:22
 msgid "All"
 msgstr "Tout"
 
-#: util/django/formutil.py:17
+#: util/django/formutil.py:22
 msgid "No"
 msgstr "Non"
 
