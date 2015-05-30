@@ -10,6 +10,7 @@ from annoying.fields import AutoOneToOneField
 from django.apps import apps
 from django.conf import settings
 from django.db import models
+from django.db.models.manager import Manager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -20,14 +21,19 @@ from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.namedfilter import NamedFilterManager
 from scoop.core.abstract.social.like import LikableModel
 from scoop.core.util.data.dateutil import is_new
-from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
 
 logger = logging.getLogger(__name__)
 
 
-class BaseProfileManager(SingleDeleteManager, BirthManager, NamedFilterManager):
+class ProfileQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
+    """ Queryset des utilisateurs """
+    pass
+
+
+class BaseProfileManager(Manager.from_queryset(ProfileQuerySet), BirthManager, NamedFilterManager):
     """ Manager de base de profils """
 
     def get_queryset(self):
@@ -56,7 +62,8 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
                                 verbose_name=_(u"Picture"))
     banned = models.BooleanField(default=False, verbose_name=pgettext_lazy('profile', u"Banned"))
     harmful = models.NullBooleanField(default=None, verbose_name=pgettext_lazy('profile', u"Harmful"))
-    city = models.ForeignKey('location.City', null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name="+", verbose_name=_(u"City")) if apps.is_installed('scoop.location') else None
+    city = models.ForeignKey('location.City', null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name="+", verbose_name=_(u"City")) if apps.is_installed(
+        'scoop.location') else None
 
     # Getter
     @addattr(boolean=True, admin_order_field='user__date_joined', short_description=_(u"New"))

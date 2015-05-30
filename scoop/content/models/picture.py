@@ -45,6 +45,7 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -149,6 +150,7 @@ class PictureQuerySet(models.QuerySet, PictureQuerySetMixin, ModeratedQuerySetMi
 
 class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manager, PictureQuerySetMixin, ModeratedQuerySetMixin):
     """ Manager des images """
+    use_for_related_fields = True
 
     def get_queryset(self):
         """ Renvoyer le queryset par défaut """
@@ -174,7 +176,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     AUDIENCES = [[0, _(u"Everyone")], [5, _(u"Adults only")]]
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_(u"Author"))
-    image = WebImageField(upload_to=get_image_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64), help_text=_(u"Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_(u"Image"))
+    image = WebImageField(upload_to=get_image_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64),
+                          help_text=_(u"Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_(u"Image"))
     title = models.CharField(max_length=96, blank=True, verbose_name=_(u"Title"))
     description = models.TextField(blank=True, verbose_name=_(u"Description"), help_text=_(u"Description text. Enter an URL here to download a picture"))
     marker = models.CharField(max_length=36, blank=True, help_text=_(u"Comma separated"), verbose_name=_(u"Internal marker"))
@@ -226,12 +229,12 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 thumbnail_options = {'crop': 'smart', 'size': size}
                 result = self.get_thumbnail(**thumbnail_options)
                 template = kwargs.get('template', 'link')
-                template_file = 'content/display/picture/thumbnail/{}.html'.format(template)
+                template_file = u'content/display/picture/thumbnail/{}.html'.format(template)
                 output = render_to_string(template_file, {'picture': self, 'href': self.image.url, 'title': escape(self.description), 'source': result.url})
                 return output
             except Exception as e:
                 print_exc(e)
-                return '<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', u"None"), e, self.image.name)
+                return u'<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', u"None"), e, self.image.name)
         return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', u"None"))
 
     @addattr(short_description=_(u"#"))
@@ -309,6 +312,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def get_google_similar_count(self, request):
         """ Renvoyer le nombre d'images similaires trouvées par Google """
         from scoop.content.templatetags.picture_tags import lookup_url
+
 
         url = lookup_url(self, request)
         resource = get_url_resource(url)
@@ -389,7 +393,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             Picture.objects.filter(pk=self.pk).update(width=None, height=None)
 
     def update_path(self, force_name=None):
-        """ Déplacer l'image vers son chemin par défaut """
+        """
+        Déplacer l'image vers son chemin par défaut
+        :param force_name: Forcer un nouveau nom de fichier
+        :type force_name: str
+        """
         if self.exists():
             # Supprimer les miniatures de l'image
             self.clean_thumbnail()
@@ -438,22 +446,24 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             self.transient = False
             self.save(update_fields=['transient'])
 
-    def paste(self, path, absolute=False, position='center center', offset=(0, 0)):
+    def paste(self, path, absolute=False, position='center center', offset=None):
         """
         Coller une autre image locale via son chemin sur cette image
         :param path: chemin local du fichier, sans protocole
         :param absolute: si False, path est relatif à STATIC_ROOT
-        :param position: texte de positionnement, [top|left|bottom|right|center]
+        :param position: texte de positionnement, "[left|right|center] [top|bottom|center]"
         :param offset: tuple d'offset en pixels depuis le positionnement texte
+        :type offset: tuple or list
         """
         hpos, vpos = position.split(" ")
         current = Image.open(self.image.path, 'r')
         if absolute is False:
             path = join(settings.STATIC_ROOT, path)
         overlay = Image.open(path, 'r')
+        offset = offset or (0, 0)
         xposition = {'left': 0 + offset[0], 'center': (current.size[0] - overlay.size[0]) / 2 + offset[0], 'right': current.size[0] - overlay.size[0] + offset[0]}
         yposition = {'top': 0 + offset[1], 'center': (current.size[1] - overlay.size[1]) / 2 + offset[1], 'bottom': current.size[1] - overlay.size[1] + offset[1]}
-        current.paste(overlay, (xposition[hpos], yposition[vpos]))
+        current.paste(overlay, (xposition.get('hpos', 0), yposition.get('vpos', 0)))
         current.save(self.image.path)
 
     # Actions
@@ -470,7 +480,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                         logger.warning(e)
 
     def _fix_exif(self):
-        """ Réorienter l'image si c'est un jpeg """
+        """ Réorienter l'image jpeg avec un champ EXIF Rotation différent de 0 """
         if self.get_extension() in {'.jpg', '.jpeg'}:
             subprocess.call(["exiftran", "-a", "-i", "-p", self.image.path], stderr=open(os.devnull, 'wb'))
 
@@ -492,8 +502,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             if extension in {".jpg", ".jpeg"}:
                 subprocess.call(["jpegoptim", "-o", "-p", "--strip-com", self.image.path], stderr=open(os.devnull, 'wb'))
             elif extension == ".png":
-                subprocess.call(["pngquant", "-s2", "--force", "--quality", "70-100", "--ext", ".png", self.image.path], stderr=open(os.devnull, 'wb'))
-                subprocess.call(["optipng", "-strip", "all", "-o3", self.image.path], stderr=open(os.devnull, 'wb'))
+                subprocess.call(["pngquant", "--speed", "2", "--force", "--quality", "70-100", "--ext", ".png", self.image.path], stderr=open(os.devnull, 'wb'))
+                subprocess.call(["optipng", "-strip", "all", "-o7", self.image.path], stderr=open(os.devnull, 'wb'))
             return True
         return False
 
@@ -535,7 +545,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             coordinates = [point.pt for point in points]
             hull = convex_hull(coordinates)
             rectangle = convex_hull_to_rect(hull)
-            subprocess.call(["convert", self.image.path, "-crop", "{0}x{1}+{2}x{3}".format(rectangle[2] - rectangle[0], rectangle[3] - rectangle[1], rectangle[0], rectangle[1]), self.image.path])
+            subprocess.call(
+                ["convert", self.image.path, "-crop", "{0}x{1}+{2}x{3}".format(rectangle[2] - rectangle[0], rectangle[3] - rectangle[1], rectangle[0], rectangle[1]), self.image.path])
             self.update_size()
 
     def quantize(self, save=True):
@@ -550,7 +561,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             if save:
                 self.clone(self.description)
-            subprocess.call(["convert", self.image.path, "-modulate", "100,130,100", "-colorspace", "Lab", "-channel", "R", "-brightness-contrast", "4x30", "+channel", "-colorspace", "sRGB", self.image.path])
+            subprocess.call(["convert", self.image.path, "-modulate", "100,130,100", "-colorspace", "Lab", "-channel", "R", "-brightness-contrast", "4x30", "+channel", "-colorspace", "sRGB",
+                             self.image.path])
 
     def liquid(self, width=80, height=80, save=True):
         """ Redimensionner de façon liquide (seam carving) """
@@ -565,8 +577,12 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             if save:
                 self.clone(self.description)
-            os.system('convert "%s" \( -clone 0 -fill "#440000" -colorize 100%% \)  -compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%% -modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (self.image.path, self.image.path))
-            os.system('convert "%s" \( -clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6 \) -channel RGB -compose multiply -composite "%s"' % (self.image.path, self.image.path))
+            os.system(
+                'convert "%s" \( -clone 0 -fill "#440000" -colorize 100%% \)  -compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%% -modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (
+                self.image.path, self.image.path))
+            os.system(
+                'convert "%s" \( -clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6 \) -channel RGB -compose multiply -composite "%s"' % (
+                self.image.path, self.image.path))
             os.system('convert "%s" \( -clone 0 -blur 30x15 \) -compose dissolve -define compose:args=20 -composite "%s"' % (self.image.path, self.image.path))
 
     def clone(self, description=None):
@@ -619,7 +635,6 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def save(self, *args, **kwargs):
         """ Enregistrer l'image dans la base de données """
         self.updated = timezone.now()
-        self.animated = self.has_animation()
         super(Picture, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -631,5 +646,6 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         verbose_name = _(u'image')
         verbose_name_plural = _(u'images')
         index_together = [['content_type', 'object_id']]
-        permissions = [['can_upload_picture', u"Can upload a picture"]]
+        permissions = [['can_upload_picture', u"Can upload a picture"],
+                       ['can_moderate_picture', u"Can moderate pictures"]]
         app_label = 'content'

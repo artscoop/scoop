@@ -2,24 +2,25 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Steve Kossouho <steve.kossouho@gmail.com>, 2012.
+# Steve Kossouho <steve.kossouho@gmail.com>, 2012, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 19:33+0200\n"
-"PO-Revision-Date: 2015-04-11 14:47+0009\n"
+"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"PO-Revision-Date: 2015-05-08 01:07+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
 "X-Translated-Using: django-rosetta 0.7.6\n"
 
-#: admin/activation.py:24
+#: admin/activation.py:23
 msgid "Activate selected users"
 msgstr "Activer les utilisateurs sélectionnés"
 
@@ -160,7 +161,7 @@ msgid "Permissions"
 msgstr "Permissions"
 
 #: admin/profile.py:29 admin/profile.py:105 admin/user.py:31
-#: models/activation.py:73 models/forms.py:58 models/profile.py:52
+#: models/activation.py:73 models/forms.py:58 models/profile.py:58
 #: models/visit.py:70
 msgid "User"
 msgstr "Utilisateur"
@@ -186,7 +187,7 @@ msgstr "Mélanger les données du profil"
 msgid "Id"
 msgstr "Id"
 
-#: admin/profile.py:110 forms/registration.py:26 models/user.py:183
+#: admin/profile.py:110 forms/registration.py:26 models/user.py:185
 msgid "Email"
 msgstr "Email"
 
@@ -330,23 +331,30 @@ msgstr "Recevoir lorsqu'un membre du personnel vous envoie un message"
 msgid "You must be {age:d} or older."
 msgstr "Vous devez avoir au moins {age:d} ans."
 
-#: forms/profile.py:75
-#, python-format
-msgid "%(input)s <span class='pull-right'>%(checkbox)s Remove picture</span>"
-msgstr "%(input)s <span class='pull-right'>%(checkbox)s Enlever</span>"
+#: forms/profile.py:47
+msgid "Enter your postcode or city name"
+msgstr "Votre code postal ou le nom de votre ville"
 
-#: forms/profile.py:75
+#: forms/profile.py:74
+#, python-format
+msgid ""
+"%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"
+msgstr ""
+"%(input)s <span class='clear'>%(checkbox)s <span>Retirer l'image</span></"
+"span>"
+
+#: forms/profile.py:74
 msgid "Main picture"
 msgstr "Image principale"
 
-#: forms/profile.py:82
+#: forms/profile.py:81
 msgid ""
 "Your picture may need to be reviewed by moderators before being visible."
 msgstr ""
 "Votre image peut nécessiter d'être examinée par des modérateurs avant d'être "
 "visible."
 
-#: forms/profile.py:93 models/profile.py:54
+#: forms/profile.py:92 models/profile.py:60
 msgid "Gender"
 msgstr "Sexe"
 
@@ -432,9 +440,9 @@ msgid "This activation code is invalid."
 msgstr "Ce code d'activation est invalide."
 
 #: listeners/user.py:56
-#, python-format
-msgid "Hello, %(name)s!"
-msgstr "Bonjour, %(name)s !"
+#, python-brace-format
+msgid "Hello, {name}!"
+msgstr "Bonjour, {name} !"
 
 #: listeners/user.py:64
 msgid "Thanks for visiting."
@@ -512,55 +520,55 @@ msgstr "configuration utilisateur"
 msgid "user configurations"
 msgstr "configurations utilisateurs"
 
-#: models/profile.py:46
+#: models/profile.py:52
 msgid "Male"
 msgstr "Homme"
 
-#: models/profile.py:46
+#: models/profile.py:52
 msgid "Female"
 msgstr "Femme"
 
-#: models/profile.py:46
+#: models/profile.py:52
 msgid "Other"
 msgstr "Autre"
 
-#: models/profile.py:48
+#: models/profile.py:54
 msgctxt "gender"
 msgid "All"
 msgstr "Tous"
 
-#: models/profile.py:53
+#: models/profile.py:59
 msgctxt "profile"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/profile.py:55
+#: models/profile.py:61
 msgid "Select the main profile picture"
 msgstr "Choisissez la photo principale du profil"
 
-#: models/profile.py:56
+#: models/profile.py:62
 msgid "Picture"
 msgstr "Image"
 
-#: models/profile.py:57
+#: models/profile.py:63
 msgctxt "profile"
 msgid "Banned"
 msgstr "Banni"
 
-#: models/profile.py:58
+#: models/profile.py:64
 msgctxt "profile"
 msgid "Harmful"
 msgstr "Offensif"
 
-#: models/profile.py:59
+#: models/profile.py:65
 msgid "City"
 msgstr "Ville"
 
-#: models/profile.py:62
+#: models/profile.py:69
 msgid "New"
 msgstr "Nouveau"
 
-#: models/profile.py:101
+#: models/profile.py:108
 msgid ""
 "No default path for user pictures. Add a directory path relative to "
 "MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"
@@ -568,7 +576,7 @@ msgstr ""
 "Pas de chemin par défaut pour les imamges utilisateur. Ajoutez un chemin "
 "relatif à MEDIA_URL dans settings.USER_DEFAULT_PICTURE_PATH"
 
-#: models/user.py:179
+#: models/user.py:176
 msgid ""
 "Your name must start with a letter and can only contain letters, digits and "
 "underscores"
@@ -576,99 +584,99 @@ msgstr ""
 "Votre nom doit commencer par une lettre et ne contenir que des lettres, des "
 "chiffres et des tirets bas (_)"
 
-#: models/user.py:180
-msgid "Username"
-msgstr "Nom d'utilisateur"
-
-#: models/user.py:181
+#: models/user.py:178
 msgid "Your name can only contain letters"
 msgstr "Votre nom ne peut contenir que des lettres"
 
-#: models/user.py:181
+#: models/user.py:182
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: models/user.py:183
 msgid "Name"
 msgstr "Nom"
 
-#: models/user.py:182
+#: models/user.py:184
 msgctxt "user"
 msgid "Bot"
 msgstr "Robot"
 
-#: models/user.py:184
+#: models/user.py:186
 msgctxt "user"
 msgid "Active"
 msgstr "Actif"
 
-#: models/user.py:185
+#: models/user.py:187
 msgctxt "user"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/user.py:186
+#: models/user.py:188
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 "Indique si l'utilisateur peut se connecter ou non à ce site d'administration."
 
-#: models/user.py:186
+#: models/user.py:188
 msgctxt "user"
 msgid "Staff"
 msgstr "Équipe"
 
-#: models/user.py:187
+#: models/user.py:189
 msgid "Date joined"
 msgstr "Date d'inscription"
 
-#: models/user.py:188
+#: models/user.py:190
 msgctxt "user"
 msgid "Last online"
 msgstr "Vu en ligne"
 
-#: models/user.py:189
+#: models/user.py:191
 msgid "Next possible mail for user"
 msgstr "Prochain courrier possible pour l'utilisateur"
 
-#: models/user.py:198
+#: models/user.py:200
 msgid "Robot"
 msgstr "Robot"
 
-#: models/user.py:223
+#: models/user.py:225
 msgid "The value passed has no login value"
 msgstr "La valeur passée ne contient pas d'information d'identification"
 
-#: models/user.py:231
+#: models/user.py:233
 msgid "Bad username and/or password."
 msgstr "Mauvais nom d'utilisateur et/ou mot de passe."
 
-#: models/user.py:233
+#: models/user.py:235
 msgid "This account is currently not active."
 msgstr "Ce compte est actuellement inactif."
 
-#: models/user.py:235
+#: models/user.py:237
 msgid "This user cannot log in."
 msgstr "Cet utilisateur ne peut pas se connecter."
 
-#: models/user.py:242
-#: templates/user/display/user/templatetag/online-status.html:26
+#: models/user.py:244
+#: templates/user/display/user/templatetag/online-status.html:27
 msgid "Online"
 msgstr "En ligne"
 
-#: models/user.py:251
-#: templates/user/display/user/templatetag/online-status.html:24
+#: models/user.py:253
+#: templates/user/display/user/templatetag/online-status.html:25
 msgid "Away"
 msgstr "Absent(e)"
 
-#: models/user.py:256
+#: models/user.py:258
 msgid "Online time"
 msgstr "En ligne depuis"
 
-#: models/user.py:262
+#: models/user.py:264
 msgid "Time online"
 msgstr "en ligne"
 
-#: models/user.py:495
+#: models/user.py:497
 msgid "user"
 msgstr "utilisateur"
 
-#: models/user.py:496 templates/user/dashboard/online.html:5
+#: models/user.py:498 templates/user/dashboard/online.html:5
 msgid "users"
 msgstr "utilisateurs"
 
@@ -800,9 +808,17 @@ msgstr "Mot n'appartenant pas au dictionnaire"
 msgid "(Recommended)"
 msgstr "(Recommandé)"
 
-#: templates/user/display/user/templatetag/online-status.html:29
+#: templates/user/display/user/templatetag/online-status.html:30
 msgid "Offline"
 msgstr "Hors ligne"
+
+#: templatetags/user_tags.py:173 templatetags/user_tags.py:190
+msgid "yes"
+msgstr "oui"
+
+#: templatetags/user_tags.py:173 templatetags/user_tags.py:190
+msgid "no"
+msgstr "non"
 
 #: util/auth.py:83
 msgid "You have no permission over this user."

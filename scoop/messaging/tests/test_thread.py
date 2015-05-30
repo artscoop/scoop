@@ -7,6 +7,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.importlib import import_module
 
+from scoop.core.util.stream.directory import Paths
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.models.negotiation import Negotiation
 from scoop.messaging.models.quota import Quota
@@ -14,11 +15,10 @@ from scoop.messaging.models.thread import Thread
 from scoop.rogue.models.blocklist import Blocklist
 from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
-from settings.django import root_dir
 
 
 @override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',
-                   EMAIL_FILE_PATH=root_dir('files', 'tests', 'mail'),
+                   EMAIL_FILE_PATH=Paths.get_root_dir('files', 'tests', 'mail'),
                    DEFAULT_FROM_EMAIL='admin@test.com')
 class ThreadTest(TestCase):
     """ Test des fils de discussion """

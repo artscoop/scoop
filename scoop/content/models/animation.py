@@ -37,7 +37,10 @@ class AnimationManager(SingleDeleteManager):
         return u""
 
     def create_from_animation(self, picture, extensions=None, reset=False):
-        """ Créer des objets animation pour l'objet Picture """
+        """
+        Créer des objets animation pour l'objet Picture
+        :type picture: scoop.content.models.Picture
+        """
         from scoop.content.models import Picture
 
         if isinstance(picture, basestring):
@@ -62,6 +65,8 @@ class AnimationManager(SingleDeleteManager):
                     os.popen('rm /tmp/{}*.jpg && rm {}'.format(sequence_name, temp_path))
             # Remplacer l'image GIF par un aperçu
             picture.convert()  # JPG par défaut
+            picture.animated = True
+            super(Picture, picture).save()
         else:
             picture.animated = False
             super(Picture, picture).save()
@@ -127,7 +132,7 @@ class Animation(DatetimeModel, UUID128Model):
                 if save is True:
                     self.save(update_fields=['duration'])
                 return self.duration
-            except Exception:
+            except TypeError:
                 return 0
         else:
             return self.duration
@@ -144,6 +149,8 @@ class Animation(DatetimeModel, UUID128Model):
         """
         Renvoyer la taille du fichier en chaîne lisible
         :param raw: définit si une taille en octets est retournée
+        :returns: la taille du fichier en octets ou en chaîne lisible
+        :rtype: int or str
         """
         if self.exists():
             return filesizeformat(self.file.size) if not raw else self.file.size

@@ -2,53 +2,55 @@
 {% paginate 8 userips using 'uip_p' %}
 <p class="dashboard-buttons text-right">
 	<span class="btn-group text-right" style="display: inline-block;">
-		<a class="btn btn-mini btn-primary" href="{% url 'admin:access_ip_changelist' %}" title="{% trans 'ips' %}"><b class="icon-desktop"></b></a>
+		<a class="btn btn-mini btn-primary" href="{% url 'admin:access_ip_changelist' %}" title="{{ _("Ips") }}"><b class="icon-desktop"></b></a>
 	</span>
 </p>
 
 <div id="dashboard-ips">
-	<div class="table-div">
-		<table class="table table-bordered table-striped table-condensed">
-			<thead>
-				<th><b class="icon-flag"></b></th>
-				<th>{% trans "Who" %}</th>
-				<th>IP</th>
-				<th>{% trans "Reverse" %}</th>
-				<th>{% trans "ISP" %}</th>
-				<th><b class="icon-group"></b></th>
-			</thead>
-			{% for userip in userips %}
-			<tr{% if userip.ip.is_blocked %} class="error"{% endif %}>
-				<td width="16">{{userip.ip.get_icon}}</td>
-				<td width="24">{% image userip.user|picture:request alias="i32x16" link_target=userip.user link_class="modal-action" %}</td>
-				<td>{{userip.ip}}</td>
-				<td title="{{userip.ip.reverse}}">{{userip.ip.get_short_reverse|truncatechars:20}}</td>
-				<td title="{{userip.ip.isp}}">{{userip.ip.isp|truncatewords:2|default:_("None")}}</td>
-				<td width="1">
-				    <div class="btn-group">
-					    <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">{{userip.ip.get_user_count}}<u class="icon-caret-down"></u></a>
-					    <ul class="dropdown-menu">
-					    	{% for user in userip.ip.get_users|slice:"0:6" %}
-					    	<li>
-					    		<div>
-					    		{% image user|picture:request alias="i32x16" link_target=user link_class="modal-action inline" %}
-					    		{{user}}
-					    		{% if user.profile.doubt %}
-					    		<i class="icon-warning-sign" title="{{user.profile.doubt|bit_labels|join:", "}}"></i>
-					    		{% endif %}
-					    		</div>
-				    		</li>
-					    	{% endfor %}
-					    </ul>
-				    </div>
-				</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
+    <div class="table-div">
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+            <tr>
+                <th><b class="icon-flag"></b></th>
+                <th>{{ _("Who") }}</th>
+                <th>{{ _("IP") }}</th>
+                <th>{{ _("Reverse") }}</th>
+                <th>{{ _("ISP") }}</th>
+                <th><b class="icon-group"></b></th>
+            </tr>
+            </thead>
+            {% for userip in userips %}
+                <tr{% if userip.ip.is_blocked %} class="error"{% endif %}>
+                    <td width="16">{{ userip.ip.get_icon }}</td>
+                    <td width="24">{% image userip.user|picture:request alias="i32x16" link_target=userip.user link_class="modal-action" %}</td>
+                    <td>{{ userip.ip }}</td>
+                    <td title="{{ userip.ip.reverse }}">{{ userip.ip.get_short_reverse|truncatechars:20 }}</td>
+                    <td title="{{ userip.ip.isp }}">{{ userip.ip.isp|truncatewords:2|default:_("None") }}</td>
+                    <td width="1">
+                        <div class="btn-group">
+                            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">{{ userip.ip.get_user_count }}<u class="icon-caret-down"></u></a>
+                            <ul class="dropdown-menu">
+                                {% for user in userip.ip.get_users|slice:"0:6" %}
+                                    <li>
+                                        <div>
+                                            {% image user|picture:request alias="i32x16" link_target=user link_class="modal-action inline" %}
+                                            {{ user }}
+                                            {% if user.profile.doubt %}
+                                                <i class="icon-warning-sign" title=""></i>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 
 {% get_pages %}
 {% if pages.is_paginated %}
-<div class="pagination">{% show_pages %}</div>
+    <div class="pagination">{% show_pages %}</div>
 {% endif %}

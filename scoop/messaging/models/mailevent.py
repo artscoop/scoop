@@ -16,6 +16,7 @@ from pretty_times import pretty
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import one_line
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
@@ -49,8 +50,7 @@ class MailEventManager(SingleDeleteManager):
     # Setter
     def _send_mail(self, sender, to, title, text, html=None):
         """ Envoyer immédiatement un courrier """
-        to = [to] if not isinstance(to, list) else to
-        message = EmailMultiAlternatives(title, text, sender, to)
+        message = EmailMultiAlternatives(title, text, sender, make_iterable(to))
         if html is not None:
             message.attach_alternative(html, "text/html")
         try:
@@ -64,7 +64,7 @@ class MailEventManager(SingleDeleteManager):
         from scoop.messaging.models.mailtype import MailType
         # Convertir les éléments du dictionnaire passé en listes
         data = dict() if data is None else data
-        mail_data = {item: (data[item] if isinstance(data[item], list) else [data[item]]) for item in data}
+        mail_data = {item: make_iterable(data[item]) for item in data}
         # Créer ou récupérer un événement mail
         mail_type = MailType.objects.get(short_name__iexact=typename)
         mail, created = self.get_or_create(sent=False, forced=forced, type=mail_type, recipient=recipient)

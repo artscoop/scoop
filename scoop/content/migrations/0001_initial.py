@@ -2,24 +2,25 @@
 from __future__ import unicode_literals
 
 import autoslug.fields
-import django.db.models.deletion
 import django.utils.timezone
 import easy_thumbnails.fields
 import picklefield.fields
-from django.conf import settings
 from django.db import migrations, models
 
 import scoop.content.util.attachment
 import scoop.content.util.picture
+import scoop.core.abstract.core.generic
+import scoop.core.abstract.core.icon
+import scoop.core.abstract.core.rectangle
+import scoop.core.abstract.core.translation
+import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
+import scoop.core.util.model.fields
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('access', '0001_initial'),
     ]
 
     operations = [
@@ -41,7 +42,6 @@ class Migration(migrations.Migration):
                 ('views', models.IntegerField(default=0, verbose_name='Views', editable=False)),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
                 ('network', models.CharField(default=b'na', max_length=4, verbose_name='Ad network', db_index=True, choices=[[b'gg', 'Google Adsense'], [b'af', 'AdFever'], [b'na', 'Custom'], [b'ot', 'Other']])),
-                ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'advertisement',
@@ -63,9 +63,6 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='Description', blank=True)),
                 ('updated', models.DateTimeField(auto_now=True, verbose_name='Updated')),
                 ('visible', models.BooleanField(default=True, verbose_name='Visible')),
-                ('author', models.ForeignKey(related_name='albums', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
-                ('parent', models.ForeignKey(related_name='children', verbose_name='Parent', blank=True, to='content.Album', null=True)),
             ],
             options={
                 'verbose_name': 'picture album',
@@ -88,7 +85,6 @@ class Migration(migrations.Migration):
                 ('loop', models.BooleanField(default=True, verbose_name='Loop')),
                 ('deleted', models.BooleanField(default=False, verbose_name='Deleted')),
                 ('updated', models.DateTimeField(auto_now=True, verbose_name='Updated')),
-                ('author', models.ForeignKey(related_name='owned_animations', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'verbose_name': 'Animation',
@@ -107,8 +103,6 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(default='', verbose_name='Description', blank=True)),
                 ('mimetype', models.CharField(max_length=40, verbose_name='MIME type', blank=True)),
                 ('object_id', models.PositiveIntegerField(db_index=True, null=True, verbose_name='Object Id', blank=True)),
-                ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
-                ('content_type', models.ForeignKey(related_name='attachments', verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
             ],
             options={
                 'verbose_name': 'attachment',
@@ -142,7 +136,6 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=48, verbose_name='Name')),
                 ('plural', models.CharField(default=b'__', max_length=48, verbose_name='Plural')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'category', to='content.Category')),
             ],
             options={
                 'verbose_name': 'translation',
@@ -154,11 +147,11 @@ class Migration(migrations.Migration):
             name='Comment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('accepted', models.BooleanField(default=False, verbose_name='Accepted', editable=False)),
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('object_id', models.PositiveIntegerField(null=True, verbose_name='Object Id', db_index=True)),
                 ('moderated', models.NullBooleanField(default=None, verbose_name='Moderated')),
                 ('uuid', scoop.core.abstract.core.uuid.UUIDField(default='', bits=64, unique=True, max_length=11, editable=False)),
+                ('accepted', models.BooleanField(default=False, verbose_name='Accepted', editable=False)),
                 ('name', models.CharField(max_length=24, verbose_name='Name')),
                 ('body', models.TextField(verbose_name='Body')),
                 ('url', models.URLField(max_length=100, verbose_name='URL', blank=True)),
@@ -167,10 +160,6 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(default=None, null=True, verbose_name='Updated', db_index=True)),
                 ('visible', models.BooleanField(default=True, db_index=True, verbose_name='Visible')),
                 ('removed', models.BooleanField(default=False, help_text='When visible, mark as removed', verbose_name='Removed')),
-                ('author', models.ForeignKey(related_name='comments_made', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-                ('content_type', models.ForeignKey(verbose_name='Content type', to='contenttypes.ContentType', null=True)),
-                ('ip', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='IP', to='access.IP', null=True)),
-                ('updater', models.ForeignKey(related_name='+', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Updater', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'verbose_name': 'comment',
@@ -183,16 +172,16 @@ class Migration(migrations.Migration):
             name='Content',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('commentable', models.BooleanField(default=True, db_index=True, verbose_name='Commentable')),
-                ('comment_count', models.IntegerField(default=0, verbose_name='Comments')),
+                ('se_indexed', models.BooleanField(default=False, db_index=True, verbose_name='Index in search engines')),
                 ('data', picklefield.fields.PickledObjectField(default=dict, verbose_name='Data', editable=False)),
                 ('object_id', models.PositiveIntegerField(db_index=True, null=True, verbose_name='Object Id', blank=True)),
                 ('moderated', models.NullBooleanField(default=None, verbose_name='Moderated')),
                 ('uuid', scoop.core.abstract.core.uuid.UUIDField(default='', bits=64, unique=True, max_length=11, editable=False)),
                 ('weight', models.SmallIntegerField(default=10, help_text='Items with lower weights come first', db_index=True, verbose_name='Weight', choices=[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10), (11, 11), (12, 12), (13, 13), (14, 14), (15, 15), (16, 16), (17, 17), (18, 18), (19, 19), (20, 20), (21, 21), (22, 22), (23, 23), (24, 24), (25, 25), (26, 26), (27, 27), (28, 28), (29, 29), (30, 30), (31, 31), (32, 32), (33, 33), (34, 34), (35, 35), (36, 36), (37, 37), (38, 38), (39, 39), (40, 40), (41, 41), (42, 42), (43, 43), (44, 44), (45, 45), (46, 46), (47, 47), (48, 48), (49, 49), (50, 50), (51, 51), (52, 52), (53, 53), (54, 54), (55, 55), (56, 56), (57, 57), (58, 58), (59, 59), (60, 60), (61, 61), (62, 62), (63, 63), (64, 64), (65, 65), (66, 66), (67, 67), (68, 68), (69, 69), (70, 70), (71, 71), (72, 72), (73, 73), (74, 74), (75, 75), (76, 76), (77, 77), (78, 78), (79, 79), (80, 80), (81, 81), (82, 82), (83, 83), (84, 84), (85, 85), (86, 86), (87, 87), (88, 88), (89, 89), (90, 90), (91, 91), (92, 92), (93, 93), (94, 94), (95, 95), (96, 96), (97, 97), (98, 98), (99, 99)])),
                 ('pictured', models.BooleanField(default=False, db_index=True, verbose_name='\U0001f58c')),
-                ('se_indexed', models.BooleanField(default=False, db_index=True, verbose_name='Index in search engines')),
                 ('access', models.SmallIntegerField(default=0, db_index=True, verbose_name='Access', choices=[[0, 'Public'], [1, 'Friends'], [2, 'Personal'], [3, 'Friend groups'], [4, 'Registered users']])),
+                ('commentable', models.BooleanField(default=True, db_index=True, verbose_name='Commentable')),
+                ('comment_count', models.IntegerField(default=0, verbose_name='Comments')),
                 ('title', models.CharField(max_length=192, verbose_name='Title')),
                 ('body', models.TextField(verbose_name='Text', blank=True)),
                 ('html', models.TextField(help_text='HTML output from body', verbose_name='HTML', blank=True)),
@@ -209,11 +198,6 @@ class Migration(migrations.Migration):
                 ('sticky', models.BooleanField(default=False, help_text='Will stay on top of lists', db_index=True, verbose_name='Sticky')),
                 ('featured', models.BooleanField(default=False, help_text='Will appear in magazine editorial content', db_index=True, verbose_name='Featured')),
                 ('locked', models.BooleanField(default=False, db_index=True, verbose_name='Locked')),
-                ('authors', models.ManyToManyField(related_name='contents', verbose_name='Authors', to=settings.AUTH_USER_MODEL, blank=True)),
-                ('category', models.ForeignKey(related_name='contents', verbose_name='Category', to='content.Category')),
-                ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
-                ('ip', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='IP', to='access.IP', null=True)),
-                ('parent', models.ForeignKey(related_name='children', verbose_name='Follow up of', blank=True, to='content.Content', null=True)),
             ],
             options={
                 'ordering': ['-edited'],
@@ -245,8 +229,6 @@ class Migration(migrations.Migration):
                 ('remainder', models.CharField(help_text='HTML code of extra tag attributes', max_length=64, verbose_name='HTML Remainder', blank=True)),
                 ('information', models.TextField(default='', help_text='Internal information for the link', verbose_name='Information', blank=True)),
                 ('description', models.TextField(default='', verbose_name='Description', blank=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
             ],
             options={
                 'verbose_name': 'link',
@@ -275,10 +257,9 @@ class Migration(migrations.Migration):
                 ('transient', models.BooleanField(default=False, verbose_name='Transient')),
                 ('updated', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Updated')),
                 ('object_id', models.PositiveIntegerField(null=True, verbose_name='Object Id', blank=True)),
-                ('author', models.ForeignKey(related_name='owned_pictures', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
             ],
             options={
+                'permissions': [['can_upload_picture', 'Can upload a picture']],
                 'verbose_name': 'image',
                 'verbose_name_plural': 'images',
             },
@@ -305,33 +286,5 @@ class Migration(migrations.Migration):
                 'verbose_name': 'tag',
                 'verbose_name_plural': 'tags',
             },
-        ),
-        migrations.AddField(
-            model_name='content',
-            name='picture',
-            field=models.ForeignKey(related_name='contents', on_delete=django.db.models.deletion.SET_NULL, blank=True, to='content.Picture', help_text='Main picture', null=True, verbose_name='Picture'),
-        ),
-        migrations.AddField(
-            model_name='content',
-            name='tags',
-            field=models.ManyToManyField(related_name='contents', verbose_name='Classification tags', to='content.Tag', blank=True),
-        ),
-        migrations.AddField(
-            model_name='animation',
-            name='picture',
-            field=models.ForeignKey(related_name='animations', verbose_name='Picture', blank=True, to='content.Picture', null=True),
-        ),
-        migrations.AddField(
-            model_name='album',
-            name='pictures',
-            field=models.ManyToManyField(to='content.Picture', verbose_name='Pictures', blank=True),
-        ),
-        migrations.AlterUniqueTogether(
-            name='tag',
-            unique_together=set([('short_name', 'category')]),
-        ),
-        migrations.AlterIndexTogether(
-            name='picture',
-            index_together=set([('content_type', 'object_id')]),
         ),
     ]

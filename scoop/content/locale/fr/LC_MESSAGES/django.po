@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 19:33+0200\n"
-"PO-Revision-Date: 2015-04-11 14:41+0009\n"
+"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"PO-Revision-Date: 2015-05-09 15:18+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
 "Language: \n"
@@ -28,7 +28,7 @@ msgid "Album"
 msgstr "Album"
 
 #: admin/admin.py:69 admin/content.py:85 admin/picture.py:46
-#: admin/picture.py:229 models/animation.py:74 models/content.py:258
+#: admin/picture.py:229 models/animation.py:79 models/content.py:258
 #: templates/content/display/picture/widget/inline.html:3
 msgid "Picture"
 msgstr "Image"
@@ -49,7 +49,7 @@ msgstr "Vidéo"
 msgid "Img.#"
 msgstr "Img n°"
 
-#: admin/animation.py:42 models/animation.py:76 models/animation.py:117
+#: admin/animation.py:42 models/animation.py:81 models/animation.py:122
 msgid "Duration"
 msgstr "Durée"
 
@@ -426,9 +426,9 @@ msgstr "Snippet HTML/JS"
 msgid "Views"
 msgstr "Affichages"
 
-#: models/advertisement.py:75 models/album.py:56 models/animation.py:78
+#: models/advertisement.py:75 models/album.py:56 models/animation.py:83
 #: models/attachment.py:56 models/classification.py:28 models/content.py:507
-#: models/content.py:551 models/link.py:54 models/picture.py:179
+#: models/content.py:551 models/link.py:54 models/picture.py:182
 msgid "Description"
 msgstr "Description"
 
@@ -449,8 +449,8 @@ msgstr "publicité"
 msgid "advertisements"
 msgstr "publicités"
 
-#: models/album.py:54 models/animation.py:72 models/comment.py:80
-#: models/picture.py:176
+#: models/album.py:54 models/animation.py:77 models/comment.py:80
+#: models/picture.py:178
 msgid "Author"
 msgstr "Auteur"
 
@@ -476,76 +476,76 @@ msgstr "album d'images"
 msgid "picture albums"
 msgstr "albums d'images"
 
-#: models/animation.py:73 models/attachment.py:54
+#: models/animation.py:78 models/attachment.py:54
 msgid "File"
 msgstr "Fichier"
 
-#: models/animation.py:75 models/animation.py:135 models/picture.py:257
+#: models/animation.py:80 models/animation.py:140 models/picture.py:260
 msgid "Extension"
 msgstr "Extension"
 
-#: models/animation.py:76
+#: models/animation.py:81
 msgid "In seconds"
 msgstr "En secondes"
 
-#: models/animation.py:77 models/content.py:252 models/link.py:49
-#: models/picture.py:178 templates/content/dashboard/blogs.html:14
+#: models/animation.py:82 models/content.py:252 models/link.py:49
+#: models/picture.py:181 templates/content/dashboard/blogs.html:14
 msgid "Title"
 msgstr "Titre"
 
-#: models/animation.py:78 models/picture.py:179
+#: models/animation.py:83 models/picture.py:182
 msgid "Description text. Enter an URL here to download a picture"
 msgstr "Texte descriptif. Saisissez ici une URL pour télécharger une image"
 
-#: models/animation.py:79
+#: models/animation.py:84
 msgid "Auto play"
 msgstr "Lecture auto"
 
-#: models/animation.py:80
+#: models/animation.py:85
 msgid "Loop"
 msgstr "Lire en boucle"
 
-#: models/animation.py:81 models/picture.py:182
+#: models/animation.py:86 models/picture.py:185
 msgctxt "picture"
 msgid "Deleted"
 msgstr "Supprimée"
 
-#: models/animation.py:82 models/picture.py:185
+#: models/animation.py:87 models/picture.py:188
 msgctxt "picture"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/animation.py:92 models/attachment.py:65
+#: models/animation.py:97 models/attachment.py:65
 msgid "Valid"
 msgstr "Valide"
 
-#: models/animation.py:98 models/picture.py:289
+#: models/animation.py:103 models/picture.py:292
 msgid "Is valid"
 msgstr "Est valide"
 
-#: models/animation.py:110 models/picture.py:247
+#: models/animation.py:115 models/picture.py:250
 msgid "Filename"
 msgstr "Nom de fichier"
 
-#: models/animation.py:115 models/picture.py:255
+#: models/animation.py:120 models/picture.py:258
 msgctxt "file"
 msgid "None"
 msgstr "Aucun"
 
-#: models/animation.py:142 models/attachment.py:80 models/picture.py:271
+#: models/animation.py:147 models/attachment.py:80 models/picture.py:274
 msgid "Size"
 msgstr "Taille"
 
-#: models/animation.py:151 models/attachment.py:86 models/picture.py:277
+#: models/animation.py:158 models/attachment.py:86 models/picture.py:280
 msgctxt "size"
 msgid "None"
 msgstr "Aucune"
 
-#: models/animation.py:174
+#: models/animation.py:181
 msgid "Animation"
 msgstr "Animation"
 
-#: models/animation.py:175
+#: models/animation.py:182
 msgid "Animations"
 msgstr "Animations"
 
@@ -561,11 +561,11 @@ msgstr "Fichier à joindre"
 msgid "MIME type"
 msgstr "type MIME"
 
-#: models/attachment.py:59 models/picture.py:187
+#: models/attachment.py:59 models/picture.py:190
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/attachment.py:60 models/picture.py:188
+#: models/attachment.py:60 models/picture.py:191
 msgid "Object Id"
 msgstr "Id de l'objet"
 
@@ -916,84 +916,84 @@ msgstr "lien"
 msgid "links"
 msgstr "liens"
 
-#: models/picture.py:174
+#: models/picture.py:176
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: models/picture.py:174
+#: models/picture.py:176
 msgid "Adults only"
 msgstr "Adultes seulement"
 
-#: models/picture.py:177
+#: models/picture.py:180
 msgid "Only .gif, .jpeg or .png image files, 64x64 minimum"
 msgstr "Uniquement des fichiers image .gif, .jpeg ou .png, 64x64 minimum"
 
-#: models/picture.py:177 models/picture.py:220
+#: models/picture.py:180 models/picture.py:223
 msgid "Image"
 msgstr "Image"
 
-#: models/picture.py:180
+#: models/picture.py:183
 msgid "Comma separated"
 msgstr "Séparé par des virgules"
 
-#: models/picture.py:180
+#: models/picture.py:183
 msgid "Internal marker"
 msgstr "Marqueur interne"
 
-#: models/picture.py:181
+#: models/picture.py:184
 msgid "Code"
 msgstr "Code"
 
-#: models/picture.py:183
+#: models/picture.py:186
 msgctxt "picture"
 msgid "Animated"
 msgstr "Animée"
 
-#: models/picture.py:184
+#: models/picture.py:187
 msgctxt "picture"
 msgid "Transient"
 msgstr "Temporaire"
 
-#: models/picture.py:234 models/picture.py:235
+#: models/picture.py:237 models/picture.py:238
 msgctxt "thumbnail"
 msgid "None"
 msgstr "Aucun(e)"
 
-#: models/picture.py:237
+#: models/picture.py:240
 msgid "#"
 msgstr "N°"
 
-#: models/picture.py:298
+#: models/picture.py:301
 msgid "Markers"
 msgstr "Marqueurs"
 
-#: models/picture.py:303
+#: models/picture.py:306
 msgid "Deletable transient"
 msgstr "Temporaire suppressible"
 
-#: models/picture.py:308
+#: models/picture.py:311
 msgid "Duplicates found"
 msgstr "Doublons trouvés"
 
-#: models/picture.py:577
+#: models/picture.py:593
 #, python-brace-format
 msgid "Clone of picture {uuid}"
 msgstr "Clone de l'image {uuid}"
 
-#: models/picture.py:589
+#: models/picture.py:605
 msgid "Picture ({})"
 msgstr "Image ({})"
 
-#: models/picture.py:602
+#: models/picture.py:618
 #, python-brace-format
 msgid "{image}"
 msgstr "{image}"
 
-#: models/picture.py:631
+#: models/picture.py:646
 msgid "image"
 msgstr "image"
 
-#: models/picture.py:632
+#: models/picture.py:647
 msgid "images"
 msgstr "images"
 
@@ -1055,7 +1055,7 @@ msgstr "Total"
 msgid "Select files to upload"
 msgstr "Choisissez des fichiers à envoyer"
 
-#: templates/content/display/picture/widget/ajax-upload.html:24
+#: templates/content/display/picture/widget/ajax-upload.html:26
 msgid "Image files"
 msgstr "Fichiers images"
 
@@ -1074,6 +1074,18 @@ msgstr "[groupe/nom manquant]"
 #: templatetags/advertisement_tags.py:44
 msgid "advertisement missing"
 msgstr "publicité manquante"
+
+#: templatetags/language_tags.py:47
+#, python-brace-format
+msgctxt "country_in"
+msgid "{adverb} {country}"
+msgstr "{adverb} {country}"
+
+#: templatetags/language_tags.py:48
+#, python-brace-format
+msgctxt "country_in"
+msgid "in {country}"
+msgstr "en {country}"
 
 #: util/admin.py:17
 msgid "Pictures"
@@ -1236,8 +1248,8 @@ msgstr "Flux RSS"
 #~ msgstr "%(image)s"
 
 #~ msgid ""
-#~ "Similarity can only be calculated with model instances having title and "
-#~ "body attributes."
+#~ "Similarity can only be calculated with model instances having title and body"
+#~ " attributes."
 #~ msgstr ""
 #~ "La similarité ne peut être calculée qu'entre instances de Model ayant des "
 #~ "attributs title et body."

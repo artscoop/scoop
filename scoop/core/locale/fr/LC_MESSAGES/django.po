@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 19:33+0200\n"
-"PO-Revision-Date: 2015-04-11 14:42+0009\n"
+"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"PO-Revision-Date: 2015-04-27 15:06+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
 "Language: \n"
@@ -274,27 +274,19 @@ msgstr "Les éléments aux poids les plus élevés sont prioritaires "
 msgid "Sites"
 msgstr "Sites"
 
-#: abstract/location/coordinates.py:25
-msgid "Latitude"
-msgstr "Latitude"
-
-#: abstract/location/coordinates.py:26
-msgid "Longitude"
-msgstr "Longitude"
-
-#: abstract/location/coordinates.py:67
+#: abstract/location/coordinates.py:80
 msgid "WE"
 msgstr "OE"
 
-#: abstract/location/coordinates.py:67
+#: abstract/location/coordinates.py:80
 msgid "SN"
 msgstr "SN"
 
-#: abstract/location/coordinates.py:75
+#: abstract/location/coordinates.py:88
 msgid "Coordinates"
 msgstr "Coordonnées"
 
-#: abstract/location/coordinates.py:80
+#: abstract/location/coordinates.py:93
 msgid "Sexagesimal"
 msgstr "Sexagésimal"
 
@@ -372,7 +364,7 @@ msgstr "première lettre"
 msgid "random"
 msgstr "aléatoire"
 
-#: admin/filters.py:40 util/django/formutil.py:22
+#: admin/filters.py:40 util/django/formutil.py:23
 msgid "Yes"
 msgstr "Oui"
 
@@ -704,19 +696,26 @@ msgstr "Aucun(e)"
 msgid " and "
 msgstr " et "
 
-#: templatetags/panels.py:46 templatetags/panels.py:78
+#: templatetags/panels.py:46
 #, python-format
 msgid "%(viewname)r is not a method or function and cannot be called"
 msgstr ""
 "%(viewname)r n'est ni une méthode ni une fonction et ne peut donc pas être "
 "appelé(e)"
 
-#: templatetags/text_tags.py:99
+#: templatetags/panels.py:77
+#, python-brace-format
+msgid "{viewname} is not a method or function and cannot be called"
+msgstr ""
+"{viewname} n'est ni une méthode ni une fonction et ne peut donc pas être "
+"appelée"
+
+#: templatetags/text_tags.py:97
 #, python-format
 msgid "%(join)s and %(rest)d %(unit)s"
 msgstr "%(join)s et %(rest)d %(unit)s"
 
-#: templatetags/text_tags.py:106
+#: templatetags/text_tags.py:104
 #, python-brace-format
 msgid "{join} and {last}"
 msgstr "{join} et {last}"
@@ -735,11 +734,11 @@ msgctxt "type"
 msgid "None"
 msgstr "Aucun"
 
-#: util/django/formutil.py:22
+#: util/django/formutil.py:23
 msgid "All"
 msgstr "Tout"
 
-#: util/django/formutil.py:22
+#: util/django/formutil.py:23
 msgid "No"
 msgstr "Non"
 
@@ -791,6 +790,12 @@ msgstr "La ressource à %(path)s est indisponible."
 msgid "The download destination file at %(path)s already exists. Skipped."
 msgstr ""
 "Le fichier de destination du téléchargement à %(path)s existe déjà. Ignoré."
+
+#~ msgid "Latitude"
+#~ msgstr "Latitude"
+
+#~ msgid "Longitude"
+#~ msgstr "Longitude"
 
 #~ msgid "Attribute fieldnames must be a list"
 #~ msgstr "L'attribut fieldnames doit être une liste"

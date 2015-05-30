@@ -25,7 +25,7 @@ def clean_transient_pictures():
 def update_unsized_pictures():
     """ Mettre à jour les dimensions des images sans dimensions """
     with transaction.atomic():
-        pictures = Picture.objects.filter(width__in=[0, 1, None], height__in=[0, 1, None]).order_by('?')[:256]
+        pictures = Picture.objects.filter(width__in=[0, 1], height__in=[0, 1]).order_by('?')[:256]
         for picture in pictures:
             picture.update_size()
     return True

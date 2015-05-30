@@ -61,23 +61,23 @@ class AccessManager(models.Manager):
             fmt = timezone.now().strftime
             filename_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d"), 'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'rows': queryset.count()}
             path = join(Paths.get_root_dir('isolated', 'var', 'log'), "access-log-{year}-{month}-{day}-{hour}-{minute}-{rows}.csv".format(**filename_info))
-            csv_dump(queryset, path, compress=True)
+            return csv_dump(queryset, path, compress=True)
+        return False
 
     def purge(self, days=3, persist=False, path="site"):
         """ Supprimer les accès plus vieux que n jours"""
         rows = self.filter(time__lte=from_now(days=-days, timestamp=True))
         if persist is True:
             self.dump(rows)
-        rows.delete()
-        return
+        return rows.delete()
 
     def purge_before_month(self, persist=False, path="site"):
         """ Supprimer les accès plus anciens que 1er du mois """
         limit = Access.get_timestamp(datetime_round_month())
         rows = self.filter(time__lt=limit)
-        if persist:
+        if persist is True:
             self.dump(rows)
-        rows.delete()
+        return rows.delete()
 
     # Setter
     def add(self, request):

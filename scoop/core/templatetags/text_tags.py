@@ -31,14 +31,12 @@ def truncate_ellipsis(value, arg):
         return value
 
 
-# ===============================================================================
-# Réduire les suites de lettres de type « touche enfoncée »
-# Permet de combattre, autant que possible, la kikoolollerie qui casse les layouts
-# ex. Saluuuuuuuuuuuuuuuuut devient Salut
-# ===============================================================================
 @register.filter
 def truncate_stuckkey(value, length=5):
-    """ Renvoyer une chaîne débarrassée de longues suites de la même lettre """
+    """
+    Renvoyer une chaîne débarrassée de longues suites de la même lettre
+    ex. « Saluuuuuuuut » devient « Salut »
+    """
     re.DEBUG = settings.DEBUG
 
     # Sous fonction : récupère un match et le coupe
@@ -105,6 +103,16 @@ def humanize_join(values, enum_count, singular_plural=None, as_links=False):
         else:
             output = _(u"{join} and {last}").format(join=", ".join(values[:-1]), last=values[-1])
     return mark_safe(output)
+
+@register.filter
+def gender(value, text):
+    """
+    Renvoyer une chaîne dépendant du genre de l'objet
+    :param value: un genre, 0=H, 1=F ou 2=ND
+    :param text: une chaîne de trois textes séparés par des points-virgules
+    """
+    texts = text.split(';')
+    return texts[value]
 
 
 @register.assignment_tag

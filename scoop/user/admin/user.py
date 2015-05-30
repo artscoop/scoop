@@ -26,7 +26,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'username']
     list_editable = []
     list_per_page = 25
-    search_fields = ['username', 'email']
+    search_fields = ['username', 'email', 'id']
     exclude = ('last_login',)
     fieldsets = ((_(u"User"), {'fields': ('username', 'email', 'password', 'name')}), (_(u"Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),)
     form = make_ajax_form(get_user_model(), {'user_permissions': 'permission', 'groups': 'group'}, UserAdminForm)
@@ -95,7 +95,7 @@ class UserAdmin(admin.ModelAdmin):
     def get_image(self, obj):
         """ Renvoyer une vignette de l'image de profil de l'utilisateur """
         if obj.profile.picture is not None:
-            return "{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width, obj.profile.picture.height)
+            return u"{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width, obj.profile.picture.height)
 
 # Enregistrer les classes d'administration
 admin.site.register(get_user_model(), UserAdmin)

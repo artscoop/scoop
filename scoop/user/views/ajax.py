@@ -13,7 +13,7 @@ from scoop.user.util.auth import is_staff
 @require_AJAX
 @user_passes_test(is_staff)
 def view_online_dashboard(request):
-    """ Afficher le dashboard utilisateurs pour afmin-tools """
-    dash = OnlineModule()
-    dash.init_with_context(RequestContext(request))
-    return HttpResponse(dash.pre_content)
+    """ Afficher le dashboard utilisateurs pour admin-tools """
+    dashboard = OnlineModule()
+    dashboard.init_with_context(RequestContext(request))
+    return HttpResponse(dashboard.pre_content)

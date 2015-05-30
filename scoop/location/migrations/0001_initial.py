@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django.core.validators
-import django.db.models.deletion
+import django.contrib.gis.db.models.fields
 import django.utils.timezone
 import picklefield.fields
-from django.conf import settings
 from django.db import migrations, models
 
+import scoop.core.abstract.core.translation
 import scoop.core.util.data.dateutil
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -22,8 +20,7 @@ class Migration(migrations.Migration):
             name='City',
             fields=[
                 ('pictured', models.BooleanField(default=False, db_index=True, verbose_name='\U0001f58c')),
-                ('latitude', models.FloatField(default=0.0, verbose_name='Latitude', validators=[django.core.validators.MinValueValidator(-90.0), django.core.validators.MaxValueValidator(90.0)])),
-                ('longitude', models.FloatField(default=0.0, verbose_name='Longitude', validators=[django.core.validators.MinValueValidator(-180.0), django.core.validators.MaxValueValidator(180.0)])),
+                ('position', django.contrib.gis.db.models.fields.PointField(default=(0.0, 0.0), srid=4326)),
                 ('id', models.IntegerField(serialize=False, verbose_name='Geonames ID', primary_key=True)),
                 ('city', models.BooleanField(default=False, db_index=True, verbose_name='City?')),
                 ('type', models.CharField(max_length=8, verbose_name='Type')),
@@ -53,7 +50,6 @@ class Migration(migrations.Migration):
                 ('ascii', models.CharField(max_length=200, verbose_name='Name', db_index=True)),
                 ('preferred', models.BooleanField(default=False, verbose_name='Preferred')),
                 ('short', models.BooleanField(default=False, verbose_name='Short version')),
-                ('city', models.ForeignKey(related_name='alternates', verbose_name='City', to='location.City')),
             ],
             options={
                 'abstract': False,
@@ -67,8 +63,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('data', picklefield.fields.PickledObjectField(default=dict, verbose_name='Data', editable=False)),
                 ('pictured', models.BooleanField(default=False, db_index=True, verbose_name='\U0001f58c')),
-                ('latitude', models.FloatField(default=0.0, verbose_name='Latitude', validators=[django.core.validators.MinValueValidator(-90.0), django.core.validators.MaxValueValidator(90.0)])),
-                ('longitude', models.FloatField(default=0.0, verbose_name='Longitude', validators=[django.core.validators.MinValueValidator(-180.0), django.core.validators.MaxValueValidator(180.0)])),
+                ('position', django.contrib.gis.db.models.fields.PointField(default=(0.0, 0.0), srid=4326)),
                 ('name', models.CharField(max_length=100, verbose_name='Name')),
                 ('code2', models.CharField(unique=True, max_length=2, verbose_name='ISO Code', db_index=True)),
                 ('code3', models.CharField(unique=True, max_length=3, verbose_name='ISO Code 3', db_index=True)),
@@ -96,7 +91,6 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=200, verbose_name='Name')),
                 ('preferred', models.BooleanField(default=False, verbose_name='Preferred')),
                 ('short', models.BooleanField(default=False, verbose_name='Short version')),
-                ('country', models.ForeignKey(related_name='alternates', verbose_name='Country', to='location.Country')),
             ],
             options={
                 'verbose_name': 'country name',
@@ -122,9 +116,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
-                ('latitude', models.FloatField(default=0.0, verbose_name='Latitude', validators=[django.core.validators.MinValueValidator(-90.0), django.core.validators.MaxValueValidator(90.0)])),
-                ('longitude', models.FloatField(default=0.0, verbose_name='Longitude', validators=[django.core.validators.MinValueValidator(-180.0), django.core.validators.MaxValueValidator(180.0)])),
-                ('user', models.OneToOneField(verbose_name='User', to=settings.AUTH_USER_MODEL)),
+                ('position', django.contrib.gis.db.models.fields.PointField(default=(0.0, 0.0), srid=4326)),
             ],
             options={
                 'verbose_name': 'user position',
@@ -148,14 +140,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('pictured', models.BooleanField(default=False, db_index=True, verbose_name='\U0001f58c')),
-                ('latitude', models.FloatField(default=0.0, verbose_name='Latitude', validators=[django.core.validators.MinValueValidator(-90.0), django.core.validators.MaxValueValidator(90.0)])),
-                ('longitude', models.FloatField(default=0.0, verbose_name='Longitude', validators=[django.core.validators.MinValueValidator(-180.0), django.core.validators.MaxValueValidator(180.0)])),
+                ('position', django.contrib.gis.db.models.fields.PointField(default=(0.0, 0.0), srid=4326)),
                 ('name', models.CharField(max_length=64, verbose_name='Name', db_index=True)),
                 ('street', models.CharField(help_text='Way number, type and name', max_length=80, verbose_name='Way', db_index=True)),
                 ('full', models.CharField(help_text='Full address, lines separated by semicolons', max_length=250, verbose_name='Full address')),
                 ('url', models.URLField(max_length=160, verbose_name='URL', blank=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('city', models.ForeignKey(related_name='venues', verbose_name='City', to='location.City')),
             ],
             options={
                 'verbose_name': 'venue',
@@ -186,50 +175,5 @@ class Migration(migrations.Migration):
                 ('model', models.ForeignKey(related_name='translations', verbose_name=b'venuetype', to='location.VenueType')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
-        ),
-        migrations.AddField(
-            model_name='venue',
-            name='type',
-            field=models.ForeignKey(verbose_name='Venue type', to='location.VenueType', null=True),
-        ),
-        migrations.AddField(
-            model_name='country',
-            name='currency',
-            field=models.ForeignKey(related_name='countries', verbose_name='Currency', blank=True, to='location.Currency', null=True),
-        ),
-        migrations.AddField(
-            model_name='city',
-            name='country',
-            field=models.ForeignKey(related_name='cities', verbose_name='Country', to='location.Country'),
-        ),
-        migrations.AddField(
-            model_name='city',
-            name='parent',
-            field=models.ForeignKey(related_name='children', verbose_name='Parent', to='location.City', null=True),
-        ),
-        migrations.AddField(
-            model_name='city',
-            name='timezone',
-            field=models.ForeignKey(related_name='cities', verbose_name='Timezone', to='location.Timezone', null=True, db_index=False),
-        ),
-        migrations.AlterUniqueTogether(
-            name='venue',
-            unique_together=set([('name', 'street', 'city')]),
-        ),
-        migrations.AlterIndexTogether(
-            name='venue',
-            index_together=set([('latitude', 'longitude')]),
-        ),
-        migrations.AlterIndexTogether(
-            name='countryname',
-            index_together=set([('country', 'language', 'preferred')]),
-        ),
-        migrations.AlterIndexTogether(
-            name='cityname',
-            index_together=set([('city', 'language', 'preferred')]),
-        ),
-        migrations.AlterIndexTogether(
-            name='city',
-            index_together=set([('latitude', 'longitude'), ('a1', 'a2', 'a3', 'a4')]),
         ),
     ]

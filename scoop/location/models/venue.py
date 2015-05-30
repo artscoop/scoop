@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
+from django.contrib.gis.db.models.manager import GeoManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,7 +12,7 @@ from scoop.core.abstract.user.authorable import AuthorableModel
 from scoop.core.util.model.model import SingleDeleteManager
 
 
-class VenueManager(SingleDeleteManager):
+class VenueManager(SingleDeleteManager, GeoManager):
     """ Manager des lieux """
 
     # Getter
@@ -78,6 +79,6 @@ class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
     class Meta:
         verbose_name = _(u"venue")
         verbose_name_plural = _(u"venues")
-        index_together = [['latitude', 'longitude']]
+        index_together = []
         unique_together = [['name', 'street', 'city']]
         app_label = 'location'

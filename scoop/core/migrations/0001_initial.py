@@ -3,10 +3,11 @@ from __future__ import unicode_literals
 
 import datetime
 
-import django.db.models.deletion
-from django.conf import settings
 from django.db import migrations, models
 
+import scoop.core.abstract.core.generic
+import scoop.core.abstract.core.translation
+import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
 
 
@@ -14,7 +15,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('contenttypes', '0002_remove_content_type_name'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -67,7 +67,6 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('name', models.CharField(max_length=80, verbose_name='Name')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'optiongroup', to='core.OptionGroup')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -78,7 +77,6 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('name', models.CharField(max_length=120, verbose_name='Name')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'option', to='core.Option')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -95,7 +93,6 @@ class Migration(migrations.Migration):
                 ('container_type', models.ForeignKey(related_name='container_record', verbose_name='Container type', to='contenttypes.ContentType', null=True)),
                 ('target_type', models.ForeignKey(related_name='target_record', verbose_name='Target type', to='contenttypes.ContentType', null=True)),
                 ('type', models.ForeignKey(related_name='records', verbose_name='Action type', to='core.ActionType')),
-                ('user', models.ForeignKey(related_name='action_records', on_delete=django.db.models.deletion.SET_NULL, verbose_name='User', to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'verbose_name': 'record',
@@ -109,7 +106,7 @@ class Migration(migrations.Migration):
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('active', models.BooleanField(default=True, db_index=True, verbose_name='Active')),
                 ('base', models.CharField(unique=True, max_length=250, verbose_name='Original URL')),
-                ('expires', models.DateTimeField(default=datetime.datetime(2025, 4, 3, 14, 31, 35, 833605), verbose_name='Expiry')),
+                ('expires', models.DateTimeField(default=datetime.datetime(2025, 4, 30, 1, 57, 41, 223980), verbose_name='Expiry')),
                 ('permanent', models.BooleanField(default=True, verbose_name='Permanent')),
                 ('object_id', models.PositiveIntegerField(null=True, verbose_name='Object Id', db_index=True)),
                 ('content_type', models.ForeignKey(verbose_name='Content type', to='contenttypes.ContentType', null=True)),
@@ -133,19 +130,5 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'UUID References',
             },
             bases=(models.Model, scoop.core.abstract.core.generic.GenericModelMixin),
-        ),
-        migrations.AddField(
-            model_name='option',
-            name='group',
-            field=models.ForeignKey(related_name='options', verbose_name='Group', to='core.OptionGroup'),
-        ),
-        migrations.AddField(
-            model_name='option',
-            name='parent',
-            field=models.ForeignKey(related_name='children', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Parent', blank=True, to='core.Option', null=True),
-        ),
-        migrations.AlterUniqueTogether(
-            name='option',
-            unique_together=set([('group', 'code')]),
         ),
     ]

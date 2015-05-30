@@ -11,6 +11,9 @@ from django.core.cache import cache
 from scoop.core.util.stream.directory import Paths
 
 
+PROXY_LIST_DIRECTORY = Paths.get_root_dir('isolated', 'database', 'rogue', 'proxies')
+
+
 def get_tor_nodes(path='http://torstatus.blutmagie.de/ip_list_exit.php/Tor_ip_list_EXIT.csv'):
     """
     Charger la liste de nœuds pour le réseau TOR
@@ -65,7 +68,7 @@ def get_proxy_nodes(directory='/'):
 
 def is_proxy_node(ip_string):
     """ Renvoyer si une IP est un nœud Proxy """
-    return ip_string in get_proxy_nodes(Paths.get_root_dir('isolated', 'database', 'rogue', 'proxies'))
+    return ip_string in get_proxy_nodes(PROXY_LIST_DIRECTORY)
 
 
 def is_relay_node(ip_string):

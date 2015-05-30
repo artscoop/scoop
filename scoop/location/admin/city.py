@@ -36,7 +36,7 @@ class CityAdminModelAdmin(ViewOnlyModelAdmin, PicturedModelAdmin):
     actions_on_bottom = True
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     exclude = []
-    fieldsets = ((_(u"City"), {'fields': ('name', 'ascii', 'country', 'latitude', 'longitude', 'city')}), (_(u"Geonames"), {'fields': ('code', 'population', 'type', 'a1', 'a2', 'a3', 'a4')}),)
+    fieldsets = ((_(u"City"), {'fields': ('name', 'ascii', 'country', 'position', 'city')}), (_(u"Geonames"), {'fields': ('code', 'population', 'type', 'a1', 'a2', 'a3', 'a4')}),)
     list_display = ['id', 'get_name', 'level', 'type', 'city', 'get_city_parent', 'get_country_icon', 'get_city_code', 'population', 'timezone', 'get_picture_set']
     list_display_links = ['id', 'get_name']
     list_filter = [RandomOrderFilter, 'city', 'pictured', ParentedFilter, LevelFilter, PostalCodedFilter, 'type', 'country', 'country__continent']  # , 'country']
@@ -85,8 +85,8 @@ class CityAdminModelAdmin(ViewOnlyModelAdmin, PicturedModelAdmin):
     # Overrides
     def get_queryset(self, request):
         """ Renvoyer le queryset par défaut de l'admin """
-        qs = super(CityAdminModelAdmin, self).queryset(request)
-        return qs.select_related('parent', 'alternates')
+        qs = super(CityAdminModelAdmin, self).get_queryset(request)
+        return qs.select_related('parent')
 
 # Enregistrer les classes d'administration
 admin.site.register(City, CityAdminModelAdmin)

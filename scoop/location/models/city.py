@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import absolute_import
 
+from django.contrib.gis.geos import Point, Polygon
+from django.contrib.gis.measure import D
 from django.core.cache import cache
 from django.db import models
 from django.template.loader import render_to_string
@@ -15,23 +17,35 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import search_query
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
+from scoop.location.util.gis import Distance
 from scoop.location.util.weather import get_open_weather
 
 
 class CityQuerySetMixin(object):
-    """ Mixin de Queryset/Manager des villes """
+    """
+    Mixin de Queryset/Manager des villes
+    """
 
     # Getter
     def city(self):
-        """ Renvoyer les villes uniquement """
+        """
+        Renvoyer les villes uniquement
+        :type self: django.db.models.Manager
+        """
         return self.filter(city=True)
 
     def by_level(self, country, level):
-        """ Renvoyer les éléments d'un niveau administratif """
+        """
+        Renvoyer les éléments d'un niveau administratif
+        :type self: django.db.models.Manager
+        """
         return self.filter(country=country, level=level)
 
     def by_name(self, name, city=True, **kwargs):
-        """ Renvoyer les villes portant un nom """
+        """
+        Renvoyer les villes portant un nom
+        :type self: django.db.models.Manager
+        """
         fields = ['alternates__ascii', 'country__alternates__name']
         final_query = search_query(unidecode(name), fields, queryset=self.filter(city=city, **kwargs))
         return final_query.distinct().order_by('-population')
@@ -44,6 +58,7 @@ class CityQuerySetMixin(object):
     def by_population(self, country_codes, value, operator=">="):
         """
         Renvoyer les villes correspondant à un critère sur leur population
+        :type self: django.db.models.Manager
         :param country_codes: liste de codes pays pour lesquels filtrer
         :param value: nombre d'habitants
         :param operator: modifie la sélection par rapport à un nombre d'habitants
@@ -54,48 +69,58 @@ class CityQuerySetMixin(object):
         return self.filter(country__code2__in=make_iterable(country_codes, list), **criteria)
 
     def by_country(self, country):
-        """ Renvoyer les éléments dans un pays """
+        """
+        Renvoyer les éléments dans un pays
+        :type self: django.db.models.Manager
+        """
         return self.filter(country__code2__iexact=country) if isinstance(country, basestring) else self.filter(country__id=country.id)
 
     def in_box(self, box):
-        """ Renvoyer les villes uniquement situées dans un rectangle """
-        return self.filter(latitude__range=(box[0], box[2]), longitude__range=(box[1], box[3]), city=True)
+        """
+        Renvoyer les villes uniquement situées dans un rectangle
+        :type self: django.db.models.Manager
+        """
+        polygon = Polygon.from_bbox([box[1], box[0], box[3], box[2]])
+        return self.filter(position__contained=polygon, city=True)
 
     def in_square(self, point, km):
         """ Renvoyer les villes uniquement dans un carré avec un centre et une longueur de demi-diagonale """
         return self.in_box(City.get_bounding_box_at(point, km))
 
     def in_radius(self, point, km):
-        """ Renvoyer les villes uniquement dans un cercle de n km autour d'un point """
-        cities = self.in_box(City.get_bounding_box_at(point, km))
-        if cities.count() < 16384:
-            cities = cities.exclude(pk__in=[city.pk for city in cities if city.get_distance(point) > km])
-        return cities
+        """
+        Renvoyer les villes uniquement dans un cercle de n km autour d'un point
+        :type self: django.db.models.Manager
+        """
+        center = Point(point[1], point[0])
+        return self.filter(position__distance_lt=(center, D(km=km)))
 
     def biggest(self, point, km=20):
         """ Renvoyer la ville la plus peuplée à n km autour d'un point """
-        cities = self.in_square(point, km).order_by('-population')
+        cities = self.in_radius(point, km).order_by('-population')
         return cities.first() if cities.exists() else None
 
     def find_by_name(self, point, name):
-        """ Renvoyer une ville la plus proche d'un point, portant un nom si possible """
-        name = unidecode(name).lower().strip()
+        """
+        Renvoyer une ville la plus proche d'un point, portant un nom si possible
+        :type self: django.db.models.Manager, CityQuerySetMixin
+        """
+        name = unidecode(name).lower().strip() if name else '*'
         # Renvoyer le résultat en cache
         CACHE_KEY = u"location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=point[0], lon=point[1], name=name or '*')
         result = cache.get(CACHE_KEY, None)
         if result is not None:
             return self.get(id=result)
         # Ou retrouver la ville la plus proche
-        cities = self.in_square(point, 128).filter(city=True, alternates__ascii=name).distinct()  # recherche par cityname.ascii -> 128km
-        cities = cities if cities.exists() else self.in_square(point, 128).filter(city=True, ascii=name).distinct()  # recherche par city.ascii -> 128km
-        cities = cities if cities.exists() else self.in_square(point, 8)  # recherche par lat/lon -> 8km
+        cities = self.filter(city=True, alternates__ascii=name).in_square(point, 128).distinct()  # recherche par cityname.ascii -> 128km
+        cities = cities if cities.exists() else self.filter(city=True, ascii=name).in_square(point, 128).distinct()  # recherche par city.ascii -> 128km
+        cities = cities if cities.exists() else self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
         if cities.exists():
-            distances = {city: city.get_distance(point) for city in cities.iterator()}
-            closest_city = min(distances, key=distances.get)
-            cache.set(CACHE_KEY, closest_city.id)
+            cities = cities.annotate(distance=Distance('position', Point(point[1], point[0], srid=4326))).order_by('distance')
+            closest_city = cities.first()
+            cache.set(CACHE_KEY, closest_city.pk)
             return closest_city
         return None
-
 
 class CityQuerySet(models.QuerySet, CityQuerySetMixin):
     """ Queryset des villes """
@@ -157,6 +182,7 @@ class City(CoordinatesModel, PicturableModel):
 
     def get_auto_parent(self, level=None):
         """ Renvoyer l'élément parent le plus pertinent selon le pays """
+        from scoop.location.models import Country
         # Pas de parent direct, renvoyer immédiatement le pays
         if self.parent_id is None:
             return self.country
@@ -164,7 +190,8 @@ class City(CoordinatesModel, PicturableModel):
         CACHE_KEY = u"location.city.ap:{id}".format(id=self.id)
         result = cache.get(CACHE_KEY, None)
         if result is not None:
-            return City.objects.get(id=result)
+            parent = City.objects.filter(id=result) or Country.objects.filter(id=result)  # On a en cache soit un id de ville soit de pays
+            return parent.first()
         # Autrement parcourir les parents jusqu'au level désiré
         level = self.country.subregional_level if level is None else level
         parent = self.parent
@@ -172,15 +199,13 @@ class City(CoordinatesModel, PicturableModel):
             parent = parent.parent
         # Si parent non trouvé, renvoyer le pays. Sinon mettre en cache
         if parent is None:
-            return self.country
-        cache.set(CACHE_KEY, parent.pk, 900)  # parent peut être None
+            parent = self.country
+        cache.set(CACHE_KEY, parent.pk, 1800)  # parent peut être None
         return parent
 
     def get_close_cities(self, km, circle=False):
         """ Renvoyer les villes les plus proches à n km """
-        cities = City.objects.in_box(self.get_bounding_box(km))
-        if circle is True:
-            cities = cities.exclude(pk__in=[city.pk for city in cities if self.get_distance(city) > km])
+        cities = City.objects.in_radius(self.get_point(), km).filter(city=True)
         return cities
 
     def get_biggest_close_city(self, km=30):
@@ -274,7 +299,7 @@ class City(CoordinatesModel, PicturableModel):
     class Meta:
         verbose_name = _(u"city")
         verbose_name_plural = _(u"cities")
-        index_together = [['latitude', 'longitude'], ['a1', 'a2', 'a3', 'a4']]
+        index_together = [['a1', 'a2', 'a3', 'a4']]
         app_label = 'location'
         abstract = False
 

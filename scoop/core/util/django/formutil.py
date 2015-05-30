@@ -8,6 +8,7 @@ from inspect import isclass
 from os.path import join
 
 from django.contrib import messages
+from django.db.models.base import Model
 from django.forms.forms import Form
 from django.forms.models import ModelForm
 from django.http.request import QueryDict
@@ -132,6 +133,28 @@ def has_post(request, action=None):
     return posted
 
 
+def _normalize_initial(initial, form):
+    """
+    Parcourir les données initiales de formulaire et remplacer les instances par les ID etc.
+    :type initial: dict
+    """
+
+    def convert_value(value):
+        """ Convertir une valeur en valeur chaîne ou numérique """
+        if isinstance(value, (basestring, int, float, long)):
+            return value
+        elif isinstance(value, Model):
+            return value.pk
+        elif isinstance(value, (list, tuple)):
+            return [convert_value(item) for item in value]
+
+    output = dict()
+    for key, value in initial.items():
+        if key in form._meta.fields:
+            output[key] = convert_value(value)
+    return output
+
+
 def form(request, config, initial=None):
     """
     Créer un formulaire initialisé selon l'état de la requête.
@@ -153,25 +176,16 @@ def form(request, config, initial=None):
             args.append(request.POST)
             args.append(request.FILES)
         elif initial is not None:
-            if isinstance(initial, QueryDict):
+            if isinstance(initial, QueryDict):  # Charger des données POST
                 args.append(initial.dict())
             else:
-                kwargs['initial'] = initial
+                kwargs['initial'] = _normalize_initial(initial, form_class)
         if isclass(form_class) and issubclass(form_class, ModelForm) and config[form_class] is not None:
             kwargs['instance'] = config[form_class]
-        # Créer le formulaire
-        form = form_class(*args, **kwargs)
-        form.request = request
         # Vérifier que le formulaire fonctionne avec initial
-        try:
-            form.as_p()
-            forms.append(form)
-        except TypeError:
-            print u"Form instantiation: FIX ME!!"
-            kwargs['initial'] = None
-            args.append(initial)
-            form = form_class(*args, **kwargs)
-            forms.append(form)
+        temp_form = form_class(*args, **kwargs)
+        temp_form.request = request
+        forms.append(temp_form)
     # Renvoyer les formulaires
     return forms if len(forms) > 1 else forms[0] if forms else None
 

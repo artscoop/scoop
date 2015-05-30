@@ -33,7 +33,7 @@ class Profanity(models.Model):
     # Getter
     def check_text(self, text):
         """ Renvoyer si ce filtre fonctionne sur une chaîne """
-        return re.search(re.escape(self.regex), text)
+        return re.search(re.escape(unicode(self.regex)), text)
 
     @staticmethod
     def concatenate(standalone=True, language=None):

@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import annoying.fields
 import autoslug.fields
-import django.db.models.deletion
 import easy_thumbnails.fields
 import picklefield.fields
-from django.conf import settings
 from django.db import migrations, models
 
+import scoop.core.abstract.core.icon
+import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
+import scoop.core.util.model.fields
+import scoop.forum.models.sanction
 import scoop.forum.util.read
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('content', '0001_initial'),
     ]
 
     operations = [
@@ -39,9 +38,6 @@ class Migration(migrations.Migration):
                 ('topic_count', models.IntegerField(default=0, verbose_name='Topics count')),
                 ('post_count', models.IntegerField(default=0, verbose_name='Posts count')),
                 ('root', models.BooleanField(default=False, help_text='Appears on the forum index', verbose_name='Root')),
-                ('forums', models.ManyToManyField(related_name='parents', verbose_name='Subforums', to='forum.Forum', blank=True)),
-                ('moderators', models.ManyToManyField(help_text='Members who can moderate topics in this forum', related_name='moderated_forums', verbose_name='Moderators', to=settings.AUTH_USER_MODEL, blank=True)),
-                ('topics', models.ManyToManyField(related_name='forums', verbose_name='Topics', to='content.Content', blank=True)),
             ],
             options={
                 'verbose_name': 'forum',
@@ -53,7 +49,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('data', picklefield.fields.PickledObjectField(default=dict, verbose_name='Data', editable=False)),
-                ('user', annoying.fields.AutoOneToOneField(related_name='forum_ignorelist', null=True, verbose_name='User', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'ignore list',
@@ -74,8 +69,6 @@ class Migration(migrations.Migration):
                 ('answers', scoop.core.util.model.fields.LineListField(default=b'Yes\nNo', help_text='Enter one answer per line', verbose_name='Answers')),
                 ('slug', autoslug.fields.AutoSlugField(max_length=100, editable=False, blank=True)),
                 ('closed', models.BooleanField(default=False, db_index=True, verbose_name='Closed')),
-                ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
-                ('content', models.ForeignKey(related_name='polls', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Content', blank=True, to='content.Content', null=True)),
             ],
             options={
                 'verbose_name': 'poll',
@@ -88,12 +81,25 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('expiry', models.DateTimeField(default=scoop.forum.util.read.default_expiry, null=True, verbose_name='Expiry')),
                 ('created', models.DateTimeField(auto_now=True, verbose_name='Created')),
-                ('content', models.ForeignKey(related_name='reads', verbose_name='Thread', to='content.Content')),
-                ('user', models.ForeignKey(related_name='content_reads+', verbose_name='User', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'topic read',
                 'verbose_name_plural': 'topics read',
+            },
+        ),
+        migrations.CreateModel(
+            name='Sanction',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
+                ('type', models.SmallIntegerField(default=0, db_index=True, verbose_name='Type', choices=[[0, 'Posting disabled'], [1, 'Reading disabled']])),
+                ('description', models.TextField(verbose_name='Description', blank=True)),
+                ('expires', models.DateTimeField(default=scoop.forum.models.sanction.get_default_expiry, verbose_name='Expiry')),
+                ('revoked', models.BooleanField(default=False, verbose_name='Revoked')),
+            ],
+            options={
+                'verbose_name': 'sanction',
+                'verbose_name_plural': 'sanctions',
             },
         ),
         migrations.CreateModel(
@@ -102,20 +108,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('choice', models.SmallIntegerField(default=None, null=True, verbose_name='Choice')),
-                ('author', models.ForeignKey(verbose_name='Author', to=settings.AUTH_USER_MODEL)),
-                ('poll', models.ForeignKey(related_name='votes', verbose_name='Poll', to='forum.Poll')),
             ],
             options={
                 'verbose_name': 'vote',
                 'verbose_name_plural': 'votes',
             },
-        ),
-        migrations.AlterUniqueTogether(
-            name='vote',
-            unique_together=set([('author', 'poll')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='read',
-            unique_together=set([('content', 'user')]),
         ),
     ]

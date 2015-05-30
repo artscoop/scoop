@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from datetime import datetime
 
-import floppyforms as forms_
+import floppyforms.__future__ as forms_
 from ajax_select.fields import AutoCompleteSelectWidget
 from annoying.decorators import autostrip
 from django import forms
@@ -44,10 +44,9 @@ class ProfileForm(forms_.ModelForm):
     class Meta:
         model = BaseProfile
         widgets = {'birth': SelectDateWidget(years=range(1940, datetime.now().year + 1 - getattr(settings, 'USER_REGISTRATION_MINIMUM_AGE', 18))),
-                   'gender': forms_.Select(),
-                   'city': AutoCompleteSelectWidget('citypm', attrs={'class': "form-control"})
+                   'city': AutoCompleteSelectWidget('citypm', attrs={'class': "control", 'placeholder': _(u"Enter your postcode or city name")})
                    }
-        fields = ('birth', 'gender', 'city')
+        fields = ('gender', 'birth', 'city')
 
 
 @autostrip
@@ -72,7 +71,7 @@ class ProfileInlineAdminForm(forms.ModelForm):
 
 class ProfilePictureForm(forms_.ModelForm):
     """ Formulaire d'édition d'image de profil """
-    image = ClearableImageField(widget=PictureInlineWidget, template=_(u"%(input)s <span class='pull-right'>%(checkbox)s Remove picture</span>"), label=_(u"Main picture"))
+    image = ClearableImageField(widget=PictureInlineWidget, template=_(u"%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"), label=_(u"Main picture"))
 
     # Validation
     def is_valid(self):

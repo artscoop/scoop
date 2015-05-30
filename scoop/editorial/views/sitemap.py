@@ -9,7 +9,7 @@ class EditorialSitemap(Sitemap):
     """ Sitemap des pages """
     changefreq = 'weekly'
     priority = 0.5
-    limit = settings.SITEMAPS_ITEMS_PER_PAGE
+    limit = getattr(settings, 'SITEMAPS_ITEMS_PER_PAGE', 50000)
 
     # Getter
     def items(self):

@@ -17,8 +17,7 @@ def default_pre_thread(sender, author, recipients, request, unique, force, **kwa
     errors = set()
     # Ne rien faire si le quota de sujets pour user est atteint
     if Quota.objects.exceeded_for(author):
-        if request:
-            errors.add(_(u"You have started discussions with too much people today."))
+        errors.add(_(u"You have started discussions with too much people today."))
     # Ne rien faire s'il n'y a aucun participant ou juste author
     if set(recipients) == {author} or not recipients:
         if not force:
@@ -27,7 +26,7 @@ def default_pre_thread(sender, author, recipients, request, unique, force, **kwa
     for recipient in recipients:
         if not Blocklist.objects.is_safe(recipient, author):  # or recipient.rule.is_blocked(author):
             errors.add(_(u"User policy prevents you from talking to at least one recipient."))
-    return {'messages': errors} if len(errors) > 0 else True
+    return {'messages': errors} if errors else True
 
 
 @receiver(thread_created)

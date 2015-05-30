@@ -40,3 +40,4 @@ def csv_dump(queryset, path, compress=False):
                 val = val.strftime("%Y-%m-%d %H:%M:%S")
             row.append(val)
         writer.writerow(row)
+    return True

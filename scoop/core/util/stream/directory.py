@@ -11,15 +11,17 @@ class Paths(object):
     @staticmethod
     def get_root_dir(*sublist):
         """ Renvoyer le chemin du répertoire du projet contant manage.py """
-        import settings
-        current_dir = dirname(settings.__file__)
-        while not exists(join(current_dir, 'manage.py')):
-            print current_dir
-            current_dir = dirname(current_dir)
-        sublist += ('',)
-        for item in sublist:
-            current_dir = join(current_dir, item)
-        return current_dir
+        try:
+            import settings
+            current_dir = dirname(settings.__file__)
+            while not exists(join(current_dir, 'manage.py')) and len(current_dir) > 4:
+                current_dir = dirname(current_dir)
+            sublist += ('',)
+            for item in sublist:
+                current_dir = join(current_dir, item)
+            return current_dir
+        except ImportError:
+            raise
 
     @staticmethod
     def get_python():

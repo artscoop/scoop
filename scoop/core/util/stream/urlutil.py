@@ -8,7 +8,6 @@ from urllib2 import HTTPError
 
 import requests
 from django.conf import settings
-from django.contrib.sites.models import Site
 from django.core.files.temp import NamedTemporaryFile
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -20,6 +19,7 @@ DEFAULT_HEADERS = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko
 
 def get_domain():
     """ Renvoyer le nom de domaine courant """
+    from django.contrib.sites.models import Site
     current_site = Site.objects.get_current()
     return current_site.domain if "/" in current_site.domain else getattr(settings, "DOMAIN_NAME", "")
 

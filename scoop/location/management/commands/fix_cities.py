@@ -12,6 +12,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from scoop.location.models import City
         # Pour la France, Belgique etc. exclure les objets sans code postal
-        City.objects.filter(city=True, country__code2__in=['FR', 'BE', 'CA']).exclude(alternates__language="post").distinct().update(city=False)
+        City.objects.filter(city=True, country__code2__in=['FR', 'BE']).exclude(alternates__language="post").distinct().delete()
         # Inclure les capitales (PPLC en l'absence de sabotage)
         City.objects.filter(type='PPLC').update(city=True)

@@ -135,6 +135,17 @@ def show_distance(user1, user2, unit=None, digits=2):
             return u"{}{}".format(intcomma(round_left(distance, digits)), unit or 'km')
     return ""
 
+# Cardinal entre deux utilisateurs
+@register.simple_tag(name='user_cardinal')
+def show_cardinal(user1, user2, mode=None):
+    """
+    Afficher le cardinal de direction entre deux villes de profils
+    Ne rien afficher si les deux profils sont dans la même ville
+    """
+    if not any([u.is_anonymous() or not u.profile.city for u in [user1, user2]]):
+        return user1.profile.city.get_cardinal_position(user2.profile.city)
+    return ""
+
 
 @register.filter(name='distance')
 def distance_to(user1, user2):
