@@ -5,8 +5,9 @@ import math
 from math import atan2, degrees, pi
 
 import pyproj
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point, Polygon
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
@@ -22,30 +23,42 @@ class CoordinatesModel(models.Model):
     UNIT_RATIO = {'km': 1.0, 'm': 1000, 'mi': 0.621371192237334, 'yd': 1093.6132983377076, 'ft': 3280.839895013123, 'nmi': 0.5399568034557235}
     GEODETIC_MODEL = pyproj.Geod(ellps="WGS84")
     # Position géographique du centre de l'objet
-    latitude = models.FloatField(default=0.0, validators=[MinValueValidator(-90.0), MaxValueValidator(90.0)], null=False, verbose_name=_(u"Latitude"))
-    longitude = models.FloatField(default=0.0, validators=[MinValueValidator(-180.0), MaxValueValidator(180.0)], null=False, verbose_name=_(u"Longitude"))
+    position = models.PointField(default=Point(0.0, 0.0))
 
     # Setter
     def set_coordinates(self, lat, lon):
         """ Définir les coordonnées de l'objet """
-        self.latitude = sorted((-90.0, lat, 90.0))[1]
-        self.longitude = sorted((-180.0, lon, 180.0))[1]
+        self.position.set_coords(sorted((-180.0, lon, 180.0))[1], sorted((-90.0, lat, 90.0))[1])
 
     # Getter
     def get_point(self):
         """ Renvoyer les coordonnées lat,lon de l'objet """
-        return [self.latitude, self.longitude]
+        return [self.position.get_y(), self.position.get_x()]
+
+    def get_latitude(self):
+        """ Renvoyer la latitude du point """
+        return self.position.get_y()
+
+    def get_longitude(self):
+        """ Renvoyer la longitude du point """
+        return self.position.get_x()
 
     def get_point_dict(self):
         """ Renvoyer un dictionnaire des coordonnées de l'objet """
-        return {'latitude': self.latitude, 'longitude': self.longitude}
+        return {'latitude': self.position.get_y(), 'longitude': self.position.get_x()}
 
     def get_bounding_box(self, km):
         """ Renvoyer les coordonnées d'un rectangle dont les coins sont à n km autour de l'objet """
         lat_offset = km * self.KM_LAT
-        lon_offset = km * self.KM_LON / math.cos(math.radians(self.latitude))
+        lon_offset = km * self.KM_LON / math.cos(math.radians(self.position.get_y()))
         # Renvoyer un rectangle
         result = [self.latitude - lat_offset, self.longitude - lon_offset, self.latitude + lat_offset, self.longitude + lon_offset]
+        return result
+
+    def get_bounding_poly(self, km):
+        """ Renvoyer les coordonnées d'un rectangle dont les coins sont à n km autour de l'objet """
+        box = self.get_bounding_box(km)
+        result = Polygon.from_bbox([box[1], box[0], box[3], box[2]])
         return result
 
     def __iter__(self):
@@ -105,16 +118,19 @@ class CoordinatesModel(models.Model):
         """
         point, origin = list(point), self.get_point()
         delta = [point[1] - origin[1], point[0] - origin[0]]
+        if delta == [0, 0]:
+            return u""
         angle = degrees(atan2(delta[1], delta[0]) % (2.0 * pi))
         rounded_angle = round_multiple(angle - 11.25, 22.5)
         angle_tick = int(rounded_angle / 22.5)
         cardinal_modes = {'name': ANGLE_CARDINAL, 'relative': RELATIVE_CARDINAL, 'short': SHORT_CARDINAL}
-        result = cardinal_modes.get(mode, None)
+        result = cardinal_modes.get(mode or 'relative', None)
         return result[angle_tick] if result else int(angle)
 
     def order_by_distance(self, queryset, reverse=False, as_queryset=True, related={'field': None, 'model': None}, add_field_only=False):
         """
-        Trier un queryset de CoordinatesModel par leur distance à cet objet
+        DEPRECATED: Trier un queryset de CoordinatesModel par leur distance à cet objet
+        Utiliser l'annotation Distance dans scoop.location.util.gis ou dans Django 1.9
         :param queryset: queryset d'objets CoordinatesModel
         :param reverse: tri descendant
         :param as_queryset: renvoyer un queryset au lieu d'une liste
@@ -168,6 +184,10 @@ class CoordinatesModel(models.Model):
         if unit == 'km':
             return value
         return value * CoordinatesModel.UNIT_RATIO.get(unit, 1.0)
+
+    # Propriétés
+    latitude = property(get_latitude)
+    longitude = property(get_longitude)
 
     # Métadonnées
     class Meta:

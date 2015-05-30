@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 19:33+0200\n"
+"POT-Creation-Date: 2015-05-09 15:06+0200\n"
 "PO-Revision-Date: 2015-04-11 14:44+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -113,15 +113,15 @@ msgstr "Message envoyé avec succès"
 msgid "Discussion between {0} and {1}"
 msgstr "Discussion entre {0} et {1}"
 
-#: listeners/thread.py:21
+#: listeners/thread.py:20
 msgid "You have started discussions with too much people today."
 msgstr "Vous avez démarré des discussions avec trop de monde aujourd'hui."
 
-#: listeners/thread.py:25
+#: listeners/thread.py:24
 msgid "Cannot send a new message to nobody."
 msgstr "Impossible d'envoyer un nouveau message à personne."
 
-#: listeners/thread.py:29
+#: listeners/thread.py:28
 msgid "User policy prevents you from talking to at least one recipient."
 msgstr ""
 "Des règles d'utilisateur vous empêchent de contacter au moins un "

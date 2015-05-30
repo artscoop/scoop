@@ -46,3 +46,14 @@ def cardinal_position(location, target):
     if isinstance(location, CoordinatesModel) and isinstance(target, CoordinatesModel):
         return location.get_cardinal_position(target)
     return None
+
+
+@register.simple_tag(name='cardinal')
+def cardinal_position_tag(center, target, mode=None):
+    """
+    Renvoyer la position relative d'une cible par rapport à un lieu
+    :type mode: "short|relative|name"
+    """
+    if isinstance(center, CoordinatesModel) and isinstance(target, CoordinatesModel):
+        return center.get_cardinal_position(target, mode=mode)
+    return None

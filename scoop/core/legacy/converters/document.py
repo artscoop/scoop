@@ -90,8 +90,9 @@ class DocumentImporter(object):
     name = None  # Nom de fichier à lire (sans extension)
 
     # Getter
-    def progress(self, ind, total, every=1024, label=None):
+    def progress(self, ind, total, every=None, label=None):
         """ Afficher la progression d'un opération """
+        every = every or int(total / 25)
         if ind % every == 0:
             percent = ind * 100.0 / total
             print u"{label} - Progress - {pc:.01f}%".format(pc=percent, label=label or u"Import")

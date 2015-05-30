@@ -8,7 +8,6 @@ from time import sleep
 
 from django.db import models
 from django.db.transaction import atomic
-from django.utils.functional import SimpleLazyObject
 
 
 class DictUpdateModel:
@@ -16,7 +15,10 @@ class DictUpdateModel:
 
     # Setter
     def update(self, save=False, **kwargs):
-        """ Mettre à jour les champs du modèle """
+        """
+        Mettre à jour les champs du modèle
+        :type self: django.db.models.Model
+        """
         for (key, value) in kwargs.items():
             setattr(self, key, value)
         if save is True:
@@ -153,7 +155,10 @@ class SingleDeleteQuerySetMixin(object):
     """ Mixin de queryset implémentant la suppression individuelle des instances du queryset """
 
     def delete(self):
-        """ Supprimer indépendamment chaque objet du queryset """
+        """
+        Supprimer indépendamment chaque objet du queryset
+        :type self: django.db.models.Queryset
+        """
         for item in self:
             item.delete()
 
@@ -163,7 +168,7 @@ class SingleDeleteQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
     pass
 
 
-class SingleDeleteManager(models.Manager):
+class SingleDeleteManager(models.Manager, object):
     """ Manager implémentant la suppression individuelle des instances du queryset """
 
     def get_queryset(self):
@@ -173,6 +178,7 @@ class SingleDeleteManager(models.Manager):
 
 class DisableMigrations(object):
     """ Faux dictionnaire désactivant les migrations pour toutes les applications """
+
     def __contains__(self, item):
         return True
 

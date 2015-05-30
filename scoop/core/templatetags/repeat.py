@@ -1,6 +1,13 @@
 # coding: utf-8
+"""
+Utilisation:
+- Dans un template, ajouter {% enable_macros %}
+- Utiliser un macro comme un block
+- Repeat macro block
+"""
 from django import template
 from django.template import Node, TemplateSyntaxError
+from django.template.base import TokenParser
 from django.template.loader_tags import BlockNode, do_block
 
 register = template.Library()
@@ -116,7 +123,7 @@ def do_macro(parser, token):
 def do_repeat(parser, token):
     """ Renvoyer un bloc repeat """
 
-    class RepeatTagParser(template.TokenParser):
+    class RepeatTagParser(TokenParser):
         """ Parser de tag repeat """
 
         def top(self):

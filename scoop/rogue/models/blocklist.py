@@ -116,39 +116,48 @@ class Blocklist(DatetimeModel, DataModel):
 
     def is_listed(self, sender, name=None):
         """ Renvoyer si un utilisateur est bloqué par une blocklist """
-        return sender.pk in self.get_ids(name)
+        return getattr(sender, 'pk', sender) in self.get_ids(name)
 
     def get_list_date(self, sender, name=None):
         """ Renvoyer la date de mise en blocklist d'un utilisateur """
         data = self.get_data(name or DEFAULT_LIST, {})
-        if sender.pk in data:
-            return data[sender.pk][0]
+        if getattr(sender, 'pk', sender) in data:
+            return data[getattr(sender, 'pk', sender)][0]
         return None
 
     # Setter
     def enlist(self, sender, name=None):
-        """ Ajouter un utilisateur à une blocklist """
-        if sender.pk not in self.get_ids(name):
+        """
+        Ajouter un utilisateur à une blocklist
+        :type sender: scoop.user.models.User or int
+        """
+        if getattr(sender, 'pk', sender) not in self.get_ids(name) and not getattr(sender, 'is_staff', False):
             now = timezone.now()
             data = self.get_data(name or DEFAULT_LIST, {})
-            data[sender.pk] = [now]
+            data[getattr(sender, 'pk', sender)] = [now]
             self.set_data(name or DEFAULT_LIST, data)
             self.save()
             return True
         return False
 
     def unlist(self, sender, name=None):
-        """ Retirer un utilisateur d'une blocklist """
-        if sender.pk in self.get_ids(name):
+        """
+        Retirer un utilisateur d'une blocklist
+        :type sender: scoop.user.models.User or int
+        """
+        if getattr(sender, 'pk', sender) in self.get_ids(name):
             data = self.get_data(name or DEFAULT_LIST)
-            del data[sender.pk]
+            del data[getattr(sender, 'pk', sender)]
             self.set_data(name or DEFAULT_LIST, data)
             self.save()
             return True
         return False
 
     def toggle(self, sender, name=None):
-        """ Basculer l'enrôlement d'un utilisateur à une blocklist """
+        """
+        Basculer l'enrôlement d'un utilisateur à une blocklist
+        :type sender: scoop.user.models.User or int
+        """
         if self.is_listed(sender, name or DEFAULT_LIST):
             self.unlist(sender, name or DEFAULT_LIST)
             return False

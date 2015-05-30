@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from unidecode import unidecode
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.ippoint import IPPointModel
@@ -78,6 +79,10 @@ class UserIP(IPPointModel, DatetimeModel):
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _(u"{user}@{ip}").format(user=self.user, ip=self.get_ip())
+
+    def __repr__(self):
+        """ Renvoyer la représentation texte de l'objet """
+        return unidecode(self.__unicode__())
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """

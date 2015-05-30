@@ -31,8 +31,14 @@ class IPBlockManager(SingleDeleteManager):
         return self.filter(active=True)
 
     def is_blocked(self, ip):
-        """ Renvoyer si une IP est bloquée """
+        """
+        Renvoyer si une IP est bloquée
+        :type ip: scoop.user.access.models.IP
+        """
         from scoop.location.models import Country
+        # Ignorer les IPs protégées
+        if ip.is_protected():
+            return {'blocked': False, 'level': 0, 'type': 0}
         # Vérifier d'abord les attributs de l'IP
         if ip.is_blocked(check=False) or not Country.objects.is_safe(ip.country):
             return {'blocked': True, 'level': ip.harm or 3, 'type': 0}
@@ -148,12 +154,15 @@ class IPBlockManager(SingleDeleteManager):
                     ip = IP.objects.get(id=ip)
                 elif isinstance(ip, IP):
                     ip = ip
-                block, created = self.get_or_create(type=0, ip1=ip.ip, isp=ip.isp, harm=harm, category=category, description=description or u"")
-                if created is False:
-                    block.active = True
-                    block.save()
                 else:
-                    new_blocks.append(block)
+                    raise TypeError(u"IPs must be strings, ints or IPs.")
+                if not ip.is_protected():
+                    block, created = self.get_or_create(type=0, ip1=ip.ip, isp=ip.isp, harm=harm, category=category, description=description or u"")
+                    if created is False:
+                        block.active = True
+                        block.save()
+                    else:
+                        new_blocks.append(block)
             except:
                 pass
             return new_blocks

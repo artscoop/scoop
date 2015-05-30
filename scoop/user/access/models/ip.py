@@ -9,6 +9,7 @@ import IPy
 from django.apps.registry import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.gis.db.models.manager import GeoManager
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import permalink
@@ -28,7 +29,7 @@ from scoop.user.access.util.access import STATUS_CHOICES, reverse_lookup
 logger = logging.getLogger(__name__)
 
 
-class IPManager(models.Manager):
+class IPManager(GeoManager):
     """ Manager des IP """
 
     # Getter
@@ -36,14 +37,14 @@ class IPManager(models.Manager):
         """ Renvoyer une IP par clé naturelle """
         return self.get(ip=ip)
 
-    def get_by_ip(self, ipstr):
+    def get_by_ip(self, ip_string):
         """ Renvoyer l'objet IP depuis une chaîne """
         try:
-            return self.get(ip=IP.get_ip_value(ipstr))
+            return self.get(ip=IP.get_ip_value(ip_string))
         except IP.DoesNotExist:
             try:
                 new_ip = IP()
-                new_ip.set_ip_address(ipstr, save=True)
+                new_ip.set_ip_address(ip_string, save=True)
                 return new_ip
             except:
                 return None
@@ -87,6 +88,8 @@ class IP(DatetimeModel, CoordinatesModel):
     """ Adresse IP """
     # Constantes
     HARMFUL_LEVEL = 2
+    PROTECTED_IPS = [r'^127\.', r'^192\.168\.']
+
     # Champs
     ip = models.DecimalField(null=False, blank=True, unique=True, max_digits=39, decimal_places=0, db_index=True, verbose_name=_(u"Decimal"))
     string = models.CharField(max_length=48, verbose_name=_(u"String"))
@@ -142,7 +145,7 @@ class IP(DatetimeModel, CoordinatesModel):
     @addattr(short_description=_(u"Country"))
     def get_country(self):
         """ Renvoyer l'instance Country pour l'IP """
-        if not apps.is_installed('location'):
+        if not apps.is_installed('scoop.location'):
             return None
         from scoop.location.models import Country
         # Renvoyer le pays correspondant au code, ou aucun si A1, A2 etc.
@@ -155,10 +158,12 @@ class IP(DatetimeModel, CoordinatesModel):
 
     def get_closest_city(self):
         """ Renvoyer l'instance de City la plus proche des coordonnées GPS de l'adresse IP '"""
-        if not apps.is_installed('location'):
+        if not apps.is_installed('scoop.location'):
             return None
         try:
             from scoop.location.models import City
+            if self.string in settings.INTERNAL_IPS:
+                return IP.objects.get_by_ip(settings.PUBLIC_IP).get_closest_city()
             # Trouver la ville la plus proche des coordonnées GPS de l'IP, portant idéalement un nom
             geoip = self.get_geoip() or dict()
             if geoip.get('latitude', 0) != 0:
@@ -196,9 +201,9 @@ class IP(DatetimeModel, CoordinatesModel):
         return shorter
 
     @staticmethod
-    def get_ip_value(ip):
+    def get_ip_value(ip_string):
         """ Renvoyer la valeur décimale d'une IP """
-        return IPy.IP(ip).ip
+        return IPy.IP(ip_string).ip
 
     @addattr(admin_order_field='ip', short_description=_(u"Hexadecimal"))
     def get_hex(self, group=2):
@@ -281,6 +286,13 @@ class IP(DatetimeModel, CoordinatesModel):
     def is_harmful(self):
         """ Renvoyer si l'adresse IP est dangereuse """
         return self.harm >= IP.HARMFUL_LEVEL
+
+    def is_protected(self):
+        """ Renvoyer si l'IP est spéciale et protégée """
+        for regex in self.PROTECTED_IPS:
+            if re.search(regex, self.string):
+                return True
+        return False
 
     @staticmethod
     def is_country_harmful(code):

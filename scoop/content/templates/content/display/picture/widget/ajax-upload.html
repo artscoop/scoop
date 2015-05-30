@@ -1,6 +1,7 @@
 {% load i18n %}
 <div id="upload-container">
-	<a id="upload-open-file-dialog" class="btn btn-small btn-default">{{_("Select files to upload")}}</a>
+    <a id="upload-open-file-dialog" class="btn btn-small btn-default">{{ _("Select files to upload") }}</a>
+
     <div class="row">
         <span id="upload-files-list" class="col-sm-12"></span>
         <span id="upload-total-progress" class="col-sm-12"></span>
@@ -8,77 +9,84 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
-    // Créer l'objet PLUpload
-    var uploader = new plupload.Uploader({
-        container: 'upload-container',
-    	browse_button: 'upload-open-file-dialog',
-        multipart: true,
-        multipart_params: {'csrfmiddlewaretoken': "{{csrf_token}}" },
-    	runtimes: 'html5, html4, flash, html5, silverlight, browserplus',
-    	max_file_size: '10mb',
-    	chunk_size: '16kb',
-    	resize: {width: 1536, height: 1152, quality: 90},
-    	url: '{% url urlname parameter %}',
-    	flash_swf_url: '{{STATIC_URL}}tool/jquery/features/plupload/js/Moxie.swf',
-    	filters: [{title: "{% trans 'Image files' %}", extensions: "jpg, gif, png"},]
-    });
+    $(document).ready(function () {
+        try {
+            // Créer l'objet PLUpload
+            var uploader = new plupload.Uploader({
+                                                     container: 'upload-container',
+                                                     browse_button: 'upload-open-file-dialog',
+                                                     multipart: true,
+                                                     multipart_params: {'csrfmiddlewaretoken': "{{csrf_token}}"},
+                                                     runtimes: 'html5, html4, flash, html5, silverlight, browserplus',
+                                                     max_file_size: '10mb',
+                                                     chunk_size: '16kb',
+                                                     resize: {width: 1536, height: 1152, quality: 90},
+                                                     url: '{% url urlname parameter %}',
+                                                     flash_swf_url: '{{STATIC_URL}}tool/jquery/features/plupload/js/Moxie.swf',
+                                                     filters: [{title: "{% trans 'Image files' %}", extensions: "jpg, gif, png"},]
+                                                 });
 
-    // Démarrage / Arrêt
-    uploader.bind('StateChanged', function(up) {
-        if (up.state == plupload.STARTED) {
-            $('#upload-files-list, #upload-file-dialog').hide();
+            // Démarrage / Arrêt
+            uploader.bind('StateChanged', function (up) {
+                if (up.state == plupload.STARTED) {
+                    $('#upload-files-list, #upload-file-dialog').hide();
+                }
+            });
+
+            // Ajout/Suppression d'un fichier
+            uploader.bind('QueueChanged', function (up) {
+                var output = ('<table style="margin-top:0.5em;" class="table table-condensed table-bordered table-striped"><tbody>');
+                for (var i = 0; i < up.files.length; i++) {
+                    var file_name = (up.files[i].name < 96) ? up.files[i].name : up.files[i].name.substring(0, 40) + "..." + up.files[i].name.substring(up.files[i].name.length - 40, up.files[i].name.length);
+                    output += ('<tr><td>');
+                    output += ('<span value="' + i.toString() + '" class="col-1 text-danger upload-queue-remove"><span class="entypo circled-cross"></span></span>');
+                    output += ('<small>' + file_name + '</small> ');
+                    output += ('</td><td><span class="label label-default">' + Math.round(up.files[i].size / 1024.0).toString() + ' ko</span>');
+                    output += ('</td></tr>');
+                }
+                output += ('</tbody></table>');
+                $('#upload-files-list').html(output);
+                $('#upload-files-list').trigger('contentChanged');
+            });
+
+            // Un morceau (chunk) vient d'être uploadé
+            uploader.bind('ChunkUploaded', function (up, file, response) {
+                uploader.trigger('UploadProgress', uploader, file); // Sans cela, le rafraîchissement est aléatoire et rare
+                var file_percent = Math.round(100 * file.loaded / file.size);
+                var total_percent = Math.round(100 * uploader.total.loaded / uploader.total.size);
+                $('#upload-current-file').html(file.name + ' <div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="' + file_percent.toString() + '" aria-valuemin="0" aria-valuemax="100" style="width:' + file_percent.toString() + '%;"></div>');
+                $('#upload-total-progress').html('<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="' + total_percent.toString() + '" aria-valuemin="0" aria-valuemax="100" style="width:' + total_percent.toString() + '%;"></div>');
+            });
+
+            // Initialiser l'objet
+            uploader.init();
+
+            // Traiter la validation du formulaire, uploader avant
+            $('#profile-edit').submit(function (e) {
+                if (uploader.total.uploaded == 0) {
+                    if (uploader.files.length > 0) {
+                        uploader.bind('UploadComplete', function () {
+                            console.log("Upload complete");
+                            $('#profile-edit').submit(function (e) {
+                                return true;
+                            });
+                            $('#submit-profile-edit').click(); // Valider le formulaire à l'aide d'un clic
+                        });
+                        uploader.start();
+                        e.preventDefault();
+                    } else {
+                        $('#save').click();
+                    }
+                }
+            });
+            // Cliquer sur une croix retire le fichier de la file
+            $(document).on('click', 'span.upload-queue-remove', function () {
+                var index = parseInt($(this).attr('value'));
+                uploader.removeFile(uploader.files[index]);
+            });
+
+        } catch (err) {
+            console.log("Plupload is not loaded, skipping in content/display/picture/widget/ajax-upload.html")
         }
     });
-
-    // Ajout/Suppression d'un fichier
-    uploader.bind('QueueChanged', function(up) {
-        var output = ('<table style="margin-top:0.5em;" class="table table-condensed table-bordered table-striped"><tbody>');
-        for (var i=0; i < up.files.length; i++) {
-            var file_name = (up.files[i].name < 96) ? up.files[i].name : up.files[i].name.substring(0, 40) + "..." + up.files[i].name.substring(up.files[i].name.length - 40, up.files[i].name.length);
-            output += ('<tr><td>');
-            output += ('<span value="' + i.toString() + '" class="col-1 text-danger upload-queue-remove"><span class="entypo circled-cross"></span></span>');
-            output += ('<small>' + file_name + '</small> ');
-            output += ('</td><td><span class="label label-default">' + Math.round(up.files[i].size / 1024.0).toString() + ' ko</span>');
-            output += ('</td></tr>');
-        }
-        output += ('</tbody></table>');
-        $('#upload-files-list').html(output);
-        $('#upload-files-list').trigger('contentChanged');
-    });
-    
-    // Un morceau (chunk) vient d'être uploadé
-    uploader.bind('ChunkUploaded', function(up, file, response) {
-        uploader.trigger('UploadProgress', uploader, file); // Sans cela, le rafraîchissement est aléatoire et rare
-        var file_percent = Math.round(100 * file.loaded / file.size);
-        var total_percent = Math.round(100 * uploader.total.loaded / uploader.total.size);
-        $('#upload-current-file').html(file.name + ' <div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="' + file_percent.toString() + '" aria-valuemin="0" aria-valuemax="100" style="width:' + file_percent.toString() + '%;"></div>');
-        $('#upload-total-progress').html('<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="' + total_percent.toString() + '" aria-valuemin="0" aria-valuemax="100" style="width:' + total_percent.toString() + '%;"></div>');
-    });
-
-    // Initialiser l'objet
-	uploader.init();
-
-	// Traiter la validation du formulaire, uploader avant
-    $('#profile-edit').submit( function(e) {
-        if (uploader.total.uploaded == 0) {
-            if (uploader.files.length > 0) {
-                uploader.bind('UploadComplete', function() {
-                    console.log("Upload complete");
-                    $('#profile-edit').submit(function(e) {return true;});
-                    $('#submit-profile-edit').click(); // Valider le formulaire à l'aide d'un clic
-                });
-                uploader.start();
-                e.preventDefault();
-            } else {
-                $('#save').click();
-            }
-        }
-    });
-    // Cliquer sur une croix retire le fichier de la file
-    $(document).on('click', 'span.upload-queue-remove', function() {
-        var index = parseInt($(this).attr('value'));
-        uploader.removeFile(uploader.files[index]);
-    });
-});
 </script>

@@ -2,12 +2,12 @@
 from __future__ import unicode_literals
 
 import django.core.validators
-import django.db.models.deletion
 import django.utils.timezone
 import picklefield.fields
-from django.conf import settings
 from django.db import migrations, models
 
+import scoop.core.abstract.core.translation
+import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
 
 
@@ -15,8 +15,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0006_require_contenttypes_0002'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('access', '0001_initial'),
     ]
 
     operations = [
@@ -32,7 +30,6 @@ class Migration(migrations.Migration):
                 ('items', models.CharField(default=b'', max_length=128, verbose_name='Items')),
                 ('read', models.BooleanField(default=False, db_index=True, verbose_name='Read')),
                 ('read_time', models.DateTimeField(default=None, null=True, verbose_name='Read', db_index=True)),
-                ('user', models.ForeignKey(related_name='alerts_received', verbose_name='User', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['-time'],
@@ -46,7 +43,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('name', models.CharField(db_index=True, max_length=40, verbose_name='Name', validators=[django.core.validators.RegexValidator(b'^[\\d\\w][\\d\\s\\w]*$', 'Must contain only letters and digits')])),
-                ('user', models.ForeignKey(related_name='thread_labels', verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'verbose_name': 'label',
@@ -65,7 +61,6 @@ class Migration(migrations.Migration):
                 ('sent_time', models.DateTimeField(default=None, null=True, verbose_name='Delivery time')),
                 ('sent_email', models.CharField(default='', max_length=96, verbose_name='Email used')),
                 ('minimum_time', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Minimum delivery')),
-                ('recipient', models.ForeignKey(related_name='mailevents_to', verbose_name='Recipient', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'mail event',
@@ -91,7 +86,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'mailtype', to='messaging.MailType')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -106,8 +100,6 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(verbose_name='Text')),
                 ('spam', models.FloatField(default=0.0, verbose_name='Spam level', validators=[django.core.validators.MaxValueValidator(1.0), django.core.validators.MinValueValidator(0.0)])),
                 ('deleted', models.BooleanField(default=False, db_index=True, verbose_name='Deleted')),
-                ('author', models.ForeignKey(related_name='messages_sent', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('ip', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='IP', to='access.IP', null=True)),
             ],
             options={
                 'verbose_name': 'message',
@@ -123,8 +115,6 @@ class Migration(migrations.Migration):
                 ('status', models.NullBooleanField(default=None, verbose_name='Status', db_index=True)),
                 ('closed', models.BooleanField(default=False, db_index=True, verbose_name='Closed')),
                 ('updated', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Updated')),
-                ('source', models.ForeignKey(related_name='negotiations_made', verbose_name='Asker', to=settings.AUTH_USER_MODEL)),
-                ('target', models.ForeignKey(related_name='negotiations_received', verbose_name='Target', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'negotiation',
@@ -175,50 +165,10 @@ class Migration(migrations.Migration):
                 ('closed', models.BooleanField(default=False, db_index=True, verbose_name='Closed')),
                 ('expires', models.DateTimeField(null=True, verbose_name='Expires', blank=True)),
                 ('expiry_on_read', models.SmallIntegerField(default=365, help_text='Value in days', verbose_name='Expiry on read')),
-                ('author', models.ForeignKey(related_name='threads', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('labels', models.ManyToManyField(to='messaging.Label', verbose_name='Labels', blank=True)),
-                ('updater', models.ForeignKey(related_name='threads_where_last', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Last speaker', to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'verbose_name': 'thread',
                 'verbose_name_plural': 'threads',
             },
-        ),
-        migrations.AddField(
-            model_name='recipient',
-            name='thread',
-            field=models.ForeignKey(related_name='recipients', verbose_name='Thread', to='messaging.Thread'),
-        ),
-        migrations.AddField(
-            model_name='recipient',
-            name='user',
-            field=models.ForeignKey(related_name='user_recipients', verbose_name='User', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='negotiation',
-            name='thread',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Thread', to='messaging.Thread', null=True),
-        ),
-        migrations.AddField(
-            model_name='message',
-            name='thread',
-            field=models.ForeignKey(related_name='messages', verbose_name='Thread', to='messaging.Thread'),
-        ),
-        migrations.AddField(
-            model_name='mailevent',
-            name='type',
-            field=models.ForeignKey(related_name='events', verbose_name='Mail type', to='messaging.MailType'),
-        ),
-        migrations.AlterUniqueTogether(
-            name='recipient',
-            unique_together=set([('thread', 'user')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='negotiation',
-            unique_together=set([('source', 'target')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='label',
-            unique_together=set([('user', 'name')]),
         ),
     ]

@@ -10,12 +10,12 @@ from django.template.defaultfilters import slugify
 from scoop.core.util.django import formutil
 
 
-class RequestAddon():
+class RequestMixin():
     """
     Opérations sur l'objet HttpRequest destinées à l'usage avec plusieurs
     applications. Principalement, l'objectif de l'utilitaire est de manipuler
     IP ou autres éléments de requête HTTP.
-    :type RequestAddon: django.http.HttpRequest
+    :type RequestMixin: django.http.HttpRequest
     """
     # Constantes
     CHECKS = ['HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR']
@@ -26,7 +26,7 @@ class RequestAddon():
     # Getter
     def get_ip(self):
         """ Renvoyer l'adresse IP de la requête, au format texte"""
-        for entry in RequestAddon.CHECKS:
+        for entry in RequestMixin.CHECKS:
             if self.META.get(entry, False):
                 return self.META[entry]
         return '-'
@@ -111,7 +111,7 @@ class RequestAddon():
         """ Préparer l'objet au pickling """
         if hasattr(self, 'user'):
             self.user = self.user._wrapped if hasattr(self.user, '_wrapped') else self.user  # Depuis Django 1.8, user est un LazyObject qui ne peut être picklé en l'état.
-        meta = {k: self.META[k] for k in RequestAddon.METACOPY if k in self.META and isinstance(self.META[k], basestring)}
+        meta = {k: self.META[k] for k in RequestMixin.METACOPY if k in self.META and isinstance(self.META[k], basestring)}
 
         return (HttpRequest, (), {'META': meta, 'POST': self.POST, 'GET': self.GET, 'user': getattr(self, 'user', None),
                                   'path': self.path, 'scheme': self.scheme, 'path_info': self.path_info,

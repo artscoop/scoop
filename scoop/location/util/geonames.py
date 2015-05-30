@@ -17,6 +17,7 @@ import pytz
 import unicodecsv
 from celery import task
 from django.conf import settings
+from django.contrib.gis.geos.point import Point
 from django.db import transaction
 from django.db.models import Q
 from django.db.models.aggregates import Avg
@@ -172,8 +173,9 @@ def populate_cities(country, output_every=8192):
                 # Traiter le reste
                 for idx, row in enumerate(table.values(), start=1):
                     geoid, updateable = int(row[0]), datetime.datetime.strptime(row[18], '%Y-%m-%d').replace(tzinfo=pytz.utc) >= country.updated
+                    latitude, longitude = float(row[4]), float(row[5])
                     city = City(id=geoid, level=0, country=country, timezone=timezones[row[17]], name=row[1], ascii=row[2].lower(), a1=row[10], a2=row[11], a3=row[12], a4=row[13], type=row[7],
-                                feature=row[6], city=(row[6] == 'P'), latitude=float(row[4]), longitude=float(row[5]), population=int(row[14]))
+                                feature=row[6], city=(row[6] == 'P'), population=int(row[14]), position=Point(longitude, latitude))
                     if updateable or geoid not in db_ids:
                         city.save(force_update=updateable)
                         updated_count += int(updateable)
@@ -184,8 +186,9 @@ def populate_cities(country, output_every=8192):
             else:
                 bulk = []
                 for idx, row in enumerate(table.values(), start=1):
+                    latitude, longitude = float(row[4]), float(row[5])
                     city = City(id=int(row[0]), level=0, country=country, timezone=timezones[row[17]], name=row[1], ascii=row[2], a1=row[10], a2=row[11], a3=row[12], a4=row[13], type=row[7],
-                                feature=row[6], city=row[6] == 'P', latitude=float(row[4]), longitude=float(row[5]), population=int(row[14]))
+                                feature=row[6], city=row[6] == 'P', population=int(row[14]), position=Point(longitude, latitude))
                     bulk.append(city)
                     if idx % output_every == 0 or idx == rows - 1:
                         output_progress(u"Filling {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10})           \r", idx, rows, output_every, {'country': country_name})
@@ -285,8 +288,11 @@ def reparent_cities(country, clear=False, output_every=256):
             if idx % output_every == 0 or idx == rows - 1:
                 output_progress(u"Rebuilding {country}: {pc:>5.1f}% ({idx:>10}/{rows:>10})           \r", idx, rows, output_every, {'country': country_name})
         # Calculer la latitude et longitude moyennes du pays
-        average = City.objects.filter(country=country, city=True).aggregate(Avg('latitude'), Avg('longitude'))
-        country.longitude, country.latitude = average['longitude__avg'], average['latitude__avg']
+        all_cities = City.objects.filter(country=country, city=True).only('position')
+        city_count = all_cities.count()
+        average_latitude = sum([city.position.y for city in all_cities]) / city_count
+        average_longitude = sum([city.position.x for city in all_cities]) / city_count
+        country.position = Point(average_longitude, average_latitude)
         country.updated = timezone.now()
         country.save()
         gc.collect()

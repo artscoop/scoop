@@ -19,7 +19,7 @@ class CoreConfig(AppConfig):
         from scoop.core.util.django.admin import AdminURLUtil, _boolean_icon
         from scoop.core.util.django.formutil import ModelFormUtil
         from scoop.core.util.model.model import DictUpdateModel, get_all_related_objects
-        from scoop.core.util.stream.request import RequestAddon
+        from scoop.core.util.stream.request import RequestMixin
 
         from django.contrib.admin.templatetags import admin_list
         from django.core.handlers.wsgi import WSGIRequest
@@ -27,10 +27,10 @@ class CoreConfig(AppConfig):
         from django.http.request import HttpRequest
 
         # Patcher les classes HTTPRequest
-        HttpRequest.__bases__ += (RequestAddon,)
-        WSGIRequest.__bases__ += (RequestAddon,)
-        WSGIRequest.__reduce__ = RequestAddon.__reduce__
-        HttpRequest.__reduce__ = RequestAddon.__reduce__
+        HttpRequest.__bases__ += (RequestMixin,)
+        WSGIRequest.__bases__ += (RequestMixin,)
+        WSGIRequest.__reduce__ = RequestMixin.__reduce__
+        HttpRequest.__reduce__ = RequestMixin.__reduce__
         # Patcher la classe Model
         models.Model.__bases__ += (AdminURLUtil, ModelFormUtil, DictUpdateModel)
         models.Model.get_all_related_objects = get_all_related_objects

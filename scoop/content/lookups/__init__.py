@@ -1,4 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from scoop.content.lookups.content import ContentLookup
+from .content import ContentLookup
+from .comment import CommentLookup
+from .picture import PictureLookup

@@ -1,25 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import annoying.fields
 import django.core.validators
-import django.db.models.deletion
 import django.utils.timezone
 import django_countries.fields
 import django_languages.fields
 import easy_thumbnails.fields
 import picklefield.fields
-from django.conf import settings
 from django.db import migrations, models
 
+import scoop.core.abstract.core.icon
+import scoop.core.abstract.core.translation
 import scoop.core.util.data.dateutil
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -29,7 +26,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('data', picklefield.fields.PickledObjectField(default=dict, verbose_name='Data', editable=False)),
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
-                ('user', annoying.fields.AutoOneToOneField(related_name='blocklist', null=True, verbose_name='Blocker', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'blocklists',
@@ -46,14 +42,11 @@ class Migration(migrations.Migration):
                 ('status', models.SmallIntegerField(default=0, db_index=True, verbose_name='Status', choices=[[0, 'New'], [1, 'Being checked'], [2, 'Closed'], [3, 'Fixed'], [4, 'Will not fix'], [5, 'Postponed'], [6, 'Pending']])),
                 ('details', models.CharField(max_length=128, verbose_name='Details', blank=True)),
                 ('admin', models.CharField(max_length=128, verbose_name='Administration notes', blank=True)),
-                ('automatic', models.BooleanField(default=False, verbose_name='Automatic flag', db_index=True, editable=False)),
+                ('automatic', models.BooleanField(default=False, verbose_name='Automatic', db_index=True, editable=False)),
                 ('action_done', models.BooleanField(default=False, db_index=True, verbose_name='Action done')),
                 ('updated', models.DateTimeField(default=django.utils.timezone.now, null=True, verbose_name='Updated')),
                 ('object_id', models.PositiveIntegerField(db_index=True, null=True, verbose_name='Object Id', blank=True)),
                 ('url', models.CharField(max_length=128, verbose_name='URL', blank=True)),
-                ('author', models.ForeignKey(related_name='flags_made', on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-                ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
-                ('moderators', models.ManyToManyField(related_name='moderated_flags', verbose_name='Moderators', to=settings.AUTH_USER_MODEL, blank=True)),
             ],
             options={
                 'verbose_name': 'flag',
@@ -70,7 +63,6 @@ class Migration(migrations.Migration):
                 ('icon_height', models.IntegerField(verbose_name='Height', null=True, editable=False, blank=True)),
                 ('short_name', models.CharField(max_length=20, verbose_name='Identifier')),
                 ('needs_details', models.BooleanField(default=False, verbose_name='Needs details')),
-                ('content_type', models.ForeignKey(verbose_name='Content type', blank=True, to='contenttypes.ContentType', null=True)),
             ],
             options={
                 'verbose_name': 'flag type',
@@ -84,7 +76,6 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=15, verbose_name='language', choices=[(b'en', 'English'), (b'fr', 'French')])),
                 ('name', models.CharField(max_length=96, verbose_name='Name')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
-                ('model', models.ForeignKey(related_name='translations', verbose_name=b'flagtype', to='rogue.FlagType')),
             ],
             bases=(models.Model, scoop.core.abstract.core.translation.TranslationModel),
         ),
@@ -121,7 +112,6 @@ class Migration(migrations.Migration):
                 ('reason', models.SmallIntegerField(default=0, verbose_name='Reason', choices=[[0, 'Fake accounts'], [1, 'Raw behaviour']])),
                 ('details', models.CharField(default=False, max_length=64, verbose_name='Details', blank=True)),
                 ('active', models.BooleanField(default=True, verbose_name='Active')),
-                ('user', models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, verbose_name='User', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'mail blocking',
@@ -143,22 +133,5 @@ class Migration(migrations.Migration):
                 'verbose_name': 'profanity',
                 'verbose_name_plural': 'profanities',
             },
-        ),
-        migrations.AlterUniqueTogether(
-            name='ipblock',
-            unique_together=set([('type', 'ip1', 'ip2', 'isp', 'hostname', 'country_code')]),
-        ),
-        migrations.AlterIndexTogether(
-            name='ipblock',
-            index_together=set([('ip1', 'ip2')]),
-        ),
-        migrations.AddField(
-            model_name='flag',
-            name='type',
-            field=models.ForeignKey(related_name='flags', verbose_name='Type', to='rogue.FlagType'),
-        ),
-        migrations.AlterUniqueTogether(
-            name='flag',
-            unique_together=set([('author', 'content_type', 'object_id')]),
         ),
     ]

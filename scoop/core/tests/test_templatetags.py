@@ -15,12 +15,12 @@ from scoop.core.templatetags.datetime_tags import is_date_new as tt_is_new
 from scoop.core.templatetags.html_tags import linebreaks_convert as tt_linebreaks
 from scoop.core.templatetags.html_tags import sanitize as tt_sanitize
 from scoop.core.templatetags.html_tags import tags_keep as tt_tags_keep
+from scoop.core.util.stream.directory import Paths
 from scoop.user.models.user import User
-from settings.django import root_dir
 
 
 @override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',
-                   EMAIL_FILE_PATH=root_dir('files', 'tests', 'mail'),
+                   EMAIL_FILE_PATH=Paths.get_root_dir('files', 'tests', 'mail'),
                    DEFAULT_FROM_EMAIL='admin@test.com')
 class TemplateTagsTest(TestCase):
     """ Test des template tags """

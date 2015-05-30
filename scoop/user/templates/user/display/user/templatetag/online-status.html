@@ -1,3 +1,4 @@
+{% load text_tags %}
 {% if mode == "text" %}
     {% if user.is_online %}
         {% if user.is_away %}
@@ -11,12 +12,12 @@
 {% elif mode == "label" %}
     {% if user.is_online %}
         {% if user.is_away %}
-        <span class="badge away">absent</span>
+        <span class="label away">absent</span>
         {% else %}
-        <span class="badge online">En ligne</span>
+        <span class="label online">En ligne</span>
         {% endif %}
     {% else %}
-    <span class="badge offline">déconnecté</span>
+    <span class="label offline">{{ user.profile.gender|gender:"déconnecté;déconnectée;déconnecté-e" }}</span>
     {% endif %}
 {% elif mode == "pill" %}
     {% if user.is_online %}

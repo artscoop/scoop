@@ -46,6 +46,10 @@ class CityLookup(LookupChannel):
                                                                                                                                             code=obj.get_code(), parent=obj.get_auto_parent())
         return output
 
+    def check_auth(self, request):
+        """ Renvoyer si l'utilisateur peut envoyer une requête """
+        return True
+
 
 class CityPublicLookup(CityLookup):
     """ Lookup ajax-select des villes, pays publics uniquement """
@@ -87,7 +91,7 @@ class CityPublicMinimalLookup(CityLookup):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
-        output = u"""{country} <span class="text-muted" style="display:inline-block; text-align:right; padding:0 0.5em; min-width:4em; white-space:nowrap;">{code}</span> {name} <span class="text-muted">{parent}</span>""".format(
+        output = u"""{country} <span class="city-code">{code}</span> <span class="city-name">{name}</span> <span class="city-parent">{parent}</span>""".format(
             name=obj.get_name(), country=obj.get_country_icon(directory="png"), code=obj.get_code(), parent=obj.get_auto_parent())
         return output
 

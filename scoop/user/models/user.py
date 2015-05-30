@@ -22,7 +22,6 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
-from scoop.core.abstract.core.namedfilter import NamedFilterManager
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
@@ -159,12 +158,12 @@ class UserQuerySet(models.QuerySet, UserQuerySetMixin, SingleDeleteQuerySetMixin
     pass
 
 
-class UserManager(DefaultManager.from_queryset(UserQuerySet), DefaultManager, NamedFilterManager, UserQuerySetMixin):
+class UserManager(DefaultManager.from_queryset(UserQuerySet), models.Manager, UserQuerySetMixin):
     """ Manager des utilisateurs """
 
     def get_queryset(self):
         """ Renvoyer le queryset par défaut des utilisateurs """
-        return super(UserManager, self).get_queryset().exclude(id=0)
+        return super(UserManager, self).get_queryset().select_related('profile').exclude(id=0)
 
 
 class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
@@ -173,19 +172,22 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'name']
     CACHE_KEY = {'online': 'user.profile.online.{}', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count', 'logout.force': 'user.profile.logout.{}'}
-    USERNAME_REGEX = r'[A-Za-z][A-Za-z0-9_\-]+'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
+    USERNAME_REGEX = r'^[A-Za-z0-9][A-Za-z0-9_]+$'  # Contient lettres, chiffres et underscores
+    USERNAME_REGEX_MESSAGE = _(u"Your name must start with a letter and can only contain letters, digits and underscores")
+    NAME_REGEX = r'^[A-Za-z][A-Za-z0-9_\-]+$'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
+    NAME_REGEX_MESSAGE = _(u"Your name can only contain letters")
     ONLINE_DURATION, AWAY_DURATION = 900, 300
     # Champs
-    username = models.CharField(max_length=32, unique=True, validators=[RegexValidator(regex=r'^[A-Za-z0-9][A-Za-z0-9_]+', message=_(u"Your name must start with a letter and can only contain letters, digits and underscores")), MinLengthValidator(4)],
+    username = models.CharField(max_length=32, unique=True, validators=[RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE), MinLengthValidator(4)],
                                 verbose_name=_(u"Username"))
-    name = models.CharField(max_length=24, validators=[RegexValidator(regex=r'^{}$'.format(USERNAME_REGEX), message=_(u"Your name can only contain letters"))], blank=True, verbose_name=_(u"Name"))
+    name = models.CharField(max_length=24, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_(u"Name"))
     bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', u"Bot"))
     email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_(u"Email"))
     is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', u"Active"))
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', u"Deleted"))
     is_staff = models.BooleanField(default=False, help_text=_(u"Designates whether the user can log into this admin site."), verbose_name=pgettext_lazy('user', u"Staff"))
     date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_(u"Date joined"))
-    last_online = models.DateTimeField(default=None, null=True, db_index=False, verbose_name=pgettext_lazy('user', u"Last online"))
+    last_online = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('user', u"Last online"))
     next_mail = models.DateTimeField(default=timezone.now, editable=False, verbose_name=_(u"Next possible mail for user"))
     objects = UserManager()
 

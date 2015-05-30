@@ -8,7 +8,9 @@ import picklefield.fields
 from django.conf import settings
 from django.db import migrations, models
 
+import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
+import scoop.user.models.user
 
 
 class Migration(migrations.Migration):
@@ -32,9 +34,9 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(unique=True, max_length=96, verbose_name='Email', blank=True)),
                 ('is_active', models.BooleanField(default=True, db_index=True, verbose_name='Active')),
                 ('deleted', models.BooleanField(default=False, db_index=True, verbose_name='Deleted')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='Staff status')),
+                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='Staff')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Date joined')),
-                ('last_online', models.DateTimeField(default=None, null=True, verbose_name='Last online')),
+                ('last_online', models.DateTimeField(default=None, null=True, verbose_name='Last online', db_index=True)),
                 ('next_mail', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Next possible mail for user', editable=False)),
             ],
             options={
@@ -42,7 +44,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'users',
             },
             managers=[
-                (b'objects', scoop.user.models.user.UserManager()),
+                ('objects', scoop.user.models.user.UserManager()),
             ],
         ),
         migrations.CreateModel(
