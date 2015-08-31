@@ -99,26 +99,26 @@ class FlagManager(SingleDeleteManager):
 class Flag(DatetimeModel):
     """ Signalement """
     # Constantes
-    STATUSES = [[0, _(u"New")], [1, _(u"Being checked")], [2, _(u"Closed")], [3, _(u"Fixed")], [4, _(u"Will not fix")], [5, _(u"Postponed")], [6, _(u"Pending")]]
+    STATUSES = [[0, _("New")], [1, _("Being checked")], [2, _("Closed")], [3, _("Fixed")], [4, _("Will not fix")], [5, _("Postponed")], [6, _("Pending")]]
     NEW, CHECKING, CLOSED, FIXED, WONTFIX, POSTPONED, PENDING = 0, 1, 2, 3, 4, 5, 6
     # Informations du flag
-    name = models.CharField(max_length=128, blank=True, editable=False, verbose_name=_(u"Object name"))
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='flags_made', on_delete=models.SET_NULL, verbose_name=_(u"Author"))
-    type = models.ForeignKey('rogue.FlagType', null=False, related_name='flags', verbose_name=_(u"Type"))
-    priority = models.SmallIntegerField(default=2, validators=[MaxValueValidator(5), MinValueValidator(0)], verbose_name=_(u"Priority"))
-    status = models.SmallIntegerField(choices=STATUSES, default=NEW, null=False, db_index=True, verbose_name=_(u"Status"))
-    details = models.CharField(max_length=128, blank=True, verbose_name=_(u"Details"))
-    admin = models.CharField(max_length=128, blank=True, verbose_name=_(u"Administration notes"))
-    automatic = models.BooleanField(default=False, db_index=True, editable=False, verbose_name=pgettext_lazy('flag', u"Automatic"))
-    action_done = models.BooleanField(default=False, db_index=True, verbose_name=_(u"Action done"))
-    updated = models.DateTimeField(default=timezone.now, null=True, verbose_name=pgettext_lazy('flag', u"Updated"))
+    name = models.CharField(max_length=128, blank=True, editable=False, verbose_name=_("Object name"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='flags_made', on_delete=models.SET_NULL, verbose_name=_("Author"))
+    type = models.ForeignKey('rogue.FlagType', null=False, related_name='flags', verbose_name=_("Type"))
+    priority = models.SmallIntegerField(default=2, validators=[MaxValueValidator(5), MinValueValidator(0)], verbose_name=_("Priority"))
+    status = models.SmallIntegerField(choices=STATUSES, default=NEW, null=False, db_index=True, verbose_name=_("Status"))
+    details = models.CharField(max_length=128, blank=True, verbose_name=_("Details"))
+    admin = models.CharField(max_length=128, blank=True, verbose_name=_("Administration notes"))
+    automatic = models.BooleanField(default=False, db_index=True, editable=False, verbose_name=pgettext_lazy('flag', "Automatic"))
+    action_done = models.BooleanField(default=False, db_index=True, verbose_name=_("Action done"))
+    updated = models.DateTimeField(default=timezone.now, null=True, verbose_name=pgettext_lazy('flag', "Updated"))
     objects = FlagManager()
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')  # limite des modèles concernés
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, limit_choices_to=limit, verbose_name=_(u"Content type"))
-    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, limit_choices_to=limit, verbose_name=_("Content type"))
+    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
-    url = models.CharField(max_length=128, blank=True, verbose_name=_(u"URL"))
-    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_flags', verbose_name=_(u"Moderators"))
+    url = models.CharField(max_length=128, blank=True, verbose_name=_("URL"))
+    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_flags', verbose_name=_("Moderators"))
 
     # Getter
     def get_siblings(self):
@@ -143,7 +143,7 @@ class Flag(DatetimeModel):
         superuser = user.is_superuser
         return superuser or moderator
 
-    @addattr(short_description=_(u"Author"))
+    @addattr(short_description=_("Author"))
     def get_author_name(self):
         """ Renvoyer le nom de l'auteur du signalement """
         return self.author or self.name
@@ -156,12 +156,12 @@ class Flag(DatetimeModel):
         """ Renvoyer le nom de code du type du signalement """
         return self.type.short_name
 
-    @addattr(allow_tags=True, admin_order_field='content_object', short_description=_(u"Content"))
+    @addattr(allow_tags=True, admin_order_field='content_object', short_description=_("Content"))
     def get_content_name(self):
         """ Renvoyer le nom """
         return self.name
 
-    @addattr(allow_tags=True, admin_order_field='status', short_description=_(u"Status"))
+    @addattr(allow_tags=True, admin_order_field='status', short_description=_("Status"))
     def get_status_html(self):
         """ Renvoyer une représentation HTML du statut du signalement """
         types = {0: u'important', 1: u'warning', 2: u'success', 3: u'success', 4: u'success', 5: u'info', 6: u'info'}
@@ -234,15 +234,15 @@ class Flag(DatetimeModel):
 
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"{item}@{url}".format(url=self.url, item=self.content_object)
+        return "{item}@{url}".format(url=self.url, item=self.content_object)
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"flag")
-        verbose_name_plural = _(u"flags")
+        verbose_name = _("flag")
+        verbose_name_plural = _("flags")
         unique_together = ('author', 'content_type', 'object_id')
-        permissions = (("can_flag", u"Can flag"),
-                       ("can_moderate_flag", u"Can moderate flags")
+        permissions = (("can_flag", "Can flag"),
+                       ("can_moderate_flag", "Can moderate flags")
                        )
         app_label = 'rogue'
 
@@ -263,26 +263,26 @@ class FlagTypeManager(SingleDeleteManager):
 class FlagType(TranslatableModel, IconModel):
     """ Type de signalement """
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')
-    short_name = models.CharField(max_length=20, verbose_name=_(u"Identifier"))
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, verbose_name=_(u"Content type"), limit_choices_to=limit)
-    needs_details = models.BooleanField(default=False, verbose_name=_(u"Needs details"))
+    short_name = models.CharField(max_length=20, verbose_name=_("Identifier"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, verbose_name=_("Content type"), limit_choices_to=limit)
+    needs_details = models.BooleanField(default=False, verbose_name=_("Needs details"))
     objects = FlagTypeManager()
 
     # Getter
-    @addattr(short_description=_(u"Name"))
+    @addattr(short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom du type de signalement """
         try:
             return self.get_translation().name
         except:
-            return _(u"(No name)")
+            return _("(No name)")
 
-    @addattr(short_description=_(u"Description"))
+    @addattr(short_description=_("Description"))
     def get_description(self):
         try:
             return self.get_translation().description
         except:
-            return _(u"(No description)")
+            return _("(No description)")
 
     # Propriétés
     name = property(get_name)
@@ -299,19 +299,19 @@ class FlagType(TranslatableModel, IconModel):
         try:
             return self.get_translation().name
         except:
-            return _(u"None")
+            return _("None")
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"flag type")
-        verbose_name_plural = _(u"flag types")
+        verbose_name = _("flag type")
+        verbose_name_plural = _("flag types")
         app_label = 'rogue'
 
 
 class FlagTypeTranslation(get_translation_model(FlagType, "flagtype"), TranslationModel):
     """ Traduction de type de signalement """
-    name = models.CharField(max_length=96, blank=False, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    name = models.CharField(max_length=96, blank=False, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Métadonnées
     class Meta:

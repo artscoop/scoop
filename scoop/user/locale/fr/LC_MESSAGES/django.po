@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"POT-Creation-Date: 2015-08-31 09:21+0200\n"
 "PO-Revision-Date: 2015-05-08 01:07+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -161,7 +161,7 @@ msgid "Permissions"
 msgstr "Permissions"
 
 #: admin/profile.py:29 admin/profile.py:105 admin/user.py:31
-#: models/activation.py:73 models/forms.py:58 models/profile.py:58
+#: models/activation.py:74 models/forms.py:58 models/profile.py:58
 #: models/visit.py:70
 msgid "User"
 msgstr "Utilisateur"
@@ -463,40 +463,40 @@ msgstr ""
 msgid "There is no active user with the username {name}."
 msgstr "Aucun utilisateur actif trouvé avec le nom {name}."
 
-#: models/activation.py:75
+#: models/activation.py:76
 msgid "Secret question"
 msgstr "Question secrète"
 
-#: models/activation.py:76
+#: models/activation.py:77
 msgid "Answer"
 msgstr "Réponse"
 
-#: models/activation.py:78
+#: models/activation.py:79
 msgctxt "activation"
 msgid "Active"
 msgstr "Active"
 
-#: models/activation.py:79
+#: models/activation.py:80
 msgid "Updates"
 msgstr "Mises à jour"
 
-#: models/activation.py:80
+#: models/activation.py:81
 msgid "Mail send count"
 msgstr "Nombre d'emails envoyés"
 
-#: models/activation.py:81
+#: models/activation.py:82
 msgid "Admin details"
 msgstr "Détails admin"
 
-#: models/activation.py:126
+#: models/activation.py:127
 msgid "{}'s activation data"
 msgstr "Activation utilisateur pour {}"
 
-#: models/activation.py:139
+#: models/activation.py:144
 msgid "user activation"
 msgstr "activation utilisateur"
 
-#: models/activation.py:140
+#: models/activation.py:145
 msgid "user activations"
 msgstr "activations utilisateur"
 
@@ -812,11 +812,11 @@ msgstr "(Recommandé)"
 msgid "Offline"
 msgstr "Hors ligne"
 
-#: templatetags/user_tags.py:173 templatetags/user_tags.py:190
+#: templatetags/user_tags.py:171 templatetags/user_tags.py:188
 msgid "yes"
 msgstr "oui"
 
-#: templatetags/user_tags.py:173 templatetags/user_tags.py:190
+#: templatetags/user_tags.py:171 templatetags/user_tags.py:188
 msgid "no"
 msgstr "non"
 

@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-import urllib2
+from urllib.request import urlopen
 from decimal import Decimal, DivisionByZero
 
 from django.db import models
@@ -33,10 +33,10 @@ class CurrencyManager(SingleDeleteManager):
 class Currency(models.Model):
     """ Devise """
     # Champs
-    name = models.CharField(max_length=32, blank=False, verbose_name=_(u"Name"))
-    short_name = models.CharField(max_length=6, blank=False, unique=True, verbose_name=_(u"3 letter name"))
-    balance = models.DecimalField(max_digits=10, decimal_places=7, default=-1, verbose_name=pgettext_lazy('currency', u"Quote"))
-    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('currency', u"Updated"))
+    name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
+    short_name = models.CharField(max_length=6, blank=False, unique=True, verbose_name=_("3 letter name"))
+    balance = models.DecimalField(max_digits=10, decimal_places=7, default=-1, verbose_name=pgettext_lazy('currency', "Quote"))
+    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('currency', "Updated"))
     objects = CurrencyManager()
 
     # Getter
@@ -60,7 +60,7 @@ class Currency(models.Model):
     def update_balance(self, save=True):
         """ Mettre à jour les valeurs de la devise """
         try:
-            req = urllib2.urlopen('http://quote.yahoo.com/d/quotes.csv?s={}USD=X&f=l1&e=.csv'.format(self.short_name))
+            req = urlopen('http://quote.yahoo.com/d/quotes.csv?s={}USD=X&f=l1&e=.csv'.format(self.short_name))
             result = req.read()
         except:
             result = 0
@@ -81,6 +81,6 @@ class Currency(models.Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"currency")
-        verbose_name_plural = _(u"currencies")
+        verbose_name = _("currency")
+        verbose_name_plural = _("currencies")
         app_label = 'location'

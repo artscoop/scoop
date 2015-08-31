@@ -12,7 +12,7 @@ from scoop.core.util.shortcuts import addattr
 
 class AuthoredModel(models.Model):
     """ Mixin de modèle ayant un auteur """
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, verbose_name=_(u"Author"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, verbose_name=_("Author"))
 
     # Métadonnées
     class Meta:
@@ -22,7 +22,7 @@ class AuthoredModel(models.Model):
 class AuthoredModelAdmin(admin.ModelAdmin):
     """ Mixin d'admin pour les modèles ayant un auteur """
 
-    @addattr(allow_tags=True, admin_order_field='author__username', short_description=_(u"Author"))
+    @addattr(allow_tags=True, admin_order_field='author__username', short_description=_("Author"))
     def get_author_link(self, obj):
         """ Renvoyer un lien vers l'auteur """
         return '<a href="%s">%s</a>' % (obj.author.get_admin_url(), escape(obj.author))
@@ -31,7 +31,7 @@ class AuthoredModelAdmin(admin.ModelAdmin):
 class UseredModelAdmin(admin.ModelAdmin):
     """ Mixin d'admin pour les modèles liés à un utilisateur """
 
-    @addattr(allow_tags=True, admin_order_field='user__username', short_description=_(u"User"))
+    @addattr(allow_tags=True, admin_order_field='user__username', short_description=_("User"))
     def get_user_link(self, obj):
         """ Renvoyer un lien vers l'utilisateur """
         return '<a href="%s">%s</a>' % (obj.user.get_admin_url(), escape(obj.user))
@@ -62,7 +62,7 @@ class AutoAuthoredModelAdmin(admin.ModelAdmin):
             field = [f for f in obj._meta.fields if f.name == 'author']
             if len(field) > 0:
                 field = field[0]
-                field.help_text = _(u"Automatically set to {name} if let empty").format(name=request.user.username)
+                field.help_text = _("Automatically set to {name} if let empty").format(name=request.user.username)
         except:
             pass
         return self.readonly_fields
@@ -106,7 +106,7 @@ class AutoManyAuthoredModelAdmin(admin.ModelAdmin):
             field = [f for f in obj._meta.fields if f.name == 'authors']
             if len(field) > 0:
                 field = field[0]
-                field.help_text = _(u"Automatically set to {name} if let empty").format(name=request.user.username)
+                field.help_text = _("Automatically set to {name} if let empty").format(name=request.user.username)
         except:
             pass
         return self.readonly_fields

@@ -36,7 +36,7 @@ class AccessManager(models.Manager):
         visits.query.group_by = ['user_id']
         return visits
 
-    def user_accesses(self, user, limit=100):
+    def by_user(self, user, limit=100):
         """ Renvoyer les accès d'un utilisateur """
         visits = self.filter(user=user).order_by('-id')
         return visits[:limit] if limit is not None else visits
@@ -98,15 +98,15 @@ class AccessManager(models.Manager):
 
 class Access(DatetimeModel, IPPointableModel):
     """ Entrée du journal d'accès """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="access_log", verbose_name=_(u"User"))
-    page = models.ForeignKey('access.Page', null=False, related_name='access_log', verbose_name=_(u"Page"))
-    referrer = models.CharField(max_length=192, verbose_name=_(u"Referrer"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="access_log", verbose_name=_("User"))
+    page = models.ForeignKey('access.Page', null=False, related_name='access_log', verbose_name=_("Page"))
+    referrer = models.CharField(max_length=192, verbose_name=_("Referrer"))
     objects = AccessManager()
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{who} has visited {what}").format(who=self.ip, what=self.page)
+        return _("{who} has visited {what}").format(who=self.ip, what=self.page)
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -115,6 +115,6 @@ class Access(DatetimeModel, IPPointableModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"access")
-        verbose_name_plural = _(u"accesses")
+        verbose_name = _("access")
+        verbose_name_plural = _("accesses")
         app_label = 'access'

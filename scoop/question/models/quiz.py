@@ -9,17 +9,17 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 class Quiz(DatetimeModel, DataModel):
     """ Questionnaire """
     # Champs
-    title = models.CharField(max_length=96, verbose_name=_(u"Title"))
-    description = models.TextField(blank=False, verbose_name=_(u"Description"))
-    questions = models.ManyToManyField('question.Question', verbose_name=_(u"Questions"))
+    title = models.CharField(max_length=96, verbose_name=_("Title"))
+    description = models.TextField(blank=False, verbose_name=_("Description"))
+    questions = models.ManyToManyField('question.Question', verbose_name=_("Questions"))
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"%(title)s" % {'title': self.title}
+        return "%(title)s" % {'title': self.title}
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"quiz")
-        verbose_name_plural = _(u"quizzes")
+        verbose_name = _("quiz")
+        verbose_name_plural = _("quizzes")
         app_label = 'question'

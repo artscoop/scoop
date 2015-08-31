@@ -1,19 +1,19 @@
 # coding: utf-8
 from __future__ import absolute_import
+
 import re
 
-from classytags.core import Tag, Options
+from classytags.core import Options, Tag
 from django import template
 from django.utils.translation import pgettext_lazy
-
 
 register = template.Library()
 
 BASIC_CHANGES = {
-    'fr': {u"à le": u"au", u"de le": u"du", u"à les": u"aux", u"de les": u"des"},
+    'fr': {"à le": "au", "de le": "du", "à les": "aux", "de les": "des"},
 }
 COUNTRY_IN = {
-    'fr': {'ma': u"au", u"mu": u"à", u"re": u"à la", u"mg": u"à"}
+    'fr': {'ma': "au", "mu": "à", "re": "à la", "mg": "à"}
 }
 
 
@@ -46,5 +46,5 @@ def in_country(context, country):
     """
     language = context.get('LANGUAGE_CODE', 'en')
     if language in COUNTRY_IN and country.code2.lower() in COUNTRY_IN[language]:
-        return pgettext_lazy('country_in', u"{adverb} {country}").format(adverb=COUNTRY_IN[language][country.code2.lower()], country=country)
-    return pgettext_lazy('country_in', u"in {country}").format(country=country)
+        return pgettext_lazy('country_in', "{adverb} {country}").format(adverb=COUNTRY_IN[language][country.code2.lower()], country=country)
+    return pgettext_lazy('country_in', "in {country}").format(country=country)

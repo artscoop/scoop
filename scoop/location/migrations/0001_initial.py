@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.db import models, migrations
 import django.contrib.gis.db.models.fields
 import django.utils.timezone
-import picklefield.fields
-from django.db import migrations, models
-
-import scoop.core.abstract.core.translation
 import scoop.core.util.data.dateutil
+import scoop.core.abstract.core.translation
+import picklefield.fields
 
 
 class Migration(migrations.Migration):

@@ -131,11 +131,11 @@ def clean_thumbnails():
                 try:
                     try:
                         default_storage.delete(thumb.name)
-                    except Exception, e:
-                        print e
+                    except Exception as e:
+                        print(e)
                     thumb.delete()
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print(e)
             source.delete()
     # Supprimer les miniatures qui ne correspondent pas à un fichier
     thumbnails = Thumbnail.objects.all().iterator()
@@ -157,7 +157,7 @@ def get_context_picture_url(self, name, ext=None, *args):
     :param ext: None ou une extension de fichier, sans le point
     :param args: paramètres du contexte, utilisés dans le nom de fichier
     """
-    filename = u"context-{name}-{args}.{ext}".format(name=name, args=u"-".join(args), ext=ext or "jpg")
+    filename = "context-{name}-{args}.{ext}".format(name=name, args="-".join(args), ext=ext or "jpg")
     fullpath = os.path.join(settings.USER_DEFAULT_PICTURE_PATH, filename)
     return fullpath
 

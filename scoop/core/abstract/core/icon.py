@@ -38,18 +38,18 @@ class IconModel(models.Model):
     ICON_MAX_SIZE = {'w': 64, 'h': 64}
     # Champs
     icon = ThumbnailerImageField(max_length=96, blank=True, resize_source={'size': (ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']), 'crop': 'smart'}, width_field='icon_width',
-                                 height_field='icon_height', upload_to=get_icon_upload_path, help_text=u"{} {}x{}".format(_(u"Maximum size"), ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']),
-                                 verbose_name=_(u"Icon"))
-    icon_width = models.IntegerField(blank=True, null=True, editable=False, verbose_name=pgettext_lazy("geometry", u"Width"))
-    icon_height = models.IntegerField(blank=True, null=True, editable=False, verbose_name=pgettext_lazy("geometry", u"Height"))
+                                 height_field='icon_height', upload_to=get_icon_upload_path, help_text=_("Maximum size {}x{}").format(ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']),
+                                 verbose_name=_("Icon"))
+    icon_width = models.IntegerField(blank=True, null=True, editable=False, verbose_name=pgettext_lazy("geometry", "Width"))
+    icon_height = models.IntegerField(blank=True, null=True, editable=False, verbose_name=pgettext_lazy("geometry", "Height"))
 
     # Getter
-    @addattr(allow_tags=True, short_description=_(u"Icon"))
+    @addattr(allow_tags=True, short_description=_("Icon"))
     def get_icon_html(self):
         """ Renvoyer la représentation HTML de l'icône """
-        return u"""<img src="{url}">""".format(url=self.icon.url) if self.icon else u""
+        return """<img src="{url}">""".format(url=self.icon.url) if self.icon else ""
 
-    @addattr(allow_tags=True, short_description=_(u"Image"))
+    @addattr(allow_tags=True, short_description=_("Image"))
     def get_icon_thumbnail_html(self, *args, **kwargs):
         """ Renvoyer une miniature de l'icône """
         if self.icon:
@@ -61,9 +61,9 @@ class IconModel(models.Model):
                 template_file = 'content/display/picture/thumbnail/{}.html'.format(template)
                 output = render_to_string(template_file, {'picture': self.icon, 'href': self.icon.url, 'title': escape(self.description), 'source': result.url})
                 return output
-            except Exception, e:
-                return '<span class="text-error">{}</span> ({})'.format(pgettext_lazy('thumbnail', u"None"), e)
-        return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', u"None"))
+            except Exception as e:
+                return '<span class="text-error">{}</span> ({})'.format(pgettext_lazy('thumbnail', "None"), e)
+        return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
 
     def icon_exists(self):
         """ renvoyer si le fichier de l'icône existe """

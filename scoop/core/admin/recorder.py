@@ -23,21 +23,21 @@ class ActionTypeAdmin(admin.ModelAdmin):
     order_by = ['codename']
 
     # Getter
-    @addattr(short_description=_(u"Record count"))
+    @addattr(short_description=_("Record count"))
     def get_record_count(self, obj):
         """ Renvoyer le nombre d'actions du même type """
         count = Record.objects.filter(type=obj).count()
         return count
 
-    @addattr(allow_tags=True, admin_order_field='codename', short_description=_(u"Codename"))
+    @addattr(allow_tags=True, admin_order_field='codename', short_description=_("Codename"))
     def get_codename(self, obj):
         """ Renvoyer une représentation HTML du nom de code de l'objet """
         codeparts = obj.codename.split('.')
-        output = u"<strong class='text-info'>%(app)s</strong> &#8226; " % {'app': codeparts.pop(0)}
-        output += u" &#8226; ".join(codeparts)
+        output = "<strong class='text-info'>%(app)s</strong> &#8226; " % {'app': codeparts.pop(0)}
+        output += " &#8226; ".join(codeparts)
         return output
 
-    @addattr(allow_tags=True, admin_order_field='sentence', short_description=_(u"Sentence"))
+    @addattr(allow_tags=True, admin_order_field='sentence', short_description=_("Sentence"))
     def get_sentence(self, obj):
         """ Renvoyer une représentation HTML de la description de l'action """
         sentence = obj.sentence

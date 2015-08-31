@@ -18,7 +18,7 @@ def http_500(request, template_name='http/500.html'):
     template_dict['settings'] = [[attribute, getattr(settings, attribute)] for attribute in attributes if attribute == attribute.upper()]
     for item in template_dict['settings']:
         if any(word in item[0] for word in {'PASSWORD', 'KEY', 'SECRET', 'PRIVATE', 'PUBLIC', 'DATABASES'}):
-            item[1] = u"* private *"
+            item[1] = "* private *"
     context_dict = {'exception': sys.exc_info(), 'exception_type': sys.exc_info()[1].__class__.__name__, 'settings_data': sorted(template_dict['settings'])}
     return context_dict
 

@@ -22,7 +22,7 @@ class GroupAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     save_on_top = False
 
     # Getter
-    @addattr(short_description=_(u"Permissions"))
+    @addattr(short_description=_("Permissions"))
     def get_permissions(self, obj):
         """ Renvoyer la représentation texte des permissions du groupe """
         return " | ".join([item.codename for item in obj.permissions.all()])

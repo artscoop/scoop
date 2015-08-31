@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import permalink
 
 
-class FlaggableModelUtil:
+class FlaggableModelUtil(object):
     """ Mixin d'objet pouvant être signalé"""
 
     @permalink
@@ -15,6 +15,3 @@ class FlaggableModelUtil:
         content_type_id = ContentType.objects.get_for_model(self).id
         identifier = self.id
         return ('rogue:flag-new', [content_type_id, identifier])
-
-# Patcher la classe Model
-models.Model.__bases__ += (FlaggableModelUtil,)

@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Steve Kossouho <steve.kossouho@gmail.com>, 2012.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"POT-Creation-Date: 2015-08-31 09:22+0200\n"
 "PO-Revision-Date: 2015-05-09 15:18+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -28,7 +28,7 @@ msgid "Album"
 msgstr "Album"
 
 #: admin/admin.py:69 admin/content.py:85 admin/picture.py:46
-#: admin/picture.py:229 models/animation.py:79 models/content.py:258
+#: admin/picture.py:229 models/animation.py:82 models/content.py:273
 #: templates/content/display/picture/widget/inline.html:3
 msgid "Picture"
 msgstr "Image"
@@ -49,7 +49,7 @@ msgstr "Vidéo"
 msgid "Img.#"
 msgstr "Img n°"
 
-#: admin/animation.py:42 models/animation.py:81 models/animation.py:122
+#: admin/animation.py:42 models/animation.py:84 models/animation.py:125
 msgid "Duration"
 msgstr "Durée"
 
@@ -114,7 +114,7 @@ msgstr "Le contenu sélectionné n'est plus épinglé."
 msgid "Created"
 msgstr "Créé"
 
-#: admin/content.py:96 models/content.py:251 models/content.py:294
+#: admin/content.py:96 models/content.py:266 models/content.py:309
 #: templates/content/dashboard/blogs.html:15
 msgid "Authors"
 msgstr "Auteurs"
@@ -397,7 +397,7 @@ msgstr "Autre"
 
 #: models/advertisement.py:70 models/album.py:55 models/attachment.py:55
 #: models/attachment.py:75 models/classification.py:27 models/comment.py:81
-#: models/comment.py:101 models/content.py:491 models/content.py:549
+#: models/comment.py:101 models/content.py:506 models/content.py:564
 msgid "Name"
 msgstr "Nom"
 
@@ -426,9 +426,9 @@ msgstr "Snippet HTML/JS"
 msgid "Views"
 msgstr "Affichages"
 
-#: models/advertisement.py:75 models/album.py:56 models/animation.py:83
-#: models/attachment.py:56 models/classification.py:28 models/content.py:507
-#: models/content.py:551 models/link.py:54 models/picture.py:182
+#: models/advertisement.py:75 models/album.py:56 models/animation.py:86
+#: models/attachment.py:56 models/classification.py:28 models/content.py:522
+#: models/content.py:566 models/link.py:54 models/picture.py:181
 msgid "Description"
 msgstr "Description"
 
@@ -449,8 +449,8 @@ msgstr "publicité"
 msgid "advertisements"
 msgstr "publicités"
 
-#: models/album.py:54 models/animation.py:77 models/comment.py:80
-#: models/picture.py:178
+#: models/album.py:54 models/animation.py:80 models/comment.py:80
+#: models/picture.py:177
 msgid "Author"
 msgstr "Auteur"
 
@@ -476,76 +476,76 @@ msgstr "album d'images"
 msgid "picture albums"
 msgstr "albums d'images"
 
-#: models/animation.py:78 models/attachment.py:54
+#: models/animation.py:81 models/attachment.py:54
 msgid "File"
 msgstr "Fichier"
 
-#: models/animation.py:80 models/animation.py:140 models/picture.py:260
+#: models/animation.py:83 models/animation.py:146 models/picture.py:265
 msgid "Extension"
 msgstr "Extension"
 
-#: models/animation.py:81
+#: models/animation.py:84
 msgid "In seconds"
 msgstr "En secondes"
 
-#: models/animation.py:82 models/content.py:252 models/link.py:49
-#: models/picture.py:181 templates/content/dashboard/blogs.html:14
+#: models/animation.py:85 models/content.py:267 models/link.py:49
+#: models/picture.py:180 templates/content/dashboard/blogs.html:14
 msgid "Title"
 msgstr "Titre"
 
-#: models/animation.py:83 models/picture.py:182
+#: models/animation.py:86 models/picture.py:181
 msgid "Description text. Enter an URL here to download a picture"
 msgstr "Texte descriptif. Saisissez ici une URL pour télécharger une image"
 
-#: models/animation.py:84
+#: models/animation.py:87
 msgid "Auto play"
 msgstr "Lecture auto"
 
-#: models/animation.py:85
+#: models/animation.py:88
 msgid "Loop"
 msgstr "Lire en boucle"
 
-#: models/animation.py:86 models/picture.py:185
+#: models/animation.py:89 models/picture.py:184
 msgctxt "picture"
 msgid "Deleted"
 msgstr "Supprimée"
 
-#: models/animation.py:87 models/picture.py:188
+#: models/animation.py:90 models/picture.py:187
 msgctxt "picture"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/animation.py:97 models/attachment.py:65
+#: models/animation.py:100 models/attachment.py:65
 msgid "Valid"
 msgstr "Valide"
 
-#: models/animation.py:103 models/picture.py:292
+#: models/animation.py:106 models/picture.py:301
 msgid "Is valid"
 msgstr "Est valide"
 
-#: models/animation.py:115 models/picture.py:250
+#: models/animation.py:118 models/picture.py:255
 msgid "Filename"
 msgstr "Nom de fichier"
 
-#: models/animation.py:120 models/picture.py:258
+#: models/animation.py:123 models/picture.py:263
 msgctxt "file"
 msgid "None"
 msgstr "Aucun"
 
-#: models/animation.py:147 models/attachment.py:80 models/picture.py:274
+#: models/animation.py:153 models/attachment.py:80 models/picture.py:279
 msgid "Size"
 msgstr "Taille"
 
-#: models/animation.py:158 models/attachment.py:86 models/picture.py:280
+#: models/animation.py:164 models/attachment.py:86 models/picture.py:285
 msgctxt "size"
 msgid "None"
 msgstr "Aucune"
 
-#: models/animation.py:181
+#: models/animation.py:187
 msgid "Animation"
 msgstr "Animation"
 
-#: models/animation.py:182
+#: models/animation.py:188
 msgid "Animations"
 msgstr "Animations"
 
@@ -561,11 +561,11 @@ msgstr "Fichier à joindre"
 msgid "MIME type"
 msgstr "type MIME"
 
-#: models/attachment.py:59 models/picture.py:190
+#: models/attachment.py:59 models/picture.py:189
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/attachment.py:60 models/picture.py:191
+#: models/attachment.py:60 models/picture.py:190
 msgid "Object Id"
 msgstr "Id de l'objet"
 
@@ -586,7 +586,7 @@ msgstr "pièces jointes"
 msgid "Category if this tag is specific to one"
 msgstr "Catégorie, si cette étiquette est spécifique"
 
-#: models/classification.py:26 models/content.py:250
+#: models/classification.py:26 models/content.py:265
 msgid "Category"
 msgstr "Catégorie"
 
@@ -611,7 +611,7 @@ msgstr "tags"
 msgid "Body"
 msgstr "Corps"
 
-#: models/comment.py:83 models/comment.py:93 models/content.py:485
+#: models/comment.py:83 models/comment.py:93 models/content.py:500
 #: models/link.py:47
 msgid "URL"
 msgstr "URL"
@@ -664,191 +664,191 @@ msgstr "commentaire"
 msgid "comments"
 msgstr "commentaires"
 
-#: models/content.py:244
+#: models/content.py:259
 msgid "Plain HTML"
 msgstr "HTML Simple"
 
-#: models/content.py:244
+#: models/content.py:259
 msgid "Markdown"
 msgstr "Markdown"
 
-#: models/content.py:244
+#: models/content.py:259
 msgid "Textile"
 msgstr "Textile"
 
-#: models/content.py:253 models/link.py:43
+#: models/content.py:268 models/link.py:43
 msgid "Text"
 msgstr "Texte"
 
-#: models/content.py:254
+#: models/content.py:269
 msgid "HTML output from body"
 msgstr "Sortie HTML"
 
-#: models/content.py:254
+#: models/content.py:269
 msgid "HTML"
 msgstr "HTML"
 
-#: models/content.py:255
+#: models/content.py:270
 msgid "Introduction"
 msgstr "Introduction"
 
-#: models/content.py:256
+#: models/content.py:271
 msgid "Format"
 msgstr "Formatage"
 
-#: models/content.py:258
+#: models/content.py:273
 msgid "Main picture"
 msgstr "Image principale"
 
-#: models/content.py:259
+#: models/content.py:274
 msgid "Follow up of"
 msgstr "Suite de"
 
-#: models/content.py:260
+#: models/content.py:275
 msgid "Classification tags"
 msgstr "Étiquettes de classement"
 
-#: models/content.py:262
+#: models/content.py:277
 msgctxt "content"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/content.py:263
+#: models/content.py:278
 msgctxt "content"
 msgid "Created"
 msgstr "Créé"
 
-#: models/content.py:264
+#: models/content.py:279
 msgctxt "content"
 msgid "Edited"
 msgstr "Modifié"
 
-#: models/content.py:265
+#: models/content.py:280
 msgctxt "content"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/content.py:266
+#: models/content.py:281
 msgid "Publish when"
 msgstr "Publier le"
 
-#: models/content.py:267
+#: models/content.py:282
 msgid "Unpublish when"
 msgstr "Dépublier le"
 
-#: models/content.py:269
+#: models/content.py:284
 msgctxt "content"
-msgid "Published"
-msgstr "Publié"
-
-#: models/content.py:270
-msgid "Will stay on top of lists"
-msgstr "Demeurera en tête des listes"
-
-#: models/content.py:270
-msgctxt "content"
-msgid "Sticky"
-msgstr "Épinglé"
-
-#: models/content.py:271
-msgid "Will appear in magazine editorial content"
-msgstr "Apparaîtra dans le contenu éditorial du magazine"
-
-#: models/content.py:271
-msgctxt "content"
-msgid "Featured"
-msgstr "À la une"
-
-#: models/content.py:272
-msgctxt "content"
-msgid "Locked"
-msgstr "Verrouillé"
-
-#: models/content.py:276
 msgid "Published"
 msgstr "Publié"
 
 #: models/content.py:285
+msgid "Will stay on top of lists"
+msgstr "Demeurera en tête des listes"
+
+#: models/content.py:285
+msgctxt "content"
+msgid "Sticky"
+msgstr "Épinglé"
+
+#: models/content.py:286
+msgid "Will appear in magazine editorial content"
+msgstr "Apparaîtra dans le contenu éditorial du magazine"
+
+#: models/content.py:286
+msgctxt "content"
+msgid "Featured"
+msgstr "À la une"
+
+#: models/content.py:287
+msgctxt "content"
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: models/content.py:291
+msgid "Published"
+msgstr "Publié"
+
+#: models/content.py:300
 msgid "Commentable"
 msgstr "Commentable"
 
-#: models/content.py:303
+#: models/content.py:318
 msgid "Authors count"
 msgstr "Nombre d'auteurs"
 
-#: models/content.py:312
+#: models/content.py:327
 msgid "New"
 msgstr "Nouveau"
 
-#: models/content.py:328
+#: models/content.py:343
 msgid "Teaser"
 msgstr "Introduction"
 
-#: models/content.py:340
+#: models/content.py:355
 msgid "Similar content"
 msgstr "Contenu similaire"
 
-#: models/content.py:346
+#: models/content.py:361
 msgid "Has similar content"
 msgstr "A du contenu similaire"
 
-#: models/content.py:352
+#: models/content.py:367
 msgid "Tags"
 msgstr "Tags"
 
-#: models/content.py:357
+#: models/content.py:372
 msgid "Children"
 msgstr "Enfants"
 
-#: models/content.py:472
+#: models/content.py:487
 msgid "content"
 msgstr "contenu"
 
-#: models/content.py:473 templates/content/dashboard/blogs.html:5
+#: models/content.py:488 templates/content/dashboard/blogs.html:5
 msgid "contents"
 msgstr "contenus"
 
-#: models/content.py:484
+#: models/content.py:499
 msgid "Identifier"
 msgstr "Identifiant"
 
-#: models/content.py:485
+#: models/content.py:500
 msgid "e.g. blog, story or article"
 msgstr "ex. blog, story ou article"
 
-#: models/content.py:486
+#: models/content.py:501
 msgid "Has index"
 msgstr "A une page d'index"
 
-#: models/content.py:487
+#: models/content.py:502
 msgid "Visible"
 msgstr "Visible"
 
-#: models/content.py:497 models/content.py:505
+#: models/content.py:512 models/content.py:520
 msgid "(No name)"
 msgstr "(Sans nom)"
 
-#: models/content.py:499 models/content.py:550
+#: models/content.py:514 models/content.py:565
 msgid "Plural"
 msgstr "Pluriel"
 
-#: models/content.py:513
+#: models/content.py:528
 msgid "(No description)"
 msgstr "(Sans description)"
 
-#: models/content.py:541
+#: models/content.py:556
 msgid "content type"
 msgstr "type de contenu"
 
-#: models/content.py:542 templates/content/dashboard/blogs.html:7
+#: models/content.py:557 templates/content/dashboard/blogs.html:7
 msgid "content types"
 msgstr "types de contenu"
 
-#: models/content.py:563
+#: models/content.py:578
 msgid "translation"
 msgstr "traduction"
 
-#: models/content.py:564
+#: models/content.py:579
 msgid "translations"
 msgstr "traductions"
 
@@ -916,84 +916,84 @@ msgstr "lien"
 msgid "links"
 msgstr "liens"
 
-#: models/picture.py:176
+#: models/picture.py:175
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: models/picture.py:176
+#: models/picture.py:175
 msgid "Adults only"
 msgstr "Adultes seulement"
 
-#: models/picture.py:180
+#: models/picture.py:179
 msgid "Only .gif, .jpeg or .png image files, 64x64 minimum"
 msgstr "Uniquement des fichiers image .gif, .jpeg ou .png, 64x64 minimum"
 
-#: models/picture.py:180 models/picture.py:223
+#: models/picture.py:179 models/picture.py:228
 msgid "Image"
 msgstr "Image"
 
-#: models/picture.py:183
+#: models/picture.py:182
 msgid "Comma separated"
 msgstr "Séparé par des virgules"
 
-#: models/picture.py:183
+#: models/picture.py:182
 msgid "Internal marker"
 msgstr "Marqueur interne"
 
-#: models/picture.py:184
+#: models/picture.py:183
 msgid "Code"
 msgstr "Code"
 
-#: models/picture.py:186
+#: models/picture.py:185
 msgctxt "picture"
 msgid "Animated"
 msgstr "Animée"
 
-#: models/picture.py:187
+#: models/picture.py:186
 msgctxt "picture"
 msgid "Transient"
 msgstr "Temporaire"
 
-#: models/picture.py:237 models/picture.py:238
+#: models/picture.py:242 models/picture.py:243
 msgctxt "thumbnail"
 msgid "None"
 msgstr "Aucun(e)"
 
-#: models/picture.py:240
+#: models/picture.py:245
 msgid "#"
 msgstr "N°"
 
-#: models/picture.py:301
+#: models/picture.py:310
 msgid "Markers"
 msgstr "Marqueurs"
 
-#: models/picture.py:306
+#: models/picture.py:319
 msgid "Deletable transient"
 msgstr "Temporaire suppressible"
 
-#: models/picture.py:311
+#: models/picture.py:324
 msgid "Duplicates found"
 msgstr "Doublons trouvés"
 
-#: models/picture.py:593
+#: models/picture.py:605
 #, python-brace-format
 msgid "Clone of picture {uuid}"
 msgstr "Clone de l'image {uuid}"
 
-#: models/picture.py:605
+#: models/picture.py:617
 msgid "Picture ({})"
 msgstr "Image ({})"
 
-#: models/picture.py:618
+#: models/picture.py:630
 #, python-brace-format
 msgid "{image}"
 msgstr "{image}"
 
-#: models/picture.py:646
+#: models/picture.py:658
 msgid "image"
 msgstr "image"
 
-#: models/picture.py:647
+#: models/picture.py:659
 msgid "images"
 msgstr "images"
 
@@ -1071,17 +1071,17 @@ msgstr "Image non trouvée"
 msgid "[group/name missing]"
 msgstr "[groupe/nom manquant]"
 
-#: templatetags/advertisement_tags.py:44
+#: templatetags/advertisement_tags.py:46
 msgid "advertisement missing"
 msgstr "publicité manquante"
 
-#: templatetags/language_tags.py:47
+#: templatetags/language_tags.py:49
 #, python-brace-format
 msgctxt "country_in"
 msgid "{adverb} {country}"
 msgstr "{adverb} {country}"
 
-#: templatetags/language_tags.py:48
+#: templatetags/language_tags.py:50
 #, python-brace-format
 msgctxt "country_in"
 msgid "in {country}"
@@ -1248,8 +1248,8 @@ msgstr "Flux RSS"
 #~ msgstr "%(image)s"
 
 #~ msgid ""
-#~ "Similarity can only be calculated with model instances having title and body"
-#~ " attributes."
+#~ "Similarity can only be calculated with model instances having title and "
+#~ "body attributes."
 #~ msgstr ""
 #~ "La similarité ne peut être calculée qu'entre instances de Model ayant des "
 #~ "attributs title et body."

@@ -21,4 +21,4 @@ def view_common_friends(request, user=None):
     if user is None:
         return HttpResponseNotFound()
     users = user.friendlist.get_mutual_users(request.user, count=False)
-    return {'users': users, 'title': u"Amis communs (%d)" % len(users), 'size': 4, 'nested': True}
+    return {'users': users, 'title': "Amis communs (%d)" % len(users), 'size': 4, 'nested': True}

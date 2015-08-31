@@ -25,7 +25,7 @@ class ForumManager(models.Manager):
     # Getter
     def _get_dummy_forum(self):
         """ Renvoyer un faux forum d'index """
-        return Forum(name=_(u"Forum index"))
+        return Forum(name=_("Forum index"))
 
     def get_root_forums(self):
         """ Renvoyer les forums de la racine """
@@ -70,32 +70,32 @@ class ForumManager(models.Manager):
 class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
     """ Forum """
     # Champs
-    name = models.CharField(max_length=80, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    locked = models.BooleanField(default=False, help_text=_(u"Protected from the creation of new topics"), verbose_name=pgettext_lazy('forum', u"Locked"))
-    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('forum', u"Visible"))
+    name = models.CharField(max_length=80, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    locked = models.BooleanField(default=False, help_text=_("Protected from the creation of new topics"), verbose_name=pgettext_lazy('forum', "Locked"))
+    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('forum', "Visible"))
     slug = AutoSlugField(max_length=100, populate_from='name', unique=True, blank=True, editable=True, unique_with=('id',))
     # Cache du nombre de sujets
-    topic_count = models.IntegerField(default=0, verbose_name=_(u"Topics count"))
-    post_count = models.IntegerField(default=0, verbose_name=_(u"Posts count"))
+    topic_count = models.IntegerField(default=0, verbose_name=_("Topics count"))
+    post_count = models.IntegerField(default=0, verbose_name=_("Posts count"))
     # Forum parent
-    root = models.BooleanField(default=False, blank=True, help_text=_(u"Appears on the forum index"), verbose_name=_(u"Root"))
-    forums = models.ManyToManyField('forum.Forum', blank=True, related_name='parents', verbose_name=_(u"Subforums"))
+    root = models.BooleanField(default=False, blank=True, help_text=_("Appears on the forum index"), verbose_name=_("Root"))
+    forums = models.ManyToManyField('forum.Forum', blank=True, related_name='parents', verbose_name=_("Subforums"))
     # Sujets contenus dans le forum
-    topics = models.ManyToManyField('content.Content', blank=True, limit_choices_to={'category__short_name__in': ['topic', 'forum']}, related_name="forums", verbose_name=_(u"Topics"))
+    topics = models.ManyToManyField('content.Content', blank=True, limit_choices_to={'category__short_name__in': ['topic', 'forum']}, related_name="forums", verbose_name=_("Topics"))
     # Modérateurs du forum
-    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_forums', help_text=_(u"Members who can moderate topics in this forum"),
-                                        verbose_name=_(u"Moderators"))
+    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_forums', help_text=_("Members who can moderate topics in this forum"),
+                                        verbose_name=_("Moderators"))
     objects = ForumManager()
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return unicode(self.name)
+        return str(self.name)
 
     def __repr__(self):
         """ Renvoyer la représentation ASCII de l'objet """
-        return u"Forum: {}".format(self.__unicode__())
+        return "Forum: {}".format(self.__unicode__())
 
     @permalink
     def get_absolute_url(self):
@@ -129,7 +129,7 @@ class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
         """ Renvoyer les sous-forums """
         return self.forums.all()
 
-    @addattr(admin_order_field='topic_count', short_description=_(u"Topics"))
+    @addattr(admin_order_field='topic_count', short_description=_("Topics"))
     def get_topic_count(self):
         """ Renvoyer le nombre de sujets du forum """
         count = self.topics.count()
@@ -141,12 +141,12 @@ class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
             self.save(update_fields=['topic_count'])
         return count
 
-    @addattr(allow_tags=True, short_description=_(u"Topics"))
+    @addattr(allow_tags=True, short_description=_("Topics"))
     def get_topic_count_admin(self):
         """ Renvoyer la représentation admin du nombre de sujets dans le forum """
-        return u"<center><span class='badge'>{count}</span></center>".format(count=self.get_topic_count())
+        return "<center><span class='badge'>{count}</span></center>".format(count=self.get_topic_count())
 
-    @addattr(admin_order_field='post_count', short_description=_(u"Posts"))
+    @addattr(admin_order_field='post_count', short_description=_("Posts"))
     def get_post_count(self):
         """ Renvoyer le nombre de posts du forum et de ses descendants """
         count = self.topics.all().aggregate(comments=Sum('comment_count'))
@@ -162,17 +162,17 @@ class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
         """ Renvoyer si un utilisateur est modérateur du forum """
         return user in self.moderators.all() or user.is_superuser
 
-    @addattr(boolean=True, short_description=_(u"Has forums"))
+    @addattr(boolean=True, short_description=_("Has forums"))
     def has_forums(self):
         """ Renvoyer s'il y a des sous-forums """
         return self.forums.exists()
 
-    @addattr(boolean=True, short_description=_(u"Locked"))
+    @addattr(boolean=True, short_description=_("Locked"))
     def is_locked(self):
         """ Renvoyer si le forum est verrouillé """
         return self.locked
 
-    @addattr(boolean=True, short_description=_(u"Group"))
+    @addattr(boolean=True, short_description=_("Group"))
     def is_group(self):
         """ Le forum est-il juste un regroupement de forums """
         return self.has_forums() and self.is_locked()
@@ -181,7 +181,7 @@ class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
         """ Renvoyer si le forum est visible par un utilisateur """
         return self.is_accessible(user) and self.visible
 
-    @addattr(boolean=True, short_description=_(u"Circular"))
+    @addattr(boolean=True, short_description=_("Circular"))
     def is_circular(self):
         """ Renvoyer si le forum est parent d'une structure circulaire ? (infinie) """
         return Forum.objects.is_circular(root=self)
@@ -229,6 +229,6 @@ class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"forum")
-        verbose_name_plural = _(u"forums")
+        verbose_name = _("forum")
+        verbose_name_plural = _("forums")
         app_label = 'forum'

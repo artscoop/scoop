@@ -13,12 +13,12 @@ from scoop.core.abstract.core.weight import WeightedModel
 
 class Configuration(DatetimeModel, WeightedModel):
     """ Configuration d'un bloc de page """
-    page = models.ForeignKey('editorial.Page', null=False, related_name='configurations', verbose_name=_(u"Page"))
-    position = models.ForeignKey('editorial.Position', null=False, related_name='configurations', verbose_name=_(u"Position"))
-    template = models.ForeignKey('editorial.Template', null=False, related_name='configurations', limit_choices_to={'full': False}, verbose_name=_(u"Template"))
+    page = models.ForeignKey('editorial.Page', null=False, related_name='configurations', verbose_name=_("Page"))
+    position = models.ForeignKey('editorial.Position', null=False, related_name='configurations', verbose_name=_("Position"))
+    template = models.ForeignKey('editorial.Template', null=False, related_name='configurations', limit_choices_to={'full': False}, verbose_name=_("Template"))
     limit = models.Q(name__in=['Excerpt', 'Picture', 'Content', 'Link'])  # limiter les modèles liés
-    content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, verbose_name=_(u"Content type"), limit_choices_to=limit)
-    object_id = models.PositiveIntegerField(null=False, blank=True, db_index=False, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, verbose_name=_("Content type"), limit_choices_to=limit)
+    object_id = models.PositiveIntegerField(null=False, blank=True, db_index=False, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
 
     # Getter
@@ -33,13 +33,13 @@ class Configuration(DatetimeModel, WeightedModel):
         if force or self.is_valid():
             return render_to_string(self.template.path, {'item': self.content_object, 'page': self.page})
         if settings.DEBUG:
-            return _(u"The block could not be rendered.")
+            return _("The block could not be rendered.")
         return ""
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"%(page)s/%(item)s at %(position)s") % {'page': self.page, 'item': self.content_object}
+        return _("%(page)s/%(item)s at %(position)s") % {'page': self.page, 'item': self.content_object}
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -47,7 +47,7 @@ class Configuration(DatetimeModel, WeightedModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"block configuration")
-        verbose_name_plural = _(u"block configurations")
+        verbose_name = _("block configuration")
+        verbose_name_plural = _("block configurations")
         unique_together = (('page', 'position', 'template', 'content_type', 'object_id'),)
         app_label = 'editorial'

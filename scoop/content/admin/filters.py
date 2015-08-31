@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class DimensionsFilter(SimpleListFilter):
     """ Filtre admin sur les dimensions des images """
-    title = _(u"image size")
+    title = _("image size")
     parameter_name = 'imagesize'
 
     def lookups(self, request, model_admin):

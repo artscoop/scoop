@@ -14,8 +14,8 @@ from scoop.core.util.shortcuts import addattr
 
 class OptionTranslationInlineAdmin(admin.TabularInline):
     """ Inline d'admin des traductions d'options """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = OptionTranslation
     max_num = len(settings.LANGUAGES)
     extra = 2
@@ -31,16 +31,16 @@ class OptionAdmin(admin.ModelAdmin):
     list_editable = ['active']
     list_per_page = 25
     readonly_fields = []
-    search_fields = ['name', 'group__name', 'code']
+    search_fields = ['translations__name', 'code']
     actions = []
     save_on_top = False
-    fieldsets = ((_(u"Option"), {'fields': ('group', 'code', 'active', 'parent')}),)
+    fieldsets = ((_("Option"), {'fields': ('group', 'code', 'active', 'parent')}),)
     inlines = [OptionTranslationInlineAdmin, ]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     ordering = ['-group', 'code']
 
     # Getter
-    @addattr(short_description=_(u"Short name"))
+    @addattr(short_description=_("Short name"))
     def get_short_name(self, obj):
         """ Renvoyer le nom court du groupe de l'option """
         return obj.group.short_name
@@ -48,8 +48,8 @@ class OptionAdmin(admin.ModelAdmin):
 
 class OptionGroupTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin de traduction des groupes d'options """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = OptionGroupTranslation
     max_num = len(settings.LANGUAGES)
     extra = 4
@@ -67,7 +67,7 @@ class OptionGroupAdmin(admin.ModelAdmin):
     search_fields = ['name', 'short__name', 'code']
     actions = []
     save_on_top = False
-    fieldsets = ((_(u"Option group"), {'fields': ('code', 'short_name')}),)
+    fieldsets = ((_("Option group"), {'fields': ('code', 'short_name')}),)
     inlines = [OptionGroupTranslationInlineAdmin, ]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 

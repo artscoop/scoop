@@ -27,15 +27,15 @@ class SanctionManager(models.Manager):
 class Sanction(DatetimeModel):
     """ Sanction utilisateur """
     # Constantes
-    TYPES = [[0, _(u"Posting disabled")], [1, _(u"Reading disabled")]]
-    DURATIONS = [[7200, _(u"2 hours")], [86400, _(u"1 day")], [86400 * 3, _(u"3 days")], [86400 * 7, _(u"1 week")]]
+    TYPES = [[0, _("Posting disabled")], [1, _("Reading disabled")]]
+    DURATIONS = [[7200, _("2 hours")], [86400, _("1 day")], [86400 * 3, _("3 days")], [86400 * 7, _("1 week")]]
 
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='sanctions', verbose_name=_(u"User"))
-    type = models.SmallIntegerField(default=0, choices=TYPES, db_index=True, verbose_name=_(u"Type"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    expires = models.DateTimeField(default=get_default_expiry, verbose_name=_(u"Expiry"))
-    revoked = models.BooleanField(default=False, verbose_name=pgettext_lazy('sanction', u"Revoked"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='sanctions', verbose_name=_("User"))
+    type = models.SmallIntegerField(default=0, choices=TYPES, db_index=True, verbose_name=_("Type"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    expires = models.DateTimeField(default=get_default_expiry, verbose_name=_("Expiry"))
+    revoked = models.BooleanField(default=False, verbose_name=pgettext_lazy('sanction', "Revoked"))
     objects = SanctionManager()
 
     # Getter
@@ -46,10 +46,10 @@ class Sanction(DatetimeModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"sanction on {user}: {type}".format(user=self.user, type=self.get_type_display())
+        return "sanction on {user}: {type}".format(user=self.user, type=self.get_type_display())
 
     # Métadonnées
     class Meta:
         app_label = 'forum'
-        verbose_name = _(u"sanction")
-        verbose_name_plural = _(u"sanctions")
+        verbose_name = _("sanction")
+        verbose_name_plural = _("sanctions")

@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import logging
+from django.utils.encoding import python_2_unicode_compatible
 
 import pytz
 from django.conf import settings
@@ -65,27 +66,27 @@ class CountryManager(models.Manager.from_queryset(CountryQuerySet), models.Manag
 class Country(CoordinatesModel, PicturableModel, DataModel):
     """ Pays """
     # Constantes
-    CONTINENTS = [['AF', _(u"Africa")], ['AS', _(u"Asia")], ['EU', _(u"Europe")], ['NA', _(u"North America")], ['OC', _(u"Oceania")], ['SA', _(u"South America")], ['AN', _(u"Antarctica")]]
+    CONTINENTS = [['AF', _("Africa")], ['AS', _("Asia")], ['EU', _("Europe")], ['NA', _("North America")], ['OC', _("Oceania")], ['SA', _("South America")], ['AN', _("Antarctica")]]
     DATA_KEYS = ['neighbours']
     # Champs
-    name = models.CharField(max_length=100, blank=False, verbose_name=_(u"Name"))
-    code2 = models.CharField(max_length=2, unique=True, db_index=True, verbose_name=_(u"ISO Code"))
-    code3 = models.CharField(max_length=3, unique=True, db_index=True, verbose_name=_(u"ISO Code 3"))
-    phone = models.CharField(max_length=8, default="", blank=True, verbose_name=_(u"Phone prefix"))
-    continent = models.CharField(max_length=2, choices=CONTINENTS, db_index=True, verbose_name=_(u"Continent"))
-    population = models.IntegerField(default=0, verbose_name=_(u"Population"))
-    area = models.FloatField(default=0, verbose_name=pgettext_lazy('country', u"Area"))
-    capital = models.CharField(max_length=96, blank=True, verbose_name=pgettext_lazy('country', u"Capital"))
-    currency = models.ForeignKey('location.Currency', null=True, blank=True, related_name='countries', verbose_name=_(u"Currency"))
-    regional_level = models.SmallIntegerField(default=1, verbose_name=_(u"Regional level"))
-    subregional_level = models.SmallIntegerField(default=2, verbose_name=_(u"Sub-regional level"))
-    public = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('country', u"Public"))  # accessible aux membres ?
-    safe = models.BooleanField(default=False, verbose_name=pgettext_lazy('country', u"Safe"))  # considéré par le site comme un pays autorisé ?
-    updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('country', u"Last update"))  # utilisé pour les différentiels de mises à jour
+    name = models.CharField(max_length=100, blank=False, verbose_name=_("Name"))
+    code2 = models.CharField(max_length=2, unique=True, db_index=True, verbose_name=_("ISO Code"))
+    code3 = models.CharField(max_length=3, unique=True, db_index=True, verbose_name=_("ISO Code 3"))
+    phone = models.CharField(max_length=8, default="", blank=True, verbose_name=_("Phone prefix"))
+    continent = models.CharField(max_length=2, choices=CONTINENTS, db_index=True, verbose_name=_("Continent"))
+    population = models.IntegerField(default=0, verbose_name=_("Population"))
+    area = models.FloatField(default=0, verbose_name=pgettext_lazy('country', "Area"))
+    capital = models.CharField(max_length=96, blank=True, verbose_name=pgettext_lazy('country', "Capital"))
+    currency = models.ForeignKey('location.Currency', null=True, blank=True, related_name='countries', verbose_name=_("Currency"))
+    regional_level = models.SmallIntegerField(default=1, verbose_name=_("Regional level"))
+    subregional_level = models.SmallIntegerField(default=2, verbose_name=_("Sub-regional level"))
+    public = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('country', "Public"))  # accessible aux membres ?
+    safe = models.BooleanField(default=False, verbose_name=pgettext_lazy('country', "Safe"))  # considéré par le site comme un pays autorisé ?
+    updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('country', "Last update"))  # utilisé pour les différentiels de mises à jour
     objects = CountryManager()
 
     # Getter
-    @addattr(admin_order_field='name', short_description=_(u"Name"))
+    @addattr(admin_order_field='name', short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom du pays """
         language = translation.get_language()
@@ -99,7 +100,7 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
         name = name.strip().lower()
         return self.name.lower() == name or self.alternates.filter(name__iexact=name).exclude(language__in=['link']).exists()
 
-    @addattr(short_description=_(u"City count"))
+    @addattr(short_description=_("City count"))
     def get_entries_count(self):
         """ Renvoyer le nombre de villes dans le pays """
         return self.cities.filter(city=True).count()
@@ -110,17 +111,17 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
         # Tous les éléments City
         return City.objects.filter(country=self).exists()
 
-    @addattr(allow_tags=True, admin_order_field='code2', short_description=_(u"Icon"))
+    @addattr(allow_tags=True, admin_order_field='code2', short_description=_("Icon"))
     def get_icon(self, directory="png24"):
         """ Renvoyer une icône du pays """
         return get_country_icon_html(self.code2, self.get_name())
 
-    @addattr(admin_order_field='area', short_description=pgettext_lazy('country', u"Area"))
+    @addattr(admin_order_field='area', short_description=pgettext_lazy('country', "Area"))
     def get_area(self, unit=None):
         """ Renvoyer la superficie du pays, en m² ou en mi² """
         conversion = {None: 1.0, 'mi': 0.386102159}
         unit_name = {None: u'km²', 'mi': u'mi²'}
-        return u"{area:.0f} {unit}".format(area=self.area * conversion.get(unit, 1.0), unit=unit_name.get(unit, u'km²'))
+        return "{area:.0f} {unit}".format(area=self.area * conversion.get(unit, 1.0), unit=unit_name.get(unit, u'km²'))
 
     def get_timezones(self):
         """ Renvoyer les fuseaux horaires du pays """
@@ -137,7 +138,8 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
         return countries
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.get_name()
 
@@ -155,29 +157,29 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"country")
-        verbose_name_plural = _(u"countries")
+        verbose_name = _("country")
+        verbose_name_plural = _("countries")
         app_label = 'location'
 
 
 class CountryName(models.Model):
     """ Noms alternatifs de pays """
     # Champs
-    id = models.IntegerField(primary_key=True, verbose_name=_(u"Alternate ID"))
-    country = models.ForeignKey('location.Country', null=False, on_delete=models.CASCADE, related_name='alternates', verbose_name=_(u"Country"))
-    language = models.CharField(max_length=10, blank=False, verbose_name=_(u"Language name"))
-    name = models.CharField(max_length=200, blank=False, verbose_name=_(u"Name"))
-    preferred = models.BooleanField(default=False, verbose_name=_(u"Preferred"))
-    short = models.BooleanField(default=False, verbose_name=_(u"Short version"))
+    id = models.IntegerField(primary_key=True, verbose_name=_("Alternate ID"))
+    country = models.ForeignKey('location.Country', null=False, on_delete=models.CASCADE, related_name='alternates', verbose_name=_("Country"))
+    language = models.CharField(max_length=10, blank=False, verbose_name=_("Language name"))
+    name = models.CharField(max_length=200, blank=False, verbose_name=_("Name"))
+    preferred = models.BooleanField(default=False, verbose_name=_("Preferred"))
+    short = models.BooleanField(default=False, verbose_name=_("Short version"))
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"Name for {}").format(self.country.name)
+        return _("Name for {}").format(self.country.name)
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"country name")
-        verbose_name_plural = _(u"country names")
+        verbose_name = _("country name")
+        verbose_name_plural = _("country names")
         index_together = [['country', 'language', 'preferred']]
         app_label = 'location'

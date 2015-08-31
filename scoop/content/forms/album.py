@@ -11,7 +11,7 @@ class AlbumForm(forms.ModelForm):
     """ Formulaire d'albums """
     # Constantes
     NAME_LENGTH_MIN = 2
-    DEFAULT_NAME = _(u"{author}'s album")
+    DEFAULT_NAME = _("{author}'s album")
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le formulaire """

@@ -13,7 +13,7 @@ DEFAULT_STOPWORDS = STOPWORDS_FR + STOPWORDS_EN
 
 # Récupérer le nom du moteur de base de données actuel
 if settings.DATABASES:
-    DATABASE_ENGINE = settings.DATABASES[settings.DATABASES.keys()[0]]['ENGINE'].split('.')[-1]
+    DATABASE_ENGINE = settings.DATABASES[list(settings.DATABASES.keys())[0]]['ENGINE'].split('.')[-1]
 else:
     DATABASE_ENGINE = settings.DATABASE_ENGINE
 
@@ -30,7 +30,7 @@ class BaseSearchForm(forms.Form):
     STOPWORD_LIST = DEFAULT_STOPWORDS.split(',')
     DEFAULT_OPERATOR = Q.__and__
     # Champs
-    q = forms.CharField(label=_(u"Search"), required=False)
+    q = forms.CharField(label=_("Search"), required=False)
     order_by = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     # Validation

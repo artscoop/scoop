@@ -37,28 +37,28 @@ class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin):
     inlines = [PictureInlineAdmin]
     filter_horizontal = ['tags', 'authors']
     form = make_ajax_form(Content, {'authors': 'user', 'picture': 'picture', 'parent': 'content'}, ContentAdminForm)
-    fieldsets = ((_(u"Content"), {'fields': ('title', 'body', 'format', 'authors', 'category', 'access', 'published', 'sticky', 'commentable', 'picture')}),
-                 (_(u"Plus"), {'fields': ('slug', 'parent', 'locked', 'featured', 'teaser', 'created', 'publish', 'expire', 'tags')}))
+    fieldsets = ((_("Content"), {'fields': ('title', 'body', 'format', 'authors', 'category', 'access', 'published', 'sticky', 'commentable', 'picture')}),
+                 (_("Plus"), {'fields': ('slug', 'parent', 'locked', 'featured', 'teaser', 'created', 'publish', 'expire', 'tags')}))
     actions = ['publish', 'unpublish', 'stick', 'unstick']
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     ignore_duplicate_revisions = True
 
     # Actions
-    @addattr(short_description=_(u"Unpublish selected content"))
+    @addattr(short_description=_("Unpublish selected content"))
     def unpublish(self, request, queryset):
         """ Dépublier un queryset de contenus """
         for content in queryset:
             content.publish_plain(value=False)
-        self.message_user(request, _(u"Selected content has been unpublished."))
+        self.message_user(request, _("Selected content has been unpublished."))
 
-    @addattr(short_description=_(u"Publish selected content"))
+    @addattr(short_description=_("Publish selected content"))
     def publish(self, request, queryset):
         """ Publier un queryset de contenus """
         for content in queryset:
             content.publish_plain(True)
-        self.message_user(request, _(u"Selected content has been published."))
+        self.message_user(request, _("Selected content has been published."))
 
-    @addattr(short_description=_(u"Spread publication of content, one a day."))
+    @addattr(short_description=_("Spread publication of content, one a day."))
     def spread_publish(self, request, queryset):
         """ Étaler la publication des articles à un par jour """
         day = timezone.now() + datetime.timedelta(days=1)
@@ -67,36 +67,36 @@ class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin):
             if not content.is_published():
                 content.set_publish_dates(day, None)
                 day += datetime.timedelta(days=1)
-        self.message_user(request, _(u"{count} contents have been scheduled for interval publication.").format(count=count))
+        self.message_user(request, _("{count} contents have been scheduled for interval publication.").format(count=count))
 
-    @addattr(short_description=_(u"Pin selected content"))
+    @addattr(short_description=_("Pin selected content"))
     def stick(self, request, queryset):
         """ Définir les contenus comme épinglés """
         queryset.update(sticky=True)
-        self.message_user(request, _(u"Selected content has been pinned."))
+        self.message_user(request, _("Selected content has been pinned."))
 
-    @addattr(short_description=_(u"Unpin selected content"))
+    @addattr(short_description=_("Unpin selected content"))
     def unstick(self, request, queryset):
         """ Définir les contenus comme non épinglés """
         queryset.update(sticky=False)
-        self.message_user(request, _(u"Selected content has been unpinned."))
+        self.message_user(request, _("Selected content has been unpinned."))
 
     # Getter
-    @addattr(allow_tags=True, short_description=_(u"Picture"))
+    @addattr(allow_tags=True, short_description=_("Picture"))
     def get_image(self, obj):
         """ Renvoyer le tag de l'image par défaut du contenu """
         if obj.picture is not None:
-            return u"{}".format(obj.picture.get_thumbnail_html(size=(48, 20)))
+            return "{}".format(obj.picture.get_thumbnail_html(size=(48, 20)))
 
-    @addattr(admin_order_field='created', short_description=_(u"Created"))
+    @addattr(admin_order_field='created', short_description=_("Created"))
     def get_created(self, obj):
         """ Renvoyer la date de création du contenu """
         return datefilter(obj.created, "j M Y G:i")
 
-    @addattr(short_description=_(u"Authors"))
+    @addattr(short_description=_("Authors"))
     def get_authors(self, obj):
         """ Renvoyer la liste des auteurs du contenu """
-        return list_enumerate(obj.authors.all()) or _(u"None")
+        return list_enumerate(obj.authors.all()) or _("None")
 
     # Overrides
     def get_queryset(self, request):

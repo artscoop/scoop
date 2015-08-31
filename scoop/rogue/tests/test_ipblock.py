@@ -1,5 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
+
 from random import choice
 
 from django.conf import settings
@@ -7,7 +8,7 @@ from django.test import TestCase
 from django.utils.importlib import import_module
 
 from scoop.rogue.models.ipblock import IPBlock
-from scoop.rogue.util.ipblock import get_proxy_nodes, PROXY_LIST_DIRECTORY
+from scoop.rogue.util.ipblock import PROXY_LIST_DIRECTORY, get_proxy_nodes
 from scoop.user.access.models.ip import IP
 from scoop.user.models.user import User
 
@@ -28,7 +29,7 @@ class IPBlockTest(TestCase):
 
     def test_ipblock_detection(self):
         """ Tester que des IPs saines et bloquées sont détectées correctement """
-        proxy_node = choice(get_proxy_nodes(PROXY_LIST_DIRECTORY))
-        self.assertTrue(IPBlock.objects.is_blocked(IP.objects.get_by_ip(proxy_node))['blocked'], u"The IP {} should be blocked.".format(proxy_node))
+        proxy_node = choice(list(get_proxy_nodes(PROXY_LIST_DIRECTORY)))
+        self.assertTrue(IPBlock.objects.is_blocked(IP.objects.get_by_ip(proxy_node))['blocked'], "The IP {} should be blocked.".format(proxy_node))
         localhost = IP.objects.get_by_ip('127.0.0.1')
-        self.assertFalse(IPBlock.objects.is_blocked(IP.objects.get_by_ip(localhost))['blocked'], u"The IP {} should always be allowed.".format(localhost))
+        self.assertFalse(IPBlock.objects.is_blocked(localhost)['blocked'], "The IP {} should always be allowed.".format(localhost))

@@ -25,15 +25,15 @@ class ConfigurationAdmin(admin.ModelAdmin):
     actions = []
 
     # Getter
-    @addattr(admin_order_field='version', short_description=_(u"Version"))
+    @addattr(admin_order_field='version', short_description=_("Version"))
     def get_version(self, obj):
         """ Renvoyer la version de la configuration """
-        return obj.version or _(u"Default")
+        return obj.version or _("Default")
 
-    @addattr(allow_tags=True, admin_order_field='data', short_description=_(u"Data"))
+    @addattr(allow_tags=True, admin_order_field='data', short_description=_("Data"))
     def get_data(self, obj):
         """ Renvoyer la représentation HTML des données de configuration """
-        output = u"""<span title="{data}">{text}</span>""".format(data=escape(obj.data), text=truncate_ellipsis(unicode(obj.data), 40))
+        output = """<span title="{data}">{text}</span>""".format(data=escape(obj.data), text=truncate_ellipsis(str(obj.data), 40))
         return output
 
 # Enregistrer les classes d'administration

@@ -31,12 +31,12 @@ class VenueAdmin(admin.ModelAdmin, PicturedModelAdmin):
     save_on_top = True
 
     # Actions
-    @addattr(short_description=_(u"Fetch pictures for selected venues"))
+    @addattr(short_description=_("Fetch pictures for selected venues"))
     def fetch_pictures(self, request, queryset):
         """ Récupérer automatiquement des images pour les lieux """
         for item in queryset:
             item.fetch_picture()
-        self.message_user(request, _(u"Pictures were successfully fetched"))
+        self.message_user(request, _("Pictures were successfully fetched"))
 
     # Média
     class Media:
@@ -60,7 +60,7 @@ class CurrencyAdmin(admin.ModelAdmin):
     save_on_top = True
 
     # Actions
-    @addattr(short_description=_(u"Update currency values"))
+    @addattr(short_description=_("Update currency values"))
     def update_currency(self, request, queryset):
         """ Mettre à jour les valeurs des devises sélectionnées """
         for obj in queryset:

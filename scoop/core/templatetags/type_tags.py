@@ -79,7 +79,7 @@ def si_suffix(value):
     """
     level = math.floor(math.log(value, 1000))
     unit_count = int(value / (1000 ** level))
-    return u"{count:d}{unit}".format(count=unit_count, unit=SI_PREFIXES[int(level)])
+    return "{count:d}{unit}".format(count=unit_count, unit=SI_PREFIXES[int(level)])
 
 
 @register.filter

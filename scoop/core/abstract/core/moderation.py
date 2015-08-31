@@ -26,7 +26,7 @@ class ModeratedQuerySetMixin(object):
 
 class ModeratedModel(models.Model):
     """ Mixin de modèle modéré """
-    moderated = models.NullBooleanField(default=None, verbose_name=_(u"Moderated"))
+    moderated = models.NullBooleanField(default=None, verbose_name=_("Moderated"))
 
     # Overrides
     def save(self, *args, **kwargs):
@@ -65,7 +65,7 @@ class ModeratedModel(models.Model):
     # Getter
     def get_moderation_status(self):
         """ Renvoyer le statut de modération de l'objet """
-        return {None: _(u"pending"), False: _(u"denied"), True: _(u"accepted")}[self.moderated]
+        return {None: _("pending"), False: _("denied"), True: _("accepted")}[self.moderated]
 
     # Métadonnées
     class Meta:

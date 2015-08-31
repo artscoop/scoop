@@ -20,12 +20,12 @@ class TicketAdmin(admin.ModelAdmin):
     actions = ['close_ticket']
 
     # Actions
-    @addattr(short_description=_(u"Close selected tickets"))
+    @addattr(short_description=_("Close selected tickets"))
     def close_ticket(self, request, queryset):
         """ Fermer un ticket """
         for ticket in queryset:
             ticket.close()
-        self.message_user(request, _(u"Selected tickets have been successfully closed."))
+        self.message_user(request, _("Selected tickets have been successfully closed."))
 
 
 class UpdateAdmin(admin.ModelAdmin):

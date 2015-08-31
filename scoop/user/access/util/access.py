@@ -14,11 +14,11 @@ from scoop.core.util.data.dateutil import now
 # Codes de statut de résolution
 STATUS = {'ok': 0, 'timeout': 1, 'noanswer': 2, 'nonameservers': 3, 'nxdomain': 4}
 STATUS_CHOICES = [
-    [STATUS['ok'], _(u"Ok")],
-    [STATUS['timeout'], _(u"Timed out")],
-    [STATUS['noanswer'], _(u"Empty answer")],
-    [STATUS['nonameservers'], _(u"Broken NS")],
-    [STATUS['nxdomain'], _(u"Domain not found")]
+    [STATUS['ok'], _("Ok")],
+    [STATUS['timeout'], _("Timed out")],
+    [STATUS['noanswer'], _("Empty answer")],
+    [STATUS['nonameservers'], _("Broken NS")],
+    [STATUS['nxdomain'], _("Domain not found")]
 ]
 
 

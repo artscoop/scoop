@@ -29,12 +29,12 @@ class VenueManager(SingleDeleteManager, GeoManager):
 
 class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
     """ Lieu précis avec un nom """
-    type = models.ForeignKey('location.VenueType', null=True, verbose_name=_(u"Venue type"))
-    name = models.CharField(max_length=64, db_index=True, verbose_name=_(u"Name"))
-    street = models.CharField(max_length=80, db_index=True, help_text=_(u"Way number, type and name"), verbose_name=_(u"Way"))
-    city = models.ForeignKey('location.City', related_name='venues', verbose_name=_(u"City"))
-    full = models.CharField(max_length=250, help_text=_(u"Full address, lines separated by semicolons"), verbose_name=_(u"Full address"))
-    url = models.URLField(max_length=160, blank=True, verbose_name=_(u"URL"))
+    type = models.ForeignKey('location.VenueType', null=True, verbose_name=_("Venue type"))
+    name = models.CharField(max_length=64, db_index=True, verbose_name=_("Name"))
+    street = models.CharField(max_length=80, db_index=True, help_text=_("Way number, type and name"), verbose_name=_("Way"))
+    city = models.ForeignKey('location.City', related_name='venues', verbose_name=_("City"))
+    full = models.CharField(max_length=250, help_text=_("Full address, lines separated by semicolons"), verbose_name=_("Full address"))
+    url = models.URLField(max_length=160, blank=True, verbose_name=_("URL"))
     objects = VenueManager()
 
     # Getter
@@ -44,7 +44,7 @@ class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
 
     def get_formatted_text(self):
         """ Renvoyer une représentation textuelle du lieu """
-        return _(u"{name}, {city}, {country}").format(name=self.name, city=self.city, country=self.get_country())
+        return _("{name}, {city}, {country}").format(name=self.name, city=self.city, country=self.get_country())
 
     def get_close_venues(self, km=1):
         """ Renvoyer les lieux à n km du lieu """
@@ -77,8 +77,8 @@ class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"venue")
-        verbose_name_plural = _(u"venues")
+        verbose_name = _("venue")
+        verbose_name_plural = _("venues")
         index_together = []
         unique_together = [['name', 'street', 'city']]
         app_label = 'location'

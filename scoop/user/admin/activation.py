@@ -20,7 +20,7 @@ class ActivationAdmin(admin.ModelAdmin):
     ordering = ['-user']
     actions = ['activate']
 
-    @addattr(short_description=_(u"Activate selected users"))
+    @addattr(short_description=_("Activate selected users"))
     def activate(self, request, queryset):
         """ Activer les utilisateurs sélectionnés """
         for activation in queryset:

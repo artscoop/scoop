@@ -39,10 +39,10 @@ class GenericModelMixin(object):
 
 class GenericModel(models.Model, GenericModelMixin):
     """ Mixin de modèle avec lien générique """
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, verbose_name=_(u"Content type"))
-    object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, verbose_name=_("Content type"))
+    object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
-    content_object.short_description = _(u"Content object")
+    content_object.short_description = _("Content object")
 
     # Métadonnées
     class Meta:
@@ -51,8 +51,8 @@ class GenericModel(models.Model, GenericModelMixin):
 
 class NullableGenericModel(models.Model, GenericModelMixin):
     """ Mixin de modèle avec lien générique nullable """
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, db_index=True, verbose_name=_(u"Content type"))
-    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, db_index=True, verbose_name=_("Content type"))
+    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
 
     # Métadonnées

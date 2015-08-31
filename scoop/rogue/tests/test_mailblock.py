@@ -25,7 +25,7 @@ class MailBlockTest(TestCase):
 
     def test_mailblock_detection(self):
         """ Tester que des adresses saines et bloquées sont détectées correctement """
-        disposable_email = u"david.cameron@jetable.org"
-        correct_email = u"david.cameron@gmail.com"
-        self.assertTrue(MailBlock.objects.is_blocked(disposable_email), u"The email {} should be blocked.".format(disposable_email))
-        self.assertFalse(MailBlock.objects.is_blocked(correct_email), u"The email {} should be accepted.".format(correct_email))
+        disposable_email = "david.cameron@jetable.org"
+        correct_email = "david.cameron@gmail.com"
+        self.assertTrue(MailBlock.objects.is_blocked(disposable_email), "The email {} should be blocked.".format(disposable_email))
+        self.assertFalse(MailBlock.objects.is_blocked(correct_email), "The email {} should be accepted.".format(correct_email))

@@ -23,7 +23,7 @@ from scoop.core.forms import BaseSearchForm
 class PictureModelForm(forms.ModelForm):
     """ Formulaire d'images """
     # Champs
-    image = ClearableImageField(widget=PictureInlineWidget, template=_(u"%(input)s Clear: %(checkbox)s"))
+    image = ClearableImageField(widget=PictureInlineWidget, template=_("%(input)s Clear: %(checkbox)s"))
 
     def __init__(self, *args, **kwargs):
         """ Initialiser l'objet """
@@ -51,7 +51,7 @@ class PictureAdminForm(forms.ModelForm):
             self.fields['weight'].required = False
             self.fields['image'].required = False
             self.fields['image'].widget = PictureInlineWidget()
-            self.fields['image'].help_text = _(u"You can also enter an URL as a Description.")
+            self.fields['image'].help_text = _("You can also enter an URL as a Description.")
         except:
             pass
 
@@ -62,7 +62,7 @@ class PictureAdminForm(forms.ModelForm):
         url = cleaned_data.get('description', '').strip()
         scheme = Picture._parse_scheme(url)
         if not image and (not url or (url and scheme not in ['http', 'https', 'find', 'file'])):
-            raise forms.ValidationError(_(u"You must specify an image or put an URL as a description"))
+            raise forms.ValidationError(_("You must specify an image or put an URL as a description"))
         return cleaned_data
 
     # Métadonnées
@@ -98,7 +98,7 @@ class PictureSearchForm(BaseSearchForm):
 
 class ZipUploadForm(forms.Form):
     """ Formulaire d'upload d'archive ZIP d'images """
-    zipfile = forms.FileField(max_length=128, label=_(u"Zip archive"))
+    zipfile = forms.FileField(max_length=128, label=_("Zip archive"))
     captcha = CaptchaField()
 
     def clean_zipfile(self):
@@ -110,7 +110,7 @@ class ZipUploadForm(forms.Form):
         """ Valider le formulaire """
         datafile = self.clean_zipfile()
         if datafile is None:
-            raise forms.ValidationError(_(u"File must be a zip file"))
+            raise forms.ValidationError(_("File must be a zip file"))
         return self.cleaned_data
 
     def save_file(self, datafile):
@@ -132,7 +132,7 @@ class ZipUploadForm(forms.Form):
                         picture.save()
             return self.cleaned_data
         else:
-            raise forms.ValidationError(_(u"File must be a zip file"))
+            raise forms.ValidationError(_("File must be a zip file"))
 
     # Overrides
     def __init__(self, *args, **kwargs):

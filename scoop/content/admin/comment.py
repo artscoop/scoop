@@ -38,15 +38,15 @@ class CommentAdmin(AjaxSelectAdmin, admin.ModelAdmin, GenericModelUtil):
     form = CommentAdminForm
     actions = ['set_spam']
     save_on_top = True
-    fieldsets = ((_(u"Comment"), {'fields': ('body', ('content_type', 'object_id',), 'visible', 'email', 'url', 'name',)}),)
+    fieldsets = ((_("Comment"), {'fields': ('body', ('content_type', 'object_id',), 'visible', 'email', 'url', 'name',)}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
-    @addattr(short_description=_(u"Mark selected comments as spam."))
+    @addattr(short_description=_("Mark selected comments as spam."))
     def set_spam(self, request, queryset):
         """ Marquer un queryset de commentaires comme spam """
         for comment in queryset:
             comment.set_spam(True)
-        self.message_user(request, _(u"Selected comments have been marked as spam."))
+        self.message_user(request, _("Selected comments have been marked as spam."))
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         """ Renvoyer le champ de formulaire pour un champ db """

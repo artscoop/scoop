@@ -25,7 +25,7 @@ class PageManager(models.Manager):
 class Page(models.Model):
     """ Page du site """
     # Champs
-    path = models.CharField(max_length=192, blank=False, db_index=True, unique=True, verbose_name=_(u"Path"))
+    path = models.CharField(max_length=192, blank=False, db_index=True, unique=True, verbose_name=_("Path"))
     objects = PageManager()
 
     # Getter
@@ -45,6 +45,6 @@ class Page(models.Model):
 
     class Meta:
         """ Métadonnées """
-        verbose_name = _(u"site page")
-        verbose_name_plural = _(u"site pages")
+        verbose_name = _("site page")
+        verbose_name_plural = _("site pages")
         app_label = 'access'

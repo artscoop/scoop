@@ -28,7 +28,7 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 25
     search_fields = ['username', 'email', 'id']
     exclude = ('last_login',)
-    fieldsets = ((_(u"User"), {'fields': ('username', 'email', 'password', 'name')}), (_(u"Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),)
+    fieldsets = ((_("User"), {'fields': ('username', 'email', 'password', 'name')}), (_("Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),)
     form = make_ajax_form(get_user_model(), {'user_permissions': 'permission', 'groups': 'group'}, UserAdminForm)
     inlines = [ProfileInlineAdmin]
     save_on_top = False
@@ -38,27 +38,27 @@ class UserAdmin(admin.ModelAdmin):
     locale.setlocale(locale.LC_TIME, 'fr_FR.UTF8')  # Définir la langue locale
 
     # Actions
-    @addattr(short_description=_(u"Deactivate selected users"))
+    @addattr(short_description=_("Deactivate selected users"))
     def deactivate(self, request, queryset):
         """ Désactiver des utilisateurs """
         count = queryset.update(is_active=False)
-        self.message_user(request, _(u"{count} users have been successfully deactivated.").format(count=count), messages.SUCCESS)
+        self.message_user(request, _("{count} users have been successfully deactivated.").format(count=count), messages.SUCCESS)
 
-    @addattr(short_description=_(u"Disconnect selected users"))
+    @addattr(short_description=_("Disconnect selected users"))
     def logout(self, request, queryset):
         """ Forcer la déconnexion des utilisateurs """
         for user in queryset:
             if user.profile:
                 user.profile.force_logout()
-        self.message_user(request, _(u"{count} users have been successfully logged out.").format(count=queryset.count()), messages.SUCCESS)
+        self.message_user(request, _("{count} users have been successfully logged out.").format(count=queryset.count()), messages.SUCCESS)
 
     # Getter
-    @addattr(admin_order_field='date_joined', short_description=_(u"date joined"))
+    @addattr(admin_order_field='date_joined', short_description=_("date joined"))
     def get_joined_date(self, obj):
         """ Renvoyer la date d'inscription """
         return obj.date_joined.strftime('%d %b %Y %H:%M')
 
-    @addattr(admin_order_field='last_login', short_description=_(u"last login"))
+    @addattr(admin_order_field='last_login', short_description=_("last login"))
     def get_last_login(self, obj):
         """ Renvoyer la date de dernière connexion """
         if obj.last_login:
@@ -66,36 +66,36 @@ class UserAdmin(admin.ModelAdmin):
         else:
             return "None"
 
-    @addattr(admin_order_field='last_online', short_description=_(u"last online"))
+    @addattr(admin_order_field='last_online', short_description=_("last online"))
     def get_last_online(self, obj):
         """ Renvoyer la date où l'utilisateur a été vu en ligne la dernière fois """
         if obj.last_online:
             return obj.last_online.strftime('%d %b %Y %H:%M')
-        return _(u"Never")
+        return _("Never")
 
     def related_count(self, obj):
         """ Renvoyer le nombre d'objet liés à l'utilisateur (FK et M2M) """
         return len(obj.get_all_related_objects())
 
-    @addattr(short_description=_(u"Groups"))
+    @addattr(short_description=_("Groups"))
     def get_groups(self, obj):
         """ Renvoyer les groupes de l'utilisateur """
         groups = obj.groups.all()
-        output = _(u"(None)")
+        output = _("(None)")
         if groups.exists():
             output = ", ".join([group.name for group in groups])
         return output
 
-    @addattr(allow_tags=True, short_description=_(u"Profile"))
+    @addattr(allow_tags=True, short_description=_("Profile"))
     def get_profile_link(self, obj):
         """ Renvoyer un lien vers la page d'admin du profil """
-        return u"""<a href="{}">{}</a>""".format(reverse("admin:dating_profile_change", args=(obj.profile.user_id,)), escape(obj.profile.__unicode__()))
+        return """<a href="{}">{}</a>""".format(reverse("admin:dating_profile_change", args=(obj.profile.user_id,)), escape(obj.profile.__unicode__()))
 
-    @addattr(allow_tags=True, short_description=_(u"User picture"))
+    @addattr(allow_tags=True, short_description=_("User picture"))
     def get_image(self, obj):
         """ Renvoyer une vignette de l'image de profil de l'utilisateur """
         if obj.profile.picture is not None:
-            return u"{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width, obj.profile.picture.height)
+            return "{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width, obj.profile.picture.height)
 
 # Enregistrer les classes d'administration
 admin.site.register(get_user_model(), UserAdmin)

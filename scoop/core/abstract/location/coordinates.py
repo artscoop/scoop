@@ -22,13 +22,20 @@ class CoordinatesModel(models.Model):
     KM_LON, KM_LAT = 0.008998308318036208, 0.008983111749910169
     UNIT_RATIO = {'km': 1.0, 'm': 1000, 'mi': 0.621371192237334, 'yd': 1093.6132983377076, 'ft': 3280.839895013123, 'nmi': 0.5399568034557235}
     GEODETIC_MODEL = pyproj.Geod(ellps="WGS84")
+    SRID = 4326
     # Position géographique du centre de l'objet
-    position = models.PointField(default=Point(0.0, 0.0))
+    position = models.PointField(default=Point(0.0, 0.0, srid=SRID))
 
     # Setter
     def set_coordinates(self, lat, lon):
         """ Définir les coordonnées de l'objet """
         self.position.set_coords(sorted((-180.0, lon, 180.0))[1], sorted((-90.0, lat, 90.0))[1])
+
+    def set_longitude(self, lon):
+        self.position.set_x(sorted((-180.0, lon, 180.0))[1])
+
+    def set_latitude(self, lat):
+        self.position.set_y(sorted((-90.0, lat, 90.0))[1])
 
     # Getter
     def get_point(self):
@@ -77,23 +84,23 @@ class CoordinatesModel(models.Model):
     @staticmethod
     def sexagesimal_from_degrees(degrees, longitudinal=True):
         """ Renvoyer une valeur horaire depuis une valeur en degrés """
-        letters = _(u"WE") if longitudinal else _(u"SN")
+        letters = _("WE") if longitudinal else _("SN")
         mnt, sec = divmod(degrees * 3600, 60.0)
         deg, mnt = divmod(mnt, 60)
         letter = letters[0 if deg < 0 else 1]
         # Formater les informations de coordonnées
-        output = u"{:.0f}°{:.0f}ʹ{:.03n}ʺ {}".format(abs(deg), mnt, sec, letter)
+        output = "{:.0f}°{:.0f}ʹ{:.03n}ʺ {}".format(abs(deg), mnt, sec, letter)
         return output
 
-    @addattr(short_description=_(u"Coordinates"))
+    @addattr(short_description=_("Coordinates"))
     def get_formatted_coordinates(self):
         """ Renvoyer une représentation des coordonnées de l'objet """
-        return u"↓:{:.04f} →:{:.04f}".format(self.latitude, self.longitude)
+        return "↓:{:.04f} →:{:.04f}".format(self.latitude, self.longitude)
 
-    @addattr(admin_order_field='latitude', short_description=_(u"Sexagesimal"))
+    @addattr(admin_order_field='latitude', short_description=_("Sexagesimal"))
     def get_sexagesimal_coordinates(self):
         """ Renvoyer la représentation horaire des coordonnées de l'objet """
-        return u"{}, {}".format(self.sexagesimal_from_degrees(self.latitude, longitudinal=False), self.sexagesimal_from_degrees(self.longitude, longitudinal=True))
+        return "{}, {}".format(self.sexagesimal_from_degrees(self.latitude, longitudinal=False), self.sexagesimal_from_degrees(self.longitude, longitudinal=True))
 
     def get_distance(self, point=None, **kwargs):
         """
@@ -119,7 +126,7 @@ class CoordinatesModel(models.Model):
         point, origin = list(point), self.get_point()
         delta = [point[1] - origin[1], point[0] - origin[0]]
         if delta == [0, 0]:
-            return u""
+            return ""
         angle = degrees(atan2(delta[1], delta[0]) % (2.0 * pi))
         rounded_angle = round_multiple(angle - 11.25, 22.5)
         angle_tick = int(rounded_angle / 22.5)
@@ -186,8 +193,8 @@ class CoordinatesModel(models.Model):
         return value * CoordinatesModel.UNIT_RATIO.get(unit, 1.0)
 
     # Propriétés
-    latitude = property(get_latitude)
-    longitude = property(get_longitude)
+    latitude = property(get_latitude, set_latitude)
+    longitude = property(get_longitude, set_longitude)
 
     # Métadonnées
     class Meta:

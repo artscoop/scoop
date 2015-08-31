@@ -31,7 +31,7 @@ class ContentInline(TemplateInline):
     def get_template_name(self):
         """ Renvoyer le chemin du template """
         base = super(ContentInline, self).get_template_name()[0]
-        path = u"content/{0}".format(base)
+        path = "content/{0}".format(base)
         return path
 
 
@@ -85,7 +85,7 @@ class LinkInline(TemplateInline):
     def get_template_name(self):
         """ Renvoyer le chemin du template """
         base = super(LinkInline, self).get_template_name()[0]
-        path = u"content/{}".format(base)
+        path = "content/{}".format(base)
         return path
 
 
@@ -166,7 +166,7 @@ class AlbumInline(TemplateInline):
     def get_template_name(self):
         """ Renvoyer les chemin du template """
         base = super(AlbumInline, self).get_template_name()[0]
-        path = u"content/{}".format(base)
+        path = "content/{}".format(base)
         return path
 
 

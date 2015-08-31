@@ -12,9 +12,9 @@ from scoop.rogue.models.flag import Flag
 class FlagFilterSet(FilterSet):
     """ Filtre django-filters des signalements """
     # Constantes
-    AUTOMATIC_CHOICES = (('1', _(u"Automatic")), ('0', _(u"Manual")),)
+    AUTOMATIC_CHOICES = (('1', _("Automatic")), ('0', _("Manual")),)
     # Champs
-    automatic = ChoiceFilter(widget=LinkWidget, choices=AUTOMATIC_CHOICES, label=_(u"Automatic"))
+    automatic = ChoiceFilter(widget=LinkWidget, choices=AUTOMATIC_CHOICES, label=_("Automatic"))
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le filtre """
@@ -24,7 +24,7 @@ class FlagFilterSet(FilterSet):
         self.filters['automatic'].widget = LinkWidget(attrs={'class': ''})
         for _name, field in self.filters.iteritems():
             if isinstance(field, ChoiceFilter):
-                field.extra['choices'] = tuple([("", _(u"All"))] + list(field.extra['choices']))
+                field.extra['choices'] = tuple([("", _("All"))] + list(field.extra['choices']))
 
     # Métadonnées
     class Meta:

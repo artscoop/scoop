@@ -10,16 +10,16 @@ register = template.Library()
 
 
 @register.simple_tag
-def active(request, pattern, value=u"active"):
+def active(request, pattern, value="active"):
     """ Renvoyer un texte si le chmin correspond à un pattern """
-    return value if re.search(pattern, request.path) else u""
+    return value if re.search(pattern, request.path) else ""
 
 
 @register.simple_tag
-def active_named(request, name, value=u"active"):
+def active_named(request, name, value="active"):
     """ Renvoyer un texte si le chemin correspond à une URL nommée """
     url = "^{}$".format(reverse(name))
-    return value if re.search(url, request.path) else u""
+    return value if re.search(url, request.path) else ""
 
 
 @register.filter
@@ -34,7 +34,7 @@ def url_name(request):
     try:
         return request.resolver_match.url_name
     except:
-        return u""
+        return ""
 
 
 class AddGetParameter(Node):

@@ -2,7 +2,7 @@
 import re
 
 import bleach
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from django import template
 from django.conf import settings
 from django.utils.html import escape, urlize
@@ -58,7 +58,7 @@ def truncate_longwords_html(value, length=27):
     def cut_match(match):
         portion = list(match.group())
         portion.insert(length - 1, ' ')
-        return u"".join(portion)
+        return "".join(portion)
 
     # Supprimer toutes les séquences de la même lettre par cut_match
     pattern = r"\S{{{0}}}".format(int(length))
@@ -93,14 +93,14 @@ def html_urlize(value, autoescape=None):
         if 'rel' in link:
             del link['rel']
         link.attrs.append(('rel', 'nofollow'))
-    return mark_safe(unicode(soup))
+    return mark_safe(str(soup))
 
 
 @register.filter(name="lightboxify")
 def lightboxify(value):
     """ Créer un lien lightbox vers un objet """
     return mark_safe("<a href='%(url)s' title='%(name)s' rel='iframe'>%(name)s</a>" % {'url': value.get_absolute_url() if hasattr(value, 'get_absolute_url') else "#",
-                                                                                       'name': escape(value) or _("None")}) if value else u""
+                                                                                       'name': escape(value) or _("None")}) if value else ""
 
 
 # Listes
@@ -123,13 +123,13 @@ def list_enumerate(valueset, as_links=True):
     """ Renvoyer un texte d'énumération d'objets """
     output = []
     length = len(valueset)
-    finaljoin = _(u" and ")
+    finaljoin = _(" and ")
     for idx, item in enumerate(valueset):
         if idx > 0 and idx < length - 1:
             output.append(", ")
         if idx > 0 and idx == length - 1:
             output.append(finaljoin)
-        output.append(linkify(item) if as_links else unicode(item))
+        output.append(linkify(item) if as_links else str(item))
     return mark_safe("".join(output))
 
 

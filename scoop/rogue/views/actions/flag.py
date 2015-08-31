@@ -20,7 +20,7 @@ def ban_and_alert(request, user, template):
         recipients = Thread.objects.related_users(user)
         Alert.objects.alert(recipients, 'user.profile.fake', 'security', {'profile': user.profile})
         count = len(recipients)
-        notice = _(u"%(user)s has been banned and reported to %(count)d users.") % {'user': user, 'count': count}
+        notice = _("%(user)s has been banned and reported to %(count)d users.") % {'user': user, 'count': count}
         messages.success(request, notice)
         record.send(None, request.user, 'user.ban-alert.user', user)
 
@@ -32,10 +32,10 @@ def remove_pictures(request, user):
     count = pictures.count()
     if count > 0:
         Alert.objects.alert(user, 'user.profile.picture.invalid', 'notification', {'count': count, 'pictures': pictures})
-        notice = _(u"%(count)s pictures by %(user)s have been deleted.") % {'count': count, 'user': user}
+        notice = _("%(count)s pictures by %(user)s have been deleted.") % {'count': count, 'user': user}
         messages.success(request, notice)
     else:
-        messages.warning(request, _(u"No picture was deleted."))
+        messages.warning(request, _("No picture was deleted."))
     pictures.delete()
     record.send(None, request.user, 'content.delete.picture', user)
 
@@ -45,5 +45,5 @@ def lock_content(request, content):
     """ Verrouiller un contenu contre les modifications """
     content.lock()
     Alert.objects.alert(list(content.authors.all()), 'content.content.lock', 'notification', {'content': content})
-    messages.success(request, _(u"The content was protected from user interaction."))
+    messages.success(request, _("The content was protected from user interaction."))
     record.send(None, request.user, 'content.lock.content', content)

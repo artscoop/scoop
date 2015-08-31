@@ -15,8 +15,8 @@
 			<tr>
 				<th width="120">{% trans "Active users" %}</th>
 				<td class="emphasis"><span>{{total|si_suffix}}</span></td>
-				<td><span class="badge badge-male">{% blocktrans count numbers.men|round_left:2|si_suffix as men %}{{men}} man{% plural %}{{men}} men{% endblocktrans%}</span> <span class="muted pull-right">{{numbers.men|to_percent:total|floatformat:1}}%</span></td>
-				<td><span class="badge badge-female">{% blocktrans count numbers.women|round_left:2|si_suffix as women %}{{women}} woman{% plural %}{{women}} women{% endblocktrans%}</span> <span class="muted pull-right">{{numbers.women|to_percent:total|floatformat:1}}%</span></td>
+				<td><span class="badge badge-male">{% blocktrans with men=numbers.men|round_left:2|si_suffix count c=numbers.men %}{{men}} man{% plural %}{{men}} men{% endblocktrans%}</span> <span class="muted pull-right">{{numbers.men|to_percent:total|floatformat:1}}%</span></td>
+				<td><span class="badge badge-female">{% blocktrans with women=numbers.women|round_left:2|si_suffix count c=numbers.women %}{{women}} woman{% plural %}{{women}} women{% endblocktrans%}</span> <span class="muted pull-right">{{numbers.women|to_percent:total|floatformat:1}}%</span></td>
 			</tr>
 			<tr>
 				<th>{% trans "Online status" %}</th>

@@ -21,7 +21,7 @@ class FriendGroupGrantManager(SingleDeleteManager):
 class FriendGroupGrant(GenericModel):
     """ Permission d'accès à un groupe d'amis """
     # Champs
-    group = models.ForeignKey('social.FriendGroup', related_name='grants', verbose_name=_(u"Group"))
+    group = models.ForeignKey('social.FriendGroup', related_name='grants', verbose_name=_("Group"))
     objects = FriendGroupGrantManager()
 
     # Getter
@@ -31,6 +31,6 @@ class FriendGroupGrant(GenericModel):
 
     # Métadonnées
     class Meta(object):
-        verbose_name = _(u"friend group grant")
-        verbose_name_plural = _(u"friend group grants")
+        verbose_name = _("friend group grant")
+        verbose_name_plural = _("friend group grants")
         app_label = "social"

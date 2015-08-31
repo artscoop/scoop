@@ -28,26 +28,26 @@ class ForumAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     inlines = []
     form = make_ajax_form(Forum, {'moderators': 'user'}, ForumAdminForm)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
-    fieldsets = ((_(u"Forum"), {'fields': ('name', 'description', 'access_level', 'visible', 'locked')}), (_(u"Settings"), {'fields': ('forums', 'root', 'icon', 'weight')}))
+    fieldsets = ((_("Forum"), {'fields': ('name', 'description', 'access_level', 'visible', 'locked')}), (_("Settings"), {'fields': ('forums', 'root', 'icon', 'weight')}))
 
     # Actions
-    @addattr(short_description=_(u"Update topic count"))
+    @addattr(short_description=_("Update topic count"))
     def update_count(self, request, queryset):
         """ Recalculer le nombre de sujets des forums """
         for forum in queryset:
             forum.get_topic_count()
-        self.message_user(request, _(u"Forum topic counts have been updated."))
+        self.message_user(request, _("Forum topic counts have been updated."))
 
     # Getter
-    @addattr(allow_tags=True, short_description=_(u"Picture"))
+    @addattr(allow_tags=True, short_description=_("Picture"))
     def get_thumbnail(self, obj):
         """ Renvoyer une miniature de l'icône """
         return obj.get_icon_thumbnail_html(size=(48, 24))
 
-    @addattr(allow_tags=True, short_description=_(u"Found in"))
+    @addattr(allow_tags=True, short_description=_("Found in"))
     def get_parents(self, obj):
         """ Renvoyer les parents du forum """
-        return u"<br>".join([unicode(item) for item in obj.get_parents()]) or None
+        return "<br>".join([str(item) for item in obj.get_parents()]) or None
 
     # Overrides
     def get_queryset(self, request):

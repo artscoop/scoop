@@ -17,7 +17,7 @@ from scoop.core.util.shortcuts import addattr
 class GenericModelUtil():
     """ Mixin d'administration pour les objets avec un lien générique """
 
-    @addattr(allow_tags=True, admin_order_field='content_type', short_description=_(u"Target"))
+    @addattr(allow_tags=True, admin_order_field='content_type', short_description=_("Target"))
     def get_content_object_info(self, obj):
         """ Renvoyer un lien vers la page d'admin de l'objet lié """
         admin_link = []
@@ -27,14 +27,14 @@ class GenericModelUtil():
             if hasattr(obj.content_object, 'get_admin_url'):
                 admin_link.append('<a href="%s">%s</a>' % (obj.content_object.get_admin_url(), obj.content_object.__unicode__()))
             return "".join(admin_link)
-        return "<em class='muted'>%s</em>" % (pgettext('target', u"None"),)
+        return "<em class='muted'>%s</em>" % (pgettext('target', "None"),)
 
-    @addattr(allow_tags=True, admin_order_field='content_type', short_description=_(u"Type"))
+    @addattr(allow_tags=True, admin_order_field='content_type', short_description=_("Type"))
     def get_content_type_info(self, obj):
         """ Renvoyer un lien vers la gestion du Modèle de la cible """
         css = 'label-info' if obj.content_type else ''
         url = '#' if not hasattr(obj.content_type, 'get_admin_url') else obj.content_type.get_admin_url()
-        label = obj.content_type or pgettext('type', u"None")
+        label = obj.content_type or pgettext('type', "None")
         tag = 'a' if obj.content_type else 'span'
         return '<%s href="%s"><span class="label %s">%s</span></%s>' % (tag, url, css, label, tag)
 

@@ -49,24 +49,24 @@ class BaseProfileManager(Manager.from_queryset(ProfileQuerySet), BirthManager, N
 class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     """ Profil de base """
     # Constantes
-    GENDER = [[0, _(u"Male")], [1, _(u"Female")], [2, _(u"Other")]]
+    GENDER = [[0, _("Male")], [1, _("Female")], [2, _("Other")]]
     MALE, FEMALE, GENDER_OTHER = 0, 1, 2
-    NULLABLE_GENDER = [['', pgettext_lazy('gender', u"All")]] + GENDER
+    NULLABLE_GENDER = [['', pgettext_lazy('gender', "All")]] + GENDER
     CACHE_KEY = {'online': 'user.profile.online.%d', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count', 'logout.force': 'user.profile.logout.%d'}
     DATA_KEYS = {'baninfo', 'admin', 'deactivation', 'logins'}
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='profile', primary_key=True, on_delete=models.PROTECT, verbose_name=_(u"User"))
-    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('profile', u"Updated"))
-    gender = models.SmallIntegerField(null=False, blank=False, choices=GENDER, default=0, db_index=True, verbose_name=_(u"Gender"))
-    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, help_text=_(u"Select the main profile picture"), related_name='+',
-                                verbose_name=_(u"Picture"))
-    banned = models.BooleanField(default=False, verbose_name=pgettext_lazy('profile', u"Banned"))
-    harmful = models.NullBooleanField(default=None, verbose_name=pgettext_lazy('profile', u"Harmful"))
-    city = models.ForeignKey('location.City', null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name="+", verbose_name=_(u"City")) if apps.is_installed(
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='profile', primary_key=True, on_delete=models.PROTECT, verbose_name=_("User"))
+    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('profile', "Updated"))
+    gender = models.SmallIntegerField(null=False, blank=False, choices=GENDER, default=0, db_index=True, verbose_name=_("Gender"))
+    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, help_text=_("Select the main profile picture"), related_name='+',
+                                verbose_name=_("Picture"))
+    banned = models.BooleanField(default=False, verbose_name=pgettext_lazy('profile', "Banned"))
+    harmful = models.NullBooleanField(default=None, verbose_name=pgettext_lazy('profile', "Harmful"))
+    city = models.ForeignKey('location.City', null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name="+", verbose_name=_("City")) if apps.is_installed(
         'scoop.location') else None
 
     # Getter
-    @addattr(boolean=True, admin_order_field='user__date_joined', short_description=_(u"New"))
+    @addattr(boolean=True, admin_order_field='user__date_joined', short_description=_("New"))
     def is_new(self, days=7):
         """ Renvoyer si le profil est récent """
         return is_new(self.user.date_joined, days)
@@ -105,7 +105,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
         # Choisir le nom de fichier par défaut
         if use_default is True:
             if not hasattr(settings, 'USER_DEFAULT_PICTURE_PATH'):
-                logging.warn(_(u"No default path for user pictures. Add a directory path relative to MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"))
+                logging.warn(_("No default path for user pictures. Add a directory path relative to MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"))
             else:
                 filename = getattr(settings, 'USER_DEFAULT_PICTURE_NAME', 'user-{0.gender}.jpg').format(self)
                 fullpath = os.path.join(settings.USER_DEFAULT_PICTURE_PATH, filename)

@@ -20,7 +20,7 @@ class FlagForm(forms.ModelForm):
         """ Valider et renvoyer les données du formulaire """
         if self.cleaned_data['type'].needs_details is True:
             if not self.cleaned_data['details']:
-                raise forms.ValidationError(_(u"This flag type needs details."))
+                raise forms.ValidationError(_("This flag type needs details."))
         return self.cleaned_data
 
     # Métadonnées

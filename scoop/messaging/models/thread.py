@@ -166,11 +166,11 @@ class ThreadQuerySetMixin(object):
 
     def get_inbox(self, user, name=None):  # name: [inbox|unread|replied|trash]
         """ Renvoyer les informations d'une boîte de réception """
-        name = name or u"inbox"
+        name = name or "inbox"
         groups = {'inbox': self.user_active_threads(user), 'unread': self.unread_threads(user), 'replied': self.threads_not_updated_by(user),
                   'trash': Thread.objects.closed().user_threads(user)}
-        titles = {'inbox': _(u"Inbox"), 'unread': _(u"Unread threads"), 'replied': _(u"Waiting for your reply"), 'trash': _(u"Trash")}
-        return {'title': titles.get(name, u""), 'threads': groups.get(name, self.none())}
+        titles = {'inbox': _("Inbox"), 'unread': _("Unread threads"), 'replied': _("Waiting for your reply"), 'trash': _("Trash")}
+        return {'title': titles.get(name, ""), 'threads': groups.get(name, self.none())}
 
     def get_inbox_names(self):
         """ Renvoyer les noms des boîtes de réception """
@@ -232,12 +232,12 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
                 if thread is None:
                     thread = threads[0]
                 created = False
-                logger.info(u"Duplicates disabled, message added to thread with identifier {uuid}".format(uuid=thread.uuid))
+                logger.info("Duplicates disabled, message added to thread with identifier {uuid}".format(uuid=thread.uuid))
         if thread is None:
             thread = super(self.__class__, self).create(author=author, updater=author, topic=subject, deleted=False, closed=closed, expires=expiry)
             created = True
             thread_created.send(sender=thread, author=author, thread=thread)
-            logger.debug(u"A new thread with identifier {uuid} has been created".format(uuid=thread.uuid))
+            logger.debug("A new thread with identifier {uuid} has been created".format(uuid=thread.uuid))
             # Ajouter les participants
             thread.add_recipients(recipients)
         # Ack auteur
@@ -272,18 +272,18 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     DATA_KEYS = ['last_toggle']
     TOGGLE_DELAY = getattr(settings, 'MESSAGING_THREAD_TOGGLE_DELAY', 3600)
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='threads', verbose_name=_(u"Author"))
-    topic = models.CharField(max_length=128, blank=True, db_index=True, verbose_name=_(u"Topic"))
-    started = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('thread', u"Was started"))
-    updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('thread', u"Updated"))
-    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='threads_where_last', on_delete=models.SET_NULL, verbose_name=_(u"Last speaker"))
-    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', u"Deleted"))
-    counter = models.IntegerField(default=0, verbose_name=_(u"Message count"))
-    population = models.IntegerField(default=0, verbose_name=_(u"Recipient count"))
-    closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', u"Closed"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='threads', verbose_name=_("Author"))
+    topic = models.CharField(max_length=128, blank=True, db_index=True, verbose_name=_("Topic"))
+    started = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('thread', "Was started"))
+    updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('thread', "Updated"))
+    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='threads_where_last', on_delete=models.SET_NULL, verbose_name=_("Last speaker"))
+    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Deleted"))
+    counter = models.IntegerField(default=0, verbose_name=_("Message count"))
+    population = models.IntegerField(default=0, verbose_name=_("Recipient count"))
+    closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Closed"))
     # Expiration du sujet : Temps après dernier update avant suppression du message.
-    expires = models.DateTimeField(null=True, blank=True, verbose_name=_(u"Expires"))
-    expiry_on_read = models.SmallIntegerField(default=365, help_text=_(u"Value in days"), verbose_name=_(u"Expiry on read"))
+    expires = models.DateTimeField(null=True, blank=True, verbose_name=_("Expires"))
+    expiry_on_read = models.SmallIntegerField(default=365, help_text=_("Value in days"), verbose_name=_("Expiry on read"))
     objects = ThreadManager()
 
     # Overrides
@@ -417,31 +417,31 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         self.save(update_fields=['expires', 'expiry_on_read'])
 
     # Getter
-    @addattr(short_description=_(u"Topic"))
+    @addattr(short_description=_("Topic"))
     def get_topic(self):
         """ Renvoyer le sujet du fil """
         return self.topic or mark_safe(render_to_string('messaging/message/subject/no-subject.txt', {'thread': self}))
 
-    @addattr(short_description=_(u"All messages"))
+    @addattr(short_description=_("All messages"))
     def get_messages(self, ghost=False, reverse=False):
         """ Renvoyer les messages du fil """
         criteria = {'deleted': False} if not ghost else {}
         messages = self.messages.filter(**criteria).order_by('id' if not reverse else '-id')
         return messages
 
-    @addattr(short_description=_(u"Last message"))
+    @addattr(short_description=_("Last message"))
     def get_last_message(self, ghost=False):
         """ Renvoyer le dernier message du sujet """
         messages = self.get_messages(ghost=ghost).order_by('-id')
         return messages[0]
 
-    @addattr(short_description=_(u"First message"))
+    @addattr(short_description=_("First message"))
     def get_first_message(self, ghost=False):
         """ Renvoyer le premier message du sujet """
         messages = self.get_messages(ghost=ghost).order_by('id')
         return messages[0]
 
-    @addattr(short_description=_(u"Recipients"))
+    @addattr(short_description=_("Recipients"))
     def get_recipients(self, exclude=None, only_active=True):
         """ Renvoyer les objets Recipient du fil """
         criteria = {'active': True} if only_active else {}
@@ -459,7 +459,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         criteria = {'is_staff': False, 'bot': False} if exclude_staff else {}
         return get_user_model().objects.filter(messages_sent__thread=self, **criteria).distinct()
 
-    @addattr(short_description=_(u"Users"))
+    @addattr(short_description=_("Users"))
     def get_users(self, exclude=None, only_active=True):
         """ Renvoyer les utilisateurs participant au fil """
         criteria = {'user_recipients__active': True} if only_active else {}
@@ -467,7 +467,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         users = get_user_model().objects.filter(user_recipients__thread=self, **criteria).exclude(**exclusion).distinct()
         return users
 
-    @addattr(admin_order_field='population', short_description=_(u"Recipients"))
+    @addattr(admin_order_field='population', short_description=_("Recipients"))
     def get_recipient_count(self, only_active=True):
         """ Renvoyer le nombre de participants au fil """
         recipients = self.get_recipients(only_active=only_active)
@@ -483,7 +483,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         if not self.is_recipient(user):
             raise exception()
 
-    @addattr(admin_order_field='counter', short_description=_(u"Messages"))
+    @addattr(admin_order_field='counter', short_description=_("Messages"))
     def get_message_count(self, ghost=False, use_cache=False):
         """ Renvoyer le nombre de messages dans le fil """
         return self.counter if use_cache else self.get_messages(ghost=ghost).count()
@@ -494,24 +494,24 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         total = self.messages.filter(author=user, **filtering).count()
         return total
 
-    @addattr(boolean=True, short_description=_(u"Unread"))
+    @addattr(boolean=True, short_description=_("Unread"))
     def is_unread(self, user):
         """ Renvoyer si un utilisateur n'a pas lu le fil """
         from scoop.messaging.models import Recipient
         # Renvoyer l'état
         return Recipient.objects.is_unread(self, user)
 
-    @addattr(boolean=True, short_description=_(u"All read"))
+    @addattr(boolean=True, short_description=_("All read"))
     def is_read_by_everyone(self):
         """ Renvoyer si tous les participants ont lu le fil """
         return not self.recipients.filter(unread=True).exists()
 
-    @addattr(boolean=True, short_description=_(u"Staff thread"))
+    @addattr(boolean=True, short_description=_("Staff thread"))
     def is_staff(self):
         """ Renvoyer si l'auteur du sujet fait partie du personnel """
         return self.author.is_staff or self.author.is_superuser
 
-    @addattr(short_description=_(u"Unread count"))
+    @addattr(short_description=_("Unread count"))
     def get_unread_count(self, since=None):
         """ Renvoyer le nombre de destinataires n'ayant pas lu le fil """
         filtering = {} if since is None else {'time__gt': to_timestamp(since)}
@@ -540,6 +540,6 @@ class Thread(UUID64Model, LabelableModel, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"thread")
-        verbose_name_plural = _(u"threads")
+        verbose_name = _("thread")
+        verbose_name_plural = _("threads")
         app_label = "messaging"

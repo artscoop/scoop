@@ -44,7 +44,7 @@ class PositionManager(SingleDeleteManager, GeoManager):
 
 class Position(CoordinatesModel, DatetimeModel):
     """ Position utilisateur """
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_(u"User"))
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("User"))
     objects = PositionManager()
 
     # Getter
@@ -55,10 +55,10 @@ class Position(CoordinatesModel, DatetimeModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"%(user)s @ %(gps)s" % {'user': self.user, 'gps': self.get_formatted_coordinates()}
+        return "%(user)s @ %(gps)s" % {'user': self.user, 'gps': self.get_formatted_coordinates()}
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"user position")
-        verbose_name_plural = _(u"user positioning")
+        verbose_name = _("user position")
+        verbose_name_plural = _("user positioning")
         app_label = 'location'

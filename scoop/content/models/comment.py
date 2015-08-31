@@ -67,7 +67,7 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
         :param force: forcer la création même sur un contenu non commentable
         """
         if (isinstance(target, CommentableModel) and target.is_commentable()) or (request and request.user.is_staff) or force is True:
-            comment = Comment(author=author, content_object=target, body=body, name=name or unicode(author), email=email or u"", url=url or u"")
+            comment = Comment(author=author, content_object=target, body=body, name=name or str(author), email=email or "", url=url or "")
             comment.set_request(request, save=True)
             comment_posted.send(sender=comment, target=target)
             return comment
@@ -77,20 +77,20 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
 class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UUID64Model, ModeratedModel):
     """ Commentaire """
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="comments_made", verbose_name=_(u"Author"))
-    name = models.CharField(max_length=24, verbose_name=_(u"Name"))
-    body = models.TextField(blank=False, verbose_name=_(u"Body"))
-    url = models.URLField(max_length=100, blank=True, verbose_name=_(u"URL"))
-    email = models.EmailField(max_length=64, blank=True, verbose_name=_(u"Email"))
-    spam = models.BooleanField(default=False, db_index=True, verbose_name=_(u"Spam"))
-    updated = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('comment', u"Updated"))
-    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+", verbose_name=_(u"Updater"))
-    visible = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('comment', u"Visible"))
-    removed = models.BooleanField(default=False, help_text=_(u"When visible, mark as removed"), verbose_name=pgettext_lazy('comment', u"Removed"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="comments_made", verbose_name=_("Author"))
+    name = models.CharField(max_length=24, verbose_name=_("Name"))
+    body = models.TextField(blank=False, verbose_name=_("Body"))
+    url = models.URLField(max_length=100, blank=True, verbose_name=_("URL"))
+    email = models.EmailField(max_length=64, blank=True, verbose_name=_("Email"))
+    spam = models.NullBooleanField(default=None, db_index=True, verbose_name=_("Spam"))
+    updated = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('comment', "Updated"))
+    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+", verbose_name=_("Updater"))
+    visible = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('comment', "Visible"))
+    removed = models.BooleanField(default=False, help_text=_("When visible, mark as removed"), verbose_name=pgettext_lazy('comment', "Removed"))
     objects = CommentManager()
 
     # Getter
-    @addattr(short_description=_(u"URL"))
+    @addattr(short_description=_("URL"))
     def get_url(self):
         """ Renvoyer l'URL de l'auteur ou du commentaire """
         if self.author is not None:
@@ -98,12 +98,12 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
         else:
             return self.url
 
-    @addattr(short_description=_(u"Name"))
+    @addattr(short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom de l'auteur ou du commentaire """
         if self.author is not None:
             return self.author.username
-        return self.name if self.name != "" else _(u"Anonymous")
+        return self.name if self.name != "" else _("Anonymous")
 
     def get_teaser(self, words=6):
         """ Renvoyer une introduction du corps du commentaire """
@@ -116,7 +116,7 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
                 return True
         return False
 
-    @addattr(boolean=True, short_description=pgettext_lazy('comment', u"Updated"))
+    @addattr(boolean=True, short_description=pgettext_lazy('comment', "Updated"))
     def is_updated(self):
         """ Renvoyer si le commentaire a été updaté """
         return self.updated > self.datetime + datetime.timedelta(seconds=30)
@@ -151,7 +151,7 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
 
     def __html__(self):
         """ Renvoyer la représentation HTML de l'objet"""
-        return u"<span>{teaser}</span>".format(teaser=self.get_teaser())
+        return "<span>{teaser}</span>".format(teaser=self.get_teaser())
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
@@ -175,5 +175,5 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
     class Meta:
         verbose_name = _(u'comment')
         verbose_name_plural = _(u'comments')
-        permissions = (("can_edit_own_comment", u"Can edit own Comment"),)
+        permissions = (("can_edit_own_comment", "Can edit own Comment"),)
         app_label = 'content'

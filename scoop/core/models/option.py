@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy, ugettext
 from translatable.models import TranslatableModel, get_translation_model
@@ -33,22 +34,22 @@ class OptionManager(SingleDeleteManager):
         except OptionGroup.DoesNotExist:
             return self.none()
 
-    def get_by_code(self, group, code):
+    def get_by_code(self, group, code, active_only=True):
         """ Renvoyer l'ooption d'un groupe avec un code précis """
-        if isinstance(group, basestring):
-            return self.get(active=True, group__short_name=group, code=code)
-        return self.get(active=True, group__id=group, code=code)
+        if isinstance(group, str):
+            return self.get(group__short_name=group, code=code, **({'active': True} if active_only else {}))
+        return self.get(group__id=group, code=code, **({'active': True} if active_only else {}))
 
 
 class Option(TranslatableModel, PicturableModel, UUID64Model):
     """ Option """
     # Choix de codes
-    CODES = [[i, i] for i in xrange(200)]
+    CODES = [[i, i] for i in range(200)]
     # Champs
-    group = models.ForeignKey('core.OptionGroup', null=False, blank=False, related_name='options', verbose_name=_(u"Group"))
-    code = models.SmallIntegerField(null=False, blank=False, choices=CODES, db_index=True, verbose_name=_(u"Code"))
-    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('option', u"Active"))
-    parent = models.ForeignKey('core.Option', null=True, blank=True, related_name='children', on_delete=models.SET_NULL, verbose_name=_(u"Parent"))
+    group = models.ForeignKey('core.OptionGroup', null=False, blank=False, related_name='options', verbose_name=_("Group"))
+    code = models.SmallIntegerField(null=False, blank=False, choices=CODES, db_index=True, verbose_name=_("Code"))
+    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('option', "Active"))
+    parent = models.ForeignKey('core.Option', null=True, blank=True, related_name='children', on_delete=models.SET_NULL, verbose_name=_("Parent"))
     objects = OptionManager()
 
     # Getter
@@ -56,21 +57,21 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
         """ Renvoyer la clé naturelle de l'objet """
         return (self.uuid,)
 
-    @addattr(short_description=_(u"Name"))
+    @addattr(short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom de l'option """
         try:
             return self.get_translation().name
         except:
-            return ugettext(u"(No name)")
+            return ugettext("(No name)")
 
-    @addattr(short_description=_(u"Description"))
+    @addattr(short_description=_("Description"))
     def get_description(self):
         """ Renvoyer la description de l'option """
         try:
             return self.get_translation().description
         except:
-            return ugettext(u"(No description)")
+            return ugettext("(No description)")
 
     def get_children(self):
         """ Renvoyer les descendants de l'option """
@@ -100,7 +101,8 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
     description = property(get_description)
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return self.get_name()
 
@@ -114,8 +116,8 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"option")
-        verbose_name_plural = _(u"options")
+        verbose_name = _("option")
+        verbose_name_plural = _("options")
         unique_together = (('group', 'code'),)
         ordering = ['code']
         app_label = 'core'
@@ -123,8 +125,8 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
 
 class OptionTranslation(get_translation_model(Option, "option"), TranslationModel):
     """ Traduction des options """
-    name = models.CharField(max_length=120, blank=False, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    name = models.CharField(max_length=120, blank=False, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Métadonnées
     class Meta:

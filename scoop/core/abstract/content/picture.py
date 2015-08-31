@@ -59,7 +59,7 @@ class PicturedBaseModel(models.Model):
         actually_downloaded = 0
         images = Picture.objects.find_by_keyword(default) or Picture.objects.find_by_keyword(fallback)
         for number, image in enumerate(images[0:count], start=1):
-            description = u"{name} ({index})".format(name=self.get_name(), index=number)
+            description = "{name} ({index})".format(name=self.get_name(), index=number)
             try:
                 if isinstance(self, PicturableModel):
                     picture = Picture.objects.create_from_uri(image['url'], content_object=self, title=description, description=image['title'], author=author or User.objects.get_superuser())
@@ -71,7 +71,7 @@ class PicturedBaseModel(models.Model):
                     actually_downloaded += 1
                     if issubclass(Picture, ModeratedModel):  # Modérer automatiquement
                         Picture.objects.filter(id=picture.id, moderated__isnull=True).update(moderated=True)
-            except Exception, e:
+            except Exception as e:
                 print_exc(e)
         if actually_downloaded > 0 or self.has_pictures({}):
             self.pictured = True
@@ -92,7 +92,7 @@ class PicturedBaseModel(models.Model):
 class PicturableModel(PicturedBaseModel):
     """ Objet pouvant être lié à des images via une relation générique """
     # Champs
-    pictured = models.BooleanField(default=False, db_index=True, verbose_name=_(u"\U0001f58c"))
+    pictured = models.BooleanField(default=False, db_index=True, verbose_name=_("\U0001f58c"))
     pictures = GenericRelation('content.Picture')
 
     # Métadonnées
@@ -103,8 +103,8 @@ class PicturableModel(PicturedBaseModel):
 class PicturedModel(PicturedBaseModel):
     """ Objet lié à des images par un champ ManyToMany """
     # Champs
-    pictured = models.BooleanField(default=False, db_index=True, verbose_name=_(u"\U0001f58c"))
-    pictures = models.ManyToManyField('content.Picture', blank=True, verbose_name=_(u"Pictures"))
+    pictured = models.BooleanField(default=False, db_index=True, verbose_name=_("\U0001f58c"))
+    pictures = models.ManyToManyField('content.Picture', blank=True, verbose_name=_("Pictures"))
 
     # Métadonnées
     class Meta:

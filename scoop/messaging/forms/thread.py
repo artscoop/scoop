@@ -21,8 +21,8 @@ class MessageForm(forms.Form):
     """ Formulaire de message """
     # Constantes
     BODY_LENGTH_MIN = 2
-    HELP_TEXT = _(u"Please make use of polite and correct language and behaviour.")
-    INPUT_CSS = u"width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;"
+    HELP_TEXT = _("Please make use of polite and correct language and behaviour.")
+    INPUT_CSS = "width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;"
     # Champs
     body = forms.CharField(required=False, label="", help_text=HELP_TEXT,
                            widget=TinyMCE(attrs={'rows': 3}, mce_attrs=TINYMCE_CONFIG_CONTENT))  # widget=Textarea(attrs={'style':INPUT_CSS, 'rows':3}))
@@ -37,7 +37,7 @@ class MessageForm(forms.Form):
         body = self.data['body']
         raw = striptags(body)
         if len(raw) < MessageForm.BODY_LENGTH_MIN:
-            raise forms.ValidationError(_(u"Your message must be at least {} characters long.").format(MessageForm.BODY_LENGTH_MIN))
+            raise forms.ValidationError(_("Your message must be at least {} characters long.").format(MessageForm.BODY_LENGTH_MIN))
         return body
 
 
@@ -55,14 +55,14 @@ class ThreadForm(MessageForm):
         """ Valider et renvoyer les données du champ sujet """
         subject = self.data['subject']
         if len(subject) < ThreadForm.SUBJECT_LENGTH_MIN:
-            raise forms.ValidationError(_(u"Your subject must be at least {} characters long.").format(ThreadForm.SUBJECT_LENGTH_MIN))
+            raise forms.ValidationError(_("Your subject must be at least {} characters long.").format(ThreadForm.SUBJECT_LENGTH_MIN))
         return subject
 
     def clean_recipient(self):
         """ Valider et renvoyer les données du champ destinataire """
         recipient = int(self.data['recipient'])
         if get_user_model().objects.get_or_none(id=recipient) is None:
-            raise forms.ValidationError(_(u"The recipient does not exist."))
+            raise forms.ValidationError(_("The recipient does not exist."))
         return get_user_model().objects.get(id=recipient)
 
 

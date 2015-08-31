@@ -26,7 +26,7 @@ class UserInline(TemplateInline):
     def get_template_name(self):
         """ Renvoyer le chemin du template """
         base = super(UserInline, self).get_template_name()[0]
-        path = u"user/%s" % base
+        path = "user/%s" % base
         return path
 
 # Enregistrer les classes d'inlines

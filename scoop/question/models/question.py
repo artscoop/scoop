@@ -13,12 +13,12 @@ from scoop.core.abstract.core.weight import WeightedModel
 class Question(DatetimeModel, WeightedModel):
     """ Question """
     # Constantes
-    TYPES = [[0, _(u"Simple answers")], [1, _(u"Multiple answers")], [2, _(u"Grouped answers")]]
+    TYPES = [[0, _("Simple answers")], [1, _("Multiple answers")], [2, _("Grouped answers")]]
     # Champs
-    type = models.SmallIntegerField(choices=TYPES, default=0, verbose_name=_(u"Quiz type"))
-    title = models.CharField(max_length=96, verbose_name=_(u"Title"))
-    description = models.TextField(blank=False, verbose_name=_(u"Description"))
-    answers = models.TextField(blank=False, help_text=(u"TODO"), verbose_name=_(u"Answers"))
+    type = models.SmallIntegerField(choices=TYPES, default=0, verbose_name=_("Quiz type"))
+    title = models.CharField(max_length=96, verbose_name=_("Title"))
+    description = models.TextField(blank=False, verbose_name=_("Description"))
+    answers = models.TextField(blank=False, help_text=("TODO"), verbose_name=_("Answers"))
 
     # Getter
     def get_group_count(self):
@@ -35,10 +35,10 @@ class Question(DatetimeModel, WeightedModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"%(title)s" % {'title': self.title}
+        return "%(title)s" % {'title': self.title}
 
     # Métadonnées
     class Meta:
         app_label = 'question'
-        verbose_name = _(u"Question")
-        verbose_name_plural = _(u"Questions")
+        verbose_name = _("Question")
+        verbose_name_plural = _("Questions")

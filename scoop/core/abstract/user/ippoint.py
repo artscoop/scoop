@@ -6,7 +6,7 @@ from IPy import IP as IP_
 
 class IPPointModel(models.Model):
     """ Mixin de modèle pointant vers une adresse IP """
-    ip = models.ForeignKey('access.IP', editable=False, verbose_name=_(u"IP"))
+    ip = models.ForeignKey('access.IP', editable=False, verbose_name=_("IP"))
 
     # Getter
     def get_ip(self):
@@ -30,7 +30,7 @@ class IPPointModel(models.Model):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{}").format(self.get_ip())
+        return _("{}").format(self.get_ip())
 
     # Propriétés
     ip_address = property(get_ip, set_ip)
@@ -43,7 +43,7 @@ class IPPointModel(models.Model):
 class IPPointableModel(models.Model):
     """ Mixin de modèle pouvant pointer vers une IP """
     # Champs
-    ip = models.ForeignKey('access.IP', db_index=True, null=True, on_delete=models.SET_NULL, verbose_name=_(u"IP"))
+    ip = models.ForeignKey('access.IP', db_index=True, null=True, on_delete=models.SET_NULL, verbose_name=_("IP"))
 
     # Getter
     def get_ip(self):
@@ -67,7 +67,7 @@ class IPPointableModel(models.Model):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{}").format(self.get_ip())
+        return _("{}").format(self.get_ip())
 
     # Propriétés
     ip_address = property(get_ip, set_ip)

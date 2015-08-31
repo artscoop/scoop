@@ -65,15 +65,15 @@ class AdvertisementManager(SingleDeleteManager):
 class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, RectangleModel):
     """ Annonce publicitaire """
     # Constantes
-    NETWORKS = [['gg', u"Google Adsense"], ['af', u"AdFever"], ['na', _(u"Custom")], ['ot', pgettext_lazy('adnetwork', u"Other")]]
+    NETWORKS = [['gg', "Google Adsense"], ['af', "AdFever"], ['na', _("Custom")], ['ot', pgettext_lazy('adnetwork', "Other")]]
     # Champs
-    name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_(u"Name"))
-    active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('advertisement', u"Active"))
-    group = models.CharField(max_length=48, blank=True, help_text=_(u"Pipe separated"), verbose_name=_(u"Group name"))
-    code = models.TextField(blank=False, help_text=_(u"Django template code for HTML/JS"), verbose_name=_(u"HTML/JS Snippet"))
-    views = models.IntegerField(default=0, editable=False, verbose_name=_(u"Views"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    network = models.CharField(choices=NETWORKS, default='na', max_length=4, db_index=True, verbose_name=_(u"Ad network"))
+    name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
+    active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('advertisement', "Active"))
+    group = models.CharField(max_length=48, blank=True, help_text=_("Pipe separated"), verbose_name=_("Group name"))
+    code = models.TextField(blank=False, help_text=_("Django template code for HTML/JS"), verbose_name=_("HTML/JS Snippet"))
+    views = models.IntegerField(default=0, editable=False, verbose_name=_("Views"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    network = models.CharField(choices=NETWORKS, default='na', max_length=4, db_index=True, verbose_name=_("Ad network"))
     objects = AdvertisementManager()
 
     def render(self, view=True):
@@ -89,7 +89,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
 
     def __unicode__(self):
         """ Renvoyer auformat unicode """
-        return _(u"Advertisement {name}").format(name=self.name)
+        return _("Advertisement {name}").format(name=self.name)
 
     def save(self, *args, **kwargs):
         """ Sauvegarder l'objet dans la base de données """
@@ -97,6 +97,6 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"advertisement")
-        verbose_name_plural = _(u"advertisements")
+        verbose_name = _("advertisement")
+        verbose_name_plural = _("advertisements")
         app_label = 'content'

@@ -64,9 +64,9 @@ class LikeManager(SingleDeleteManager):
 class Like(DatetimeModel):
     """ Annotation "J'aime" sur un objet arbitraire. """
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='likees', verbose_name=_(u"Author"))
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=False, verbose_name=_(u"Content type"), limit_choices_to={'app_label__in': ['content']})
-    object_id = models.PositiveIntegerField(null=True, blank=False, verbose_name=_(u"Object Id"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='likees', verbose_name=_("Author"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=False, verbose_name=_("Content type"), limit_choices_to={'app_label__in': ['content']})
+    object_id = models.PositiveIntegerField(null=True, blank=False, verbose_name=_("Object Id"))
     content_object = generic.GenericForeignKey('content_type', 'object_id')
     objects = LikeManager()
 
@@ -79,11 +79,11 @@ class Like(DatetimeModel):
 
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{user} likes {target}").format(user=self.author.username, target=self)
+        return _("{user} likes {target}").format(user=self.author.username, target=self)
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"like")
-        verbose_name_plural = _(u"likes")
+        verbose_name = _("like")
+        verbose_name_plural = _("likes")
         unique_together = (('author', 'content_type', 'object_id'),)
         app_label = 'social'

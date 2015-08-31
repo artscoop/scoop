@@ -25,12 +25,12 @@ class PictureLookup(LookupChannel):
 
     def format_match(self, obj):
         """ Renvoyer le HTML de l'élément dans le dropdown """
-        output = u"""<div>{thumb} {name}</div>""".format(thumb=obj.get_thumbnail_html(size=(48, 20), template='picture'), name=obj.title or obj.description)
+        output = """<div>{thumb} {name}</div>""".format(thumb=obj.get_thumbnail_html(size=(48, 20), template='picture'), name=obj.title or obj.description)
         return output
 
     def format_item_display(self, obj):
         """ Renvoyer le HTML de l'élément dans le deck """
-        output = u"""<div>{thumb} {name}</div>""".format(thumb=obj.get_thumbnail_html(size=(48, 20)), name=obj.title or obj.description)
+        output = """<div>{thumb} {name}</div>""".format(thumb=obj.get_thumbnail_html(size=(48, 20)), name=obj.title or obj.description)
         return output
 
     def check_auth(self, request):

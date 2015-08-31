@@ -26,7 +26,7 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
     actions_on_bottom = True
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     exclude = ()
-    fieldsets = ((_(u"User"), {'fields': ('picture', 'gender', 'birth', 'city', 'doubt', 'banned',)}),)
+    fieldsets = ((_("User"), {'fields': ('picture', 'gender', 'birth', 'city', 'doubt', 'banned',)}),)
     filter_horizontal = []
     form = make_ajax_form(get_profile_model(), {'city': 'citypm', 'picture': 'picture'}, ProfileAdminForm)
     formfield_overrides = {}
@@ -44,13 +44,13 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
     search_fields = ['user__username', 'user__email']
 
     # Actions
-    @addattr(short_description=_(u"Deactivate selected users"))
+    @addattr(short_description=_("Deactivate selected users"))
     def deactivate(self, request, queryset):
         """ Désactiver des utilisateurs """
         count = queryset.update(user__is_active=False)
-        self.message_user(request, _(u"%(count)d users have been successfully deactivated.") % {"count": count}, messages.SUCCESS)
+        self.message_user(request, _("%(count)d users have been successfully deactivated.") % {"count": count}, messages.SUCCESS)
 
-    @addattr(short_description=_(u"Reset the selected users pictures"))
+    @addattr(short_description=_("Reset the selected users pictures"))
     def clear_picture(self, request, queryset):
         """ Supprimer les images principales des profils """
         for profile in queryset:
@@ -59,7 +59,7 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
                 profile.set_picture(None)
                 picture.delete()
 
-    @addattr(short_description=_(u"Shuffle profile"))
+    @addattr(short_description=_("Shuffle profile"))
     def shuffle(self, request, queryset):
         """ Shuffle les données des profils"""
         for profile in queryset:
@@ -97,22 +97,22 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
         return form
 
     # Getter
-    @addattr(admin_order_field='user__id', short_description=_(u"Id"))
+    @addattr(admin_order_field='user__id', short_description=_("Id"))
     def get_id(self, obj):
         """ Renvoyer l'ID de l'utilisateur """
         return obj.pk
 
-    @addattr(short_description=_(u"User"), admin_order_field='user__username')
+    @addattr(short_description=_("User"), admin_order_field='user__username')
     def get_user(self, obj):
         """ Renvoyer l'utilisateur """
         return obj.user
 
-    @addattr(admin_order_field='user__email', short_description=_(u"Email"))
+    @addattr(admin_order_field='user__email', short_description=_("Email"))
     def get_email(self, obj):
         """ Renvoyer l'adresse email de l'utilisateur """
         return obj.user.email
 
-    @addattr(allow_tags=True, admin_order_field='picture__title', short_description=_(u"User picture"))
+    @addattr(allow_tags=True, admin_order_field='picture__title', short_description=_("User picture"))
     def get_image(self, obj):
         """ Renvoyer une vignette du portrait utilisateur """
         if obj.picture is not None:

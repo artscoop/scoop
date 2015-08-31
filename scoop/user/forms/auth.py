@@ -12,8 +12,8 @@ from scoop.user.models.user import User
 @autostrip
 class LoginForm(forms.Form):
     """ Formulaire de connexion """
-    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _(u"User name or email")}), label=_(u"Identifier"))
-    password = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': _(u"Password")}), label=_(u"Password"))
+    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("User name or email")}), label=_("Identifier"))
+    password = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': _("Password")}), label=_("Password"))
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le formulaire """
@@ -28,4 +28,4 @@ class LoginForm(forms.Form):
         if username and password:
             User.sign(self.request, {'username': username, 'password': password}, fake=True)
             return self.cleaned_data
-        raise ValidationError(_(u"You must provide an username or email and a password."))
+        raise ValidationError(_("You must provide an username or email and a password."))

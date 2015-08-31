@@ -48,7 +48,10 @@ logger = logging.getLogger(__name__)
 
 
 class ContentQuerySetMixin(object):
-    """ Mixin de Manager et Queryset """
+    """
+    Mixin de Manager et Queryset
+    :type ContentQuerySetMixin: models.QuerySet
+    """
 
     def by_request(self, request):
         """ Renvoyer les éléments accessibles à l'utilisateur """
@@ -56,14 +59,17 @@ class ContentQuerySetMixin(object):
 
     def visible(self, **kwargs):
         """ Renvoyer les éléments visibles """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         return self.filter(published=True, deleted=False, **(kwargs or dict())).order_by('-sticky')
 
     def invisible(self, **kwargs):
         """ Renvoyer les éléments invisibles """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         return self.filter(published=False, deleted=False, **(kwargs or dict())).order_by('-sticky')
 
     def deleted(self, **kwargs):
         """ Renvoyer les contenus marqués comme supprimés """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         return self.filter(deleted=True)
 
     def featured(self, **kwargs):
@@ -72,6 +78,7 @@ class ContentQuerySetMixin(object):
 
     def by_author(self, user):
         """ Renvoyer les contenus créés par un utilisateur """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         return self.filter(authors=user)
 
     def get_by_slug(self, slug, exact=True, category=None, exc=None):
@@ -82,7 +89,8 @@ class ContentQuerySetMixin(object):
         :param category: nom du type de contenu
         :param exc: classe de l'exception à lever si le slug exact n'existe pas
         """
-        slug = unicode(slug)
+        assert isinstance(self, (models.QuerySet, models.Manager))
+        slug = str(slug)
         try:
             return self.get(slug=slug)
         except Content.DoesNotExist:
@@ -90,7 +98,7 @@ class ContentQuerySetMixin(object):
                 if exc is None:
                     raise
                 else:
-                    raise exc(u"No content found with this slug")
+                    raise exc("No content found with this slug")
         word = max(slug.split('-'), key=len)  # utiliser le mot le plus long pour filtrer
         contents = self.filter(slug__icontains=word, **({'category': category} if category is not None else {}))  # filtrer les contenus contenant le mot le plus long
         try:
@@ -105,6 +113,7 @@ class ContentQuerySetMixin(object):
         :param cid: id du contenu à retrouver
         :param exc: exception à lever si l'ID n'existe pas
         """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         try:
             return self.get(pk=cid)
         except:
@@ -118,9 +127,10 @@ class ContentQuerySetMixin(object):
         :param categories: liste de catégories ou liste de noms de catégories
         :param attribute: sur quel attribut de la classe catégorie effectuer la recherche
         """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         categories = make_iterable(categories, list)
         ctype = type(categories[0])
-        kwargs.update({('category__{}__in' if issubclass(ctype, basestring) else 'category__in').format(attribute): categories})
+        kwargs.update({('category__{}__in' if issubclass(ctype, str) else 'category__in').format(attribute): categories})
         return self.filter(**kwargs)
 
     def by_tags(self, tags, **kwargs):
@@ -129,9 +139,10 @@ class ContentQuerySetMixin(object):
         :param tags: liste de noms de tags ou liste de tags
         :param kwargs: options de filtrage supplémentaires
         """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         tags = make_iterable(tags, list)
         ttype = type(tags[0])
-        return self.filter(tags__short_name__in=tags, **kwargs) if issubclass(ttype, basestring) else self.filter(terms__in=tags, **kwargs)
+        return self.filter(tags__short_name__in=tags, **kwargs) if issubclass(ttype, str) else self.filter(terms__in=tags, **kwargs)
 
     def get_months(self, *args, **kwargs):
         """ Renvoyer la liste des mois de publication des articles """
@@ -158,6 +169,7 @@ class ContentQuerySetMixin(object):
 
     def get_last_edit_time(self, **kwargs):
         """ Renvoyer la date la plus récente de modification des contenus """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         try:
             return self.filter(**kwargs).latest('edited').edited
         except:
@@ -166,11 +178,13 @@ class ContentQuerySetMixin(object):
     # Setter
     def delete_from_author(self, author=None):
         """ Effacer les contenus d'un auteur """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         if author is not None:
             return self.filter(authors=author).update(deleted=True)
 
     def unpublish_from_author(self, author=None):
         """ Dépublier les contenus d'un auteur """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         if author is not None:
             return self.filter(authors=author).update(published=False)
 
@@ -180,6 +194,7 @@ class ContentQuerySetMixin(object):
         :param start: date correspondant au premier jour de publication
         :param step: à quel intervalle publier les contenus
         """
+        assert isinstance(self, (models.QuerySet, models.Manager))
         # Par défaut, demain à 7h toutes les 24h
         start = start or date.today() + timedelta(days=1, hours=7)
         step = step or timedelta(days=1)
@@ -190,7 +205,7 @@ class ContentQuerySetMixin(object):
                     content.update(save=True, publish=start)
                     start += step
             return True
-        logger.warn(u"You can schedule publication for 1 to 128 contents max.")
+        logger.warn("You can schedule publication for 1 to 128 contents max.")
         return False
 
 
@@ -241,39 +256,39 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     """ Contenu basé sur du texte """
     # Constantes
     DEFAULT_TEASER_SIZE = 20  # Taille du teaser en mots
-    FORMATS = {0: _(u"Plain HTML"), 1: _(u"Markdown"), 2: _(u"Textile")}
+    FORMATS = {0: _("Plain HTML"), 1: _("Markdown"), 2: _("Textile")}
     FORMAT_CHOICES = FORMATS.items()
     TRANSFORMS = {1: markdown.Markdown().convert, 2: textile.textile}  # fonctions à appliquer à chaque format
     DATA_KEYS = ['similar']
 
     # Champs
-    category = models.ForeignKey('content.Category', null=False, related_name='contents', verbose_name=_(u"Category"))
-    authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='contents', verbose_name=_(u"Authors"))
-    title = models.CharField(max_length=192, blank=False, verbose_name=_(u"Title"))
-    body = models.TextField(blank=True, verbose_name=_(u"Text"))
-    html = models.TextField(blank=True, help_text=_(u"HTML output from body"), verbose_name=_(u"HTML"))
-    teaser = models.TextField(blank=True, verbose_name=_(u"Introduction"))
-    format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=0, verbose_name=_(u"Format"))
+    category = models.ForeignKey('content.Category', null=False, related_name='contents', verbose_name=_("Category"))
+    authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='contents', verbose_name=_("Authors"))
+    title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
+    body = models.TextField(blank=True, verbose_name=_("Text"))
+    html = models.TextField(blank=True, help_text=_("HTML output from body"), verbose_name=_("HTML"))
+    teaser = models.TextField(blank=True, verbose_name=_("Introduction"))
+    format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=0, verbose_name=_("Format"))
     slug = AutoSlugField(max_length=100, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
-    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, related_name='contents', help_text=_(u"Main picture"), verbose_name=_(u"Picture"))
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_(u"Follow up of"))
-    tags = models.ManyToManyField('content.Tag', blank=True, related_name='contents', verbose_name=_(u"Classification tags"))
+    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, related_name='contents', help_text=_("Main picture"), verbose_name=_("Picture"))
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Follow up of"))
+    tags = models.ManyToManyField('content.Tag', blank=True, related_name='contents', verbose_name=_("Classification tags"))
     # Toutes les dates du contenu
-    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', u"Deleted"))
-    created = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', u"Created"))
-    edited = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', u"Edited"))
-    updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', u"Updated"))
-    publish = models.DateTimeField(null=True, blank=True, verbose_name=_(u"Publish when"))
-    expire = models.DateTimeField(null=True, blank=True, verbose_name=_(u"Unpublish when"))
+    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', "Deleted"))
+    created = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', "Created"))
+    edited = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', "Edited"))
+    updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', "Updated"))
+    publish = models.DateTimeField(null=True, blank=True, verbose_name=_("Publish when"))
+    expire = models.DateTimeField(null=True, blank=True, verbose_name=_("Unpublish when"))
     # État du contenu
-    published = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('content', u"Published"))
-    sticky = models.BooleanField(default=False, db_index=True, help_text=_(u"Will stay on top of lists"), verbose_name=pgettext_lazy('content', u"Sticky"))
-    featured = models.BooleanField(default=False, db_index=True, help_text=_(u"Will appear in magazine editorial content"), verbose_name=pgettext_lazy('content', u"Featured"))
-    locked = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', u"Locked"))
+    published = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('content', "Published"))
+    sticky = models.BooleanField(default=False, db_index=True, help_text=_("Will stay on top of lists"), verbose_name=pgettext_lazy('content', "Sticky"))
+    featured = models.BooleanField(default=False, db_index=True, help_text=_("Will appear in magazine editorial content"), verbose_name=pgettext_lazy('content', "Featured"))
+    locked = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', "Locked"))
     objects = ContentManager()
 
     # Getter
-    @addattr(boolean=True, short_description=_(u"Published"))
+    @addattr(boolean=True, short_description=_("Published"))
     def is_published(self):
         """ Renvoyer si le contenu est publié """
         now = timezone.now()
@@ -282,7 +297,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
             self.update(published=True, save=True)
         return published
 
-    @addattr(short_description=_(u"Commentable"))
+    @addattr(short_description=_("Commentable"))
     def is_commentable(self):
         """ Renvoyer si le contenu peut être commenté """
         return self.commentable and not self.locked
@@ -291,7 +306,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer si le contenu peut être modifié par un utilisateur """
         return self.authors.filter(id=user.id).exists() or user.is_staff or user.is_superuser
 
-    @addattr(short_description=_(u"Authors"))
+    @addattr(short_description=_("Authors"))
     def get_authors(self):
         """ Renvoyer les utilisateurs auteurs du document """
         return self.authors.all()
@@ -300,7 +315,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer si un utilisateur fait partie des auteurs du document """
         return self.authors.filter(pk=user.pk).exists()
 
-    @addattr(short_description=_(u"Authors count"))
+    @addattr(short_description=_("Authors count"))
     def get_author_count(self):
         """ Renvoyer le nombre d'auteurs du document """
         return self.authors.count()
@@ -309,7 +324,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer le HTML non échappé du document """
         return mark_safe(self.html)
 
-    @addattr(boolean=True, short_description=_(u"New"))
+    @addattr(boolean=True, short_description=_("New"))
     def is_new(self, days=3):
         """ Renvoyer si le contenu a été publié dans les n derniers jours """
         show_date = self.publish if (self.publish is not None and self.publish > self.created) else self.created
@@ -325,7 +340,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         weights = text_to_dict(render_to_string("content/similarity/weights.txt", {}), evaluate=True)  # texte de la forme key:value\n
         return sum([NGram.compare(this[label], that[label]) * weights[label] for label in labels]) / sum(weights.values())
 
-    @addattr(short_description=_(u"Teaser"))
+    @addattr(short_description=_("Teaser"))
     def get_teaser(self, words=DEFAULT_TEASER_SIZE):
         """ Renvoyer le résumé du document (automatique) """
         if len(self.teaser) <= 8 and len(self.body) > 8:
@@ -337,24 +352,24 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer le résumé du document, sans balise HTML """
         return striptags(self.get_teaser())
 
-    @addattr(short_description=_(u"Similar content"))
+    @addattr(short_description=_("Similar content"))
     def similar_to(self):
         """ Renvoyer les contenus publiés les plus similaires à ce contenu """
         similar = self.get_data('similar')
         return Content.objects.visible().filter(id__in=similar or [])
 
-    @addattr(boolean=True, short_description=_(u"Has similar content"))
+    @addattr(boolean=True, short_description=_("Has similar content"))
     def has_similar(self):
         """ Renvoyer si le contenu recense des contenus similaire """
         similar = self.get_data('similar')
         return similar is not None and len(similar) > 0
 
-    @addattr(short_description=_(u"Tags"))
+    @addattr(short_description=_("Tags"))
     def get_tags(self):
         """ Renvoyer les tags du document """
         return self.tags.all()
 
-    @addattr(short_description=_(u"Children"))
+    @addattr(short_description=_("Children"))
     def get_children(self):
         """ Renvoyer les contenus enfants, triés par poids/page """
         return self.children.all().order_by('weight')
@@ -365,7 +380,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
 
     def fetch_picture(self, force=False, count=1):
         """ Récupérer automatiquement des images correspondant aux tags du document """
-        default = "{tags}".format(tags=u" ".join(unicode(tag) for tag in self.get_tags()))
+        default = "{tags}".format(tags=" ".join(str(tag) for tag in self.get_tags()))
         fallback = "{title}".format(title=self.title)
         return self._fetch_pictures(default, fallback, count, self.author, force)
 
@@ -469,10 +484,10 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"content")
-        verbose_name_plural = _(u"contents")
+        verbose_name = _("content")
+        verbose_name_plural = _("contents")
         # Pas de traduction paresseuse des permissions (https://code.djangoproject.com/ticket/13965)
-        permissions = (("can_access_all_content", u"Can bypass content access"),)
+        permissions = (("can_access_all_content", "Can bypass content access"),)
         get_latest_by = 'updated'
         ordering = ['-edited']
         app_label = 'content'
@@ -481,36 +496,36 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
 class Category(TranslatableModel, IconModel, DataModel):
     """ Type de contenu """
     # Champs
-    short_name = models.CharField(max_length=10, verbose_name=_(u"Identifier"))
-    url = models.CharField(max_length=16, help_text=_(u"e.g. blog, story or article"), verbose_name=_(u"URL"))
-    has_index = models.BooleanField(default=True, verbose_name=_(u"Has index"))
-    visible = models.BooleanField(default=True, verbose_name=_(u"Visible"))
+    short_name = models.CharField(max_length=10, verbose_name=_("Identifier"))
+    url = models.CharField(max_length=16, help_text=_("e.g. blog, story or article"), verbose_name=_("URL"))
+    has_index = models.BooleanField(default=True, verbose_name=_("Has index"))
+    visible = models.BooleanField(default=True, verbose_name=_("Visible"))
     objects = CategoryManager()
 
     # Getter
-    @addattr(short_description=_(u"Name"))
+    @addattr(short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom au singulier du type de contenu """
         try:
             return self.get_translation().name
         except MissingTranslation:
-            return _(u"(No name)")
+            return _("(No name)")
 
-    @addattr(short_description=_(u"Plural"))
+    @addattr(short_description=_("Plural"))
     def get_plural(self):
         """ Renvoyer le nom au pluriel du type de contenu """
         try:
             return self.get_translation().plural
         except MissingTranslation:
-            return _(u"(No name)")
+            return _("(No name)")
 
-    @addattr(short_description=_(u"Description"))
+    @addattr(short_description=_("Description"))
     def get_description(self):
         """ Renvoyer la description du type de contenu """
         try:
             return self.get_translation().description
         except MissingTranslation:
-            return _(u"(No description)")
+            return _("(No description)")
 
     def get_contents(self, **kwargs):
         """ Renvoyer tous les contenus correspondant à ce type """
@@ -534,21 +549,21 @@ class Category(TranslatableModel, IconModel, DataModel):
 
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return unicode(self.get_name())
+        return str(self.get_name())
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"content type")
-        verbose_name_plural = _(u"content types")
+        verbose_name = _("content type")
+        verbose_name_plural = _("content types")
         app_label = 'content'
 
 
 class CategoryTranslation(get_translation_model(Category, "category"), TranslationModel):
     """ Traduction de type de contenu """
     # Champs
-    name = models.CharField(max_length=48, blank=False, verbose_name=_(u"Name"))
-    plural = models.CharField(max_length=48, blank=False, default="__", verbose_name=_(u"Plural"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    name = models.CharField(max_length=48, blank=False, verbose_name=_("Name"))
+    plural = models.CharField(max_length=48, blank=False, default="__", verbose_name=_("Plural"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Overrides
     def save(self, *args, **kwargs):
@@ -560,5 +575,5 @@ class CategoryTranslation(get_translation_model(Category, "category"), Translati
     # Métadonnées
     class Meta:
         app_label = 'content'
-        verbose_name = _(u"translation")
-        verbose_name_plural = _(u"translations")
+        verbose_name = _("translation")
+        verbose_name_plural = _("translations")

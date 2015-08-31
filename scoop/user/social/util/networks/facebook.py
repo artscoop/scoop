@@ -22,7 +22,7 @@ def parse_signed_request(signed_request, secret):
     def base64_url_decode(encoded):
         padding_factor = (4 - len(encoded) % 4) % 4
         encoded += "=" * padding_factor
-        return base64.b64decode(unicode(encoded).translate(dict(zip(map(ord, u'-_'), u'+/'))))
+        return base64.b64decode(str(encoded).translate(dict(zip(map(ord, u'-_'), u'+/'))))
 
     # La requête est séparée en 2 : signature et payload (données)
     l = signed_request.split('.', 2)

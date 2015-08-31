@@ -9,9 +9,9 @@ from unidecode import unidecode
 class Category(models.Model):
     """ Catégorie de document """
     # Champs
-    group = models.CharField(max_length=16, db_index=True, blank=True, verbose_name=_(u"Group"))
-    name = models.CharField(max_length=32, blank=False, verbose_name=_(u"Name"))
-    positive = models.BooleanField(verbose_name=_(u"Positive slot or not"))
+    group = models.CharField(max_length=16, db_index=True, blank=True, verbose_name=_("Group"))
+    name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
+    positive = models.BooleanField(verbose_name=_("Positive slot or not"))
 
     # Getter
     @staticmethod
@@ -31,6 +31,6 @@ class Category(models.Model):
     # Métadonnées
     class Meta:
         unique_together = (('name', 'positive'),)
-        verbose_name = _(u"category")
-        verbose_name_plural = _(u"categories")
+        verbose_name = _("category")
+        verbose_name_plural = _("categories")
         app_label = 'analysis'

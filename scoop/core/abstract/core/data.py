@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class DataModel(models.Model):
     """ Mixin de modèle pour stocker des données """
-    data = picklefield.PickledObjectField(default=dict, verbose_name=_(u"Data"))
+    data = picklefield.PickledObjectField(default=dict, verbose_name=_("Data"))
 
     # Setter
     def set_data(self, key, value, save=False):
@@ -39,7 +39,7 @@ class DataModel(models.Model):
             if save is True:
                 self.save(update_fields=['data'])
             return True
-        logger.warning(u"Could not set full data field for {}. Check your DATA_KEYS attribute matches your keys.".format(unicode(self)))
+        logger.warning("Could not set full data field for {}. Check your DATA_KEYS attribute matches your keys.".format(str(self)))
         return False
 
     # Getter
@@ -54,22 +54,22 @@ class DataModel(models.Model):
         else:
             return self.data[key]
 
-    @addattr(short_description=_(u"Data"))
+    @addattr(short_description=_("Data"))
     def get_data_repr(self):
         """ Renvoyer la représentation unicode des données """
         lines = []
         for key in self.data:
             value = self.get_data(key)
             if isinstance(value, list):
-                info = _(u"{count} items").format(count=len(value))
+                info = _("{count} items").format(count=len(value))
             else:
                 try:
-                    info = unicode(value)
+                    info = str(value)
                 except:
-                    info = _(u"Unknown data")
-            output = u"{key} -> {info}".format(key=key, info=info)
+                    info = _("Unknown data")
+            output = "{key} -> {info}".format(key=key, info=info)
             lines.append(output)
-        return u", ".join(lines)
+        return ", ".join(lines)
 
     # Métadonnées
     class Meta:
@@ -78,26 +78,26 @@ class DataModel(models.Model):
 
 class PipeListModel(models.Model):
     """ Mixin de modèle dont les données sont séparées par des pipes (|) """
-    pipe_data = PipeListField(default=u"", verbose_name=_(u"Data"))
+    pipe_data = PipeListField(default="", verbose_name=_("Data"))
 
     # Setter
     def add_pipe_value(self, value):
         """ Ajouter une donnée"""
         if value not in self.get_pipe_list():
-            self.pipe_data += (u"|{}".format(value) if self.pipe_data else value)
+            self.pipe_data += ("|{}".format(value) if self.pipe_data else value)
             self.save()
 
     def remove_pipe_value(self, value):
         """ Retirer une donnée si elle existe """
         if value in self.get_pipe_list():
             clean_data = [item for item in self.get_pipe_list() if item != value]
-            self.pipe_data = u"|".join(clean_data)
+            self.pipe_data = "|".join(clean_data)
             self.save()
 
     # Getter
     def get_pipe_list(self):
         """ Renvoyer les données """
-        return self.pipe_data.split(u"|")
+        return self.pipe_data.split("|")
 
     # Métadonnées
     class Meta:

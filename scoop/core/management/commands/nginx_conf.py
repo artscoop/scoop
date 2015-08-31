@@ -49,4 +49,4 @@ class Command(BaseCommand):
                 finally:
                     os.remove(filename)
         else:
-            print output
+            print(output)

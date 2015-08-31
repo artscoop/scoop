@@ -12,4 +12,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """ Exécuter la commande """
         from scoop.location.util.geonames import populate_countries
-        populate_countries(rename=False)
+        populate_countries(rename=True)

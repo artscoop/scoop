@@ -40,7 +40,7 @@ def create_testuser(sender, app_config, verbosity, interactive, using, **kwargs)
                 Activation.objects.activate(None, default.username)
         # Créer les comptes supplémentaires demandés
         with open(os.path.join(settings.STATIC_ROOT, "assets", "dictionnaire", "usernames.txt"), 'r') as f:
-            names = [slugify(unicode(name.strip())).replace('-', '_') for name in f.readlines() if name.strip()]
+            names = [slugify(str(name.strip())).replace('-', '_') for name in f.readlines() if name.strip()]
             shuffle(names)
             DEFAULT_USER_COUNT = min(len(names), DEFAULT_USER_COUNT)
         if current_count < DEFAULT_USER_COUNT:

@@ -98,13 +98,13 @@ class Recipient(DatetimeModel, DataModel):
     # Constantes
     DATA_KEYS = ['is_important']
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name="user_recipients", on_delete=models.CASCADE, verbose_name=_(u"User"))
-    thread = models.ForeignKey("messaging.Thread", null=False, related_name='recipients', on_delete=models.CASCADE, verbose_name=_(u"Thread"))
-    active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('recipient', u"Is active"))
-    unread = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('thread', u"Unread"))
-    unread_date = models.DateTimeField(null=True, default=None, verbose_name=_(u"Unread time"))
-    counter = models.PositiveSmallIntegerField(default=0, verbose_name=_(u"Message count"))
-    acknowledged = models.BooleanField(default=False, verbose_name=pgettext_lazy('thread', u"Acknowledged"))  # Le destinataire a-t-il vu au moins une fois le sujet
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name="user_recipients", on_delete=models.CASCADE, verbose_name=_("User"))
+    thread = models.ForeignKey("messaging.Thread", null=False, related_name='recipients', on_delete=models.CASCADE, verbose_name=_("Thread"))
+    active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('recipient', "Is active"))
+    unread = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('thread', "Unread"))
+    unread_date = models.DateTimeField(null=True, default=None, verbose_name=_("Unread time"))
+    counter = models.PositiveSmallIntegerField(default=0, verbose_name=_("Message count"))
+    acknowledged = models.BooleanField(default=False, verbose_name=pgettext_lazy('thread', "Acknowledged"))  # Le destinataire a-t-il vu au moins une fois le sujet
     objects = RecipientManager()
 
     # Getter
@@ -141,7 +141,7 @@ class Recipient(DatetimeModel, DataModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"{name}".format(name=self.user.username)
+        return "{name}".format(name=self.user.username)
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
@@ -150,6 +150,6 @@ class Recipient(DatetimeModel, DataModel):
     # Métadonnées
     class Meta:
         unique_together = (('thread', 'user'),)
-        verbose_name = _(u"recipient")
-        verbose_name_plural = _(u"recipients")
+        verbose_name = _("recipient")
+        verbose_name_plural = _("recipients")
         app_label = "messaging"

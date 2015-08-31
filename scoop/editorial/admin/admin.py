@@ -19,8 +19,8 @@ from scoop.editorial.models.template import Template
 
 class ConfigurationInlineAdmin(admin.TabularInline):
     """ Inline admin de configuration de page """
-    verbose_name = _(u"Configuration")
-    verbose_name_plural = _(u"Configurations")
+    verbose_name = _("Configuration")
+    verbose_name_plural = _("Configurations")
     model = Configuration
     form = ConfigurationInlineForm
     max_num = 20
@@ -44,7 +44,7 @@ class PageAdmin(AutoAuthoredModelAdmin):
     list_filter = ['active', 'anonymous', 'authenticated']
     search_fields = []
     fieldsets = (
-        (_(u"Page"), {'fields': ('path', 'name', 'title', 'description', 'author', 'template', 'parent', 'active',)}), ('Plus', {'fields': ('anonymous', 'authenticated', 'heading',)}))
+        (_("Page"), {'fields': ('path', 'name', 'title', 'description', 'author', 'template', 'parent', 'active',)}), ('Plus', {'fields': ('anonymous', 'authenticated', 'heading',)}))
     form = make_ajax_form(Page, {'author': 'user'})
     inlines = [ConfigurationInlineAdmin, ]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
@@ -52,8 +52,8 @@ class PageAdmin(AutoAuthoredModelAdmin):
 
 class ExcerptTranslationInlineAdmin(admin.TabularInline):
     """ Inline d'administration des extraits """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = ExcerptTranslation
     max_num = len(settings.LANGUAGES)
     form = ExcerptTranslationInlineForm
@@ -67,7 +67,7 @@ class ExcerptAdmin(admin.ModelAdmin):
     list_editable = ['visible']
     search_fields = ['name', 'translations__text']
     list_filter = ['visible']
-    fieldsets = ((_(u"Excerpt"), {'fields': ('name', 'author', 'format', 'visible', 'weight',)}),)
+    fieldsets = ((_("Excerpt"), {'fields': ('name', 'author', 'format', 'visible', 'weight',)}),)
     form = make_ajax_form(Excerpt, {'author': 'user'})
     inlines = [ExcerptTranslationInlineAdmin]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
@@ -95,15 +95,15 @@ class TemplateAdmin(admin.ModelAdmin):
     actions = ['auto_fill']
 
     # Actions
-    @addattr(short_description=_(u"Automatically fill selected templates information"))
+    @addattr(short_description=_("Automatically fill selected templates information"))
     def auto_fill(self, request, queryset):
         """ Découvrir automatiquement les positions du template """
         for template in queryset:
             template.auto_fill()
-        self.message_user(request, _(u"The selected templates have been updated."))
+        self.message_user(request, _("The selected templates have been updated."))
 
     # Getter
-    @addattr(short_description=_(u"Positions"))
+    @addattr(short_description=_("Positions"))
     def get_position_count(self, obj):
         """ Renvoyer le nombre de positions dans le template """
         return obj.positions.all().count()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"POT-Creation-Date: 2015-08-31 09:21+0200\n"
 "PO-Revision-Date: 2015-04-11 14:44+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -40,7 +40,7 @@ msgctxt "location"
 msgid "Location"
 msgstr "Lieu"
 
-#: admin/thread.py:30 models/message.py:124 models/negotiation.py:61
+#: admin/thread.py:30 models/message.py:124 models/negotiation.py:70
 #: models/recipient.py:102
 msgid "Thread"
 msgstr "Fil de discussion"
@@ -139,46 +139,46 @@ msgstr "Important"
 msgid "Security"
 msgstr "Sécurité"
 
-#: models/alert.py:72 models/recipient.py:101
+#: models/alert.py:73 models/recipient.py:101
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/alert.py:73
+#: models/alert.py:74
 msgid "Level"
 msgstr "Niveau"
 
-#: models/alert.py:74
+#: models/alert.py:75
 msgid "Title"
 msgstr "Titre"
 
-#: models/alert.py:75 models/message.py:125
+#: models/alert.py:76 models/message.py:125
 msgid "Text"
 msgstr "Texte"
 
-#: models/alert.py:76
+#: models/alert.py:77
 msgid "Items"
 msgstr "Éléments"
 
-#: models/alert.py:77
+#: models/alert.py:78
 msgctxt "alert"
 msgid "Read"
 msgstr "Lue"
 
-#: models/alert.py:78
+#: models/alert.py:79
 msgctxt "alert.time"
 msgid "Read"
 msgstr "Lecture"
 
-#: models/alert.py:97
+#: models/alert.py:98
 #, python-brace-format
 msgid "Alert for {user}"
 msgstr "Alerte pour {user}"
 
-#: models/alert.py:105
+#: models/alert.py:106
 msgid "alert"
 msgstr "alerte"
 
-#: models/alert.py:106
+#: models/alert.py:107
 msgid "alerts"
 msgstr "alertes"
 
@@ -206,56 +206,60 @@ msgstr "libellés"
 msgid "Labels"
 msgstr "Libellés"
 
-#: models/mailevent.py:130
+#: models/mailevent.py:152
 msgid "Mail type"
 msgstr "Type de courrier"
 
-#: models/mailevent.py:131
+#: models/mailevent.py:153
 msgid "Queue time"
 msgstr "Heure de remise"
 
-#: models/mailevent.py:132
+#: models/mailevent.py:154
 msgid "Recipient"
 msgstr "Destinataire"
 
-#: models/mailevent.py:133
+#: models/mailevent.py:155
 msgid "Force sending"
 msgstr "Forcer l'envoi"
 
-#: models/mailevent.py:134
+#: models/mailevent.py:156
 msgctxt "mailevent"
 msgid "Sent"
 msgstr "Envoyé"
 
-#: models/mailevent.py:135
+#: models/mailevent.py:157
 msgid "Delivery time"
 msgstr "Heure de remise"
 
-#: models/mailevent.py:136
+#: models/mailevent.py:158
 msgid "Email used"
 msgstr "Email utilisé"
 
-#: models/mailevent.py:137
+#: models/mailevent.py:159
 msgid "Minimum delivery"
 msgstr "Expédition minimum"
 
-#: models/mailevent.py:141
+#: models/mailevent.py:160
+msgid "Discarded"
+msgstr ""
+
+#: models/mailevent.py:164
 msgid "Can be sent now"
 msgstr "Peut être envoyé maintenant"
 
-#: models/mailevent.py:146
+#: models/mailevent.py:169
 msgid "Delivery"
 msgstr "Remise"
 
-#: models/mailevent.py:151
+#: models/mailevent.py:174
 msgid "Rendering"
 msgstr "Rendu"
 
-#: models/mailevent.py:170
+#: models/mailevent.py:193
 msgid "mail event"
 msgstr "événement courrier"
 
-#: models/mailevent.py:171
+#: models/mailevent.py:194
 msgid "mail events"
 msgstr "événements courrier"
 
@@ -360,50 +364,50 @@ msgstr "message"
 msgid "messages"
 msgstr "messages"
 
-#: models/negotiation.py:55
+#: models/negotiation.py:64
 msgid "Pending"
 msgstr "En attente"
 
-#: models/negotiation.py:55
+#: models/negotiation.py:64
 msgid "Accepted"
 msgstr "Acceptée"
 
-#: models/negotiation.py:55
+#: models/negotiation.py:64
 msgid "Denied"
 msgstr "Refusée"
 
-#: models/negotiation.py:58
+#: models/negotiation.py:67
 msgid "Asker"
 msgstr "Demandeur"
 
-#: models/negotiation.py:59
+#: models/negotiation.py:68
 msgid "Target"
 msgstr "Cible"
 
-#: models/negotiation.py:60
+#: models/negotiation.py:69
 msgid "Status"
 msgstr "Statut"
 
-#: models/negotiation.py:62
+#: models/negotiation.py:71
 msgctxt "negotiation"
 msgid "Closed"
 msgstr "Fermée"
 
-#: models/negotiation.py:63
+#: models/negotiation.py:72
 msgctxt "negotiation"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/negotiation.py:88
+#: models/negotiation.py:97
 #, python-brace-format
 msgid "Messaging negotiation between {source} and {target}"
 msgstr "Négociation de messagerie entre {source} et {target}"
 
-#: models/negotiation.py:93
+#: models/negotiation.py:106
 msgid "negotiation"
 msgstr "négociation"
 
-#: models/negotiation.py:94
+#: models/negotiation.py:107
 msgid "negotiations"
 msgstr "négociations"
 

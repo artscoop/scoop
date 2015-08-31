@@ -28,13 +28,13 @@ class CommentTest(TestCase):
         self.content1 = Content.objects.create([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=True)
         self.content2 = Content.objects.create([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=False)
         # Commenter l'utilisateur et tester l'état des commentaires
-        self.comment1 = Comment.objects.comment(None, self.user, self.user, u"Commentaire 1", force=True)
-        self.comment2 = Comment.objects.comment(None, self.user, self.user, u"Commentaire 2", force=True)
-        self.comment3 = Comment.objects.comment(None, self.user, self.user, u"Commentaire 3", force=True)
-        self.comment4 = Comment.objects.comment(None, self.user, self.user, u"Commentaire 4", force=True)
-        self.comment5 = Comment.objects.comment(None, self.user, self.user, u"Commentaire 5")  # échec : user n'est pas un commentablemodel et force == False
-        self.comment6 = Comment.objects.comment(None, self.user, self.content1, u"Commentaire 6")
-        self.comment7 = Comment.objects.comment(None, self.user, self.content2, u"Commentaire 7")  # échec : content.commentable == False
+        self.comment1 = Comment.objects.comment(None, self.user, self.user, "Commentaire 1", force=True)
+        self.comment2 = Comment.objects.comment(None, self.user, self.user, "Commentaire 2", force=True)
+        self.comment3 = Comment.objects.comment(None, self.user, self.user, "Commentaire 3", force=True)
+        self.comment4 = Comment.objects.comment(None, self.user, self.user, "Commentaire 4", force=True)
+        self.comment5 = Comment.objects.comment(None, self.user, self.user, "Commentaire 5")  # échec : user n'est pas un commentablemodel et force == False
+        self.comment6 = Comment.objects.comment(None, self.user, self.content1, "Commentaire 6")
+        self.comment7 = Comment.objects.comment(None, self.user, self.content2, "Commentaire 7")  # échec : content.commentable == False
 
     def test_commentability(self):
         """ Tester que les commentaires ont été créés ou non """

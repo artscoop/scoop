@@ -37,26 +37,26 @@ class EventCategoryManager(SingleDeleteManager):
 class EventCategory(TranslatableModel, IconModel, UUID32Model):
     """ Catégorie d'événement """
     # Champs
-    parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_(u"Parent"))
-    public = models.BooleanField(default=True, verbose_name=_(u"Public"))
+    parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_("Parent"))
+    public = models.BooleanField(default=True, verbose_name=_("Public"))
     objects = EventCategoryManager()
 
     # Getter
-    @addattr(admin_order_field='translations__name', short_description=_(u"Name"))
+    @addattr(admin_order_field='translations__name', short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom de la catégorie """
         try:
             return self.get_translation().name
         except MissingTranslation:
-            return _(u"(No name)")
+            return _("(No name)")
 
-    @addattr(admin_order_field='translations__description', short_description=_(u"Description"))
+    @addattr(admin_order_field='translations__description', short_description=_("Description"))
     def get_description(self):
         """ Renvoyer la description de la catégorie """
         try:
             return self.get_translation().description
         except MissingTranslation:
-            return _(u"(No description)")
+            return _("(No description)")
 
     def get_children(self):
         """ Renvoyer les catégories enfants """
@@ -67,16 +67,16 @@ class EventCategory(TranslatableModel, IconModel, UUID32Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"event category")
-        verbose_name_plural = _(u"event categories")
+        verbose_name = _("event category")
+        verbose_name_plural = _("event categories")
         app_label = "social"
 
 
 class EventCategoryTranslation(get_translation_model(EventCategory, "eventcategory"), TranslationModel):
     """ Traduction de catégorie d'événements """
     # Champs
-    name = models.CharField(max_length=48, blank=False, verbose_name=_(u"Name"))
-    description = models.TextField(default=u"", blank=True, verbose_name=_(u"Description"))
+    name = models.CharField(max_length=48, blank=False, verbose_name=_("Name"))
+    description = models.TextField(default="", blank=True, verbose_name=_("Description"))
 
     # Métadonnées
     class Meta:

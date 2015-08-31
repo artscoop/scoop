@@ -22,13 +22,13 @@ class TagManager(models.Manager):
 class Tag(IconModel, PicturableModel):
     """ Étiquette de contenu """
     # Champs
-    group = models.CharField(max_length=16, blank=True, verbose_name=_(u"Group"))
-    category = models.ForeignKey('content.Category', null=True, help_text=_(u"Category if this tag is specific to one"), verbose_name=_(u"Category"))
-    name = models.CharField(max_length=96, blank=False, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    short_name = AutoSlugField(max_length=100, populate_from='name', unique=True, blank=True, editable=True, unique_with=('id',), verbose_name=_(u"Short name"))
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_(u"Parent"))
-    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('tag', u"Active"))
+    group = models.CharField(max_length=16, blank=True, verbose_name=_("Group"))
+    category = models.ForeignKey('content.Category', null=True, help_text=_("Category if this tag is specific to one"), verbose_name=_("Category"))
+    name = models.CharField(max_length=96, blank=False, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    short_name = AutoSlugField(max_length=100, populate_from='name', unique=True, blank=True, editable=True, unique_with=('id',), verbose_name=_("Short name"))
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Parent"))
+    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('tag', "Active"))
     objects = TagManager()
 
     # Overrides
@@ -61,8 +61,8 @@ class Tag(IconModel, PicturableModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"tag")
-        verbose_name_plural = _(u"tags")
+        verbose_name = _("tag")
+        verbose_name_plural = _("tags")
         unique_together = (('short_name', 'category'),)
         ordering = ['name']
         app_label = 'content'

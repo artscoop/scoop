@@ -26,14 +26,14 @@ class ContentForm(forms_.ModelForm):
         body = self.data['body']
         raw = striptags(body)
         if len(raw) < ContentForm.BODY_LENGTH_MIN:
-            raise forms_.ValidationError(_(u"Your text must be at least {} characters long.").format(ContentForm.BODY_LENGTH_MIN))
+            raise forms_.ValidationError(_("Your text must be at least {} characters long.").format(ContentForm.BODY_LENGTH_MIN))
         return body
 
     def clean_title(self):
         """ Valider et traiter le champ de titre """
         title = self.data['title']
         if len(title) < ContentForm.TITLE_LENGTH_MIN:
-            raise forms_.ValidationError(_(u"The title must be at least {} characters long.").format(ContentForm.TITLE_LENGTH_MIN))
+            raise forms_.ValidationError(_("The title must be at least {} characters long.").format(ContentForm.TITLE_LENGTH_MIN))
         return title
 
     # Métadonnées

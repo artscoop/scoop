@@ -39,8 +39,8 @@ class PostManager(SingleDeleteManager):
 class Post(DatetimeModel, AuthoredModel, PrivacyModel, LikableModel):
     """ Post """
     # Champs
-    text = models.CharField(max_length=140, verbose_name=_(u"Text"))
-    deleted = models.BooleanField(default=False, verbose_name=_(u"Deleted"))
+    text = models.CharField(max_length=140, verbose_name=_("Text"))
+    deleted = models.BooleanField(default=False, verbose_name=_("Deleted"))
     objects = PostManager()
 
     # Overrides
@@ -51,6 +51,6 @@ class Post(DatetimeModel, AuthoredModel, PrivacyModel, LikableModel):
 
     # Métadonnées
     class Meta(object):
-        verbose_name = _(u"user shout")
-        verbose_name_plural = _(u"user shouts")
+        verbose_name = _("user shout")
+        verbose_name_plural = _("user shouts")
         app_label = "social"

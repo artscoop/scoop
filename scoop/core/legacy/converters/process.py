@@ -19,13 +19,13 @@ class ExportProcessor(object):
             exporters = cls.exporters[start_index:]
             count = len(exporters)
             for ind, exporter in enumerate(exporters, start=1):
-                print u"Exporting model {ind}/{count} using {name}".format(ind=ind, count=count, name=exporter.__name__)
+                print("Exporting model {ind}/{count} using {name}".format(ind=ind, count=count, name=exporter.__name__))
                 exporter().exports()
                 gc.collect()
             elapsed = time.time() - start
             minute, second = divmod(elapsed, 60)
-            print "*" * 80
-            print u"Export complete in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second)
+            print("*" * 80)
+            print("Export complete in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second))
 
 
 class ImportProcessor(object):
@@ -62,31 +62,31 @@ class ImportProcessor(object):
                 count = len(importers)
                 # Import première passe
                 for ind, importer in enumerate(importers, start=1):
-                    print u"Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__)
+                    print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                     i_start = time.time()
                     importer.imports()
                     i_elapsed = time.time() - i_start
                     gc.collect()
-                    print u"Model successfully imported in {:.01f}s.".format(i_elapsed)
+                    print("Model successfully imported in {:.01f}s.".format(i_elapsed))
                 # Import deuxième passe
                 for ind, importer in enumerate(importers, start=1):
-                    print u"Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__)
+                    print("Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                     i_start = time.time()
                     importer.post_imports()
                     i_elapsed = time.time() - i_start
                     gc.collect()
-                    print u"Model successfully updated in {:.01f}s.".format(i_elapsed)
+                    print("Model successfully updated in {:.01f}s.".format(i_elapsed))
                 # Import troisième passe
                 for ind, importer in enumerate(importers, start=1):
-                    print u"Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__)
+                    print("Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                     i_start = time.time()
                     importer.brushup()
                     i_elapsed = time.time() - i_start
                     gc.collect()
-                    print u"End of model process updated in {:.01f}s.".format(i_elapsed)
+                    print("End of model process updated in {:.01f}s.".format(i_elapsed))
                 # Touche de fin
                 cls.brushup()
                 elapsed = time.time() - start
                 minute, second = divmod(elapsed, 60)
-                print "*" * 80
-                print u"Import complete in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second)
+                print("*" * 80)
+                print("Import complete in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second))

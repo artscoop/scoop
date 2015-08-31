@@ -29,11 +29,11 @@ class MessageAdmin(AuthoredModelAdmin):
     raw_id_fields = []
 
     # Getter
-    @addattr(short_description=pgettext_lazy('location', u"Location"))
+    @addattr(short_description=pgettext_lazy('location', "Location"))
     def get_position(self, obj):
         """ Renvoyer le lieu de l'IP du message """
         if obj.ip is not None and obj.ip.country:
-            return u"{country} {city}".format(country=obj.ip.country, city=obj.ip.city_name)
+            return "{country} {city}".format(country=obj.ip.country, city=obj.ip.city_name)
         return None
 
     # Overrides

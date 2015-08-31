@@ -20,7 +20,7 @@ from scoop.core.templatetags.text_tags import humanize_join
 # Choix Oui/Non et Tout
 from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable
 
-CHOICES_NULLBOOLEAN = (('', _(u"All")), (False, _(u"No")), (True, _(u"Yes")))
+CHOICES_NULLBOOLEAN = (('', _("All")), (False, _("No")), (True, _("Yes")))
 
 
 class ModelFormUtil:
@@ -65,7 +65,7 @@ class ModelFormUtil:
         elif fieldnames is None:
             self = form.save(commit=False)
         else:
-            raise AttributeError(u"You must pass a field names iterable or None.")
+            raise AttributeError("You must pass a field names iterable or None.")
         # Terminer en sauvegardant l'objet si demandé
         if save:
             self.update(save=True, **kwargs)
@@ -77,9 +77,9 @@ class Validation(object):
 
     def __init__(self, success=False, code=0, message='', *args, **kwargs):
         """ Initialiser l'objet """
-        self.success = success
-        self.code = code
-        self.message = message
+        self.success = success  # bool
+        self.code = code  # int
+        self.message = message  # str ou object
 
     # Getter
     def is_successful(self):
@@ -98,7 +98,7 @@ def handle_upload(request):
     Utilisation :
     - Vous utilisez une vue AJAX qui est appelée pour l'upload progressif
     - Récupérer le résultat de handle_upload dans la vue AJAX
-    - Si le résultat est un nom de fichier, l'upload est terminé.
+    - Si le résultat est un dictionnaire, l'upload est terminé.
     Vous pouvez ensuite, gérer ce résultat (par exemple) :
       picture.image.save(unidecode(result['name']), File(open(result['path'])))
     """
@@ -141,7 +141,7 @@ def _normalize_initial(initial, form):
 
     def convert_value(value):
         """ Convertir une valeur en valeur chaîne ou numérique """
-        if isinstance(value, (basestring, int, float, long)):
+        if isinstance(value, (str, int, float)):
             return value
         elif isinstance(value, Model):
             return value.pk

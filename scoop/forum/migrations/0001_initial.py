@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import autoslug.fields
-import easy_thumbnails.fields
-import picklefield.fields
-from django.db import migrations, models
-
+from django.db import models, migrations
 import scoop.core.abstract.core.icon
 import scoop.core.abstract.core.uuid
-import scoop.core.util.data.dateutil
-import scoop.core.util.model.fields
 import scoop.forum.models.sanction
+import scoop.core.util.data.dateutil
+import picklefield.fields
+import autoslug.fields
+import scoop.core.util.model.fields
 import scoop.forum.util.read
+import easy_thumbnails.fields
 
 
 class Migration(migrations.Migration):

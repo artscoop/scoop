@@ -29,7 +29,7 @@ class UserLookup(LookupChannel):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation de l'élément dans le deck """
-        return u"<strong>{}</strong> / {}".format(obj.username, obj.__unicode__())
+        return "<strong>{}</strong> / {}".format(obj.username, obj.__unicode__())
 
     def check_auth(self, request):
         """ Renvoyer si l'utilisateur courant peut effectuer une requête """

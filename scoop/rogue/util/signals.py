@@ -13,3 +13,5 @@ flag_created = Signal(providing_args=['flag'])
 flag_closed = Signal(providing_args=['flag'])
 # Flag à résoudre. iteration correspond au nombre de flags déjà résolus
 flag_resolve = Signal(providing_args=['iteration'])
+# Blocklist créé
+blocklist_added = Signal(['user', 'name'])

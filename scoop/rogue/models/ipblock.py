@@ -148,16 +148,16 @@ class IPBlockManager(SingleDeleteManager):
             try:
                 from scoop.user.access.models.ip import IP
                 # Convertir en  une instance d'IP
-                if isinstance(ip, basestring):
+                if isinstance(ip, str):
                     ip = IP.objects.get_by_ip(ip)
                 elif isinstance(ip, int):
                     ip = IP.objects.get(id=ip)
                 elif isinstance(ip, IP):
                     ip = ip
                 else:
-                    raise TypeError(u"IPs must be strings, ints or IPs.")
+                    raise TypeError("IPs must be strings, ints or IPs.")
                 if not ip.is_protected():
-                    block, created = self.get_or_create(type=0, ip1=ip.ip, isp=ip.isp, harm=harm, category=category, description=description or u"")
+                    block, created = self.get_or_create(type=0, ip1=ip.ip, isp=ip.isp, harm=harm, category=category, description=description or "")
                     if created is False:
                         block.active = True
                         block.save()
@@ -175,7 +175,7 @@ class IPBlockManager(SingleDeleteManager):
             if IP.get_ip_value(ip1) > IP.get_ip_value(ip2):
                 ip1, ip2 = ip2, ip1  # inverser la plage si à l'envers
             if ip1 != ip2:  # bloquer une simple ip si les deux ip sont identiques
-                self.create(type=1, ip1=IP.get_ip_value(ip1), ip2=IP.get_ip_value(ip2), harm=harm, category=category, description=description or u"")
+                self.create(type=1, ip1=IP.get_ip_value(ip1), ip2=IP.get_ip_value(ip2), harm=harm, category=category, description=description or "")
             else:
                 self.block_ips(ip1, harm=harm)
         except:
@@ -190,7 +190,7 @@ class IPBlockManager(SingleDeleteManager):
 
     def block_reverse(self, name, exclude=None, harm=2, category=0, description=None):
         """ Bloquer un reverse (regex) """
-        criteria = {'type': 3 if exclude else 2, 'hostname': name, 'harm': harm, 'category': category, 'description': description or u""}
+        criteria = {'type': 3 if exclude else 2, 'hostname': name, 'harm': harm, 'category': category, 'description': description or ""}
         criteria.update({'hostname_exclude': exclude} if exclude else {})
         new_block, created = self.get_or_create(**criteria)
         return new_block if created else False
@@ -205,25 +205,25 @@ class IPBlockManager(SingleDeleteManager):
 class IPBlock(DatetimeModel):
     """ Régle de blocage d'IP """
     # Constantes
-    TYPES = [[0, _(u"Single address")], [1, _(u"Address range")], [2, _(u"Partial host")], [3, _(u"Partial host with exclusion")], [4, _(u"ISP with host exclusion")], [5, _(u"Country code")],
-             [6, _(u"Allowed host")], [7, _(u"Allowed ISP")]]
-    CATEGORIES = [[0, _(u"General")], [1, _(u"Proxy")], [2, _(u"Server")], [3, _(u"Compromised IP")], [4, _(u"Repeated trouble")], [10, _(u"Tor network")], [11, _(u"Anonymous network")],
-                  [12, _(u"VPN")]]
-    HARM = [[1, _(u"Rarely harmful")], [2, _(u"Often harmful")], [3, _(u"Always harmful")]]
+    TYPES = [[0, _("Single address")], [1, _("Address range")], [2, _("Partial host")], [3, _("Partial host with exclusion")], [4, _("ISP with host exclusion")], [5, _("Country code")],
+             [6, _("Allowed host")], [7, _("Allowed ISP")]]
+    CATEGORIES = [[0, _("General")], [1, _("Proxy")], [2, _("Server")], [3, _("Compromised IP")], [4, _("Repeated trouble")], [10, _("Tor network")], [11, _("Anonymous network")],
+                  [12, _("VPN")]]
+    HARM = [[1, _("Rarely harmful")], [2, _("Often harmful")], [3, _("Always harmful")]]
     # Champs
-    active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('ipblocking', u"Active"))
-    expires = models.DateTimeField(default=None, blank=True, null=True, verbose_name=_(u"Expires"))
-    type = models.SmallIntegerField(choices=TYPES, default=0, db_index=True, verbose_name=_(u"Type"))
-    category = models.SmallIntegerField(choices=CATEGORIES, default=0, db_index=True, verbose_name=_(u"Category"))
-    description = models.TextField(default="", blank=True, verbose_name=_(u"Description"))
-    harm = models.SmallIntegerField(choices=HARM, default=2, validators=[MaxValueValidator(4)], verbose_name=_(u"Harm level"))
-    country_code = CountryField(blank=True, verbose_name=_(u"Country"))
-    isp = models.CharField(max_length=64, blank=True, verbose_name=_(u"ISP"))
-    hostname = models.CharField(max_length=48, blank=True, default='', verbose_name=_(u"Host name"))
-    hostname_exclude = models.CharField(max_length=48, default='', blank=True, verbose_name=_(u"Exclude host name"))  # regex
-    ip1 = models.DecimalField(max_digits=39, decimal_places=0, default=0, db_index=True, verbose_name=_(u"IP 1"))
-    ip2 = models.DecimalField(max_digits=39, decimal_places=0, default=0, db_index=True, verbose_name=_(u"IP 2"))
-    representation = models.CharField(max_length=128, blank=False, verbose_name=_(u"Blocking representation"))
+    active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('ipblocking', "Active"))
+    expires = models.DateTimeField(default=None, blank=True, null=True, verbose_name=_("Expires"))
+    type = models.SmallIntegerField(choices=TYPES, default=0, db_index=True, verbose_name=_("Type"))
+    category = models.SmallIntegerField(choices=CATEGORIES, default=0, db_index=True, verbose_name=_("Category"))
+    description = models.TextField(default="", blank=True, verbose_name=_("Description"))
+    harm = models.SmallIntegerField(choices=HARM, default=2, validators=[MaxValueValidator(4)], verbose_name=_("Harm level"))
+    country_code = CountryField(blank=True, verbose_name=_("Country"))
+    isp = models.CharField(max_length=64, blank=True, verbose_name=_("ISP"))
+    hostname = models.CharField(max_length=48, blank=True, default='', verbose_name=_("Host name"))
+    hostname_exclude = models.CharField(max_length=48, default='', blank=True, verbose_name=_("Exclude host name"))  # regex
+    ip1 = models.DecimalField(max_digits=39, decimal_places=0, default=0, db_index=True, verbose_name=_("IP 1"))
+    ip2 = models.DecimalField(max_digits=39, decimal_places=0, default=0, db_index=True, verbose_name=_("IP 2"))
+    representation = models.CharField(max_length=128, blank=False, verbose_name=_("Blocking representation"))
     objects = IPBlockManager()
 
     # Getter
@@ -267,12 +267,12 @@ class IPBlock(DatetimeModel):
         else:
             return IP.objects.none()
 
-    @addattr(short_description=_(u"IP count"))
+    @addattr(short_description=_("IP count"))
     def get_blocked_ip_count(self):
         """ Renvoyer le nombre d'IP bloquées par ce filtre """
         return self.get_blocked_ip_set().count()
 
-    @addattr(short_description=_(u"IP count"))
+    @addattr(short_description=_("IP count"))
     def get_allowed_ip_count(self):
         """ Renvoyer le nombre d'IP en liste blanche via ce filtre """
         return self.get_allowed_ip_set().count()
@@ -302,44 +302,44 @@ class IPBlock(DatetimeModel):
     def clean(self):
         # Valider l'état de l'objet
         if self.type == 0 and self.ip1 == 0:
-            raise ValidationError(_(u"A single IP block must have a valid IP to block."))
+            raise ValidationError(_("A single IP block must have a valid IP to block."))
         elif self.type == 1 and ((self.ip1 == 0 or self.ip2 == 0) or (self.ip2 <= self.ip1)):
-            raise ValidationError(_(u"A range IP block must have valid IPs to block."))
+            raise ValidationError(_("A range IP block must have valid IPs to block."))
         elif self.type in {2, 3} and self.hostname == '':
-            raise ValidationError(_(u"A hostname block must have a partial hostname to block."))
+            raise ValidationError(_("A hostname block must have a partial hostname to block."))
         elif self.type == 4 and self.isp == '':
-            raise ValidationError(_(u"An ISP block must have a valid ISP name to block."))
+            raise ValidationError(_("An ISP block must have a valid ISP name to block."))
         elif self.type == 5 and self.country_code == '':
-            raise ValidationError(_(u"A country block must have a valid country code to block."))
+            raise ValidationError(_("A country block must have a valid country code to block."))
         elif self.type == 6 and self.hostname == '':
-            raise ValidationError(_(u"A hostname permission must have a valid hostname."))
+            raise ValidationError(_("A hostname permission must have a valid hostname."))
         elif self.type == 7 and self.isp == '':
-            raise ValidationError(_(u"An ISP permission must have a valid ISP."))
+            raise ValidationError(_("An ISP permission must have a valid ISP."))
 
     def __unicode__(self):
         """ Renvoyer une représentation unicode du filtre """
         if self.type == 0:
-            return _(u"Blocking of {ip}").format(ip=IPy.IP(str(self.ip1)))
+            return _("Blocking of {ip}").format(ip=IPy.IP(str(self.ip1)))
         elif self.type == 1:
-            return _(u"Blocking of IPs from {ip1} to {ip2}").format(ip1=IPy.IP(str(self.ip1)), ip2=IPy.IP(str(self.ip2)))
+            return _("Blocking of IPs from {ip1} to {ip2}").format(ip1=IPy.IP(str(self.ip1)), ip2=IPy.IP(str(self.ip2)))
         elif self.type == 2:
-            return _(u"Blocking of reverse {reverse}").format(reverse=self.hostname)
+            return _("Blocking of reverse {reverse}").format(reverse=self.hostname)
         elif self.type == 3:
-            return _(u"Blocking of reverse {reverse} but not with {exclude}").format(reverse=self.hostname, exclude=self.hostname_exclude)
+            return _("Blocking of reverse {reverse} but not with {exclude}").format(reverse=self.hostname, exclude=self.hostname_exclude)
         elif self.type == 4:
-            return _(u"Blocking of ISP {isp}").format(isp=self.isp) if self.hostname_exclude == "" else _(u"Blocking of ISP {isp} minus {exclude}").format(isp=self.isp,
+            return _("Blocking of ISP {isp}").format(isp=self.isp) if self.hostname_exclude == "" else _("Blocking of ISP {isp} minus {exclude}").format(isp=self.isp,
                                                                                                                                                            exclude=self.hostname_exclude)
         elif self.type == 5:
-            return _(u"Blocking of country with code {code}").format(code=self.country_code)
+            return _("Blocking of country with code {code}").format(code=self.country_code)
         elif self.type == 6:
-            return _(u"Authorization of reverse {reverse}").format(reverse=self.hostname)
+            return _("Authorization of reverse {reverse}").format(reverse=self.hostname)
         elif self.type == 7:
-            return _(u"Authorization of ISP {isp}").format(isp=self.isp)
+            return _("Authorization of ISP {isp}").format(isp=self.isp)
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"IP blocking")
-        verbose_name_plural = _(u"IP blocking")
+        verbose_name = _("IP blocking")
+        verbose_name_plural = _("IP blocking")
         unique_together = (('type', 'ip1', 'ip2', 'isp', 'hostname', 'country_code'),)
         index_together = [['ip1', 'ip2']]
         app_label = 'rogue'

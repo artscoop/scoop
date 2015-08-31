@@ -54,15 +54,15 @@ class Read(models.Model):
     # Constante
     CONTENT_TYPE = 'forum'
     # Champs
-    content = models.ForeignKey("content.Content", null=False, on_delete=models.CASCADE, related_name='reads', verbose_name=_(u"Thread"))
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='content_reads+', verbose_name=_(u"User"))
-    expiry = models.DateTimeField(default=default_expiry, null=True, verbose_name=_(u"Expiry"))
-    created = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('forum.read', u"Created"))
+    content = models.ForeignKey("content.Content", null=False, on_delete=models.CASCADE, related_name='reads', verbose_name=_("Thread"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='content_reads+', verbose_name=_("User"))
+    expiry = models.DateTimeField(default=default_expiry, null=True, verbose_name=_("Expiry"))
+    created = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('forum.read', "Created"))
     objects = ReadManager()
 
     # Métadonnées
     class Meta:
         unique_together = (('content', 'user'),)
-        verbose_name = _(u"topic read")
-        verbose_name_plural = _(u"topics read")
+        verbose_name = _("topic read")
+        verbose_name_plural = _("topics read")
         app_label = "forum"

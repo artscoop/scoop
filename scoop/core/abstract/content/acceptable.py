@@ -10,10 +10,10 @@ from scoop.core.util.shortcuts import addattr
 class AcceptableModel(models.Model):
     """ Objet accepté, ex. bonne réponse """
     # Champs
-    accepted = models.BooleanField(default=False, editable=False, verbose_name=_(u"Accepted"))
+    accepted = models.BooleanField(default=False, editable=False, verbose_name=_("Accepted"))
 
     # Getter
-    @addattr(short_description=_(u"Accepted answer"))
+    @addattr(short_description=_("Accepted answer"))
     def is_accepted(self):
         """ Renvoyer si l'objet est la réponse acceptée """
         return self.accepted

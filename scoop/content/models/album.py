@@ -51,12 +51,12 @@ class AlbumManager(SingleDeleteManager):
 class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UUID64Model, WeightedModel):
     """ Album d'images """
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="albums", on_delete=models.SET_NULL, verbose_name=_(u"Author"))
-    name = models.CharField(max_length=96, blank=False, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('album', u"Updated"))
-    parent = models.ForeignKey('content.Album', null=True, blank=True, related_name='children', verbose_name=_(u"Parent"))
-    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('album', u"Visible"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="albums", on_delete=models.SET_NULL, verbose_name=_("Author"))
+    name = models.CharField(max_length=96, blank=False, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('album', "Updated"))
+    parent = models.ForeignKey('content.Album', null=True, blank=True, related_name='children', verbose_name=_("Parent"))
+    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('album', "Visible"))
     objects = AlbumManager()
 
     # Getter
@@ -99,6 +99,6 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"picture album")
-        verbose_name_plural = _(u"picture albums")
+        verbose_name = _("picture album")
+        verbose_name_plural = _("picture albums")
         app_label = 'content'

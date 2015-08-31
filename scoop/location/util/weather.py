@@ -12,7 +12,7 @@ from scoop.core.abstract.location.coordinates import CoordinatesModel
 
 def get_open_weather(location, days=6):
     """ Renvoyer les données de météo OpenWeatherMap 2.0 """
-    if isinstance(location, CoordinatesModel):
+    if isinstance(location, CoordinatesModel) and isinstance(days, (int, float)):
         # Récupérer la météo en cache si possible
         cache_key = "location.weather.{type}.{id}.{days}".format(type=slugify(location._meta.object_name), id=location.pk, days=days)
         cached = cache.get(cache_key, None)
@@ -28,3 +28,4 @@ def get_open_weather(location, days=6):
         # Mettre le résultat en cache pendant 12 heures
         cache.set(cache_key, value, 43200)
         return value
+    return None

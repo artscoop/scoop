@@ -21,14 +21,14 @@ class FormConfigurationManager(models.Manager):
     def get_user_config(self, user, name, version=None):
         """ Renvoyer les données de configuration utilisateur nom/version """
         if user is not None:
-            results = self.filter(user=user, name=name, version=version or u"")
+            results = self.filter(user=user, name=name, version=version or "")
             if results.exists():
                 return results.first().data
         return None
 
     def get_template_config(self, name, version=None):
         """ Renvoyer les données de configuration templates nom/version """
-        results = self.filter(user=None, name=name, version=version or u"")
+        results = self.filter(user=None, name=name, version=version or "")
         if results.exists():
             return results.first().data
         return None
@@ -41,25 +41,25 @@ class FormConfigurationManager(models.Manager):
     def set_user_config(self, user, name, data, version=None):
         """ Définir une configuration utilisateur pour un nom et une version """
         if user is not None:
-            if self.filter(user=user, name=name, version=version or u"").update(data=data) == 0:
-                self.create(user=user, name=name, data=data, version=version or u"")
+            if self.filter(user=user, name=name, version=version or "").update(data=data) == 0:
+                self.create(user=user, name=name, data=data, version=version or "")
             return True
         return False
 
     def set_template_config(self, name, data, version=None, description=None):
         """ Définir une configuration template pour un nom et une version """
-        if self.filter(user=None, name=name, version=version or u"").update(data=data, description=description or u"") == 0:
-            self.create(user=None, name=name, data=data, version=version or u"", description=description or u"")
+        if self.filter(user=None, name=name, version=version or "").update(data=data, description=description or "") == 0:
+            self.create(user=None, name=name, data=data, version=version or "", description=description or "")
             return True
 
 
 class FormConfiguration(DatetimeModel):
     """ Configuration utilisateur via formulaire """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='configurations', on_delete=models.CASCADE, verbose_name=_(u"User"))
-    name = models.CharField(max_length=32, verbose_name=_(u"Form name"))
-    version = models.CharField(max_length=24, blank=True, help_text=_(u"Variation name"), verbose_name=_(u"Version"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='configurations', on_delete=models.CASCADE, verbose_name=_("User"))
+    name = models.CharField(max_length=32, verbose_name=_("Form name"))
+    version = models.CharField(max_length=24, blank=True, help_text=_("Variation name"), verbose_name=_("Version"))
     data = picklefield.PickledObjectField(default=dict(), compress=True, verbose_name=_("Data"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))  # only for templates, ie user=None
+    description = models.TextField(blank=True, verbose_name=_("Description"))  # only for templates, ie user=None
     objects = FormConfigurationManager()
 
     # Getter
@@ -70,7 +70,7 @@ class FormConfiguration(DatetimeModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"user configuration")
-        verbose_name_plural = _(u"user configurations")
+        verbose_name = _("user configuration")
+        verbose_name_plural = _("user configurations")
         unique_together = (('user', 'name', 'version'),)
         app_label = 'user'

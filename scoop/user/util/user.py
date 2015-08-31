@@ -32,7 +32,7 @@ def replace_user_email_domains(source, destination):
 
 def _get_splitted(name):
     """ Renvoyer un NDD splitté """
-    names = unicode(name).lower().split(u'.', 1)
+    names = str(name).lower().split(u'.', 1)
     while len(names) < 2:
         names.append(u'')
     return names

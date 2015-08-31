@@ -36,9 +36,9 @@ class PasswordForm(forms.Form):
         """ Valider et renvoyer les données du champ mot de passe original """
         original = self.cleaned_data['original']
         if not self.request.user.can_edit(self.user):
-            raise forms.ValidationError(_(u"You cannot edit this user."))
+            raise forms.ValidationError(_("You cannot edit this user."))
         if not authenticate(username=self.user.username, password=original):
-            raise forms.ValidationError(_(u"Wrong password"))
+            raise forms.ValidationError(_("Wrong password"))
         return original
 
     # Overrides
@@ -69,9 +69,9 @@ class UsernameSearchForm(BaseSearchForm):
 
 class LoginForm(forms.Form):
     """ Formulaire de connexion """
-    username = forms.CharField(required=True, label=_(u"User name"))
-    password = forms.CharField(required=True, widget=forms.PasswordInput(), label=_(u"Password"))
-    remember = forms.BooleanField(required=False, label=_(u"Remember me"))
+    username = forms.CharField(required=True, label=_("User name"))
+    password = forms.CharField(required=True, widget=forms.PasswordInput(), label=_("Password"))
+    remember = forms.BooleanField(required=False, label=_("Remember me"))
 
     # Constructeur
     def __init__(self, *args, **kwargs):

@@ -8,14 +8,14 @@ from django_countries.data import COUNTRIES
 
 class IPCountryFilter(SimpleListFilter):
     """ Filtre admin des pays des IPs """
-    title = _(u"Country")
+    title = _("Country")
     parameter_name = 'countrys'
 
     def lookups(self, request, model_admin):
         """ Renvoyer les options des pays  """
         queryset = model_admin.queryset(request)
         results = queryset.values_list('country').order_by('country').distinct()
-        data = ((code[0] or 'none', dict(COUNTRIES).get(code[0], _(u"None"))) for code in results if code[0] not in ['None', ''])
+        data = ((code[0] or 'none', dict(COUNTRIES).get(code[0], _("None"))) for code in results if code[0] not in ['None', ''])
         return data
 
     def queryset(self, request, queryset):
@@ -29,14 +29,14 @@ class IPCountryFilter(SimpleListFilter):
 
 class AccessIPCountryFilter(SimpleListFilter):
     """ Filtre admin des pays des IP des accès """
-    title = _(u"Country")
+    title = _("Country")
     parameter_name = 'country'
 
     def lookups(self, request, model_admin):
         """ Renvoyer les options de pays """
         queryset = model_admin.queryset(request)
         results = queryset.values_list('ip__country').order_by('ip__country').distinct()
-        data = ((code[0] or 'none', dict(COUNTRIES).get(code[0], _(u"None"))) for code in results if code[0] not in ['None', ''])
+        data = ((code[0] or 'none', dict(COUNTRIES).get(code[0], _("None"))) for code in results if code[0] not in ['None', ''])
         return data
 
     def queryset(self, request, queryset):

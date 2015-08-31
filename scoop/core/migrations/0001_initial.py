@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.db import models, migrations
 import datetime
-
-from django.db import migrations, models
-
 import scoop.core.abstract.core.generic
-import scoop.core.abstract.core.translation
 import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
+import scoop.core.abstract.core.translation
 
 
 class Migration(migrations.Migration):
@@ -51,7 +49,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('pictured', models.BooleanField(default=False, db_index=True, verbose_name='\U0001f58c')),
-                ('code', models.SmallIntegerField(default=0, verbose_name='Code', choices=[[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9], [10, 10], [11, 11], [12, 12], [13, 13], [14, 14], [15, 15], [16, 16], [17, 17], [18, 18], [19, 19], [20, 20], [21, 21], [22, 22], [23, 23], [24, 24], [25, 25], [26, 26], [27, 27], [28, 28], [29, 29], [30, 30], [31, 31], [32, 32], [33, 33], [34, 34], [35, 35], [36, 36], [37, 37], [38, 38], [39, 39], [40, 40], [41, 41], [42, 42], [43, 43], [44, 44], [45, 45], [46, 46], [47, 47], [48, 48], [49, 49], [50, 50], [51, 51], [52, 52], [53, 53], [54, 54], [55, 55], [56, 56], [57, 57], [58, 58], [59, 59], [60, 60], [61, 61], [62, 62], [63, 63], [64, 64], [65, 65], [66, 66], [67, 67], [68, 68], [69, 69], [70, 70], [71, 71], [72, 72], [73, 73], [74, 74], [75, 75], [76, 76], [77, 77], [78, 78], [79, 79], [80, 80], [81, 81], [82, 82], [83, 83], [84, 84], [85, 85], [86, 86], [87, 87], [88, 88], [89, 89], [90, 90], [91, 91], [92, 92], [93, 93], [94, 94], [95, 95], [96, 96], [97, 97], [98, 98], [99, 99]])),
+                ('code', models.SmallIntegerField(default=0, verbose_name='Code')),
                 ('short_name', models.CharField(max_length=20, verbose_name='Short name')),
             ],
             options={
@@ -106,7 +104,7 @@ class Migration(migrations.Migration):
                 ('time', models.PositiveIntegerField(default=scoop.core.util.data.dateutil.now, verbose_name='Timestamp', editable=False, db_index=True)),
                 ('active', models.BooleanField(default=True, db_index=True, verbose_name='Active')),
                 ('base', models.CharField(unique=True, max_length=250, verbose_name='Original URL')),
-                ('expires', models.DateTimeField(default=datetime.datetime(2025, 4, 30, 1, 57, 41, 223980), verbose_name='Expiry')),
+                ('expires', models.DateTimeField(default=datetime.datetime(2025, 6, 3, 20, 31, 56, 579797), verbose_name='Expiry')),
                 ('permanent', models.BooleanField(default=True, verbose_name='Permanent')),
                 ('object_id', models.PositiveIntegerField(null=True, verbose_name='Object Id', db_index=True)),
                 ('content_type', models.ForeignKey(verbose_name='Content type', to='contenttypes.ContentType', null=True)),

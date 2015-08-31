@@ -20,7 +20,7 @@ def accept_negotiation(sender, source, target, **kwargs):
     from scoop.messaging.models import Thread
     # Créer un enregistrement
     record.send(None, actor=target, action='messaging.accept.negotiation', target=source)
-    subject = _(u"Discussion between {0} and {1}").format(target, source)
+    subject = _("Discussion between {0} and {1}").format(target, source)
     # Créer le nouveau sujet entre les deux participants
     thread_info = Thread.objects.new(target, [source], subject, None, None, closed=False, unique=False, as_mail=False, force=False)
     thread_info['thread'].add_bot_message('negotiation-accepted', as_mail=False, data={'target': target})

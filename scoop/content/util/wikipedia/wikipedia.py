@@ -3,8 +3,6 @@
 
 import re
 import urllib
-import urllib2
-
 import yaml
 
 
@@ -25,14 +23,14 @@ class Wikipedia:
 
     def __fetch(self, url):
         """ Renvoyer le descripteur de fichier sur la page Wikipedia """
-        request = urllib2.Request(url)
+        request = urllib.Request(url)
         request.add_header('User-Agent', 'Mozilla/5.0')
 
         try:
-            result = urllib2.urlopen(request)
-        except urllib2.HTTPError, e:
+            result = urllib.urlopen(request)
+        except urllib.HTTPError as e:
             raise WikipediaError(e.code)
-        except urllib2.URLError, e:
+        except urllib.URLError as e:
             raise WikipediaError(e.reason)
 
         return result
@@ -101,4 +99,4 @@ if __name__ == '__main__':
     wiki.article('Uruguay')
     wiki.image('Bono_at_the_2009_Tribeca_Film_Festival.jpg', '640')
     wiki.search('Wikipedia')
-    print 'OK'
+    print('OK')

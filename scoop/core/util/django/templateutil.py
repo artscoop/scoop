@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 from functools import wraps
-from types import NoneType
 
 from django.http.response import REASON_PHRASES, HttpResponse
 from django.shortcuts import render_to_response
@@ -116,7 +115,7 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
         @wraps(function)
         def wrapper(request, *args, **kwargs):
             output = function(request, *args, **kwargs)
-            if not isinstance(output, (dict, NoneType)):
+            if not isinstance(output, (dict, type(None))):
                 return output
             tmpl = output.pop('set.template', template)
             head = output.pop('set.headers', headers)

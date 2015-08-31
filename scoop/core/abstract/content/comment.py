@@ -17,8 +17,8 @@ from scoop.core.util.shortcuts import addattr
 class CommentableModel(models.Model):
     """ Objet pouvant recevoir et gérer des commentaires """
     # Champs
-    commentable = models.BooleanField(default=True, db_index=True, verbose_name=_(u"Commentable"))
-    comment_count = models.IntegerField(default=0, verbose_name=_(u"Comments"))
+    commentable = models.BooleanField(default=True, db_index=True, verbose_name=_("Commentable"))
+    comment_count = models.IntegerField(default=0, verbose_name=_("Comments"))
     comments = GenericRelation('content.Comment')
 
     # Getter
@@ -43,10 +43,10 @@ class CommentableModel(models.Model):
         """ Renvoyer le nombre de commentaires de l'objet """
         return self.comments.filter(visible=True).count()
 
-    @addattr(allow_tags=True, short_description=mark_safe(u'<center title="{label}">&#x1f5db;</center>'.format(label=_(u"Comments"))))
+    @addattr(allow_tags=True, short_description=mark_safe(u'<center title="{label}">&#x1f5db;</center>'.format(label=_("Comments"))))
     def get_comment_count_admin(self):
         """ Renvoyer le nombre de commentaires (pour l'admin) """
-        return u"<center><span class='badge'>{count}</span></center>".format(count=self.get_comment_count())
+        return "<center><span class='badge'>{count}</span></center>".format(count=self.get_comment_count())
 
     def has_comments(self):
         """ Renvoyer si l'objet possède des commentaires """

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import easy_thumbnails.fields
-from django.db import migrations, models
-
+from django.db import models, migrations
 import scoop.core.abstract.core.icon
-import scoop.core.abstract.core.translation
 import scoop.core.abstract.core.uuid
+import easy_thumbnails.fields
 import scoop.core.util.data.dateutil
+import scoop.core.abstract.core.translation
 
 
 class Migration(migrations.Migration):

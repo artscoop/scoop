@@ -18,11 +18,11 @@ def activation_check(sender, user, request, failed, **kwargs):
         if request is not None:
             from scoop.user.models import User
             # Accueillir l'utilisateur avec un message et le connecter
-            messages.success(request, _(u"Congratulations! Your account is activated, you are now logged in."))
+            messages.success(request, _("Congratulations! Your account is activated, you are now logged in."))
             User.sign(request, None, logout=False, fake=False, direct_user=user)
     else:
         if request is not None:
-            messages.error(request, _(u"This activation code is invalid."), extra_tags="danger")
+            messages.error(request, _("This activation code is invalid."), extra_tags="danger")
 
 
 @receiver(user_deactivated)

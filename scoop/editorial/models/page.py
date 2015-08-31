@@ -40,18 +40,18 @@ class PageManager(models.Manager):
 class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexModel):
     """ Page personnalisée """
     # Champs
-    name = models.CharField(max_length=64, unique=True, blank=False, verbose_name=_(u"Name"))
-    title = models.CharField(max_length=64, blank=False, verbose_name=_(u"Title"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    keywords = models.CharField(max_length=160, blank=True, verbose_name=_(u"Keywords"))
-    path = models.CharField(max_length=160, help_text=_(u"Page URL"), verbose_name=_(u"Path"))
-    template = models.ForeignKey('editorial.Template', blank=False, null=False, related_name='pages', limit_choices_to={'full': True}, verbose_name=_(u"Template"))
-    active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('page', u"Active"))
-    heading = models.TextField(blank=True, verbose_name=_(u"Page header extra code"))
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', help_text=_(u"Parent page, used in lists and breadcrumbs"), verbose_name=_(u"Parent"))
+    name = models.CharField(max_length=64, unique=True, blank=False, verbose_name=_("Name"))
+    title = models.CharField(max_length=64, blank=False, verbose_name=_("Title"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    keywords = models.CharField(max_length=160, blank=True, verbose_name=_("Keywords"))
+    path = models.CharField(max_length=160, help_text=_("Page URL"), verbose_name=_("Path"))
+    template = models.ForeignKey('editorial.Template', blank=False, null=False, related_name='pages', limit_choices_to={'full': True}, verbose_name=_("Template"))
+    active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('page', "Active"))
+    heading = models.TextField(blank=True, verbose_name=_("Page header extra code"))
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', help_text=_("Parent page, used in lists and breadcrumbs"), verbose_name=_("Parent"))
     # Accès
-    anonymous = models.BooleanField(default=True, blank=True, verbose_name=_(u"Anonymous access"))
-    authenticated = models.BooleanField(default=True, blank=True, verbose_name=_(u"Authenticated access"))
+    anonymous = models.BooleanField(default=True, blank=True, verbose_name=_("Anonymous access"))
+    authenticated = models.BooleanField(default=True, blank=True, verbose_name=_("Authenticated access"))
     objects = PageManager()
 
     # Getter
@@ -69,11 +69,11 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
         # Blocs
         for position in self.position_set.all():
             if position.has_access(request.user):
-                content = u"{{block.super}}"
+                content = "{{block.super}}"
                 # Récupérer les configurations appartenant à ce block
                 for configuration in self.get_configurations(position).iterator():
                     content += configuration.render()
-                output.append(u"{{{{% block {name} %}}}}{content}{{{{% endblock %}}}}".format(name=position.name, content=content))
+                output.append("{{{{% block {name} %}}}}{content}{{{{% endblock %}}}}".format(name=position.name, content=content))
         # Utiliser le rendu comme un template
         output = "".join(output)
         template = Template(output)
@@ -113,6 +113,6 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"page")
-        verbose_name_plural = _(u"pages")
+        verbose_name = _("page")
+        verbose_name_plural = _("pages")
         app_label = 'editorial'

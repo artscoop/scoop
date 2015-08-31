@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class FlagStatusFilter(SimpleListFilter):
     """ Filtre admin de statut de signalement """
-    title = _(u"status")
+    title = _("status")
     parameter_name = 'status_ext'
 
     def lookups(self, request, model_admin):

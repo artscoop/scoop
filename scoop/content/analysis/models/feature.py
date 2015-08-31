@@ -13,10 +13,10 @@ from scoop.core.templatetags.text_tags import truncate_stuckkey
 class Feature(models.Model):
     """ Caractéristique d'un document """
     # Constantes
-    STATUSES = [[0, _(u"Word")], [1, _(u"Number")], [2, _(u"Email")]]
+    STATUSES = [[0, _("Word")], [1, _("Number")], [2, _("Email")]]
     # Champs
-    name = models.CharField(max_length=32, blank=False, verbose_name=_(u"Name"))
-    status = models.SmallIntegerField(default=0, verbose_name=_(u"Feature type"))
+    name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
+    status = models.SmallIntegerField(default=0, verbose_name=_("Feature type"))
 
     # Getter
     def __unicode__(self):
@@ -44,6 +44,6 @@ class Feature(models.Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"feature")
-        verbose_name_plural = _(u"features")
+        verbose_name = _("feature")
+        verbose_name_plural = _("features")
         app_label = 'analysis'
