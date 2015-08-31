@@ -37,7 +37,7 @@ class DataForm(Form):
     @classmethod
     def reset(cls, user, version=None):
         """ Supprimer les données de formulaire de la base et revenir aux valeurs par défaut """
-        FormConfiguration.objects.filter(user=user, name=cls.name, version=version or u"").delete()
+        FormConfiguration.objects.filter(user=user, name=cls.name, version=version or "").delete()
 
     # Getter
     @classmethod
@@ -114,8 +114,8 @@ class DataForm(Form):
         """ Remplacer les donées actuelles de l'utilisateur par celles d'une autre version """
         try:
             versioned = FormConfiguration.objects.get(name=cls.name, user=user, version=version)
-            FormConfiguration.objects.filter(name=cls.name, user=user, version=u"").delete()
-            versioned.version = u""
+            FormConfiguration.objects.filter(name=cls.name, user=user, version="").delete()
+            versioned.version = ""
             versioned.save()
         except FormConfiguration.DoesNotExist:
             pass

@@ -39,7 +39,7 @@ def content(user, category_name=None):
 def get_content(category_name=None, randomize=True):
     """ Renvoyer un contenu au hasard dans une catégorie """
     entries = Content.objects.visible()
-    if isinstance(category_name, basestring):
+    if isinstance(category_name, str):
         entries = entries.by_category(category_name)
     if randomize is True:
         entries = entries.order_by('?')

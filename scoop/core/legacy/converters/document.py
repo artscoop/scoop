@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-import cPickle as pickle
+import pickle
 import io
 import pprint
 import time
@@ -19,11 +19,11 @@ class DocumentExporter(object):
     # Utilitaire
     def instance_for_ct(self, ct, oi):
         """ Renvoyer une instance d'objet depuis un type de contenu et un id """
-        raise NotImplementedError(u"Should return an instance from the content type and object id")
+        raise NotImplementedError("Should return an instance from the content type and object id")
 
     def modelname_for_ct(self, ct):
         """ Renvoyer le nom du modèle pour un type de contenu """
-        raise NotImplementedError(u"Should return an instance from the content type and object id")
+        raise NotImplementedError("Should return an instance from the content type and object id")
 
     def get_fields_data(self, obj, *fields):
         """ Renvoyer les données des champs d'un objet """
@@ -32,7 +32,7 @@ class DocumentExporter(object):
             if hasattr(obj, field):
                 value = getattr(obj, field)
                 try:
-                    output[field] = value if not isinstance(value, Model) else unicode(value)
+                    output[field] = value if not isinstance(value, Model) else str(value)
                 except UnicodeEncodeError:
                     raise
         return output
@@ -44,7 +44,7 @@ class DocumentExporter(object):
         if getattr(obj, ct, None) is not None:
             typename = self.modelname_for_ct(getattr(obj, ct))
             item = self.instance_for_ct(typename, getattr(obj, oi))
-            output = {'type': typename, 'item': representation or unicode(item) if item else None}
+            output = {'type': typename, 'item': representation or str(item) if item else None}
         else:
             output = None
         return output
@@ -52,17 +52,17 @@ class DocumentExporter(object):
     def get_foreign_data(self, obj, attribute):
         """ Renvoyer la représentation texte d'un objet en clé étrangère """
         if getattr(obj, attribute, None) is not None:
-            return unicode(getattr(obj, attribute))
+            return str(getattr(obj, attribute))
         return None
 
     # Getter
     def get_export_list(self):
         """ Renvoyer une liste des objets à exporter """
-        raise NotImplementedError(u"This method should return the list of all objects to export in one model")
+        raise NotImplementedError("This method should return the list of all objects to export in one model")
 
     def get_object_export_data(self, obj):
         """ Renvoyer les données à exporter pour un objet (dictionnaire) """
-        raise NotImplementedError(u"This method should return a dictionary of object data")
+        raise NotImplementedError("This method should return a dictionary of object data")
 
     # Setter
     def exports(self, name=None, debug=False):
@@ -80,9 +80,9 @@ class DocumentExporter(object):
             with io.open("{}.txt".format(path), "w", encoding="utf-8") as f:
                 pp = pprint.PrettyPrinter(stream=f)
                 output = pp.pformat(data)
-                f.write(unicode(output))
+                f.write(str(output))
         # Résumé de l'opération
-        print u"- {exporter} successfully exported {count} items in {elapsed:.03f}s".format(exporter=type(self).__name__, count=len(data), elapsed=elapsed)
+        print("- {exporter} successfully exported {count} items in {elapsed:.03f}s".format(exporter=type(self).__name__, count=len(data), elapsed=elapsed))
 
 
 class DocumentImporter(object):
@@ -95,7 +95,7 @@ class DocumentImporter(object):
         every = every or int(total / 25)
         if ind % every == 0:
             percent = ind * 100.0 / total
-            print u"{label} - Progress - {pc:.01f}%".format(pc=percent, label=label or u"Import")
+            print("{label} - Progress - {pc:.01f}%".format(pc=percent, label=label or "Import"))
 
     def get_data(self, name=None):
         """ Renvoyer les données du fichier exporté """
@@ -118,7 +118,7 @@ class DocumentImporter(object):
     # Actions
     def imports(self, name=None):
         """ Importer le document dans la nouvelle base """
-        raise NotImplementedError(u"This method creates instances from imported data")
+        raise NotImplementedError("This method creates instances from imported data")
 
     def post_imports(self, name=None):
         """ Traiter la seconde passe d'import """

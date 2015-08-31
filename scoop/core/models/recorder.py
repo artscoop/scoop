@@ -75,7 +75,7 @@ class RecordManager(SingleDeleteManager):
             entry = Record(user=user, type=action_type, target_object=target, container_object=container)
             entry.save()
         except ActionType.DoesNotExist:
-            logger.warning(u"The action type {type} must be registered in order to create this record.".format(type=codename))
+            logger.warning("The action type {type} must be registered in order to create this record.".format(type=codename))
 
 
 class ActionTypeManager(SingleDeleteManager):
@@ -97,38 +97,38 @@ class ActionTypeManager(SingleDeleteManager):
 class Record(models.Model):
     """ Action """
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='action_records', verbose_name=_(u"User"))
-    name = models.CharField(max_length=32, verbose_name=_(u"Name"))
-    type = models.ForeignKey('core.ActionType', related_name='records', verbose_name=_(u"Action type"))
-    created = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name=pgettext_lazy('record', u"Created"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='action_records', verbose_name=_("User"))
+    name = models.CharField(max_length=32, verbose_name=_("Name"))
+    type = models.ForeignKey('core.ActionType', related_name='records', verbose_name=_("Action type"))
+    created = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name=pgettext_lazy('record', "Created"))
     # Cible de l'action
-    target_type = models.ForeignKey('contenttypes.ContentType', related_name='target_record', null=True, verbose_name=_(u"Target type"))
-    target_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_(u"Target Id"))
+    target_type = models.ForeignKey('contenttypes.ContentType', related_name='target_record', null=True, verbose_name=_("Target type"))
+    target_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Target Id"))
     target_object = fields.GenericForeignKey('target_type', 'target_id')
-    target_object.short_description = _(u"Target")
-    target_name = models.CharField(max_length=80, verbose_name=_(u"Target name"))
+    target_object.short_description = _("Target")
+    target_name = models.CharField(max_length=80, verbose_name=_("Target name"))
     # Conteneur de la cible de l'action
-    container_type = models.ForeignKey('contenttypes.ContentType', related_name='container_record', null=True, verbose_name=_(u"Container type"))
-    container_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_(u"Container Id"))
+    container_type = models.ForeignKey('contenttypes.ContentType', related_name='container_record', null=True, verbose_name=_("Container type"))
+    container_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Container Id"))
     container_object = fields.GenericForeignKey('container_type', 'container_id')
-    container_object.short_description = _(u"Container")
-    container_name = models.CharField(max_length=80, verbose_name=_(u"Container name"))
+    container_object.short_description = _("Container")
+    container_name = models.CharField(max_length=80, verbose_name=_("Container name"))
     objects = RecordManager()
 
     # Getter
-    @addattr(short_description=_(u"Description"))
+    @addattr(short_description=_("Description"))
     def get_description(self):
         """ Renvoyer le texte descriptif de l'action """
         output = self.type.sentence % {'actor': self.user, 'target': self.target_object or self.target_name, 'container': self.container_object or self.container_name,
                                        'when': self.get_datetime_ago()}
         return output
 
-    @addattr(admin_order_field='hour', short_description=_(u"Hour"))
+    @addattr(admin_order_field='hour', short_description=_("Hour"))
     def get_hour_format(self):
         """ Renvoyer la représentation texte de l'heure de l'action """
         return self.created.strftime("%Y.%m.%d %Hh")
 
-    @addattr(admin_order_field='time', short_description=pgettext_lazy(u"datetime", u"Time"))
+    @addattr(admin_order_field='time', short_description=pgettext_lazy("datetime", "Time"))
     def get_datetime_ago(self):
         """ Renvoyer la date relative de l'action """
         return pretty.date(self.created)
@@ -145,7 +145,7 @@ class Record(models.Model):
         """ Renvoyer le nombre d'enregistrements identiques du même auteur, à n secondes près """
         return self.get_near(delta).filter(type=self.type, user=self.user).count() - 1
 
-    @addattr(allow_tags=True, short_description=_(u"Color"))
+    @addattr(allow_tags=True, short_description=_("Color"))
     def get_color_legend(self):
         """ Renvoyer la vignette de légende couleur de l'action """
         return self.type.get_color_legend()
@@ -170,21 +170,21 @@ class Record(models.Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"record")
-        verbose_name_plural = _(u"records")
+        verbose_name = _("record")
+        verbose_name_plural = _("records")
         app_label = "core"
 
 
 class ActionType(models.Model):
     """ Type d'action """
     # Champs
-    codename = models.CharField(max_length=32, verbose_name=_(u"Code name"))
-    sentence = models.CharField(max_length=48, verbose_name=_(u"Sentence"))  # actor, target, container, when
-    verb = models.CharField(max_length=24, verbose_name=_(u"Verb"))
+    codename = models.CharField(max_length=32, verbose_name=_("Code name"))
+    sentence = models.CharField(max_length=48, verbose_name=_("Sentence"))  # actor, target, container, when
+    verb = models.CharField(max_length=24, verbose_name=_("Verb"))
     objects = ActionTypeManager()
 
     # Getter
-    @addattr(allow_tags=True, short_description=_(u"Color"))
+    @addattr(allow_tags=True, short_description=_("Color"))
     def get_color_legend(self):
         """ Renvoyer la vignette de code couleur du type d'action """
         rgb = hash_rgb(self.codename)
@@ -192,7 +192,7 @@ class ActionType(models.Model):
         output = '<span class="hash-pill" style="background-color: rgb(%d,%d,%d);" title="%s"></span>' % (rgb[0], rgb[1], rgb[2], colorname)
         return mark_safe(output)
 
-    @addattr(boolean=True, short_description=_(u"Valid"))
+    @addattr(boolean=True, short_description=_("Valid"))
     def is_valid(self):
         """ Renvoyer si le nom de code est correct """
         codeparts = self.codename.split('.')
@@ -207,6 +207,6 @@ class ActionType(models.Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"action type")
-        verbose_name_plural = _(u"action types")
+        verbose_name = _("action type")
+        verbose_name_plural = _("action types")
         app_label = "core"

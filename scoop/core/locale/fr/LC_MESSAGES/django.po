@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 15:06+0200\n"
+"POT-Creation-Date: 2015-08-31 09:21+0200\n"
 "PO-Revision-Date: 2015-04-27 15:06+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -148,6 +148,10 @@ msgstr "Âge"
 msgid "Birthday"
 msgstr "Anniversaire"
 
+#: abstract/core/birth.py:74
+msgid "Sign"
+msgstr ""
+
 #: abstract/core/data.py:18 abstract/core/data.py:57 abstract/core/data.py:81
 msgid "Data"
 msgstr "Données"
@@ -196,21 +200,23 @@ msgid "Content object"
 msgstr "Objet de contenu"
 
 #: abstract/core/icon.py:41
-msgid "Maximum size"
+#, fuzzy
+#| msgid "Maximum size"
+msgid "Maximum size {}x{}"
 msgstr "Taille maximum"
 
 #: abstract/core/icon.py:42 abstract/core/icon.py:47
 msgid "Icon"
 msgstr "Icône"
 
-#: abstract/core/icon.py:43 abstract/core/rectangle.py:49
-#: abstract/core/rectangle.py:59
+#: abstract/core/icon.py:43 abstract/core/rectangle.py:50
+#: abstract/core/rectangle.py:60
 msgctxt "geometry"
 msgid "Width"
 msgstr "Largeur"
 
-#: abstract/core/icon.py:44 abstract/core/rectangle.py:50
-#: abstract/core/rectangle.py:60
+#: abstract/core/icon.py:44 abstract/core/rectangle.py:51
+#: abstract/core/rectangle.py:61
 msgctxt "geometry"
 msgid "Height"
 msgstr "Hauteur"
@@ -240,11 +246,11 @@ msgstr "refusé"
 msgid "accepted"
 msgstr "accepté"
 
-#: abstract/core/rectangle.py:17
+#: abstract/core/rectangle.py:18
 msgid "Dimension"
 msgstr "Dimension"
 
-#: abstract/core/rectangle.py:38
+#: abstract/core/rectangle.py:39
 msgid "Ratio"
 msgstr "Ratio"
 
@@ -254,7 +260,7 @@ msgid "[{language}] {name}"
 msgstr "[{language}] {name}"
 
 #: abstract/core/uuid.py:81 abstract/core/uuid.py:90 abstract/core/uuid.py:99
-#: models/option.py:49 models/optiongroup.py:30
+#: models/option.py:50 models/optiongroup.py:31
 msgid "Code"
 msgstr "Code"
 
@@ -274,19 +280,19 @@ msgstr "Les éléments aux poids les plus élevés sont prioritaires "
 msgid "Sites"
 msgstr "Sites"
 
-#: abstract/location/coordinates.py:80
+#: abstract/location/coordinates.py:87
 msgid "WE"
 msgstr "OE"
 
-#: abstract/location/coordinates.py:80
+#: abstract/location/coordinates.py:87
 msgid "SN"
 msgstr "SN"
 
-#: abstract/location/coordinates.py:88
+#: abstract/location/coordinates.py:95
 msgid "Coordinates"
 msgstr "Coordonnées"
 
-#: abstract/location/coordinates.py:93
+#: abstract/location/coordinates.py:100
 msgid "Sexagesimal"
 msgstr "Sexagésimal"
 
@@ -423,7 +429,7 @@ msgstr "Traductions"
 msgid "Option"
 msgstr "Option"
 
-#: admin/option.py:43 models/optiongroup.py:31
+#: admin/option.py:43 models/optiongroup.py:32
 msgid "Short name"
 msgstr "Nom court"
 
@@ -451,51 +457,51 @@ msgstr "Expire"
 msgid "Search"
 msgstr "Recherccher"
 
-#: models/option.py:48
+#: models/option.py:49
 msgid "Group"
 msgstr "Groupe"
 
-#: models/option.py:50
+#: models/option.py:51
 msgctxt "option"
 msgid "Active"
 msgstr "Active"
 
-#: models/option.py:51
+#: models/option.py:52
 msgid "Parent"
 msgstr "Parent"
 
-#: models/option.py:59 models/option.py:126 models/optiongroup.py:35
-#: models/optiongroup.py:80 models/recorder.py:101
+#: models/option.py:60 models/option.py:128 models/optiongroup.py:36
+#: models/optiongroup.py:82 models/recorder.py:101
 #: templates/core/middleware/profiling.html:7
 msgid "Name"
 msgstr "Nom"
 
-#: models/option.py:65 models/optiongroup.py:41
+#: models/option.py:66 models/optiongroup.py:42
 msgid "(No name)"
 msgstr "(sans nom)"
 
-#: models/option.py:67 models/option.py:127 models/optiongroup.py:43
-#: models/optiongroup.py:81 models/recorder.py:119
+#: models/option.py:68 models/option.py:129 models/optiongroup.py:44
+#: models/optiongroup.py:83 models/recorder.py:119
 msgid "Description"
 msgstr "Description"
 
-#: models/option.py:73 models/optiongroup.py:49
+#: models/option.py:74 models/optiongroup.py:50
 msgid "(No description)"
 msgstr "(sans description)"
 
-#: models/option.py:117
+#: models/option.py:119
 msgid "option"
 msgstr "option"
 
-#: models/option.py:118
+#: models/option.py:120
 msgid "options"
 msgstr "options"
 
-#: models/optiongroup.py:71
+#: models/optiongroup.py:73
 msgid "option group"
 msgstr "groupe d'options"
 
-#: models/optiongroup.py:72
+#: models/optiongroup.py:74
 msgid "option groups"
 msgstr "groupes d'options"
 
@@ -676,7 +682,7 @@ msgstr "Chemin"
 msgid "Calls"
 msgstr "Appels"
 
-#: templates/core/middleware/profiling.html:9 util/model/widgets.py:211
+#: templates/core/middleware/profiling.html:9 util/model/widgets.py:210
 msgid "Time"
 msgstr "Heure"
 
@@ -771,7 +777,7 @@ msgstr "Image refusée. La taille minimum acceptée est {mw}x{mh}."
 msgid "This image cannot be handled. Accepted formats: {}."
 msgstr "Impossible de gérer cette image. Formats acceptés : {}."
 
-#: util/model/widgets.py:211
+#: util/model/widgets.py:210
 msgid "Date"
 msgstr "Date"
 
@@ -780,12 +786,12 @@ msgstr "Date"
 msgid "A file named %(file)s was not found in %(path)s"
 msgstr "Aucun fichier nommé %(file)s n'a été trouvé dans %(path)s"
 
-#: util/stream/urlutil.py:33
+#: util/stream/urlutil.py:34
 #, python-format
 msgid "The resource at %(path)s was unavailable."
 msgstr "La ressource à %(path)s est indisponible."
 
-#: util/stream/urlutil.py:39
+#: util/stream/urlutil.py:40
 #, python-format
 msgid "The download destination file at %(path)s already exists. Skipped."
 msgstr ""

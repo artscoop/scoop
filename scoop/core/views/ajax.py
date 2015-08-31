@@ -34,7 +34,7 @@ def validate_form(request, *args, **kwargs):
         else:
             Forms = [import_fullname(form_names)]
     else:
-        return HttpResponseBadRequest(u"You need to send a form or a form alias")
+        return HttpResponseBadRequest("You need to send a form or a form alias")
     output = {'valid': True, '_all_': []}
     # Vérifier la validité de tous les formulaires passés
     Forms = make_iterable(Forms)

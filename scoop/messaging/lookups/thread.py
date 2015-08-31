@@ -30,7 +30,7 @@ class ThreadLookup(LookupChannel):
 
     def format_item_display(self, obj):
         """ Renvoyer une représentation du résultat dans le deck """
-        return u"<strong>%s</strong>" % (obj,)
+        return "<strong>%s</strong>" % (obj,)
 
     def check_auth(self, request):
         """ Renvoyer si l'utilisateur courant peut effectuer une requête """

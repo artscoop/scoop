@@ -21,7 +21,7 @@ DELTA = {'minute': 60, 'hour': 3600, 'day': 86400, 'week': 604800, 'year': 31536
 
 class DatetimeModel(models.Model):
     """ Mixin de modèle avec un timestamp de création """
-    time = models.PositiveIntegerField(default=now_, editable=False, db_index=True, verbose_name=_(u"Timestamp"))
+    time = models.PositiveIntegerField(default=now_, editable=False, db_index=True, verbose_name=_("Timestamp"))
 
     # Getter
     def now(self=None):
@@ -41,27 +41,27 @@ class DatetimeModel(models.Model):
         elif isinstance(value, DatetimeModel):
             return pretty.date(value.datetime)
 
-    @addattr(admin_order_field='time', short_description=pgettext_lazy(u"datetime", u"Time"))
+    @addattr(admin_order_field='time', short_description=pgettext_lazy("datetime", "Time"))
     def get_datetime(self):
         """ Renvoyer le timestamp de l'objet converti en datetime """
         return datetime.datetime.fromtimestamp(self.time, _tz('UTC'))
 
-    @addattr(admin_order_field='time', short_description=pgettext_lazy(u"datetime", u"Time"))
+    @addattr(admin_order_field='time', short_description=pgettext_lazy("datetime", "Time"))
     def get_datetime_format(self, format_string="j F Y H:i"):
         """ Renvoyer une représentation texte du timestamp """
         return datefilter(self.get_datetime(), format_string)
 
-    @addattr(admin_order_field='time', short_description=pgettext_lazy(u"datetime", u"Time"))
+    @addattr(admin_order_field='time', short_description=pgettext_lazy("datetime", "Time"))
     def get_datetime_ago(self):
         """ Renvoyer une représentation relative du timestamp """
         return pretty.date(self.datetime)
 
-    @addattr(admin_order_field='time', short_description=pgettext_lazy(u"datetime", u"Time"))
+    @addattr(admin_order_field='time', short_description=pgettext_lazy("datetime", "Time"))
     def get_short_datetime_format(self, format_string="j M y G:i"):
         """ Renvoyer une représentation texte courte du timestamp """
         return self.get_datetime_format(format_string)
 
-    @addattr(admin_order_field='time', short_description=pgettext_lazy(u"datetime", u"Date"))
+    @addattr(admin_order_field='time', short_description=pgettext_lazy("datetime", "Date"))
     def get_date_format(self, format_string="j F Y"):
         """ Renvoyer une représentation texte du jour du timestamp """
         return self.get_datetime_format(format_string)
@@ -94,7 +94,7 @@ class DatetimeModel(models.Model):
         value = DatetimeModel.get_timestamp(value) if timestamp else value
         return value
 
-    @addattr(boolean=True, admin_order_field='time', short_description=_(u"New"))
+    @addattr(boolean=True, admin_order_field='time', short_description=_("New"))
     def is_new(self, days=7, hours=0, minutes=0):
         """ Renvoyer si le timestamp de l'objet est récent """
         return self.time >= now_() - days * DELTA['day'] - hours * DELTA['hour'] - minutes * DELTA['minute']

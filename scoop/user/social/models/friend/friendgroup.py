@@ -13,9 +13,9 @@ from scoop.core.util.shortcuts import addattr
 class FriendGroup(DataModel):
     """ Groupe personnalisé d'amis """
     # Constantes
-    GROUP_NAMES = [[item, item] for item in [_(u"Family"), _(u"Friends"), _(u"Colleagues"), _(u"Acquaitances"), _(u"Friends 2"), _(u"Friends 3")]]
+    GROUP_NAMES = [[item, item] for item in [_("Family"), _("Friends"), _("Colleagues"), _("Acquaitances"), _("Friends 2"), _("Friends 3")]]
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendgroups', verbose_name=_(u"User"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendgroups', verbose_name=_("User"))
     name = models.CharField(max_length=24, choices=GROUP_NAMES, blank=False, verbose_name=_(u'Name'))
 
     # Getter
@@ -35,7 +35,7 @@ class FriendGroup(DataModel):
         if purge:
             self.remove(purge)
 
-    @addattr(short_description=_(u"Friend count"))
+    @addattr(short_description=_("Friend count"))
     def get_friend_count(self):
         """ Renvoyer le nombre d'amis dans le groupe """
         return len(self.get_data('friends'))
@@ -65,7 +65,7 @@ class FriendGroup(DataModel):
 
     # Métadonnées
     class Meta(object):
-        verbose_name = _(u"friend group")
-        verbose_name_plural = _(u"friend groups")
+        verbose_name = _("friend group")
+        verbose_name_plural = _("friend groups")
         unique_together = (('user', 'name',),)
         app_label = "social"

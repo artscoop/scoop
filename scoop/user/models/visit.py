@@ -66,20 +66,20 @@ class VisitManager(models.Manager):
 
 class Visit(DatetimeModel):
     """ Visite de profil """
-    visitor = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='visits_maker', verbose_name=_(u"Visitor"))
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='visits_receiver', verbose_name=_(u"User"))
+    visitor = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='visits_maker', verbose_name=_("Visitor"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='visits_receiver', verbose_name=_("User"))
     objects = VisitManager()
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"{visitor} -> {target}".format(visitor=self.visitor, target=self.user)
+        return "{visitor} -> {target}".format(visitor=self.visitor, target=self.user)
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"profile visit")
-        verbose_name_plural = _(u"profile visits")
+        verbose_name = _("profile visit")
+        verbose_name_plural = _("profile visits")
         unique_together = (('visitor', 'user'),)
         # Pas de traduction paresseuse des permissions (https://code.djangoproject.com/ticket/13965)
-        permissions = (("can_ghost_visit", u"Can visit stealth"),)
+        permissions = (("can_ghost_visit", "Can visit stealth"),)
         app_label = 'user'

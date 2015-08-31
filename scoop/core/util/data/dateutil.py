@@ -8,14 +8,16 @@ from random import randrange
 from django.utils import timezone
 
 
-# Timestamp
 def now():
     """ Renvoie la date/heure actuelle en int(timestamp) """
     return calendar.timegm(datetime.datetime.utcnow().utctimetuple())
 
 
 def to_timestamp(dt):
-    """ Convertit un objet date ou datetime en int(timestamp) """
+    """
+    Convertit un objet date ou datetime en int(timestamp)
+    :type dt: datetime.datetime | datetime.date
+    """
     if isinstance(dt, datetime.date):
         dt = datetime.datetime(dt.year, dt.month, dt.day)
     return calendar.timegm(dt.utctimetuple())

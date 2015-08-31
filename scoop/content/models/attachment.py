@@ -28,7 +28,7 @@ class AttachmentManager(SingleDeleteManager):
         """ Renvoyer un lien HTML vers un fichier portant un UUID spécifique """
         try:
             attachment = self.get(uuid=uuid)
-            result = u"""<a href="{url}">{name}</a>""".format(url=attachment.file.url, name=attachment.get_name())
+            result = """<a href="{url}">{name}</a>""".format(url=attachment.file.url, name=attachment.get_name())
             return result
         except Attachment.DoesNotExist:
             return ""
@@ -50,42 +50,42 @@ class AttachmentManager(SingleDeleteManager):
 class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
     """ Pièce jointe fichier """
     # Champs
-    group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_(u"Group"))
-    file = models.FileField(max_length=192, upload_to=get_attachment_upload_path, verbose_name=_(u"File"), help_text=_(u"File to attach"))
-    name = models.CharField(max_length=64, blank=True, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, default=u"", verbose_name=_(u"Description"))
-    mimetype = models.CharField(max_length=40, blank=True, verbose_name=_(u"MIME type"))
+    group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_("Group"))
+    file = models.FileField(max_length=192, upload_to=get_attachment_upload_path, verbose_name=_("File"), help_text=_("File to attach"))
+    name = models.CharField(max_length=64, blank=True, verbose_name=_("Name"))
+    description = models.TextField(blank=True, default="", verbose_name=_("Description"))
+    mimetype = models.CharField(max_length=40, blank=True, verbose_name=_("MIME type"))
     limit = models.Q(model__in={'Profile', 'Content'})  # limite des content types
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, related_name='attachments', limit_choices_to=limit, verbose_name=_(u"Content type"))
-    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, related_name='attachments', limit_choices_to=limit, verbose_name=_("Content type"))
+    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     objects = AttachmentManager()
 
     # Getter
-    @addattr(boolean=True, short_description=_(u"Valid"))
+    @addattr(boolean=True, short_description=_("Valid"))
     def exists(self):
         """ Renvoyer si le fichier existe """
         return self.id and self.file and self.file.path and os.path.exists(self.file.path)
 
-    @addattr(allow_tags=True, short_description=_(u"Link"))
+    @addattr(allow_tags=True, short_description=_("Link"))
     def get_link(self):
         """ Renvoyer un lien HTML vers le fichier """
         return Attachment.objects.get_link_by_uuid(self.uuid)
 
-    @addattr(short_description=_(u"Name"))
+    @addattr(short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom du fichier """
         return os.path.basename(self.file.name)
 
-    @addattr(short_description=_(u"Size"))
+    @addattr(short_description=_("Size"))
     def get_file_size(self):
         """ Renvoyer la taille du fichier au format lisible """
         if self.exists():
             return filesizeformat(self.file.size)
         else:
-            return pgettext('size', u"None")
+            return pgettext('size', "None")
 
-    @addattr(boolean=True, short_description=pgettext_lazy('attachment', u"Orphaned"))
+    @addattr(boolean=True, short_description=pgettext_lazy('attachment', "Orphaned"))
     def is_orphan(self):
         """ Renvoyer si la pièce jointe n'a pas de cible """
         return self.content_object is None
@@ -120,7 +120,7 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"{}".format(self.file.name)
+        return "{}".format(self.file.name)
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -134,7 +134,7 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"attachment")
-        verbose_name_plural = _(u"attachments")
-        permissions = (("can_join_files", u"Can join files"),)
+        verbose_name = _("attachment")
+        verbose_name_plural = _("attachments")
+        permissions = (("can_join_files", "Can join files"),)
         app_label = "content"

@@ -15,23 +15,23 @@ from scoop.core.util.shortcuts import addattr
 class MailType(TranslatableModel):
     """ Type de mail """
     # Constantes
-    INTERVALS = [[0, _(u"As soon as possible")], [5, _(u"Every 5 minutes")], [10, _(u"Every 10 minutes")], [30, _(u"Every 30 minutes")], [60, _(u"Every hour")], [720, _(u"Every 12 hours")],
-                 [1440, _(u"Every day")], [4320, _(u"Every 3 days")], [10080, _(u"Every week")], [43200, _(u"Every 30 days")]]
+    INTERVALS = [[0, _("As soon as possible")], [5, _("Every 5 minutes")], [10, _("Every 10 minutes")], [30, _("Every 30 minutes")], [60, _("Every hour")], [720, _("Every 12 hours")],
+                 [1440, _("Every day")], [4320, _("Every 3 days")], [10080, _("Every week")], [43200, _("Every 30 days")]]
     # Champs
-    short_name = models.CharField(max_length=32, verbose_name=_(u"Codename"))
-    template = models.CharField(max_length=32, help_text=_(u"Template filename without path and extension"), verbose_name=_(u"Template"))
-    interval = models.IntegerField(default=0, choices=INTERVALS, help_text=_(u"Delay in minutes"), verbose_name=_(u"Minimum delay"))
+    short_name = models.CharField(max_length=32, verbose_name=_("Codename"))
+    template = models.CharField(max_length=32, help_text=_("Template filename without path and extension"), verbose_name=_("Template"))
+    interval = models.IntegerField(default=0, choices=INTERVALS, help_text=_("Delay in minutes"), verbose_name=_("Minimum delay"))
 
     # Getter
-    @addattr(short_description=_(u"Description"))
+    @addattr(short_description=_("Description"))
     def get_description(self):
         """ Renvoyer la description du type de mail """
         try:
             return self.get_translation().description
         except MissingTranslation:
-            return _(u"(No description)")
+            return _("(No description)")
 
-    @addattr(admin_order_field='interval', short_description=_(u"Interval"))
+    @addattr(admin_order_field='interval', short_description=_("Interval"))
     def get_interval(self):
         """ Renvoyer l'intervalle d'envoi pour ce type de mail """
         return datetime.timedelta(minutes=self.interval)
@@ -46,14 +46,14 @@ class MailType(TranslatableModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"mail type")
-        verbose_name_plural = _(u"mail types")
+        verbose_name = _("mail type")
+        verbose_name_plural = _("mail types")
         app_label = "messaging"
 
 
 class MailTypeTranslation(get_translation_model(MailType, "mailtype"), TranslationModel):
     """ Traduction du type de mail """
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Overrides
     def save(self, *args, **kwargs):

@@ -24,8 +24,8 @@ class VoteManager(SingleDeleteManager):
 
 class Vote(DatetimeModel, AuthoredModel):
     """ Réponse dans un sondage """
-    poll = models.ForeignKey('forum.Poll', null=False, related_name='votes', verbose_name=_(u"Poll"))
-    choice = models.SmallIntegerField(default=None, null=True, verbose_name=_(u"Choice"))
+    poll = models.ForeignKey('forum.Poll', null=False, related_name='votes', verbose_name=_("Poll"))
+    choice = models.SmallIntegerField(default=None, null=True, verbose_name=_("Choice"))
     objects = VoteManager()
 
     # Overrides
@@ -36,6 +36,6 @@ class Vote(DatetimeModel, AuthoredModel):
     # Métadonnées
     class Meta:
         unique_together = (('author', 'poll'),)
-        verbose_name = _(u"vote")
-        verbose_name_plural = _(u"votes")
+        verbose_name = _("vote")
+        verbose_name_plural = _("votes")
         app_label = 'forum'

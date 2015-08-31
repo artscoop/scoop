@@ -21,30 +21,30 @@ class AnimationAdmin(ModelAdmin):
     form = make_ajax_form(Animation, {'author': 'user', 'picture': 'picture'})
     actions = ['delete_full']
 
-    @addattr(short_description=_(u"Fully delete selected animations"))
+    @addattr(short_description=_("Fully delete selected animations"))
     def delete_full(self, request, queryset):
         """ Action : Supprimer les animations du queryset """
         for animation in queryset:
             animation.delete(clear=True)
-        self.message_user(request, _(u"Selected animation has been fully deleted."))
+        self.message_user(request, _("Selected animation has been fully deleted."))
 
-    @addattr(allow_tags=True, short_description=_(u"Video"))
+    @addattr(allow_tags=True, short_description=_("Video"))
     def get_video_tag(self, obj):
         """ Renvoyer le tag HTML d'un objet vidéo """
         return obj.get_html(width=160)
 
-    @addattr(short_description=_(u"Img.#"))
+    @addattr(short_description=_("Img.#"))
     def get_picture_id(self, obj):
         """ Renvoyer l'id de l'image source de l'animation """
         if obj.picture:
             return "{}".format(obj.picture.id)
 
-    @addattr(short_description=_(u"Duration"))
+    @addattr(short_description=_("Duration"))
     def get_duration_unit(self, obj):
         """ Renvoyer un texte de la durée de l'animation """
         duration = obj.get_duration()
         minutes, seconds = divmod(duration, 60.0)
-        return (u"{minutes:.0f}m{seconds}s" if minutes else u"{seconds}s").format(minutes=minutes, seconds=localize(seconds))
+        return ("{minutes:.0f}m{seconds}s" if minutes else "{seconds}s").format(minutes=minutes, seconds=localize(seconds))
 
 # Enregistrer les classes d'administration
 admin.site.register(Animation, AnimationAdmin)

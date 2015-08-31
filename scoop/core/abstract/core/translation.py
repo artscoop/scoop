@@ -9,4 +9,4 @@ class TranslationModel(object):
 
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"[{language}] {name}").format(language=self.language, name=_(self.model.__class__._meta.verbose_name))
+        return _("[{language}] {name}").format(language=self.language, name=_(self.model.__class__._meta.verbose_name))

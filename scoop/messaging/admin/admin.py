@@ -20,8 +20,8 @@ from scoop.messaging.models.recipient import Recipient
 
 class MailTypeTranslationInlineAdmin(admin.TabularInline):
     """ Administration inline des traductions de types de courrier """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = MailTypeTranslation
     max_num = len(settings.LANGUAGES)
     formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}, }

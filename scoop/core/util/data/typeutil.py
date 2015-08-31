@@ -47,7 +47,7 @@ def get_color_name(requested_color):
     except ValueError:
         closest_name = closest_color(requested_color)
         actual_name = None
-    return actual_name or u"&#8776;{}".format(closest_name)
+    return actual_name or "&#8776;{}".format(closest_name)
 
 
 def list_contains(t, text):

@@ -1,5 +1,5 @@
 # coding: utf-8
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from django import template
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -30,7 +30,7 @@ def show_ad(**options):
     for option, value in options.items():
         args[option] = value
     if args['group'] is None and args['name'] is None and args['size'] is None:
-        return _(u"[group/name missing]")
+        return _("[group/name missing]")
     if args['group'] is not None:
         advert = Advertisement.objects.random(args['group'])
     elif args['name'] is not None:
@@ -38,8 +38,10 @@ def show_ad(**options):
     elif args['size'] is not None:
         width, height = [int(item) for item in args['size'].split('x')]
         advert = Advertisement.objects.random_by_size(width, height)
+    else:
+        advert = None
     if advert is not None:
-        return render_to_string("content/display/advertisement.html", {'ad': advert.render()})
+        return render_to_string("content/display/advertisement/html/default.html", {'ad': advert.render()})
     if settings.DEBUG:
-        return _(u"advertisement missing")
+        return _("advertisement missing")
     return ""

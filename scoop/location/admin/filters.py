@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class ParentedFilter(SimpleListFilter):
     """ Filtre admin d'objets avec un attribut parent """
-    title = _(u"Parent")
+    title = _("Parent")
     parameter_name = 'parented'
 
     def lookups(self, request, model_admin):
@@ -25,7 +25,7 @@ class ParentedFilter(SimpleListFilter):
 
 class PostalCodedFilter(SimpleListFilter):
     """ Filtre admin sur la présence ou non de code postal """
-    title = _(u"Has postal code")
+    title = _("Has postal code")
     parameter_name = 'postalcoded'
 
     def lookups(self, request, model_admin):
@@ -45,12 +45,12 @@ class PostalCodedFilter(SimpleListFilter):
 
 class LevelFilter(SimpleListFilter):
     """ Filtre admin sur le niveau admin d'une ville """
-    title = _(u"Level")
+    title = _("Level")
     parameter_name = 'level'
 
     def lookups(self, request, model_admin):
         """ Renvoyer toutes les valeurs possibles de filtre """
-        level_str = _(u"Level {level}")
+        level_str = _("Level {level}")
         return ((str(l), level_str.format(level=l)) for l in range(1, 5))
 
     def queryset(self, request, queryset):

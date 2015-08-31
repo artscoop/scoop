@@ -17,12 +17,12 @@ class NamedFilterManager(object):
         try:
             # Calculer le chemin de template à ouvrir
             meta = self.model._meta
-            template_path = u"{app}/namedfilter/{model}/{name}.txt".format(app=meta.app_label, model=meta.model_name, name=name)
+            template_path = "{app}/namedfilter/{model}/{name}.txt".format(app=meta.app_label, model=meta.model_name, name=name)
             # Effectuer le rendu du template avec les arguments passés
             output = render_to_string(template_path, kwargs)
             # Convertir le template en dictionnaire
             arguments = text_to_dict(output, evaluate=True)
             return self.filter(**arguments)
-        except Exception, e:
+        except Exception as e:
             print_exc(e)
             return self.all()

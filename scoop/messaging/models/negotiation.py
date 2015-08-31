@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from unidecode import unidecode
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager
@@ -30,6 +31,14 @@ class NegotiationManager(SingleDeleteManager):
         """ Renvoyer toutes les négociations vers une cible """
         return self.filter(target=target, **kwargs)
 
+    def accepted(self, target):
+        """ Renvoyer les négociations acceptées par une cible """
+        return self.filter(target=target, status=Negotiation.ACCEPTED)
+
+    def pending(self, target):
+        """ Renvoyer les négociations en attente vers une cible """
+        return self.filter(target=target, status=Negotiation.PENDING)
+
     # Setter
     def negotiate(self, source, target):
         """ Créer une négociation entre source et cible """
@@ -52,15 +61,15 @@ class NegotiationManager(SingleDeleteManager):
 class Negotiation(DatetimeModel):
     """ Négociation d'autorisation d'envoeyer un message """
     # Constantes
-    STATUS = [[None, _(u"Pending")], [True, _(u"Accepted")], [False, _(u"Denied")]]
+    STATUS = [[None, _("Pending")], [True, _("Accepted")], [False, _("Denied")]]
     PENDING, ACCEPTED, DENIED = None, True, False
     # Champs
-    source = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name="negotiations_made", verbose_name=_(u"Asker"))
-    target = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name="negotiations_received", verbose_name=_(u"Target"))
-    status = models.NullBooleanField(default=PENDING, db_index=True, verbose_name=_(u"Status"))
-    thread = models.ForeignKey('messaging.Thread', null=True, on_delete=models.SET_NULL, verbose_name=_(u"Thread"))
-    closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('negotiation', u"Closed"))
-    updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('negotiation', u"Updated"))
+    source = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name="negotiations_made", verbose_name=_("Asker"))
+    target = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name="negotiations_received", verbose_name=_("Target"))
+    status = models.NullBooleanField(default=PENDING, db_index=True, verbose_name=_("Status"))
+    thread = models.ForeignKey('messaging.Thread', null=True, on_delete=models.SET_NULL, verbose_name=_("Thread"))
+    closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('negotiation', "Closed"))
+    updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('negotiation', "Updated"))
     objects = NegotiationManager()
 
     # Setter
@@ -85,11 +94,15 @@ class Negotiation(DatetimeModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"Messaging negotiation between {source} and {target}").format(source=self.source, target=self.target)
+        return _("Messaging negotiation between {source} and {target}").format(source=self.source, target=self.target)
+
+    def __repr__(self):
+        """ Renvoyer la représentation texte de l'objet """
+        return "Negotiation: {source}->{target}".format(source=unidecode(self.source), target=unidecode(self.target))
 
     # Métadonnées
     class Meta:
         unique_together = (('source', 'target'),)
-        verbose_name = _(u"negotiation")
-        verbose_name_plural = _(u"negotiations")
+        verbose_name = _("negotiation")
+        verbose_name_plural = _("negotiations")
         app_label = "messaging"

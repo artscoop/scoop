@@ -30,7 +30,7 @@ def picture(user, request=None):
 def picture_url(user, request=None):
     """ Renvoyer l'URL de l'image de profil utilisateur """
     relative_path = picture(user, request=request)
-    return u"{}{}".format(settings.MEDIA_URL, relative_path)
+    return "{}{}".format(settings.MEDIA_URL, relative_path)
 
 
 # Permissions
@@ -119,7 +119,6 @@ def made_visits(user):
     return Visit.objects.has_made_visits(user)
 
 
-# Distance entre deux utilisateurs
 @register.simple_tag(name='user_distance')
 def show_distance(user1, user2, unit=None, digits=2):
     """
@@ -132,10 +131,10 @@ def show_distance(user1, user2, unit=None, digits=2):
         distance = CoordinatesModel.convert_km_to(user1.profile.city.get_distance(user2.profile.city), unit or 'km')
         if distance > 0:
             unit = unit if unit in CoordinatesModel.UNIT_RATIO else 'km'
-            return u"{}{}".format(intcomma(round_left(distance, digits)), unit or 'km')
+            return "{}{}".format(intcomma(round_left(distance, digits)), unit or 'km')
     return ""
 
-# Cardinal entre deux utilisateurs
+
 @register.simple_tag(name='user_cardinal')
 def show_cardinal(user1, user2, mode=None):
     """
@@ -153,10 +152,9 @@ def distance_to(user1, user2):
     if not any([u.is_anonymous() or not u.profile.city for u in [user1, user2]]):
         distance = user1.profile.city.get_distance(user2.profile.city)
         return distance
-    return u""
+    return ""
 
 
-# Traitement de chaînes selon l'état de l'utilisateur
 @register.filter(name='by_auth')
 def string_by_auth(user, value):
     """
@@ -165,12 +163,12 @@ def string_by_auth(user, value):
         la première valeur étant renvoyée si l'utilisateur est authentifié
     :type value: str or list or tuple
     """
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         strings = value.split(',')
     elif isinstance(value, (list, tuple)):
-        strings = [unicode(item) for item in value]
+        strings = [str(item) for item in value]
     else:
-        strings = [_(u"yes"), _(u"no")]
+        strings = [_("yes"), _("no")]
     return strings[0] if user.is_authenticated() else strings[1]
 
 
@@ -182,10 +180,10 @@ def string_by_staff(user, value):
         la première valeur étant renvoyée si l'utilisateur est du personnel
     :type value: str or list or tuple
     """
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         strings = value.split(',')
     elif isinstance(value, (list, tuple)):
-        strings = [unicode(item) for item in value]
+        strings = [str(item) for item in value]
     else:
-        strings = [_(u"yes"), _(u"no")]
+        strings = [_("yes"), _("no")]
     return strings[0] if user.is_staff else strings[1]

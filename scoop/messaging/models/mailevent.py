@@ -18,30 +18,52 @@ from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import one_line
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
-from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 
 
-class MailEventManager(SingleDeleteManager):
-    """ Manager des événements mail """
+class MailEventQuerySetMixin(object):
+    """ Mixin de manager des événements mail """
 
     # Getter
     def clearable(self, user):
-        """ Renvoyer les événements supprimables si l'utilisateur passe en ligne """
+        """
+        Renvoyer les événements supprimables si l'utilisateur passe en ligne
+        :type self: django.db.models.Queryset
+        """
         return self.filter(recipient=user, forced=False, sent=False)
 
     def orphans(self):
-        """ Renvoyer les événements dont le statut est incorrect """
+        """
+        Renvoyer les événements dont le statut est incorrect
+        :type self: django.db.models.Queryset
+        """
         return self.filter(recipient__isnull=True)
+
+    def discard(self):
+        """
+        Marquer comme annulés les événements mails du queryset
+        :type self: django.db.models.Queryset
+        """
+        return self.update(discarded=True)
+
+
+class MailEventQuerySet(models.QuerySet, MailEventQuerySetMixin, SingleDeleteQuerySetMixin):
+    """ Queryset des fils de discussion """
+    pass
+
+
+class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.Manager, SingleDeleteQuerySetMixin, MailEventQuerySetMixin):
+    """ Manager des événements mail """
 
     def get_queue_length(self):
         """ Renvoyer le nombre d'événements en file """
-        return self.filter(sent=False).count()
+        return self.filter(sent=False, discarded=False).count()
 
     def unsent(self):
         """ Renvoyer les événements non expédiés """
-        return self.filter(sent=False)
+        return self.filter(sent=False, discarded=False)
 
     def get_unsent_count(self):
         """ Renvoyer le nombre d'événements non expédiés """
@@ -81,14 +103,14 @@ class MailEventManager(SingleDeleteManager):
         if forced == 'all':
             return self.process(forced=False, bypass_delay=bypass_delay) + self.process(forced=True, bypass_delay=bypass_delay)
         # Pas besoin de process si aucun mail à expédier
-        if self.filter(sent=False, forced=forced).count() == 0:
+        if self.filter(sent=False, discarded=False, forced=forced).count() == 0:
             return 0
         # Adresse du sender (selon template+settings)
         sender = render_to_string('messaging/mail/layout/sender.txt', {'settings': settings}, default_context())
         # Supprimer les mails sans utilisateur et non importants
         self.orphans().delete()
         # Récupérer la liste des membres à qui envoyer un mail
-        mail_users = self.filter(sent=False).values_list('recipient', flat=True).distinct()
+        mail_users = self.filter(sent=False, discarded=False).values_list('recipient', flat=True).distinct()
         users = get_user_model().objects.filter(id__in=mail_users)
         # Total de mails envoyés à calculer
         mail_counter = 0
@@ -101,7 +123,7 @@ class MailEventManager(SingleDeleteManager):
             # Ne traiter que si la configuration de l'utilisateur autorise
             if (user.can_send_mail() and mail_counter < mail_ceiling) or forced or bypass_delay:
                 # Traiter les mails non marqués comme *forcés*
-                mails = self.filter(recipient=user, forced=forced, sent=False)
+                mails = self.filter(recipient=user, forced=forced, sent=False, discarded=False)
                 # Envoyer chaque mail si son heure minimum d'envoi est atteinte
                 for mail in mails:
                     if mail.can_send() or bypass_delay:
@@ -127,28 +149,29 @@ class MailEventManager(SingleDeleteManager):
 class MailEvent(UUID128Model, DataModel):
     """ Événement mail """
     # Champs
-    type = models.ForeignKey('messaging.MailType', related_name='events', verbose_name=_(u"Mail type"))
-    queued = models.DateTimeField(default=timezone.now, verbose_name=_(u"Queue time"))
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='mailevents_to', verbose_name=_(u"Recipient"))
-    forced = models.BooleanField(default=False, db_index=True, verbose_name=_(u"Force sending"))
-    sent = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('mailevent', u"Sent"))
-    sent_time = models.DateTimeField(null=True, default=None, verbose_name=_(u"Delivery time"))
-    sent_email = models.CharField(max_length=96, default=u"", verbose_name=_(u"Email used"))
-    minimum_time = models.DateTimeField(default=timezone.now, verbose_name=_(u"Minimum delivery"))
+    type = models.ForeignKey('messaging.MailType', related_name='events', verbose_name=_("Mail type"))
+    queued = models.DateTimeField(default=timezone.now, verbose_name=_("Queue time"))
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='mailevents_to', verbose_name=_("Recipient"))
+    forced = models.BooleanField(default=False, db_index=True, verbose_name=_("Force sending"))
+    sent = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('mailevent', "Sent"))
+    sent_time = models.DateTimeField(null=True, default=None, verbose_name=_("Delivery time"))
+    sent_email = models.CharField(max_length=96, default="", verbose_name=_("Email used"))
+    minimum_time = models.DateTimeField(default=timezone.now, verbose_name=_("Minimum delivery"))
+    discarded = models.BooleanField(default=False, verbose_name=_("Discarded"))
     objects = MailEventManager()
 
     # Getter
-    @addattr(boolean=True, short_description=_(u"Can be sent now"))
+    @addattr(boolean=True, short_description=_("Can be sent now"))
     def can_send(self):
         """ Renvoyer si cet événement peut être distribué """
         return self.minimum_time <= timezone.now() or self.forced
 
-    @addattr(short_description=_(u"Delivery"))
+    @addattr(short_description=_("Delivery"))
     def get_delivery_delay(self):
         """ Renvoyer l'heure relative où l'envoi sera autorisé """
         return pretty.date(self.minimum_time)
 
-    @addattr(allow_tags=True, short_description=_(u"Rendering"))
+    @addattr(allow_tags=True, short_description=_("Rendering"))
     def render(self):
         """ Renvoyer les informations de rendu de l'événement """
         context = default_context()
@@ -167,6 +190,6 @@ class MailEvent(UUID128Model, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"mail event")
-        verbose_name_plural = _(u"mail events")
+        verbose_name = _("mail event")
+        verbose_name_plural = _("mail events")
         app_label = "messaging"

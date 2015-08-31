@@ -22,4 +22,4 @@ class IPIntegerField(forms.IntegerField):
         try:
             return IP(str(value)).__str__()
         except:
-            return u""
+            return ""

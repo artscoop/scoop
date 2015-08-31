@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-import urlparse
+from urllib import parse
 
 from annoying.decorators import render_to
 from django.core.validators import URLValidator
@@ -40,18 +40,18 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
     """ Lien interne ou externe """
 
     # Constantes
-    TYPES = ((0, _(u"Text")), (1, _(u"Icon")), (2, _(u"Icon and text")), (3, _(u"oEmbed")), (4, _(u"Flash")))
+    TYPES = ((0, _("Text")), (1, _("Icon")), (2, _("Icon and text")), (3, _("oEmbed")), (4, _("Flash")))
     # Champs
-    group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_(u"Group"), help_text=_(u"Use the same name to group icons."))
-    display = models.SmallIntegerField(choices=TYPES, default=0, db_index=True, help_text=_(u"Default display mode of this link"), verbose_name=_(u"Type"))
-    url = models.URLField(max_length=1024, unique=True, verbose_name=_(u"URL"))
-    anchor = models.CharField(max_length=192, blank=True, verbose_name=_(u"Anchor"))
-    title = models.CharField(max_length=128, blank=True, verbose_name=_(u"Title"))
-    target = models.CharField(max_length=16, default="_self", blank=True, verbose_name=_(u"Target"))
-    nofollow = models.BooleanField(default=True, verbose_name=_(u"No-follow"))
-    remainder = models.CharField(max_length=64, blank=True, verbose_name=_(u"HTML Remainder"), help_text=_(u"HTML code of extra tag attributes"))
-    information = models.TextField(blank=True, default=u"", help_text=_(u"Internal information for the link"), verbose_name=_(u"Information"))
-    description = models.TextField(blank=True, default=u"", verbose_name=_(u"Description"))
+    group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_("Group"), help_text=_("Use the same name to group icons."))
+    display = models.SmallIntegerField(choices=TYPES, default=0, db_index=True, help_text=_("Default display mode of this link"), verbose_name=_("Type"))
+    url = models.URLField(max_length=1024, unique=True, verbose_name=_("URL"))
+    anchor = models.CharField(max_length=192, blank=True, verbose_name=_("Anchor"))
+    title = models.CharField(max_length=128, blank=True, verbose_name=_("Title"))
+    target = models.CharField(max_length=16, default="_self", blank=True, verbose_name=_("Target"))
+    nofollow = models.BooleanField(default=True, verbose_name=_("No-follow"))
+    remainder = models.CharField(max_length=64, blank=True, verbose_name=_("HTML Remainder"), help_text=_("HTML code of extra tag attributes"))
+    information = models.TextField(blank=True, default="", help_text=_("Internal information for the link"), verbose_name=_("Information"))
+    description = models.TextField(blank=True, default="", verbose_name=_("Description"))
     objects = LinkManager()
 
     # Getter
@@ -63,7 +63,7 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
     @addattr(boolean=True)
     def is_valid(self):
         """ Renvoyer si l'URL est formée correctement """
-        parsed = urlparse.urlparse(self.url)
+        parsed = parse.urlparse(self.url)
         try:
             URLValidator(self.url)
         except:
@@ -95,6 +95,6 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"link")
-        verbose_name_plural = _(u"links")
+        verbose_name = _("link")
+        verbose_name_plural = _("links")
         app_label = 'content'

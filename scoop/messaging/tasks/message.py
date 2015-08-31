@@ -17,4 +17,4 @@ def check_message(message):
     if has_mail or long_enough:
         similar = message.get_similar_user_message_count()
         if similar >= 3:
-            Flag.objects.flag(message.author, status=Flag.PENDING, automatic=True, typename='message-mail', details=_(u"Duplicate or similar messages"))
+            Flag.objects.flag(message.author, status=Flag.PENDING, automatic=True, typename='message-mail', details=_("Duplicate or similar messages"))

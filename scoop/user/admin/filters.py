@@ -13,7 +13,7 @@ from scoop.core.admin.filters import FirstLetterFilter
 
 class LastOnlineFilter(SimpleListFilter):
     """ Filtre admin sur la date où les utilisateurs ont été vus en ligne """
-    title = _(u"last online")
+    title = _("last online")
     parameter_name = 'last online'
 
     def lookups(self, request, model_admin):
@@ -47,7 +47,7 @@ class LastOnlineFilter(SimpleListFilter):
 
 class OnlineFilter(SimpleListFilter):
     """ Filtre admin sur les profils actuellement en ligne """
-    title = _(u"online")
+    title = _("online")
     parameter_name = 'online'
 
     def lookups(self, request, model_admin):
@@ -80,7 +80,7 @@ class OnlineFilter(SimpleListFilter):
 
 class AgeFilter(SimpleListFilter):
     """ Filtre admin sur l'âge des profils """
-    title = _(u"age")
+    title = _("age")
     parameter_name = 'age'
 
     def lookups(self, request, model_admin):
@@ -106,7 +106,7 @@ class AgeFilter(SimpleListFilter):
 
 class MailFilter(SimpleListFilter):
     """ Filtre admin sur le domaine de l'adresse email d'un profil """
-    title = _(u"mail service")
+    title = _("mail service")
     parameter_name = 'mailservice'
 
     def lookups(self, request, model_admin):
@@ -144,7 +144,7 @@ class MailFilter(SimpleListFilter):
 
 class ImageFilter(SimpleListFilter):
     """ Filtre admin sur l'existence de photos de profil """
-    title = _(u"picture")
+    title = _("picture")
     parameter_name = 'picture'
 
     def lookups(self, request, model_admin):
@@ -164,7 +164,7 @@ class ImageFilter(SimpleListFilter):
 
 class InitialFilter(FirstLetterFilter):
     """ Filtre admin sur l'initiale du nom d'utilisateur """
-    title = _(u"first username letter")
+    title = _("first username letter")
     parameter_name = 'username_l'
 
     def queryset(self, request, queryset):

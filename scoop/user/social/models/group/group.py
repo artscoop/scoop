@@ -32,17 +32,17 @@ class GroupManager(SingleDeleteManager):
 class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, InviteTargetModel):
     """ Groupe d'intérêt """
     # Constantes
-    MEMBERSHIPS = [(0, _(u"Anyone can join")), (1, _(u"Administrators must confirm first")), (2, _(u"Invites only"))]
+    MEMBERSHIPS = [(0, _("Anyone can join")), (1, _("Administrators must confirm first")), (2, _("Invites only"))]
     # Champs
-    name = models.CharField(_(u"Name"), max_length=128, unique=True)
+    name = models.CharField(_("Name"), max_length=128, unique=True)
     slug = AutoSlugField(max_length=100, populate_from='name', unique=True, blank=True, editable=True, unique_with=('id',))
-    discreet = models.BooleanField(default=False, help_text=_(u"Define if the group is not in the public listings"), verbose_name=_(u"Discrete group"))
-    description = models.TextField(blank=False, verbose_name=_(u"Description"))
-    membership = models.SmallIntegerField(default=0, choices=MEMBERSHIPS, verbose_name=_(u"Membership type"))
+    discreet = models.BooleanField(default=False, help_text=_("Define if the group is not in the public listings"), verbose_name=_("Discrete group"))
+    description = models.TextField(blank=False, verbose_name=_("Description"))
+    membership = models.SmallIntegerField(default=0, choices=MEMBERSHIPS, verbose_name=_("Membership type"))
     # Membres du groupe
-    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_social_groups', verbose_name=_(u"Moderators"))
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='social_groups', verbose_name=_(u"Members"))
-    applications = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='social_groups_applied', verbose_name=_(u"Applications"))
+    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_social_groups', verbose_name=_("Moderators"))
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='social_groups', verbose_name=_("Members"))
+    applications = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='social_groups_applied', verbose_name=_("Applications"))
     objects = GroupManager()
 
     # Getter
@@ -106,7 +106,7 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, 
 
     # Métadonnées
     class Meta(object):
-        verbose_name = _(u"group")
-        verbose_name_plural = _(u"groups")
-        permissions = (("can_join_groups", u"Can join groups"),)
+        verbose_name = _("group")
+        verbose_name_plural = _("groups")
+        permissions = (("can_join_groups", "Can join groups"),)
         app_label = "social"

@@ -91,17 +91,17 @@ class IP(DatetimeModel, CoordinatesModel):
     PROTECTED_IPS = [r'^127\.', r'^192\.168\.']
 
     # Champs
-    ip = models.DecimalField(null=False, blank=True, unique=True, max_digits=39, decimal_places=0, db_index=True, verbose_name=_(u"Decimal"))
-    string = models.CharField(max_length=48, verbose_name=_(u"String"))
-    reverse = models.CharField(max_length=80, blank=True, verbose_name=_(u"Reverse"))  # état de résolution du reverse
-    status = models.SmallIntegerField(default=0, choices=STATUS_CHOICES, verbose_name=_(u"Reverse status"))
-    isp = models.CharField(max_length=64, blank=True, verbose_name=_(u"ISP"))
-    country = models.CharField(max_length=2, blank=True, choices=COUNTRIES.items(), db_index=True, verbose_name=_(u"Country"))
-    harm = models.SmallIntegerField(default=0, db_index=True, validators=[MinValueValidator(0), MaxValueValidator(4)], verbose_name=_(u"Harm"))
-    blocked = models.BooleanField(default=False, db_index=True, verbose_name=_(u"Blocked"))
-    updated = models.DateTimeField(default=datetime(1970, 1, 1), verbose_name=pgettext_lazy('ip', u"Updated"))
-    dynamic = models.NullBooleanField(default=None, verbose_name=_(u"Dynamic"))  # IP dynamique ?
-    city_name = models.CharField(max_length=96, blank=True, verbose_name=_(u"City name"))
+    ip = models.DecimalField(null=False, blank=True, unique=True, max_digits=39, decimal_places=0, db_index=True, verbose_name=_("Decimal"))
+    string = models.CharField(max_length=48, verbose_name=_("String"))
+    reverse = models.CharField(max_length=80, blank=True, verbose_name=_("Reverse"))  # état de résolution du reverse
+    status = models.SmallIntegerField(default=0, choices=STATUS_CHOICES, verbose_name=_("Reverse status"))
+    isp = models.CharField(max_length=64, blank=True, verbose_name=_("ISP"))
+    country = models.CharField(max_length=2, blank=True, choices=COUNTRIES.items(), db_index=True, verbose_name=_("Country"))
+    harm = models.SmallIntegerField(default=0, db_index=True, validators=[MinValueValidator(0), MaxValueValidator(4)], verbose_name=_("Harm"))
+    blocked = models.BooleanField(default=False, db_index=True, verbose_name=_("Blocked"))
+    updated = models.DateTimeField(default=datetime(1970, 1, 1), verbose_name=pgettext_lazy('ip', "Updated"))
+    dynamic = models.NullBooleanField(default=None, verbose_name=_("Dynamic"))  # IP dynamique ?
+    city_name = models.CharField(max_length=96, blank=True, verbose_name=_("City name"))
     objects = IPManager()
 
     # Getter
@@ -111,38 +111,38 @@ class IP(DatetimeModel, CoordinatesModel):
 
     def get_ip_address(self):
         """ Renvoyer la chaîne d'adresse de l'IP """
-        return self.string or IPy.IP(long(self.ip)).strNormal()
+        return self.string or IPy.IP(int(self.ip)).strNormal()
 
-    @addattr(short_description=_(u"Class"))
+    @addattr(short_description=_("Class"))
     def get_ip_class(self):
         """ Renvoyer la classe de l'IP, de A à E """
-        value = long(self.ip)
+        value = int(self.ip)
         if value & (0b1 << 31) == 0:  # 0.0.0.0 à 127.255.255.255
-            return u"A"
+            return "A"
         elif value & (0b10 << 30) == (0b10 << 30):  # 128.0.0.0 à 191.255.255.255
-            return u"B"
+            return "B"
         elif value & (0b110 << 29) == (0b110 << 29):  # 192.0.0.0 à 223.255.255.255
-            return u"C"
+            return "C"
         elif value & (0b1110 << 28) == (0b1110 << 28):  # 224.0.0.0 à 239.255.255.255
-            return u"D"
+            return "D"
         elif value & (0b1111 << 28) == (0b1111 << 28):  # 240.0.0.0 à 255.255.255.255
-            return u"E"
+            return "E"
 
     def get_geoip(self):
         """ Renvoyer les informations de localisation de l'IP """
         try:
             return IP.objects.geoip.record_by_addr(self.string) or {}
-        except Exception, e:
+        except Exception as e:
             logger.warn(e)
             return {'country_code': '', 'latitude': 0.0, 'longitude': 0.0}
 
-    @addattr(short_description=_(u"Country"))
+    @addattr(short_description=_("Country"))
     def get_country_code(self):
         """ Renvoyer le code pays de l'IP """
         code = self.get_geoip().get('country_code', "").upper()
         return code
 
-    @addattr(short_description=_(u"Country"))
+    @addattr(short_description=_("Country"))
     def get_country(self):
         """ Renvoyer l'instance Country pour l'IP """
         if not apps.is_installed('scoop.location'):
@@ -151,7 +151,7 @@ class IP(DatetimeModel, CoordinatesModel):
         # Renvoyer le pays correspondant au code, ou aucun si A1, A2 etc.
         return Country.objects.get_by_code2_or_none(self.country)
 
-    @addattr(short_description=_(u"Country"))
+    @addattr(short_description=_("Country"))
     def get_country_name(self):
         """ Renvoyer le nom du pays de l'IP """
         return self.get_country_display()
@@ -173,25 +173,25 @@ class IP(DatetimeModel, CoordinatesModel):
         except Exception:
             return None
 
-    @addattr(short_description=_(u"ISP"))
+    @addattr(short_description=_("ISP"))
     def get_isp(self):
         """ Renvoyer les informations du FAI de l'IP """
         org = IP.objects.geoisp.org_by_addr(self.ip_address) or ""
         return org
 
-    @addattr(short_description=_(u"City name"))
+    @addattr(short_description=_("City name"))
     def get_city_name(self):
         """ Renvoyer le nom de la ville de l'IP """
-        return self.city_name or _(u"N/D")
+        return self.city_name or _("N/D")
 
-    @addattr(short_description=_(u"Reverse"))
+    @addattr(short_description=_("Reverse"))
     def get_reverse(self, force_lookup=False):
         """ Renvoyer le nom inversé de l'IP """
         if force_lookup is True:
             return reverse_lookup(self.get_ip_address())
         return self.reverse or reverse_lookup(self.get_ip_address())
 
-    @addattr(short_description=_(u"Short reverse"))
+    @addattr(short_description=_("Short reverse"))
     def get_short_reverse(self):
         """ Renvoyer un nom inversé court pour l'IP """
         reverse = self.reverse
@@ -205,22 +205,22 @@ class IP(DatetimeModel, CoordinatesModel):
         """ Renvoyer la valeur décimale d'une IP """
         return IPy.IP(ip_string).ip
 
-    @addattr(admin_order_field='ip', short_description=_(u"Hexadecimal"))
+    @addattr(admin_order_field='ip', short_description=_("Hexadecimal"))
     def get_hex(self, group=2):
         """ Renvoyer la représentation hexadécimale de l'IP """
         if group is not int(group) or not group > 0:
             group = 1
-        result = "{:X}".format(long(self.ip))
+        result = "{:X}".format(int(self.ip))
         output = "".join([digit + ':' if idx % group == group - 1 and idx < len(result) - 1 else digit for idx, digit in enumerate(result)])
         return output
 
-    @addattr(short_description=_(u"Users"))
+    @addattr(short_description=_("Users"))
     def get_users(self):
         """ Renvoyer les utilisateurs ayant navigué avec cette IP """
         users = get_user_model().objects.filter(userips__ip=self).order_by('-pk')
         return users
 
-    @addattr(short_description=_(u"Number of users"))
+    @addattr(short_description=_("Number of users"))
     def get_user_count(self):
         """ Renvoyer le nombre d'utilisateurs ayant navigué avec cette IP """
         return self.get_users().count()
@@ -301,7 +301,7 @@ class IP(DatetimeModel, CoordinatesModel):
             return False
         return True
 
-    @addattr(allow_tags=True, short_description=_(u"Icon"))
+    @addattr(allow_tags=True, short_description=_("Icon"))
     def get_country_icon(self):
         """ Renvoyer le HTML du drapeau du pays de l'IP """
         if self.has_country():
@@ -317,10 +317,10 @@ class IP(DatetimeModel, CoordinatesModel):
         """
         try:
             self.ip = IP.get_ip_value(ip_string)
-            self.string = unicode(ip_string)
+            self.string = str(ip_string)
             reverse_status = self.get_reverse(force_lookup=force_lookup)
             if isinstance(reverse_status, dict):
-                self.reverse = unicode(reverse_status['name'])
+                self.reverse = str(reverse_status['name'])
                 self.status = reverse_status['status']
             else:
                 self.reverse = reverse_status
@@ -335,7 +335,7 @@ class IP(DatetimeModel, CoordinatesModel):
             # Sauvegarder si demandé
             if save:
                 self.save(force_update=self.id is not None)
-        except Exception, e:
+        except Exception as e:
             logger.warning(e)
         return self
 
@@ -366,11 +366,11 @@ class IP(DatetimeModel, CoordinatesModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"{}".format(self.ip_address)
+        return "{}".format(self.ip_address)
 
     def __repr__(self):
         """ Renvoyer la représentation ASCII de l'objet """
-        return u"@{}".format(self.ip_address)
+        return "@{}".format(self.ip_address)
 
     @permalink
     def get_absolute_url(self):
@@ -385,6 +385,6 @@ class IP(DatetimeModel, CoordinatesModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = u"IP"
-        verbose_name_plural = u"IP"
+        verbose_name = "IP"
+        verbose_name_plural = "IP"
         app_label = 'access'

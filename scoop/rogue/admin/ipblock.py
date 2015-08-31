@@ -24,35 +24,35 @@ class IPBlockAdmin(admin.ModelAdmin):
     actions = ['resave']
     save_on_top = True
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
-    fieldsets = ((_(u"Blocking"), {'fields': ('active', 'type', 'category', 'ip1', 'ip2', 'isp', 'hostname', 'hostname_exclude', 'country_code')}),
-                 (_(u"Extra"), {'fields': ('harm', 'description', 'expires')}))
+    fieldsets = ((_("Blocking"), {'fields': ('active', 'type', 'category', 'ip1', 'ip2', 'isp', 'hostname', 'hostname_exclude', 'country_code')}),
+                 (_("Extra"), {'fields': ('harm', 'description', 'expires')}))
 
     # Actions
-    @addattr(short_description=_(u"Update selected IP blocks"))
+    @addattr(short_description=_("Update selected IP blocks"))
     def resave(self, request, queryset):
         """ Réenregsitrer les blocages d'IP """
         for ipblock in queryset:
             ipblock.save()
-        self.message_user(request, _(u"Selected blocks successfully updated."))
+        self.message_user(request, _("Selected blocks successfully updated."))
 
     # Getter
-    @addattr(allow_tags=True, admin_order_field="ip1", short_description=_(u"IP 1"))
+    @addattr(allow_tags=True, admin_order_field="ip1", short_description=_("IP 1"))
     def get_ip1(self, obj):
         """ Renvoyer l'IP 1 dans un format A.B.C.D """
         output = IPy.IP(long(obj.ip1)).strNormal()
         return output
 
-    @addattr(allow_tags=True, admin_order_field="ip2", short_description=_(u"IP 2"))
+    @addattr(allow_tags=True, admin_order_field="ip2", short_description=_("IP 2"))
     def get_ip2(self, obj):
         """ Renvoyer l'IP 2 dans un format A.B.C.D """
         output = IPy.IP(long(obj.ip2)).strNormal()
         return output
 
-    @addattr(admin_order_field="expires", short_description=_(u"Expires"))
+    @addattr(admin_order_field="expires", short_description=_("Expires"))
     def get_expires(self, obj):
         """ Renvoyer la date d'expiration du blocage """
         if obj.expires is None:
-            return _(u"Never")
+            return _("Never")
         return obj.expires
 
 # Enregistrer les classes d'administration

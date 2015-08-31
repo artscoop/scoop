@@ -8,6 +8,7 @@ from time import sleep
 
 from django.db import models
 from django.db.transaction import atomic
+from functools import reduce
 
 
 class DictUpdateModel:
@@ -35,7 +36,7 @@ def resave_queryset(queryset, fields=None, count=None):
     def _resave_queryset_progress(progress, total):
         """ Afficher la progression pendant la mise à jour du queryset"""
         percent = progress * 100 / total
-        print u"{percent:>5.1f}% ({progress})".format(progress=progress, percent=percent)
+        print("{percent:>5.1f}% ({progress})".format(progress=progress, percent=percent))
         sleep(1.0)
 
     t = None

@@ -43,14 +43,14 @@ class ViewNode(Node):
             output = view(request, *args, **kwargs)
             return getattr(output, 'content', output)
         if settings.TEMPLATE_DEBUG:
-            output = (_(u"%(viewname)r is not a method or function and cannot be called") % {'viewname': view})
+            output = (_("%(viewname)r is not a method or function and cannot be called") % {'viewname': view})
             raise ViewDoesNotExist(output)
         return ''
 
 
 class ViewFuncNode(Node):
     """
-    Insérer le contenu d'une vue Django ou d'une URL dans un template
+    Insérer le contenu d'une vue Django dans un template
     Insertion par chemin complet de fonction
     La vue peut renvoyer une HttpReponse ou une chaîne de caractères.
     (Code basé sur un snippet de James G. Pearce, 17 juin 2009)
@@ -74,9 +74,9 @@ class ViewFuncNode(Node):
                 output = view(request, *args, **kwargs)
                 return getattr(output, 'content', output)
             elif settings.TEMPLATE_DEBUG:
-                output = _(u"{viewname} is not a method or function and cannot be called").format(viewname=view)
+                output = _("{viewname} is not a method or function and cannot be called").format(viewname=view)
                 raise ViewDoesNotExist(output)
-        return u""
+        return ""
 
 
 def do_view(parser, token):
@@ -92,7 +92,7 @@ def do_view(parser, token):
     # Découper les tokens envoyés au tag
     tokens = token.split_contents()
     if len(tokens) == 1:
-        raise TemplateSyntaxError(u"%(tag)s requires one or more arguments" % {'tag': token.contents.split()[0]})
+        raise TemplateSyntaxError("%(tag)s requires one or more arguments" % {'tag': token.contents.split()[0]})
     tokens.pop(0)  # Pop le nom du tag de la liste sans l'utiliser
     url_or_view = tokens.pop(0)  # Pop le nom de la vue ou de l'URL
     args, kwargs = [], {}
@@ -128,9 +128,9 @@ def do_view_func(parser, token):
             elif len(subtokens) == 2:
                 kwargs[subtokens[0]] = subtokens[1]
             else:
-                raise TemplateSyntaxError(u"Syntax error at panel argument {argument}".format(argument=token))
+                raise TemplateSyntaxError("Syntax error at panel argument {argument}".format(argument=token))
         return ViewFuncNode(view, args, kwargs)
-    raise TemplateSyntaxError(u"{tag} requires one or more arguments".format(tag=token.contents.split()[0]))
+    raise TemplateSyntaxError("{tag} requires one or more arguments".format(tag=token.contents.split()[0]))
 
 # Enregistrer les tags
 register.tag('panel', do_view_func)

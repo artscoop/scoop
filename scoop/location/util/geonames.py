@@ -20,8 +20,8 @@ from django.conf import settings
 from django.contrib.gis.geos.point import Point
 from django.db import transaction
 from django.db.models import Q
-from django.db.models.aggregates import Avg
 from django.utils import timezone
+
 from unidecode import unidecode
 
 from scoop.core.util.stream.directory import Paths
@@ -29,11 +29,12 @@ from scoop.core.util.stream.fileutil import auto_open_file, open_zip_file
 from scoop.core.util.stream.urlutil import download_url_resource
 from scoop.location.models import City, CityName, Country, CountryName, Currency, Timezone
 
+
 # Codes Feature : http://www.geonames.org/export/codes.html
 # Fichiers Villes : http://download.geonames.org/export/dump/
 # Total des noms alternatifs : http://www.geonames.org/statistics/
 csv.field_size_limit(16777216)
-ALTERNATES_COUNT = 10056066  # 2015/03/27
+ALTERNATES_COUNT = 10056066  # 2015/08/09
 
 
 class ExcelNoQuote(excel_tab):
@@ -44,7 +45,7 @@ class ExcelNoQuote(excel_tab):
 def load_geoname_table_raw(path, filename):
     """ Renvoyer un reader CSV vers une table de pays Geonames """
     handle = open_zip_file(path, filename)
-    # columns = ['id','name','ascii','alternate','latitude','longitude','f1','feature','country','c1','zone1','zone2','zone3','zone4','population','elevation','gtopo','timezone','updated']
+    # columns = ['id', 'name', 'ascii', 'alternate', 'latitude', 'longitude', 'f1', 'feature', 'country', 'c1', 'zone1', 'zone2', 'zone3', 'zone4', 'population', 'elevation', 'gtopo', 'timezone', 'updated']
     return csv.reader(handle, dialect='excel-tab')
 
 
@@ -124,7 +125,7 @@ def rename_countries(output_every=262144):
                     CountryName.objects.create(id=alternate_id, country_id=geonames_id, language=row[2], name=row[3], preferred=row[4] == '1', short=row[5] == '1')
                     affected += 1
             if idx % output_every == 0 or idx == rows:
-                output_progress(u"Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)           \r", idx, rows, output_every, {'affected': affected})
+                output_progress("Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)           \r", idx, rows, output_every, {'affected': affected})
         sys.stdout.write("\n")
         reader.close()
         gc.collect()
@@ -180,7 +181,7 @@ def populate_cities(country, output_every=8192):
                         city.save(force_update=updateable)
                         updated_count += int(updateable)
                     if idx % output_every == 0 or idx == rows - 1:
-                        output_progress(u"Updating {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {updated:>10} updated)          \r", idx, rows, output_every,
+                        output_progress("Updating {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {updated:>10} updated)          \r", idx, rows, output_every,
                                         {'country': country_name, 'updated': updated_count})
             # Peupler la liste des villes si aucune n'existe pour le pays
             else:
@@ -191,18 +192,18 @@ def populate_cities(country, output_every=8192):
                                 feature=row[6], city=row[6] == 'P', population=int(row[14]), position=Point(longitude, latitude))
                     bulk.append(city)
                     if idx % output_every == 0 or idx == rows - 1:
-                        output_progress(u"Filling {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10})           \r", idx, rows, output_every, {'country': country_name})
+                        output_progress("Filling {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10})           \r", idx, rows, output_every, {'country': country_name})
                 City.objects.bulk_create(bulk)
             # Les portions de ville sont ensuite marquées comme non villes
             gc.collect()
             City.objects.filter(type='PPLX').update(city=False)
             country.update(updated=timezone.now(), public=True, save=True)
             return True
-        except Exception, e:
+        except Exception as e:
             traceback.print_exc(e)
             return False
     else:
-        print u"Operation not launched, disable DEBUG first."
+        print("Operation not launched, disable DEBUG first.")
 
 
 @task
@@ -223,15 +224,15 @@ def rename_cities(output_every=262144):
             for idx, row in enumerate(reader, start=1):
                 if (row[2] in languages and row[1]) and not (row[6] or row[7]):
                     if int(row[1]) in existing:
-                        ascii = unidecode(row[3].decode('utf-8') if type(row[3]) != unicode else row[3]).lower()
+                        ascii = unidecode(row[3].decode('utf-8') if type(row[3]) != str else row[3]).lower()
                         cityname = CityName(id=int(row[0]), city_id=int(row[1]), language=row[2], name=row[3], ascii=ascii, preferred=(row[4] == '1'), short=(row[5] == '1'))
                         citynames.append(cityname)
                         affected += 1
                 if idx % output_every == 0 or idx == ALTERNATES_COUNT:
-                    output_progress(u"Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)           \r", idx, ALTERNATES_COUNT, output_every, {'affected': affected})
+                    output_progress("Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)           \r", idx, ALTERNATES_COUNT, output_every, {'affected': affected})
             CityName.objects.bulk_create(citynames, batch_size=32768)
             return True
-        except Exception, e:
+        except Exception as e:
             print_exc(e)
             return False
         finally:
@@ -286,7 +287,7 @@ def reparent_cities(country, clear=False, output_every=256):
                 City.objects.filter(**criteria).exclude(id=parent.id, **exclusion).update(parent_id=parent.id, level=level)
             # Sortie logging ou console
             if idx % output_every == 0 or idx == rows - 1:
-                output_progress(u"Rebuilding {country}: {pc:>5.1f}% ({idx:>10}/{rows:>10})           \r", idx, rows, output_every, {'country': country_name})
+                output_progress("Rebuilding {country}: {pc:>5.1f}% ({idx:>10}/{rows:>10})           \r", idx, rows, output_every, {'country': country_name})
         # Calculer la latitude et longitude moyennes du pays
         all_cities = City.objects.filter(country=country, city=True).only('position')
         city_count = all_cities.count()

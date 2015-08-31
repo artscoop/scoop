@@ -32,16 +32,16 @@ class CityLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer la représentation texte de l'objet """
-        return u"{code} {name}, {parent}, {country}".format(code=obj.get_code(), name=obj.get_name(), country=obj.country, parent=obj.get_auto_parent())
+        return "{code} {name}, {parent}, {country}".format(code=obj.get_code(), name=obj.get_name(), country=obj.country, parent=obj.get_auto_parent())
 
     def format_match(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le dropdown """
-        output = u"{icon} <span class='muted'>{code}</span> <strong>{name}</strong>".format(icon=obj.country.get_icon(), name=obj.get_name(), code=obj.get_code())
+        output = "{icon} <span class='muted'>{code}</span> <strong>{name}</strong>".format(icon=obj.country.get_icon(), name=obj.get_name(), code=obj.get_code())
         return output
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
-        output = u"<span class='text-middle'>{country} <span class='muted'>{code}</span> <strong>{name}</strong></span><br>{parent}".format(name=obj.get_name(),
+        output = "<span class='text-middle'>{country} <span class='muted'>{code}</span> <strong>{name}</strong></span><br>{parent}".format(name=obj.get_name(),
                                                                                                                                             country=obj.get_country_icon(directory="png"),
                                                                                                                                             code=obj.get_code(), parent=obj.get_auto_parent())
         return output
@@ -91,7 +91,7 @@ class CityPublicMinimalLookup(CityLookup):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
-        output = u"""{country} <span class="city-code">{code}</span> <span class="city-name">{name}</span> <span class="city-parent">{parent}</span>""".format(
+        output = """{country} <span class="city-code">{code}</span> <span class="city-name">{name}</span> <span class="city-parent">{parent}</span>""".format(
             name=obj.get_name(), country=obj.get_country_icon(directory="png"), code=obj.get_code(), parent=obj.get_auto_parent())
         return output
 
@@ -118,5 +118,5 @@ class CityA1Lookup(CityLookup):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
-        output = u"""{country} {name}""".format(name=obj.get_name(), country=obj.get_country_icon(directory="png"))
+        output = """{country} {name}""".format(name=obj.get_name(), country=obj.get_country_icon(directory="png"))
         return output

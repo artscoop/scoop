@@ -33,7 +33,7 @@ class AccessMiddleware(object):
         """ Traiter l'objet Response renvoyé par la vue """
         if response is not None and 200 <= response.status_code <= 309:
             # Ne rien faire si un chemin blacklisté apparaît dans l'URL
-            if [True for i in AccessMiddleware.ACCESS_LOG_BLACKLIST if request.path.startswith(unicode(i))]:
+            if [True for i in AccessMiddleware.ACCESS_LOG_BLACKLIST if request.path.startswith(str(i))]:
                 return response
             # Enregistrer l'accès à la page
             add_access.delay(request)

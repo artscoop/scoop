@@ -63,10 +63,10 @@ class TemplateTagsTest(TestCase):
 
     def test_html_tags(self):
         """ Tester les tags HTML """
-        insane = u"<script type='javascript'>alert('harmful html');</script><h2>Sound part of HTML</h2>"
-        filtered_sane = u"<h1 style='margin-left: 1em;'>Titre</h1>Nous sommes les garants du bon fonctionnement de l'univers"
-        sane = u"<h1>Acceptable tag</h1><p>The quick brown fox<br>Jumps over the lazy dog</p>"
-        lined_text = u"\n\nBonjour,\n\n\n\nnous sommes heureux de vous accueillir.\n"
+        insane = "<script type='javascript'>alert('harmful html');</script><h2>Sound part of HTML</h2>"
+        filtered_sane = "<h1 style='margin-left: 1em;'>Titre</h1>Nous sommes les garants du bon fonctionnement de l'univers"
+        sane = "<h1>Acceptable tag</h1><p>The quick brown fox<br>Jumps over the lazy dog</p>"
+        lined_text = "\n\nBonjour,\n\n\n\nnous sommes heureux de vous accueillir.\n"
         # tags_keep
         self.assertNotEqual(insane, tt_tags_keep(insane))
         self.assertNotEqual(insane, tt_sanitize(insane))

@@ -53,7 +53,7 @@ def login_actions(sender, request, user, **kwargs):
     request.session.set_expiry(timedelta(seconds=timeout))
     logins = user.profile.get_data('logins', 0)
     user.profile.set_data('logins', logins + 1, save=True)
-    messages.success(request, _(u"Hello, {name}!").format(name=capfirst(user)))
+    messages.success(request, _("Hello, {name}!").format(name=capfirst(user)))
     # Actions publiques et enregistrements
     record.send(None, actor=user, action='user.login')
 
@@ -61,7 +61,7 @@ def login_actions(sender, request, user, **kwargs):
 @receiver(user_logged_out, sender=User)
 def logout_actions(sender, request, user, **kwargs):
     """ Traiter la déconnexion d'un utilisateur """
-    messages.success(request, _(u"Thanks for visiting."))
+    messages.success(request, _("Thanks for visiting."))
     record.send(None, actor=user, action='user.logout')
 
 

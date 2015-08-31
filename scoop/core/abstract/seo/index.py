@@ -27,10 +27,10 @@ class SEIndexQuerySetMixin(object):
 # ===============================================================================
 class SEIndexModel(models.Model):
     """ Mixin de modèle dont on peut choisir l'indexation dans les moteurs de recherche """
-    se_indexed = models.BooleanField(default=False, null=False, db_index=True, verbose_name=_(u"Index in search engines"))
+    se_indexed = models.BooleanField(default=False, null=False, db_index=True, verbose_name=_("Index in search engines"))
 
     # Getter
-    @addattr(boolean=True, short_description=_(u"Index/Follow"))
+    @addattr(boolean=True, short_description=_("Index/Follow"))
     def _update_se_indexed(self):
         """ Mettre à jour l'état indexable automatiquement """
         result = check_indexable.send(self._meta.model, instance=self)

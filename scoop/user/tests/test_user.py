@@ -63,13 +63,13 @@ class UserTest(TestCase):
         self.assertTrue(self.user.is_active)
         self.assertFalse(self.user.is_staff or self.user.is_superuser)
         if hasattr(self.user, 'profile'):
-            self.assertTrue(isinstance(self.user.profile.get_picture(None), basestring), "user picture should be a path by default")
+            self.assertTrue(isinstance(self.user.profile.get_picture(None), str), "user picture should be a path by default")
             self.assertTrue(hasattr(self.user.profile, 'updated'), "user profile should have an updated field")
             self.assertTrue(getattr(self.user.profile, 'gender', None) is not None, "user profile should have a gender attribute defined")
 
     def test_template_tags(self):
         """ Vérifier que les template tags fonctionnent comme prévu """
-        self.assertEquals(distance_to(self.user, self.user), u"")
+        self.assertEquals(distance_to(self.user, self.user), "")
 
     def test_usernames(self):
         """ Vérifier que les noms d'utilisateurs répondent toujours à un format """

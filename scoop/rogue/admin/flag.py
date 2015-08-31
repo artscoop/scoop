@@ -32,32 +32,32 @@ class FlagAdmin(AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
     readonly_fields = []
     save_on_top = False
     fieldsets = (
-        (_(u"Flag"), {'fields': ('author', ('content_type', 'object_id',), 'type', 'status', 'details')}), ('Plus', {'fields': ('moderators', 'admin', 'automatic', 'url', 'priority')}))
+        (_("Flag"), {'fields': ('author', ('content_type', 'object_id',), 'type', 'status', 'details')}), ('Plus', {'fields': ('moderators', 'admin', 'automatic', 'url', 'priority')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
     # Actions
-    @addattr(short_description=_(u"Will not fix"))
+    @addattr(short_description=_("Will not fix"))
     def wont_fix(self, request, queryset):
         """ Classer les signalements comme Won't Fix """
         for flag in queryset:
             flag.close(Flag.WONTFIX)
-        self.message_user(request, _(u"Selected flags successfully closed."))
+        self.message_user(request, _("Selected flags successfully closed."))
 
-    @addattr(short_description=_(u"Automatically fix"))
+    @addattr(short_description=_("Automatically fix"))
     def fix(self, request, queryset):
         """ Traiter automatiquement un signalement """
         for flag in queryset:
             flag.resolve()
-        self.message_user(request, _(u"Selected flags successfully resolved."))
+        self.message_user(request, _("Selected flags successfully resolved."))
 
     # Getter
-    @addattr(allow_tags=True, short_description=_(u"URL"))
+    @addattr(allow_tags=True, short_description=_("URL"))
     def get_url(self, obj):
         """ Renvoyer l'URL du signalement """
         html = "<a class='modal-action' href='%(url)s'>%(url)s</a>" % {'url': obj.url}
         return html
 
-    @addattr(allow_tags=True, admin_order_field='status', short_description=_(u"Status"))
+    @addattr(allow_tags=True, admin_order_field='status', short_description=_("Status"))
     def get_status(self, obj):
         """ Renvoyer le statut du signalement """
         types = {0: 'important', 1: 'warning', 2: 'success', 3: 'success', 4: 'sucess', 5: 'info', 6: 'info'}
@@ -75,8 +75,8 @@ class FlagAdmin(AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
 
 class FlagTypeTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin de traduction des types de signalement """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = FlagTypeTranslation
     max_num = len(settings.LANGUAGES)
     formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget}}
@@ -92,7 +92,7 @@ class FlagTypeAdmin(admin.ModelAdmin, GenericModelUtil):
     search_fields = []
     readonly_fields = []
     inlines = [FlagTypeTranslationInlineAdmin, ]
-    fieldsets = ((_(u"Flag type"), {'fields': ('short_name', 'content_type', 'icon')}),)
+    fieldsets = ((_("Flag type"), {'fields': ('short_name', 'content_type', 'icon')}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
 # Enregistrer les classes d'administration

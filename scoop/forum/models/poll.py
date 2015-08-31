@@ -34,14 +34,14 @@ class PollManager(SingleDeleteManager):
 class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
     """ Sondage """
     # Champs
-    title = models.CharField(max_length=192, blank=False, verbose_name=_(u"Title"))
-    description = models.TextField(verbose_name=_(u"Description"))
-    published = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('poll', u"Published"))
-    expires = models.DateTimeField(null=True, blank=True, verbose_name=_(u"Expires"))
-    answers = LineListField(default="Yes\nNo", blank=False, help_text=_(u"Enter one answer per line"), verbose_name=_(u"Answers"))
+    title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
+    description = models.TextField(verbose_name=_("Description"))
+    published = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('poll', "Published"))
+    expires = models.DateTimeField(null=True, blank=True, verbose_name=_("Expires"))
+    answers = LineListField(default="Yes\nNo", blank=False, help_text=_("Enter one answer per line"), verbose_name=_("Answers"))
     slug = AutoSlugField(max_length=100, populate_from='title', unique=True, blank=True, editable=False, unique_with=('id',))
-    closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('poll', u"Closed"))
-    content = models.ForeignKey('content.Content', null=True, blank=True, on_delete=models.SET_NULL, related_name='polls', verbose_name=_(u"Content"))
+    closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('poll', "Closed"))
+    content = models.ForeignKey('content.Content', null=True, blank=True, on_delete=models.SET_NULL, related_name='polls', verbose_name=_("Content"))
     objects = PollManager()
 
     # Getter
@@ -61,7 +61,7 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
         """ Renvoyer les choix de champ de formulaire """
         return tuple(enumerate(self.answers))
 
-    @addattr(boolean=True, short_description=_(u"Has votes"))
+    @addattr(boolean=True, short_description=_("Has votes"))
     def has_votes(self):
         """ Renvoyer s'il y a des votes pour ce sondage """
         return self.votes.all().exists()
@@ -88,12 +88,12 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
             result.append({'choice': choice, 'percent': percent})
         return result
 
-    @addattr(boolean=True, short_description=_(u"Expired"))
+    @addattr(boolean=True, short_description=_("Expired"))
     def has_expired(self):
         """ Renvoyer si le sondage a expiré """
         return (timezone.now() < self.expires)
 
-    @addattr(boolean=True, short_description=_(u"Open"))
+    @addattr(boolean=True, short_description=_("Open"))
     def is_open(self):
         """ Renvoyer si le sondage est ouvert """
         return not (self.has_expired() or self.closed)
@@ -108,10 +108,10 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"%s" % self.title
+        return "%s" % self.title
 
     # Métadonnées
     class Meta:
         app_label = 'forum'
-        verbose_name = _(u"poll")
-        verbose_name_plural = _(u"polls")
+        verbose_name = _("poll")
+        verbose_name_plural = _("polls")

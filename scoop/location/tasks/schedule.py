@@ -24,5 +24,5 @@ def auto_fetch_city_pictures():
             if not city.has_pictures({}):  # aucun filtre sur les images modérées
                 fetched = city.fetch_picture()
                 fetch_count += fetched
-                print _(u"Successfully fetched {count} images for city {city}").format(count=fetched, city=city)
+                print(_("Successfully fetched {count} images for city {city}").format(count=fetched, city=city))
     return {'fetched': fetch_count}

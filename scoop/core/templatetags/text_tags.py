@@ -23,10 +23,10 @@ def truncate_ellipsis(value, arg):
         length = int(arg)
     except ValueError:
         return value
-    if not isinstance(value, basestring):
-        value = unicode(value)
+    if not isinstance(value, str):
+        value = str(value)
     if len(value) > length:
-        return value[:length].strip() + u"…"
+        return value[:length].strip() + "…"
     else:
         return value
 
@@ -45,7 +45,7 @@ def truncate_stuckkey(value, length=5):
 
     # Supprimer toutes les séquences de la même lettre par cut_match
     pattern = r"(?i)(\w)\1{%d,100}" % (int(length))
-    result = re.sub(pattern, cut_match, unicode(value))
+    result = re.sub(pattern, cut_match, str(value))
     return result
 
 
@@ -91,18 +91,19 @@ def humanize_join(values, enum_count, singular_plural=None, as_links=False):
     elif total > 0 and isinstance(values[0], Model):
         singular, plural = values[0]._meta.verbose_name, values[0]._meta.verbose_name_plural
     else:
-        raise TypeError(u"Values must be a list of Model instances or singular_plural must be passed as an argument.")
-    values = [linkify(value) for value in values] if as_links else [unicode(value) for value in values]
+        raise TypeError("Values must be a list of Model instances or singular_plural must be passed as an argument.")
+    values = [linkify(value) for value in values] if as_links else [str(value) for value in values]
     if rest > 0:
-        output = _(u"%(join)s and %(rest)d %(unit)s") % {'join': ", ".join(values[:enum_count]), 'rest': rest, 'unit': singular if rest == 1 else plural}
+        output = _("%(join)s and %(rest)d %(unit)s") % {'join': ", ".join(values[:enum_count]), 'rest': rest, 'unit': singular if rest == 1 else plural}
     else:
         if total == 0:
-            output = u""
+            output = ""
         elif total == 1:
-            output = u"{item}".format(item=values[0])
+            output = "{item}".format(item=values[0])
         else:
-            output = _(u"{join} and {last}").format(join=", ".join(values[:-1]), last=values[-1])
+            output = _("{join} and {last}").format(join=", ".join(values[:-1]), last=values[-1])
     return mark_safe(output)
+
 
 @register.filter
 def gender(value, text):

@@ -25,12 +25,12 @@ class UserIPAdmin(admin.ModelAdmin):
         return []
 
     # Getter
-    @addattr(boolean=True, admin_order_field='ip__harmful', short_description=_(u"Harmful"))
+    @addattr(boolean=True, admin_order_field='ip__harmful', short_description=_("Harmful"))
     def get_harmful(self, obj):
         """ Renvoyer si l'IP est considérée dangereuse """
         return obj.ip.harmful
 
-    @addattr(admin_order_field='ip__isp', short_description=_(u"ISP"))
+    @addattr(admin_order_field='ip__isp', short_description=_("ISP"))
     def get_isp(self, obj):
         """ Renvoyer le FAI de l'IP """
         return obj.ip.isp

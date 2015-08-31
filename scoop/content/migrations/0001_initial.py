@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import autoslug.fields
-import django.utils.timezone
-import easy_thumbnails.fields
-import picklefield.fields
-from django.db import migrations, models
-
-import scoop.content.util.attachment
-import scoop.content.util.picture
-import scoop.core.abstract.core.generic
-import scoop.core.abstract.core.icon
+from django.db import models, migrations
 import scoop.core.abstract.core.rectangle
-import scoop.core.abstract.core.translation
+import scoop.core.abstract.core.icon
 import scoop.core.abstract.core.uuid
-import scoop.core.util.data.dateutil
+import scoop.content.util.picture
+import scoop.core.abstract.core.translation
+import picklefield.fields
+import autoslug.fields
 import scoop.core.util.model.fields
+import scoop.core.abstract.core.generic
+import easy_thumbnails.fields
+import django.utils.timezone
+import scoop.content.util.attachment
+import scoop.core.util.data.dateutil
 
 
 class Migration(migrations.Migration):
@@ -259,7 +258,7 @@ class Migration(migrations.Migration):
                 ('object_id', models.PositiveIntegerField(null=True, verbose_name='Object Id', blank=True)),
             ],
             options={
-                'permissions': [['can_upload_picture', 'Can upload a picture']],
+                'permissions': [['can_upload_picture', 'Can upload a picture'], ['can_moderate_picture', 'Can moderate pictures']],
                 'verbose_name': 'image',
                 'verbose_name_plural': 'images',
             },

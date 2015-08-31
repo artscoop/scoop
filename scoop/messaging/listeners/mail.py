@@ -26,4 +26,4 @@ def default_mail_send(sender, category, mailtype, recipient, data, **kwargs):
 @receiver(user_logged_in)
 def clear_offline_mailevents(sender, request, user, **kwargs):
     """ Supprimer les événements mails supprimables si l'utilisateur est en ligne """
-    MailEvent.objects.clearable(user).delete()
+    MailEvent.objects.clearable(user).discard()

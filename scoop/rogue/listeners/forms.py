@@ -17,5 +17,5 @@ def check_form_email(sender, mail, **kwargs):
     from scoop.rogue.models.mailblock import MailBlock
     # Adresse non autorisée
     if MailBlock.objects.is_blocked(mail):
-        raise ValidationError(u"This email address is not authorized.")
+        raise ValidationError("This email address is not authorized.")
     return True

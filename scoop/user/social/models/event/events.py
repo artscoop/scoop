@@ -62,11 +62,11 @@ class OccurrenceManager(models.Manager.from_queryset(OccurrenceQuerySet), models
 class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataModel, UUID64Model):
     """ Événement """
     # Champs
-    title = models.CharField(max_length=128, blank=False, verbose_name=_(u"Title"))
-    description = models.TextField(blank=False, verbose_name=_(u"Description"))
-    categories = models.ManyToManyField('social.EventCategory', related_name='events', verbose_name=_(u"Categories"))
-    address = models.ForeignKey('scoop.location.Venue', null=True, blank=True, related_name='events', verbose_name=_(u"Address"))
-    capacity = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_(u"Max attendants"))
+    title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
+    description = models.TextField(blank=False, verbose_name=_("Description"))
+    categories = models.ManyToManyField('social.EventCategory', related_name='events', verbose_name=_("Categories"))
+    address = models.ForeignKey('scoop.location.Venue', null=True, blank=True, related_name='events', verbose_name=_("Address"))
+    capacity = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_("Max attendants"))
 
     # Getter
     def get_occurrences(self):
@@ -85,8 +85,8 @@ class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataMod
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"event")
-        verbose_name_plural = _(u"events")
+        verbose_name = _("event")
+        verbose_name_plural = _("events")
         app_label = "social"
 
 
@@ -94,16 +94,16 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     """ Récurrence d'événement """
     # Constantes
     DEFAULT_CAPACITY = 20
-    STATUSES = [[0, _(u"Open")], [1, _(u"Closed")], [2, _(u"Cancelled")]]
+    STATUSES = [[0, _("Open")], [1, _("Closed")], [2, _("Cancelled")]]
     OPEN, CLOSED, CANCELLED = 0, 1, 2
     # Champs
-    event = models.ForeignKey('social.Event', related_name='occurrences', verbose_name=_(u"Event"))
-    status = models.SmallIntegerField(default=0, choices=STATUSES, db_index=True, verbose_name=_(u"Status"))
-    title = models.CharField(max_length=128, blank=True, verbose_name=_(u"Title"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
-    date = models.DateTimeField(null=False, verbose_name=_(u"Date"))
-    address = models.ForeignKey('scoop.location.Venue', null=True, blank=True, related_name='event_occurrences', verbose_name=_(u"Address"))
-    capacity = models.IntegerField(default=DEFAULT_CAPACITY, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_(u"Max attendants"))
+    event = models.ForeignKey('social.Event', related_name='occurrences', verbose_name=_("Event"))
+    status = models.SmallIntegerField(default=0, choices=STATUSES, db_index=True, verbose_name=_("Status"))
+    title = models.CharField(max_length=128, blank=True, verbose_name=_("Title"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    date = models.DateTimeField(null=False, verbose_name=_("Date"))
+    address = models.ForeignKey('scoop.location.Venue', null=True, blank=True, related_name='event_occurrences', verbose_name=_("Address"))
+    capacity = models.IntegerField(default=DEFAULT_CAPACITY, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_("Max attendants"))
     objects = OccurrenceManager()
 
     # Getter
@@ -176,6 +176,6 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"event occurrence")
-        verbose_name_plural = _(u"event occurrences")
+        verbose_name = _("event occurrence")
+        verbose_name_plural = _("event occurrences")
         app_label = "social"

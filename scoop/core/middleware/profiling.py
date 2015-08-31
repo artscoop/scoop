@@ -6,6 +6,7 @@ import re
 import sys
 from operator import add
 from time import time
+from functools import reduce
 
 import psutil
 from django.conf import settings
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 class ProfilerMiddleware(object):
     """ Middleware de profilage """
     # Constantes
-    HTML_SIGNAL = u"<!-- debug -->"
+    HTML_SIGNAL = "<!-- debug -->"
 
     def process_view(self, request, callback, callback_args, callback_kwargs):
         """ Traiter la vue """
@@ -38,7 +39,7 @@ class ProfilerMiddleware(object):
             stats = sorted(stats, key=lambda k: -k.inlinetime)
             total_time = reduce(lambda x, y: x + y.inlinetime, stats, 0)
             total_calls = reduce(lambda x, y: x + y.callcount, stats, 0)
-            insert_pos = unicode(response.content, 'utf-8').rfind(ProfilerMiddleware.HTML_SIGNAL)
+            insert_pos = str(response.content, 'utf-8').rfind(ProfilerMiddleware.HTML_SIGNAL)
             if insert_pos != -1:
                 output = render_to_string('core/middleware/profiling.html', {'stats': stats, 'total_time': total_time, 'total_calls': total_calls}, context_instance=RequestContext(request))
                 response.content = response.content.decode('utf-8').replace(ProfilerMiddleware.HTML_SIGNAL, output, 1)
@@ -91,7 +92,7 @@ class QuickPageStatsMiddleware(object):
     def process_response(self, request, response):
         """ Traiter la réponse """
         self.elapsed = time() - self.start
-        sys.stderr.write("{view:<20} {total:>8.04f}s ".format(total=self.elapsed, view=self.view.__name__ if self.view else ""))
+        sys.stderr.write("{view:<20} {total:>8.04f}s ".format(total=self.elapsed, view=self.view.__name__ if hasattr(self, 'view') else ""))
         return response
 
 

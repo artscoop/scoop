@@ -30,13 +30,13 @@ def default_pre_send(sender, author, thread, **kwargs):
         return True
     # Ne rien faire si le sujet est fermé
     if thread.closed:
-        errors.add(_(u"The thread is closed."))
+        errors.add(_("The thread is closed."))
     # Ne rien faire non plus si l'auteur ne fait pas partie du sujet
     if not thread.is_recipient(author):
-        errors.add(_(u"You have no access to this thread."))
+        errors.add(_("You have no access to this thread."))
     elif getattr(settings, 'MESSAGING_BLACKLIST_ENABLE', False):
         if thread.has_blacklist(author):
-            errors.add(_(u"A blacklist policy prevents you from sending your message."))
+            errors.add(_("A blacklist policy prevents you from sending your message."))
     # Renvoyer les erreurs s'il y en a
     if errors:
         return {'messages': errors}
@@ -47,7 +47,7 @@ def default_pre_send(sender, author, thread, **kwargs):
 def default_post_send(sender, author, message, request, **kwargs):
     """ Traiter un message qui vient d'être envoyé """
     if request is not None:
-        messages.success(request, _(u"Message sent successfully"))
+        messages.success(request, _("Message sent successfully"))
     getattr(check_message, 'delay')(sender)
     # Mettre à jour le nombre de messages envoyés par user
     Recipient.objects.update_counter(author, message.thread)

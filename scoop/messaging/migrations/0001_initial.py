@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django.core.validators
-import django.utils.timezone
-import picklefield.fields
-from django.db import migrations, models
-
-import scoop.core.abstract.core.translation
+from django.db import models, migrations
 import scoop.core.abstract.core.uuid
+import scoop.core.abstract.core.translation
+import picklefield.fields
+import django.utils.timezone
+import django.core.validators
 import scoop.core.util.data.dateutil
 
 
@@ -61,6 +60,7 @@ class Migration(migrations.Migration):
                 ('sent_time', models.DateTimeField(default=None, null=True, verbose_name='Delivery time')),
                 ('sent_email', models.CharField(default='', max_length=96, verbose_name='Email used')),
                 ('minimum_time', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Minimum delivery')),
+                ('discarded', models.BooleanField(default=False, verbose_name='Discarded')),
             ],
             options={
                 'verbose_name': 'mail event',

@@ -40,17 +40,17 @@ class ScoreManager(SingleDeleteManager):
 class Score(DatetimeModel):
     """ Score utilisateur """
     # Constantes
-    SCORE_AXIS = [(0, _(u"General"))]
+    SCORE_AXIS = [(0, _("General"))]
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='score_given', verbose_name=_(u"Author"))
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='score_received', verbose_name=_(u"User"))
-    axis = models.SmallIntegerField(choices=SCORE_AXIS, default=0, unique=True, verbose_name=_(u"Axis"))
-    score = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name=_(u"Score"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='score_given', verbose_name=_("Author"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='score_received', verbose_name=_("User"))
+    axis = models.SmallIntegerField(choices=SCORE_AXIS, default=0, unique=True, verbose_name=_("Axis"))
+    score = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name=_("Score"))
     objects = ScoreManager()
 
     class Meta(object):
         """ M2tadonnées """
-        verbose_name = _(u"user score")
-        verbose_name_plural = _(u"user points")
+        verbose_name = _("user score")
+        verbose_name_plural = _("user points")
         unique_together = ('author', 'user', 'axis')
         app_label = "social"

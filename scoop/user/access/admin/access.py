@@ -25,18 +25,18 @@ class AccessAdmin(ViewOnlyModelAdmin):
     actions = ['purge']
 
     # Actions
-    @addattr(short_description=_(u"Purge selected access log entries"))
+    @addattr(short_description=_("Purge selected access log entries"))
     def purge(self, request, queryset):
         """ Supprimer les accès sélectionnés """
         queryset.delete()
 
     # Getter
-    @addattr(admin_order_field='ip__country', short_description=_(u"Country"))
+    @addattr(admin_order_field='ip__country', short_description=_("Country"))
     def get_country(self, obj):
         """ Renvoyer le pays de l'adresse IP """
         return obj.ip.country if obj.ip else None
 
-    @addattr(allow_tags=True, short_description=_(u"User picture"))
+    @addattr(allow_tags=True, short_description=_("User picture"))
     def get_image(self, obj):
         """ Renvoyer la vignette HTML du portrait de l'utilisateur """
         if obj.user and obj.user.is_active and obj.user.profile.picture:

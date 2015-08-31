@@ -16,10 +16,10 @@ from scoop.core.util.shortcuts import addattr
 class Template(DatetimeModel):
     """ Template d'affichage d'une page """
     # Champs
-    name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_(u"Name"))
-    path = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_(u"Path"))
-    full = models.BooleanField(default=False, help_text=_(u"Contains html, head and body tags."), verbose_name=_(u"Full page template"))
-    positions = models.ManyToManyField('editorial.Position', blank=True, verbose_name=_(u"Positions"))
+    name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
+    path = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_("Path"))
+    full = models.BooleanField(default=False, help_text=_("Contains html, head and body tags."), verbose_name=_("Full page template"))
+    positions = models.ManyToManyField('editorial.Position', blank=True, verbose_name=_("Positions"))
 
     # Actions
     def auto_fill(self):
@@ -39,7 +39,7 @@ class Template(DatetimeModel):
             pass
 
     # Getter
-    @addattr(boolean=True, short_description=_(u"File exists"))
+    @addattr(boolean=True, short_description=_("File exists"))
     def exists(self):
         """ Renvoyer si le chemin de template est valide """
         try:
@@ -82,7 +82,7 @@ class Template(DatetimeModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"{name} ({count})".format(name=self.name, count=self.positions.count())
+        return "{name} ({count})".format(name=self.name, count=self.positions.count())
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -90,6 +90,6 @@ class Template(DatetimeModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"template")
-        verbose_name_plural = _(u"templates")
+        verbose_name = _("template")
+        verbose_name_plural = _("templates")
         app_label = 'editorial'

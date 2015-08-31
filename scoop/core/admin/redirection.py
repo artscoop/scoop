@@ -25,7 +25,7 @@ class RedirectionAdmin(ViewOnlyModelAdmin, GenericModelUtil):
     order_by = ['content_type']
 
     # Getter
-    @addattr(allow_tags=True, admin_order_field='expires', short_description=_(u"Expires"))
+    @addattr(allow_tags=True, admin_order_field='expires', short_description=_("Expires"))
     def get_expires(self, obj):
         """ Renvoyer la date d'expiration d'une redirection """
         return pretty.date(obj.expires).replace(' ', '&nbsp;')

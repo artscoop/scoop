@@ -64,7 +64,7 @@ def auto_open_file(path, filename):
             if '.zip' in files.lower():
                 return open_zip_file(os.path.join(path, files), filename)
             return open(os.path.join(path, files), 'rb')
-    raise ImproperlyConfigured(_(u"A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
+    raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
 
 
 def open_zip_file(path, filename):
@@ -73,10 +73,10 @@ def open_zip_file(path, filename):
     names = archive.namelist()
     name = names[0]
     for n in names:
-        if n.lower().startswith(u"{}.".format(filename.lower())):
+        if n.lower().startswith("{}.".format(filename.lower())):
             name = n
             return archive.open(name, 'rU')
-    raise ImproperlyConfigured(_(u"A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
+    raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
 
 
 def clean_orphans(output_log=True, delete=False):
@@ -120,7 +120,7 @@ def clean_orphans(output_log=True, delete=False):
     if output_log is True:
         output = render_to_string('core/view/orphan-log.txt', {'counter': counter, 'deleted': deleted, 'files_delete': deletable, 'files': db_files, 'fields': fields})
         logger.info(output)
-        print output
+        print(output)
         return output
 
 
@@ -139,7 +139,7 @@ def check_file_extension(filename, resource_path, extensions):
             mimetype = mime.from_file(resource_path)
             new_extension = guess_extension(mimetype)
             if filename and new_extension:
-                filename = u"{}{}".format(filename, new_extension)
+                filename = "{}{}".format(filename, new_extension)
                 if new_extension.lower() in extensions:
                     return filename
             else:
@@ -169,12 +169,11 @@ def clean_empty_folders(path, output=True):
                         os.rmdir(join(default_storage.base_location, root))
                         deleted += 1
                         total_deleted += 1
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    logger.warn(e)
                     pass
     if output is True:
-        trace = u"{count} empty folders have been successfully deleted.".format(count=total_deleted)
-        print trace
+        trace = "{count} empty folders have been successfully deleted.".format(count=total_deleted)
         logger.warn(trace)
     if total_deleted > 0:
         clean_empty_folders(path, output=output)
@@ -182,11 +181,12 @@ def clean_empty_folders(path, output=True):
 
 def batch_execute(path, extensions, command):
     """
-    Exécuter une commande shell sur tous les fichers de path répondant aux
+    Exécuter une commande shell sur tous les fichers de <path> correspondant aux
     extensions passées en paramètre (liste ou simple chaîne)
-    commande est une chaîne qui peut contenir le placeholder {name}, dans le cas
-    cette commande effectue un traitement sur un des fichiers parcourus
+    @param command: chaîne contenant la commande à exécuter sur chaque fichier.
+    Autorise l'utilisation du placeholder {name}
     """
+    total_processed = 0
     for root, _dummy, files in os.walk(path):
         for f in files:
             for extension in make_iterable(extensions):
@@ -194,6 +194,8 @@ def batch_execute(path, extensions, command):
                     for i, _dummyx in enumerate(command):
                         command[i] = command[i].format(file=os.path.join(path, root, f))
                     subprocess.call(command)
+                    total_processed += 1
+    logger.info("Batch executed successfully on {count} files.".format(count=total_processed))
 
 
 def delete_old_files(path, days=7):
@@ -213,7 +215,7 @@ def find_files_in_folder(path, extensions):
         for filename in filenames:
             for extension in extensions:
                 if filename.lower().endswith(extension):
-                    files.append(join(folder, file))
+                    files.append(join(folder, filename))
     return files
 
 

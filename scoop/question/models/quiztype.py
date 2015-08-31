@@ -9,21 +9,21 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 class QuizType(DatetimeModel, DataModel):
     """ Type de questionnaire """
     # Champs
-    processor = models.CharField(max_length=128, blank=False, verbose_name=_(u"Results processor class name"))
-    title = models.CharField(max_length=96, verbose_name=_(u"Title"))
-    description = models.TextField(blank=False, verbose_name=_(u"Description"))
+    processor = models.CharField(max_length=128, blank=False, verbose_name=_("Results processor class name"))
+    title = models.CharField(max_length=96, verbose_name=_("Title"))
+    description = models.TextField(blank=False, verbose_name=_("Description"))
 
     # Champs supplémentaires
-    backwards = models.BooleanField(default=False, verbose_name=_(u"Can go backwards"))
-    timeout = models.SmallIntegerField(default=-1, verbose_name=_(u"Timeout, in seconds"))
+    backwards = models.BooleanField(default=False, verbose_name=_("Can go backwards"))
+    timeout = models.SmallIntegerField(default=-1, verbose_name=_("Timeout, in seconds"))
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return u"%(title)s" % {'title': self.title}
+        return "%(title)s" % {'title': self.title}
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"quiz type")
-        verbose_name_plural = _(u"quiz types")
+        verbose_name = _("quiz type")
+        verbose_name_plural = _("quiz types")
         app_label = 'question'

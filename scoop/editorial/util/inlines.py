@@ -21,7 +21,7 @@ class ExcerptInline(TemplateInline):
     def get_template_name(self):
         """ Renvoyer le chemin du template d'affichage """
         base = super(ExcerptInline, self).get_template_name()[0]
-        path = u"editorial/%s" % base
+        path = "editorial/%s" % base
         return path
 
 # Enregistrer les classes d'inlines

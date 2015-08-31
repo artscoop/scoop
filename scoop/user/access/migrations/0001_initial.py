@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.db import models, migrations
 import datetime
-
 import django.contrib.gis.db.models.fields
-import django.core.validators
-from django.db import migrations, models
-
 import scoop.core.util.data.dateutil
+import django.core.validators
 
 
 class Migration(migrations.Migration):

@@ -8,9 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 class FeatureCount(models.Model):
     """ Décompte d'une caractéristique dans une catégorie """
     # Champs
-    feature = models.CharField(max_length=32, db_index=True, verbose_name=_(u"Feature"))
-    category = models.ForeignKey('classify.Category', related_name='feature_counts', verbose_name=_(u"Feature"))
-    total = models.IntegerField(default=0, verbose_name=_(u"Count"))
+    feature = models.CharField(max_length=32, db_index=True, verbose_name=_("Feature"))
+    category = models.ForeignKey('classify.Category', related_name='feature_counts', verbose_name=_("Feature"))
+    total = models.IntegerField(default=0, verbose_name=_("Count"))
 
     # Getter
     @staticmethod
@@ -38,16 +38,16 @@ class FeatureCount(models.Model):
     # Métadonnées
     class Meta:
         unique_together = (('feature', 'category'),)
-        verbose_name = _(u"feature count")
-        verbose_name_plural = _(u"feature counts")
+        verbose_name = _("feature count")
+        verbose_name_plural = _("feature counts")
         app_label = 'analysis'
 
 
 class CategoryCount(models.Model):
     """ Total de classifications dans une catégorie """
     # Champs
-    category = models.ForeignKey('classify.Category', related_name='category_counts', verbose_name=_(u"Feature"))
-    total = models.IntegerField(default=0, verbose_name=_(u"Count"))
+    category = models.ForeignKey('classify.Category', related_name='category_counts', verbose_name=_("Feature"))
+    total = models.IntegerField(default=0, verbose_name=_("Count"))
 
     # Getter
     @staticmethod
@@ -74,6 +74,6 @@ class CategoryCount(models.Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"category train count")
-        verbose_name_plural = _(u"category train counts")
+        verbose_name = _("category train count")
+        verbose_name_plural = _("category train counts")
         app_label = 'analysis'

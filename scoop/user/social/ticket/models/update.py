@@ -22,13 +22,13 @@ class UpdateManager(SingleDeleteManager):
 class Update(AuthoredModel, DatetimeModel):
     """ Mise à jour d'un ticket """
     # Champs
-    ticket = models.ForeignKey('ticket.Ticket', related_name='updates', verbose_name=_(u"Ticket"))
-    status = models.ForeignKey('ticket.Resolution', related_name='updates+', verbose_name=_(u"Status"))
-    body = models.TextField(blank=True, verbose_name=_(u"Body"))
+    ticket = models.ForeignKey('ticket.Ticket', related_name='updates', verbose_name=_("Ticket"))
+    status = models.ForeignKey('ticket.Resolution', related_name='updates+', verbose_name=_("Status"))
+    body = models.TextField(blank=True, verbose_name=_("Body"))
     objects = UpdateManager()
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"ticket update")
-        verbose_name_plural = _(u"ticket updates")
+        verbose_name = _("ticket update")
+        verbose_name_plural = _("ticket updates")
         app_label = 'ticket'

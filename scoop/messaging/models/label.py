@@ -21,8 +21,8 @@ class LabelManager(SingleDeleteManager):
 
 
 class Label(DatetimeModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='thread_labels', verbose_name=_(u"Author"))
-    name = models.CharField(blank=False, max_length=40, validators=[RegexValidator(r'^[\d\w][\d\s\w]*$', _(u"Must contain only letters and digits"))], db_index=True, verbose_name=_(u"Name"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='thread_labels', verbose_name=_("Author"))
+    name = models.CharField(blank=False, max_length=40, validators=[RegexValidator(r'^[\d\w][\d\s\w]*$', _("Must contain only letters and digits"))], db_index=True, verbose_name=_("Name"))
     objects = LabelManager()
 
     # Getter
@@ -52,15 +52,15 @@ class Label(DatetimeModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"label")
-        verbose_name_plural = _(u"labels")
+        verbose_name = _("label")
+        verbose_name_plural = _("labels")
         unique_together = (('user', 'name'),)
         app_label = 'messaging'
 
 
 class LabelableModel(models.Model):
     """ Mixin de modèle pouvant avoir des étiquettes """
-    labels = models.ManyToManyField('messaging.label', blank=True, verbose_name=_(u"Labels"))
+    labels = models.ManyToManyField('messaging.label', blank=True, verbose_name=_("Labels"))
 
     # Getter
     def get_labels(self):
@@ -71,7 +71,7 @@ class LabelableModel(models.Model):
         """ Renvoyer les étiquettes sur l'élément créées par un utilisateur """
         return self.labels.filter(user=user)
 
-    @addattr(short_description=_(u"Labels"))
+    @addattr(short_description=_("Labels"))
     def get_label_count(self):
         """ Renvoyer le nombre d'étiquettes """
         return self.labels.all().count()

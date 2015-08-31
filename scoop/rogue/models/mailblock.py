@@ -52,13 +52,13 @@ class MailBlockManager(models.Manager):
 class MailBlock(DatetimeModel):
     """ Blocage d'adresse email """
     # Constantes
-    REASONS = [[0, _(u"Fake accounts")], [1, _(u"Raw behaviour")]]
+    REASONS = [[0, _("Fake accounts")], [1, _("Raw behaviour")]]
     # Champs
-    email = models.CharField(max_length=48, db_index=True, unique=True, verbose_name=_(u"Email address"))
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=_(u"User"))
-    reason = models.SmallIntegerField(choices=REASONS, default=0, verbose_name=_(u"Reason"))
-    details = models.CharField(max_length=64, default=False, blank=True, verbose_name=_(u"Details"))
-    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('mailblocking', u"Active"))
+    email = models.CharField(max_length=48, db_index=True, unique=True, verbose_name=_("Email address"))
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=_("User"))
+    reason = models.SmallIntegerField(choices=REASONS, default=0, verbose_name=_("Reason"))
+    details = models.CharField(max_length=64, default=False, blank=True, verbose_name=_("Details"))
+    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('mailblocking', "Active"))
     objects = MailBlockManager()
 
     # Getter
@@ -70,10 +70,10 @@ class MailBlock(DatetimeModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer une représentation unicode de l'objet """
-        return _(u"Blocking of email {mail}").format(mail=self.email)
+        return _("Blocking of email {mail}").format(mail=self.email)
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"mail blocking")
-        verbose_name_plural = _(u"mail blocking")
+        verbose_name = _("mail blocking")
+        verbose_name_plural = _("mail blocking")
         app_label = 'rogue'

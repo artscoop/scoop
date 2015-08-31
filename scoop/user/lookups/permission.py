@@ -29,7 +29,7 @@ class PermissionLookup(LookupChannel):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation de l'élément dans le deck """
-        return u"{}".format(obj)
+        return "{}".format(obj)
 
     def check_auth(self, request):
         """ Renvoyer si l'utilisateur courant peut effectuer des requêtes """

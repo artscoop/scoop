@@ -11,19 +11,19 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 
 # Positions à traduire par défaut
-DEFAULT_NAMES = [_(u"Menu"), _(u"Heading"), _(u"Footer"), _(u"Js"), _(u"Extra head"), ]
+DEFAULT_NAMES = [_("Menu"), _("Heading"), _("Footer"), _("Js"), _("Extra head"), ]
 
 
 class Position(DatetimeModel, IconModel):
     """ Emplacement dans un template """
     # Champs
-    name = models.SlugField(max_length=64, unique=True, blank=False, help_text=_(u"Name used for the position block in a template"), verbose_name=_(u"Name"))
-    title = models.CharField(max_length=64, blank=False, verbose_name=_(u"Title"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    name = models.SlugField(max_length=64, unique=True, blank=False, help_text=_("Name used for the position block in a template"), verbose_name=_("Name"))
+    title = models.CharField(max_length=64, blank=False, verbose_name=_("Title"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
     # Accès
-    anonymous = models.BooleanField(default=True, blank=True, verbose_name=_(u"Anonymous access"))
-    authenticated = models.BooleanField(default=True, blank=True, verbose_name=_(u"Authenticated access"))
-    groups = models.ManyToManyField('auth.Group', blank=True, verbose_name=_(u"Access for groups"))
+    anonymous = models.BooleanField(default=True, blank=True, verbose_name=_("Anonymous access"))
+    authenticated = models.BooleanField(default=True, blank=True, verbose_name=_("Authenticated access"))
+    groups = models.ManyToManyField('auth.Group', blank=True, verbose_name=_("Access for groups"))
 
     # Getter
     @staticmethod
@@ -67,6 +67,6 @@ class Position(DatetimeModel, IconModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"position")
-        verbose_name_plural = _(u"positions")
+        verbose_name = _("position")
+        verbose_name_plural = _("positions")
         app_label = 'editorial'

@@ -16,7 +16,7 @@ class Command(CompileMessages):
         """ Exécuter la commande """
         project_paths = getattr(settings, 'MAKEMESSAGES_DIRS', [Paths.get_root_dir()])
         for project_path in project_paths:
-            print u"Updating locale binaries for project at {path}".format(path=project_path)
+            print("Updating locale binaries for project at {path}".format(path=project_path))
             parsable_paths = []
             for root, dirs, _ in os.walk(project_path, topdown=True):
                 for directory in dirs:
@@ -27,6 +27,6 @@ class Command(CompileMessages):
             for subdir in parsable_paths:
                 os.chdir(subdir)
                 if 'locale' in os.listdir(subdir):
-                    print u"Creating locale binaries for {dir}".format(dir=subdir)
+                    print("Creating locale binaries for {dir}".format(dir=subdir))
                     call_command('compilemessages', *args, **options)
-        print u"Finished updating locale binaries."
+        print("Finished updating locale binaries.")

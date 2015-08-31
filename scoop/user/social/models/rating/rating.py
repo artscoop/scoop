@@ -31,26 +31,26 @@ class Axis(TranslatableModel, WeightedModel):
         return slugify(" ".join(result))
 
     # Champs
-    slug = models.SlugField(max_length=16, unique=True, blank=False, default=get_default_slug, verbose_name=_(u"Slug"))
+    slug = models.SlugField(max_length=16, unique=True, blank=False, default=get_default_slug, verbose_name=_("Slug"))
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')
-    content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, limit_choices_to=limit, verbose_name=_(u"Content type"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, limit_choices_to=limit, verbose_name=_("Content type"))
 
     # Getter
-    @addattr(short_description=_(u"Name"))
+    @addattr(short_description=_("Name"))
     def get_name(self):
         """ Renvoyer le nom de la catégorie """
         try:
             return self.get_translation().name
         except:
-            return _(u"(No name)")
+            return _("(No name)")
 
-    @addattr(short_description=_(u"Description"))
+    @addattr(short_description=_("Description"))
     def get_description(self):
         """ Renvoyer la description de la catégorie """
         try:
             return self.get_translation().description
         except:
-            return _(u"(No description)")
+            return _("(No description)")
 
     # Propriétés
     name = property(get_name)
@@ -59,20 +59,20 @@ class Axis(TranslatableModel, WeightedModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{name}").format(name=self.name)
+        return _("{name}").format(name=self.name)
 
     class Meta:
         """ Métadonnées """
-        verbose_name = _(u"rating axis")
-        verbose_name_plural = _(u"rating axes")
+        verbose_name = _("rating axis")
+        verbose_name_plural = _("rating axes")
         app_label = 'social'
 
 
 class AxisTranslation(get_translation_model(Axis, "axis"), TranslationModel):
     """ Traduction d'axe de notation """
     # Champs
-    name = models.CharField(max_length=32, blank=False, verbose_name=_(u"Name"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"))
+    name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Métadonnées
     class Meta:
@@ -97,21 +97,21 @@ class RatingManager(SingleDeleteManager):
 class Rating(DatetimeModel):
     """ Note donnée par un utilisateur à un objet arbitraire """
     # Constantes
-    AXIS_NAMES = [[0, _(u"General")]]
+    AXIS_NAMES = [[0, _("General")]]
     # Champs
-    axis = models.ForeignKey('social.Axis', blank=True, null=True, related_name='ratings', verbose_name=_(u"Axis"))
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='ratings_given', verbose_name=_(u"Author"))
-    rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(10)], default=0, verbose_name=_(u"Rating"))
+    axis = models.ForeignKey('social.Axis', blank=True, null=True, related_name='ratings', verbose_name=_("Axis"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='ratings_given', verbose_name=_("Author"))
+    rating = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(10)], default=0, verbose_name=_("Rating"))
     limit = models.Q(name__in=['Content'])  # limitation des modèles cibles
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, db_index=True, verbose_name=_(u"Content type"), limit_choices_to=limit)
-    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, db_index=True, verbose_name=_("Content type"), limit_choices_to=limit)
+    object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = generic.GenericForeignKey('content_type', 'object_id')
     objects = RatingManager()
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{user} gave {item} {rating:.03f} points").format(rating=self.rating, item=self.content_object, user=self.author)
+        return _("{user} gave {item} {rating:.03f} points").format(rating=self.rating, item=self.content_object, user=self.author)
 
     def delete(self, *args, **kwargs):
         """ Supprimer l'objet de la base de données """
@@ -121,8 +121,8 @@ class Rating(DatetimeModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"rating")
-        verbose_name_plural = _(u"ratings")
+        verbose_name = _("rating")
+        verbose_name_plural = _("ratings")
         unique_together = ('author', 'axis', 'content_type', 'object_id')
         app_label = 'social'
 

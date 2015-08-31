@@ -36,20 +36,20 @@ class TicketManager(models.Manager):
 class Ticket(DatetimeModel, UUID64Model):
     """ Ticket """
     # Constantes
-    RESOLUTIONS = [[0, _(u"New")], [1, _(u"New")], [2, _(u"New")], [3, _(u"New")], [4, _(u"New")], [5, _(u"Closed")]]
+    RESOLUTIONS = [[0, _("New")], [1, _("New")], [2, _("New")], [3, _("New")], [4, _("New")], [5, _("Closed")]]
     CLOSING = {0: False, 1: False, 2: False, 3: False, 4: False, 5: True}
     NEW, CLOSED = 0, 5
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="ticket_author", verbose_name=_(u"Author"))
-    title = models.CharField(max_length=128, blank=False, verbose_name=_(u"Title"))
-    description = models.TextField(validators=[MinLengthValidator(24)], verbose_name=_(u"Description"))
-    closed = models.BooleanField(default=False, db_index=True, verbose_name=_(u"Closed"))
-    updated = models.DateTimeField(auto_now=True, db_index=True, verbose_name=_(u"Updated"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="ticket_author", verbose_name=_("Author"))
+    title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
+    description = models.TextField(validators=[MinLengthValidator(24)], verbose_name=_("Description"))
+    closed = models.BooleanField(default=False, db_index=True, verbose_name=_("Closed"))
+    updated = models.DateTimeField(auto_now=True, db_index=True, verbose_name=_("Updated"))
     # Statut (à mettre à jour avec le dernier update)
-    status = models.SmallIntegerField(default=0, db_index=True, verbose_name=_(u"Status"))
-    related = models.ManyToManyField('ticket.Ticket', related_name='referenced_by', verbose_name=_(u"Related tickets"))
+    status = models.SmallIntegerField(default=0, db_index=True, verbose_name=_("Status"))
+    related = models.ManyToManyField('ticket.Ticket', related_name='referenced_by', verbose_name=_("Related tickets"))
     # Administrateurs du ticket
-    administrators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='tickets_managed', verbose_name=_(u"Administrators"))
+    administrators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='tickets_managed', verbose_name=_("Administrators"))
     objects = TicketManager()
 
     # Getter
@@ -101,7 +101,7 @@ class Ticket(DatetimeModel, UUID64Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"ticket")
-        verbose_name_plural = _(u"tickets")
-        permissions = (('can_close_ticket', ugettext(u"Can close a ticket")),)
+        verbose_name = _("ticket")
+        verbose_name_plural = _("tickets")
+        permissions = (('can_close_ticket', ugettext("Can close a ticket")),)
         app_label = 'ticket'

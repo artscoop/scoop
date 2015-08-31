@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import annoying.fields
-import django.core.validators
-import django.utils.timezone
-import picklefield.fields
-from django.conf import settings
-from django.db import migrations, models
-
+from django.db import models, migrations
 import scoop.core.abstract.core.uuid
 import scoop.core.util.data.dateutil
 import scoop.user.models.user
+import picklefield.fields
+import django.utils.timezone
+from django.conf import settings
+import django.core.validators
+import annoying.fields
 
 
 class Migration(migrations.Migration):
@@ -28,7 +27,7 @@ class Migration(migrations.Migration):
                 ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
                 ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
                 ('uuid', scoop.core.abstract.core.uuid.UUIDField(default='', bits=64, unique=True, max_length=11, editable=False)),
-                ('username', models.CharField(unique=True, max_length=32, verbose_name='Username', validators=[django.core.validators.RegexValidator(regex=b'^[A-Za-z0-9][A-Za-z0-9_]+', message='Your name must start with a letter and can only contain letters, digits and underscores'), django.core.validators.MinLengthValidator(4)])),
+                ('username', models.CharField(unique=True, max_length=32, verbose_name='Username', validators=[django.core.validators.RegexValidator(regex=b'^[A-Za-z0-9][A-Za-z0-9_]+$', message='Your name must start with a letter and can only contain letters, digits and underscores'), django.core.validators.MinLengthValidator(4)])),
                 ('name', models.CharField(blank=True, max_length=24, verbose_name='Name', validators=[django.core.validators.RegexValidator(regex=b'^[A-Za-z][A-Za-z0-9_\\-]+$', message='Your name can only contain letters')])),
                 ('bot', models.BooleanField(default=False, verbose_name='Bot')),
                 ('email', models.EmailField(unique=True, max_length=96, verbose_name='Email', blank=True)),

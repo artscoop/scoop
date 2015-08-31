@@ -6,7 +6,7 @@ from django.utils.translation import gettext_noop as _
 
 
 __version__ = (1, 2015, 3)
-_("language"), _(u"gender"), _(u"Profiles"), _(u"Profile")
+_("language"), _("gender"), _("Profiles"), _("Profile")
 
 
 class CoreConfig(AppConfig):
@@ -20,22 +20,24 @@ class CoreConfig(AppConfig):
         from scoop.core.util.django.formutil import ModelFormUtil
         from scoop.core.util.model.model import DictUpdateModel, get_all_related_objects
         from scoop.core.util.stream.request import RequestMixin
+        from scoop.core.abstract.rogue.flag import FlaggableModelUtil
 
         from django.contrib.admin.templatetags import admin_list
         from django.core.handlers.wsgi import WSGIRequest
-        from django.db import models
+        from django.db.models import Model
         from django.http.request import HttpRequest
 
         # Patcher les classes HTTPRequest
-        HttpRequest.__bases__ += (RequestMixin,)
+        HttpRequest = type('HttpRequest', (RequestMixin,), {})
         WSGIRequest.__bases__ += (RequestMixin,)
         WSGIRequest.__reduce__ = RequestMixin.__reduce__
         HttpRequest.__reduce__ = RequestMixin.__reduce__
         # Patcher la classe Model
-        models.Model.__bases__ += (AdminURLUtil, ModelFormUtil, DictUpdateModel)
-        models.Model.get_all_related_objects = get_all_related_objects
+        Model = type('Model', (Model, AdminURLUtil, ModelFormUtil, DictUpdateModel, FlaggableModelUtil), {'__module__': __name__})
+        Model.get_all_related_objects = get_all_related_objects
         # Patcher l'admin
         admin_list._boolean_icon = _boolean_icon
+
 
 # Charger la configuration ci-dessus par défaut
 default_app_config = 'scoop.core.CoreConfig'

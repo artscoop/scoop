@@ -12,8 +12,8 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 class Document(DatetimeModel, DataModel):
     """ Corpus """
     # Champs
-    text = models.TextField(unique=True, verbose_name=_(u"Text"))
-    category = models.ForeignKey('classify.Category', null=True, related_name='documents', verbose_name=_(u"Category"))
+    text = models.TextField(unique=True, verbose_name=_("Text"))
+    category = models.ForeignKey('classify.Category', null=True, related_name='documents', verbose_name=_("Category"))
 
     # Setter
     @staticmethod
@@ -31,6 +31,6 @@ class Document(DatetimeModel, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"document")
-        verbose_name_plural = _(u"documents")
+        verbose_name = _("document")
+        verbose_name_plural = _("documents")
         app_label = 'analysis'

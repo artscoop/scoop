@@ -9,6 +9,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from unidecode import unidecode
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID128Model
@@ -70,15 +71,15 @@ class Activation(DatetimeModel, UUID128Model):
     # Constantes
     MAX_RESENDS = 5  # Maximum de renvois de mails de confirmation
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='activation', primary_key=True, verbose_name=_(u"User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='activation', primary_key=True, verbose_name=_("User"))
     # Dans le cas où l'email est indisponible, utiliser question secrète
-    question = models.IntegerField(null=True, verbose_name=_(u"Secret question"))
-    answer = models.CharField(max_length=48, blank=True, verbose_name=_(u"Answer"))
+    question = models.IntegerField(null=True, verbose_name=_("Secret question"))
+    answer = models.CharField(max_length=48, blank=True, verbose_name=_("Answer"))
     # Activation possible ?
-    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('activation', u"Active"))
-    updates = models.SmallIntegerField(default=0, verbose_name=_(u"Updates"))
-    resends = models.SmallIntegerField(default=0, verbose_name=_(u"Mail send count"))
-    details = models.CharField(max_length=48, default="", blank=True, verbose_name=_(u"Admin details"))
+    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('activation', "Active"))
+    updates = models.SmallIntegerField(default=0, verbose_name=_("Updates"))
+    resends = models.SmallIntegerField(default=0, verbose_name=_("Mail send count"))
+    details = models.CharField(max_length=48, default="", blank=True, verbose_name=_("Admin details"))
     objects = ActivationManager()
 
     # Getter
@@ -115,15 +116,19 @@ class Activation(DatetimeModel, UUID128Model):
                 self.save(update_fields=['resends'])
                 return True
             except MailType.DoesNotExist:
-                logger.warning(u"Cannot send activation info, mail type is not configured yet.")
+                logger.warning("Cannot send activation info, mail type is not configured yet.")
         else:
-            logger.warning(u"Cannot send activation info anymore for {user}: limit exceeded".format(user=self.user))
+            logger.warning("Cannot send activation info anymore for {user}: limit exceeded".format(user=self.user))
         return False
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{}'s activation data").format(self.user.username)
+        return _("{}'s activation data").format(self.user.username)
+
+    def __repr__(self):
+        """ Renvoyer la représentation texte de l'objet """
+        return unidecode(self.__unicode__())
 
     def __init__(self, *args, **kwargs):
         """ Initialiser l'objet """
@@ -136,6 +141,6 @@ class Activation(DatetimeModel, UUID128Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"user activation")
-        verbose_name_plural = _(u"user activations")
+        verbose_name = _("user activation")
+        verbose_name_plural = _("user activations")
         app_label = "user"

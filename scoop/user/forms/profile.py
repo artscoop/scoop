@@ -31,7 +31,7 @@ class ProfileForm(forms_.ModelForm):
         date = self.cleaned_data['birth']
         age = date_age(date)
         if age < ProfileForm.MINIMUM_AGE:
-            raise forms.ValidationError(_(u"You must be {age:d} or older.").format(age=ProfileForm.MINIMUM_AGE))
+            raise forms.ValidationError(_("You must be {age:d} or older.").format(age=ProfileForm.MINIMUM_AGE))
         return date
 
     def __init__(self, *args, **kwargs):
@@ -44,7 +44,7 @@ class ProfileForm(forms_.ModelForm):
     class Meta:
         model = BaseProfile
         widgets = {'birth': SelectDateWidget(years=range(1940, datetime.now().year + 1 - getattr(settings, 'USER_REGISTRATION_MINIMUM_AGE', 18))),
-                   'city': AutoCompleteSelectWidget('citypm', attrs={'class': "control", 'placeholder': _(u"Enter your postcode or city name")})
+                   'city': AutoCompleteSelectWidget('citypm', attrs={'class': "control", 'placeholder': _("Enter your postcode or city name")})
                    }
         fields = ('gender', 'birth', 'city')
 
@@ -71,14 +71,14 @@ class ProfileInlineAdminForm(forms.ModelForm):
 
 class ProfilePictureForm(forms_.ModelForm):
     """ Formulaire d'édition d'image de profil """
-    image = ClearableImageField(widget=PictureInlineWidget, template=_(u"%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"), label=_(u"Main picture"))
+    image = ClearableImageField(widget=PictureInlineWidget, template=_("%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"), label=_("Main picture"))
 
     # Validation
     def is_valid(self):
         """ Renvoyer si l'état du formulaire est valide """
         valid = super(ProfilePictureForm, self).is_valid()
         if valid is True and self.request:
-            messages.success(self.request, _(u"Your picture may need to be reviewed by moderators before being visible."))
+            messages.success(self.request, _("Your picture may need to be reviewed by moderators before being visible."))
         return valid
 
     # Métadonnées
@@ -89,7 +89,7 @@ class ProfilePictureForm(forms_.ModelForm):
 
 class ProfileSearchForm(forms.Form):
     """ Formulaire de recherche de profils """
-    gender = forms.MultipleChoiceField(choices=BaseProfile.GENDER, required=False, label=_(u"Gender"))
+    gender = forms.MultipleChoiceField(choices=BaseProfile.GENDER, required=False, label=_("Gender"))
     seen_online = forms.BooleanField(required=False)
 
 

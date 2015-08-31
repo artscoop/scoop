@@ -67,15 +67,16 @@ class AlertManager(SingleDeleteManager):
 class Alert(DatetimeModel, DataModel):
     """ Alerte """
     # Constantes
-    ALERT_LEVELS = [[0, _(u"Warning")], [1, _(u"Important")], [2, _(u"Security")]]
+    ALERT_LEVELS = [[0, _("Warning")], [1, _("Important")], [2, _("Security")]]
+
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='alerts_received', on_delete=models.CASCADE, verbose_name=_(u"User"))
-    level = models.SmallIntegerField(default=0, choices=ALERT_LEVELS, validators=[MinValueValidator(0), MaxValueValidator(2)], verbose_name=_(u"Level"))
-    title = models.CharField(max_length=80, blank=False, verbose_name=_(u"Title"))
-    text = models.TextField(blank=False, verbose_name=_(u"Text"))
-    items = models.CharField(max_length=128, default="", verbose_name=_(u"Items"))
-    read = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('alert', u"Read"))
-    read_time = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('alert.time', u"Read"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='alerts_received', on_delete=models.CASCADE, verbose_name=_("User"))
+    level = models.SmallIntegerField(default=0, choices=ALERT_LEVELS, validators=[MinValueValidator(0), MaxValueValidator(2)], verbose_name=_("Level"))
+    title = models.CharField(max_length=80, blank=False, verbose_name=_("Title"))
+    text = models.TextField(blank=False, verbose_name=_("Text"))
+    items = models.CharField(max_length=128, default="", verbose_name=_("Items"))
+    read = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('alert', "Read"))
+    read_time = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('alert.time', "Read"))
     objects = AlertManager()
 
     # Getter
@@ -94,7 +95,7 @@ class Alert(DatetimeModel, DataModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"Alert for {user}").format(user=self.recipient)
+        return _("Alert for {user}").format(user=self.recipient)
 
     def delete(self, *args, **kwargs):
         """ Supprimer l'objet de la base de données """
@@ -102,7 +103,7 @@ class Alert(DatetimeModel, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"alert")
-        verbose_name_plural = _(u"alerts")
+        verbose_name = _("alert")
+        verbose_name_plural = _("alerts")
         ordering = ['-time']
         app_label = "messaging"

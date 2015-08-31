@@ -28,10 +28,10 @@ class InviteManager(SingleDeleteManager):
 class Invite(AuthoredModel, DatetimeModel, GenericModel):
     """ Invitation à un contenu "invitable" """
     # Constantes
-    STATUSES = [[0, _(u"Pending")], [1, _(u"Accepted")], [2, _(u"Denied")], [3, _(u"Permanently denied")]]
+    STATUSES = [[0, _("Pending")], [1, _("Accepted")], [2, _("Denied")], [3, _("Permanently denied")]]
     # Champs
-    target = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name="invite_targeted", verbose_name=_(u"Target"))
-    status = models.SmallIntegerField(choices=STATUSES, default=0, verbose_name=_(u"Status"))
+    target = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name="invite_targeted", verbose_name=_("Target"))
+    status = models.SmallIntegerField(choices=STATUSES, default=0, verbose_name=_("Status"))
 
     # Getter
     def is_denied(self):
@@ -58,6 +58,6 @@ class Invite(AuthoredModel, DatetimeModel, GenericModel):
     # Métadonnées
     class Meta:
         unique_together = (('content_type', 'object_id', 'target'),)
-        verbose_name = _(u"Group invite")
-        verbose_name_plural = _(u"Group invites")
+        verbose_name = _("Group invite")
+        verbose_name_plural = _("Group invites")
         app_label = "social"

@@ -46,8 +46,8 @@ class MessageManager(SingleDeleteManager):
         results = message_pre_send.send(sender=None, author=author, thread=thread, request=request)
         # Ne rien faire si le traitement l'interdit
         if any([result[1] is not True for result in results]):
-            messages = [unicode(message) for message in reduce(lambda x, y: x + y, [result[1]['messages'] for result in results if result[1] is not True])]
-            raise PermissionDenied(u", ".join(messages))
+            messages = [str(message) for message in reduce(lambda x, y: x + y, [result[1]['messages'] for result in results if result[1] is not True])]
+            raise PermissionDenied(", ".join(messages))
         # Formater le corps du message
         body = format_message(body, limit=MessageManager.MESSAGE_SIZE_LIMIT, strip_tags=strip_tags and not request.user.is_staff)
         # Ajouter le message + les indicateurs de non-lecture
@@ -74,7 +74,7 @@ class MessageManager(SingleDeleteManager):
     def for_user(self, user, sorting=None):
         """ Renvoyer les messages à l'attention de l'utilisateur """
         messages = self.select_related('author', 'thread', 'ip').filter(thread__recipient__user=user).exclude(author=user)
-        messages = messages.order_by(sorting) if isinstance(sorting, basestring) else messages
+        messages = messages.order_by(sorting) if isinstance(sorting, str) else messages
         return messages
 
     def last_messages(self, minutes=30, **kwargs):
@@ -119,12 +119,12 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
     DATA_KEYS = {'pasted', 'similar'}  # clés autorisées par datamodel
     SPAM_THRESHOLD = 0.83
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="messages_sent", on_delete=models.SET_NULL, verbose_name=_(u"Author"))
-    name = models.CharField(max_length=32, verbose_name=_(u"Name"))
-    thread = models.ForeignKey("messaging.Thread", on_delete=models.CASCADE, related_name='messages', null=False, verbose_name=_(u"Thread"))
-    text = models.TextField(blank=False, verbose_name=_(u"Text"))
-    spam = models.FloatField(default=0.0, validators=[MaxValueValidator(1.0), MinValueValidator(0.0)], verbose_name=_(u"Spam level"))
-    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('message', u"Deleted"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="messages_sent", on_delete=models.SET_NULL, verbose_name=_("Author"))
+    name = models.CharField(max_length=32, verbose_name=_("Name"))
+    thread = models.ForeignKey("messaging.Thread", on_delete=models.CASCADE, related_name='messages', null=False, verbose_name=_("Thread"))
+    text = models.TextField(blank=False, verbose_name=_("Text"))
+    spam = models.FloatField(default=0.0, validators=[MaxValueValidator(1.0), MinValueValidator(0.0)], verbose_name=_("Spam level"))
+    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('message', "Deleted"))
     objects = MessageManager()
 
     # Getter
@@ -163,7 +163,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
         """ Vérifier si le message est du spam """
         message_check_spam.send(None, message=self)
 
-    @addattr(boolean=True, short_description=_(u"Spam"))
+    @addattr(boolean=True, short_description=_("Spam"))
     def is_spam(self):
         """ Renvoyer si le message est du spam """
         return self.spam >= Message.SPAM_THRESHOLD
@@ -226,7 +226,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
 
     def __unicode__(self):
         """ Renvoyer une représentation unicode de l'objet """
-        return u"""Message #{thread:010} "{message}" """.format(thread=self.thread_id, message=truncate_ellipsis(self.text, 24))
+        return """Message #{thread:010} "{message}" """.format(thread=self.thread_id, message=truncate_ellipsis(self.text, 24))
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
@@ -234,9 +234,9 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"message")
-        verbose_name_plural = _(u"messages")
-        permissions = (("can_force_send", u"Can force send messages"),
-                       ("can_broadcast", u"Can broadcast messages"),
+        verbose_name = _("message")
+        verbose_name_plural = _("messages")
+        permissions = (("can_force_send", "Can force send messages"),
+                       ("can_broadcast", "Can broadcast messages"),
                        )
         app_label = "messaging"

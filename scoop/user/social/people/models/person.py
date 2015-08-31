@@ -25,23 +25,23 @@ class PersonManager(SingleDeleteManager, BirthManager):
 class Person(PicturedModel, WeightedModel, BirthModel, UUID32Model):
     """ Personne """
     # Constantes
-    TITLES = [['m', _(u"Mister")], ['mme', _(u"Miss'ess")], ['mlle', _(u"Miss")], ['dr', _(u"Doctor")]]
+    TITLES = [['m', _("Mister")], ['mme', _("Miss'ess")], ['mlle', _("Miss")], ['dr', _("Doctor")]]
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='person', on_delete=models.SET_NULL, verbose_name=_(u"User"))
-    full_name = models.CharField(max_length=64, blank=False, verbose_name=_(u"Full name"))
-    prefix = models.CharField(max_length=4, blank=False, choices=TITLES, verbose_name=_(u"Prefix"))
-    given_name = models.CharField(max_length=64, blank=True, verbose_name=_(u"Name given at birth"))
-    additional_name = models.CharField(max_length=64, blank=True, verbose_name=_(u"Name given at birth"))
-    family_name = models.CharField(max_length=64, blank=True, verbose_name=_(u"Family name"))
-    nickname = models.CharField(max_length=32, blank=True, verbose_name=_(u"Nickname"))
-    url = models.URLField(max_length=100, blank=True, verbose_name=_(u"Personal page"))
-    email = models.EmailField(max_length=64, blank=True, verbose_name=_(u"Email"))
-    telephone = models.CharField(max_length=128, blank=True, help_text=_(u"ex. Home:1114567, Fax:1114568, 1114569"), verbose_name=_(u"Phone numbers"))
-    notes = models.TextField(blank=True, verbose_name=_(u"Additional notes"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='person', on_delete=models.SET_NULL, verbose_name=_("User"))
+    full_name = models.CharField(max_length=64, blank=False, verbose_name=_("Full name"))
+    prefix = models.CharField(max_length=4, blank=False, choices=TITLES, verbose_name=_("Prefix"))
+    given_name = models.CharField(max_length=64, blank=True, verbose_name=_("Name given at birth"))
+    additional_name = models.CharField(max_length=64, blank=True, verbose_name=_("Name given at birth"))
+    family_name = models.CharField(max_length=64, blank=True, verbose_name=_("Family name"))
+    nickname = models.CharField(max_length=32, blank=True, verbose_name=_("Nickname"))
+    url = models.URLField(max_length=100, blank=True, verbose_name=_("Personal page"))
+    email = models.EmailField(max_length=64, blank=True, verbose_name=_("Email"))
+    telephone = models.CharField(max_length=128, blank=True, help_text=_("ex. Home:1114567, Fax:1114568, 1114569"), verbose_name=_("Phone numbers"))
+    notes = models.TextField(blank=True, verbose_name=_("Additional notes"))
     # Lieu
-    street_address = models.CharField(max_length=192, blank=True, help_text=_(u"Street number, name and appartment/suite"), verbose_name=_(u"Street address"))
-    city = models.CharField(max_length=96, blank=True, verbose_name=_(u"City"))
-    postal_code = models.CharField(max_length=24, blank=True, verbose_name=_(u"Postal code"))
+    street_address = models.CharField(max_length=192, blank=True, help_text=_("Street number, name and appartment/suite"), verbose_name=_("Street address"))
+    city = models.CharField(max_length=96, blank=True, verbose_name=_("City"))
+    postal_code = models.CharField(max_length=24, blank=True, verbose_name=_("Postal code"))
     country = CountryField()
     objects = PersonManager()
 
@@ -57,6 +57,6 @@ class Person(PicturedModel, WeightedModel, BirthModel, UUID32Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"person")
-        verbose_name_plural = _(u"persons")
+        verbose_name = _("person")
+        verbose_name_plural = _("persons")
         app_label = 'people'

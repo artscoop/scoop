@@ -13,8 +13,8 @@ from scoop.core.util.shortcuts import addattr
 
 class Timezone(models.Model):
     """ Fuseau horaire """
-    name = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_(u"Name"))
-    hash = models.IntegerField(primary_key=True, editable=False, help_text=_(u"Adler32 hash of timezone standard name"), verbose_name=_(u"Name hash"))
+    name = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_("Name"))
+    hash = models.IntegerField(primary_key=True, editable=False, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
 
     # Getter
     @staticmethod
@@ -44,19 +44,19 @@ class Timezone(models.Model):
         """ Renvoyer les informations de fuseau horaire """
         return pytz.timezone(self.name)
 
-    @addattr(short_description=_(u"UTC Offset"))
+    @addattr(short_description=_("UTC Offset"))
     def get_utc_offset(self, as_str=True):
         """ Renvoyer le décalage UTC du fuseau horaire """
         offset = self.get_info().utcoffset(datetime.datetime.now())
         return Timezone._get_offset_str(offset) if as_str else offset
 
-    @addattr(short_description=_(u"DST Offset"))
+    @addattr(short_description=_("DST Offset"))
     def get_dst_offset(self, as_str=True):
         """ Renvoyer le décalage de l'heure d'été """
         offset = self.get_info().dst(datetime.datetime.now())
         return Timezone._get_offset_str(offset) if as_str else offset
 
-    @addattr(short_description=_(u"Base Offset"))
+    @addattr(short_description=_("Base Offset"))
     def get_base_offset(self, as_str=True):
         """ Renvoyer le décalage UTC sans le décalage d'été """
         offset = self.get_utc_offset() - self.get_dst_offset()
@@ -66,7 +66,7 @@ class Timezone(models.Model):
     def _get_offset_str(offset):
         """ Renvoyer une représentation texte d'un décalage """
         offset, extra = (datetime.timedelta() - offset, '-') if offset.days < 0 else (offset, '+')
-        return u"{ex}{delta}".format(**{'ex': extra, 'delta': offset})
+        return "{ex}{delta}".format(**{'ex': extra, 'delta': offset})
 
     # Overrides
     def __unicode__(self):
@@ -81,6 +81,6 @@ class Timezone(models.Model):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"timezone")
-        verbose_name_plural = _(u"timezones")
+        verbose_name = _("timezone")
+        verbose_name_plural = _("timezones")
         app_label = 'location'

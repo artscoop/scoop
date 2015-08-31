@@ -6,11 +6,11 @@ import math
 import os
 import subprocess
 import traceback
-import urlparse
+from urllib import parse
 from os.path import join
 from random import randrange
 from traceback import print_exc
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 import cv2
 import simplejson
@@ -45,7 +45,6 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -78,7 +77,7 @@ class PictureQuerySetMixin(object):
                 else:
                     picture.delete()
             except (IOError, TypeError) as e:
-                print e, picture.id, picture.image
+                print(e, picture.id, picture.image)
         cache.set(self.TOTAL_SIZE_CACHE_KEY, int(total), 86400)
         return total
 
@@ -173,22 +172,22 @@ class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manag
 class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel):
     """ Image """
     # Constantes
-    AUDIENCES = [[0, _(u"Everyone")], [5, _(u"Adults only")]]
+    AUDIENCES = [[0, _("Everyone")], [5, _("Adults only")]]
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_(u"Author"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_("Author"))
     image = WebImageField(upload_to=get_image_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64),
-                          help_text=_(u"Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_(u"Image"))
-    title = models.CharField(max_length=96, blank=True, verbose_name=_(u"Title"))
-    description = models.TextField(blank=True, verbose_name=_(u"Description"), help_text=_(u"Description text. Enter an URL here to download a picture"))
-    marker = models.CharField(max_length=36, blank=True, help_text=_(u"Comma separated"), verbose_name=_(u"Internal marker"))
-    uuid = UUIDField(verbose_name=_(u"Code"), bits=48)
-    deleted = models.BooleanField(default=False, verbose_name=pgettext_lazy('picture', u"Deleted"))
-    animated = models.BooleanField(default=False, verbose_name=pgettext_lazy('picture', u"Animated"))
-    transient = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('picture', u"Transient"))  # temporaire avant effacement
-    updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('picture', u"Updated"))
+                          help_text=_("Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_("Image"))
+    title = models.CharField(max_length=96, blank=True, verbose_name=_("Title"))
+    description = models.TextField(blank=True, verbose_name=_("Description"), help_text=_("Description text. Enter an URL here to download a picture"))
+    marker = models.CharField(max_length=36, blank=True, help_text=_("Comma separated"), verbose_name=_("Internal marker"))
+    uuid = UUIDField(verbose_name=_("Code"), bits=48)
+    deleted = models.BooleanField(default=False, verbose_name=pgettext_lazy('picture', "Deleted"))
+    animated = models.BooleanField(default=False, verbose_name=pgettext_lazy('picture', "Animated"))
+    transient = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('picture', "Transient"))  # temporaire avant effacement
+    updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('picture', "Updated"))
     limit = models.Q(model__in=['profile', 'content', 'city'])  # limite de content_type
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, verbose_name=_(u"Content type"), limit_choices_to=limit)
-    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name=_(u"Object Id"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, verbose_name=_("Content type"), limit_choices_to=limit)
+    object_id = models.PositiveIntegerField(null=True, blank=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     objects = PictureManager()
 
@@ -220,7 +219,13 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         """ Renvoyer les instances d'animation de l'image """
         return self.animations.all()
 
-    @addattr(allow_tags=True, short_description=_(u"Image"))
+    def get_animation_duration(self):
+        """ Renvoyer la durée des animations de l'image en secondes """
+        if self.animated and self.has_animation():
+            return self.get_animations()[0].duration
+        return None
+
+    @addattr(allow_tags=True, short_description=_("Image"))
     def get_thumbnail_html(self, *args, **kwargs):
         """ Renvoyer le HTML d'une miniature de l'image """
         if self.exists():
@@ -234,10 +239,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 return output
             except Exception as e:
                 print_exc(e)
-                return u'<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', u"None"), e, self.image.name)
-        return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', u"None"))
+                return u'<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', "None"), e, self.image.name)
+        return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
 
-    @addattr(short_description=_(u"#"))
+    @addattr(short_description=_("#"))
     def get_thumbnail_count(self):
         """ Renvoyer le nombre de miniatures de l'image """
         try:
@@ -247,7 +252,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         except Source.DoesNotExist:
             return 0
 
-    @addattr(short_description=_(u"Filename"))
+    @addattr(short_description=_("Filename"))
     def get_filename(self, extension=True):
         """ Renvoyer le nom du fichier """
         if self.exists():
@@ -255,9 +260,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 return os.path.basename(self.image.path)
             else:
                 return os.path.splitext(os.path.basename(self.image.path))[0]
-        return pgettext_lazy('file', u"None")
+        return pgettext_lazy('file', "None")
 
-    @addattr(short_description=_(u"Extension"))
+    @addattr(short_description=_("Extension"))
     def get_extension(self):
         """ Renvoyer le suffixe du fichier avec le point """
         if self.exists():
@@ -271,13 +276,13 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         """
         return self.get_extension() == extension.lower()
 
-    @addattr(short_description=_(u"Size"))
+    @addattr(short_description=_("Size"))
     def get_file_size(self, raw=False):
         """ Renvoyer la taille du fichier au format lisible """
         if self.exists():
             return filesizeformat(self.image.size) if not raw else self.image.size
         else:
-            return pgettext_lazy('size', u"None")
+            return pgettext_lazy('size', "None")
 
     @render_to('content/display/picture/license/default.html', string=True)
     def get_formatted_license_info(self):
@@ -286,10 +291,14 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     @staticmethod
     def _parse_scheme(uri):
-        """ Renvoyer le schema d'une URI, ex. file:// """
-        return urlparse.urlparse(uri).scheme
+        """
+        Renvoyer le schema d'une URI
+        :param uri: chaîne d'URI de la ressource, au format protocole://ressource
+        :type uri: str
+        """
+        return parse.urlparse(uri).scheme
 
-    @addattr(boolean=True, short_description=_(u"Is valid"))
+    @addattr(boolean=True, short_description=_("Is valid"))
     def exists(self):
         """ Renvoyer si le fichier existe et est valide """
         file_exists = self.id and self.image and self.image.path and default_storage.exists(self.image.name)
@@ -298,22 +307,25 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             file_exists = False
         return file_exists
 
-    @addattr(short_description=_(u"Markers"))
+    @addattr(short_description=_("Markers"))
     def get_markers(self):
         """ Renvoyer le marqueur splitté par virgules """
         return [marker.lower().strip() for marker in self.marker.split(',')]
 
-    @addattr(boolean=True, short_description=_(u"Deletable transient"))
+    def has_marker(self, name):
+        """ Renvoyer si un marqueur est associé à l'image """
+        return name.lower().strip() in self.get_markers()
+
+    @addattr(boolean=True, short_description=_("Deletable transient"))
     def can_delete_transient(self):
         """ Renvoyer si l'image est volatile et suppressible """
         return self.transient and not self.is_new(days=2)
 
-    @addattr(short_description=_(u"Duplicates found"))
+    @addattr(short_description=_("Duplicates found"))
     def get_google_similar_count(self, request):
         """ Renvoyer le nombre d'images similaires trouvées par Google """
         from scoop.content.templatetags.picture_tags import lookup_url
-
-
+        # Charger l'URL et récupérer le nombre de résultats
         url = lookup_url(self, request)
         resource = get_url_resource(url)
         count = resource.count('h3 class="r"')
@@ -329,7 +341,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     def set_license(self, license_id, author, save=True):
         """ Définir la licence """
-        self.license = u"{license}:{author}".format(license=license_id, author=author)
+        self.license = "{license}:{author}".format(license=license_id, author=author)
         if save is True:
             self.save(update_fields=['license'])
 
@@ -338,7 +350,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         try:
             self.clean_thumbnail()
             default_storage.delete(self.image.name)
-        except Exception, e:
+        except Exception as e:
             logger.warning(e)
 
     def set_from_url(self, path):
@@ -348,7 +360,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     def set_from_file(self, uri):
         """ Définir depuis un fichier local """
-        parts = urlparse.urlparse(uri)
+        parts = parse.urlparse(uri)
         if parts.scheme in {'', 'file'}:
             path = parts.path
             filename = os.path.basename(path)
@@ -356,14 +368,14 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 self.image.save(filename, File(open(path)))
                 self.title = filename
                 self.save()
-            except Exception, e:
+            except Exception as e:
                 traceback.print_exc(e)
                 pass
 
     def find_from_uri(self, uri):
         """ Définir depuis une image trouvée via une URL find:// """
-        parts = urlparse.urlparse(uri.replace('find://', 'http://'))
-        query = urlparse.parse_qs(parts.query)
+        parts = parse.urlparse(uri.replace('find://', 'http://'))
+        query = parse.parse_qs(parts.query)
         expression = parts.netloc
         index = query.get('id', 0)
         index = index[0] if isinstance(index, list) else index
@@ -432,11 +444,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                     os.rename(path, new_path)
                     self.image.save(new_name, File(open(new_path)))
                     super(Picture, self).save()
-                    logger.info(u"Picture extension set: {}".format(new_name))
+                    logger.info("Picture extension set: {}".format(new_name))
                     # Si après traitement, ce n'est toujours pas une image, supprimer
                     if self.image.path[-4:] not in extensions4 and self.image.path[-5:] not in extensions5:
                         self.delete(clear=True)
-                        logger.warn(u"Could not find a correct extension for {}, deleted".format(self.image.path))
+                        logger.warn("Could not find a correct extension for {}, deleted".format(self.image.path))
                 else:
                     self.delete(clear=True)
 
@@ -476,7 +488,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                     try:
                         os.remove(os.path.join(settings.MEDIA_ROOT, thumb.name))
                         thumb.delete()
-                    except Exception, e:
+                    except Exception as e:
                         logger.warning(e)
 
     def _fix_exif(self):
@@ -579,10 +591,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 self.clone(self.description)
             os.system(
                 'convert "%s" \( -clone 0 -fill "#440000" -colorize 100%% \)  -compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%% -modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (
-                self.image.path, self.image.path))
+                    self.image.path, self.image.path))
             os.system(
                 'convert "%s" \( -clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6 \) -channel RGB -compose multiply -composite "%s"' % (
-                self.image.path, self.image.path))
+                    self.image.path, self.image.path))
             os.system('convert "%s" \( -clone 0 -blur 30x15 \) -compose dissolve -define compose:args=20 -composite "%s"' % (self.image.path, self.image.path))
 
     def clone(self, description=None):
@@ -590,7 +602,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             clone = Picture(description=urljoin(settings.DOMAIN_NAME, self.image.url), title=self.title, author=self.author)
             clone.save()
-            clone.description = (description or _(u"Clone of picture {uuid}")).format(uuid=self.uuid)
+            clone.description = (description or _("Clone of picture {uuid}")).format(uuid=self.uuid)
             clone.update_path(force_name=uuid_bits(48))
             return clone
 
@@ -602,7 +614,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 self.find_from_uri(self.description)
             elif scheme in {'http', 'https'}:
                 self.set_from_url(self.description)
-                self.title = (_(u"Picture ({})").format(self.get_formatted_dimension())) if not self.title else self.title
+                self.title = (_("Picture ({})").format(self.get_formatted_dimension())) if not self.title else self.title
             elif scheme == 'file':
                 self.set_from_file(self.description)
             if self.image:
@@ -615,7 +627,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{image}").format(image=self.title or self.description or self.get_filename())
+        return _("{image}").format(image=self.title or self.description or self.get_filename())
 
     def __html__(self):
         """ Renvoyer la représentation HTML de l'objet """
@@ -646,6 +658,6 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         verbose_name = _(u'image')
         verbose_name_plural = _(u'images')
         index_together = [['content_type', 'object_id']]
-        permissions = [['can_upload_picture', u"Can upload a picture"],
-                       ['can_moderate_picture', u"Can moderate pictures"]]
+        permissions = [['can_upload_picture', "Can upload a picture"],
+                       ['can_moderate_picture', "Can moderate pictures"]]
         app_label = 'content'

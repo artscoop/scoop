@@ -67,7 +67,7 @@ class UserIPManager(models.Manager):
 class UserIP(IPPointModel, DatetimeModel):
     """ IP d'un utilisateur """
     # Champs
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='userips', verbose_name=_(u"User"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='userips', verbose_name=_("User"))
     objects = UserIPManager()
 
     # Getter
@@ -78,7 +78,7 @@ class UserIP(IPPointModel, DatetimeModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"{user}@{ip}").format(user=self.user, ip=self.get_ip())
+        return _("{user}@{ip}").format(user=self.user, ip=self.get_ip())
 
     def __repr__(self):
         """ Renvoyer la représentation texte de l'objet """
@@ -90,7 +90,7 @@ class UserIP(IPPointModel, DatetimeModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"user IP")
-        verbose_name_plural = _(u"user IPs")
+        verbose_name = _("user IP")
+        verbose_name_plural = _("user IPs")
         unique_together = (('ip', 'user'),)
         app_label = 'access'

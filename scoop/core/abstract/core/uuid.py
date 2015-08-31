@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-import math
+from math import ceil
 
 from django.db import models
 from django.utils.baseconv import base64
@@ -24,7 +24,7 @@ class UUIDField(models.CharField):
             self.bits = 16
         if self.bits > 128:
             self.bits = 128
-        kwargs['max_length'] = int(math.ceil(self.bits / 6.0))
+        kwargs['max_length'] = int(ceil(self.bits / 6.0))
         kwargs['default'] = kwargs.get('default', self._generate)
         if 'bits' in kwargs:
             del kwargs['bits']
@@ -78,7 +78,7 @@ class FreeUUIDModel(models.Model):
 
 class UUID64Model(FreeUUIDModel):
     """ Mixin de modèle avec un UUID 64 bits """
-    uuid = UUIDField(verbose_name=_(u"Code"), bits=64)
+    uuid = UUIDField(verbose_name=_("Code"), bits=64)
 
     # Métadonnées
     class Meta:
@@ -87,7 +87,7 @@ class UUID64Model(FreeUUIDModel):
 
 class UUID128Model(FreeUUIDModel):
     """ Mixin de modèle avec un UUID 128 bits """
-    uuid = UUIDField(verbose_name=_(u"Code"), bits=128, max_length=22)
+    uuid = UUIDField(verbose_name=_("Code"), bits=128, max_length=22)
 
     # Métadonnées
     class Meta:
@@ -96,7 +96,7 @@ class UUID128Model(FreeUUIDModel):
 
 class UUID32Model(FreeUUIDModel):
     """ Mixin de modèle avec un UUID 32 bits """
-    uuid = UUIDField(verbose_name=_(u"Code"), bits=32, max_length=6)
+    uuid = UUIDField(verbose_name=_("Code"), bits=32, max_length=6)
 
     # Métadonnées
     class Meta:

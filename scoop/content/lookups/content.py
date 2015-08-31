@@ -25,15 +25,15 @@ class ContentLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer le texte simple du résultat """
-        return u"{}".format(obj.title)
+        return "{}".format(obj.title)
 
     def format_match(self, obj):
         """ Renvoyer le HTML de l'élément dans le dropdown """
-        return u"{}".format(obj.title)
+        return "{}".format(obj.title)
 
     def format_item_display(self, obj):
         """ Renvoyer le HTML de l'élément dans le deck """
-        return u"<strong>{title}</strong><br><small>{when}</small><br>{author}".format(title=obj.title, author=humanize_join(obj.get_authors(), 2), when=localize(obj.created))
+        return "<strong>{title}</strong><br><small>{when}</small><br>{author}".format(title=obj.title, author=humanize_join(obj.get_authors(), 2), when=localize(obj.created))
 
     def check_auth(self, request):
         """ Renvoyer si l'utilisateur peut faire une requête """

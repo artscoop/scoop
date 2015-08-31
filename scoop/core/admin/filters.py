@@ -11,7 +11,7 @@ from scoop.core.util.data.dateutil import now as now_
 
 class FirstLetterFilter(SimpleListFilter):
     """ Filtre admin sur la première lettre du champ name """
-    title = _(u"first letter")
+    title = _("first letter")
     parameter_name = 'firstlt'
 
     def lookups(self, request, model_admin):
@@ -32,12 +32,12 @@ class FirstLetterFilter(SimpleListFilter):
 
 class RandomOrderFilter(SimpleListFilter):
     """ Filtre admin de tri aléatoire """
-    title = _(u"random")
+    title = _("random")
     parameter_name = 'randomize'
 
     def lookups(self, request, model_admin):
         """ Renvoyer les valeurs possibles du filtre """
-        return (('yes', _(u"Yes")),)
+        return (('yes', _("Yes")),)
 
     def queryset(self, request, queryset):
         """ Renvoyer un queryset mélangé ou ordonné """
@@ -47,16 +47,16 @@ class RandomOrderFilter(SimpleListFilter):
 
 class TimestampFilter(SimpleListFilter):
     """ Filtre admin pour les objets DatetimeModel """
-    title = _(u"date and time")
+    title = _("date and time")
     parameter_name = 'time'
 
     def lookups(self, request, model_admin):
         """ Renvoyer les valeurs possibles de filtre """
         today = timezone.now()
         day, month, year = today.strftime('%A,%B,%Y').decode('utf-8').split(',')
-        return (('l24', _(u"last 24 hours")), ('l72', _(u"last 72 hours")), ('lweek', _(u"past 7 days")), ('lmonth', _(u"past 30 days")),
-                ('today', _(u"today ({day})").format(day=day)), ('month', _(u"this month ({month})").format(month=month)), ('month-1', _(u"last month")),
-                ('year', _(u"this year ({year})").format(year=year)), ('year-1', _(u"last year")),)
+        return (('l24', _("last 24 hours")), ('l72', _("last 72 hours")), ('lweek', _("past 7 days")), ('lmonth', _("past 30 days")),
+                ('today', _("today ({day})").format(day=day)), ('month', _("this month ({month})").format(month=month)), ('month-1', _("last month")),
+                ('year', _("this year ({year})").format(year=year)), ('year-1', _("last year")),)
 
     def queryset(self, request, queryset):
         """ Renvoyer un queryset correspondant aux valeurs du filtre """

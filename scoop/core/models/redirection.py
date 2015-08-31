@@ -48,14 +48,14 @@ class RedirectionManager(SingleDeleteManager):
 
 class Redirection(GenericModelMixin, DatetimeModel):
     """ Redirection d'URL """
-    active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('redirection', u"Active"))
-    base = models.CharField(max_length=250, unique=True, blank=False, verbose_name=_(u"Original URL"))
-    expires = models.DateTimeField(default=datetime.now() + timedelta(days=3650), verbose_name=_(u"Expiry"))  # 10 ans après démarrage du serveur
-    permanent = models.BooleanField(default=True, verbose_name=pgettext_lazy('redirection', u"Permanent"))
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, limit_choices_to={'model__in': ['user', 'profile', 'content']}, verbose_name=_(u"Content type"))
-    object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_(u"Object Id"))
+    active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('redirection', "Active"))
+    base = models.CharField(max_length=250, unique=True, blank=False, verbose_name=_("Original URL"))
+    expires = models.DateTimeField(default=datetime.now() + timedelta(days=3650), verbose_name=_("Expiry"))  # 10 ans après démarrage du serveur
+    permanent = models.BooleanField(default=True, verbose_name=pgettext_lazy('redirection', "Permanent"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, limit_choices_to={'model__in': ['user', 'profile', 'content']}, verbose_name=_("Content type"))
+    object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
-    content_object.short_description = _(u"Content object")
+    content_object.short_description = _("Content object")
     objects = RedirectionManager()
 
     # Getter
@@ -63,7 +63,7 @@ class Redirection(GenericModelMixin, DatetimeModel):
         """ Renvoyer l'URL de destination de la redirection """
         if hasattr(self.content_object, 'get_absolute_url'):
             query_string = "?{}".format(request.GET.urlencode()) if request else ""
-            return u"{}{}".format(self.content_object.get_absolute_url(), query_string)
+            return "{}{}".format(self.content_object.get_absolute_url(), query_string)
         return "/"
 
     def get_redirection_class(self):
@@ -85,10 +85,10 @@ class Redirection(GenericModelMixin, DatetimeModel):
 
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"HTTP {http} Redirection from {base} to {new}").format(http=self.get_http_code(), base=self.base, new=self.get_new_url())
+        return _("HTTP {http} Redirection from {base} to {new}").format(http=self.get_http_code(), base=self.base, new=self.get_new_url())
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"redirection")
-        verbose_name_plural = _(u"redirections")
+        verbose_name = _("redirection")
+        verbose_name_plural = _("redirections")
         app_label = 'core'

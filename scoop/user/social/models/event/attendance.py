@@ -38,14 +38,14 @@ class AttendanceManager(SingleDeleteManager):
 class Attendance(AuthoredModel):
     """ Participation à un événement """
     # Constantes
-    STATUSES = [[1, _(u"I was there")], [2, _(u"I was not there")], [0, _(u"Unknown")]]
-    FORECASTS = [[0, _(u"I will not participate")], [1, _(u"I might participate")], [2, _(u"I will participate")]]
+    STATUSES = [[1, _("I was there")], [2, _("I was not there")], [0, _("Unknown")]]
+    FORECASTS = [[0, _("I will not participate")], [1, _("I might participate")], [2, _("I will participate")]]
     WAS_THERE, NOT_THERE, UNKNOWN = 1, 2, 0
     WONT, MIGHT, WILL = 0, 1, 2
     # Champs
-    event = models.ForeignKey('social.Event', related_name='attendances', verbose_name=_(u"Event"))
-    forecast = models.SmallIntegerField(choices=FORECASTS, default=MIGHT, db_index=True, verbose_name=_(u"Forecast"))
-    status = models.SmallIntegerField(choices=STATUSES, default=UNKNOWN, db_index=True, verbose_name=_(u"Status"))
+    event = models.ForeignKey('social.Event', related_name='attendances', verbose_name=_("Event"))
+    forecast = models.SmallIntegerField(choices=FORECASTS, default=MIGHT, db_index=True, verbose_name=_("Forecast"))
+    status = models.SmallIntegerField(choices=STATUSES, default=UNKNOWN, db_index=True, verbose_name=_("Status"))
     objects = AttendanceManager()
 
     # Setter
@@ -63,7 +63,7 @@ class Attendance(AuthoredModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"attendance")
-        verbose_name_plural = _(u"attendances")
+        verbose_name = _("attendance")
+        verbose_name_plural = _("attendances")
         unique_together = [['author', 'event']]
         app_label = "social"

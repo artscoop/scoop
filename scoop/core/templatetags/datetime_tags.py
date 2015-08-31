@@ -22,7 +22,7 @@ def is_date_new(value, by):
     """
     from scoop.core.abstract.core.datetime import DatetimeModel
     # Traiter le cas possibles, ou False si non supporté
-    if isinstance(by, basestring):
+    if isinstance(by, str):
         days = int(getattr(re.search(r"(\d+)d", by, re.IGNORECASE), 'groups', lambda: [0])()[0])
         hours = int(getattr(re.search(r"(\d+)h", by, re.IGNORECASE), 'groups', lambda: [0])()[0])
         minutes = int(getattr(re.search(r"(\d+)m", by, re.IGNORECASE), 'groups', lambda: [0])()[0])

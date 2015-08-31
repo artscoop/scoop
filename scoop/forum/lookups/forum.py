@@ -22,12 +22,12 @@ class ForumLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer la représentation texte de l'élément """
-        return u"{name}".format(name=obj.name)
+        return "{name}".format(name=obj.name)
 
     def format_match(self, obj):
         """ Renvoyer la représentation HTML de l'élément dans le dropdown """
-        return u"{name}".format(name=obj.name)
+        return "{name}".format(name=obj.name)
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'élément dans le deck """
-        return u"{name}".format(name=obj.name)
+        return "{name}".format(name=obj.name)

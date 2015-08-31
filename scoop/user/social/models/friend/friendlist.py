@@ -43,9 +43,9 @@ class FriendList(DataModel):
     """ Liste d'amis """
     # Constantes
     DATA_KEYS = ['friends', 'received', 'sent']  # amis, demandes reçues, demandes envoyées
-    ACTION_LABELS = {(True, False): _(u"Friend"), (False, True): _(u"Cancel request"), (False, False): _(u"Add to friends")}
+    ACTION_LABELS = {(True, False): _("Friend"), (False, True): _("Cancel request"), (False, False): _("Add to friends")}
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='friends', verbose_name=_(u"User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='friends', verbose_name=_("User"))
     objects = FriendListManager()
 
     # Getter
@@ -227,7 +227,7 @@ class FriendList(DataModel):
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u"Friendship status for {user}").format(user=self.user)
+        return _("Friendship status for {user}").format(user=self.user)
 
     def __init__(self, *args, **kwargs):
         """ Initialiser l'objet """
@@ -235,6 +235,6 @@ class FriendList(DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"friend status")
-        verbose_name_plural = _(u"friend statuses")
+        verbose_name = _("friend status")
+        verbose_name_plural = _("friend statuses")
         app_label = 'social'

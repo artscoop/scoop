@@ -10,7 +10,7 @@ from django.template.defaultfilters import slugify
 from scoop.core.util.django import formutil
 
 
-class RequestMixin():
+class RequestMixin:
     """
     Opérations sur l'objet HttpRequest destinées à l'usage avec plusieurs
     applications. Principalement, l'objectif de l'utilitaire est de manipuler
@@ -25,14 +25,20 @@ class RequestMixin():
 
     # Getter
     def get_ip(self):
-        """ Renvoyer l'adresse IP de la requête, au format texte"""
+        """
+        Renvoyer l'adresse IP de la requête, au format texte
+        :type self: django.http.HttpRequest
+        """
         for entry in RequestMixin.CHECKS:
             if self.META.get(entry, False):
                 return self.META[entry]
         return '-'
 
     def get_referrer(self):
-        """ Renvoyer le référent """
+        """
+        Renvoyer le référent
+        :type self: django.http.HttpRequest
+        """
         return self.META.get('HTTP_REFERER', "")
 
     def is_referrer_external(self):
@@ -70,7 +76,10 @@ class RequestMixin():
         return city
 
     def list_to_queryset(self, attribute, base_queryset, qs_att='pk', conversion=int):
-        """ Renvoyer un queryset filtré par les valeurs d'un attribut POST """
+        """
+        Renvoyer un queryset filtré par les valeurs d'un attribut POST
+        :type self: django.http.HttpRequest
+        """
         if attribute in self.REQUEST:
             values = getattr(self, 'REQUEST').getlist(attribute)
             values = [conversion(value) for value in values]
@@ -91,6 +100,7 @@ class RequestMixin():
         Renvoyer une liste d'ID cochés et décochés depuis des données POST
         :param full: liste des champs hidden
         :param selected: liste des cases à cocher sélectionnées
+        :type self: django.http.HttpRequest
         """
         full_set = set([int(i) for i in self.POST.getlist(full)])
         selected_set = set([int(i) for i in self.POST.getlist(selected)])
@@ -98,7 +108,10 @@ class RequestMixin():
         return {'selected': selected_set, 'unselected': unselected_set}
 
     def save_post(self, name):
-        """ Sauvegarder des données POST pour un utilisateur et un nom"""
+        """
+        Sauvegarder des données POST pour un utilisateur et un nom
+        :type self: django.http.HttpRequest, RequestMixin
+        """
         key = self.POST_CACHE_KEY % {'user': self.user.id, 'name': slugify(name)}
         cache.set(key, self.POST, 2592000)
 
@@ -108,10 +121,13 @@ class RequestMixin():
         return cache.get(key, dict())
 
     def __reduce__(self):
-        """ Préparer l'objet au pickling """
+        """
+        Préparer l'objet au pickling
+        :type self: django.http.HttpRequest
+        """
         if hasattr(self, 'user'):
             self.user = self.user._wrapped if hasattr(self.user, '_wrapped') else self.user  # Depuis Django 1.8, user est un LazyObject qui ne peut être picklé en l'état.
-        meta = {k: self.META[k] for k in RequestMixin.METACOPY if k in self.META and isinstance(self.META[k], basestring)}
+        meta = {k: self.META[k] for k in RequestMixin.METACOPY if k in self.META and isinstance(self.META[k], str)}
 
         return (HttpRequest, (), {'META': meta, 'POST': self.POST, 'GET': self.GET, 'user': getattr(self, 'user', None),
                                   'path': self.path, 'scheme': self.scheme, 'path_info': self.path_info,

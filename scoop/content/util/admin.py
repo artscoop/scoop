@@ -14,7 +14,7 @@ class PicturedModelAdmin():
     des miniatures attachées à un objet de type PicturableModel
     """
 
-    @addattr(allow_tags=True, admin_order_field='pictures', short_description=_(u"Pictures"))
+    @addattr(allow_tags=True, admin_order_field='pictures', short_description=_("Pictures"))
     def get_picture_set(self, obj):
         """
         Renvoyer les premières miniatures des images attachées à
@@ -27,9 +27,9 @@ class PicturedModelAdmin():
             if queryset.count() > 2:
                 pictures = u'{pictures} <span class="muted">{count}</span>'.format(pictures=pictures, count=queryset.count())
             return pictures
-        return _(u"This model has no field named pictures.")
+        return _("This model has no field named pictures.")
 
-    @addattr(boolean=True, admin_order_field='pictures', short_description=_(u"\U0001F58C"))
+    @addattr(boolean=True, admin_order_field='pictures', short_description=_("\U0001F58C"))
     def has_picture(self, obj):
         """ Renvoyer si des images sont attachées à l'objet """
         return obj.pictures.all().exists()

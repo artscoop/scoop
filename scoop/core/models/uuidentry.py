@@ -44,7 +44,7 @@ class UUIDEntryManager(SingleDeleteManager):
 
 class UUIDEntry(GenericModel):
     """ Entrée du registre d'UUID """
-    uuid = models.CharField(max_length=22, unique=True, blank=False, null=False, verbose_name=_(u"UUID"))
+    uuid = models.CharField(max_length=22, unique=True, blank=False, null=False, verbose_name=_("UUID"))
     objects = UUIDEntryManager()
 
     # Overrides
@@ -54,6 +54,6 @@ class UUIDEntry(GenericModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"UUID Reference")
-        verbose_name_plural = _(u"UUID References")
+        verbose_name = _("UUID Reference")
+        verbose_name_plural = _("UUID References")
         app_label = 'core'

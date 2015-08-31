@@ -27,40 +27,40 @@ class ThreadAdmin(admin.ModelAdmin):
     inlines = []
     save_on_top = False
     actions_on_top = True
-    fieldsets = ((_(u"Thread"), {'fields': ('author', 'topic', 'deleted', 'closed')}), (_(u"Expiry"), {'fields': ('expires', 'expiry_on_read', 'started', 'updated')}),)
+    fieldsets = ((_("Thread"), {'fields': ('author', 'topic', 'deleted', 'closed')}), (_("Expiry"), {'fields': ('expires', 'expiry_on_read', 'started', 'updated')}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
     # Getter
-    @addattr(short_description=_(u"Recipients"))
+    @addattr(short_description=_("Recipients"))
     def get_recipients(self, obj):
         """ Renvoyer la liste des destinataires """
-        return ", ".join([u"{}".format(item.user.username) for item in obj.recipients.all()])
+        return ", ".join(["{}".format(item.user.username) for item in obj.recipients.all()])
 
-    @addattr(allow_tags=True, short_description=_(u"Recipients"))
+    @addattr(allow_tags=True, short_description=_("Recipients"))
     def get_recipient_pictures(self, obj):
         """ Renvoyer les vignettes des destinataires """
         picture_links = []
         for recipient in obj.get_users(exclude=obj.author):
-            picture_links.append(u"""<a href="{}">{}</a>""".format(recipient.get_absolute_url(), recipient))
-        return u" ".join(picture_links)
+            picture_links.append("""<a href="{}">{}</a>""".format(recipient.get_absolute_url(), recipient))
+        return " ".join(picture_links)
 
-    @addattr(short_description=_(u"Expiry on read"))
+    @addattr(short_description=_("Expiry on read"))
     def get_expiry(self, obj):
         """ Renvoyer l'expiration après lecture """
         delta = datetime.timedelta(days=obj.expiry_on_read)
         return delta
 
-    @addattr(admin_order_field='expires', short_description=_(u"Expires"))
+    @addattr(admin_order_field='expires', short_description=_("Expires"))
     def get_expires(self, obj):
         """ Renvoyer la date d'expiration du fil de discussion """
-        return obj.expires or _(u"Never")
+        return obj.expires or _("Never")
 
-    @addattr(admin_order_field='started', short_description=_(u"Was started"))
+    @addattr(admin_order_field='started', short_description=_("Was started"))
     def get_started(self, obj):
         """ Renvoyer la date de début du fil de discussion """
         return obj.started.strftime("%d/%m/%Y %H:%M")
 
-    @addattr(admin_order_field='updated', short_description=_(u"Updated"))
+    @addattr(admin_order_field='updated', short_description=_("Updated"))
     def get_updated(self, obj):
         """ Renvoyer la date de modification de la discussion """
         return obj.updated.strftime("%d/%m/%Y %H:%M")

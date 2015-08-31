@@ -48,13 +48,13 @@ class ImpersonationMiddleware(object):
                 request.session[SESSION_ITEM] = request.GET[IMPERSONATE_PARAMETER]
             elif EXIT_PARAMETER in request.GET and SESSION_ITEM in request.session:
                 del request.session[SESSION_ITEM]
-                messages.info(request, _(u"Your impersonation session has been properly shut down."))
+                messages.info(request, _("Your impersonation session has been properly shut down."))
                 return HttpResponseRedirect(remove_get_parameter(request, EXIT_PARAMETER))
             if SESSION_ITEM in request.session:
                 try:
                     request.user = get_user_model().objects.active().get(username__iexact=request.session[SESSION_ITEM])
                     messages.info(request,
-                                  _(u"""You are viewing {path} as {name}. <a href="?{exit}">Quit</a>""").format(name=request.session[SESSION_ITEM], path=request.path, exit=EXIT_PARAMETER))
+                                  _("""You are viewing {path} as {name}. <a href="?{exit}">Quit</a>""").format(name=request.session[SESSION_ITEM], path=request.path, exit=EXIT_PARAMETER))
                 except:
-                    messages.error(request, _(u"There is no active user with the username {name}.").format(name=request.session[SESSION_ITEM]))
+                    messages.error(request, _("There is no active user with the username {name}.").format(name=request.session[SESSION_ITEM]))
                     del request.session[SESSION_ITEM]

@@ -29,7 +29,7 @@ class GroupLookup(LookupChannel):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation de l'objet dans le deck """
-        return u"{}".format(obj)
+        return "{}".format(obj)
 
     def check_auth(self, request):
         """ Renvoyer si l'utilisateur en cours peut effectuer une requête """

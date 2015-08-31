@@ -12,7 +12,7 @@ def phonex(query):
     Le Phonex est un Soundex pour la langue française
     """
     # Nettoyer la chaîne de ses caractères superflus
-    for char in u" -+*/.,:;'_!?<>":
+    for char in " -+*/.,:;'_!?<>":
         query = query.replace(char, '')
     # 0. Mettre les caractères en minuscule
     query = query.lower()

@@ -32,19 +32,19 @@ class BirthManager(object):
 class BirthModel(models.Model):
     """ Mixin de modèle avec date de naissance, d'anniversaire et âge """
     # Constantes
-    SIGNS = {120: _(u"Capricorn"), 218: _(u"Aquarius"), 320: _(u"Pisces"), 420: _(u"Aries"), 521: _(u"Taurus"), 621: _(u"Gemini"), 722: _(u"Cancer"), 823: _(u"Leo"), 923: _(u"Virgo"),
-             1023: _(u"Libra"), 1122: _(u"Scorpion"), 1222: _(u"Sagittarius"), 1232: _(u"Capricorn")}
+    SIGNS = {120: _("Capricorn"), 218: _("Aquarius"), 320: _("Pisces"), 420: _("Aries"), 521: _("Taurus"), 621: _("Gemini"), 722: _("Cancer"), 823: _("Leo"), 923: _("Virgo"),
+             1023: _("Libra"), 1122: _("Scorpion"), 1222: _("Sagittarius"), 1232: _("Capricorn")}
     # Champs
-    birth = models.DateField(null=False, default=datetime.date(1990, 1, 1), blank=False, verbose_name=_(u"Birth date"))
-    birthday = models.IntegerField(null=True, editable=False, blank=True, verbose_name=_(u"Birth day"))
-    age = models.SmallIntegerField(editable=False, db_index=True, verbose_name=_(u"Age"))
+    birth = models.DateField(null=False, default=datetime.date(1990, 1, 1), blank=False, verbose_name=_("Birth date"))
+    birthday = models.IntegerField(null=True, editable=False, blank=True, verbose_name=_("Birth day"))
+    age = models.SmallIntegerField(editable=False, db_index=True, verbose_name=_("Age"))
 
     # Getter
     def get_birthday_dict(self):
         """ Renvoyer un dictionnaire de la date d'anniversaire """
         return {'month': int(self.birthday / 100), 'month_name': calendar.month_name[int(self.birthday / 100)], 'day': self.birthday % 100}
 
-    @addattr(short_description=_(u"Birthday"))
+    @addattr(short_description=_("Birthday"))
     def get_next_birthday(self):
         """ Renvoyer la date du prochain anniversaire """
         today = timezone.now().date()
@@ -54,7 +54,7 @@ class BirthModel(models.Model):
         next_birthday = datetime.date(today.year + year_shift, birth_day['month'], birth_day['day'])
         return next_birthday
 
-    @addattr(short_description=_(u"Birthday"))
+    @addattr(short_description=_("Birthday"))
     def get_next_birthday_relative(self):
         """ Renvoyer une version texte relative de la date du prochain anniversaire """
         return pretty.date(self.get_next_birthday())
@@ -66,11 +66,12 @@ class BirthModel(models.Model):
         dayid = today.day + today.month * 100
         return self.birthday == dayid
 
-    @addattr(admin_order_field='-birth', short_description=_(u"Age"))
+    @addattr(admin_order_field='-birth', short_description=_("Age"))
     def get_age(self):
         """ Renvoie l'âge de l'objet """
         return date_age(self.birth)
 
+    @addattr(short_description=_("Sign"))
     def get_zodiac_sign(self):
         """ Renvoyer le signe zodiacal de l'objet """
         for sign in self.SIGNS.items():
@@ -79,7 +80,7 @@ class BirthModel(models.Model):
 
     # Overrides
     def save(self, *args, **kwargs):
-        """ Enregsitrer l'objet en base de données """
+        """ Enregistrer l'objet en base de données """
         if self.birth:
             self.birthday = self.birth.day + self.birth.month * 100
             self.age = self.get_age()

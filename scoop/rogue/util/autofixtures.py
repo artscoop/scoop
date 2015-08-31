@@ -56,8 +56,8 @@ class FlagAutoFixture(AutoFixture):
     follow_m2m = False
     field_values = {
         'details': LoremSentenceGenerator(max_length=32),
-        'url': u"",
-        'name': u"",
+        'url': "",
+        'name': "",
         'content_type': values_content_type,
         'object_id': values_user_id,
         'author': values_user,

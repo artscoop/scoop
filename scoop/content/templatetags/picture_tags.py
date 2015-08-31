@@ -44,26 +44,26 @@ def display_image(context, image=None, **kwargs):
     if 'uuid' in kwargs:
         image = Picture.objects.get_by_uuid(kwargs.pop('uuid', None), default=image)
     # N'afficher que si l'objet Picture est visible pour l'objet Request
-    if image is not None and isinstance(image, (Picture, basestring, FieldFile)):
+    if image is not None and isinstance(image, (Picture, str, FieldFile)):
         display['alias'] = kwargs.pop('alias', None)  # alias de vignette
         display['options'] = kwargs.pop('options', "")  # options easy-thumbnails de type bool
-        display['image_class'] = kwargs.pop('image_class', u"")
-        display['image_rel'] = kwargs.pop('image_rel', u"")
-        display['link_title'] = kwargs.pop('link_title', u"")
-        display['link_class'] = kwargs.pop('link_class', u"")
-        display['link_id'] = kwargs.pop('link_id', u"")
+        display['image_class'] = kwargs.pop('image_class', "")
+        display['image_rel'] = kwargs.pop('image_rel', "")
+        display['link_title'] = kwargs.pop('link_title', "")
+        display['link_class'] = kwargs.pop('link_class', "")
+        display['link_id'] = kwargs.pop('link_id', "")
         display['link_rel'] = kwargs.pop('link_rel', None)
         display['link'] = kwargs.pop('link', True)
         if isinstance(image, Picture) and image.is_visible(request) and image.exists():
             display['image_url'] = image.image
-            display['link_target'] = kwargs.pop('link_target', u"{}{}".format(settings.MEDIA_URL, image.image))
+            display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image.image))
             display['image_title'] = kwargs.pop('image_title', image.title)
             display['image_alt'] = kwargs.pop('image_alt', image.description)
-        elif isinstance(image, (basestring, FieldFile)):
+        elif isinstance(image, (str, FieldFile)):
             display['image_url'] = image
-            display['link_target'] = kwargs.pop('link_target', u"{}{}".format(settings.MEDIA_URL, image))
-            display['image_title'] = kwargs.pop('image_title', u"")
-            display['image_alt'] = kwargs.pop('image_alt', u"")
+            display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image))
+            display['image_title'] = kwargs.pop('image_title', "")
+            display['image_alt'] = kwargs.pop('image_alt', "")
         else:
             return ""
         # Si link_target est un objet, convertir en URL

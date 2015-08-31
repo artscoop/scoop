@@ -30,14 +30,14 @@ class IPAdmin(admin.ModelAdmin):
         """ Renvoyer les actions disponibles """
         return super(IPAdmin, self).get_actions(request)
 
-    @addattr(short_description=_(u"Update selected IPs"))
+    @addattr(short_description=_("Update selected IPs"))
     def update_ip(self, request, queryset):
         """ Mettre à jour les informations des IP sélectionnées """
         count = queryset.count()
         for item in queryset:
             item.set_ip_address(item.string)
             item.save()
-        self.message_user(request, _(u"{} IP adresses were successfully updated.").format(count))
+        self.message_user(request, _("{} IP adresses were successfully updated.").format(count))
 
 # Enregistrer les classes d'administration
 admin.site.register(IP, IPAdmin)

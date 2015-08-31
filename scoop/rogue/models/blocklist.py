@@ -97,11 +97,11 @@ class Blocklist(DatetimeModel, DataModel):
     # Constantes
     DATA_KEYS = ['blacklist', 'hidelist']
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, related_name='blocklist', on_delete=models.CASCADE, verbose_name=_(u"Blocker"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, related_name='blocklist', on_delete=models.CASCADE, verbose_name=_("Blocker"))
     objects = BlocklistManager()
 
     # Getter
-    @addattr(short_description=pgettext_lazy('users', u"Blacklisted"))
+    @addattr(short_description=pgettext_lazy('users', "Blacklisted"))
     def get_count(self, name=None):
         """ Renvoyer le nombre d'entrées dans une blocklist """
         return len(self.get_data(name or DEFAULT_LIST, []))
@@ -178,6 +178,6 @@ class Blocklist(DatetimeModel, DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"blocklists")
-        verbose_name_plural = _(u"blocklists")
+        verbose_name = _("blocklists")
+        verbose_name_plural = _("blocklists")
         app_label = "rogue"

@@ -10,7 +10,6 @@ from django.core.cache import cache
 
 from scoop.core.util.stream.directory import Paths
 
-
 PROXY_LIST_DIRECTORY = Paths.get_root_dir('isolated', 'database', 'rogue', 'proxies')
 
 

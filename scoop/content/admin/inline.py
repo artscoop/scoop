@@ -30,8 +30,8 @@ class CategoryInline(admin.TabularInline):
 
 class CategoryTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin des traductions de contenu """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = CategoryTranslation
     max_num = len(settings.LANGUAGES)
     formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}, }

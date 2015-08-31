@@ -35,7 +35,7 @@ class LoginMiddleware(object):
                     user = User.sign(request, request.POST)
                     target = request.GET.get('next', ConfigurationForm.get_login_destination(user))
                     return HttpResponseRedirect(target)
-                except ValidationError, exc:
+                except ValidationError as exc:
                     messages.warning(request, exc.message)
                 except Exception as e:
                     traceback.print_exc(e)
@@ -43,7 +43,7 @@ class LoginMiddleware(object):
                 if LoginMiddleware.LOGOUT_URL in request.get_full_path():
                     return HttpResponseRedirect(settings.LOGIN_URL)
             else:
-                messages.warning(request, u"".join(form.errors['__all__']))
+                messages.warning(request, "".join(form.errors['__all__']))
         return None
 
 

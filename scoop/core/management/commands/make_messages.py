@@ -16,7 +16,7 @@ class Command(MakeMessages):
         """ Exécuter la commande """
         project_paths = getattr(settings, 'MAKEMESSAGES_DIRS', [Paths.get_root_dir()])
         for project_path in project_paths:
-            print u"Update locales for project at {path}".format(path=project_path)
+            print("Update locales for project at {path}".format(path=project_path))
             parsable_paths = []
             for root, dirs, _ in os.walk(project_path, topdown=True):
                 for directory in dirs:
@@ -27,6 +27,6 @@ class Command(MakeMessages):
             for subdir in parsable_paths:
                 os.chdir(subdir)
                 if 'locale' in os.listdir(subdir):
-                    print u"Updating locale messages for {dir}".format(dir=subdir)
+                    print("Updating locale messages for {dir}".format(dir=subdir))
                     call_command('makemessages', *args, **options)
-        print u"Finished updating locale messages."
+        print("Finished updating locale messages.")

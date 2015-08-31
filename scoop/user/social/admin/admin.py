@@ -61,8 +61,8 @@ class EventAdmin(AjaxSelectAdmin):
 
 class EventCategoryInlineAdmin(admin.TabularInline):
     """ Admin inline des catégories d'événements """
-    verbose_name = _(u"Translation")
-    verbose_name_plural = _(u"Translations")
+    verbose_name = _("Translation")
+    verbose_name_plural = _("Translations")
     model = EventCategory
     max_num = len(settings.LANGUAGES)
     extra = 4
@@ -78,7 +78,7 @@ class EventCategoryAdmin(admin.ModelAdmin):
     search_fields = ['translations__name']
     readonly_fields = []
     inlines = [EventCategoryInlineAdmin, ]
-    fieldsets = ((_(u"event category"), {'fields': ('icon', 'parent')}),)
+    fieldsets = ((_("event category"), {'fields': ('icon', 'parent')}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
 

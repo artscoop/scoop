@@ -84,7 +84,7 @@ class MiserizeMiddleware(object):
             miserize = profile.is_banned()
             # Perturber l'activité utilisateur
             if miserize:
-                logger.debug(u"{user} is miserized".format(user=user))
+                logger.debug("{user} is miserized".format(user=user))
 
                 # Tester sa chance sur un pourcentage de probabilité
                 def out_of_luck(probability):

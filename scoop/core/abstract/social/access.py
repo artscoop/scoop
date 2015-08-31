@@ -8,9 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 class PrivacyModel(models.Model):
     """ Mixin de modèle avec contrôle d'accès """
     # Constantes
-    ACCESS_TYPES = [[0, _(u"Public")], [1, _(u"Friends")], [2, _(u"Personal")], [3, _(u"Friend groups")], [4, _(u"Registered users")]]
+    ACCESS_TYPES = [[0, _("Public")], [1, _("Friends")], [2, _("Personal")], [3, _("Friend groups")], [4, _("Registered users")]]
     # Champs
-    access = models.SmallIntegerField(choices=ACCESS_TYPES, default=0, db_index=True, verbose_name=_(u"Access"))
+    access = models.SmallIntegerField(choices=ACCESS_TYPES, default=0, db_index=True, verbose_name=_("Access"))
     group_grants = GenericRelation('social.FriendGroupGrant', related_name="%(class)s_group_grants") if apps.is_installed('social') else None
 
     # Getter
@@ -49,9 +49,9 @@ class PrivacyModel(models.Model):
 class AccessLevelModel(models.Model):
     """ Mixin de modèle avec Niveau d'accès requis """
     # Constantes
-    LEVEL_TYPES = [[0, _(u"Public")], [1, _(u"Members only")], [2, _(u"Staff only")]]
+    LEVEL_TYPES = [[0, _("Public")], [1, _("Members only")], [2, _("Staff only")]]
     # Champs
-    access_level = models.SmallIntegerField(choices=LEVEL_TYPES, default=0, db_index=True, verbose_name=_(u"Access level"))
+    access_level = models.SmallIntegerField(choices=LEVEL_TYPES, default=0, db_index=True, verbose_name=_("Access level"))
 
     # Getter
     def is_accessible(self, user):

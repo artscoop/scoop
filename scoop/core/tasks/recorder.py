@@ -13,7 +13,7 @@ def record_action_async(actor, action, target=None, content=None):
     # N'enregistrer des actions que si les paramètres l'autorisent
     if getattr(settings, 'CORE_ACTION_RECORD', True):
         # L'action peut être une instance d'Action ou un codename d'action
-        if isinstance(action, basestring):
+        if isinstance(action, str):
             action = ActionType.objects.get_by_name(action)
         # Créer l'enregistrement si l'action existe dans le système
         if action is not None:

@@ -24,7 +24,7 @@ class CommentForm(forms.ModelForm):
         """ Valider le champ de texte """
         body = self.cleaned_data['body']
         if len(striptags(body)) < CommentForm.BODY_LENGTH_MIN:
-            raise forms.ValidationError(_(u"Your comment must be at least {length} characters long.").format(length=CommentForm.BODY_LENGTH_MIN))
+            raise forms.ValidationError(_("Your comment must be at least {length} characters long.").format(length=CommentForm.BODY_LENGTH_MIN))
         return body
 
     def clean(self):
@@ -33,7 +33,7 @@ class CommentForm(forms.ModelForm):
         name, email, url = data['name'], data['email'], data['url']
         filled_count = (1 if name else 0) + (1 if email else 0) + (1 if url else 0)
         if 1 <= filled_count <= 2:  # Les 3 champs doivent être remplis
-            raise forms.ValidationError(_(u"You must fill all fields."))
+            raise forms.ValidationError(_("You must fill all fields."))
 
     # Métadonnées
     class Meta:

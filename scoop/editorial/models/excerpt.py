@@ -18,36 +18,36 @@ from scoop.editorial.util.languages import get_country_code
 class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UUID64Model):
     """ Extrait de texte """
     # Constantes
-    FORMATS = [[0, _(u"Plain HTML")], [1, _(u"Markdown")], [2, _(u"Textile")], [3, _(u"reStructured Text")], ]
+    FORMATS = [[0, _("Plain HTML")], [1, _("Markdown")], [2, _("Textile")], [3, _("reStructured Text")], ]
     TRANSFORMS = {1: Markdown().convert}
     # Champs
-    name = models.CharField(max_length=48, unique=True, blank=False, verbose_name=_(u"Name"))
-    title = models.CharField(max_length=80, unique=True, blank=False, verbose_name=_(u"Title"))
-    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('excerpt', u"Visible"))
-    format = models.SmallIntegerField(choices=FORMATS, default=0, verbose_name=_(u"Format"))
-    description = models.TextField(default=u"", blank=True, verbose_name=_(u"Description"))
-    libraries = models.CharField(max_length=40, help_text=_(u"{% load %} libraries, comma separated"), verbose_name=_(u"Tag libs"))
+    name = models.CharField(max_length=48, unique=True, blank=False, verbose_name=_("Name"))
+    title = models.CharField(max_length=80, unique=True, blank=False, verbose_name=_("Title"))
+    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('excerpt', "Visible"))
+    format = models.SmallIntegerField(choices=FORMATS, default=0, verbose_name=_("Format"))
+    description = models.TextField(default="", blank=True, verbose_name=_("Description"))
+    libraries = models.CharField(max_length=40, help_text=_("{% load %} libraries, comma separated"), verbose_name=_("Tag libs"))
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer une représentation unicode de l'objet """
-        return u"{title} ({name})".format(title=self.title, name=self.name)
+        return "{title} ({name})".format(title=self.title, name=self.name)
 
     # Getter
-    @addattr(short_description=_(u"Text"))
+    @addattr(short_description=_("Text"))
     def get_text(self):
         """ Renvoyer le texte de l'extrait """
         try:
             return self.get_translation().text
         except:
-            return _(u"(No text)")
+            return _("(No text)")
 
     def html(self):
         """ Renvoyer le code HTML de l'extrait (selon le format) """
         content = Excerpt.TRANSFORMS.get(self.format, lambda s: s)(self.get_text())
         return content
 
-    @addattr(allow_tags=True, short_description=_(u"Languages"))
+    @addattr(allow_tags=True, short_description=_("Languages"))
     def get_language_icons_html(self):
         """ Renvoyer une icone correspondant à la langue de l'extrait """
         output = []
@@ -62,14 +62,14 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UU
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"excerpt")
-        verbose_name_plural = _(u"excerpts")
+        verbose_name = _("excerpt")
+        verbose_name_plural = _("excerpts")
         app_label = 'editorial'
 
 
 class ExcerptTranslation(get_translation_model(Excerpt, "excerpt"), TranslationModel):
     """ Traduction d'un extrait """
-    text = models.TextField(blank=False, verbose_name=_(u"Text"))
+    text = models.TextField(blank=False, verbose_name=_("Text"))
 
     # Métadonnées
     class Meta:

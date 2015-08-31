@@ -104,8 +104,8 @@ The land there is mostly flat and they have many farms there.
     content = wiki2plain.text
     image = wiki2plain.image()
 
-    print '---'
-    print content
-    print '---'
-    print image
-    print '---'
+    print('---')
+    print(content)
+    print('---')
+    print(image)
+    print('---')

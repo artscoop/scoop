@@ -15,7 +15,7 @@ class IgnoreList(DataModel):
     # Constantes
     DATA_KEYS = ['ignored']
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, related_name='forum_ignorelist', on_delete=models.CASCADE, verbose_name=_(u"User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, related_name='forum_ignorelist', on_delete=models.CASCADE, verbose_name=_("User"))
 
     # Setter
     def ignore(self, user):
@@ -55,6 +55,6 @@ class IgnoreList(DataModel):
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"ignore list")
-        verbose_name_plural = _(u"ignore lists")
+        verbose_name = _("ignore list")
+        verbose_name_plural = _("ignore lists")
         app_label = "forum"

@@ -18,7 +18,7 @@ class LinkAdmin(AutoAuthoredModelAdmin, AjaxSelectAdmin):
     list_editable = ['nofollow']
     list_filter = ['nofollow', 'group']
     search_fields = ['url', 'anchor', 'title']
-    fieldsets = ((_(u"Link"), {'fields': ('author', 'group', 'url', 'anchor', 'title', 'target', 'nofollow')}), ('Plus', {'fields': (('content_type', 'object_id'), 'remainder', 'information')}))
+    fieldsets = ((_("Link"), {'fields': ('author', 'group', 'url', 'anchor', 'title', 'target', 'nofollow')}), ('Plus', {'fields': (('content_type', 'object_id'), 'remainder', 'information')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     form = make_ajax_form(Link, {'author': 'user'})
 

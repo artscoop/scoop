@@ -104,7 +104,7 @@ class UserQuerySetMixin(object):
         bots = self.filter(is_superuser=True)
         if bots.exists():
             return bots.first()
-        new_bot = self.create(username=u'bot-{}'.format(slugify(name or u"default")), name=name or "Bot", email='rescuebot@localhost.com', bot=True)
+        new_bot = self.create(username=u'bot-{}'.format(slugify(name or "default")), name=name or "Bot", email='rescuebot@localhost.com', bot=True)
         return new_bot
 
     def get_anonymous(self):
@@ -173,36 +173,36 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     REQUIRED_FIELDS = ['email', 'name']
     CACHE_KEY = {'online': 'user.profile.online.{}', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count', 'logout.force': 'user.profile.logout.{}'}
     USERNAME_REGEX = r'^[A-Za-z0-9][A-Za-z0-9_]+$'  # Contient lettres, chiffres et underscores
-    USERNAME_REGEX_MESSAGE = _(u"Your name must start with a letter and can only contain letters, digits and underscores")
+    USERNAME_REGEX_MESSAGE = _("Your name must start with a letter and can only contain letters, digits and underscores")
     NAME_REGEX = r'^[A-Za-z][A-Za-z0-9_\-]+$'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
-    NAME_REGEX_MESSAGE = _(u"Your name can only contain letters")
+    NAME_REGEX_MESSAGE = _("Your name can only contain letters")
     ONLINE_DURATION, AWAY_DURATION = 900, 300
     # Champs
     username = models.CharField(max_length=32, unique=True, validators=[RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE), MinLengthValidator(4)],
-                                verbose_name=_(u"Username"))
-    name = models.CharField(max_length=24, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_(u"Name"))
-    bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', u"Bot"))
-    email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_(u"Email"))
-    is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', u"Active"))
-    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', u"Deleted"))
-    is_staff = models.BooleanField(default=False, help_text=_(u"Designates whether the user can log into this admin site."), verbose_name=pgettext_lazy('user', u"Staff"))
-    date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_(u"Date joined"))
-    last_online = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('user', u"Last online"))
-    next_mail = models.DateTimeField(default=timezone.now, editable=False, verbose_name=_(u"Next possible mail for user"))
+                                verbose_name=_("Username"))
+    name = models.CharField(max_length=24, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_("Name"))
+    bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', "Bot"))
+    email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_("Email"))
+    is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', "Active"))
+    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', "Deleted"))
+    is_staff = models.BooleanField(default=False, help_text=_("Designates whether the user can log into this admin site."), verbose_name=pgettext_lazy('user', "Staff"))
+    date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_("Date joined"))
+    last_online = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))
+    next_mail = models.DateTimeField(default=timezone.now, editable=False, verbose_name=_("Next possible mail for user"))
     objects = UserManager()
 
     # Overrides
     def __unicode__(self):
         """ Renvoyer la représentation unicode de l'objet """
         if not self.bot and self.name:
-            return u"{name}".format(name=self.name or self.username)
+            return "{name}".format(name=self.name or self.username)
         elif self.bot:
-            return _(u"Robot")
-        return u"{nickname}".format(nickname=self.username)
+            return _("Robot")
+        return "{nickname}".format(nickname=self.username)
 
     def __html__(self):
         """ Renvoyer la représentation HTML de l'objet """
-        return u"""<a href="{url}">{name}</a>""".format(url=self.get_absolute_url(), name=self.username)
+        return """<a href="{url}">{name}</a>""".format(url=self.get_absolute_url(), name=self.username)
 
     # Actions
     @staticmethod
@@ -222,7 +222,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
                 direct_user.update_online(online=True)
                 return direct_user
             if not username or not password:
-                raise ValidationError(_(u"The value passed has no login value"))
+                raise ValidationError(_("The value passed has no login value"))
             user = auth.authenticate(username=username, password=password)
             if user is not None and user.can_login():
                 if fake is False:
@@ -230,18 +230,18 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
                     user.update_online(online=True)
                     return user
             elif user is None:
-                raise ValidationError(_(u"Bad username and/or password."), code=0)
+                raise ValidationError(_("Bad username and/or password."), code=0)
             elif not user.is_active:
-                raise ValidationError(_(u"This account is currently not active."), code=1)
+                raise ValidationError(_("This account is currently not active."), code=1)
             else:
-                raise ValidationError(_(u"This user cannot log in."), code=2)
+                raise ValidationError(_("This user cannot log in."), code=2)
         else:
             if fake is False:
                 request.user.update_online(online=False)
                 auth.logout(request)
 
     # Online / Offline
-    @addattr(boolean=True, admin_order_field='last_login', short_description=_(u"Online"))
+    @addattr(boolean=True, admin_order_field='last_login', short_description=_("Online"))
     def is_online(self, seconds=ONLINE_DURATION):
         """ Renvoyer si cet utilisateur est considéré en ligne """
         return User.is_user_online(self.id, seconds)
@@ -250,18 +250,18 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         """ Renvoyer si cet utilisateur a été en ligne ces n derniers jours """
         return self.last_online >= timezone.now() - datetime.timedelta(days=days)
 
-    @addattr(boolean=True, admin_order_field='last_login', short_description=_(u"Away"))
+    @addattr(boolean=True, admin_order_field='last_login', short_description=_("Away"))
     def is_away(self, seconds=AWAY_DURATION):
         """ Renvoyer si cet utilisateur est en ligne, mais absent """
         return User.is_user_away(self.id, seconds)
 
-    @addattr(short_description=_(u"Online time"))
+    @addattr(short_description=_("Online time"))
     def get_online_time(self):
         """ Renvoyer l'heure du dernier accès à une page """
         value = cache.get(self.CACHE_KEY['online'].format(self.id), 0)
         return datetime.datetime.fromtimestamp(value)
 
-    @addattr(short_description=_(u"Time online"))
+    @addattr(short_description=_("Time online"))
     def get_time_online(self):
         """ Renvoyer le temps écoulé depuis le dernier accès à une page """
         return User.get_user_time_online(self.id)
@@ -472,7 +472,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             self.deleted = True
             self.name = self.username
             self.username = self.id
-            self.email = u"user-{name}-{id}@removed.del".format(name=self.name, id=self.id)
+            self.email = "user-{name}-{id}@removed.del".format(name=self.name, id=self.id)
             self.save()  # En réalité, on ne supprime jamais un utilisateur
 
     def save(self, *args, **kwargs):
@@ -490,10 +490,10 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     # Privé
     def _get_fixed_username(self):
         """ Renvoyer le nom d'utilisateur final """
-        return slugify(unicode(self.username))
+        return slugify(str(self.username))
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u"user")
-        verbose_name_plural = _(u"users")
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
         app_label = 'user'

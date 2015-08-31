@@ -45,7 +45,7 @@ class AlbumAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, admin.ModelAdmin
     list_filter = []
     actions = []
     form = make_ajax_form(Album, {'author': 'user', 'pictures': 'picture'})
-    fieldsets = ((_(u"Album"), {'fields': ('author', 'name', 'description', ('content_type', 'object_id'), 'parent', 'pictures')}),)
+    fieldsets = ((_("Album"), {'fields': ('author', 'name', 'description', ('content_type', 'object_id'), 'parent', 'pictures')}),)
 
 
 class AttachmentAdmin(admin.ModelAdmin, GenericModelUtil):
@@ -66,7 +66,7 @@ class ThumbnailAdmin(ViewOnlyModelAdmin):
     list_filter = []
     actions = []
 
-    @addattr(allow_tags=True, short_description=_(u"Picture"))
+    @addattr(allow_tags=True, short_description=_("Picture"))
     def get_thumbnail(self, obj):
         """ Retourner le contenu de la miniature """
         return "<img src='%(media)s%(url)s' title='%(url)s' style='height:24px;'>" % {'url': obj.name, 'media': settings.MEDIA_URL}
