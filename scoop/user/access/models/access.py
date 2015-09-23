@@ -104,7 +104,7 @@ class Access(DatetimeModel, IPPointableModel):
     objects = AccessManager()
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{who} has visited {what}").format(who=self.ip, what=self.page)
 

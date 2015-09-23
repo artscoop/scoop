@@ -63,7 +63,7 @@ class IconModel(models.Model):
                 return output
             except Exception as e:
                 return '<span class="text-error">{}</span> ({})'.format(pgettext_lazy('thumbnail', "None"), e)
-        return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
+        return '<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
 
     def icon_exists(self):
         """ renvoyer si le fichier de l'icône existe """

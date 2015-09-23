@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import gzip
+import io
 import logging
 import os
 import subprocess
@@ -60,10 +61,13 @@ def auto_open_file(path, filename):
     for files in os.listdir(path):
         if files.lower().startswith('%s' % filename.lower()):
             if '.gz' in files.lower():
-                return gzip.open(os.path.join(path, files), 'rb')
-            if '.zip' in files.lower():
-                return open_zip_file(os.path.join(path, files), filename)
-            return open(os.path.join(path, files), 'rb')
+                content = gzip.open(os.path.join(path, files), 'rb')
+            elif '.zip' in files.lower():
+                content = open_zip_file(os.path.join(path, files), filename)
+            else:
+                content = open(os.path.join(path, files), 'rb')
+            content = io.TextIOWrapper(content, encoding='utf-8', newline='')
+            return content
     raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
 
 
@@ -75,7 +79,9 @@ def open_zip_file(path, filename):
     for n in names:
         if n.lower().startswith("{}.".format(filename.lower())):
             name = n
-            return archive.open(name, 'rU')
+            content = archive.open(name, 'rU')
+            content = io.TextIOWrapper(content, encoding='utf-8', newline='')
+            return content
     raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
 
 

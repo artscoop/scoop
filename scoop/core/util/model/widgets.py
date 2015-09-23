@@ -85,7 +85,7 @@ class SelectDateWidget(SelectDateWidgetBase):
                     date_value = datetime_safe.new_date(date_value)
                     return date_value.strftime(input_format)
             else:
-                return u'%s-%s-%s' % (y, m, d)
+                return '%s-%s-%s' % (y, m, d)
         return data.get(name, None)
 
 
@@ -101,7 +101,7 @@ class SimpleCheckboxSelectMultiple(CheckboxSelectMultiple):
             value = []
         has_id = attrs and 'id' in attrs
         final_attrs = self.build_attrs(attrs, name=name)
-        output = [u'<ul>']
+        output = ['<ul>']
         # Normalize to strings
         str_values = set([str(v) for v in value])
         for i, (option_value, option_label) in enumerate(itertools.chain(self.choices, choices)):
@@ -109,16 +109,16 @@ class SimpleCheckboxSelectMultiple(CheckboxSelectMultiple):
             # so that the checkboxes don't all have the same ID attribute.
             if has_id:
                 final_attrs = dict(final_attrs, id='{}_{}'.format(attrs['id'], i))
-                label_for = u' for="{}"'.format(final_attrs['id'])
+                label_for = ' for="{}"'.format(final_attrs['id'])
             else:
                 label_for = ''
             cb = CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
             option_value = str(option_value)
             rendered_cb = cb.render(name, option_value)
             option_label = conditional_escape(str(option_label))
-            output.append(u'<li>{} <label{}>{}</label></li>'.format(rendered_cb, label_for, option_label))
-        output.append(u'</ul>')
-        return mark_safe(u'\n'.join(output))
+            output.append('<li>{} <label{}>{}</label></li>'.format(rendered_cb, label_for, option_label))
+        output.append('</ul>')
+        return mark_safe('\n'.join(output))
 
 
 class ColumnCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
@@ -151,9 +151,9 @@ class ColumnCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
         output = []
         for column in columns:
             if self.css_class:
-                output.append(u'<ul class="%s"' % self.css_class)
+                output.append('<ul class="%s"' % self.css_class)
             else:
-                output.append(u'<ul>')
+                output.append('<ul>')
             # Normalize to strings
             str_values = set([str(v) for v in value])
             for i, (option_value, option_label) in column:
@@ -162,7 +162,7 @@ class ColumnCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
                 if has_id:
                     final_attrs = dict(final_attrs, id='%s_%s' % (
                         attrs['id'], i))
-                    label_for = u' for="%s"' % final_attrs['id']
+                    label_for = ' for="%s"' % final_attrs['id']
                 else:
                     label_for = ''
 
@@ -171,10 +171,10 @@ class ColumnCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
                 option_value = str(option_value)
                 rendered_cb = cb.render(name, option_value)
                 option_label = conditional_escape(str(option_label))
-                output.append(u'<li><label%s>%s %s</label></li>' % (
+                output.append('<li><label%s>%s %s</label></li>' % (
                     label_for, rendered_cb, option_label))
-            output.append(u'</ul>')
-        return mark_safe(u'\n'.join(output))
+            output.append('</ul>')
+        return mark_safe('\n'.join(output))
 
 
 def columnize(items, columns):
@@ -206,5 +206,5 @@ class AdminSplitDateTime(forms.SplitDateTimeWidget):
         forms.MultiWidget.__init__(self, widgets, attrs)
 
     def format_output(self, rendered_widgets):
-        return mark_safe(u'<p class="datetime"><span class="vDateTimeLabel">%s</span> %s<br /><span class="vDateTimeLabel">%s</span> %s</p>' %
+        return mark_safe('<p class="datetime"><span class="vDateTimeLabel">%s</span> %s<br /><span class="vDateTimeLabel">%s</span> %s</p>' %
                          (_('Date'), rendered_widgets[0], _('Time'), rendered_widgets[1]))

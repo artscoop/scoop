@@ -42,8 +42,8 @@ class CityLookup(LookupChannel):
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
         output = "<span class='text-middle'>{country} <span class='muted'>{code}</span> <strong>{name}</strong></span><br>{parent}".format(name=obj.get_name(),
-                                                                                                                                            country=obj.get_country_icon(directory="png"),
-                                                                                                                                            code=obj.get_code(), parent=obj.get_auto_parent())
+                                                                                                                                           country=obj.get_country_icon(directory="png"),
+                                                                                                                                           code=obj.get_code(), parent=obj.get_auto_parent())
         return output
 
     def check_auth(self, request):

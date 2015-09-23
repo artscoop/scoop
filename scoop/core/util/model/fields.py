@@ -2,13 +2,12 @@
 from __future__ import absolute_import
 
 from collections import OrderedDict
+from io import BytesIO
 
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.fields.files import FieldFile, ImageField
 from django.utils.translation import ugettext_lazy as _
-
-from io import BytesIO
 
 
 class PipeListField(models.TextField):
@@ -152,11 +151,11 @@ class WebImageField(ImageField):
                 image = Image.open(fi)
                 # If opened, check against Format and dim constraints
                 if image.format not in WebImageField.ACCEPTED_FORMATS:
-                    raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(u', '.join(WebImageField.ACCEPTED_FORMATS)))
+                    raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
                 if sorted(image.size) < self.min_dimensions:
                     raise ValidationError(_("Image not accepted. Minimum accepted size is {mw}x{mh}.").format(mw=self.min_dimensions[0], mh=self.min_dimensions[1]))
             except IOError:  # PIL cannot load and handle the image
-                raise ValidationError(_("This image cannot be handled. Accepted formats: {}.").format(u', '.join(WebImageField.ACCEPTED_FORMATS)))
+                raise ValidationError(_("This image cannot be handled. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
             except ImportError:  # Maybe an error with PIL only on PyPy
                 raise
             # Reset file cursor position if fi is a file object

@@ -25,7 +25,7 @@ STATUS_CHOICES = [
 def reverse_lookup(ip):
     """
     Résoudre une adresse IP en son nom inversé.
-    @requires: dnspython
+    @requires: dnspython3
     @param ip: chaîne de type A.B.C.D
     @return: dictionnaire aux clés "name" et "status"
     """

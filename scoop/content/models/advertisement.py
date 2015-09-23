@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.aggregates import Sum
 from django.template.base import Template
 from django.template.context import RequestContext
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
@@ -87,7 +88,8 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
             self.save(update_fields=['views'])
         return template.render(context)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer auformat unicode """
         return _("Advertisement {name}").format(name=self.name)
 

@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Sum
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
@@ -89,13 +90,14 @@ class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
     objects = ForumManager()
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return str(self.name)
 
     def __repr__(self):
         """ Renvoyer la représentation ASCII de l'objet """
-        return "Forum: {}".format(self.__unicode__())
+        return "Forum: {}".format(self.__str__())
 
     @permalink
     def get_absolute_url(self):

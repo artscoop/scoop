@@ -1,4 +1,6 @@
 # coding: utf-8
+from functools import reduce
+
 from django import forms
 from django.conf import settings
 from django.db.models import Q

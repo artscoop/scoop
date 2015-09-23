@@ -21,15 +21,15 @@ class UserLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer la représentation texte de l'élément """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_match(self, obj):
         """ Renvoyer la représentation de l'élément dans le dropdown """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation de l'élément dans le deck """
-        return "<strong>{}</strong> / {}".format(obj.username, obj.__unicode__())
+        return "<strong>{}</strong> / {}".format(obj.username, obj.__str__())
 
     def check_auth(self, request):
         """ Renvoyer si l'utilisateur courant peut effectuer une requête """

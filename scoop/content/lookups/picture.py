@@ -21,7 +21,7 @@ class PictureLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer le texte simple du résultat """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_match(self, obj):
         """ Renvoyer le HTML de l'élément dans le dropdown """

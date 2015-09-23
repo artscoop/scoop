@@ -5,8 +5,11 @@ from django.db import models
 from django.db.models import permalink
 
 
-class FlaggableModelUtil(object):
-    """ Mixin d'objet pouvant être signalé"""
+class FlaggableModelUtil:
+    """
+    Mixin d'objet pouvant être signalé à la modération
+    Monkey-patching done in scoop.core.__init__
+    """
 
     @permalink
     def get_flag_url(self):

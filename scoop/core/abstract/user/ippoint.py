@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from IPy import IP as IP_
 
@@ -28,7 +29,8 @@ class IPPointModel(models.Model):
         self.ip = IP.objects.get_by_ip(ip)
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{}").format(self.get_ip())
 
@@ -65,7 +67,8 @@ class IPPointableModel(models.Model):
         self.ip = IP.objects.get_by_ip(ip)
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{}").format(self.get_ip())
 

@@ -9,12 +9,13 @@ from scoop.core.util.shortcuts import get_languages
 from scoop.location.models.city import City
 from scoop.location.models.country import Country
 from scoop.location.tasks.geonames import geonames_fill
+from scoop.location.util.geonames import populate_countries
 from scoop.user.models.user import User
 
 
 class CityTest(TestCase):
     """ Test des villes """
-    fixtures = ['country', 'mailtype', 'options']
+    fixtures = ['mailtype', 'options']
 
     def setUp(self):
         """ Préparer l'environnement de test """
@@ -25,6 +26,7 @@ class CityTest(TestCase):
         self.user.set_password('commentuser')
         self.user.save()
         # Peupler la Belgique
+        populate_countries()
         self.countries = Country.objects.filter(code2="BE")
         geonames_fill(self.countries)
 

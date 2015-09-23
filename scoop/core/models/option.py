@@ -6,7 +6,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy, ugettext
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.exceptions import MissingTranslation
+from translatable.models import get_translation_model, TranslatableModel
 from unidecode import unidecode
 
 from scoop.core.abstract.content.picture import PicturableModel
@@ -62,7 +63,7 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
         """ Renvoyer le nom de l'option """
         try:
             return self.get_translation().name
-        except:
+        except MissingTranslation:
             return ugettext("(No name)")
 
     @addattr(short_description=_("Description"))
@@ -70,7 +71,7 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
         """ Renvoyer la description de l'option """
         try:
             return self.get_translation().description
-        except:
+        except MissingTranslation:
             return ugettext("(No description)")
 
     def get_children(self):

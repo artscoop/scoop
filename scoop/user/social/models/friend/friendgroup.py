@@ -16,7 +16,7 @@ class FriendGroup(DataModel):
     GROUP_NAMES = [[item, item] for item in [_("Family"), _("Friends"), _("Colleagues"), _("Acquaitances"), _("Friends 2"), _("Friends 3")]]
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendgroups', verbose_name=_("User"))
-    name = models.CharField(max_length=24, choices=GROUP_NAMES, blank=False, verbose_name=_(u'Name'))
+    name = models.CharField(max_length=24, choices=GROUP_NAMES, blank=False, verbose_name=_('Name'))
 
     # Getter
     def has_member(self, friend):

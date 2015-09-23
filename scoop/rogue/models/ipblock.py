@@ -47,7 +47,7 @@ class IPBlockManager(SingleDeleteManager):
             for ipblock in self.filter(active=True, type=6):
                 if re.search(ipblock.hostname, ip.reverse):
                     return {'blocked': False, 'level': 0, 'type': 0}
-        # Ne chercher les autorisations de reverse que si l'IP a un ISP
+        # Ne chercher les autorisations de FAI que si l'IP a un ISP
         if ip.has_isp():
             allows = self.filter(isp__iexact=ip.isp, active=True, type=7)
             if allows.exists():
@@ -140,6 +140,7 @@ class IPBlockManager(SingleDeleteManager):
         """
         Bloquer une ou plusieurs adresse IP
         :param ips: id ou instance d'IP ou chaîne au format A.B.C.D
+        :type ips: list | tuple | set | IP | str | int
         :returns: les nouveaux blocages d'IP
         """
         ips = make_iterable(ips)
@@ -168,7 +169,11 @@ class IPBlockManager(SingleDeleteManager):
             return new_blocks
 
     def block_ip_range(self, ip1, ip2, harm=2, category=0, description=None):
-        """ Bloquer une plage d'adresses IP """
+        """
+        Bloquer une plage d'adresses IP
+        :type ip1: int
+        :type ip2: int
+        """
         try:
             from scoop.user.access.models.ip import IP
             # Vérifier que la plage est correcte
@@ -203,7 +208,11 @@ class IPBlockManager(SingleDeleteManager):
 
 
 class IPBlock(DatetimeModel):
-    """ Régle de blocage d'IP """
+    """
+    Régle de blocage d'IP
+    Les régles d'autorisation (types 6 et 7) sont prioritaires sur les
+    règles de blocage.
+    """
     # Constantes
     TYPES = [[0, _("Single address")], [1, _("Address range")], [2, _("Partial host")], [3, _("Partial host with exclusion")], [4, _("ISP with host exclusion")], [5, _("Country code")],
              [6, _("Allowed host")], [7, _("Allowed ISP")]]
@@ -296,7 +305,7 @@ class IPBlock(DatetimeModel):
         self.hostname = self.hostname.strip()
         self.hostname_exclude = self.hostname_exclude.strip()
         self.country_code = self.country_code
-        self.representation = self.__unicode__()
+        self.representation = self.__str__()
         super(IPBlock, self).save(*args, **kwargs)
 
     def clean(self):
@@ -315,8 +324,10 @@ class IPBlock(DatetimeModel):
             raise ValidationError(_("A hostname permission must have a valid hostname."))
         elif self.type == 7 and self.isp == '':
             raise ValidationError(_("An ISP permission must have a valid ISP."))
+        else:
+            raise ValidationError(_("This rule type {number} is unknown.").format(number=self.type))
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer une représentation unicode du filtre """
         if self.type == 0:
             return _("Blocking of {ip}").format(ip=IPy.IP(str(self.ip1)))
@@ -328,7 +339,7 @@ class IPBlock(DatetimeModel):
             return _("Blocking of reverse {reverse} but not with {exclude}").format(reverse=self.hostname, exclude=self.hostname_exclude)
         elif self.type == 4:
             return _("Blocking of ISP {isp}").format(isp=self.isp) if self.hostname_exclude == "" else _("Blocking of ISP {isp} minus {exclude}").format(isp=self.isp,
-                                                                                                                                                           exclude=self.hostname_exclude)
+                                                                                                                                                         exclude=self.hostname_exclude)
         elif self.type == 5:
             return _("Blocking of country with code {code}").format(code=self.country_code)
         elif self.type == 6:

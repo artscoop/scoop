@@ -11,7 +11,7 @@ from scoop.content.models.picture import Picture
 class Command(BaseCommand):
     """ Commande pour effacer toutes les miniatures """
     args = ''
-    help = ugettext('Delete orphan image references and thumbnails from the database')
+    help = ugettext("Delete orphan image references and thumbnails from the database")
 
     def handle(self, *args, **options):
         """ Exécuter la commande """

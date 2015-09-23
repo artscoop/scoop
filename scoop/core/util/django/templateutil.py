@@ -3,9 +3,9 @@ from __future__ import absolute_import
 
 from functools import wraps
 
-from django.http.response import REASON_PHRASES, HttpResponse
+from django.http.response import HttpResponse, REASON_PHRASES
 from django.shortcuts import render_to_response
-from django.template import Context, RequestContext, loader
+from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
 

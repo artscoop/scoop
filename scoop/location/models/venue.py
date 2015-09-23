@@ -71,7 +71,7 @@ class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
             Picture.objects.create_from_uri(images[0]['url'], content_object=self, description=images[0]['title'])
 
     # Overides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return self.split_full
 

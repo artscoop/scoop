@@ -6,13 +6,12 @@ import math
 import os
 import subprocess
 import traceback
-from urllib import parse
 from os.path import join
 from random import randrange
 from traceback import print_exc
+from urllib import parse
 from urllib.parse import urljoin
 
-import cv2
 import simplejson
 from django.conf import settings
 from django.contrib.contenttypes import fields
@@ -23,6 +22,7 @@ from django.db import models, transaction
 from django.template.defaultfilters import filesizeformat, slugify, urlencode
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -30,6 +30,7 @@ from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
 from PIL import Image
 
+import cv2
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -98,7 +99,7 @@ class PictureQuerySetMixin(object):
 
     def find_by_keyword(self, keyword):
         """ Renvoyer des informations d'URL d'images pour une expression """
-        path = u'https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={keyword}&searchType=image&imgType=photo&fileType=jpg&rights=cc_sharealike&alt=json'
+        path = 'https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={keyword}&searchType=image&imgType=photo&fileType=jpg&rights=cc_sharealike&alt=json'
         response = get_url_resource(path.format(keyword=urlencode(keyword), key=settings.GOOGLE_API_KEY, cx=settings.GOOGLE_API_CX))
         data = simplejson.loads(response)  # récupérer les données JSON d'images correspondant à la recherche
         images = data.get('items')
@@ -234,13 +235,13 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 thumbnail_options = {'crop': 'smart', 'size': size}
                 result = self.get_thumbnail(**thumbnail_options)
                 template = kwargs.get('template', 'link')
-                template_file = u'content/display/picture/thumbnail/{}.html'.format(template)
+                template_file = 'content/display/picture/thumbnail/{}.html'.format(template)
                 output = render_to_string(template_file, {'picture': self, 'href': self.image.url, 'title': escape(self.description), 'source': result.url})
                 return output
             except Exception as e:
                 print_exc(e)
-                return u'<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', "None"), e, self.image.name)
-        return u'<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
+                return '<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', "None"), e, self.image.name)
+        return '<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
 
     @addattr(short_description=_("#"))
     def get_thumbnail_count(self):
@@ -625,7 +626,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         return False
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{image}").format(image=self.title or self.description or self.get_filename())
 
@@ -655,8 +657,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u'image')
-        verbose_name_plural = _(u'images')
+        verbose_name = _('image')
+        verbose_name_plural = _('images')
         index_together = [['content_type', 'object_id']]
         permissions = [['can_upload_picture', "Can upload a picture"],
                        ['can_moderate_picture', "Can moderate pictures"]]

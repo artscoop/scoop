@@ -117,7 +117,7 @@ class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin):
             form.base_fields['picture'].queryset = Picture.objects.filter(author=request.user)
         return form
 
-    def get_object(self, request, object_id):
+    def get_object(self, request, object_id, from_field=None):
         """ Renvoyer un objet """
         obj = super(ContentAdminModelAdmin, self).get_object(request, object_id)
         if obj is not None and not obj.authors.exists():

@@ -9,6 +9,7 @@ from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -156,12 +157,13 @@ class Record(models.Model):
         if self.name == '' and self.user is not None:
             self.name = self.user.get_short_name()
         if self.target_name == '' and self.target_object is not None:
-            self.target_name = self.target_object.__unicode__()
+            self.target_name = self.target_object.__str__()
         if self.container_name == '' and self.container_object is not None:
-            self.container_name = self.container_object.__unicode__()
+            self.container_name = self.container_object.__str__()
         super(Record, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.get_description()
 
@@ -189,7 +191,7 @@ class ActionType(models.Model):
         """ Renvoyer la vignette de code couleur du type d'action """
         rgb = hash_rgb(self.codename)
         colorname = get_color_name(rgb)
-        output = '<span class="hash-pill" style="background-color: rgb(%d,%d,%d);" title="%s"></span>' % (rgb[0], rgb[1], rgb[2], colorname)
+        output = """<span class="pill" style="background-color: rgb({r},{g},{b});" title="{name}"></span>""".format(r=rgb[0], g=rgb[1], b=rgb[2], name=colorname)
         return mark_safe(output)
 
     @addattr(boolean=True, short_description=_("Valid"))
@@ -201,7 +203,8 @@ class ActionType(models.Model):
         return length >= 2 and ContentType.objects.filter(app_label=app_label).exists()
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.verb or self.codename
 

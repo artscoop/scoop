@@ -13,7 +13,7 @@ class Resolution(models.Model):
     closing = models.BooleanField(default=False, help_text=_("Does this mean ticket closure ?"), verbose_name=_("Closing"))
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{name}".format(name=self.name)
 

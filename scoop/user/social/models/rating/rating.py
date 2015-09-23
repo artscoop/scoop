@@ -12,12 +12,12 @@ from django.db import models
 from django.db.models.aggregates import Avg, Count, Sum
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.weight import WeightedModel
-from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
+from scoop.core.util.model.model import limit_to_model_names, SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 
 
@@ -27,7 +27,7 @@ class Axis(TranslatableModel, WeightedModel):
     def get_default_slug(self=None):
         """ Renvoyer un slug automatique """
         result = ['auto']
-        result.append(''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in xrange(4)))
+        result.append(''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(4)))
         return slugify(" ".join(result))
 
     # Champs
@@ -57,7 +57,7 @@ class Axis(TranslatableModel, WeightedModel):
     description = property(get_description)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{name}").format(name=self.name)
 
@@ -109,7 +109,7 @@ class Rating(DatetimeModel):
     objects = RatingManager()
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{user} gave {item} {rating:.03f} points").format(rating=self.rating, item=self.content_object, user=self.author)
 

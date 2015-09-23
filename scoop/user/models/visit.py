@@ -71,7 +71,7 @@ class Visit(DatetimeModel):
     objects = VisitManager()
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{visitor} -> {target}".format(visitor=self.visitor, target=self.user)
 

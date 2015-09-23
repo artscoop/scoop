@@ -5,7 +5,7 @@ import logging
 import os
 import urllib
 from urllib.error import HTTPError
-
+from urllib.parse import unquote
 
 import requests
 from django.conf import settings
@@ -55,7 +55,7 @@ def get_url_path(path):
 
 def unquote_url(path, transliterate=True):
     """ Renvoyer une URL en décodant les caractères HTML sous forme % """
-    filename = urllib.unquote(path).decode('utf8')
+    filename = unquote(path).decode('utf8')
     if transliterate:
         filename = unidecode(filename)
     return filename

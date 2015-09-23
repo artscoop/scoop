@@ -32,18 +32,18 @@ class CommentableModel(models.Model):
         comments = self.comments.filter(visible=True).order_by('id')
         return comments.earliest('id') if comments.exists() else None
 
-    @addattr(short_description=mark_safe(u'<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
+    @addattr(short_description=mark_safe('<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
     def get_comments(self, reverse=False):
         """ Renvoyer les commentaires de l'objet """
         result = self.comments.select_related().filter(visible=True)
         return result.order_by('time' if reverse else '-time')
 
-    @addattr(short_description=mark_safe(u'<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
+    @addattr(short_description=mark_safe('<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
     def get_comment_count(self):
         """ Renvoyer le nombre de commentaires de l'objet """
         return self.comments.filter(visible=True).count()
 
-    @addattr(allow_tags=True, short_description=mark_safe(u'<center title="{label}">&#x1f5db;</center>'.format(label=_("Comments"))))
+    @addattr(allow_tags=True, short_description=mark_safe('<center title="{label}">&#x1f5db;</center>'.format(label=_("Comments"))))
     def get_comment_count_admin(self):
         """ Renvoyer le nombre de commentaires (pour l'admin) """
         return "<center><span class='badge'>{count}</span></center>".format(count=self.get_comment_count())

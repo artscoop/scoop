@@ -41,7 +41,7 @@ class Label(DatetimeModel):
         return count
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 

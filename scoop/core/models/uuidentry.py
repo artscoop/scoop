@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from django.apps.registry import apps
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from scoop.core.abstract.core.generic import GenericModel
@@ -48,7 +49,8 @@ class UUIDEntry(GenericModel):
     objects = UUIDEntryManager()
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.uuid
 

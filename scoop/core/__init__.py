@@ -4,6 +4,8 @@ from __future__ import absolute_import
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop as _
 
+from scoop.core.util.model.model import patch_methods
+
 
 __version__ = (1, 2015, 3)
 _("language"), _("gender"), _("Profiles"), _("Profile")
@@ -25,16 +27,14 @@ class CoreConfig(AppConfig):
         from django.contrib.admin.templatetags import admin_list
         from django.core.handlers.wsgi import WSGIRequest
         from django.db.models import Model
-        from django.http.request import HttpRequest
 
         # Patcher les classes HTTPRequest
-        HttpRequest = type('HttpRequest', (RequestMixin,), {})
         WSGIRequest.__bases__ += (RequestMixin,)
         WSGIRequest.__reduce__ = RequestMixin.__reduce__
-        HttpRequest.__reduce__ = RequestMixin.__reduce__
+
         # Patcher la classe Model
-        Model = type('Model', (Model, AdminURLUtil, ModelFormUtil, DictUpdateModel, FlaggableModelUtil), {'__module__': __name__})
-        Model.get_all_related_objects = get_all_related_objects
+        patch_methods(Model, DictUpdateModel, AdminURLUtil, ModelFormUtil, FlaggableModelUtil, get_all_related_objects)
+
         # Patcher l'admin
         admin_list._boolean_icon = _boolean_icon
 

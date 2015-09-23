@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel

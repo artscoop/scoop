@@ -25,7 +25,7 @@ class GenericModelUtil():
             if hasattr(obj.content_object, '__html__'):
                 admin_link.append(''.join([obj.content_object.__html__(), '&nbsp;' * 3]))
             if hasattr(obj.content_object, 'get_admin_url'):
-                admin_link.append('<a href="%s">%s</a>' % (obj.content_object.get_admin_url(), obj.content_object.__unicode__()))
+                admin_link.append('<a href="%s">%s</a>' % (obj.content_object.get_admin_url(), obj.content_object.__str__()))
             return "".join(admin_link)
         return "<em class='muted'>%s</em>" % (pgettext('target', "None"),)
 
@@ -39,8 +39,11 @@ class GenericModelUtil():
         return '<%s href="%s"><span class="label %s">%s</span></%s>' % (tag, url, css, label, tag)
 
 
-class AdminURLUtil:
-    """ Mixin de modèle avec une fonction pour connaître la page d'admin de l'objet """
+class AdminURLUtil():
+    """
+    Mixin de modèle avec une fonction pour connaître la page d'admin de l'objet
+    Monkey-patching done in scoop.core.__init__
+    """
 
     def get_admin_url(self):
         """ Renvoyer l'URL d'admin du modèle """
@@ -70,4 +73,4 @@ class ViewOnlyModelAdmin(admin.ModelAdmin):
 def _boolean_icon(field_val):
     """ Remplacer les icônes .gif de l'administration par des .png """
     icon_url = static('admin/img/icon-%s.png' % {True: 'yes', False: 'no', None: 'unknown'}[field_val])
-    return mark_safe(u'<img src="%s" alt="%s" />' % (icon_url, field_val))
+    return mark_safe('<img src="%s" alt="%s" />' % (icon_url, field_val))

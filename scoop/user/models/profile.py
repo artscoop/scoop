@@ -12,7 +12,9 @@ from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
 from django.utils import timezone
+
 from django.utils.translation import ugettext_lazy as _
+
 from django.utils.translation import pgettext_lazy
 
 from scoop.core.abstract.content.picture import PicturableModel
@@ -24,6 +26,7 @@ from scoop.core.util.data.dateutil import is_new
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
+
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +94,10 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     def is_banned(self):
         """ Renvoyer si le profil est banni """
         return self.banned
+
+    def is_verified(self):
+        """ Renvoyer si le profil a été vérifié et non dangereux """
+        return self.harmful is False
 
     def is_bannable(self):
         """ Renvoyer si le profil peut être banni """
@@ -186,9 +193,9 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
         self.set_data('admin', content)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode pour l'objet """
-        return self.user.__unicode__()
+        return self.user.__str__()
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """

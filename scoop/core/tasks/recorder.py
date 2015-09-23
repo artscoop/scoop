@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from celery import task
+from celery.task import task
 from django.conf import settings
 
 

@@ -23,18 +23,18 @@ def replace_user_email_domains(source, destination):
     """ Remplacer un NDD d'email pour tous les utilisateurs par un autre """
     source = source.lower().strip()
     destination = destination.lower().strip()
-    users = get_user_model().objects.active().filter(email__icontains=u'@{}'.format(source))
+    users = get_user_model().objects.active().filter(email__icontains='@{}'.format(source))
     for user in users:
-        user.email = user.email.replace(u'@{}'.format(source), u'@{}'.format(destination))
+        user.email = user.email.replace('@{}'.format(source), '@{}'.format(destination))
         user.save(update_fields=['email'])
     return True
 
 
 def _get_splitted(name):
     """ Renvoyer un NDD splitté """
-    names = str(name).lower().split(u'.', 1)
+    names = str(name).lower().split('.', 1)
     while len(names) < 2:
-        names.append(u'')
+        names.append('')
     return names
 
 

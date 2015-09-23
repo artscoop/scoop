@@ -13,24 +13,33 @@ from scoop.core.util.shortcuts import addattr
 
 class Timezone(models.Model):
     """ Fuseau horaire """
-    name = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_("Name"))
-    hash = models.IntegerField(primary_key=True, editable=False, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
+
+    name = models.CharField(max_length=80, blank=False, unique=True, verbose_name=_("Name"))
+    code = models.BigIntegerField(primary_key=True, editable=True, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
 
     # Getter
     @staticmethod
+    def _hash_name(name):
+        """
+        Renvoyer le hash d'un nom de timezone
+        :type name: str
+        """
+        return zlib.adler32(bytes(name, 'UTF-8'))
+
+    @staticmethod
     def by_name(name):
         """ Renvoyer un fuseau horaire par son nom """
-        try:
-            timezone = Timezone.objects.get(hash=zlib.adler32(name))
-            return timezone
-        except Timezone.DoesNotExist:
+        timezone = Timezone.objects.filter(code=Timezone._hash_name(name))
+        if timezone.exists():
+            return timezone.first()
+        else:
             try:
                 pytz.timezone(name)  # vérifier que le nom est valide
-                timezone = Timezone(name=name)
+                timezone = Timezone(name=name, code=Timezone._hash_name(name))
                 timezone.save()
                 return timezone
             except:
-                return None
+                raise
 
     @staticmethod
     def get_dict():
@@ -69,14 +78,14 @@ class Timezone(models.Model):
         return "{ex}{delta}".format(**{'ex': extra, 'delta': offset})
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return self.name
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        if not self.hash:
-            self.hash = zlib.adler32(self.name)
+        if not self.code:
+            self.code = Timezone._hash_name(self.name)
         super(Timezone, self).save(*args, **kwargs)
 
     # Métadonnées

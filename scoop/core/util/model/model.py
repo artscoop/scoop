@@ -3,22 +3,48 @@ from __future__ import absolute_import
 
 import operator
 import threading
+from functools import reduce
+from inspect import isclass
 from random import choice, randrange
 from time import sleep
 
 from django.db import models
+from django.db.models.base import ModelBase
 from django.db.transaction import atomic
-from functools import reduce
 
 
-class DictUpdateModel:
-    """ Mixin de modèle ajoutant une fonction update """
+def patch_methods(cls, *bases):
+    """
+    Monkey-patcher une classe avec les méthodes d'autres classes
+    :param bases: Classes depuis lesquelles copier les fonctions
+    :type bases: callable | class
+    """
+    for base in bases:
+        if isclass(base):
+            for name in base.__dict__:
+                if not name.startswith('__'):
+                    attribute = getattr(base, name)
+                    if callable(attribute):
+                        setattr(cls, name, attribute)
+        elif callable(base):
+            setattr(cls, base.__name__, base)
+
+
+class DictUpdateModel():
+    """
+    Mixin pour Model ajoutant une fonction update
+    Monkey-patching done in scoop.core.__init__
+    """
 
     # Setter
     def update(self, save=False, **kwargs):
         """
         Mettre à jour les champs du modèle
+        :param save: Enregistrer l'instance après avoir modifié les champs
+        :param kwargs: Attributs de l'instance à modifier
         :type self: django.db.models.Model
+        :type save: bool
+        :type kwargs: **dict
         """
         for (key, value) in kwargs.items():
             setattr(self, key, value)
@@ -50,7 +76,10 @@ def resave_queryset(queryset, fields=None, count=None):
 
 
 def get_all_related_objects(instance, limit=2048):
-    """ Renvoyer tous les objets liés à une instance """
+    """
+    Renvoyer tous les objets liés à une instance
+    Monkey-patching done in scoop.core.__init__
+    """
     # Liste à renvoyer
     result = set()
     # Récupérer les accesseurs qui seront appelés pour récupérer les objets
@@ -63,10 +92,10 @@ def get_all_related_objects(instance, limit=2048):
             items = getattr(instance, link).all()
             for item in items:
                 result.add(item)
-        except Exception:
+        except AttributeError:
             try:
                 result.add(getattr(instance, link))
-            except:
+            except AttributeError:
                 pass
     return result
 
@@ -111,7 +140,7 @@ def search_query(expression, fields, queryset=None):
 
 
 def shuffle_model(self, fields=None):
-    """ Suffle les données du modèle, notamment les clés étrangères et clés M2M """
+    """ Randomizer les données du modèle, notamment les clés étrangères et clés M2M """
     fields = fields or [self._meta.get_field_by_name(field) for field in set(self._meta.get_all_field_names())]
     for field in fields:
         field = field[0]
@@ -174,7 +203,7 @@ class SingleDeleteManager(models.Manager, object):
 
     def get_queryset(self):
         """ Renvoyer le queryset par défaut """
-        return SingleDeleteQuerySet(self.model, using=self._db)
+        return SingleDeleteQuerySet(getattr(self, 'model'), using=getattr(self, '_db'))
 
 
 class DisableMigrations(object):

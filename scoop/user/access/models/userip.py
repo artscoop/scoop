@@ -76,13 +76,13 @@ class UserIP(IPPointModel, DatetimeModel):
         return UserIP.objects.related_users(self.user)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{user}@{ip}").format(user=self.user, ip=self.get_ip())
 
     def __repr__(self):
         """ Renvoyer la représentation texte de l'objet """
-        return unidecode(self.__unicode__())
+        return unidecode(self.__str__())
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """

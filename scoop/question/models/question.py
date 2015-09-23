@@ -33,7 +33,7 @@ class Question(DatetimeModel, WeightedModel):
         return labels
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "%(title)s" % {'title': self.title}
 

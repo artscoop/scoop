@@ -1,8 +1,8 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from urllib.request import urlopen
 from decimal import Decimal, DivisionByZero
+from urllib.request import urlopen
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -64,12 +64,12 @@ class Currency(models.Model):
             result = req.read()
         except:
             result = 0
-        self.balance = Decimal(result)
+        self.balance = Decimal(float(result))
         if save is True:
             self.save()
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 

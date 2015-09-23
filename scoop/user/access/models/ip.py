@@ -24,7 +24,7 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
-from scoop.user.access.util.access import STATUS_CHOICES, reverse_lookup
+from scoop.user.access.util.access import reverse_lookup, STATUS_CHOICES
 
 logger = logging.getLogger(__name__)
 
@@ -195,9 +195,9 @@ class IP(DatetimeModel, CoordinatesModel):
     def get_short_reverse(self):
         """ Renvoyer un nom inversé court pour l'IP """
         reverse = self.reverse
-        shorter = re.sub(u'\d', u'', reverse)
-        shorter = re.sub(u'\W{2,8}', u'-', shorter)
-        shorter = re.sub(u'(\W$|^\W)', u'', shorter)
+        shorter = re.sub('\d', '', reverse)
+        shorter = re.sub('\W{2,8}', '-', shorter)
+        shorter = re.sub('(\W$|^\W)', '', shorter)
         return shorter
 
     @staticmethod
@@ -364,7 +364,7 @@ class IP(DatetimeModel, CoordinatesModel):
     geoip = property(get_geoip)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{}".format(self.ip_address)
 

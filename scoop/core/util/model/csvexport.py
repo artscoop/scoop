@@ -34,7 +34,7 @@ def csv_dump(queryset, path, compress=False):
             val = getattr(obj, field)
             if callable(val):
                 val = val()
-            if type(val) == unicode:
+            if type(val) == str:
                 val = val.encode("utf-8")
             if isinstance(val, (datetime, date)):
                 val = val.strftime("%Y-%m-%d %H:%M:%S")

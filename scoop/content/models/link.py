@@ -6,6 +6,7 @@ from urllib import parse
 from annoying.decorators import render_to
 from django.core.validators import URLValidator
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from scoop.content.util.micawber.oembed import bootstrap_oembed
@@ -23,13 +24,13 @@ class LinkManager(models.Manager):
     """ Manager des liens """
 
     # Getter
-    def get_for_group(self, name):
+    def in_group(self, name):
         """ Renvoyer les liens appartenant au groupe désiré """
         return self.filter(group__iexact=name).order_by('weight')
 
     def get_count_in_group(self, name):
         """ Renvoyer le nombre de liens appartenant à un groupe """
-        return self.get_group(name).count()
+        return self.in_group(name).count()
 
     def get_with_url(self, text):
         """ Renvoyer le nombre de liens dont l'URL contient un texte """
@@ -89,7 +90,8 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
         return result[1][self.url]
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.url
 

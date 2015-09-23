@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import absolute_import
 
+from functools import reduce
+
 from annoying.decorators import render_to
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -16,7 +18,7 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.ippoint import IPPointableModel, IPPointModel
 from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.data.dateutil import now
-from scoop.core.util.model.model import SingleDeleteManager, search_query
+from scoop.core.util.model.model import search_query, SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.util.signals import mailable_event, message_check_spam, message_pre_send, message_sent, message_set_spam
 from scoop.messaging.util.text import format_message
@@ -224,7 +226,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
             self.deleted = False
             self.save()
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return """Message #{thread:010} "{message}" """.format(thread=self.thread_id, message=truncate_ellipsis(self.text, 24))
 

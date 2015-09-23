@@ -3,7 +3,8 @@ from django.db import models
 from django.db.utils import ProgrammingError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.exceptions import MissingTranslation
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
@@ -38,7 +39,7 @@ class OptionGroup(TranslatableModel, PicturableModel):
         """ Renvoyer le nom du groupe """
         try:
             return self.get_translation().name
-        except:
+        except MissingTranslation:
             return _("(No name)")
 
     @addattr(short_description=_("Description"))
@@ -46,7 +47,7 @@ class OptionGroup(TranslatableModel, PicturableModel):
         """ Renvoyer la description du groupe """
         try:
             return self.get_translation().description
-        except:
+        except MissingTranslation:
             return _("(No description)")
 
     def get_options(self, active_only=True):

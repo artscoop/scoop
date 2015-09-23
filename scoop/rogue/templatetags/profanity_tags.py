@@ -28,7 +28,7 @@ class ProfanitiesFilter(object):
     def _make_clean_word(self, length):
         """ Nettoyer un mot """
         # Générer une chaîne de n caractères avec self.replacements
-        return ''.join([random.choice(self.replacements) for _ in xrange(length)])
+        return ''.join([random.choice(self.replacements) for _ in range(length)])
 
     def __replacer(self, match):
         """ Remplacer une correspondance """

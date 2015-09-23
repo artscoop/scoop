@@ -48,7 +48,7 @@ class Profanity(models.Model):
         return ProfanitiesFilter.filter_profanities(text)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("Profanity with pattern {regex}").format(regex=self.regex)
 

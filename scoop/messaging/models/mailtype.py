@@ -6,7 +6,7 @@ import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.shortcuts import addattr
@@ -40,7 +40,7 @@ class MailType(TranslatableModel):
     description = property(get_description)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.short_name
 

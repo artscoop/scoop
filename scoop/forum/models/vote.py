@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -29,9 +30,10 @@ class Vote(DatetimeModel, AuthoredModel):
     objects = VoteManager()
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Représentation unicode de l'objet """
-        return _(u'Vote: {vote} in poll "{poll}"').format(poll=self.poll, vote=self.choice)
+        return _('Vote: {vote} in poll "{poll}"').format(poll=self.poll, vote=self.choice)
 
     # Métadonnées
     class Meta:

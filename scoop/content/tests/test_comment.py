@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 import loremipsum
 from django.conf import settings
+from django.db.models.base import Model
 from django.test import TestCase
 from django.utils.importlib import import_module
 
@@ -21,6 +22,7 @@ class CommentTest(TestCase):
         """ Définir l'environnement de test """
         self.engine = import_module(settings.SESSION_ENGINE)
         self.session = self.engine.SessionStore()
+        print(Model.update)
         self.user = User.objects.create(username='commentuser', email='foo@foobar1.foo')
         self.user.set_password('commentuser')
         self.user.save()

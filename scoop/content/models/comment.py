@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -145,9 +146,10 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
             self.save()
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _(u'{name} says: "{teaser}..."').format(name=self.get_name(), teaser=self.get_teaser())
+        return _('{name} says: "{teaser}..."').format(name=self.get_name(), teaser=self.get_teaser())
 
     def __html__(self):
         """ Renvoyer la représentation HTML de l'objet"""
@@ -173,7 +175,7 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
 
     # Métadonnées
     class Meta:
-        verbose_name = _(u'comment')
-        verbose_name_plural = _(u'comments')
+        verbose_name = _('comment')
+        verbose_name_plural = _('comments')
         permissions = (("can_edit_own_comment", "Can edit own Comment"),)
         app_label = 'content'

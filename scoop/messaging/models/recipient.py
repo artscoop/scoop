@@ -139,7 +139,7 @@ class Recipient(DatetimeModel, DataModel):
         self.save(update_fields=['counter'])
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{name}".format(name=self.user.username)
 

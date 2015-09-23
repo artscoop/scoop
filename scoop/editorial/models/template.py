@@ -7,6 +7,7 @@ from django.template.base import TemplateDoesNotExist, TextNode
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode, ExtendsNode
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -74,13 +75,14 @@ class Template(DatetimeModel):
             return False or Template._find_html_tags(extendlist[0].get_parent(RequestContext(HttpRequest())), tags)
         elif len(textlist) > 0:
             for text in textlist:
-                tags_found = {tag.lower() for tag in tags if (u'<{}>'.format(tag)) in text.s}
+                tags_found = {tag.lower() for tag in tags if ('<{}>'.format(tag)) in text.s}
                 if tags_found and (not find_all or len(tags_found) == len(tags)):
                     return True
             return False
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{name} ({count})".format(name=self.name, count=self.positions.count())
 

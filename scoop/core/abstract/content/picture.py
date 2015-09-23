@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
+import abc
 from traceback import print_exc
 
 from django.conf import settings
@@ -13,6 +14,8 @@ from scoop.core.abstract.core.moderation import ModeratedModel
 
 class PicturedBaseModel(models.Model):
     """ Objet étant lié à des images via ManyToMany ou Generic """
+    __metaclass__ = abc.ABCMeta
+
     # Constantes
     PICTURE_FILTERING = getattr(settings, 'GENERICRELATION_PICTURE_FILTER', {'moderated': True})
 
@@ -77,6 +80,11 @@ class PicturedBaseModel(models.Model):
             self.pictured = True
             self.save()
         return actually_downloaded
+
+    @abc.abstractmethod
+    def get_name(self):
+        """ Renvoyer le nom user-friendly de l'élément """
+        return
 
     # Overrides
     def save(self, *args, **kwargs):

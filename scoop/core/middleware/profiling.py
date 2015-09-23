@@ -4,9 +4,9 @@ import logging
 import os
 import re
 import sys
+from functools import reduce
 from operator import add
 from time import time
-from functools import reduce
 
 import psutil
 from django.conf import settings

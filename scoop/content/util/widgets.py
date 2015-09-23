@@ -45,8 +45,8 @@ class CreationLicenseWidget(forms.MultiWidget):
     def __init__(self, attrs=None, widget=None):
         """ Initialiser le widget """
         license_widget = widgets.Select if not widget else widget
-        license_widget = license_widget(choices=CreationLicenseWidget.get_choices(), attrs={u'class': u'license-license', u'style': u'min-width: 24em;'})
-        _widgets = (license_widget, widgets.TextInput(attrs={u'class': u'license-author', u'placeholder': _("Creator or rights holder")}))
+        license_widget = license_widget(choices=CreationLicenseWidget.get_choices(), attrs={'class': 'license-license', 'style': 'min-width: 24em;'})
+        _widgets = (license_widget, widgets.TextInput(attrs={'class': 'license-author', 'placeholder': _("Creator or rights holder")}))
         super(CreationLicenseWidget, self).__init__(_widgets, attrs)
 
     # Getter
@@ -74,4 +74,4 @@ class CreationLicenseWidget(forms.MultiWidget):
 
     def format_output(self, rendered_widgets):
         """ Renvoyer le rendu des sous-widgets du widget """
-        return u' '.join(rendered_widgets)
+        return ' '.join(rendered_widgets)
