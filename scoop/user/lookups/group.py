@@ -21,11 +21,11 @@ class GroupLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer la représentation texte de l'élément """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_match(self, obj):
         """ Renvoyer la représentation de l'élément dans le dropdown """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation de l'objet dans le deck """

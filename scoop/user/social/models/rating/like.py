@@ -77,7 +77,7 @@ class Like(DatetimeModel):
         self.object_id = None
         super(Like, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{user} likes {target}").format(user=self.author.username, target=self)
 

@@ -130,7 +130,7 @@ def model_name(value):
 def field_error(value):
     """ Renvoyer error si un champ possède des erreurs """
     if value.errors:
-        return u'error'
+        return 'error'
     return ''
 
 

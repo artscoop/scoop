@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import os
 import re
 import subprocess
-from subprocess import STDOUT, check_output
+from subprocess import check_output, STDOUT
 
 from django.conf import settings
 from django.core.files.base import File

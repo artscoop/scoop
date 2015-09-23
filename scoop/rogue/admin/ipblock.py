@@ -39,13 +39,13 @@ class IPBlockAdmin(admin.ModelAdmin):
     @addattr(allow_tags=True, admin_order_field="ip1", short_description=_("IP 1"))
     def get_ip1(self, obj):
         """ Renvoyer l'IP 1 dans un format A.B.C.D """
-        output = IPy.IP(long(obj.ip1)).strNormal()
+        output = IPy.IP(int(obj.ip1)).strNormal()
         return output
 
     @addattr(allow_tags=True, admin_order_field="ip2", short_description=_("IP 2"))
     def get_ip2(self, obj):
         """ Renvoyer l'IP 2 dans un format A.B.C.D """
-        output = IPy.IP(long(obj.ip2)).strNormal()
+        output = IPy.IP(int(obj.ip2)).strNormal()
         return output
 
     @addattr(admin_order_field="expires", short_description=_("Expires"))

@@ -263,7 +263,7 @@ class City(CoordinatesModel, PicturableModel):
     @addattr(admin_order_field='name', short_description=_("Name"))
     def get_name(self, language=None):
         """ Renvoyer le nom de la ville """
-        language = language or translation.get_language()[0:2]
+        language = language or (translation.get_language() or 'en')[0:2]
         names = self.alternates.filter(language__in=[language, '']).order_by('-preferred', '-short')
         if names.exists():
             return names[0].name
@@ -295,7 +295,6 @@ class City(CoordinatesModel, PicturableModel):
     @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        print(translation.get_language())
         return "{name}".format(name=self.get_name(), country=self.country.code2)
 
     def save(self, *args, **kwargs):

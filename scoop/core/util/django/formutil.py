@@ -26,6 +26,7 @@ CHOICES_NULLBOOLEAN = (('', _("All")), (False, _("No")), (True, _("Yes")))
 class ModelFormUtil:
     """
     Mise à jour d'un objet de type Model avec certains champs d'un ModelForm
+    Monkey-patching done in scoop.core.__init__
     - instance : objet dérivé de models.Model
     - form : objet de type forms.ModelForm dont la classe ciblée est celle de instance
     - fieldnames : liste de noms de champs à mettre à jour dans le modèle
@@ -50,12 +51,12 @@ class ModelFormUtil:
                 return False
         return True
 
-    def update_from_form(self, form, fieldnames, save=True, **kwargs):
+    def update_from_form(self, form, fieldnames=None, save=True, **kwargs):
         """
         Mettre à jour les champs de l'objet selon l'état d'un formulaire
         - La validation ne se fait que sur les champs sélectionnés et valides
         :param fieldnames: itérable contenant le nom des champs à mettre à jour
-            Si None, met à jour l'instance via form.save.
+            Si None, met à jour l'instance via form.save. None par défaut.
         :type fieldnames: list or tuple or set or NoneType
         """
         if isinstance(fieldnames, (list, tuple, set)):

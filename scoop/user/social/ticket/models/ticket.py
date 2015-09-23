@@ -90,7 +90,7 @@ class Ticket(DatetimeModel, UUID64Model):
             self.save()
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.title
 

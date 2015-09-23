@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.utils.importlib import import_module
 
 from scoop.rogue.models.ipblock import IPBlock
-from scoop.rogue.util.ipblock import PROXY_LIST_DIRECTORY, get_proxy_nodes
+from scoop.rogue.util.ipblock import get_proxy_nodes, PROXY_LIST_DIRECTORY
 from scoop.user.access.models.ip import IP
 from scoop.user.models.user import User
 

@@ -53,7 +53,7 @@ class AlertManager(SingleDeleteManager):
         recipients = make_iterable(recipients)[0:1000]
         context = RequestContext(request=HttpRequest())
         mailtype = MailType.objects.get(short_name=mailtypename)
-        template = u'messaging/alert/{name}.html'.format(name=mailtype.template)
+        template = 'messaging/alert/{name}.html'.format(name=mailtype.template)
         title, html = [render_block_to_string(template, label, data, context_instance=context) for label in ['title', 'html']]
         title = one_line(title)
         alerts = []
@@ -93,7 +93,7 @@ class Alert(DatetimeModel, DataModel):
             self.save(update_fields=['read', 'read_time'])
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("Alert for {user}").format(user=self.recipient)
 

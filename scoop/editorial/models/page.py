@@ -5,6 +5,7 @@ from django.core.cache import cache
 from django.db import models
 from django.template.base import Template
 from django.template.context import RequestContext
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from unidecode import unidecode
@@ -62,8 +63,8 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
         if output is not []:
             return output
         # Ligne extends
-        extends = u'{{{{% extends "{path}" %}}}}'.format(path=self.template.path)
-        filters = u'{% load i18n panels inlines %}'
+        extends = '{{{{% extends "{path}" %}}}}'.format(path=self.template.path)
+        filters = '{% load i18n panels inlines %}'
         output.append(extends)
         output.append(filters)
         # Blocs
@@ -102,7 +103,8 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
         return self.path
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 

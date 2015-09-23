@@ -18,7 +18,7 @@ class QuizType(DatetimeModel, DataModel):
     timeout = models.SmallIntegerField(default=-1, verbose_name=_("Timeout, in seconds"))
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "%(title)s" % {'title': self.title}
 

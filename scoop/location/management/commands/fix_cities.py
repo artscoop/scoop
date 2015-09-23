@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     """ Quickfixes des villes de France, Belgique et Canada """
     args = ''
-    help = 'Populate countries from Geonames'
+    help = "Populate countries from Geonames"
 
     def handle(self, *args, **options):
         from scoop.location.models import City

@@ -1,10 +1,11 @@
 # coding: utf-8
 from django.conf import settings
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from markdown import Markdown
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
@@ -29,7 +30,8 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UU
     libraries = models.CharField(max_length=40, help_text=_("{% load %} libraries, comma separated"), verbose_name=_("Tag libs"))
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return "{title} ({name})".format(title=self.title, name=self.name)
 
@@ -52,7 +54,7 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UU
         """ Renvoyer une icone correspondant à la langue de l'extrait """
         output = []
         for translation in self.translations.all():
-            output.append(u'<img src="%(url)stool/assets/icons/flag/png/%(code)s.png">' % {'code': get_country_code(translation.language), 'url': settings.STATIC_URL})
+            output.append('<img src="%(url)stool/assets/icons/flag/png/%(code)s.png">' % {'code': get_country_code(translation.language), 'url': settings.STATIC_URL})
         return " ".join(output)
 
     # Overrides

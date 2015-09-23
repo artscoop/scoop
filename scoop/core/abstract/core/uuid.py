@@ -35,7 +35,7 @@ class UUIDField(models.CharField):
         """ Déconstruire le champ """
         name, path, args, kwargs = super(UUIDField, self).deconstruct()
         kwargs['bits'] = self.bits
-        kwargs['default'] = u''
+        kwargs['default'] = ''
         return name, path, args, kwargs
 
     # Getter

@@ -234,7 +234,7 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     @addattr(allow_tags=True, admin_order_field='updated', short_description=_("Upd."))
     def get_updated_date(self, obj):
         """ Renvoyer la date de dernière mise à jour """
-        return u'<span title="{title}">{anchor}</span>'.format(anchor=datefilter(localtime(obj.updated), "H:i"), title=datefilter(localtime(obj.updated), "d F Y H:i"))
+        return '<span title="{title}">{anchor}</span>'.format(anchor=datefilter(localtime(obj.updated), "H:i"), title=datefilter(localtime(obj.updated), "d F Y H:i"))
 
     @addattr(boolean=True, admin_order_field='deleted', short_description=_("Del."))
     def get_deleted(self, obj):

@@ -4,7 +4,7 @@ from re import split
 
 from django import template
 from django.core.urlresolvers import reverse
-from django.template import Node, Variable, resolve_variable
+from django.template import Node, resolve_variable, Variable
 
 register = template.Library()
 

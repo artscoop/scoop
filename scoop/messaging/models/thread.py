@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Q, permalink
+from django.db.models import permalink, Q
 from django.db.models.aggregates import Count
 from django.http.response import Http404
 from django.template.loader import render_to_string
@@ -302,7 +302,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
             self.save(force_update=True, update_fields=['deleted', 'updated'])
             self.get_messages().update(deleted=True)
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return self.topic
 

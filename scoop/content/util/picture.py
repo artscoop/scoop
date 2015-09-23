@@ -47,7 +47,9 @@ def get_image_upload_path(picture, name, update=False):
     dir_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d"), 'picture_type': picture_type}
     name_info = {'name': slugify(splitext(basename(name))[0]), 'ext': splitext(basename(name))[1]}
     prefix_info = {'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'week': fmt("%W"), 'author': author}
-    data = dict(dir_info.items() + name_info.items() + prefix_info.items())
+    data = dir_info
+    data.update(name_info)
+    data.update(prefix_info)
     # Renvoyer le répertoire ou le chemin complet du fichier
     path = "file/pic/{year}/{month}{week}" if update else "file/pic/{year}/{month}{week}/{author}/{name}{ext}"
     path = "test/{}".format(path) if settings.TEST else path

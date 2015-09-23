@@ -2,12 +2,12 @@
 from __future__ import absolute_import
 
 import logging
-from django.utils.encoding import python_2_unicode_compatible
 
 import pytz
 from django.conf import settings
 from django.db import models
 from django.utils import timezone, translation
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from unidecode import unidecode
@@ -120,8 +120,8 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
     def get_area(self, unit=None):
         """ Renvoyer la superficie du pays, en m² ou en mi² """
         conversion = {None: 1.0, 'mi': 0.386102159}
-        unit_name = {None: u'km²', 'mi': u'mi²'}
-        return "{area:.0f} {unit}".format(area=self.area * conversion.get(unit, 1.0), unit=unit_name.get(unit, u'km²'))
+        unit_name = {None: 'km²', 'mi': 'mi²'}
+        return "{area:.0f} {unit}".format(area=self.area * conversion.get(unit, 1.0), unit=unit_name.get(unit, 'km²'))
 
     def get_timezones(self):
         """ Renvoyer les fuseaux horaires du pays """
@@ -173,7 +173,7 @@ class CountryName(models.Model):
     short = models.BooleanField(default=False, verbose_name=_("Short version"))
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("Name for {}").format(self.country.name)
 

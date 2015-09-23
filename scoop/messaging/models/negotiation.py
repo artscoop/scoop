@@ -92,7 +92,7 @@ class Negotiation(DatetimeModel):
         return None
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("Messaging negotiation between {source} and {target}").format(source=self.source, target=self.target)
 

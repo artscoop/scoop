@@ -2,12 +2,13 @@
 from __future__ import absolute_import
 
 from django.core.management.base import BaseCommand
+from django.utils.translation import ugettext
 
 
 class Command(BaseCommand):
     """ Peupler la liste des pays """
     args = ''
-    help = 'Populate countries from Geonames'
+    help = ugettext("Populate countries from Geonames")
 
     def handle(self, *args, **options):
         """ Exécuter la commande """

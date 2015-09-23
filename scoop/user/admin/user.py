@@ -89,7 +89,7 @@ class UserAdmin(admin.ModelAdmin):
     @addattr(allow_tags=True, short_description=_("Profile"))
     def get_profile_link(self, obj):
         """ Renvoyer un lien vers la page d'admin du profil """
-        return """<a href="{}">{}</a>""".format(reverse("admin:dating_profile_change", args=(obj.profile.user_id,)), escape(obj.profile.__unicode__()))
+        return """<a href="{}">{}</a>""".format(reverse("admin:dating_profile_change", args=(obj.profile.user_id,)), escape(obj.profile.__str__()))
 
     @addattr(allow_tags=True, short_description=_("User picture"))
     def get_image(self, obj):

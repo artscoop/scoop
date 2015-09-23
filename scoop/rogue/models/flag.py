@@ -12,12 +12,12 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
-from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
+from scoop.core.util.model.model import limit_to_model_names, SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from scoop.rogue.util.signals import flag_closed, flag_created, flag_resolve
 
@@ -164,8 +164,8 @@ class Flag(DatetimeModel):
     @addattr(allow_tags=True, admin_order_field='status', short_description=_("Status"))
     def get_status_html(self):
         """ Renvoyer une représentation HTML du statut du signalement """
-        types = {0: u'important', 1: u'warning', 2: u'success', 3: u'success', 4: u'success', 5: u'info', 6: u'info'}
-        html = u'<span class="modal-action label label-{css}">{status}</span>'.format(status=self.get_status_display(), css=types[self.status])
+        types = {0: 'important', 1: 'warning', 2: 'success', 3: 'success', 4: 'success', 5: 'info', 6: 'info'}
+        html = '<span class="modal-action label label-{css}">{status}</span>'.format(status=self.get_status_display(), css=types[self.status])
         return mark_safe(html.encode('utf-8'))
 
     def get_priority_class(self):
@@ -223,7 +223,7 @@ class Flag(DatetimeModel):
         # Peupler l'attribut nom
         if self.content_object is not None:
             maxlength = Flag._meta.get_field('name').max_length - 4
-            self.name = truncatechars(self.content_object.__unicode__(), maxlength)
+            self.name = truncatechars(self.content_object.__str__(), maxlength)
         super(Flag, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -232,7 +232,7 @@ class Flag(DatetimeModel):
         self.object_id = None
         super(Flag, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{item}@{url}".format(url=self.url, item=self.content_object)
 
@@ -294,7 +294,7 @@ class FlagType(TranslatableModel, IconModel):
         if not self.content_set.all().exists():
             super(FlagType, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         try:
             return self.get_translation().name

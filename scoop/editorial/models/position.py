@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from django.contrib.auth.models import AnonymousUser
 from django.db import models
 from django.template.defaultfilters import capfirst
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 
@@ -57,7 +58,8 @@ class Position(DatetimeModel, IconModel):
         return self.title
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return ugettext(self.auto_title())
 

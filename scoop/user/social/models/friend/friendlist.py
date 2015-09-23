@@ -225,7 +225,7 @@ class FriendList(DataModel):
         return self.get_action_label(user)
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("Friendship status for {user}").format(user=self.user)
 

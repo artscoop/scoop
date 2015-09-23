@@ -22,11 +22,11 @@ class ThreadLookup(LookupChannel):
 
     def get_result(self, obj):
         """ Renvoyer la représentation texte d'un résultat """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_match(self, obj):
         """ Renvoyer une représentation du résultat dans le dropdown """
-        return obj.__unicode__()
+        return obj.__str__()
 
     def format_item_display(self, obj):
         """ Renvoyer une représentation du résultat dans le deck """

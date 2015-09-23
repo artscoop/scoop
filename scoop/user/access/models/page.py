@@ -39,7 +39,7 @@ class Page(models.Model):
         """ Renvoyer l'URL de la page """
         return self.path
 
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.path
 

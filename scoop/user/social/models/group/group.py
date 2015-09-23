@@ -95,7 +95,7 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, 
         return {'group_slug': self.slug}
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 

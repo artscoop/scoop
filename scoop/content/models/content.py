@@ -16,13 +16,14 @@ from django.db.models import permalink
 from django.template.defaultfilters import striptags, truncatewords
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import get_translation_model, TranslatableModel
 
 from scoop.content.util.signals import content_pre_lock
 from scoop.core.abstract.content.comment import CommentableModel
@@ -269,7 +270,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     html = models.TextField(blank=True, help_text=_("HTML output from body"), verbose_name=_("HTML"))
     teaser = models.TextField(blank=True, verbose_name=_("Introduction"))
     format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=0, verbose_name=_("Format"))
-    slug = AutoSlugField(max_length=100, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
+    slug = AutoSlugField(max_length=128, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
     picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, related_name='contents', help_text=_("Main picture"), verbose_name=_("Picture"))
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Follow up of"))
     tags = models.ManyToManyField('content.Tag', blank=True, related_name='contents', verbose_name=_("Classification tags"))
@@ -343,7 +344,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     @addattr(short_description=_("Teaser"))
     def get_teaser(self, words=DEFAULT_TEASER_SIZE):
         """ Renvoyer le résumé du document (automatique) """
-        if len(self.teaser) <= 8 and len(self.body) > 8:
+        if len(str(self.body)) > 8 and len(str(self.teaser)) <= 8:
             self.teaser = truncatewords(self.body, words)
             self.save()
         return self.teaser
@@ -478,7 +479,8 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         self.updated = timezone.now()
         super(Content, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode """
         return self.title
 
@@ -547,7 +549,8 @@ class Category(TranslatableModel, IconModel, DataModel):
         if not self.content_set.all().exists():
             super(Category, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return str(self.get_name())
 
@@ -561,8 +564,8 @@ class Category(TranslatableModel, IconModel, DataModel):
 class CategoryTranslation(get_translation_model(Category, "category"), TranslationModel):
     """ Traduction de type de contenu """
     # Champs
-    name = models.CharField(max_length=48, blank=False, verbose_name=_("Name"))
-    plural = models.CharField(max_length=48, blank=False, default="__", verbose_name=_("Plural"))
+    name = models.CharField(max_length=64, blank=False, verbose_name=_("Name"))
+    plural = models.CharField(max_length=64, blank=False, default="__", verbose_name=_("Plural"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Overrides

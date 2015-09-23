@@ -75,9 +75,9 @@ def phonex(query):
     query = query.replace('eim', '4')
     query = query.replace('aim', '4')
     # 7. Remplacer des accents et les sons È et É
-    query = query.replace(u'é', 'y')
-    query = query.replace(u'è', 'y')
-    query = query.replace(u'ê', 'y')
+    query = query.replace('é', 'y')
+    query = query.replace('è', 'y')
+    query = query.replace('ê', 'y')
     query = query.replace('ai', 'y')
     query = query.replace('ei', 'y')
     query = query.replace('er', 'yr')
@@ -86,7 +86,7 @@ def phonex(query):
     query = unidecode.unidecode(query)
 
     # 8. replace 'an' and 'in',
-    # except if it's followed by 'a', 'e', 'i', 'o', 'u'
+    # except if it's followed by 'a', 'e', 'i', 'o', ''
     # or a sound between 1 and 4
 
     N = len(query)
@@ -140,13 +140,13 @@ def phonex(query):
     query = query.replace('on', '1')
 
     # 9. replace s by z if they are followed
-    # and preceded by 'a', 'e', 'i', 'o', 'u'
+    # and preceded by 'a', 'e', 'i', 'o', ''
     # or a sound from 1 to 4
 
     N = len(query)
     if N > 2:
         output = query[0]
-        for index in [e + 1 for e in xrange(len(query) - 2)]:
+        for index in [e + 1 for e in range(len(query) - 2)]:
             char = query[index]
             if char == 's':
                 previous = query[index - 1]
@@ -244,7 +244,7 @@ def phonex(query):
     REPLACE['r'] = 14
     REPLACE['s'] = 15
     REPLACE['t'] = 16
-    REPLACE['u'] = 17
+    REPLACE[''] = 17
     REPLACE['w'] = 18
     REPLACE['x'] = 19
     REPLACE['y'] = 20

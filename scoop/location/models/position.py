@@ -53,7 +53,7 @@ class Position(CoordinatesModel, DatetimeModel):
         return Position.get_users_in(self.get_bounding_box(km))
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "%(user)s @ %(gps)s" % {'user': self.user, 'gps': self.get_formatted_coordinates()}
 

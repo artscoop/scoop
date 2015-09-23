@@ -14,7 +14,7 @@ class Quiz(DatetimeModel, DataModel):
     questions = models.ManyToManyField('question.Question', verbose_name=_("Questions"))
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "%(title)s" % {'title': self.title}
 

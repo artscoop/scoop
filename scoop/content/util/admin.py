@@ -25,7 +25,7 @@ class PicturedModelAdmin():
             queryset = obj.get_pictures() if hasattr(obj, 'get_pictures') else obj.pictures.all()
             pictures = "".join([picture.get_thumbnail_html(size=size) for picture in queryset[0:2]]) or pgettext('picture', "None")
             if queryset.count() > 2:
-                pictures = u'{pictures} <span class="muted">{count}</span>'.format(pictures=pictures, count=queryset.count())
+                pictures = '{pictures} <span class="muted">{count}</span>'.format(pictures=pictures, count=queryset.count())
             return pictures
         return _("This model has no field named pictures.")
 

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.contrib.contenttypes import fields
 from django.db import models
 from django.http.response import HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
@@ -83,7 +84,8 @@ class Redirection(GenericModelMixin, DatetimeModel):
         """ Initialiser l'objet """
         super(Redirection, self).__init__(*args, **kwargs)
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("HTTP {http} Redirection from {base} to {new}").format(http=self.get_http_code(), base=self.base, new=self.get_new_url())
 

@@ -68,7 +68,7 @@ class MailBlock(DatetimeModel):
         return email_valid
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return _("Blocking of email {mail}").format(mail=self.email)
 

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from autoslug.fields import AutoSlugField
 from django.db import models
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
@@ -106,7 +107,8 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
             self.save()
 
     # Overrides
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "%s" % self.title
 

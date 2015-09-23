@@ -104,7 +104,7 @@ class UserQuerySetMixin(object):
         bots = self.filter(is_superuser=True)
         if bots.exists():
             return bots.first()
-        new_bot = self.create(username=u'bot-{}'.format(slugify(name or "default")), name=name or "Bot", email='rescuebot@localhost.com', bot=True)
+        new_bot = self.create(username='bot-{}'.format(slugify(name or "default")), name=name or "Bot", email='rescuebot@localhost.com', bot=True)
         return new_bot
 
     def get_anonymous(self):
@@ -192,7 +192,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     objects = UserManager()
 
     # Overrides
-    def __unicode__(self):
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         if not self.bot and self.name:
             return "{name}".format(name=self.name or self.username)

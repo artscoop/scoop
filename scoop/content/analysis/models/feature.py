@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import nltk
 from django.db import models
 from django.template.defaultfilters import striptags
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from nltk.tokenize import word_tokenize
 
@@ -19,7 +20,8 @@ class Feature(models.Model):
     status = models.SmallIntegerField(default=0, verbose_name=_("Feature type"))
 
     # Getter
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 

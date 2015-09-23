@@ -39,6 +39,7 @@ class TemplateTagsTest(TestCase):
     # Tests
     def test_datetime_tags(self):
         """ Tester les tags de date """
+
         now = timezone.now()
         last_hour = timezone.now() - timedelta(hours=1)
         yesterday = timezone.now() - timedelta(days=1)

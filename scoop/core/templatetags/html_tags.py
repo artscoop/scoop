@@ -18,7 +18,7 @@ register = template.Library()
 @register.filter(name="sanitize")
 def sanitize(value):
     """ Assainir le contenu HTML """
-    tags = ['p', 'i', 'strong', 'small', 'b', 'u', 'a', 'em', 'pre', 'blockquote', 'br', 'hr', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'sup', 'div', 'span']
+    tags = ['p', 'i', 'strong', 'small', 'b', '', 'a', 'em', 'pre', 'blockquote', 'br', 'hr', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'sub', 'sup', 'div', 'span']
     return bleach.clean(value, tags=tags)
 
 

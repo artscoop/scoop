@@ -1,8 +1,8 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-import pickle
 import io
+import pickle
 import pprint
 import time
 from os.path import join
@@ -74,7 +74,7 @@ class DocumentExporter(object):
         # Écrire le fichier
         path = join(Paths.get_root_dir('files', 'legacy'), '{}.pickle'.format(name or self.name))
         with open(path, 'wb') as f:
-            pickle.dump(data, f, protocol=2)
+            pickle.dump(data, f, protocol=3)
         # Écrire un autre fichier pretty printed
         if debug:
             with io.open("{}.txt".format(path), "w", encoding="utf-8") as f:
