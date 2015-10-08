@@ -150,6 +150,8 @@ class PictureQuerySet(models.QuerySet, PictureQuerySetMixin, ModeratedQuerySetMi
 
 class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manager, PictureQuerySetMixin, ModeratedQuerySetMixin):
     """ Manager des images """
+
+    # Configuration
     use_for_related_fields = True
 
     def get_queryset(self):
@@ -172,8 +174,10 @@ class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manag
 
 class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel):
     """ Image """
+
     # Constantes
     AUDIENCES = [[0, _("Everyone")], [5, _("Adults only")]]
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_("Author"))
     image = WebImageField(upload_to=get_image_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64),

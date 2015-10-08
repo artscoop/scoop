@@ -12,10 +12,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
 from django.utils import timezone
-
-from django.utils.translation import ugettext_lazy as _
-
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.birth import BirthManager, BirthModel
@@ -31,12 +29,21 @@ from scoop.user.util.signals import check_stale, check_unused, profile_banned, p
 logger = logging.getLogger(__name__)
 
 
-class ProfileQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
-    """ Queryset des utilisateurs """
+class ProfileQuerySetMixin(object):
+    """ Mixin de queryset de profils """
+
+    # Getter
+    def verified(self):
+        """ Renvoyer les profils vérifiés uniquement """
+        return self.filter(harmful=False)
+
+
+class ProfileQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, ProfileQuerySetMixin):
+    """ Queryset des profils """
     pass
 
 
-class BaseProfileManager(Manager.from_queryset(ProfileQuerySet), BirthManager, NamedFilterManager):
+class BaseProfileManager(Manager.from_queryset(ProfileQuerySet), BirthManager, NamedFilterManager, ProfileQuerySetMixin):
     """ Manager de base de profils """
 
     def get_queryset(self):
@@ -191,6 +198,14 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     def annotate_admin(self, content):
         """ Définir l'annotation admin pour le profil """
         self.set_data('admin', content)
+
+    def verify(self):
+        """ Marquer le profil comme étant vérifié """
+        if not self.harmful is False:
+            self.harmful = False
+            self.save()
+            return True
+        return False
 
     # Overrides
     def __str__(self):

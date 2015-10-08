@@ -56,10 +56,10 @@ class PasswordForm(forms.Form):
 class UsernameSearchForm(BaseSearchForm):
     """ Formulaire de recherche d'utilisateurs par nom d'utilisateur """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, qs=None, **kwargs):
         """ Initialiser le formulaire """
         super(UsernameSearchForm, self).__init__(*args, **kwargs)
-        self.Meta.base_qs = User.objects
+        self.Meta.base_qs = qs or User.objects
 
     # Métadonnées
     class Meta:

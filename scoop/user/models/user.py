@@ -81,6 +81,13 @@ class UserQuerySetMixin(object):
         """ Renvoyer un utilisateur par son nom d'utilisateur """
         return self.get_or_none(username=name)
 
+    def get_by_email(self, email):
+        """ Renvoyer un utilisateur avec une adresse email """
+        try:
+            return self.get(email__iexact=email)
+        except User.DoesNotExist:
+            return False
+
     def get_by_uuid(self, uuid, user=None, **kwargs):
         """ Renvoyer un utilisateur selon son uuid, sinon un utilisateur par défaut """
         value = self.get_or_404(uuid=uuid, **kwargs) if uuid else (user or AnonymousUser())
@@ -283,7 +290,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         return count
 
     @staticmethod
-    def get_online_users(*args, **kwargs):
+    def get_online_users(**kwargs):
         """ Renvoyer les utilisateurs en ligne """
         user_ids = User.get_online_set()
         kwargs['id__in'] = user_ids
@@ -294,7 +301,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     def is_user_online(user_id, seconds=ONLINE_DURATION):
         """ Renvoyer si l'utilisateur portant un ID est en ligne """
         value = cache.get(User.CACHE_KEY['online'].format(user_id), None)
-        return value is not None and ((value + seconds) >= time.time())
+        return value is not None and (value + seconds >= time.time())
 
     @staticmethod
     def is_user_away(user_id, seconds=AWAY_DURATION):
@@ -402,6 +409,10 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     def get_picture(self):
         """ Renvoyer l'image principale du profil de l'utilisateur """
         return self.profile.picture
+
+    def is_logout_forced(self):
+        """ Renvoyer si une demande de déconnexion est en attente """
+        return cache.get(User.CACHE_KEY['logout.force'].format(self.pk), 0) == 1
 
     def can_send_mail(self):
         """ Renvoyer si un nouveau mail normal peut être envoyé à l'utilisateur """

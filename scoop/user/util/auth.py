@@ -55,7 +55,7 @@ def staff_or_404(view_func):
     """ Décorateur qui renvoie un 404 si l'utilisateur n'est pas du personnel """
 
     def _checklogin(request, *args, **kwargs):
-        if request.user.is_active and request.user.is_staff:
+        if request.user.is_active and (request.user.is_staff or request.user.is_superuser):
             return view_func(request, *args, **kwargs)
         else:
             raise Http404

@@ -79,7 +79,6 @@ class AccessManager(models.Manager):
             self.dump(rows)
         return rows.delete()
 
-    # Setter
     def add(self, request):
         """ Consigner un accès au site """
         from scoop.user.access.models import IP, Page, UserIP

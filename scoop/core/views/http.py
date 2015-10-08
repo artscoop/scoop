@@ -12,6 +12,7 @@ from scoop.core.util.django.templateutil import render_to
 @render_to("http/500.html", status_code=500)
 def http_500(request, template_name='http/500.html'):
     """ Rendre la page d'erreur serveur """
+
     # Récupérer tous les attributs de settings
     attributes, template_dict = dir(settings), {'request': request}
     # Créer un dictionnaire contenant les attributs écrits en Majuscules

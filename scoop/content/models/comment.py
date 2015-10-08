@@ -70,7 +70,8 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
         if (isinstance(target, CommentableModel) and target.is_commentable()) or (request and request.user.is_staff) or force is True:
             comment = Comment(author=author, content_object=target, body=body, name=name or str(author), email=email or "", url=url or "")
             comment.set_request(request, save=True)
-            comment_posted.send(sender=comment, target=target)
+            if comment.moderated:
+                comment_posted.send(sender=comment, target=target)
             return comment
         return None
 
@@ -144,6 +145,11 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
         self.ip = IP.objects.get_by_request(request) if request is not None else None
         if save is True:
             self.save()
+
+    def moderate_accept(self, save=False):
+        """ Accepter le commentaire """
+        super().moderate_accept(save=save)
+        comment_posted.send(sender=self, target=self.content_object)
 
     # Overrides
     @python_2_unicode_compatible
