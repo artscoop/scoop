@@ -120,6 +120,13 @@ class DataForm(Form):
         except FormConfiguration.DoesNotExist:
             pass
 
+    @classmethod
+    def set_option_for(cls, user, field, value, version=None):
+        """ Modifier l'état d'un champ de données de formulaire pour un utilisateur """
+        state = cls.get_data_for(user, version)
+        state[field] = value
+        FormConfiguration.objects.set_user_config(user, cls.name, state, version=version)
+
     def save_configuration(self, user=None, version=""):
         """
         Enregistrer les données de champs du formulaire

@@ -28,6 +28,7 @@ __all__ = ['Message']
 
 class MessageManager(SingleDeleteManager):
     """ Manager des messages """
+
     # Constantes
     MESSAGE_SIZE_LIMIT = 1024
 

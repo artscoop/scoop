@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from functools import wraps
 
-from django.http.response import HttpResponse, REASON_PHRASES
+from django.http.response import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
@@ -14,7 +14,6 @@ def render_to_code(request, name, dictionary, code=200):
     """ Renvoyer un HTTPResponse avec le contenu d'un template et le code HTTP désiré """
     response = render_to_response(name, dictionary, context_instance=RequestContext(request))
     response.status_code = code
-    response.reason_phrase = REASON_PHRASES[code]
     return response
 
 
@@ -123,7 +122,6 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
             if string is False:
                 response = render_to_response(tmpl, output, context_instance=RequestContext(request), content_type=content_type or 'text/html')
                 response.status_code = code
-                response.reason_phrase = REASON_PHRASES.get(code, 'UNKNOWN')
                 if type(head) == dict:
                     for key, value in head.items():
                         response[key] = value
@@ -156,7 +154,6 @@ def do_render(data, request, template=None, content_type=None, headers=None, sta
     if string is False:
         response = render_to_response(tmpl, data, context_instance=RequestContext(request), content_type=content_type)
         response.status_code = code
-        response.reason_phrase = REASON_PHRASES[code]
         if type(head) == dict:
             for key, value in head.items():
                 response[key] = value

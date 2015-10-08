@@ -25,7 +25,7 @@ from ngram import NGram
 from translatable.exceptions import MissingTranslation
 from translatable.models import get_translation_model, TranslatableModel
 
-from scoop.content.util.signals import content_pre_lock
+from scoop.content.util.signals import content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -478,6 +478,9 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Enregistrer l'objet dans la base de données """
         self.updated = timezone.now()
         super(Content, self).save(*args, **kwargs)
+        # Envoyer un signal insiquand que le contenu est mis à jour
+        if self.moderated:
+            content_updated.send(instance=self)
 
     @python_2_unicode_compatible
     def __str__(self):

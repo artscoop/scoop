@@ -18,8 +18,12 @@ from scoop.user.models import User
 class LoginMiddleware(object):
     """
     Middleware de connexion utilisateur
-    Nécessite un attribut POST nommé submit-login et d'être hors-ligne
+    Pour connecter l'utilisateur, nécessite :
+    - un attribut POST submit-login
+    - des attributs POST username et password
+    - d'être déconnecté
     """
+
     # Constantes
     LOGOUT_URL = reverse_lazy('user:logout')
 
@@ -50,13 +54,15 @@ class LoginMiddleware(object):
 class AutoLogoutMiddleware(object):
     """
     Middleware de déconnexion automatique de l'utilisateur
-    Déconnecte un membre en ligne mais désactivé
-    Déconnecte les membres dont la déconnexion forcée a été demandée
+    Déconnecte un membre connecté dans les cas suivants :
+    - est en ligne mais désactivé
+    - est en ligne et une déconnexion a été demandée
     """
 
     def process_request(self, request):
         """ Traiter la requête """
-        if request.user.is_authenticated() and (request.user.deleted or not request.user.is_active or cache.get(User.CACHE_KEY['logout.force'].format(request.user.id), 0) == 1):
+        user = request.user
+        if user.is_authenticated() and (user.deleted or not user.is_active or user.is_logout_forced()):
             User.sign(request, None, logout=True)
-            cache.delete(User.CACHE_KEY['logout.force'].format(request.user.id))
+            cache.delete(User.CACHE_KEY['logout.force'].format(user.pk))
         return None

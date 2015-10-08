@@ -212,10 +212,12 @@ def has_valid_changes(form):
     return form.is_valid() and form.has_changed()
 
 
-def message_on_invalid(form, request, message, level=None, extra_tags=None):
+def message_on_invalid(forms, request, message, level=None, extra_tags=None):
     """ Afficher un message à l'utilisateur si un formulaire n'est pas valide """
-    if not form.is_valid():
-        messages.add_message(request, level or messages.SUCCESS, message, extra_tags=extra_tags)
+    forms = make_iterable(forms)
+    for form in forms:
+        if not form.is_valid():
+            messages.add_message(request, level or messages.SUCCESS, message, extra_tags=extra_tags)
 
 
 def error_labels(form):

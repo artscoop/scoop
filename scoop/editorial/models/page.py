@@ -58,8 +58,8 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
     # Getter
     def render(self, request):
         """ Rendre la page """
-        CACHE_KEY = 'editorial.page.render.{id}'.format(id=self.id)
-        output = cache.get(CACHE_KEY, [])
+        cache_key = 'editorial.page.render.{id}'.format(id=self.id)
+        output = cache.get(cache_key, [])
         if output is not []:
             return output
         # Ligne extends
@@ -80,7 +80,7 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
         template = Template(output)
         context = RequestContext(request, {'page': self})
         page_html = template.render(context)
-        cache.set(CACHE_KEY, page_html)
+        cache.set(cache_key, page_html)
         return page_html
 
     def get_children(self, active=True):

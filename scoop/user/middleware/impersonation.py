@@ -48,7 +48,7 @@ class ImpersonationMiddleware(object):
                 request.session[SESSION_ITEM] = request.GET[IMPERSONATE_PARAMETER]
             elif EXIT_PARAMETER in request.GET and SESSION_ITEM in request.session:
                 del request.session[SESSION_ITEM]
-                messages.info(request, _("Your impersonation session has been properly shut down."))
+                messages.info(request, _("{name}, your impersonation session has been properly shut down.").format(name=request.user.get_short_name()))
                 return HttpResponseRedirect(remove_get_parameter(request, EXIT_PARAMETER))
             if SESSION_ITEM in request.session:
                 try:

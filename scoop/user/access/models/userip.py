@@ -32,7 +32,10 @@ class UserIPManager(models.Manager):
         return self.filter(user=user)
 
     def related_users(self, user, exclude_self=False, harmful=False):
-        """ Renvoyer les utilisateurs partageant des IP avec un utilisateur """
+        """
+        Renvoyer les utilisateurs partageant des IP avec un utilisateur
+        :type user: scoop.models.user.User | django.auth.models.User
+        """
         exclude_criteria = {'pk': user.pk} if exclude_self is True else {}
         criteria = {'ip__harm__gt': 0} if harmful else {}  # Récupérer ceux qui utilisent les mêmes IP dangereuses
         ip_ids = self.filter(user=user).values_list('ip__id', flat=True)

@@ -65,6 +65,7 @@ class AdvertisementManager(SingleDeleteManager):
 
 class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, RectangleModel):
     """ Annonce publicitaire """
+
     # Constantes
     NETWORKS = [['gg', "Google Adsense"], ['af', "AdFever"], ['na', _("Custom")], ['ot', pgettext_lazy('adnetwork', "Other")]]
     # Champs

@@ -143,11 +143,11 @@ class IPBlockManager(SingleDeleteManager):
         :type ips: list | tuple | set | IP | str | int
         :returns: les nouveaux blocages d'IP
         """
+        from scoop.user.access.models.ip import IP
         ips = make_iterable(ips)
         new_blocks = []
         for ip in ips:
             try:
-                from scoop.user.access.models.ip import IP
                 # Convertir en  une instance d'IP
                 if isinstance(ip, str):
                     ip = IP.objects.get_by_ip(ip)
@@ -164,7 +164,7 @@ class IPBlockManager(SingleDeleteManager):
                         block.save()
                     else:
                         new_blocks.append(block)
-            except:
+            except TypeError:
                 pass
             return new_blocks
 
@@ -183,7 +183,7 @@ class IPBlockManager(SingleDeleteManager):
                 self.create(type=1, ip1=IP.get_ip_value(ip1), ip2=IP.get_ip_value(ip2), harm=harm, category=category, description=description or "")
             else:
                 self.block_ips(ip1, harm=harm)
-        except:
+        except IPBlock.DoesNotExist:
             pass
 
     def block_user(self, user, harm=3, category=0, description=None):

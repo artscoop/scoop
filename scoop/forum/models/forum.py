@@ -54,6 +54,7 @@ class ForumManager(models.Manager):
 
     def is_circular(self, root=None):
         """ Renvoyer si la liste des forums possède un lien circulaire """
+
         # Fonction récursive qui renvoie la profondeur de l'arborescence
         def get_max_depth(self, level=0, root=None, limit=24):
             level = level + 1
@@ -70,6 +71,7 @@ class ForumManager(models.Manager):
 
 class Forum(IconModel, WeightedModel, DatetimeModel, AccessLevelModel):
     """ Forum """
+
     # Champs
     name = models.CharField(max_length=80, verbose_name=_("Name"))
     description = models.TextField(blank=True, verbose_name=_("Description"))

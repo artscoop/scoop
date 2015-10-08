@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import datetime
+from smtplib import SMTPException, SMTPResponseException
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -78,18 +79,23 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
         try:
             message.send()
             return True
-        except:
+        except (SMTPException, SMTPResponseException):
             return False
 
     def queue(self, recipient, typename, data=None, forced=False):
-        """ Mettre en file un événement mail """
+        """
+        Mettre en file un événement mail
+        :param recipient: utilisateur ou email
+        :param typename: type d'email enregistré (voir MailType)
+        """
         from scoop.messaging.models.mailtype import MailType
         # Convertir les éléments du dictionnaire passé en listes
         data = dict() if data is None else data
         mail_data = {item: make_iterable(data[item]) for item in data}
         # Créer ou récupérer un événement mail
         mail_type = MailType.objects.get(short_name__iexact=typename)
-        mail, created = self.get_or_create(sent=False, forced=forced, type=mail_type, recipient=recipient)
+        kwargs = {'sent_email': recipient} if isinstance(recipient, str) else {'recipient': recipient, 'sent_email': recipient.email}
+        mail, created = self.get_or_create(sent=False, forced=forced, type=mail_type, **kwargs)
         # Ajouter des données au mail en file
         for item in mail_data:
             mail.set_data(item, mail_data[item] if mail.get_data(item) is None else mail.get_data(item) + mail_data[item])
@@ -110,31 +116,34 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
         # Supprimer les mails sans utilisateur et non importants
         self.orphans().delete()
         # Récupérer la liste des membres à qui envoyer un mail
-        mail_users = self.filter(sent=False, discarded=False).values_list('recipient', flat=True).distinct()
-        users = get_user_model().objects.filter(id__in=mail_users)
+        email_addresses = self.filter(sent=False, discarded=False).values_list('sent_email', flat=True).distinct()
         # Total de mails envoyés à calculer
         mail_counter = 0
         mail_ceiling = getattr(settings, 'MESSAGING_MAX_BATCH', 30)
-        if users.count() > mail_ceiling * 8:
-            mail_ceiling = users.count() / 2
+        if len(email_addresses) > mail_ceiling * 8:
+            mail_ceiling = len(email_addresses) / 2
         # Traiter un groupe de mails pour chacun des utilisateurs
         mails_to_send = []
-        for user in users:
+        for email in email_addresses:
             # Ne traiter que si la configuration de l'utilisateur autorise
-            if (user.can_send_mail() and mail_counter < mail_ceiling) or forced or bypass_delay:
+            try:
+                user = get_user_model().objects.get(email=email)
+            except get_user_model().DoesNotExist:
+                user = None
+            if (user is None or user.can_send_mail()) and (mail_counter < mail_ceiling or forced or bypass_delay):
                 # Traiter les mails non marqués comme *forcés*
-                mails = self.filter(recipient=user, forced=forced, sent=False, discarded=False)
+                mails = self.filter(email_sent=email, forced=forced, sent=False, discarded=False)
                 # Envoyer chaque mail si son heure minimum d'envoi est atteinte
                 for mail in mails:
                     if mail.can_send() or bypass_delay:
                         parts = mail.render()
-                        mails_to_send.append([sender, user.email, one_line(parts['title']), parts['text'], parts['html']])
+                        mails_to_send.append([sender, email, one_line(parts['title']), parts['text'], parts['html']])
                         mail.sent = True
                         mail.sent_time = timezone.now()
-                        mail.sent_email = user.email
                         mail.save()
                         mail_counter += 1
-                user.reset_next_mail()
+                if user:
+                    user.reset_next_mail()
                 # Et supprimer l'utilisateur de la file
                 mails.update(sent=True)
         # L'envoi de mail peut durer longtemps. (timeout, NXDomain, etc.)
@@ -151,7 +160,7 @@ class MailEvent(UUID128Model, DataModel):
     # Champs
     type = models.ForeignKey('messaging.MailType', related_name='events', verbose_name=_("Mail type"))
     queued = models.DateTimeField(default=timezone.now, verbose_name=_("Queue time"))
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='mailevents_to', verbose_name=_("Recipient"))
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='mailevents_to', verbose_name=_("Recipient"))
     forced = models.BooleanField(default=False, db_index=True, verbose_name=_("Force sending"))
     sent = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('mailevent', "Sent"))
     sent_time = models.DateTimeField(null=True, default=None, verbose_name=_("Delivery time"))
