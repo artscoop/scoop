@@ -71,10 +71,10 @@ class CurrencyAdmin(admin.ModelAdmin):
 class TimezoneAdmin(ViewOnlyModelAdmin):
     """ Administration des fuseaux horaires """
     list_select_related = True
-    list_display = ['hash', 'name', 'get_utc_offset', 'get_dst_offset']
+    list_display = ['code', 'name', 'get_utc_offset', 'get_dst_offset']
     list_filter = []
     list_per_page = 25
-    search_fields = ['name']
+    search_fields = ['code']
     list_display_links = []
     readonly_fields = []
     exclude = []

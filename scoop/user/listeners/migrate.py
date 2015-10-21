@@ -39,7 +39,7 @@ def create_testuser(sender, app_config, verbosity, interactive, using, **kwargs)
                 default = get_user_model().objects.create_user('default', 'nobody@nowhere.xx', 'default')
                 Activation.objects.activate(None, default.username)
         # Créer les comptes supplémentaires demandés
-        with open(os.path.join(settings.STATIC_ROOT, "assets", "dictionnaire", "usernames.txt"), 'r') as f:
+        with open(os.path.join(settings.STATIC_ROOT, "assets", "dictionary", "usernames.txt"), 'r') as f:
             names = [slugify(str(name.strip())).replace('-', '_') for name in f.readlines() if name.strip()]
             shuffle(names)
             DEFAULT_USER_COUNT = min(len(names), DEFAULT_USER_COUNT)

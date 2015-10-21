@@ -136,8 +136,10 @@ class CityManager(models.Manager.from_queryset(CityQuerySet), models.Manager, Ci
 
 class City(CoordinatesModel, PicturableModel):
     """ Villes, communes, etc. """
+
     # Constantes
     LOOKUP_CACHE_TIMEOUT = 1800
+
     # Champs
     id = models.IntegerField(primary_key=True, null=False, verbose_name=_("Geonames ID"))
     city = models.BooleanField(default=False, db_index=True, verbose_name=_("City?"))
@@ -168,7 +170,7 @@ class City(CoordinatesModel, PicturableModel):
         criteria = {'city': True} if city_only else {}
         return City.objects.filter(parent=self, **criteria)
 
-    def get_siblings(self, *kwargs):
+    def get_siblings(self, **kwargs):
         """ Renvoyer les villes avec le même parent """
         return City.objects.filter(parent=self.parent, country=self.country, type=self.type, **kwargs).exclude(pk=self.pk)
 

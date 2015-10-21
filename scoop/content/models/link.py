@@ -42,10 +42,11 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
 
     # Constantes
     TYPES = ((0, _("Text")), (1, _("Icon")), (2, _("Icon and text")), (3, _("oEmbed")), (4, _("Flash")))
+
     # Champs
     group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_("Group"), help_text=_("Use the same name to group icons."))
     display = models.SmallIntegerField(choices=TYPES, default=0, db_index=True, help_text=_("Default display mode of this link"), verbose_name=_("Type"))
-    url = models.URLField(max_length=1024, unique=True, verbose_name=_("URL"))
+    url = models.URLField(max_length=255, unique=True, verbose_name=_("URL"))
     anchor = models.CharField(max_length=192, blank=True, verbose_name=_("Anchor"))
     title = models.CharField(max_length=128, blank=True, verbose_name=_("Title"))
     target = models.CharField(max_length=16, default="_self", blank=True, verbose_name=_("Target"))

@@ -10,7 +10,6 @@ from scoop.content.models.subscription import Subscription
 from scoop.content.util.signals import content_updated
 from scoop.messaging.util.signals import mailable_event
 
-
 __all__ = []
 
 logger = logging.getLogger(__name__)

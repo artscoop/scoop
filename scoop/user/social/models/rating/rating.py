@@ -4,9 +4,9 @@ from __future__ import absolute_import
 import random
 
 from django.conf import settings
-from django.contrib.contenttypes import generic
-from django.contrib.contenttypes.generic import GenericRelation
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import fields
+from django.contrib.contenttypes.fields import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.aggregates import Avg, Count, Sum
@@ -96,8 +96,10 @@ class RatingManager(SingleDeleteManager):
 
 class Rating(DatetimeModel):
     """ Note donnée par un utilisateur à un objet arbitraire """
+
     # Constantes
     AXIS_NAMES = [[0, _("General")]]
+
     # Champs
     axis = models.ForeignKey('social.Axis', blank=True, null=True, related_name='ratings', verbose_name=_("Axis"))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='ratings_given', verbose_name=_("Author"))
@@ -105,7 +107,7 @@ class Rating(DatetimeModel):
     limit = models.Q(name__in=['Content'])  # limitation des modèles cibles
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, db_index=True, verbose_name=_("Content type"), limit_choices_to=limit)
     object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = fields.GenericForeignKey('content_type', 'object_id')
     objects = RatingManager()
 
     # Overrides

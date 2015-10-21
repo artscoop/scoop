@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 from django.contrib.contenttypes import fields
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -34,7 +34,7 @@ class GenericModelMixin(object):
     def delete(self, *args, **kwargs):
         """ Supprimer l'objet de la base de données """
         self.content_object = None
-        super(GenericModel, self).delete(*args, **kwargs)  # Call the "real" save() method.
+        super().delete(*args, **kwargs)  # Call the "real" save() method.
 
 
 class GenericModel(models.Model, GenericModelMixin):

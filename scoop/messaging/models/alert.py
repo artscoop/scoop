@@ -74,9 +74,9 @@ class Alert(DatetimeModel, DataModel):
     level = models.SmallIntegerField(default=0, choices=ALERT_LEVELS, validators=[MinValueValidator(0), MaxValueValidator(2)], verbose_name=_("Level"))
     title = models.CharField(max_length=80, blank=False, verbose_name=_("Title"))
     text = models.TextField(blank=False, verbose_name=_("Text"))
-    items = models.CharField(max_length=128, default="", verbose_name=_("Items"))
+    items = models.CharField(max_length=128, default="", blank=True, verbose_name=_("Items"))
     read = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('alert', "Read"))
-    read_time = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('alert.time', "Read"))
+    read_time = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('alert.time', "Read"))
     objects = AlertManager()
 
     # Getter

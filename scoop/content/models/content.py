@@ -25,6 +25,7 @@ from ngram import NGram
 from translatable.exceptions import MissingTranslation
 from translatable.models import get_translation_model, TranslatableModel
 
+from approval.models.approval import ApprovalModel
 from scoop.content.util.signals import content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
@@ -103,7 +104,9 @@ class ContentQuerySetMixin(object):
         word = max(slug.split('-'), key=len)  # utiliser le mot le plus long pour filtrer
         contents = self.filter(slug__icontains=word, **({'category': category} if category is not None else {}))  # filtrer les contenus contenant le mot le plus long
         try:
-            closest = max([{'ratio': similarity, 'content': content} for content, similarity in zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if similarity > 7500], key=operator.itemgetter('ratio'))
+            closest = max(
+                [{'ratio': similarity, 'content': content} for content, similarity in zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if
+                 similarity > 7500], key=operator.itemgetter('ratio'))
             return closest['content']
         except:
             return None
@@ -496,6 +499,22 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         get_latest_by = 'updated'
         ordering = ['-edited']
         app_label = 'content'
+
+
+class ContentApproval(ApprovalModel(Content)):
+    """ Approval data for content """
+    approval_fields = ['body']
+
+    # Getter
+    def _get_users(self):
+        return self.source.get_authors()
+
+    # Métadonnées
+    class Meta:
+        db_table = 'approval_content_content'
+        app_label = 'content'
+        verbose_name = "{name} approval".format(name=Content._meta.verbose_name)
+        verbose_name_plural = "{name} approval".format(name=Content._meta.verbose_name_plural)
 
 
 class Category(TranslatableModel, IconModel, DataModel):

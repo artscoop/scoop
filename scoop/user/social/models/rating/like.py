@@ -2,8 +2,8 @@
 from __future__ import absolute_import
 
 from django.conf import settings
-from django.contrib.contenttypes import generic
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import fields
+from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -67,7 +67,7 @@ class Like(DatetimeModel):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='likees', verbose_name=_("Author"))
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=False, verbose_name=_("Content type"), limit_choices_to={'app_label__in': ['content']})
     object_id = models.PositiveIntegerField(null=True, blank=False, verbose_name=_("Object Id"))
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = fields.GenericForeignKey('content_type', 'object_id')
     objects = LikeManager()
 
     # Overrides
@@ -75,7 +75,7 @@ class Like(DatetimeModel):
         """ Supprimer l'objet de la base de données """
         self.content_type = None
         self.object_id = None
-        super(Like, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """

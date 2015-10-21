@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import floppyforms as forms_
-from annoying.decorators import autostrip
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -12,7 +11,6 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.user.util.signals import credentials_form_check_email, credentials_form_check_name, credentials_form_check_username
 
 
-@autostrip
 class RegistrationForm(forms_.ModelForm):
     """ Formulaire d'inscription """
     # Constantes
@@ -106,7 +104,6 @@ class EULAForm(forms_.Form):
                                label=_("EULA"))
 
 
-@autostrip
 class RegistrationEULAForm(RegistrationForm):
     """ Formulaire d'inscription avec CGU à valider """
     eula = forms_.BooleanField(required=True,
@@ -114,7 +111,6 @@ class RegistrationEULAForm(RegistrationForm):
                                label=_("EULA"))
 
 
-@autostrip
 class AccountForm(RegistrationForm):
     """ Formulaire de modification du mot de passe du compte """
     original = forms.CharField(widget=forms.PasswordInput(), label=_("Original"))

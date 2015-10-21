@@ -12,8 +12,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.birth import BirthManager, BirthModel
@@ -24,6 +24,7 @@ from scoop.core.util.data.dateutil import is_new
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
+from scoop.location.models import City
 
 
 logger = logging.getLogger(__name__)
@@ -201,7 +202,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
 
     def verify(self):
         """ Marquer le profil comme étant vérifié """
-        if not self.harmful is False:
+        if self.harmful is not False:
             self.harmful = False
             self.save()
             return True

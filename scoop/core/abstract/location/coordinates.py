@@ -24,7 +24,7 @@ class CoordinatesModel(models.Model):
     GEODETIC_MODEL = pyproj.Geod(ellps="WGS84")
     SRID = 4326
     # Position géographique du centre de l'objet
-    position = models.PointField(default=Point(0.0, 0.0, srid=SRID))
+    position = models.PointField(default=Point(0.0, 0.0), srid=SRID)
 
     # Setter
     def set_coordinates(self, lat, lon):

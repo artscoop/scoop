@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.models import UserManager as DefaultManager
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
@@ -194,7 +194,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', "Deleted"))
     is_staff = models.BooleanField(default=False, help_text=_("Designates whether the user can log into this admin site."), verbose_name=pgettext_lazy('user', "Staff"))
     date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_("Date joined"))
-    last_online = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))
+    last_online = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))
     next_mail = models.DateTimeField(default=timezone.now, editable=False, verbose_name=_("Next possible mail for user"))
     objects = UserManager()
 

@@ -14,6 +14,7 @@ from scoop.core.util.shortcuts import addattr
 class Timezone(models.Model):
     """ Fuseau horaire """
 
+    # Champs
     name = models.CharField(max_length=80, blank=False, unique=True, verbose_name=_("Name"))
     code = models.BigIntegerField(primary_key=True, editable=True, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
 

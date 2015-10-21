@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 from django.apps.registry import apps
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _

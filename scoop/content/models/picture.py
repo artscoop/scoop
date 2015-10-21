@@ -51,6 +51,7 @@ logger = logging.getLogger(__name__)
 
 class PictureQuerySetMixin(object):
     """ Mixin de Queryset et de Manager des images """
+
     # Constantes
     TOTAL_SIZE_CACHE_KEY = 'content.picture.total_size'
 
@@ -269,7 +270,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     @addattr(short_description=_("Extension"))
     def get_extension(self):
-        """ Renvoyer le suffixe du fichier avec le point """
+        """
+        Renvoyer le suffixe du fichier avec le point
+        :returns: ex. ".jpg"
+        """
         if self.exists():
             return os.path.splitext(self.image.path)[1].lower()
         return None
@@ -439,11 +443,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def set_correct_extension(self):
         """ Renommer le fichier s'il possède la mauvaise extension """
         if self.exists():
-            extensions4, extensions5 = {'.jpe', '.jpg', '.gif', '.png', '.tga', '.tif', '.bmp'}, {'.jpeg', '.tiff'}
-            if self.image.path[-4:] not in extensions4 and self.image.path[-5:] not in extensions5:
+            extensions = {'.jpe', '.jpg', '.gif', '.png', '.tga', '.tif', '.bmp', '.jpeg', '.tiff'}
+            if self.get_extension() not in extensions:
                 path = self.image.path
                 filename = os.path.basename(self.image.path)
-                new_name = check_file_extension(filename, path, extensions4 | extensions5)
+                new_name = check_file_extension(filename, path, extensions)
                 if new_name is not None:
                     new_path = os.path.join(os.path.dirname(path), new_name)
                     os.rename(path, new_path)
@@ -451,7 +455,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                     super(Picture, self).save()
                     logger.info("Picture extension set: {}".format(new_name))
                     # Si après traitement, ce n'est toujours pas une image, supprimer
-                    if self.image.path[-4:] not in extensions4 and self.image.path[-5:] not in extensions5:
+                    if self.get_extension() not in extensions:
                         self.delete(clear=True)
                         logger.warn("Could not find a correct extension for {}, deleted".format(self.image.path))
                 else:
@@ -463,10 +467,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             self.transient = False
             self.save(update_fields=['transient'])
 
-    def paste(self, path, absolute=False, position='center center', offset=None):
+    def paste(self, source_path, absolute=False, position='center center', offset=None):
         """
         Coller une autre image locale via son chemin sur cette image
-        :param path: chemin local du fichier, sans protocole
+        :param source_path: chemin local du fichier source, sans protocole
         :param absolute: si False, path est relatif à STATIC_ROOT
         :param position: texte de positionnement, "[left|right|center] [top|bottom|center]"
         :param offset: tuple d'offset en pixels depuis le positionnement texte
@@ -475,8 +479,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         hpos, vpos = position.split(" ")
         current = Image.open(self.image.path, 'r')
         if absolute is False:
-            path = join(settings.STATIC_ROOT, path)
-        overlay = Image.open(path, 'r')
+            source_path = join(settings.STATIC_ROOT, source_path)
+        overlay = Image.open(source_path, 'r')
         offset = offset or (0, 0)
         xposition = {'left': 0 + offset[0], 'center': (current.size[0] - overlay.size[0]) / 2 + offset[0], 'right': current.size[0] - overlay.size[0] + offset[0]}
         yposition = {'top': 0 + offset[1], 'center': (current.size[1] - overlay.size[1]) / 2 + offset[1], 'bottom': current.size[1] - overlay.size[1] + offset[1]}

@@ -39,8 +39,10 @@ class ScoreManager(SingleDeleteManager):
 
 class Score(DatetimeModel):
     """ Score utilisateur """
+
     # Constantes
     SCORE_AXIS = [(0, _("General"))]
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='score_given', verbose_name=_("Author"))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='score_received', verbose_name=_("User"))

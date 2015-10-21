@@ -1,7 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from annoying.decorators import autostrip
 from django import forms
 from django.template.defaultfilters import striptags
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.content.models.comment import Comment
 
 
-@autostrip
 class CommentForm(forms.ModelForm):
     """ Formulaire de commentaires """
     # Constantes
@@ -46,7 +44,6 @@ class CommentForm(forms.ModelForm):
         pass
 
 
-@autostrip
 class CommentAdminForm(forms.ModelForm):
     """ Formulaire admin de commentaires """
 

@@ -8,6 +8,6 @@ from scoop.content.models.picture import Picture
 
 class PictureSerializer(serializers.ModelSerializer):
     """ Serializer for pictures """
-    # Métadonnées
+
     class Meta:
         model = Picture

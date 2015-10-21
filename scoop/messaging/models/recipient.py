@@ -102,7 +102,7 @@ class Recipient(DatetimeModel, DataModel):
     thread = models.ForeignKey("messaging.Thread", null=False, related_name='recipients', on_delete=models.CASCADE, verbose_name=_("Thread"))
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('recipient', "Is active"))
     unread = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('thread', "Unread"))
-    unread_date = models.DateTimeField(null=True, default=None, verbose_name=_("Unread time"))
+    unread_date = models.DateTimeField(blank=True, null=True, default=None, verbose_name=_("Unread time"))
     counter = models.PositiveSmallIntegerField(default=0, verbose_name=_("Message count"))
     acknowledged = models.BooleanField(default=False, verbose_name=pgettext_lazy('thread', "Acknowledged"))  # Le destinataire a-t-il vu au moins une fois le sujet
     objects = RecipientManager()

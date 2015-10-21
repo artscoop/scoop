@@ -6,7 +6,7 @@ from os.path import join
 
 from django.conf import settings
 from django.contrib.contenttypes import fields
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible

@@ -32,6 +32,7 @@ class CurrencyManager(SingleDeleteManager):
 
 class Currency(models.Model):
     """ Devise """
+
     # Champs
     name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
     short_name = models.CharField(max_length=6, blank=False, unique=True, verbose_name=_("3 letter name"))

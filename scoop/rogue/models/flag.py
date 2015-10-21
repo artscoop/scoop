@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes import fields
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import truncatechars

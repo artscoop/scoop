@@ -8,7 +8,7 @@ from inspect import isclass
 from random import choice, randrange
 from time import sleep
 
-from django.db import models
+from django.db import models, transaction
 from django.db.models.base import ModelBase
 from django.db.transaction import atomic
 
@@ -106,18 +106,18 @@ def search_query(expression, fields, queryset=None):
     On passe une expression avec un ou plusieurs mots
     et une liste de champs texte dans lesquels rechercher.
     La fonction renvoie les paramètres de QuerySet utiles à la recherche.
-    Chaque mot de l'expression peut être agrémenté de ! et = en préfixe, afin de
-    modifier la requête. Le caractère ! peut aussi se placer en suffixe.
+    Chaque mot de l'expression peut être agrémenté de ^ et = en préfixe, afin de
+    modifier la requête. Le caractère $ peut aussi se placer en suffixe.
     """
     tokens = expression.split()
     query_groups = []
     for token in tokens:
         query_list = []
-        # Variantes de recherche : ^ et $
-        if token.startswith('!'):
+        # Variantes de recherche
+        if token.startswith('^'):
             matching = 'istartswith'
             token = token[1:]
-        elif token.endswith('!'):
+        elif token.endswith('$'):
             matching = 'iendswith'
             token = token[:-1]
         elif token.startswith('='):
@@ -139,7 +139,7 @@ def search_query(expression, fields, queryset=None):
         return queryset
 
 
-def shuffle_model(self, fields=None):
+def shuffle_model(self, fields=None, m2m_max=4):
     """ Randomizer les données du modèle, notamment les clés étrangères et clés M2M """
     fields = fields or [self._meta.get_field_by_name(field) for field in set(self._meta.get_all_field_names())]
     for field in fields:
@@ -155,7 +155,7 @@ def shuffle_model(self, fields=None):
             if queryset.exists():
                 attribute = getattr(self, field.name)
                 attribute.clear()
-                for i in range(min(randrange(1, 4), queryset.count())):
+                for i in range(min(randrange(1, m2m_max + 1), queryset.count())):
                     attribute.add(queryset[i])
         elif getattr(field, 'choices', None) is not None:
             choices = list(field.choices)
@@ -184,6 +184,7 @@ def make_lazy_picklable(*args):
 class SingleDeleteQuerySetMixin(object):
     """ Mixin de queryset implémentant la suppression individuelle des instances du queryset """
 
+    @transaction.atomic()
     def delete(self):
         """
         Supprimer indépendamment chaque objet du queryset

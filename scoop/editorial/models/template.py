@@ -3,8 +3,9 @@ from __future__ import absolute_import
 
 from django.db import models
 from django.http import HttpRequest
-from django.template.base import TemplateDoesNotExist, TextNode
+from django.template.base import TextNode
 from django.template.context import RequestContext
+from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode, ExtendsNode
 from django.utils.encoding import python_2_unicode_compatible

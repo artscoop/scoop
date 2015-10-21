@@ -5,7 +5,6 @@ from datetime import datetime
 
 import floppyforms.__future__ as forms_
 from ajax_select.fields import AutoCompleteSelectWidget
-from annoying.decorators import autostrip
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -19,9 +18,9 @@ from scoop.core.util.model.widgets import SelectDateWidget, SimpleCheckboxSelect
 from scoop.user.models.profile import BaseProfile
 
 
-@autostrip
-class ProfileForm(forms_.ModelForm):
+class ProfileForm(forms.ModelForm):
     """ Formulaire d'édition de profil """
+
     # Constantes
     MINIMUM_AGE = getattr(settings, 'USER_REGISTRATION_MINIMUM_AGE', 18)
 
@@ -43,30 +42,10 @@ class ProfileForm(forms_.ModelForm):
     # Métadonnées
     class Meta:
         model = BaseProfile
-        widgets = {'birth': SelectDateWidget(years=range(1940, datetime.now().year + 1 - getattr(settings, 'USER_REGISTRATION_MINIMUM_AGE', 18))),
-                   'city': AutoCompleteSelectWidget('citypm', attrs={'class': "control", 'placeholder': _("Enter your postcode or city name")})
-                   }
-        fields = ('gender', 'birth', 'city')
-
-
-@autostrip
-class ProfileAdminForm(forms.ModelForm):
-    """ Formulaire admin d'édition de profil """
-
-    # Métadonnées
-    class Meta:
-        model = BaseProfile
-        exclude = []
-
-
-@autostrip
-class ProfileInlineAdminForm(forms.ModelForm):
-    """ Formulaire admin inline d'édition de profil """
-
-    # Métadonnées
-    class Meta:
-        model = BaseProfile
-        exclude = ['updated', 'user', 'data']
+        #widgets = {'birth': SelectDateWidget(years=range(1940, datetime.now().year + 1 - getattr(settings, 'USER_REGISTRATION_MINIMUM_AGE', 18))),
+        #           'city': AutoCompleteSelectWidget('citypm', attrs={'class': "control", 'placeholder': _("Enter your postcode or city name")})
+        #           }
+        fields = ('gender', 'birth') #, 'city')
 
 
 class ProfilePictureForm(forms_.ModelForm):

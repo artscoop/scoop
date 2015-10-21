@@ -87,7 +87,7 @@ def open_zip_file(path, filename):
 
 def clean_orphans(output_log=True, delete=False):
     """ Supprimer les fichiers orphelins du répertoire MEDIA """
-    from django.contrib.contenttypes.models import ContentType
+    from django.contrib.contenttypes.fields import ContentType
     # Configuration
     dirs = settings.ORPHAN_CHECK_DIRS
     apps = settings.ORPHAN_CHECK_APPS

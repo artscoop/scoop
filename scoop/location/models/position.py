@@ -5,6 +5,7 @@ import datetime
 
 from django.conf import settings
 from django.contrib.gis.db.models.manager import GeoManager
+from django.contrib.gis.geos.point import Point
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -32,7 +33,7 @@ class PositionManager(SingleDeleteManager, GeoManager):
     def set_position(self, user, lat=0.0, lon=0.0):
         """ Définir la position d'un utilisateur """
         position, _ = self.get_or_create(user=user)
-        position.update(**{'latitude': lat, 'longitude': lon, 'time': position.now()})
+        position.update(time=position.now(), position=Point(x=lon, y=lat))
         position.save()
 
     # Maintenance
@@ -44,6 +45,8 @@ class PositionManager(SingleDeleteManager, GeoManager):
 
 class Position(CoordinatesModel, DatetimeModel):
     """ Position utilisateur """
+
+    # Champs
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("User"))
     objects = PositionManager()
 
@@ -55,7 +58,7 @@ class Position(CoordinatesModel, DatetimeModel):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return "%(user)s @ %(gps)s" % {'user': self.user, 'gps': self.get_formatted_coordinates()}
+        return "{user} @ {gps}".format(user=self.user, gps=self.get_formatted_coordinates())
 
     # Métadonnées
     class Meta:
