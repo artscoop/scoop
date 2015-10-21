@@ -6,6 +6,6 @@ from .animation import Animation
 from .attachment import Attachment
 from .classification import Tag
 from .comment import Comment, CommentableModel
-from .content import Content, Category, CategoryTranslation
+from .content import Content, Category, CategoryTranslation, ContentApproval
 from .link import Link
 from .picture import Picture

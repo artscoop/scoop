@@ -1,42 +1,88 @@
 {% load i18n %}
 <html moznomarginboxes mozdisallowselectionprint>
-	<head>
-		<style>
-			body {font-family:Ubuntu; font-size:8pt;}
-			table {font-size:8pt;}
-			h2 {display:inline-block; white-space:nowrap; font-size:1.5em; margin:0 1em 0 0; font-family:"Open Sans"; font-weight:300;}
-			.items {display:inline-block; position:absolute; left:10em;}
-			.item {margin-right:1em; margin-bottom:4px; border-radius:4px; background-color:#e8e8e8; padding:3px 6px; display:inline-block;}
-			.code {font-weight:bold; margin-right:1em;}
-			table {border-collapse: collapse;}
-			table td {vertical-align:baseline;}
-			table tr {padding:0;}
-			table tr td {border-bottom:#ddd 1px solid;}
-			table tr:nth-child(2n) {background-color:#f5f5f5;}
-		</style>
-	</head>
-	<body>
-		<h1>{% trans "Options cheat sheet" %}</h1>
-		<table>
-		{% for group in groups %}
-			{% if group.get_options.exists %}
-			<tr>
-				<td><h2 title="{{group}}">{{group|truncatechars:16}}</h2></td>
-				<td>
-					{% for option in group.get_options %}
-					<span class="item">
+<head>
+    <style>
+        body {
+            font-family: Ubuntu;
+            font-size: 8pt;
+        }
+
+        table {
+            font-size: 8pt;
+        }
+
+        h2 {
+            display: inline-block;
+            white-space: nowrap;
+            font-size: 1.5em;
+            margin: 0 1em 0 0;
+            font-family: "Open Sans";
+            font-weight: 300;
+        }
+
+        .items {
+            display: inline-block;
+            position: absolute;
+            left: 10em;
+        }
+
+        .item {
+            margin-right: 1em;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            background-color: #e8e8e8;
+            padding: 3px 6px;
+            display: inline-block;
+        }
+
+        .code {
+            font-weight: bold;
+            margin-right: 1em;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table td {
+            vertical-align: baseline;
+        }
+
+        table tr {
+            padding: 0;
+        }
+
+        table tr td {
+            border-bottom: #ddd 1px solid;
+        }
+
+        table tr:nth-child(2n) {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+<h1>{% trans "Options cheat sheet" %}</h1>
+<table>
+    {% for group in groups %}
+        {% if group.get_options.exists %}
+            <tr>
+                <td><h2 title="{{ group }}">{{ group|truncatechars:16 }}</h2></td>
+                <td>
+                    {% for option in group.get_options %}
+                        <span class="item">
 						<span class="code">
-							{{option.code}}
+							{{ option.code }}
 						</span>
 						<span class="description">
-							{{option.get_name}}
+							{{ option.get_name }}
 						</span>
 					</span>
-					{% endfor %}
-				</td>
-			</tr>
-			{% endif %}
-		{% endfor %}
-		</table>
-	</body>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>
+</body>
 </html>

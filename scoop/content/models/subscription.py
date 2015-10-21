@@ -2,17 +2,18 @@
 from __future__ import absolute_import
 
 from django.contrib.contenttypes.apps import ContentTypesConfig
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.db.utils import IntegrityError
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 
 from scoop.content.models.content import Content
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import from_now
+from scoop.core.util.shortcuts import addattr
 from scoop.messaging.util.signals import mailable_event
 
 
@@ -67,25 +68,38 @@ class SubscriptionManager(models.Manager):
             return True
         return False
 
+    def unsubscribe(self, email, *items):
+        """ Se désabonner de 1 ou plusieurs contenus """
+        updated_rows = 0
+        for item in items:
+            updated_rows += self.for_content(item).filter(email__iexact=email, confirmed=True).update(confirmed=False)
+        return updated_rows > 0
+
     def purge(self):
         """ Supprimer les abonnement non-validés dans les 6 dernières heures """
         self.filter(time__gt=from_now(hours=-6, timestamp=True)).delete()
+
 
 class Subscription(GenericModel, DatetimeModel, UUID64Model):
     """ Abonnement """
 
     # Champs
     email = models.EmailField(max_length=96, verbose_name=_("Email"))
-    confirmed = models.BooleanField(default=False, verbose_name=pgettext_lazy('subscription', "Confirmed"))
+    confirmed = models.BooleanField(default=False, verbose_name=pgettext_lazy('content.subscription', "Confirmed"))
     objects = SubscriptionManager()
+
+    # Getter
+    @addattr(short_description=pgettext_lazy('content.subscription', "Confirmed"))
+    def is_confirmed(self):
+        """ Renvoyer si l'abonnement est confirmé """
+        return self.confirmed
 
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
         super().save(*args, **kwargs)
 
-        # Métadonnées
-
+    # Métadonnées
     class Meta:
         verbose_name = _("content subscription")
         verbose_name_plural = _("content subscriptions")

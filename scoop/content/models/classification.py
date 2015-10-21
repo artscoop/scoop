@@ -17,11 +17,16 @@ __all__ = ['Tag']
 
 class TagManager(models.Manager):
     """ Manager des étiquettes de contenu """
-    pass
+
+    # Getter
+    def in_group(self, name):
+        """ Renvoyer les tags appartenant à un groupe """
+        return self.filter(group__iexact=name)
 
 
 class Tag(IconModel, PicturableModel):
     """ Étiquette de contenu """
+
     # Champs
     group = models.CharField(max_length=16, blank=True, verbose_name=_("Group"))
     category = models.ForeignKey('content.Category', null=True, help_text=_("Category if this tag is specific to one"), verbose_name=_("Category"))

@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from django import template
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.utils.translation import ugettext_lazy as _
 
@@ -74,7 +74,7 @@ def show_online_count(name="show_online_count"):
     return User.get_online_count()
 
 
-@register.inclusion_tag(file_name='user/display/user/templatetag/online-status.html', name='online_status')
+@register.inclusion_tag('user/display/user/templatetag/online-status.html', name='online_status')
 def online_status(user, mode="text"):
     """ Afficher le statut en ligne d'un utilisateur """
     return {'user': user, 'mode': mode}

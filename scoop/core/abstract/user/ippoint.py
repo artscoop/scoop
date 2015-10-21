@@ -45,7 +45,7 @@ class IPPointModel(models.Model):
 class IPPointableModel(models.Model):
     """ Mixin de modèle pouvant pointer vers une IP """
     # Champs
-    ip = models.ForeignKey('access.IP', db_index=True, null=True, on_delete=models.SET_NULL, verbose_name=_("IP"))
+    ip = models.ForeignKey('access.IP', db_index=True, blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_("IP"))
 
     # Getter
     def get_ip(self):

@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import datetime
 
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils import timezone
@@ -78,6 +78,7 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
 
 class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UUID64Model, ModeratedModel):
     """ Commentaire """
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="comments_made", verbose_name=_("Author"))
     name = models.CharField(max_length=24, verbose_name=_("Name"))
@@ -85,7 +86,7 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
     url = models.URLField(max_length=100, blank=True, verbose_name=_("URL"))
     email = models.EmailField(max_length=64, blank=True, verbose_name=_("Email"))
     spam = models.NullBooleanField(default=None, db_index=True, verbose_name=_("Spam"))
-    updated = models.DateTimeField(default=None, null=True, db_index=True, verbose_name=pgettext_lazy('comment', "Updated"))
+    updated = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('comment', "Updated"))
     updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+", verbose_name=_("Updater"))
     visible = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('comment', "Visible"))
     removed = models.BooleanField(default=False, help_text=_("When visible, mark as removed"), verbose_name=pgettext_lazy('comment', "Removed"))
@@ -104,7 +105,7 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
     def get_name(self):
         """ Renvoyer le nom de l'auteur ou du commentaire """
         if self.author is not None:
-            return self.author.username
+            return self.author.get_short_name()
         return self.name if self.name != "" else _("Anonymous")
 
     def get_teaser(self, words=6):

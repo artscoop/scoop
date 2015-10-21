@@ -46,3 +46,6 @@ class ContentTest(TestCase):
         self.assertEqual(Content.objects.visible().count(), 2, "there should be exactly 2 visible contents")
         self.assertTrue(self.content1.is_author(self.user), "cannot find expected author in content1")
         self.assertTrue(self.content1.is_new(), "this new content should be considered new")
+        # Tester le statut du contenu
+        self.assertGreater(len(self.content1.html), 10, "the html display for the content should be populated")
+        self.assertTrue(self.content1.is_editable(self.user), "the content should be editable by user")

@@ -1,7 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from annoying.decorators import autostrip
 from django import forms
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
@@ -10,7 +9,6 @@ from scoop.core.forms.search import BaseSearchForm
 from scoop.user.models.user import User
 
 
-@autostrip
 class UserAdminForm(forms.ModelForm):
     """ Formulaire admin des utilisateur """
 
@@ -24,7 +22,6 @@ class UserAdminForm(forms.ModelForm):
         exclude = []
 
 
-@autostrip
 class PasswordForm(forms.Form):
     """ Formulaire de mise à jour du mot de passe """
     original = forms.CharField(required=True)

@@ -22,7 +22,6 @@ class CommentTest(TestCase):
         """ Définir l'environnement de test """
         self.engine = import_module(settings.SESSION_ENGINE)
         self.session = self.engine.SessionStore()
-        print(Model.update)
         self.user = User.objects.create(username='commentuser', email='foo@foobar1.foo')
         self.user.set_password('commentuser')
         self.user.save()
@@ -47,3 +46,7 @@ class CommentTest(TestCase):
         self.assertIsNotNone(self.comment6, "this comment should be created")
         self.assertIsNone(self.comment5, "this comment should be none")
         self.assertIsNone(self.comment7, "this comment should be none")
+
+    def test_comment_status(self):
+        """ Test properties of comments """
+        self.assertEqual(self.comment1.get_name(), self.user.get_short_name(), "comment's name should be {0}, is {1} instead".format(self.user.get_short_name(), self.comment1.get_name()))

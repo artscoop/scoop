@@ -65,7 +65,7 @@ class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataMod
     title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
     description = models.TextField(blank=False, verbose_name=_("Description"))
     categories = models.ManyToManyField('social.EventCategory', related_name='events', verbose_name=_("Categories"))
-    address = models.ForeignKey('scoop.location.Venue', null=True, blank=True, related_name='events', verbose_name=_("Address"))
+    address = models.ForeignKey('location.Venue', null=True, blank=True, related_name='events', verbose_name=_("Address"))
     capacity = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_("Max attendants"))
 
     # Getter
@@ -102,7 +102,7 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     title = models.CharField(max_length=128, blank=True, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     date = models.DateTimeField(null=False, verbose_name=_("Date"))
-    address = models.ForeignKey('scoop.location.Venue', null=True, blank=True, related_name='event_occurrences', verbose_name=_("Address"))
+    address = models.ForeignKey('location.Venue', null=True, blank=True, related_name='event_occurrences', verbose_name=_("Address"))
     capacity = models.IntegerField(default=DEFAULT_CAPACITY, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_("Max attendants"))
     objects = OccurrenceManager()
 
@@ -172,7 +172,7 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
         """ Enregistrer l'objet dans la base de données """
         if self.end is None or self.end < self.start + timezone.timedelta(hours=1):
             self.end = self.start + timezone.timedelta(hours=1)
-        super(Event, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     # Métadonnées
     class Meta:

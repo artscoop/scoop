@@ -32,4 +32,6 @@ def OptionField(name, verbose_name, null=None, blank=None, default=None, on_dele
         return models.ForeignKey('core.Option', **attributes)
     else:
         attributes.pop('null')
+        attributes['blank'] = True
+        attributes['default'] = []
         return models.ManyToManyField('core.Option', **attributes)

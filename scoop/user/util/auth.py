@@ -4,10 +4,10 @@ from __future__ import absolute_import
 import logging
 from functools import wraps
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-from django.db.models.loading import get_model
+from django.contrib.contenttypes.fields import ContentType
 from django.http.response import Http404
 from django.utils.translation import ugettext_lazy as _
 
@@ -100,5 +100,5 @@ def get_profile_model():
     profile_string = getattr(settings, 'AUTH_PROFILE_MODULE', None)
     if profile_string:
         app_label, model_label = profile_string.split('.')
-        model = get_model(app_label, model_label)
+        model = apps.get_model(app_label, model_label)
     return model

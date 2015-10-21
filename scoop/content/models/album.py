@@ -50,6 +50,7 @@ class AlbumManager(SingleDeleteManager):
 
 class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UUID64Model, WeightedModel):
     """ Album d'images """
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="albums", on_delete=models.SET_NULL, verbose_name=_("Author"))
     name = models.CharField(max_length=96, blank=False, verbose_name=_("Name"))

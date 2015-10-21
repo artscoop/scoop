@@ -65,9 +65,11 @@ class CountryManager(models.Manager.from_queryset(CountryQuerySet), models.Manag
 
 class Country(CoordinatesModel, PicturableModel, DataModel):
     """ Pays """
+
     # Constantes
     CONTINENTS = [['AF', _("Africa")], ['AS', _("Asia")], ['EU', _("Europe")], ['NA', _("North America")], ['OC', _("Oceania")], ['SA', _("South America")], ['AN', _("Antarctica")]]
     DATA_KEYS = ['neighbours']
+
     # Champs
     name = models.CharField(max_length=100, blank=False, verbose_name=_("Name"))
     code2 = models.CharField(max_length=2, unique=True, db_index=True, verbose_name=_("ISO Code"))
@@ -164,6 +166,7 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
 
 class CountryName(models.Model):
     """ Noms alternatifs de pays """
+
     # Champs
     id = models.IntegerField(primary_key=True, verbose_name=_("Alternate ID"))
     country = models.ForeignKey('location.Country', null=False, on_delete=models.CASCADE, related_name='alternates', verbose_name=_("Country"))

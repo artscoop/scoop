@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import floppyforms as forms_
-from annoying.decorators import autostrip
 from django import forms
 from django.template.defaultfilters import striptags
 from django.utils.translation import ugettext_lazy as _
@@ -13,7 +12,6 @@ from scoop.content.util.tinymce import TINYMCE_CONFIG_CONTENT
 from scoop.core.forms.search import BaseSearchForm
 
 
-@autostrip
 class ContentForm(forms_.ModelForm):
     """ Formulaire de contenu """
     # Constantes
@@ -44,7 +42,6 @@ class ContentForm(forms_.ModelForm):
         fields = ['category', 'title', 'body', 'published', 'commentable', 'access']
 
 
-@autostrip
 class ContentAdminForm(forms.ModelForm):
     """ Formulaire admin de contenu """
 
@@ -59,7 +56,6 @@ class ContentAdminForm(forms.ModelForm):
         exclude = []
 
 
-@autostrip
 class QuickContentForm(forms.ModelForm):
     """ Formulaire d'édition rapide de contenu """
 

@@ -29,6 +29,8 @@ class VenueManager(SingleDeleteManager, GeoManager):
 
 class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
     """ Lieu précis avec un nom """
+
+    # Champs
     type = models.ForeignKey('location.VenueType', null=True, verbose_name=_("Venue type"))
     name = models.CharField(max_length=64, db_index=True, verbose_name=_("Name"))
     street = models.CharField(max_length=80, db_index=True, help_text=_("Way number, type and name"), verbose_name=_("Way"))

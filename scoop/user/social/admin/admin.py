@@ -22,7 +22,7 @@ from scoop.user.social.models.rating.like import Like
 class FriendListAdmin(AjaxSelectAdmin):
     """ Admin des listes d'amis """
     list_select_related = True
-    list_display = ['id', 'get_ids']
+    list_display = ['pk', 'get_friend_ids']
     list_filter = []
     list_editable = []
     readonly_fields = []
@@ -51,12 +51,10 @@ class GroupAdmin(admin.ModelAdmin):
 class EventAdmin(AjaxSelectAdmin):
     """ Admin des événements """
     list_select_related = True
-    list_display = ['address', 'start', 'expires', 'capacity']
-    list_filter = ['start', 'categories', 'status']
+    list_display = ['author', 'title', 'description']
+    list_filter = ['access']
     list_editable = []
-    fields = ['author', 'address', 'start', 'expires', 'capacity', 'description']
     readonly_fields = ['author']
-    form = make_ajax_form(Event, {'address': 'venue'})
 
 
 class EventCategoryInlineAdmin(admin.TabularInline):

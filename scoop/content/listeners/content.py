@@ -24,9 +24,8 @@ def auto_manage_content(sender, instance, raw, using, update_fields, **kwargs):
     """ Traiter un contenu avant qu'il ne soit sauvegardé """
     instance.body = truncate_stuckkey(instance.body, 3)
     instance.body = truncate_longwords_html(instance.body)
-    instance._populate_html()
-    instance._populate_html()
     instance.clean_body()
+    instance._populate_html()
     instance.is_published()
     populate_similar.delay(instance)
     return None

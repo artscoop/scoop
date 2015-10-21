@@ -9,11 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 
 from scoop.core.abstract.core.datetime import DatetimeModel
+from scoop.core.util.data.dateutil import from_now
 
 
-def get_default_expiry(self):
+def get_default_expiry(self=None):
     """ Renvoyer la date d'expiration par défaut """
-    return self.make_expiry(days=2, timestamp=False)
+    return from_now(days=2, timestamp=False)
 
 
 class SanctionManager(models.Manager):

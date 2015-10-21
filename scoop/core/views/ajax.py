@@ -28,11 +28,8 @@ def validate_form(request, *args, **kwargs):
         Forms = kwargs['form_classes']
     elif kwargs.get('alias', False):
         alias, aliases = kwargs.get('alias'), getattr(settings, 'FORM_ALIASES', dict())
-        form_names = aliases.get(alias)
-        if isinstance(form_names, (list, tuple)):
-            Forms = [import_fullname(form_name) for form_name in form_names if '.' in form_name]
-        else:
-            Forms = [import_fullname(form_names)]
+        form_names = make_iterable(aliases.get(alias))
+        Forms = [import_fullname(form_name) for form_name in form_names if '.' in form_name]
     else:
         return HttpResponseBadRequest("You need to send a form or a form alias")
     output = {'valid': True, '_all_': []}

@@ -10,9 +10,10 @@ from django.template.defaultfilters import date as datefilter
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from scoop.content.admin.inline import CategoryTranslationInlineAdmin, PictureInlineAdmin
 from scoop.content.forms.content import ContentAdminForm
-from scoop.content.models.content import Category, Content
+from scoop.content.models.content import Category, Content, ContentApproval
 from scoop.content.models.picture import Picture
 from scoop.content.util.admin import PicturedModelAdmin
 from scoop.core.templatetags.html_tags import list_enumerate
@@ -22,7 +23,7 @@ from scoop.core.util.shortcuts import addattr
 __all__ = ['ContentAdminModelAdmin', 'CategoryAdmin']
 
 
-class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin):
+class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmin):
     """ Administration des contenus """
 
     list_display = ['id', 'get_uuid_html', 'title', 'get_authors', 'get_created', 'is_published', 'featured', 'sticky', 'get_comment_count_admin', 'category', 'access', 'get_image', 'has_picture', 'get_picture_set']
@@ -155,4 +156,5 @@ class CategoryAdmin(admin.ModelAdmin):
 
 # Enregistrer les classes d'administration
 admin.site.register(Content, ContentAdminModelAdmin)
+admin.site.register(ContentApproval, ApprovalAdmin)
 admin.site.register(Category, CategoryAdmin)

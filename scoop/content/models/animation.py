@@ -28,6 +28,7 @@ from scoop.core.util.shortcuts import addattr
 
 class AnimationManager(SingleDeleteManager):
     """ Manager des animations """
+
     # Constantes
     CODECS = {'mp4': 'h264', 'webm': 'libvpx', 'ogg': 'libtheora'}
 

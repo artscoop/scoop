@@ -6,6 +6,7 @@ from random import choice
 from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -26,6 +27,11 @@ class FriendListManager(SingleDeleteManager):
         """ Renvoyer si deux utilisateurs sont amis """
         return recipient == sender or sender.pk in self.get_friend_ids(recipient)
 
+    def by_user(self, user):
+        """ Renvoyer l'objet liste d'amis d'un utilisateur """
+        return self.get(user=user)
+
+    # Setter
     def add_pending(self, user, user_from, when=None):
         """ Ajouter une demande vers un utilisateur """
         return user.friends.add_sent(user, when=when)
@@ -34,16 +40,14 @@ class FriendListManager(SingleDeleteManager):
         """ Assigner deux utilisateurs comme amis """
         user1.friends.add_friend(user2, when=when)
 
-    def by_user(self, user):
-        """ Renvoyer l'objet liste d'amis d'un utilisateur """
-        return self.get(user=user)
-
 
 class FriendList(DataModel):
     """ Liste d'amis """
+
     # Constantes
     DATA_KEYS = ['friends', 'received', 'sent']  # amis, demandes reçues, demandes envoyées
     ACTION_LABELS = {(True, False): _("Friend"), (False, True): _("Cancel request"), (False, False): _("Add to friends")}
+
     # Champs
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='friends', verbose_name=_("User"))
     objects = FriendListManager()
@@ -138,6 +142,7 @@ class FriendList(DataModel):
     active_friends = property(_get_active_friends)
 
     # Setter
+    @transaction.atomic
     def add_friend(self, user, when=None):
         """ Ajouter une ami """
         if not self.is_friend(user) and user != self.user:
@@ -150,6 +155,7 @@ class FriendList(DataModel):
             return True
         return False
 
+    @transaction.atomic
     def add_received(self, user, when=None):
         """ Ajouter une demande reçue """
         if not self.is_received(user) and not self.is_friend(user) and user != self.user:
@@ -162,6 +168,7 @@ class FriendList(DataModel):
             return True
         return False
 
+    @transaction.atomic
     def add_sent(self, user, when=None):
         """ Ajouter une demande envoyée """
         if not self.is_sent(user) and not self.is_friend(user) and user != self.user:
@@ -174,6 +181,7 @@ class FriendList(DataModel):
             return True
         return False
 
+    @transaction.atomic()
     def remove_friend(self, user):
         """ Supprimer un ami """
         if self.is_friend(user):
@@ -184,6 +192,7 @@ class FriendList(DataModel):
             return True
         return False
 
+    @transaction.atomic()
     def remove_sent(self, user):
         """ Supprimer une demande envoyée """
         if self.is_sent(user):
@@ -194,6 +203,7 @@ class FriendList(DataModel):
             return True
         return False
 
+    @transaction.atomic()
     def remove_received(self, user):
         """ Supprimer une demande reçue """
         if self.is_received(user):
@@ -204,12 +214,14 @@ class FriendList(DataModel):
             return True
         return False
 
+    @transaction.atomic()
     def accept_received(self, user):
         """ Aceepter une demande reçue """
         if self.remove_received(user):
             self.add_friend(user)
             friend_accepted.send(sender=user, recipient=self.user)
 
+    @transaction.atomic()
     def deny_received(self, user):
         """ Refuser une demande reçue """
         if self.remove_received(user):

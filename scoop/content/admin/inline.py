@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.contenttypes.generic import GenericTabularInline
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
 from django.forms import widgets
 from django.utils.translation import ugettext_lazy as _

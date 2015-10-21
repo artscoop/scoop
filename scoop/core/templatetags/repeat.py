@@ -7,7 +7,7 @@ Utilisation:
 """
 from django import template
 from django.template import Node, TemplateSyntaxError
-from django.template.base import TokenParser
+from django.template.base import Parser
 from django.template.loader_tags import BlockNode, do_block
 
 register = template.Library()
@@ -123,7 +123,7 @@ def do_macro(parser, token):
 def do_repeat(parser, token):
     """ Renvoyer un bloc repeat """
 
-    class RepeatTagParser(TokenParser):
+    class RepeatTagParser(Parser):
         """ Parser de tag repeat """
 
         def top(self):

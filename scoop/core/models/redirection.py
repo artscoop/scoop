@@ -49,6 +49,8 @@ class RedirectionManager(SingleDeleteManager):
 
 class Redirection(GenericModelMixin, DatetimeModel):
     """ Redirection d'URL """
+
+    # Champs
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('redirection', "Active"))
     base = models.CharField(max_length=250, unique=True, blank=False, verbose_name=_("Original URL"))
     expires = models.DateTimeField(default=datetime.now() + timedelta(days=3650), verbose_name=_("Expiry"))  # 10 ans après démarrage du serveur

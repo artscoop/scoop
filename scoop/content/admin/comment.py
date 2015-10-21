@@ -5,7 +5,7 @@ from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
-from django.forms import forms
+from django.forms.widgets import TextInput
 from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import TinyMCE
 
@@ -22,7 +22,7 @@ class CommentInlineAdmin(GenericTabularInline):
     """ Inline admin des commentaires """
     model = Comment
     form = CommentForm
-    formfield_overrides = {models.TextField: {'widget': forms.TextInput}}
+    formfield_overrides = {models.TextField: {'widget': TextInput}}
 
 
 class CommentAdmin(AjaxSelectAdmin, admin.ModelAdmin, GenericModelUtil):

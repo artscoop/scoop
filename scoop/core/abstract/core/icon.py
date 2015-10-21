@@ -14,7 +14,7 @@ from scoop.core.util.shortcuts import addattr
 
 def get_icon_upload_path(self, name):
     """ Renvoyer le chemin d'upload d'une icône """
-    from django.contrib.contenttypes.models import ContentType
+    from django.contrib.contenttypes.fields import ContentType
     # Constituer les dictionnaires d'information de fichier
     content_type = ContentType.objects.get_for_model(self)
     format_data = {'app': content_type.app_label, 'model': content_type.name}

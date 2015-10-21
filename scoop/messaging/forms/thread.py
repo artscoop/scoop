@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import floppyforms as forms
-from annoying.decorators import autostrip
 from django import forms as baseforms
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import striptags
@@ -16,7 +15,6 @@ from scoop.messaging.models.recipient import Recipient
 from scoop.messaging.models.thread import Thread
 
 
-@autostrip
 class MessageForm(forms.Form):
     """ Formulaire de message """
     # Constantes
@@ -41,7 +39,6 @@ class MessageForm(forms.Form):
         return body
 
 
-@autostrip
 class ThreadForm(MessageForm):
     """ Formulaire de fil de discussion """
     # Constantes
@@ -66,7 +63,6 @@ class ThreadForm(MessageForm):
         return get_user_model().objects.get(id=recipient)
 
 
-@autostrip
 class MessageAdminForm(baseforms.ModelForm):
     """ Formulaire admin des messages """
 
@@ -77,7 +73,6 @@ class MessageAdminForm(baseforms.ModelForm):
         fields = ['thread', 'author', 'text', 'deleted']
 
 
-@autostrip
 class ThreadAdminForm(forms.ModelForm):
     """ Formulaire admin des threads """
 
@@ -87,7 +82,6 @@ class ThreadAdminForm(forms.ModelForm):
         exclude = []
 
 
-@autostrip
 class RecipientAdminForm(forms.ModelForm):
     """ Formulaire admin des destinataires """
 
@@ -100,6 +94,6 @@ class RecipientAdminForm(forms.ModelForm):
 class MessageSearchForm(forms.Form):
     """ Formulaire de recherche de messages """
     query = forms.CharField(max_length=128, required=False)
-    ip = forms.IPAddressField(required=False)
+    ip = forms.GenericIPAddressField(required=False)
     q = forms.CharField(max_length=48, required=False)
     when = forms.DateTimeField(widget=SelectDateWidget(years=range(2010, 2012)))

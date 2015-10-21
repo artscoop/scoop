@@ -14,7 +14,7 @@ from PyQt4.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
 def _PIL_to_Qt(image):
     """ Convertir une image PIL vers une image QT """
     width, height = image.size
-    data = image.convert("RGBA").tostring('raw', 'BGRA')
+    data = image.convert("RGBA").tobytes('raw', 'BGRA')
     qt_image = QImage(data, width, height, QImage.Format_ARGB32)
     return qt_image
 
