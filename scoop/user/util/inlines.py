@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django_inlines import inlines
 from django_inlines.inlines import TemplateInline
-
 from scoop.user.models import User
 
 

@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.dispatch.dispatcher import receiver
-
 from scoop.rogue.util.signals import flag_resolve
 
 

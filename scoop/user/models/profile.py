@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import hashlib
 import logging
 import os
@@ -14,7 +12,6 @@ from django.db.models.manager import Manager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.birth import BirthManager, BirthModel
 from scoop.core.abstract.core.data import DataModel
@@ -23,9 +20,8 @@ from scoop.core.abstract.social.like import LikableModel
 from scoop.core.util.data.dateutil import is_new
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
-from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
 from scoop.location.models import City
-
+from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +33,10 @@ class ProfileQuerySetMixin(object):
     def verified(self):
         """ Renvoyer les profils vérifiés uniquement """
         return self.filter(harmful=False)
+
+    def get_by_uuid(self, uuid):
+        """ Renvoyer un profil dont l'utilisateur possède un UUID """
+        return self.get(user__uuid=uuid)
 
 
 class ProfileQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, ProfileQuerySetMixin):
@@ -59,12 +59,14 @@ class BaseProfileManager(Manager.from_queryset(ProfileQuerySet), BirthManager, N
 
 class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     """ Profil de base """
+
     # Constantes
     GENDER = [[0, _("Male")], [1, _("Female")], [2, _("Other")]]
     MALE, FEMALE, GENDER_OTHER = 0, 1, 2
     NULLABLE_GENDER = [['', pgettext_lazy('gender', "All")]] + GENDER
     CACHE_KEY = {'online': 'user.profile.online.%d', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count', 'logout.force': 'user.profile.logout.%d'}
     DATA_KEYS = {'baninfo', 'admin', 'deactivation', 'logins'}
+
     # Champs
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='profile', primary_key=True, on_delete=models.PROTECT, verbose_name=_("User"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('profile', "Updated"))

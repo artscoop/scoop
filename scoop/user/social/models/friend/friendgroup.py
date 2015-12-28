@@ -1,22 +1,31 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.data import DataModel
+from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
+
+
+class FriendGroupManager(SingleDeleteManager):
+    """ Manager des groupes d'amis """
+
+    # Getter
+    def for_user(self, user):
+        return self.filter(user=user)
 
 
 class FriendGroup(DataModel):
     """ Groupe personnalisé d'amis """
+
     # Constantes
     GROUP_NAMES = [[item, item] for item in [_("Family"), _("Friends"), _("Colleagues"), _("Acquaitances"), _("Friends 2"), _("Friends 3")]]
+
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friendgroups', verbose_name=_("User"))
     name = models.CharField(max_length=24, choices=GROUP_NAMES, blank=False, verbose_name=_('Name'))
+    objects = FriendGroupManager()
 
     # Getter
     def has_member(self, friend):

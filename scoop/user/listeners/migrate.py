@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 import os
 from random import shuffle
@@ -10,7 +8,6 @@ from django.contrib.auth import get_user_model
 from django.db.models import signals
 from django.dispatch.dispatcher import receiver
 from django.utils.text import slugify
-
 from scoop.user import UserConfig
 
 logger = logging.getLogger(__name__)

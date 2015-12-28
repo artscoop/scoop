@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
-
 from scoop.core.util.django import formutil
 
 

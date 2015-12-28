@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import forms
 from django.forms import widgets
 from django.template.loader import render_to_string

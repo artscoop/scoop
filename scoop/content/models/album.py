@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.content.picture import PicturedModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel
@@ -44,7 +41,7 @@ class AlbumManager(SingleDeleteManager):
         for picture in pictures:
             try:
                 album.pictures.add(picture)
-            except:
+            except (ValueError,):
                 pass
 
 
@@ -96,7 +93,7 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
     @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
-        return ('content:view-category', [self.short_name])
+        return 'content:view-category', [self.short_name]
 
     # Métadonnées
     class Meta:

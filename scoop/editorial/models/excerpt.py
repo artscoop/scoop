@@ -1,12 +1,11 @@
 # coding: utf-8
+from markdown import Markdown
+
 from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from markdown import Markdown
-from translatable.models import get_translation_model, TranslatableModel
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -14,6 +13,7 @@ from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.shortcuts import addattr
 from scoop.editorial.util.languages import get_country_code
+from translatable.models import TranslatableModel, get_translation_model
 
 
 class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UUID64Model):

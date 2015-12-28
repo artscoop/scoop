@@ -1,15 +1,12 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import floppyforms as forms_
 from django import forms
 from django.template.defaultfilters import striptags
 from django.utils.translation import ugettext_lazy as _
-from tinymce.widgets import TinyMCE
-
 from scoop.content.models import Content
 from scoop.content.util.tinymce import TINYMCE_CONFIG_CONTENT
 from scoop.core.forms.search import BaseSearchForm
+from tinymce.widgets import TinyMCE
 
 
 class ContentForm(forms_.ModelForm):

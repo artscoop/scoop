@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 import time
 from datetime import timedelta
@@ -21,7 +19,6 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin

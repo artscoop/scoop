@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import math
 import traceback
 
 from django import template
 from django.db.models.base import Model
-
 from scoop.core.util.data.numbers import round_left as roundl
 
 register = template.Library()

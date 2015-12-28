@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from autoslug.fields import AutoSlugField
 from django.db import models
 from django.db.models import permalink
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.content.models.content import Content
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.icon import IconModel
@@ -65,6 +62,13 @@ class Tag(IconModel, PicturableModel):
             item = item.parent
             output.append(item)
         return output.reverse()
+
+    # Overrides
+    def save(self, *args, **kwargs):
+        """ Sauvegarder l'objet """
+        if self.parent == self:
+            self.parent = None
+        super().save(*args, **kwargs)
 
     # Métadonnées
     class Meta:

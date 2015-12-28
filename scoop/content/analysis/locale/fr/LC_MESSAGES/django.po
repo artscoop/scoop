@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:22+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2013-08-09 04:27+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,55 +19,55 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.7.3\n"
 
-#: models/category.py:12
+#: models/category.py:10
 msgid "Group"
 msgstr ""
 
-#: models/category.py:13 models/feature.py:18
+#: models/category.py:11 models/feature.py:17
 msgid "Name"
 msgstr "Nom"
 
-#: models/category.py:14
+#: models/category.py:12
 msgid "Positive slot or not"
 msgstr "Positif ou non"
 
-#: models/category.py:34
+#: models/category.py:32
 msgid "category"
 msgstr "catégorie"
 
-#: models/category.py:35
+#: models/category.py:33
 msgid "categories"
 msgstr "catégories"
 
-#: models/document.py:15
+#: models/document.py:13
 msgid "Text"
 msgstr "Texte"
 
-#: models/document.py:16
+#: models/document.py:14
 msgid "Category"
 msgstr "Catégorie"
 
-#: models/document.py:34
+#: models/document.py:32
 msgid "document"
 msgstr "document"
 
-#: models/document.py:35
+#: models/document.py:33
 msgid "documents"
 msgstr "documents"
 
-#: models/feature.py:16
+#: models/feature.py:15
 msgid "Word"
 msgstr "Mot"
 
-#: models/feature.py:16
+#: models/feature.py:15
 msgid "Number"
 msgstr "Nombre"
 
-#: models/feature.py:16
+#: models/feature.py:15
 msgid "Email"
 msgstr "Email"
 
-#: models/feature.py:19
+#: models/feature.py:18
 msgid "Feature type"
 msgstr "Type de caractéristique"
 
@@ -79,26 +79,26 @@ msgstr "caractéristique"
 msgid "features"
 msgstr "caractéristiques"
 
-#: models/statistics.py:11 models/statistics.py:12 models/statistics.py:49
+#: models/statistics.py:9 models/statistics.py:10 models/statistics.py:47
 msgid "Feature"
 msgstr "Caractéristique"
 
-#: models/statistics.py:13 models/statistics.py:50
+#: models/statistics.py:11 models/statistics.py:48
 msgid "Count"
 msgstr "Nombre"
 
-#: models/statistics.py:41
+#: models/statistics.py:39
 msgid "feature count"
 msgstr "nombre de caractéristiques"
 
-#: models/statistics.py:42
+#: models/statistics.py:40
 msgid "feature counts"
 msgstr "totaux de caractéristiques"
 
-#: models/statistics.py:77
+#: models/statistics.py:75
 msgid "category train count"
 msgstr "nombre d'apprentissages de catégorie"
 
-#: models/statistics.py:78
+#: models/statistics.py:76
 msgid "category train counts"
 msgstr "totaux d'apprentissages de catégories"

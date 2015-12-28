@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
-
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.util.signals import mailable_event
 from scoop.user.forms.configuration import ConfigurationForm

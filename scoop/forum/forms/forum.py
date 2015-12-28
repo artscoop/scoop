@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import forms
 from easy_thumbnails.fields import ThumbnailerImageField
-
 from scoop.content.util.widgets import PictureInlineWidget
 from scoop.forum.models.forum import Forum
 

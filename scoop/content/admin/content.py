@@ -1,16 +1,13 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
+from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from django.contrib import admin
 from django.template.defaultfilters import date as datefilter
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
-from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from scoop.content.admin.inline import CategoryTranslationInlineAdmin, PictureInlineAdmin
 from scoop.content.forms.content import ContentAdminForm
 from scoop.content.models.content import Category, Content, ContentApproval
@@ -153,6 +150,7 @@ class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ['data']
     inlines = [CategoryTranslationInlineAdmin]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Content, ContentAdminModelAdmin)

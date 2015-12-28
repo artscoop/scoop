@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from os.path import join
 
 from django.conf import settings
@@ -9,7 +7,6 @@ from django.contrib.contenttypes.fields import ContentType, GenericRelation
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 
 

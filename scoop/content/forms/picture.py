@@ -1,10 +1,12 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import os
 from zipfile import ZipFile
 
-from captcha.fields import CaptchaField
+try:
+    from captcha.fields import CaptchaField
+except RuntimeError:
+    def CaptchaField():
+        return None
 from django import forms
 from django.core.files.base import File
 from django.core.files.temp import NamedTemporaryFile
@@ -14,7 +16,6 @@ from django.forms.models import modelformset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from form_utils.fields import ClearableImageField
-
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import CreationLicenseWidget, PictureInlineWidget
 from scoop.core.forms import BaseSearchForm

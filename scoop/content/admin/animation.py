@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from ajax_select import make_ajax_form
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.models.animation import Animation
 from scoop.core.util.shortcuts import addattr
 

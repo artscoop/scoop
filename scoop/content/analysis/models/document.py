@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.analysis.classifiers.base import BaseClassifier
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel

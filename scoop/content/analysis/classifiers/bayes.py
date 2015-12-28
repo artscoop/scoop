@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from scoop.content.analysis.classifiers.base import BaseClassifier
 from scoop.content.analysis.models.feature import Feature
 

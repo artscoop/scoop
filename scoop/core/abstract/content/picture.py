@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import abc
 from traceback import print_exc
 
@@ -8,7 +6,6 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.moderation import ModeratedModel
 
 
@@ -81,11 +78,6 @@ class PicturedBaseModel(models.Model):
             self.save()
         return actually_downloaded
 
-    @abc.abstractmethod
-    def get_name(self):
-        """ Renvoyer le nom user-friendly de l'élément """
-        return
-
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -99,6 +91,7 @@ class PicturedBaseModel(models.Model):
 
 class PicturableModel(PicturedBaseModel):
     """ Objet pouvant être lié à des images via une relation générique """
+
     # Champs
     pictured = models.BooleanField(default=False, db_index=True, verbose_name=_("\U0001f58c"))
     pictures = GenericRelation('content.Picture')
@@ -110,6 +103,7 @@ class PicturableModel(PicturedBaseModel):
 
 class PicturedModel(PicturedBaseModel):
     """ Objet lié à des images par un champ ManyToMany """
+
     # Champs
     pictured = models.BooleanField(default=False, db_index=True, verbose_name=_("\U0001f58c"))
     pictures = models.ManyToManyField('content.Picture', blank=True, verbose_name=_("Pictures"))

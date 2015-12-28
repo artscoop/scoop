@@ -1,12 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
+from importlib import import_module
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils.importlib import import_module
-
 from scoop.core.util.stream.directory import Paths
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.models.negotiation import Negotiation
@@ -76,7 +74,7 @@ class ThreadTest(TestCase):
         self.assertTrue(opened, "The thread should have been opened by user4/staff")
         # Tester l'émission de courrier'
         unsent = MailEvent.objects.get_unsent_count()
-        sent = MailEvent.objects.process('all', True)
+        sent = MailEvent.objects.process(forced='all', bypass_delay=True)
         remaining = MailEvent.objects.get_unsent_count()
         self.assertGreater(unsent, 0, "at least one new mail should be waiting in the queue")
         self.assertGreater(sent, 0, "at least one new mail should have been sent")

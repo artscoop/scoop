@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from decimal import Decimal, DivisionByZero
 from urllib.request import urlopen
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.util.model.model import SingleDeleteManager
 
 

@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from scoop.core.util.data.dateutil import *  # NOQA
 from scoop.core.util.data.numbers import *  # NOQA
 from scoop.core.util.data.textutil import *  # NOQA

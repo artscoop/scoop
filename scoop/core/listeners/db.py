@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db.backends.signals import connection_created
 from django.dispatch.dispatcher import receiver
 

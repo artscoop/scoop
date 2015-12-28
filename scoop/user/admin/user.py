@@ -1,21 +1,16 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import locale
 
 from ajax_select import make_ajax_form
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy as reverse
 from django.template.defaultfilters import escape
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 from scoop.user.admin.filters import InitialFilter, LastOnlineFilter, OnlineFilter
-from scoop.location.models import City
 from scoop.user.admin.profile import ProfileInlineAdmin
 from scoop.user.forms.user import UserAdminForm
-
 
 __all__ = ['UserAdmin']
 

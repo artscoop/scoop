@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.core.management.base import BaseCommand
 from django.test.utils import override_settings
-
 from scoop.location.tasks.geonames import geonames_fill
 
 

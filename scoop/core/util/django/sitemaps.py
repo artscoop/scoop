@@ -1,13 +1,11 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import math
 from random import shuffle
-from xmlrpclib import Server
+
+from xmlrpc import server
 
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-
+from django.core.urlresolvers import reverse_lazy as reverse
 from scoop.core.util.signals import ping_failed
 
 # Liste de moteurs de Ping de sitemap ou RSS
@@ -63,7 +61,7 @@ def ping_feed(url_name, args=None, kwargs=None, percent=25):
     # Pinger chacun des moteurs choisis
     for url in selected:
         try:
-            engine = Server(url)
+            engine = server.SimpleXMLRPCServer(url)
             result = engine.weblogUpdates.ping(full_path)
         except:
             ping_failed.send(None, engine=url, feed=full_path)

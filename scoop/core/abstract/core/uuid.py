@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from math import ceil
 
 from django.db import models
 from django.utils.baseconv import base64
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.shortcuts import addattr
 

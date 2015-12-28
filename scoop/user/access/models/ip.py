@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 import re
 from datetime import datetime
@@ -12,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models.manager import GeoManager
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.backends.dummy.base import IntegrityError
 from django.db.models import permalink
 from django.db.models.aggregates import Count
 from django.utils import timezone
@@ -19,12 +18,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django_countries.data import COUNTRIES
 from pygeoip import GeoIP
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
-from scoop.user.access.util.access import reverse_lookup, STATUS_CHOICES
+from scoop.user.access.util.access import STATUS_CHOICES, reverse_lookup
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +44,7 @@ class IPManager(GeoManager):
                 new_ip = IP()
                 new_ip.set_ip_address(ip_string, save=True)
                 return new_ip
-            except:
+            except IntegrityError:
                 return None
 
     def get_localhost(self):

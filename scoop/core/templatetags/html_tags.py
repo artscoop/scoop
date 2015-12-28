@@ -1,14 +1,14 @@
 # coding: utf-8
 import re
 
-import bleach
 from bs4 import BeautifulSoup
+
+import bleach
 from django import template
 from django.conf import settings
 from django.utils.html import escape, urlize
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
-
 from scoop.core.util.stream.urlutil import get_domain
 
 register = template.Library()

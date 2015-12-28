@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import os
 import tempfile
 from collections import OrderedDict
@@ -15,7 +13,6 @@ from django.http.request import QueryDict
 from django.http.response import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
-
 from scoop.core.templatetags.text_tags import humanize_join
 # Choix Oui/Non et Tout
 from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable
@@ -151,7 +148,7 @@ def _normalize_initial(initial, form):
 
     output = dict()
     for key, value in initial.items():
-        if key in form._meta.fields:
+        if form._meta.fields and key in form._meta.fields:
             output[key] = convert_value(value)
     return output
 

@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django.conf import settings
@@ -8,7 +6,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http.response import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.stream.urlutil import remove_get_parameter
 
 logger = logging.getLogger(__name__)

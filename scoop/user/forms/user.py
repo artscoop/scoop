@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import forms
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.forms.search import BaseSearchForm
 from scoop.user.models.user import User
 
@@ -53,7 +50,7 @@ class PasswordForm(forms.Form):
 class UsernameSearchForm(BaseSearchForm):
     """ Formulaire de recherche d'utilisateurs par nom d'utilisateur """
 
-    def __init__(self, *args, qs=None, **kwargs):
+    def __init__(self, qs=None, *args, **kwargs):
         """ Initialiser le formulaire """
         super(UsernameSearchForm, self).__init__(*args, **kwargs)
         self.Meta.base_qs = qs or User.objects

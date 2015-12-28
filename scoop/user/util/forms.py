@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db.models.base import Model
 from django.forms.forms import Form
 from django.http.request import HttpRequest
-
 from scoop.core.util.django.formutil import form
 from scoop.user.models.forms import FormConfiguration
 
@@ -18,10 +15,11 @@ class DataForm(Form):
     :cvar defaults: dictionnaire des valeurs par défaut des attributs champs
     :cvar saved_fields: liste des noms de champs qui seront les seuls à être mémorisés
     """
+
     # Configuration
-    name = ''
-    defaults = None
-    saved_fields = None
+    name = ''  # nom unique. minuscules et .
+    defaults = None  # données par défaut
+    saved_fields = None  # champs enregistrés. None pour tous les champs
 
     # Actions
     @classmethod

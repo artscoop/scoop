@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
 from django.conf import settings
@@ -8,7 +6,6 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.user.authored import AutoAuthoredModelAdmin
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr

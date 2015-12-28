@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import template
-
 from scoop.content.models.content import Content
 from scoop.core.util.data.textutil import clean_html
 

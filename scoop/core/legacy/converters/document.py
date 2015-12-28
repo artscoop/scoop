@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import io
 import pickle
 import pprint
@@ -8,7 +6,6 @@ import time
 from os.path import join
 
 from django.db.models.base import Model
-
 from scoop.core.util.stream.directory import Paths
 
 

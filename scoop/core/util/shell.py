@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import sys
 
 import pexpect
@@ -9,7 +7,7 @@ import pexpect
 def call_and_type(command, prompt_regex, entry):
     """ Lancer une commande interactive dans le shell et y taper du contenu si un regex est affiché """
     p = pexpect.spawn(command, logfile=sys.stdout, maxread=16384)
-    index = p.expect_exact([prompt_regex, pexpect.EOF])
+    index = p.expect_exact([prompt_regex, pexpect.EOF], timeout=15)
     if index == 0:
         p.setecho(False)
         p.sendline(entry)

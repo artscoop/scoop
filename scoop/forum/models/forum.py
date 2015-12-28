@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from annoying.functions import get_object_or_None
 from autoslug.fields import AutoSlugField
 from django.conf import settings
@@ -10,7 +8,6 @@ from django.db.models.aggregates import Sum
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.weight import WeightedModel

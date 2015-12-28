@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.core.cache import cache
 from django.db import models
 from django.template.base import Template
@@ -8,13 +6,12 @@ from django.template.context import RequestContext
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from unidecode import unidecode
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.seo.index import SEIndexModel
 from scoop.core.abstract.user.authored import AuthoredModel
+from unidecode import unidecode
 
 
 class PageManager(models.Manager):

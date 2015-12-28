@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from traceback import print_exc
 
 from django.template.loader import render_to_string
-
 from scoop.core.util.data.textutil import text_to_dict
 
 

@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from autoslug.fields import AutoSlugField
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract import AuthoredModel, DatetimeModel, UUID128Model
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.util.model.fields import LineListField
@@ -34,6 +31,7 @@ class PollManager(SingleDeleteManager):
 
 class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
     """ Sondage """
+
     # Champs
     title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
     description = models.TextField(verbose_name=_("Description"))
@@ -48,7 +46,7 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
     # Getter
     def natural_key(self):
         """ Renvoyer la clé naturelle du sondage """
-        return (self.uuid,)
+        return self.uuid,
 
     def get_choices(self):
         """ Renvoyer les choix du sondage triés par poids """
@@ -71,6 +69,7 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
         """ Renvoyer les votes du sondage """
         return self.votes.all()
 
+    @addattr(short_description=_("Votes"))
     def get_vote_count(self):
         """ Renvoyer le nombre de votes du sondage """
         return self.votes.only('pk').count()
@@ -92,7 +91,7 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
     @addattr(boolean=True, short_description=_("Expired"))
     def has_expired(self):
         """ Renvoyer si le sondage a expiré """
-        return (timezone.now() < self.expires)
+        return timezone.now() < self.expires
 
     @addattr(boolean=True, short_description=_("Open"))
     def is_open(self):

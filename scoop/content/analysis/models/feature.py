@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import nltk
 from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from nltk.tokenize import word_tokenize
-
 from scoop.core.templatetags.text_tags import truncate_stuckkey
 
 

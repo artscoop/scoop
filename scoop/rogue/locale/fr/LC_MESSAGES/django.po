@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:21+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2015-04-11 14:45+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,482 +43,487 @@ msgstr "non traité"
 msgid "done"
 msgstr "fait"
 
-#: admin/flag.py:35
+#: admin/flag.py:33
 msgid "Flag"
 msgstr "Signalement"
 
-#: admin/flag.py:39 models/flag.py:102
+#: admin/flag.py:37 models/flag.py:100
 msgid "Will not fix"
 msgstr "Rien à faire"
 
-#: admin/flag.py:44
+#: admin/flag.py:42
 msgid "Selected flags successfully closed."
 msgstr "Les signalements sélectionnés ont été correctement fermés."
 
-#: admin/flag.py:46
+#: admin/flag.py:44
 msgid "Automatically fix"
 msgstr "Réparer automatiquement"
 
-#: admin/flag.py:51
+#: admin/flag.py:49
 msgid "Selected flags successfully resolved."
 msgstr "Les signalements sélectionnés ont été correctement résolus."
 
-#: admin/flag.py:54 models/flag.py:120
+#: admin/flag.py:52 models/flag.py:118
 msgid "URL"
 msgstr "URL"
 
-#: admin/flag.py:60 models/flag.py:109 models/flag.py:164
+#: admin/flag.py:58 models/flag.py:107 models/flag.py:162
 msgid "Status"
 msgstr "Statut"
 
-#: admin/flag.py:78
+#: admin/flag.py:76
 msgid "Translation"
 msgstr "Traduction"
 
-#: admin/flag.py:79
+#: admin/flag.py:77
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/flag.py:95
+#: admin/flag.py:93
 msgid "Flag type"
 msgstr "Type de signalement"
 
-#: admin/ipblock.py:27
+#: admin/ipblock.py:25
 msgid "Blocking"
 msgstr "Blocage"
 
-#: admin/ipblock.py:28
+#: admin/ipblock.py:26
 msgid "Extra"
 msgstr "Plus"
 
-#: admin/ipblock.py:31
+#: admin/ipblock.py:29
 msgid "Update selected IP blocks"
 msgstr "Mettre à jour les blocages IP sélectionnés"
 
-#: admin/ipblock.py:36
+#: admin/ipblock.py:34
 msgid "Selected blocks successfully updated."
 msgstr "Les blocages sélectionnés ont été correctement mis à jour."
 
-#: admin/ipblock.py:39 models/ipblock.py:224
+#: admin/ipblock.py:37 models/ipblock.py:231
 msgid "IP 1"
 msgstr "IP 1"
 
-#: admin/ipblock.py:45 models/ipblock.py:225
+#: admin/ipblock.py:43 models/ipblock.py:232
 msgid "IP 2"
 msgstr "IP 2"
 
-#: admin/ipblock.py:51 models/ipblock.py:215
+#: admin/ipblock.py:49 models/ipblock.py:222
 msgid "Expires"
 msgstr "Expire"
 
-#: admin/ipblock.py:55
+#: admin/ipblock.py:53
 msgid "Never"
 msgstr "Jamais"
 
-#: forms/flag.py:23
+#: forms/flag.py:21
 msgid "This flag type needs details."
 msgstr "Ce type de signalement a besoin de détails."
 
-#: lookups/flag.py:15 lookups/flag.py:17
+#: lookups/flag.py:13 lookups/flag.py:15
 msgid "Automatic"
 msgstr "Automatique"
 
-#: lookups/flag.py:15
+#: lookups/flag.py:13
 msgid "Manual"
 msgstr "Manuel"
 
-#: lookups/flag.py:27
+#: lookups/flag.py:25
 msgid "All"
 msgstr "Tout"
 
-#: models/blocklist.py:100
+#: models/blocklist.py:98
 msgid "Blocker"
 msgstr "Bloqueur"
 
-#: models/blocklist.py:104
+#: models/blocklist.py:102
 msgctxt "users"
 msgid "Blacklisted"
 msgstr "Blacklistés"
 
-#: models/blocklist.py:181 models/blocklist.py:182
+#: models/blocklist.py:179 models/blocklist.py:180
 msgid "blocklists"
 msgstr "listes de blocage"
 
-#: models/flag.py:102
+#: models/flag.py:100
 msgid "New"
 msgstr "Nouveau"
 
-#: models/flag.py:102
+#: models/flag.py:100
 msgid "Being checked"
 msgstr "En vérification"
 
-#: models/flag.py:102
+#: models/flag.py:100
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/flag.py:102
+#: models/flag.py:100
 msgid "Fixed"
 msgstr "Réparé"
 
-#: models/flag.py:102
+#: models/flag.py:100
 msgid "Postponed"
 msgstr "Retardé"
 
-#: models/flag.py:102
+#: models/flag.py:100
 msgid "Pending"
 msgstr "En attente"
 
-#: models/flag.py:105
+#: models/flag.py:103
 msgid "Object name"
 msgstr "Nom de l'objet"
 
-#: models/flag.py:106 models/flag.py:146
+#: models/flag.py:104 models/flag.py:144
 msgid "Author"
 msgstr "Auteur"
 
-#: models/flag.py:107 models/ipblock.py:216
+#: models/flag.py:105 models/ipblock.py:223
 msgid "Type"
 msgstr "Type"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "Priority"
 msgstr "Priorité"
 
-#: models/flag.py:110 models/mailblock.py:60
+#: models/flag.py:108 models/mailblock.py:58
 msgid "Details"
 msgstr "Détails"
 
-#: models/flag.py:111
+#: models/flag.py:109
 msgid "Administration notes"
 msgstr "Notes administratives"
 
-#: models/flag.py:112
+#: models/flag.py:110
 msgctxt "flag"
 msgid "Automatic"
 msgstr "Automatique"
 
-#: models/flag.py:113
+#: models/flag.py:111
 msgid "Action done"
 msgstr "Action effectuée"
 
-#: models/flag.py:114
+#: models/flag.py:112
 msgctxt "flag"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/flag.py:117 models/flag.py:267
+#: models/flag.py:115 models/flag.py:265
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/flag.py:118
+#: models/flag.py:116
 msgid "Object Id"
 msgstr "ID de l'objet"
 
-#: models/flag.py:121
+#: models/flag.py:119
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/flag.py:159
+#: models/flag.py:157
 msgid "Content"
 msgstr "Contenu"
 
-#: models/flag.py:241
+#: models/flag.py:239
 msgid "flag"
 msgstr "signalement"
 
-#: models/flag.py:242
+#: models/flag.py:240
 msgid "flags"
 msgstr "signalements"
 
-#: models/flag.py:266
+#: models/flag.py:264
 msgid "Identifier"
 msgstr "Identifiant"
 
-#: models/flag.py:268
+#: models/flag.py:266
 msgid "Needs details"
 msgstr "A besoin de détails"
 
-#: models/flag.py:272 models/flag.py:313
+#: models/flag.py:270 models/flag.py:311
 msgid "Name"
 msgstr "Nom"
 
-#: models/flag.py:278
+#: models/flag.py:276
 msgid "(No name)"
 msgstr "(sans nom)"
 
-#: models/flag.py:280 models/flag.py:314 models/ipblock.py:218
-#: models/profanity.py:30
+#: models/flag.py:278 models/flag.py:312 models/ipblock.py:225
+#: models/profanity.py:28
 msgid "Description"
 msgstr "Description"
 
-#: models/flag.py:285
+#: models/flag.py:283
 msgid "(No description)"
 msgstr "(sans description)"
 
-#: models/flag.py:302
+#: models/flag.py:300
 msgid "None"
 msgstr "Aucun"
 
-#: models/flag.py:306
+#: models/flag.py:304
 msgid "flag type"
 msgstr "type de signalement"
 
-#: models/flag.py:307
+#: models/flag.py:305
 msgid "flag types"
 msgstr "types de signalement"
 
-#: models/ipblock.py:208
+#: models/ipblock.py:215
 msgid "Single address"
 msgstr "Adresse unique"
 
-#: models/ipblock.py:208
+#: models/ipblock.py:215
 msgid "Address range"
 msgstr "Plage d'adresses"
 
-#: models/ipblock.py:208
+#: models/ipblock.py:215
 msgid "Partial host"
 msgstr "Hôte partiel"
 
-#: models/ipblock.py:208
+#: models/ipblock.py:215
 msgid "Partial host with exclusion"
 msgstr "Hôte partiel et exclusion"
 
-#: models/ipblock.py:208
+#: models/ipblock.py:215
 msgid "ISP with host exclusion"
 msgstr "FAI avec exclusion d'hôte"
 
-#: models/ipblock.py:208
+#: models/ipblock.py:215
 msgid "Country code"
 msgstr "Code pays"
 
-#: models/ipblock.py:209
+#: models/ipblock.py:216
 msgid "Allowed host"
 msgstr "Hôte autorisé"
 
-#: models/ipblock.py:209
+#: models/ipblock.py:216
 msgid "Allowed ISP"
 msgstr "FAI autorisé"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "General"
 msgstr "Général"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "Proxy"
 msgstr "Proxy"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "Server"
 msgstr "Serveur"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "Compromised IP"
 msgstr "IP compromise"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "Repeated trouble"
 msgstr "Troubles répétés"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "Tor network"
 msgstr "Réseau Tor"
 
-#: models/ipblock.py:210
+#: models/ipblock.py:217
 msgid "Anonymous network"
 msgstr "Réseau anonyme"
 
-#: models/ipblock.py:211
+#: models/ipblock.py:218
 msgid "VPN"
 msgstr "VPN"
 
-#: models/ipblock.py:212
+#: models/ipblock.py:219
 msgid "Rarely harmful"
 msgstr "Rarement dangereux"
 
-#: models/ipblock.py:212
+#: models/ipblock.py:219
 msgid "Often harmful"
 msgstr "Souvent dangereux"
 
-#: models/ipblock.py:212
+#: models/ipblock.py:219
 msgid "Always harmful"
 msgstr "Toujours dangereux"
 
-#: models/ipblock.py:214
+#: models/ipblock.py:221
 msgctxt "ipblocking"
 msgid "Active"
 msgstr "Actif"
 
-#: models/ipblock.py:217
+#: models/ipblock.py:224
 msgid "Category"
 msgstr "Catégorie"
 
-#: models/ipblock.py:219
+#: models/ipblock.py:226
 msgid "Harm level"
 msgstr "Niveau de danger"
 
-#: models/ipblock.py:220
+#: models/ipblock.py:227
 msgid "Country"
 msgstr "Pays"
 
-#: models/ipblock.py:221
+#: models/ipblock.py:228
 msgid "ISP"
 msgstr "FAI"
 
-#: models/ipblock.py:222
+#: models/ipblock.py:229
 msgid "Host name"
 msgstr "Nom d'hôte"
 
-#: models/ipblock.py:223
+#: models/ipblock.py:230
 msgid "Exclude host name"
 msgstr "Exclure nom d'hôte"
 
-#: models/ipblock.py:226
+#: models/ipblock.py:233
 msgid "Blocking representation"
 msgstr "Représentation du blocage"
 
-#: models/ipblock.py:270 models/ipblock.py:275
+#: models/ipblock.py:277 models/ipblock.py:282
 msgid "IP count"
 msgstr "Nombre d'IP"
 
-#: models/ipblock.py:305
+#: models/ipblock.py:312
 msgid "A single IP block must have a valid IP to block."
 msgstr "Un blocage d'IP unique doit bloquer une IP valide."
 
-#: models/ipblock.py:307
+#: models/ipblock.py:314
 msgid "A range IP block must have valid IPs to block."
 msgstr "Un blocage de plage d'IP doit bloquer des IPs valides."
 
-#: models/ipblock.py:309
+#: models/ipblock.py:316
 msgid "A hostname block must have a partial hostname to block."
 msgstr "Un blocage de nom d'hôte doit bloquer un nom d'hôte partiel."
 
-#: models/ipblock.py:311
+#: models/ipblock.py:318
 msgid "An ISP block must have a valid ISP name to block."
 msgstr "Un blocage de FAI doit bloquer un nom de FAI valide."
 
-#: models/ipblock.py:313
+#: models/ipblock.py:320
 msgid "A country block must have a valid country code to block."
 msgstr "Un blocage de pays doit bloquer un pays valide."
 
-#: models/ipblock.py:315
+#: models/ipblock.py:322
 msgid "A hostname permission must have a valid hostname."
 msgstr "Une permission de nom d'hôte doit autoriser un nom d'hôte valide."
 
-#: models/ipblock.py:317
+#: models/ipblock.py:324
 msgid "An ISP permission must have a valid ISP."
 msgstr "Une permission de FAI doit autoriser un FAI valide."
 
-#: models/ipblock.py:322
+#: models/ipblock.py:326
+#, python-brace-format
+msgid "This rule type {number} is unknown."
+msgstr ""
+
+#: models/ipblock.py:331
 #, python-brace-format
 msgid "Blocking of {ip}"
 msgstr "Blocage de {ip}"
 
-#: models/ipblock.py:324
+#: models/ipblock.py:333
 #, python-brace-format
 msgid "Blocking of IPs from {ip1} to {ip2}"
 msgstr "Blocage des IPs de {ip1} à {ip2}"
 
-#: models/ipblock.py:326
+#: models/ipblock.py:335
 #, python-brace-format
 msgid "Blocking of reverse {reverse}"
 msgstr "Blocage du nom inversé {reverse}"
 
-#: models/ipblock.py:328
+#: models/ipblock.py:337
 #, python-brace-format
 msgid "Blocking of reverse {reverse} but not with {exclude}"
 msgstr "Blocage du nom inversé {reverse} sans {exclude}"
 
-#: models/ipblock.py:330
+#: models/ipblock.py:339
 #, python-brace-format
 msgid "Blocking of ISP {isp}"
 msgstr "Blocage du FAI {isp}"
 
-#: models/ipblock.py:330
+#: models/ipblock.py:339
 #, python-brace-format
 msgid "Blocking of ISP {isp} minus {exclude}"
 msgstr "Blocage du FAI {isp} sauf {exclude}"
 
-#: models/ipblock.py:333
+#: models/ipblock.py:342
 #, python-brace-format
 msgid "Blocking of country with code {code}"
 msgstr "Blocage de pays avec le code {code}"
 
-#: models/ipblock.py:335
+#: models/ipblock.py:344
 #, python-brace-format
 msgid "Authorization of reverse {reverse}"
 msgstr "Autorisation du nom inversé {reverse}"
 
-#: models/ipblock.py:337
+#: models/ipblock.py:346
 #, python-brace-format
 msgid "Authorization of ISP {isp}"
 msgstr "Autorisation du FAI {isp}"
 
-#: models/ipblock.py:341 models/ipblock.py:342
+#: models/ipblock.py:350 models/ipblock.py:351
 msgid "IP blocking"
 msgstr "Blocage d'IP"
 
-#: models/mailblock.py:55
+#: models/mailblock.py:53
 msgid "Fake accounts"
 msgstr "Faux comptes"
 
-#: models/mailblock.py:55
+#: models/mailblock.py:53
 msgid "Raw behaviour"
 msgstr "Attitude grossière"
 
-#: models/mailblock.py:57
+#: models/mailblock.py:55
 msgid "Email address"
 msgstr "Adresse email"
 
-#: models/mailblock.py:58
+#: models/mailblock.py:56
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/mailblock.py:59
+#: models/mailblock.py:57
 msgid "Reason"
 msgstr "Motif"
 
-#: models/mailblock.py:61
+#: models/mailblock.py:59
 msgctxt "mailblocking"
 msgid "Active"
 msgstr "Actif"
 
-#: models/mailblock.py:73
+#: models/mailblock.py:71
 #, python-brace-format
 msgid "Blocking of email {mail}"
 msgstr "Blocage de l'adresse email {mail}"
 
-#: models/mailblock.py:77 models/mailblock.py:78
+#: models/mailblock.py:75 models/mailblock.py:76
 msgid "mail blocking"
 msgstr "blocage de courrier"
 
-#: models/profanity.py:26
+#: models/profanity.py:24
 msgctxt "profanity.filter"
 msgid "Active"
 msgstr "Actif"
 
-#: models/profanity.py:27
+#: models/profanity.py:25
 msgid "Language"
 msgstr "Langue"
 
-#: models/profanity.py:28
+#: models/profanity.py:26
 msgid "Regex"
 msgstr "Exp.rég."
 
-#: models/profanity.py:29
+#: models/profanity.py:27
 msgctxt "profanity.filter"
 msgid "Standalone"
 msgstr "Indépendant"
 
-#: models/profanity.py:53
+#: models/profanity.py:51
 #, python-brace-format
 msgid "Profanity with pattern {regex}"
 msgstr "Grossièreté avec l'expression régulière {regex}"
 
-#: models/profanity.py:57
+#: models/profanity.py:55
 msgid "profanity"
 msgstr "grossièreté"
 
-#: models/profanity.py:58
+#: models/profanity.py:56
 msgid "profanities"
 msgstr "grossièretés"
 
@@ -530,21 +535,21 @@ msgstr ""
 "L'utilisateur a l'IP %(ip)s (%(IP.isp)s, %(ip.country.name)s) qui a été "
 "bloquée."
 
-#: views/actions/flag.py:23
+#: views/actions/flag.py:21
 #, python-format
 msgid "%(user)s has been banned and reported to %(count)d users."
 msgstr "%(user)s a été banni et signalé à %(count)d membres."
 
-#: views/actions/flag.py:35
+#: views/actions/flag.py:33
 #, python-format
 msgid "%(count)s pictures by %(user)s have been deleted."
 msgstr "%(count)s images de %(user)s ont été supprimées."
 
-#: views/actions/flag.py:38
+#: views/actions/flag.py:36
 msgid "No picture was deleted."
 msgstr "Aucune image n'a été supprimée."
 
-#: views/actions/flag.py:48
+#: views/actions/flag.py:46
 msgid "The content was protected from user interaction."
 msgstr "Le contenu a été protégé contre les interactions utilisateurs."
 

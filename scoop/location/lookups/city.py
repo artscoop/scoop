@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from ajax_select import LookupChannel
 from django.core.cache import cache
 from django.db import models
-from unidecode import unidecode
-
 from scoop.core.util.model.model import search_query
 from scoop.location.models.city import City
+from unidecode import unidecode
 
 
 class CityLookup(LookupChannel):

@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db.models.signals import post_delete, post_save
 from django.dispatch.dispatcher import receiver
-
 from scoop.core.abstract.core.uuid import FreeUUIDModel
 from scoop.core.tasks.uuid import remove_uuid_entry, write_uuid_entry
 

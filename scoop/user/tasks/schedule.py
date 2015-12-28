@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from celery.schedules import crontab, timedelta
@@ -9,7 +7,6 @@ from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
-
 from scoop.user.access.models import UserIP
 from scoop.user.models import User
 

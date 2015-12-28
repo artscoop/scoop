@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import template
-
 from scoop.messaging.models import Message, Recipient, Thread
 from scoop.messaging.models.alert import Alert
 from scoop.messaging.util.text import format_message

@@ -26,7 +26,11 @@ class ModeratedQuerySetMixin(object):
 
 class ModeratedModel(models.Model):
     """ Mixin de modèle modéré """
-    moderated = models.NullBooleanField(default=None, verbose_name=_("Moderated"))
+    # Constantes
+    MODERATED_CHOICES = [[None, _("Pending")], [False, _("Refused")], [True, _("Accepted")]]
+
+    # Champs
+    moderated = models.NullBooleanField(default=None, choices=MODERATED_CHOICES, verbose_name=_("Moderated"))
 
     # Overrides
     def save(self, *args, **kwargs):

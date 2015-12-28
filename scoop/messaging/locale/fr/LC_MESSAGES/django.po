@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:21+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2015-04-11 14:44+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -27,530 +27,530 @@ msgstr "Messagerie"
 msgid "Smileys"
 msgstr "Émoticônes"
 
-#: admin/admin.py:23
+#: admin/admin.py:21
 msgid "Translation"
 msgstr "Traduction"
 
-#: admin/admin.py:24
+#: admin/admin.py:22
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/message.py:32
+#: admin/message.py:30
 msgctxt "location"
 msgid "Location"
 msgstr "Lieu"
 
-#: admin/thread.py:30 models/message.py:124 models/negotiation.py:70
-#: models/recipient.py:102
+#: admin/thread.py:28 models/message.py:125 models/negotiation.py:68
+#: models/recipient.py:100
 msgid "Thread"
 msgstr "Fil de discussion"
 
-#: admin/thread.py:30
+#: admin/thread.py:28
 msgid "Expiry"
 msgstr "Expiration"
 
-#: admin/thread.py:34 admin/thread.py:39 models/thread.py:444
-#: models/thread.py:470
+#: admin/thread.py:32 admin/thread.py:37 models/thread.py:442
+#: models/thread.py:468
 msgid "Recipients"
 msgstr "Destinataires"
 
-#: admin/thread.py:47 models/thread.py:286
+#: admin/thread.py:45 models/thread.py:284
 msgid "Expiry on read"
 msgstr "Expiration après lecture"
 
-#: admin/thread.py:53 models/thread.py:285
+#: admin/thread.py:51 models/thread.py:283
 msgid "Expires"
 msgstr "Expire"
 
-#: admin/thread.py:56
+#: admin/thread.py:54
 msgid "Never"
 msgstr "Jamais"
 
-#: admin/thread.py:58
+#: admin/thread.py:56
 msgid "Was started"
 msgstr "Démarré"
 
-#: admin/thread.py:63
+#: admin/thread.py:61
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: forms/thread.py:24
+#: forms/thread.py:20
 msgid "Please make use of polite and correct language and behaviour."
 msgstr "Veuillez employer un langage correct et poli, merci."
 
-#: forms/thread.py:40
+#: forms/thread.py:36
 msgid "Your message must be at least {} characters long."
 msgstr "Votre message doit faire {} caractères minimum."
 
-#: forms/thread.py:58
+#: forms/thread.py:53
 msgid "Your subject must be at least {} characters long."
 msgstr "Votre sujet doit faire {} caractères minimum."
 
-#: forms/thread.py:65
+#: forms/thread.py:60
 msgid "The recipient does not exist."
 msgstr "Le destinataire n'existe pas."
 
-#: listeners/message.py:33
+#: listeners/message.py:31
 msgid "The thread is closed."
 msgstr "Le fil est fermé."
 
-#: listeners/message.py:36
+#: listeners/message.py:34
 msgid "You have no access to this thread."
 msgstr "Vous n'avez pas accès à ce fil de discussion."
 
-#: listeners/message.py:39
+#: listeners/message.py:37
 msgid "A blacklist policy prevents you from sending your message."
 msgstr ""
 "Des règles de liste noire vous empêchent de contacter au moins un "
 "destinataire."
 
-#: listeners/message.py:50
+#: listeners/message.py:48
 msgid "Message sent successfully"
 msgstr "Message envoyé avec succès"
 
-#: listeners/negotiation.py:23
+#: listeners/negotiation.py:21
 #, python-brace-format
 msgid "Discussion between {0} and {1}"
 msgstr "Discussion entre {0} et {1}"
 
-#: listeners/thread.py:20
+#: listeners/thread.py:18
 msgid "You have started discussions with too much people today."
 msgstr "Vous avez démarré des discussions avec trop de monde aujourd'hui."
 
-#: listeners/thread.py:24
+#: listeners/thread.py:22
 msgid "Cannot send a new message to nobody."
 msgstr "Impossible d'envoyer un nouveau message à personne."
 
-#: listeners/thread.py:28
+#: listeners/thread.py:26
 msgid "User policy prevents you from talking to at least one recipient."
 msgstr ""
 "Des règles d'utilisateur vous empêchent de contacter au moins un "
 "destinataire."
 
-#: models/alert.py:70
+#: models/alert.py:68
 msgid "Warning"
 msgstr "Avertissement"
 
-#: models/alert.py:70
+#: models/alert.py:68
 msgid "Important"
 msgstr "Important"
 
-#: models/alert.py:70
+#: models/alert.py:68
 msgid "Security"
 msgstr "Sécurité"
 
-#: models/alert.py:73 models/recipient.py:101
+#: models/alert.py:71 models/recipient.py:99
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/alert.py:74
+#: models/alert.py:72
 msgid "Level"
 msgstr "Niveau"
 
-#: models/alert.py:75
+#: models/alert.py:73
 msgid "Title"
 msgstr "Titre"
 
-#: models/alert.py:76 models/message.py:125
+#: models/alert.py:74 models/message.py:126
 msgid "Text"
 msgstr "Texte"
 
-#: models/alert.py:77
+#: models/alert.py:75
 msgid "Items"
 msgstr "Éléments"
 
-#: models/alert.py:78
+#: models/alert.py:76
 msgctxt "alert"
 msgid "Read"
 msgstr "Lue"
 
-#: models/alert.py:79
+#: models/alert.py:77
 msgctxt "alert.time"
 msgid "Read"
 msgstr "Lecture"
 
-#: models/alert.py:98
+#: models/alert.py:96
 #, python-brace-format
 msgid "Alert for {user}"
 msgstr "Alerte pour {user}"
 
-#: models/alert.py:106
+#: models/alert.py:104
 msgid "alert"
 msgstr "alerte"
 
-#: models/alert.py:107
+#: models/alert.py:105
 msgid "alerts"
 msgstr "alertes"
 
-#: models/label.py:24 models/message.py:122 models/thread.py:275
+#: models/label.py:22 models/message.py:123 models/thread.py:273
 msgid "Author"
 msgstr "Auteur"
 
-#: models/label.py:25
+#: models/label.py:23
 msgid "Must contain only letters and digits"
 msgstr "Doit contenir uniquement des chiffres et des lettres"
 
-#: models/label.py:25 models/message.py:123
+#: models/label.py:23 models/message.py:124
 msgid "Name"
 msgstr "Nom"
 
-#: models/label.py:55
+#: models/label.py:53
 msgid "label"
 msgstr "libellé"
 
-#: models/label.py:56
+#: models/label.py:54
 msgid "labels"
 msgstr "libellés"
 
-#: models/label.py:63 models/label.py:74
+#: models/label.py:61 models/label.py:72
 msgid "Labels"
 msgstr "Libellés"
 
-#: models/mailevent.py:152
+#: models/mailevent.py:159
 msgid "Mail type"
 msgstr "Type de courrier"
 
-#: models/mailevent.py:153
+#: models/mailevent.py:160
 msgid "Queue time"
 msgstr "Heure de remise"
 
-#: models/mailevent.py:154
+#: models/mailevent.py:161
 msgid "Recipient"
 msgstr "Destinataire"
 
-#: models/mailevent.py:155
+#: models/mailevent.py:162
 msgid "Force sending"
 msgstr "Forcer l'envoi"
 
-#: models/mailevent.py:156
+#: models/mailevent.py:163
 msgctxt "mailevent"
 msgid "Sent"
 msgstr "Envoyé"
 
-#: models/mailevent.py:157
+#: models/mailevent.py:164
 msgid "Delivery time"
 msgstr "Heure de remise"
 
-#: models/mailevent.py:158
+#: models/mailevent.py:165
 msgid "Email used"
 msgstr "Email utilisé"
 
-#: models/mailevent.py:159
+#: models/mailevent.py:166
 msgid "Minimum delivery"
 msgstr "Expédition minimum"
 
-#: models/mailevent.py:160
+#: models/mailevent.py:167
 msgid "Discarded"
 msgstr ""
 
-#: models/mailevent.py:164
+#: models/mailevent.py:171
 msgid "Can be sent now"
 msgstr "Peut être envoyé maintenant"
 
-#: models/mailevent.py:169
+#: models/mailevent.py:176
 msgid "Delivery"
 msgstr "Remise"
 
-#: models/mailevent.py:174
+#: models/mailevent.py:181
 msgid "Rendering"
 msgstr "Rendu"
 
-#: models/mailevent.py:193
+#: models/mailevent.py:200
 msgid "mail event"
 msgstr "événement courrier"
 
-#: models/mailevent.py:194
+#: models/mailevent.py:201
 msgid "mail events"
 msgstr "événements courrier"
 
-#: models/mailtype.py:18
+#: models/mailtype.py:16
 msgid "As soon as possible"
 msgstr "Dès que possible"
 
-#: models/mailtype.py:18
+#: models/mailtype.py:16
 msgid "Every 5 minutes"
 msgstr "Toutes les 5 minutes"
 
-#: models/mailtype.py:18
+#: models/mailtype.py:16
 msgid "Every 10 minutes"
 msgstr "Toutes les 10 minutes"
 
-#: models/mailtype.py:18
+#: models/mailtype.py:16
 msgid "Every 30 minutes"
 msgstr "Toutes les 30 minutes"
 
-#: models/mailtype.py:18
+#: models/mailtype.py:16
 msgid "Every hour"
 msgstr "Toutes les heures"
 
-#: models/mailtype.py:18
+#: models/mailtype.py:16
 msgid "Every 12 hours"
 msgstr "Toutes les 12 heures"
 
-#: models/mailtype.py:19
+#: models/mailtype.py:17
 msgid "Every day"
 msgstr "Tous les jours"
 
-#: models/mailtype.py:19
+#: models/mailtype.py:17
 msgid "Every 3 days"
 msgstr "Tous les 3 jours"
 
-#: models/mailtype.py:19
+#: models/mailtype.py:17
 msgid "Every week"
 msgstr "Toutes les semaines"
 
-#: models/mailtype.py:19
+#: models/mailtype.py:17
 msgid "Every 30 days"
 msgstr "Tous les 30 jours"
 
-#: models/mailtype.py:21
+#: models/mailtype.py:19
 msgid "Codename"
 msgstr "Nom de code"
 
-#: models/mailtype.py:22
+#: models/mailtype.py:20
 msgid "Template filename without path and extension"
 msgstr "Nom de fichier de gabarit sans chemin ni extension"
 
-#: models/mailtype.py:22
+#: models/mailtype.py:20
 msgid "Template"
 msgstr "Gabarit"
 
-#: models/mailtype.py:23
+#: models/mailtype.py:21
 msgid "Delay in minutes"
 msgstr "Délai en minutes"
 
-#: models/mailtype.py:23
+#: models/mailtype.py:21
 msgid "Minimum delay"
 msgstr "Délai minimum"
 
-#: models/mailtype.py:26 models/mailtype.py:56
+#: models/mailtype.py:24 models/mailtype.py:54
 msgid "Description"
 msgstr "Description"
 
-#: models/mailtype.py:32
+#: models/mailtype.py:30
 msgid "(No description)"
 msgstr "(Pas de description)"
 
-#: models/mailtype.py:34
+#: models/mailtype.py:32
 msgid "Interval"
 msgstr "Intervalle"
 
-#: models/mailtype.py:49
+#: models/mailtype.py:47
 msgid "mail type"
 msgstr "type de courrier"
 
-#: models/mailtype.py:50
+#: models/mailtype.py:48
 msgid "mail types"
 msgstr "types de courrier"
 
-#: models/message.py:126
+#: models/message.py:127
 msgid "Spam level"
 msgstr "Niveau de spam"
 
-#: models/message.py:127
+#: models/message.py:128
 msgctxt "message"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/message.py:166
+#: models/message.py:167
 msgid "Spam"
 msgstr "Spam"
 
-#: models/message.py:237
+#: models/message.py:238
 msgid "message"
 msgstr "message"
 
-#: models/message.py:238
+#: models/message.py:239
 msgid "messages"
 msgstr "messages"
 
-#: models/negotiation.py:64
+#: models/negotiation.py:62
 msgid "Pending"
 msgstr "En attente"
 
-#: models/negotiation.py:64
+#: models/negotiation.py:62
 msgid "Accepted"
 msgstr "Acceptée"
 
-#: models/negotiation.py:64
+#: models/negotiation.py:62
 msgid "Denied"
 msgstr "Refusée"
 
-#: models/negotiation.py:67
+#: models/negotiation.py:65
 msgid "Asker"
 msgstr "Demandeur"
 
-#: models/negotiation.py:68
+#: models/negotiation.py:66
 msgid "Target"
 msgstr "Cible"
 
-#: models/negotiation.py:69
+#: models/negotiation.py:67
 msgid "Status"
 msgstr "Statut"
 
-#: models/negotiation.py:71
+#: models/negotiation.py:69
 msgctxt "negotiation"
 msgid "Closed"
 msgstr "Fermée"
 
-#: models/negotiation.py:72
+#: models/negotiation.py:70
 msgctxt "negotiation"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/negotiation.py:97
+#: models/negotiation.py:95
 #, python-brace-format
 msgid "Messaging negotiation between {source} and {target}"
 msgstr "Négociation de messagerie entre {source} et {target}"
 
-#: models/negotiation.py:106
+#: models/negotiation.py:104
 msgid "negotiation"
 msgstr "négociation"
 
-#: models/negotiation.py:107
+#: models/negotiation.py:105
 msgid "negotiations"
 msgstr "négociations"
 
-#: models/quota.py:43
+#: models/quota.py:41
 msgid "Group"
 msgstr "Groupe"
 
-#: models/quota.py:44
+#: models/quota.py:42
 msgid "Max threads/day"
 msgstr "Sujets max/jour"
 
-#: models/quota.py:49
+#: models/quota.py:47
 msgid "message quota"
 msgstr "quota de messages"
 
-#: models/quota.py:50
+#: models/quota.py:48
 msgid "message quotas"
 msgstr "quotas de messages"
 
-#: models/recipient.py:103
+#: models/recipient.py:101
 msgctxt "recipient"
 msgid "Is active"
 msgstr "Est actif"
 
-#: models/recipient.py:104
+#: models/recipient.py:102
 msgctxt "thread"
 msgid "Unread"
 msgstr "Non lu"
 
-#: models/recipient.py:105
+#: models/recipient.py:103
 msgid "Unread time"
 msgstr "Heure de non lu"
 
-#: models/recipient.py:106 models/thread.py:281
+#: models/recipient.py:104 models/thread.py:279
 msgid "Message count"
 msgstr "Nombre de messages"
 
-#: models/recipient.py:107
+#: models/recipient.py:105
 msgctxt "thread"
 msgid "Acknowledged"
 msgstr "Pris connaissance"
 
-#: models/recipient.py:153
+#: models/recipient.py:151
 msgid "recipient"
 msgstr "destinataire"
 
-#: models/recipient.py:154
+#: models/recipient.py:152
 msgid "recipients"
 msgstr "destinataires"
 
-#: models/thread.py:172
+#: models/thread.py:170
 msgid "Inbox"
 msgstr "Boîte de réception"
 
-#: models/thread.py:172
+#: models/thread.py:170
 msgid "Unread threads"
 msgstr "Sujets non lus"
 
-#: models/thread.py:172
+#: models/thread.py:170
 msgid "Waiting for your reply"
 msgstr "En attente de votre réponse"
 
-#: models/thread.py:172
+#: models/thread.py:170
 msgid "Trash"
 msgstr "Corbeille"
 
-#: models/thread.py:276 models/thread.py:420
+#: models/thread.py:274 models/thread.py:418
 msgid "Topic"
 msgstr "Sujet"
 
-#: models/thread.py:277
+#: models/thread.py:275
 msgctxt "thread"
 msgid "Was started"
 msgstr "Démarré"
 
-#: models/thread.py:278
+#: models/thread.py:276
 msgctxt "thread"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/thread.py:279
+#: models/thread.py:277
 msgid "Last speaker"
 msgstr "Dernier participant"
 
-#: models/thread.py:280
+#: models/thread.py:278
 msgctxt "thread"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/thread.py:282
+#: models/thread.py:280
 msgid "Recipient count"
 msgstr "Nombre de destinataires"
 
-#: models/thread.py:283
+#: models/thread.py:281
 msgctxt "thread"
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/thread.py:286
+#: models/thread.py:284
 msgid "Value in days"
 msgstr "Valeur en jours"
 
-#: models/thread.py:425
+#: models/thread.py:423
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: models/thread.py:432
+#: models/thread.py:430
 msgid "Last message"
 msgstr "Dernier message"
 
-#: models/thread.py:438
+#: models/thread.py:436
 msgid "First message"
 msgstr "Premier message"
 
-#: models/thread.py:462
+#: models/thread.py:460
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: models/thread.py:486
+#: models/thread.py:484
 msgid "Messages"
 msgstr "Messages"
 
-#: models/thread.py:497
+#: models/thread.py:495
 msgid "Unread"
 msgstr "Non lu"
 
-#: models/thread.py:504
+#: models/thread.py:502
 msgid "All read"
 msgstr "Tout lu"
 
-#: models/thread.py:509
+#: models/thread.py:507
 msgid "Staff thread"
 msgstr "Fil administratif"
 
-#: models/thread.py:514
+#: models/thread.py:512
 msgid "Unread count"
 msgstr "Nombre de non lus"
 
-#: models/thread.py:543
+#: models/thread.py:541
 msgid "thread"
 msgstr "fil de discussion"
 
-#: models/thread.py:544
+#: models/thread.py:542
 msgid "threads"
 msgstr "fils de discussion"
 

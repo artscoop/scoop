@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:22+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2015-04-27 15:05+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,153 +19,153 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.7.6\n"
 
-#: admin/access.py:28
+#: admin/access.py:26
 msgid "Purge selected access log entries"
 msgstr "Purger les entrées sélectionnées du journal d'accès"
 
-#: admin/access.py:34 admin/filters.py:11 admin/filters.py:32 models/ip.py:99
-#: models/ip.py:139 models/ip.py:145 models/ip.py:154
+#: admin/access.py:32 admin/filters.py:9 admin/filters.py:30 models/ip.py:97
+#: models/ip.py:137 models/ip.py:143 models/ip.py:152
 msgid "Country"
 msgstr "Pays"
 
-#: admin/access.py:39
+#: admin/access.py:37
 msgid "User picture"
 msgstr "Portrait utilisateur"
 
-#: admin/filters.py:18 admin/filters.py:39
+#: admin/filters.py:16 admin/filters.py:37
 #: templates/access/dashboard/ips.html:28
 msgid "None"
 msgstr "Aucun"
 
-#: admin/ip.py:33
+#: admin/ip.py:31
 msgid "Update selected IPs"
 msgstr "Mettre à jour les IP sélectionnées"
 
-#: admin/ip.py:40
+#: admin/ip.py:38
 msgid "{} IP adresses were successfully updated."
 msgstr "{} adresses IP ont été correctement mises à jour."
 
-#: admin/userip.py:28
+#: admin/userip.py:26
 msgid "Harmful"
 msgstr "Dangereux"
 
-#: admin/userip.py:33 models/ip.py:98 models/ip.py:176
+#: admin/userip.py:31 models/ip.py:96 models/ip.py:174
 #: templates/access/dashboard/ips.html:18
 msgid "ISP"
 msgstr "FAI"
 
-#: models/access.py:101 models/userip.py:70
+#: models/access.py:98 models/userip.py:71
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/access.py:102
+#: models/access.py:99
 msgid "Page"
 msgstr "Page"
 
-#: models/access.py:103
+#: models/access.py:100
 msgid "Referrer"
 msgstr "Référent"
 
-#: models/access.py:109
+#: models/access.py:106
 #, python-brace-format
 msgid "{who} has visited {what}"
 msgstr "{who} à visité {what}"
 
-#: models/access.py:118
+#: models/access.py:115
 msgid "access"
 msgstr "accès"
 
-#: models/access.py:119
+#: models/access.py:116
 msgid "accesses"
 msgstr "accès"
 
-#: models/ip.py:94
+#: models/ip.py:92
 msgid "Decimal"
 msgstr "Décimal"
 
-#: models/ip.py:95
+#: models/ip.py:93
 msgid "String"
 msgstr "Chaîne"
 
-#: models/ip.py:96 models/ip.py:187 templates/access/dashboard/ips.html:17
+#: models/ip.py:94 models/ip.py:185 templates/access/dashboard/ips.html.py:17
 msgid "Reverse"
 msgstr "Inversé"
 
-#: models/ip.py:97
+#: models/ip.py:95
 msgid "Reverse status"
 msgstr "Statut inversé"
 
-#: models/ip.py:100
+#: models/ip.py:98
 msgid "Harm"
 msgstr "Danger"
 
-#: models/ip.py:101
+#: models/ip.py:99
 msgid "Blocked"
 msgstr "Bloqué"
 
-#: models/ip.py:102
+#: models/ip.py:100
 msgctxt "ip"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/ip.py:103
+#: models/ip.py:101
 msgid "Dynamic"
 msgstr "Dynamique"
 
-#: models/ip.py:104 models/ip.py:182
+#: models/ip.py:102 models/ip.py:180
 msgid "City name"
 msgstr "Nom de ville"
 
-#: models/ip.py:116
+#: models/ip.py:114
 msgid "Class"
 msgstr "Classe"
 
-#: models/ip.py:185
+#: models/ip.py:183
 msgid "N/D"
 msgstr "N/D"
 
-#: models/ip.py:194
+#: models/ip.py:192
 msgid "Short reverse"
 msgstr "Reverse court"
 
-#: models/ip.py:208
+#: models/ip.py:206
 msgid "Hexadecimal"
 msgstr "Hexadécimal"
 
-#: models/ip.py:217
+#: models/ip.py:215
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: models/ip.py:223
+#: models/ip.py:221
 msgid "Number of users"
 msgstr "Nombre d'utilisateurs"
 
-#: models/ip.py:304
+#: models/ip.py:302
 msgid "Icon"
 msgstr "Icône"
 
-#: models/page.py:28
+#: models/page.py:26
 msgid "Path"
 msgstr "Chemin"
 
-#: models/page.py:48
+#: models/page.py:46
 msgid "site page"
 msgstr "page de site"
 
-#: models/page.py:49
+#: models/page.py:47
 msgid "site pages"
 msgstr "pages de site"
 
-#: models/userip.py:81
+#: models/userip.py:82
 #, python-brace-format
 msgid "{user}@{ip}"
 msgstr "{user}@{ip}"
 
-#: models/userip.py:93
+#: models/userip.py:94
 msgid "user IP"
 msgstr "IP utilisateur"
 
-#: models/userip.py:94
+#: models/userip.py:95
 msgid "user IPs"
 msgstr "IP utilisateurs"
 
@@ -181,23 +181,23 @@ msgstr "Qui"
 msgid "IP"
 msgstr "IP"
 
-#: util/access.py:17
+#: util/access.py:15
 msgid "Ok"
 msgstr "Ok"
 
-#: util/access.py:18
+#: util/access.py:16
 msgid "Timed out"
 msgstr "Temps dépassé"
 
-#: util/access.py:19
+#: util/access.py:17
 msgid "Empty answer"
 msgstr "Réponse vide"
 
-#: util/access.py:20
+#: util/access.py:18
 msgid "Broken NS"
 msgstr "Serveur de nom cassé"
 
-#: util/access.py:21
+#: util/access.py:19
 msgid "Domain not found"
 msgstr "Domaine introuvable"
 

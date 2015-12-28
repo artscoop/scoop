@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 import logging
 from datetime import timedelta
@@ -9,7 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import permalink, Q
+from django.db.models import Q, permalink
 from django.db.models.aggregates import Count
 from django.http.response import Http404
 from django.template.loader import render_to_string
@@ -17,7 +15,6 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import to_timestamp

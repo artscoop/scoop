@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 
 from ajax_select import make_ajax_form
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.model.widgets import AdminSplitDateTime
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms.thread import ThreadAdminForm

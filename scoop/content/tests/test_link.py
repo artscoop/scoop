@@ -1,48 +1,38 @@
 # coding: utf-8
-from __future__ import absolute_import
+from importlib import import_module
 
 import loremipsum
 from django.conf import settings
 from django.test.testcases import TestCase
 from django.utils import timezone
-from django.utils.importlib import import_module
-
 from scoop.content.models import Content
 from scoop.content.models.content import Category
+from scoop.content.models.link import Link
 from scoop.user.models.user import User
 
 
 class LinkTest(TestCase):
     """ Test des liens """
     # Configuration
-    fixtures = ['options']
+    fixtures = []
 
     def setUp(self):
         """ Définit l'environnement des tests """
         self.engine = import_module(settings.SESSION_ENGINE)
         self.session = self.engine.SessionStore()
-        self.user = User.objects.create(username='commentuser', email='foo@foobar2.foo')
-        self.user.set_password('commentuser')
-        self.user.save()
-        # Créer des contenus variés
-        self.content1 = Content.objects.create([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True)
-        self.content2 = Content.objects.create(self.user, 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(12), visible=False)
-        self.content3 = Content.objects.create(self.user, 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(12), visible=False)
-        self.content3.publish = timezone.now() - timezone.timedelta(hours=1)
-        self.content3.save()
-        self.content4 = Content.objects.create(self.user, 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(12), visible=False)
-        self.content4.publish = timezone.now() + timezone.timedelta(hours=1)
-        self.content4.save()
 
-    def test_content(self):
-        """ Tester la publication et la visibilité des contenus """
-        self.assertIsNotNone(Category.objects.get_by_url('blog'), "a content type with the blog path should exist")
-        self.assertGreater(Category.objects.all().count(), 0, "could not find any content type, which should be impossible")
-        self.assertEqual(self.content1.category.short_name, 'blog', "content 1 should be a 'blog' entry")
-        self.assertTrue(self.content1.is_published(), "content 1 should be published")
-        self.assertFalse(self.content2.is_published(), "content 2 should be unpublished")
-        self.assertTrue(self.content3.is_published(), "content 3 should be published")
-        self.assertFalse(self.content4.is_published(), "content 4 should be unpublished")
-        self.assertEqual(Content.objects.visible().count(), 2, "there should be exactly 2 visible contents")
-        self.assertTrue(self.content1.is_author(self.user), "cannot find expected author in content1")
-        self.assertTrue(self.content1.is_new(), "this new content should be considered new")
+    def test_link_format(self):
+        """ Vérifier le format des liens """
+        link1 = Link.objects.create(url='http://a.com')  # valide
+        link2 = Link.objects.create(url='httu://a.com')  # invalide
+        link3 = Link.objects.create(url='http://a.com/?a=1&b=2')  # valide
+        self.assertTrue(link1.is_valid(), "This link is formatted properly")
+        self.assertFalse(link2.is_valid(), "This link is not formatted properly")
+        self.assertTrue(link3.is_valid(), "This link is formatted properly")
+
+    def test_link_access(self):
+        """ Vérifier que les liens sont accessibles """
+        link1 = Link.objects.create(url='http://example.com')  # accessible
+        link2 = Link.objects.create(url='http://a.com')  # inaccessible
+        self.assertTrue(link1.exists(), "This URL should be working")
+        self.assertFalse(link2.exists(), "This URL should not be working")

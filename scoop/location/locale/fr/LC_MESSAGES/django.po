@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:21+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2015-05-08 02:17+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -27,7 +27,7 @@ msgstr "Lieu"
 msgid "Fetch pictures for selected venues"
 msgstr "Récupérer des images pour les lieux sélectionnés"
 
-#: admin/admin.py:39 admin/city.py:67
+#: admin/admin.py:39 admin/city.py:65
 msgid "Pictures were successfully fetched"
 msgstr "Les images ont été correctement récupérées"
 
@@ -35,110 +35,110 @@ msgstr "Les images ont été correctement récupérées"
 msgid "Update currency values"
 msgstr "Mettre à jour les valeurs des devises"
 
-#: admin/city.py:25 admin/country.py:26
+#: admin/city.py:23 admin/country.py:24
 msgid "Translation"
 msgstr "Traduction"
 
-#: admin/city.py:26 admin/country.py:27
+#: admin/city.py:24 admin/country.py:25
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/city.py:39 models/city.py:317 models/venue.py:35
+#: admin/city.py:37 models/city.py:317 models/venue.py:35
 msgid "City"
 msgstr "Ville"
 
-#: admin/city.py:39
+#: admin/city.py:37
 msgid "Geonames"
 msgstr "Geonames"
 
-#: admin/city.py:51
+#: admin/city.py:49
 msgid "Delete every city in the database"
 msgstr "Supprimer toutes les villes de la base de données"
 
-#: admin/city.py:56
+#: admin/city.py:54
 msgid "Resave cities"
 msgstr "Sauvegarder à nouveau les villes"
 
-#: admin/city.py:62
+#: admin/city.py:60
 msgid "Fetch pictures for selected cities"
 msgstr "Récupérer des images pour les villes sélectionnées"
 
-#: admin/city.py:70 admin/filters.py:8 models/city.py:157
-#: models/venuetype.py:16
+#: admin/city.py:68 admin/filters.py:8 models/city.py:157
+#: models/venuetype.py:14
 msgid "Parent"
 msgstr "Parent"
 
-#: admin/city.py:80 models/city.py:153 models/city.py:277
+#: admin/city.py:78 models/city.py:153 models/city.py:277
 msgid "Code"
 msgstr "Code"
 
-#: admin/country.py:39 models/city.py:150 models/country.py:169
+#: admin/country.py:37 models/city.py:150 models/country.py:170
 msgid "Country"
 msgstr "Pays"
 
-#: admin/country.py:53
+#: admin/country.py:51
 msgid "Populate everything about this country"
 msgstr "Renseigner toutes les informations de ce pays"
 
-#: admin/country.py:57
+#: admin/country.py:55
 msgid "You can autopopulate this country by setting DEBUG to False."
 msgstr ""
 "Vous pouvez renseigner automatiquement ce pays en définissant DEBUG à False."
 
-#: admin/country.py:61
+#: admin/country.py:59
 msgid "Populate country from Geonames database file"
 msgstr "Peupler les pays depuis un fichier de base de données Geonames"
 
-#: admin/country.py:67
+#: admin/country.py:65
 msgid "Set settings.DEBUG to False before populating city tables."
 msgstr ""
 "Veuillez assigner settings.DEBUG à False avant d'ajouter des villes à la "
 "base de données."
 
-#: admin/country.py:69
+#: admin/country.py:67
 msgid "You must add a country with the correct code to populate."
 msgstr "Vous devez ajouter un pays à renseigner avec un code correct."
 
-#: admin/country.py:71
+#: admin/country.py:69
 msgid "Rebuild city hierarchy in country"
 msgstr "Reconstruire la hiérarchie des villes du pays"
 
-#: admin/country.py:76
+#: admin/country.py:74
 msgid "City tree successfully rebuilt."
 msgstr "L'arborescence des villes a été correctement reconstruite."
 
-#: admin/country.py:78
+#: admin/country.py:76
 msgid "Populate country currencies"
 msgstr "Peupler les devises des pays"
 
-#: admin/country.py:84
+#: admin/country.py:82
 msgid "Rename every city with its short counterpart"
 msgstr "Renommer toutes les villes en prenant leur nom raccourci"
 
-#: admin/country.py:88
+#: admin/country.py:86
 msgid ""
 "Every city in the database had its name successfully updated when required."
 msgstr ""
 "Tous les noms de villes de la base de données ont été correctement mis à "
 "jour lorsque c'était nécessaire."
 
-#: admin/country.py:90
+#: admin/country.py:88
 msgid "Remove all cities from selected countries"
 msgstr "Supprimer toutes les villes des pays sélectionnés"
 
-#: admin/country.py:96
+#: admin/country.py:94
 msgid "Cities from selected countries have been successfully deleted."
 msgstr "Les villes des pays sélectionnés ont été correctement supprimées."
 
-#: admin/country.py:98
+#: admin/country.py:96
 msgid "Set selected countries to private"
 msgstr "Rendre privés les pays sélectionnés"
 
-#: admin/country.py:104
+#: admin/country.py:102
 msgid "Countries have been made private."
 msgstr "Les pays ont été rendus privés."
 
-#: admin/country.py:114
+#: admin/country.py:112
 msgid "Updated"
 msgstr "Mis à jour"
 
@@ -163,6 +163,12 @@ msgstr "Niveau"
 msgid "Level {level}"
 msgstr "Niveau {level}"
 
+#: management/commands/update_countries.py:9
+#, fuzzy
+#| msgid "Populate country from Geonames database file"
+msgid "Populate countries from Geonames"
+msgstr "Peupler les pays depuis un fichier de base de données Geonames"
+
 #: models/city.py:142
 msgid "Geonames ID"
 msgstr "ID Geonames"
@@ -180,9 +186,9 @@ msgid "Feature"
 msgstr "Catégorie"
 
 #: models/city.py:151 models/city.py:263 models/city.py:319 models/city.py:320
-#: models/country.py:72 models/country.py:89 models/country.py:171
-#: models/currency.py:36 models/timezone.py:16 models/venue.py:33
-#: models/venuetype.py:19 models/venuetype.py:56
+#: models/country.py:72 models/country.py:89 models/country.py:172
+#: models/currency.py:35 models/timezone.py:16 models/venue.py:33
+#: models/venuetype.py:17 models/venuetype.py:54
 msgid "Name"
 msgstr "Nom"
 
@@ -223,59 +229,59 @@ msgstr "Arborescence formatée"
 msgid "cities"
 msgstr "villes"
 
-#: models/city.py:316 models/country.py:168
+#: models/city.py:316 models/country.py:169
 msgid "Alternate ID"
 msgstr "ID alternatif"
 
-#: models/city.py:318 models/country.py:170
+#: models/city.py:318 models/country.py:171
 msgid "Language name"
 msgstr "Nom de la langue"
 
-#: models/city.py:321 models/country.py:172
+#: models/city.py:321 models/country.py:173
 msgid "Preferred"
 msgstr "Préféré"
 
-#: models/city.py:322 models/country.py:173
+#: models/city.py:322 models/country.py:174
 msgid "Short version"
 msgstr "Raccourci"
 
-#: models/city.py:343 models/country.py:178
+#: models/city.py:344 models/country.py:179
 msgid "Name for {}"
 msgstr "Nom pour {}"
 
-#: models/city.py:352
+#: models/city.py:353
 msgid "city name"
 msgstr "nom de ville"
 
-#: models/city.py:353
+#: models/city.py:354
 msgid "city names"
 msgstr "noms de villes"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Africa"
 msgstr "Afrique"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Asia"
 msgstr "Asie"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Europe"
 msgstr "Europe"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "North America"
 msgstr "Amérique du Nord"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Oceania"
 msgstr "Océanie"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "South America"
 msgstr "Amérique du Sud"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Antarctica"
 msgstr "Antarctique"
 
@@ -344,45 +350,45 @@ msgstr "pays"
 msgid "countries"
 msgstr "pays"
 
-#: models/country.py:182
+#: models/country.py:183
 msgid "country name"
 msgstr "nom de pays"
 
-#: models/country.py:183
+#: models/country.py:184
 msgid "country names"
 msgstr "noms de pays"
 
-#: models/currency.py:37
+#: models/currency.py:36
 msgid "3 letter name"
 msgstr "Nom à 3 lettres"
 
-#: models/currency.py:38
+#: models/currency.py:37
 msgctxt "currency"
 msgid "Quote"
 msgstr "Cotation"
 
-#: models/currency.py:39
+#: models/currency.py:38
 msgctxt "currency"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/currency.py:84
+#: models/currency.py:83
 msgid "currency"
 msgstr "devise"
 
-#: models/currency.py:85
+#: models/currency.py:84
 msgid "currencies"
 msgstr "devises"
 
-#: models/position.py:47
+#: models/position.py:48
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/position.py:62
+#: models/position.py:63
 msgid "user position"
 msgstr "position utilisateur"
 
-#: models/position.py:63
+#: models/position.py:64
 msgid "user positioning"
 msgstr "positions utilisateurs"
 
@@ -394,23 +400,23 @@ msgstr "Signature Adler32 du nom standard de fuseau horaire"
 msgid "Name hash"
 msgstr "Signature"
 
-#: models/timezone.py:47
+#: models/timezone.py:55
 msgid "UTC Offset"
 msgstr "Écart UTC"
 
-#: models/timezone.py:53
+#: models/timezone.py:61
 msgid "DST Offset"
 msgstr "Écart d'heure d'été"
 
-#: models/timezone.py:59
+#: models/timezone.py:67
 msgid "Base Offset"
 msgstr "Écart de base"
 
-#: models/timezone.py:84
+#: models/timezone.py:92
 msgid "timezone"
 msgstr "fuseau horaire"
 
-#: models/timezone.py:85
+#: models/timezone.py:93
 msgid "timezones"
 msgstr "fuseaux horaires"
 
@@ -451,31 +457,31 @@ msgstr "lieu"
 msgid "venues"
 msgstr "lieux"
 
-#: models/venuetype.py:15
+#: models/venuetype.py:13
 msgid "Short name"
 msgstr "Nom court"
 
-#: models/venuetype.py:25 models/venuetype.py:33
+#: models/venuetype.py:23 models/venuetype.py:31
 msgid "(No name)"
 msgstr "(Sans nom)"
 
-#: models/venuetype.py:27 models/venuetype.py:57
+#: models/venuetype.py:25 models/venuetype.py:55
 msgid "Plural"
 msgstr "Pluriel"
 
-#: models/venuetype.py:35 models/venuetype.py:58
+#: models/venuetype.py:33 models/venuetype.py:56
 msgid "Description"
 msgstr "Description"
 
-#: models/venuetype.py:41
+#: models/venuetype.py:39
 msgid "(No description)"
 msgstr "(Sans description)"
 
-#: models/venuetype.py:49
+#: models/venuetype.py:47
 msgid "venue type"
 msgstr "type de lieu"
 
-#: models/venuetype.py:50
+#: models/venuetype.py:48
 msgid "venue types"
 msgstr "types de lieux"
 
@@ -483,136 +489,136 @@ msgstr "types de lieux"
 msgid "population has failed. please investigate."
 msgstr "Le remplissage a échoué. Veuillez enquêter sur l'erreur."
 
-#: tasks/schedule.py:27
+#: tasks/schedule.py:25
 #, python-brace-format
 msgid "Successfully fetched {count} images for city {city}"
 msgstr "{count} images ont correctement été récupérées pour la ville {city}"
 
-#: util/cardinal.py:7
+#: util/cardinal.py:5
 msgid "east"
 msgstr "est"
 
-#: util/cardinal.py:7
+#: util/cardinal.py:5
 msgid "east-north-east"
 msgstr "est-nord-est"
 
-#: util/cardinal.py:7
+#: util/cardinal.py:5
 msgid "north-east"
 msgstr "nord-est"
 
-#: util/cardinal.py:7
+#: util/cardinal.py:5
 msgid "north-north-east"
 msgstr "nord-nord-est"
 
-#: util/cardinal.py:7
+#: util/cardinal.py:5
 msgid "north"
 msgstr "nord"
 
-#: util/cardinal.py:8
+#: util/cardinal.py:6
 msgid "north-north-west"
 msgstr "nord-nord-ouest"
 
-#: util/cardinal.py:8
+#: util/cardinal.py:6
 msgid "north-west"
 msgstr "nord-ouest"
 
-#: util/cardinal.py:8
+#: util/cardinal.py:6
 msgid "west-north-west"
 msgstr "ouest-nord-ouest"
 
-#: util/cardinal.py:8
+#: util/cardinal.py:6
 msgid "west"
 msgstr "ouest"
 
-#: util/cardinal.py:9
+#: util/cardinal.py:7
 msgid "west-south-west"
 msgstr "ouest-sud-ouest"
 
-#: util/cardinal.py:9
+#: util/cardinal.py:7
 msgid "south-west"
 msgstr "sud-est"
 
-#: util/cardinal.py:9
+#: util/cardinal.py:7
 msgid "south-south-west"
 msgstr "sud-sud-ouest"
 
-#: util/cardinal.py:9
+#: util/cardinal.py:7
 msgid "south"
 msgstr "sud"
 
-#: util/cardinal.py:10
+#: util/cardinal.py:8
 msgid "south-south-east"
 msgstr "sud-sud-est"
 
-#: util/cardinal.py:10
+#: util/cardinal.py:8
 msgid "south-east"
 msgstr "sud-est"
 
-#: util/cardinal.py:10
+#: util/cardinal.py:8
 msgid "east-south-east"
 msgstr "est-sud-est"
 
-#: util/cardinal.py:12
+#: util/cardinal.py:10
 msgid "to the east"
 msgstr "à l'est"
 
-#: util/cardinal.py:12
+#: util/cardinal.py:10
 msgid "to the east-north-east"
 msgstr "à l'est-nord-est"
 
-#: util/cardinal.py:12
+#: util/cardinal.py:10
 msgid "to the north-east"
 msgstr "au nord-est"
 
-#: util/cardinal.py:12
+#: util/cardinal.py:10
 msgid "to the north-north-east"
 msgstr "au nord-nord-est"
 
-#: util/cardinal.py:12
+#: util/cardinal.py:10
 msgid "to the north"
 msgstr "au nord"
 
-#: util/cardinal.py:13
+#: util/cardinal.py:11
 msgid "to the north-north-west"
 msgstr "au nord-nord-ouest"
 
-#: util/cardinal.py:13
+#: util/cardinal.py:11
 msgid "to the north-west"
 msgstr "au nord-ouest"
 
-#: util/cardinal.py:13
+#: util/cardinal.py:11
 msgid "to the west-north-west"
 msgstr "à l'ouest-nord-ouest"
 
-#: util/cardinal.py:13
+#: util/cardinal.py:11
 msgid "to the west"
 msgstr "à l'ouest"
 
-#: util/cardinal.py:14
+#: util/cardinal.py:12
 msgid "to the west-south-west"
 msgstr "à l'ouest-sud-ouest"
 
-#: util/cardinal.py:14
+#: util/cardinal.py:12
 msgid "to the south-west"
 msgstr "au sud-ouest"
 
-#: util/cardinal.py:14
+#: util/cardinal.py:12
 msgid "to the south-south-west"
 msgstr "au sud-sud-ouest"
 
-#: util/cardinal.py:14
+#: util/cardinal.py:12
 msgid "to the south"
 msgstr "au sud"
 
-#: util/cardinal.py:15
+#: util/cardinal.py:13
 msgid "to the south-south-east"
 msgstr "au sud-sud-est"
 
-#: util/cardinal.py:15
+#: util/cardinal.py:13
 msgid "to the south-east"
 msgstr "au sud-est"
 
-#: util/cardinal.py:15
+#: util/cardinal.py:13
 msgid "to the east-south-east"
 msgstr "à l'est-sud-est"
 

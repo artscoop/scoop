@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import os
 
 from ajax_select import make_ajax_form
@@ -14,7 +12,6 @@ from django.template.defaultfilters import date as datefilter
 from django.utils.timezone import localtime
 from django.utils.translation import ugettext_lazy as _
 from genericadmin.admin import GenericAdminModelAdmin
-
 from scoop.content.admin.filters import DimensionsFilter
 from scoop.content.forms.picture import PictureAdminForm, ZipUploadForm
 from scoop.content.models.picture import Picture

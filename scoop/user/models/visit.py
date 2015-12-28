@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import now
 

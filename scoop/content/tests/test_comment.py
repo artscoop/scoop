@@ -1,12 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
+from importlib import import_module
 
 import loremipsum
 from django.conf import settings
 from django.db.models.base import Model
 from django.test import TestCase
-from django.utils.importlib import import_module
-
 from scoop.content.models.comment import Comment
 from scoop.content.models.content import Content
 from scoop.user.models.user import User
@@ -26,8 +24,8 @@ class CommentTest(TestCase):
         self.user.set_password('commentuser')
         self.user.save()
         # Créer des contenus commentables ou pas
-        self.content1 = Content.objects.create([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=True)
-        self.content2 = Content.objects.create([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=False)
+        self.content1 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=True)
+        self.content2 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=False)
         # Commenter l'utilisateur et tester l'état des commentaires
         self.comment1 = Comment.objects.comment(None, self.user, self.user, "Commentaire 1", force=True)
         self.comment2 = Comment.objects.comment(None, self.user, self.user, "Commentaire 2", force=True)

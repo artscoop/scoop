@@ -1,9 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
+from os.path import join
 
 from django.test import TestCase
-
 from scoop.content.models.picture import Picture
+from scoop.core.util.stream.directory import Paths
 from scoop.user.models.user import User
 
 
@@ -18,7 +18,7 @@ class PictureTest(TestCase):
         self.user = User.objects.create(username='pictureuser', email='foo@foobar3.foo')
         # Créer des images, une via Google Search, et une par URL
         self.picture1 = Picture.objects.create_from_uri("find://flower?id=0", author=self.user, title="Flower")
-        self.picture2 = Picture.objects.create_from_uri("http://media.topito.com/wp-content/uploads/2014/10/95qHQgg.gif", author=self.user, title="Nyan")
+        self.picture2 = Picture.objects.create_from_file(join(Paths.get_root_dir('isolated', 'static', 'assets', 'tests', 'content'), 'banana.gif'), author=self.user, title="Banana")
 
     def tearDown(self):
         """ Nettoyer l'environnement des tests """

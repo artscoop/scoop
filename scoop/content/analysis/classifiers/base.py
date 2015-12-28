@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db.models.aggregates import Sum
-
 from scoop.content.analysis.models.category import Category
 from scoop.content.analysis.models.statistics import CategoryCount, FeatureCount
 

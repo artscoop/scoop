@@ -1,14 +1,12 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import socket
+
+from dns import resolver as dnsresolver
+from dns import reversename
 
 from django.core.cache import cache
 from django.utils.lru_cache import lru_cache
 from django.utils.translation import ugettext_lazy as _
-from dns import resolver as dnsresolver
-from dns import reversename
-
 from scoop.core.util.data.dateutil import now
 
 # Codes de statut de résolution

@@ -4,7 +4,6 @@ import datetime
 from django.contrib.admin.filters import SimpleListFilter
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import now as now_
 

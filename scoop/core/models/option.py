@@ -1,20 +1,19 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db import models
+from django.db.models.base import Model
 from django.template.loader import render_to_string
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy, ugettext
-from translatable.exceptions import MissingTranslation
-from translatable.models import get_translation_model, TranslatableModel
-from unidecode import unidecode
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
+from unidecode import unidecode
+from django.apps.registry import apps
 
 
 class OptionManager(SingleDeleteManager):
@@ -42,10 +41,12 @@ class OptionManager(SingleDeleteManager):
         return self.get(group__id=group, code=code, **({'active': True} if active_only else {}))
 
 
-class Option(TranslatableModel, PicturableModel, UUID64Model):
+class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installed('content') else Model):
     """ Option """
+
     # Choix de codes
     CODES = [[i, i] for i in range(200)]
+
     # Champs
     group = models.ForeignKey('core.OptionGroup', null=False, blank=False, related_name='options', verbose_name=_("Group"))
     code = models.SmallIntegerField(null=False, blank=False, choices=CODES, db_index=True, verbose_name=_("Code"))
@@ -56,7 +57,7 @@ class Option(TranslatableModel, PicturableModel, UUID64Model):
     # Getter
     def natural_key(self):
         """ Renvoyer la clé naturelle de l'objet """
-        return (self.uuid,)
+        return self.uuid,
 
     @addattr(short_description=_("Name"))
     def get_name(self):

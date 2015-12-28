@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.apps.registry import apps
 from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.generic import GenericModel
 from scoop.core.abstract.core.uuid import FreeUUIDModel
 from scoop.core.util.model.model import SingleDeleteManager

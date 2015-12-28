@@ -3,8 +3,8 @@ import re
 from re import split
 
 from django import template
-from django.core.urlresolvers import reverse
-from django.template import Node, resolve_variable, Variable
+from django.core.urlresolvers import reverse_lazy as reverse
+from django.template import Node, Variable, resolve_variable
 
 register = template.Library()
 

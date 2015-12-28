@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import re
 
 import IPy
@@ -13,7 +11,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django_countries import countries
 from django_countries.fields import CountryField
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager

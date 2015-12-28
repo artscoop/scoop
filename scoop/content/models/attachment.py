@@ -1,17 +1,15 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import os
 
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
 from django.db import models
+from django.db.models import Q
 from django.template.defaultfilters import filesizeformat
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext, pgettext_lazy
-
 from scoop.content.util.attachment import get_attachment_upload_path
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -34,22 +32,32 @@ class AttachmentManager(SingleDeleteManager):
         except Attachment.DoesNotExist:
             return ""
 
-    def get_by_object(self, item):
+    def by_object(self, item):
         """ Renvoyer les fichiers joints à un objet """
         content_type = ContentType.objects.get_for_model(item)
         return self.filter(content_type=content_type, object_id=item.pk)
 
+    def orphaned(self):
+        """ Renvoyer les fichiers qui ne sont pas attachés à un objet """
+        return self.filter(Q(content_type=None) | Q(object_id=None))
+
     # Setter
     def attach(self, attachment, target, force=False):
-        """ Joindre un fichier à un objet """
+        """
+        Joindre un fichier à un objet
+        :returns: True si le fichier a été attaché, False sinon
+        """
         if isinstance(attachment, Attachment) and isinstance(target, models.Model):
             if force is True or attachment.content_object is None:
                 attachment.content_object = target
                 attachment.save()
+                return True
+        return False
 
 
 class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
     """ Pièce jointe fichier """
+
     # Champs
     group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_("Group"))
     file = models.FileField(max_length=192, upload_to=get_attachment_upload_path, verbose_name=_("File"), help_text=_("File to attach"))

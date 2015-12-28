@@ -1,16 +1,14 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 import os
-import urllib
 from urllib.error import HTTPError
 from urllib.parse import unquote
 
 import requests
+
 from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
 from unidecode import unidecode
 
@@ -55,9 +53,7 @@ def get_url_path(path):
 
 def unquote_url(path, transliterate=True):
     """ Renvoyer une URL en décodant les caractères HTML sous forme % """
-    filename = unquote(path).decode('utf8')
-    if transliterate:
-        filename = unidecode(filename)
+    filename = unquote(str(path))
     return filename
 
 

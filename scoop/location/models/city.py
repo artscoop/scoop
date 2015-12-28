@@ -1,6 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
+from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from django.contrib.gis.measure import D
 from django.core.cache import cache
@@ -10,22 +9,23 @@ from django.utils import translation
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from unidecode import unidecode
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import search_query
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
-from scoop.location.util.gis import Distance
 from scoop.location.util.weather import get_open_weather
+from unidecode import unidecode
 
 
 class CityQuerySetMixin(object):
     """
     Mixin de Queryset/Manager des villes
     """
+
+    # Constantes
+    OPS = {'=': 'exact', '<': 'lt', '<=': 'lte', '>': 'gt', '>=': 'gte'}
 
     # Getter
     def city(self):
@@ -65,8 +65,7 @@ class CityQuerySetMixin(object):
         :param operator: modifie la sélection par rapport à un nombre d'habitants
             opérateur entre =, <, >, <= et >=
         """
-        OPS = {'=': 'exact', '<': 'lt', '<=': 'lte', '>': 'gt', '>=': 'gte'}
-        criteria = {'population__{operator}'.format(operator=OPS.get(operator, 'gte')): value}
+        criteria = {'population__{operator}'.format(operator=self.OPS.get(operator, 'gte')): value}
         return self.filter(country__code2__in=make_iterable(country_codes, list), **criteria)
 
     def by_country(self, country):
@@ -93,7 +92,7 @@ class CityQuerySetMixin(object):
         Renvoyer les villes uniquement dans un cercle de n km autour d'un point
         :type self: django.db.models.Manager
         """
-        center = Point(point[1], point[0])
+        center = Point(point[1], point[0], srid=CoordinatesModel.SRID)
         return self.filter(position__distance_lt=(center, D(km=km)))
 
     def biggest(self, point, km=20):
@@ -108,8 +107,8 @@ class CityQuerySetMixin(object):
         """
         name = unidecode(name).lower().strip() if name else '*'
         # Renvoyer le résultat en cache
-        CACHE_KEY = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=point[0], lon=point[1], name=name or '*')
-        result = cache.get(CACHE_KEY, None)
+        cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=point[0], lon=point[1], name=name or '*')
+        result = cache.get(cache_key, None)
         if result is not None:
             return self.get(id=result)
         # Ou retrouver la ville la plus proche
@@ -119,7 +118,7 @@ class CityQuerySetMixin(object):
         if cities.exists():
             cities = cities.annotate(distance=Distance('position', Point(point[1], point[0], srid=4326))).order_by('distance')
             closest_city = cities.first()
-            cache.set(CACHE_KEY, closest_city.pk)
+            cache.set(cache_key, closest_city.pk)
             return closest_city
         return None
 

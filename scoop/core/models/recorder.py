@@ -14,7 +14,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from pretty_times import pretty
-
 from scoop.core.util.data.dateutil import datetime_round_hour
 from scoop.core.util.data.typeutil import get_color_name, hash_rgb
 from scoop.core.util.model.csvexport import csv_dump

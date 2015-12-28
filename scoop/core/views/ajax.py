@@ -1,11 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import simplejson
+
 from django.conf import settings
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
-
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.shortcuts import import_fullname
 

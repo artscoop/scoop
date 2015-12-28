@@ -3,7 +3,6 @@ import psutil
 from admin_tools.dashboard.modules import DashboardModule
 from django.core.cache import cache
 from django.template.loader import render_to_string
-
 from scoop.core.models.recorder import Record
 from scoop.core.util.stream.fileutil import get_free_disk_space
 

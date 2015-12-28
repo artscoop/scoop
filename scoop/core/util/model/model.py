@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import operator
 import threading
 from functools import reduce
@@ -9,7 +7,6 @@ from random import choice, randrange
 from time import sleep
 
 from django.db import models, transaction
-from django.db.models.base import ModelBase
 from django.db.transaction import atomic
 
 

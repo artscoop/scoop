@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db import models
 from django.http import HttpRequest
 from django.template.base import TextNode
@@ -10,7 +8,6 @@ from django.template.loader import get_template
 from django.template.loader_tags import BlockNode, ExtendsNode
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.shortcuts import addattr
 
