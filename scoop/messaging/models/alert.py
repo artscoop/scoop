@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 
 from django.conf import settings
@@ -11,7 +9,6 @@ from django.template.context import RequestContext
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.textutil import one_line

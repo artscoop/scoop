@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from haystack import indexes
-
 from scoop.content.models.picture import Picture
 
 

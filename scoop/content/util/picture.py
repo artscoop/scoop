@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 import os
 import sys
@@ -8,6 +6,7 @@ from math import ceil, floor
 from os.path import basename, splitext
 
 import PIL
+
 from django.conf import settings
 from django.core.files.base import File
 from django.core.files.storage import default_storage
@@ -15,13 +14,12 @@ from django.core.files.temp import NamedTemporaryFile
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from easy_thumbnails.models import Source, Thumbnail
-from unidecode import unidecode
-
 from scoop.content.util.webkit import Screenshot
 from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import check_file_extension, walk
 from scoop.core.util.stream.urlutil import download_url_resource, get_url_path, unquote_url
+from unidecode import unidecode
 
 logger = logging.getLogger(__name__)
 root_dir = Paths.get_root_dir
@@ -76,7 +74,9 @@ def get_animation_upload_path(animation, name, update=False):
     dir_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d")}
     name_info = {'name': slugify(splitext(basename(name))[0]), 'ext': splitext(basename(name))[1]}
     prefix_info = {'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'week': fmt("%W"), 'author': author}
-    data = dict(dir_info.items() + name_info.items() + prefix_info.items())
+    data = dir_info
+    data.update(name_info)
+    data.update(prefix_info)
     # Renvoyer le répertoire ou le chemin complet du fichier
     path = "file/ani/{year}/{month}{week}" if update else "file/ani/{year}/{month}{week}/{author}/{name}{ext}"
     path = "test/{}".format(path) if settings.TEST else path
@@ -93,7 +93,8 @@ def download(instance, path, screenshot=True):
         # Transformer le chemin de l'URL en nom de fichier utilisable
         filename = get_url_path(path)
         filename = unquote_url(filename, transliterate=True)
-        filename = check_file_extension(filename, outfile, ['.png', '.jpg', '.jpeg', '.gif']) or filename  # peut être None si aucun traitement nécessaire, auquel cas garder le filename original
+        # Peut être None si aucun traitement nécessaire, auquel cas garder le filename original
+        filename = check_file_extension(filename, outfile, ['.png', '.jpg', '.jpeg', '.gif']) or filename
         # Si une image était déjà liée à l'instance, supprimer le fichier
         if instance.exists():
             instance.delete_file()
@@ -101,7 +102,7 @@ def download(instance, path, screenshot=True):
         if path == instance.description:
             instance.description = ""
         # Sauver l'image dans le nouveau fichier
-        instance.image.save(filename, File(open(outfile)))
+        instance.image.save(filename, File(open(outfile, 'rb')))
         super(Picture, instance).save()
     except Exception:
         try:

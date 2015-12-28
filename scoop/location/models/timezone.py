@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 import zlib
 
 import pytz
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 
 

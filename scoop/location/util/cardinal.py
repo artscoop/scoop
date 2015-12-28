@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.utils.translation import ugettext_lazy as _
 
 # Constantes : Noms des points cardinaux à 1/16 (steps à Pi/8)

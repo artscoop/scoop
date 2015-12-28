@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.model.model import SingleDeleteManager

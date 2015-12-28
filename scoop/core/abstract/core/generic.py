@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
 from django.db import models

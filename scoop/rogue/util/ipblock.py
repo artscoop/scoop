@@ -1,13 +1,11 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import re
 from os import listdir
 from os.path import isfile, join
 
 import requests
-from django.core.cache import cache
 
+from django.core.cache import cache
 from scoop.core.util.stream.directory import Paths
 
 PROXY_LIST_DIRECTORY = Paths.get_root_dir('isolated', 'database', 'rogue', 'proxies')

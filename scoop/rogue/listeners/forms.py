@@ -1,11 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django.core.exceptions import ValidationError
 from django.dispatch.dispatcher import receiver
-
 from scoop.user.util.signals import credentials_form_check_email
 
 logger = logging.getLogger(__name__)

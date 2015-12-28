@@ -1,11 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop as _
-
-from scoop.core.util.model.model import patch_methods
-
 
 __version__ = (1, 2015, 3)
 _("language"), _("gender"), _("Profiles"), _("Profile")
@@ -23,6 +18,7 @@ class CoreConfig(AppConfig):
         from scoop.core.util.model.model import DictUpdateModel, get_all_related_objects
         from scoop.core.util.stream.request import RequestMixin
         from scoop.core.abstract.rogue.flag import FlaggableModelUtil
+        from scoop.core.util.model.model import patch_methods
 
         from django.contrib.admin.templatetags import admin_list
         from django.core.handlers.wsgi import WSGIRequest

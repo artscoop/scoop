@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import template
 from django.template.loader import render_to_string
-
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.location.models.city import City
 from scoop.location.models.country import Country

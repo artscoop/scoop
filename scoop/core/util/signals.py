@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.dispatch import Signal
 
 # Création d'un nouvel enregistrement

@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 

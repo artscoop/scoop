@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import gzip
 import io
 import logging
@@ -18,7 +16,6 @@ from django.db.models.manager import Manager
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from magic import Magic
-
 from scoop.core.util.data.typeutil import make_iterable
 
 logger = logging.getLogger(__name__)
@@ -158,7 +155,7 @@ def check_file_extension(filename, resource_path, extensions):
 def get_mime_type(resource_path):
     """ Renvoyer le type MIME d'un fichier local """
     mime = Magic(mime=True)
-    mimetype = mime.from_buffer(open(resource_path).read())
+    mimetype = mime.from_buffer(open(resource_path, 'rb').read())
     return mimetype
 
 
@@ -189,14 +186,14 @@ def batch_execute(path, extensions, command):
     """
     Exécuter une commande shell sur tous les fichers de <path> correspondant aux
     extensions passées en paramètre (liste ou simple chaîne)
-    @param command: chaîne contenant la commande à exécuter sur chaque fichier.
-    Autorise l'utilisation du placeholder {name}
+    :param command: chaîne contenant la commande à exécuter sur chaque fichier.
+    Autorise l'utilisation du placeholder {file} pour indiquer le nom de fichier
     """
     total_processed = 0
     for root, _dummy, files in os.walk(path):
         for f in files:
             for extension in make_iterable(extensions):
-                if extension.lower() in f.lower():
+                if f.lower().endswith(extension.lower()):
                     for i, _dummyx in enumerate(command):
                         command[i] = command[i].format(file=os.path.join(path, root, f))
                     subprocess.call(command)

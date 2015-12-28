@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.http.response import HttpResponse
-
 from scoop.content.models.picture import Picture
 from scoop.core.util.django.formutil import handle_upload
 from scoop.user.models.user import User

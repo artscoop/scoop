@@ -1,11 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from os.path import join
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
 from scoop.core.util.stream.fileutil import batch_execute
 
 

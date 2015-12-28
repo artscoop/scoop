@@ -1,11 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib import messages
 from django.dispatch.dispatcher import receiver
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.signals import record
 from scoop.user.util.signals import user_activated, user_deactivated
 

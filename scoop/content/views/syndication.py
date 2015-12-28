@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib.syndication.views import Feed
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.models.content import Content
 
 

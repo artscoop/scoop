@@ -1,11 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
-
 from scoop.user.access.tasks import add_access
 from scoop.user.util.signals import external_visit
 
@@ -17,6 +14,7 @@ class AccessMiddleware(object):
 
     # Liste des répertoires à ne pas compter dans le logging
     ACCESS_LOG_BLACKLIST = {settings.MEDIA_URL, settings.STATIC_URL, settings.ADMIN_MEDIA_PREFIX, reverse_lazy('admin:index'), '/admin_tools/'}
+    HTTP_MIN, HTTP_MAX = 200, 309
 
     def process_request(self, request):
         """ Traiter la requête """
@@ -31,7 +29,7 @@ class AccessMiddleware(object):
 
     def process_response(self, request, response):
         """ Traiter l'objet Response renvoyé par la vue """
-        if response is not None and 200 <= response.status_code <= 309:
+        if response is not None and self.HTTP_MIN <= response.status_code <= self.HTTP_MAX:
             # Ne rien faire si un chemin blacklisté apparaît dans l'URL
             if [True for i in AccessMiddleware.ACCESS_LOG_BLACKLIST if request.path.startswith(str(i))]:
                 return response

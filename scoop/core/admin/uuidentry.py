@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib import admin
-
 from scoop.core.models.uuidentry import UUIDEntry
 from scoop.core.util.django.admin import GenericModelUtil, ViewOnlyModelAdmin
 

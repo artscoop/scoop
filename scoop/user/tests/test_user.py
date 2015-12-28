@@ -1,13 +1,11 @@
 # coding: utf-8
-from __future__ import absolute_import
+from importlib import import_module
 
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils.importlib import import_module
-
 from scoop.core.util.data.typeutil import list_contains
 from scoop.core.util.stream.directory import Paths
 from scoop.messaging.models.mailevent import MailEvent
@@ -17,7 +15,9 @@ from scoop.user.templatetags.user_tags import distance_to
 User = get_user_model()
 
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend', EMAIL_FILE_PATH=Paths.get_root_dir('files', 'tests', 'mail'), DEFAULT_FROM_EMAIL='admin@test.com')
+@override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',
+                   EMAIL_FILE_PATH=Paths.get_root_dir('files', 'tests', 'mail'),
+                   DEFAULT_FROM_EMAIL='admin@test.com')
 class UserTest(TestCase):
     """ Test des utilisateurs """
     fixtures = ['mailtype', 'options']

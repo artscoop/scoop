@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.signals import record
 from scoop.messaging.models.quota import Quota
 from scoop.messaging.models.recipient import Recipient

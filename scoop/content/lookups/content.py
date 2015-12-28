@@ -1,14 +1,11 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from ajax_select import LookupChannel
 from django.core.exceptions import PermissionDenied
 from django.templatetags.l10n import localize
-from unidecode import unidecode
-
 from scoop.content.models.content import Content
 from scoop.core.templatetags.text_tags import humanize_join
 from scoop.core.util.model.model import search_query
+from unidecode import unidecode
 
 
 class ContentLookup(LookupChannel):

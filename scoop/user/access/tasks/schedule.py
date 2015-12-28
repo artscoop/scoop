@@ -1,14 +1,11 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
 from django.conf import settings
 from django.db import transaction
-
-from scoop.user.access.models import Access, IP
+from scoop.user.access.models import IP, Access
 
 logger = logging.getLogger(__name__)
 

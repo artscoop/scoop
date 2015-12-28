@@ -1,9 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 from scoop.user.access.admin.filters import IPCountryFilter
 from scoop.user.access.models.ip import IP

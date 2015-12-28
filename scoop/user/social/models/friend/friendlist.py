@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from random import choice
 
 from annoying.fields import AutoOneToOneField
@@ -9,7 +7,6 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.user.social.util.signals import friend_accepted, friend_denied, friend_pending_new
@@ -126,8 +123,12 @@ class FriendList(DataModel):
         return users
 
     def get_action_label(self, user):
-        """ Renvoyer le texte d'action par défaut par rapport au statut avec un utilisateur """
-        # ex. si déjà ami, renvoyer Ami. si en attente, renvoyer Annuler la demande.
+        """
+        Renvoyer le texte d'action par défaut par rapport au statut avec un utilisateur
+        Si un utilisateur est déjà ami, renvoyer "Ami"
+        Si une demande est en attente vers l'utilisateur, renvoyer "Annuler la demande"
+        Si l'utilisateur est ni ami ni rien, renvoyer "Demander en ami"
+        """
         status = (self.is_friend(user), user.friends.is_pending(self.user))
         return FriendList.ACTION_LABELS[status]
 

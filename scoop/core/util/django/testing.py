@@ -1,8 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.test.runner import DiscoverRunner
+
+from scoop.core.util.stream.directory import Paths
 
 
 class CeleryTestSuiteRunner(DiscoverRunner):
@@ -12,3 +12,11 @@ class CeleryTestSuiteRunner(DiscoverRunner):
         super(CeleryTestSuiteRunner, self).setup_test_environment(**kwargs)
         # Désactiver la communication avec celery, exécuter directement les tâches
         settings.CELERY_ALWAYS_EAGER = True
+
+
+# Configuration settings pour les tests
+TEST_CONFIGURATION = {
+    'EMAIL_BACKEND': 'django.core.mail.backends.filebased.EmailBackend',
+    'EMAIL_FILE_PATH': Paths.get_root_dir('files', 'tests', 'mail'),
+    'DEFAULT_FROM_EMAIL': 'admin@test.com'
+}

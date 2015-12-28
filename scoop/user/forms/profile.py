@@ -1,20 +1,16 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from datetime import datetime
 
 import floppyforms.__future__ as forms_
-from ajax_select.fields import AutoCompleteSelectWidget
 from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from form_utils.fields import ClearableImageField
-
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import PictureInlineWidget
 from scoop.core.util.data.dateutil import date_age
-from scoop.core.util.model.widgets import SelectDateWidget, SimpleCheckboxSelectMultiple
+from scoop.core.util.model.widgets import SimpleCheckboxSelectMultiple
 from scoop.user.models.profile import BaseProfile
 
 
@@ -39,17 +35,11 @@ class ProfileForm(forms.ModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['city'].required = True
 
-    # Métadonnées
-    class Meta:
-        model = BaseProfile
-        #widgets = {'birth': SelectDateWidget(years=range(1940, datetime.now().year + 1 - getattr(settings, 'USER_REGISTRATION_MINIMUM_AGE', 18))),
-        #           'city': AutoCompleteSelectWidget('citypm', attrs={'class': "control", 'placeholder': _("Enter your postcode or city name")})
-        #           }
-        fields = ('gender', 'birth') #, 'city')
-
 
 class ProfilePictureForm(forms_.ModelForm):
     """ Formulaire d'édition d'image de profil """
+
+    # Champs
     image = ClearableImageField(widget=PictureInlineWidget, template=_("%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"), label=_("Main picture"))
 
     # Validation

@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 import pytz
@@ -10,13 +8,12 @@ from django.utils import timezone, translation
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from unidecode import unidecode
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
+from unidecode import unidecode
 
 logger = logging.getLogger(__name__)
 

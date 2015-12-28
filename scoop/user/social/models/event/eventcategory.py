@@ -1,16 +1,13 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from translatable.exceptions import MissingTranslation
-from translatable.models import get_translation_model, TranslatableModel
-
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
 
 
 class EventCategoryManager(SingleDeleteManager):

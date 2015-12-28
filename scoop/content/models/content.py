@@ -1,14 +1,15 @@
 # coding: utf-8
 """ Contenus texte """
-from __future__ import absolute_import
-
 import logging
 import operator
 from datetime import date, timedelta
 from operator import itemgetter
+from traceback import print_exc
 
 import markdown
 import textile
+
+from approval.models.approval import ApprovalModel
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.db import models
@@ -22,10 +23,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
-from translatable.exceptions import MissingTranslation
-from translatable.models import get_translation_model, TranslatableModel
-
-from approval.models.approval import ApprovalModel
 from scoop.content.util.signals import content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
@@ -45,6 +42,8 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
 
 logger = logging.getLogger(__name__)
 
@@ -221,7 +220,7 @@ class ContentQuerySet(models.QuerySet, ContentQuerySetMixin, ModeratedQuerySetMi
 class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manager, ContentQuerySetMixin, ModeratedQuerySetMixin, SEIndexQuerySetMixin):
     """ Manager des contenus """
 
-    def create(self, authors, category, title, body, visible=True, **kwargs):
+    def post(self, authors, category, title, body, visible=True, **kwargs):
         """
         Créer un nouveau contenu
         :param authors: auteur ou liste des utilisateurs auteurs
@@ -238,7 +237,8 @@ class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manag
             authors = make_iterable(authors, list)
             content.authors.add(*authors)
             return content
-        except AttributeError:
+        except AttributeError as e:
+            print_exc(e)
             return None
 
 
@@ -257,23 +257,24 @@ class CategoryManager(SingleDeleteManager):
 
 
 class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel):
-    """ Contenu basé sur du texte """
+    """ Contenu textuel """
+
     # Constantes
     DEFAULT_TEASER_SIZE = 20  # Taille du teaser en mots
     FORMATS = {0: _("Plain HTML"), 1: _("Markdown"), 2: _("Textile")}
     FORMAT_CHOICES = FORMATS.items()
-    TRANSFORMS = {1: markdown.Markdown().convert, 2: textile.textile}  # fonctions à appliquer à chaque format
-    DATA_KEYS = ['similar']
+    TRANSFORMS = {1: markdown.Markdown().convert, 2: textile.textile}  # fonctions de conversion vers HTML
+    DATA_KEYS = ['similar', 'admin']
 
     # Champs
+    title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
+    slug = AutoSlugField(max_length=128, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
     category = models.ForeignKey('content.Category', null=False, related_name='contents', verbose_name=_("Category"))
     authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='contents', verbose_name=_("Authors"))
-    title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
     body = models.TextField(blank=True, verbose_name=_("Text"))
     html = models.TextField(blank=True, help_text=_("HTML output from body"), verbose_name=_("HTML"))
     teaser = models.TextField(blank=True, verbose_name=_("Introduction"))
     format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=0, verbose_name=_("Format"))
-    slug = AutoSlugField(max_length=128, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
     picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, related_name='contents', help_text=_("Main picture"), verbose_name=_("Picture"))
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Follow up of"))
     tags = models.ManyToManyField('content.Tag', blank=True, related_name='contents', verbose_name=_("Classification tags"))
@@ -295,11 +296,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     @addattr(boolean=True, short_description=_("Published"))
     def is_published(self):
         """ Renvoyer si le contenu est publié """
-        now = timezone.now()
-        published = self.published or (self.publish and self.publish < now and (self.expire is None or self.expire > now))
-        if published and self.published is False:
-            self.update(published=True, save=True)
-        return published
+        return self.published
 
     @addattr(short_description=_("Commentable"))
     def is_commentable(self):
@@ -347,7 +344,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     @addattr(short_description=_("Teaser"))
     def get_teaser(self, words=DEFAULT_TEASER_SIZE):
         """ Renvoyer le résumé du document (automatique) """
-        if len(str(self.body)) > 8 and len(str(self.teaser)) <= 8:
+        if len(str(self.body)) > 8 >= len(str(self.teaser)):
             self.teaser = truncatewords(self.body, words)
             self.save()
         return self.teaser
@@ -468,7 +465,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         try:
             self.authors.remove(author)
             return True
-        except:
+        except (TypeError, ValueError):
             return False
 
     # Overrides
@@ -490,6 +487,10 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer la représentation unicode """
         return self.title
 
+    def get_name(self):
+        """ Renvoyer le nom user-friendly de l'objet """
+        return self.title
+
     # Métadonnées
     class Meta:
         verbose_name = _("content")
@@ -503,18 +504,12 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
 
 class ContentApproval(ApprovalModel(Content)):
     """ Approval data for content """
-    approval_fields = ['body']
+    approval_fields = ['body', 'published', 'publish']
+    approval_default = {'published': False, 'publish': None}
 
     # Getter
-    def _get_users(self):
+    def _get_authors(self):
         return self.source.get_authors()
-
-    # Métadonnées
-    class Meta:
-        db_table = 'approval_content_content'
-        app_label = 'content'
-        verbose_name = "{name} approval".format(name=Content._meta.verbose_name)
-        verbose_name_plural = "{name} approval".format(name=Content._meta.verbose_name_plural)
 
 
 class Category(TranslatableModel, IconModel, DataModel):

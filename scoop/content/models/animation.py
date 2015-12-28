@@ -1,13 +1,13 @@
 # coding: utf-8
 """ Animations vidéo associées à des images """
-from __future__ import absolute_import
-
 import os
 import re
 import subprocess
-from subprocess import check_output, STDOUT
+from subprocess import STDOUT, check_output
+from traceback import print_exc
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.core.files.temp import gettempdir
@@ -16,7 +16,6 @@ from django.template.defaultfilters import filesizeformat
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.content.util.picture import get_animation_upload_path
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID128Model
@@ -25,6 +24,8 @@ from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 
+logger = logging.getLogger(__name__)
+
 
 class AnimationManager(SingleDeleteManager):
     """ Manager des animations """
@@ -32,27 +33,39 @@ class AnimationManager(SingleDeleteManager):
     # Constantes
     CODECS = {'mp4': 'h264', 'webm': 'libvpx', 'ogg': 'libtheora'}
 
+    # Getter
     def get_html_for_picture(self, picture, width=None):
         """ Récupérer le code HTML de la vidéo pour un objet Picture """
-        animations = self.filter(picture=picture)[0:8]
+        animations = self.for_picture(picture)[0:8]
         if animations.exists():
             return render_to_string("content/display/animation/html/default-set.html", {'animations': animations, 'width': width or 160})
         return ""
 
+    def for_picture(self, picture):
+        """
+        Renvoie les objets animation pour l'image désignée
+        :type picture: scoop.content.models.Picture
+        """
+        return self.filter(picture=picture)
+
+    # Setter
     def create_from_animation(self, picture, extensions=None, reset=False):
         """
         Créer des objets animation pour l'objet Picture
-        :type picture: scoop.content.models.Picture [ str
+        :type picture: scoop.content.models.Picture | str
         """
         from scoop.content.models import Picture
 
+        if not os.path.exists('/usr/bin/avconv'):
+            raise ImproperlyConfigured("You must install anvconv to convert pictures.\nIn Ubuntu 14.04+, run 'apt-get install libav-tools'")
         if isinstance(picture, str):
             picture = Picture.objects.get_by_uuid(picture)
-        extensions = extensions or ['mp4', 'webm', 'ogg']
+        extensions = extensions or ['mp4']  # mp4 pris en charge par tous les navigateurs pop.
         if isinstance(picture, Picture) and picture.get_extension() in {'.gif'}:
             if reset is True:
                 picture.get_animations().delete()
             for extension in [extension for extension in extensions if extension in AnimationManager.CODECS.keys()]:
+                # Convertir dans tous les formats de CODECS
                 if not picture.has_extension(extension):
                     sequence_name = uuid_bits(32)
                     temp_dir = gettempdir()
@@ -62,7 +75,7 @@ class AnimationManager(SingleDeleteManager):
                     subprocess.call(['avconv', '-i', '/tmp/{0}%05d.jpg'.format(sequence_name), '-vf', 'scale=trunc(in_w/2)*2:trunc(in_h/2)*2', '-c', AnimationManager.CODECS[extension], temp_path], stderr=open(os.devnull, 'wb'))
                     animation = Animation(extension=extension, description=picture.description)
                     animation.picture = picture
-                    animation.file.save(new_filename, File(open(temp_path)))
+                    animation.file.save(new_filename, File(open(temp_path, 'rb')))
                     animation.get_duration(save=True)  # Renvoie ou calcule la durée de l'animation
                     animation.save()
                     # Nettoyer les fichiers temporaires
@@ -92,23 +105,25 @@ class Animation(DatetimeModel, UUID128Model):
     objects = AnimationManager()
 
     # Getter
+    @addattr(short_description=pgettext_lazy('animation', "Visible"))
     def is_visible(self, request):
         """ Renvoyer la visibilité de l'animation """
         if request is None or self.picture is None or request.user.is_staff:
             return True
         return self.picture.is_visible(request)
 
-    @addattr(short_description=_("Valid"))
+    @addattr(short_description=pgettext_lazy('animation', "Valid"))
     def is_valid(self):
         """ Renvoyer la validité de l'objet """
         duration = self.get_duration(save=True)
         return duration > 0
 
-    @addattr(boolean=True, short_description=_("Is valid"))
+    @addattr(boolean=True, short_description=pgettext_lazy('animation', "Valid"))
     def exists(self):
         """ Renvoyer True si le fichier existe """
         return self.id and self.file and self.file.path and default_storage.exists(self.file.name)
 
+    @addattr(short_description=_("HTML"))
     def get_html(self, width=None):
         """
         Renvoyer le markup HTML d'affichage de l'animation
@@ -129,7 +144,7 @@ class Animation(DatetimeModel, UUID128Model):
         if self.duration == 0:
             try:
                 output = check_output("""avprobe -of json -show_streams {}""".format(self.file.path), shell=True, stderr=STDOUT)
-                matches = re.search(r"Duration\: .{0,15}(\d{2,4})\:(\d{2})\:(\d{2}\.\d+)", output)
+                matches = re.search(r"Duration: .{0,15}(\d{2,4}):(\d{2}):(\d{2}\.\d+)", str(output))
                 if matches:
                     hours, minutes, seconds = [float(group) for group in matches.groups()]
                     total_seconds = hours * 3600.0 + minutes * 60.0 + seconds
@@ -139,7 +154,8 @@ class Animation(DatetimeModel, UUID128Model):
                     return self.duration
                 else:
                     return 0
-            except TypeError:
+            except TypeError as e:
+                print_exc(e)
                 return -1.0
         else:
             return self.duration
@@ -170,12 +186,17 @@ class Animation(DatetimeModel, UUID128Model):
         if self.exists():
             try:
                 default_storage.delete(self.file.name)
-            except Exception:
+            except (NotImplementedError,):
+                logger.warn("Could not delete file {path}".format(path=self.file.name))
                 pass
 
     # Overrides
     def delete(self, *args, **kwargs):
-        """ Supprimer l'objet de la base de données """
+        """
+        Supprimer l'objet de la base de données
+        :param clear: supprimer totalement l'objet du disque et de la base
+        :type clear: bool
+        """
         if kwargs.pop('clear', False):
             self.delete_file()
             super(Animation, self).delete(*args, **kwargs)

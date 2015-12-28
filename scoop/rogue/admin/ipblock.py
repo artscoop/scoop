@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import IPy
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 from scoop.rogue.forms import IPBlockForm
 from scoop.rogue.models import IPBlock

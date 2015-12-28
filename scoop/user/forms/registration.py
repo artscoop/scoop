@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import floppyforms as forms_
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.user.util.signals import credentials_form_check_email, credentials_form_check_name, credentials_form_check_username
 
 

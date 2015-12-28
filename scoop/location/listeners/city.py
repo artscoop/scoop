@@ -1,11 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
-
 from scoop.location.tasks.city import weather_prefetch
 
 logger = logging.getLogger(__name__)

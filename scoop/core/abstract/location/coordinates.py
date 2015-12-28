@@ -10,7 +10,6 @@ from django.contrib.gis.geos import Point, Polygon
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.templatetags.type_tags import round_multiple
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.cardinal import ANGLE_CARDINAL, RELATIVE_CARDINAL, SHORT_CARDINAL
@@ -18,11 +17,13 @@ from scoop.location.util.cardinal import ANGLE_CARDINAL, RELATIVE_CARDINAL, SHOR
 
 class CoordinatesModel(models.Model):
     """ Mixin d'objet localisé par GPS """
+
     # Constantes
     KM_LON, KM_LAT = 0.008998308318036208, 0.008983111749910169
     UNIT_RATIO = {'km': 1.0, 'm': 1000, 'mi': 0.621371192237334, 'yd': 1093.6132983377076, 'ft': 3280.839895013123, 'nmi': 0.5399568034557235}
     GEODETIC_MODEL = pyproj.Geod(ellps="WGS84")
     SRID = 4326
+
     # Position géographique du centre de l'objet
     position = models.PointField(default=Point(0.0, 0.0), srid=SRID)
 

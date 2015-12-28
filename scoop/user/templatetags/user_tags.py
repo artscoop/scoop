@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import template
 from django.conf import settings
 from django.contrib.contenttypes.fields import ContentType
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.data.numbers import round_left
 from scoop.user.models import User, Visit

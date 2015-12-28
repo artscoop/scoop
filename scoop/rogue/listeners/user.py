@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
 from django.template.loader import render_to_string
-
 from scoop.rogue.util.signals import user_has_ip_blocked
 from scoop.user.models.user import User
 from scoop.user.util.signals import online_status_updated, userip_created

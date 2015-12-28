@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from ajax_select import make_ajax_form
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.messaging.forms import MessageAdminForm, RecipientAdminForm
 from scoop.messaging.forms.machinery import QuotaAdminForm
 from scoop.messaging.models.alert import Alert

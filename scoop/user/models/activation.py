@@ -1,21 +1,19 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from unidecode import unidecode
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import text_to_list_of_lists
 from scoop.messaging.util.signals import mailable_event
 from scoop.user.util.signals import user_activated
+from unidecode import unidecode
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +68,7 @@ class Activation(DatetimeModel, UUID128Model):
     """ Activation ou réactivation utilisateur """
     # Constantes
     MAX_RESENDS = 5  # Maximum de renvois de mails de confirmation
+
     # Champs
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='activation', primary_key=True, verbose_name=_("User"))
     # Dans le cas où l'email est indisponible, utiliser question secrète
@@ -79,6 +78,7 @@ class Activation(DatetimeModel, UUID128Model):
     active = models.BooleanField(default=True, verbose_name=pgettext_lazy('activation', "Active"))
     updates = models.SmallIntegerField(default=0, verbose_name=_("Updates"))
     resends = models.SmallIntegerField(default=0, verbose_name=_("Mail send count"))
+    last_resend = models.DateTimeField(default=None, null=True, verbose_name=_(u"Mail sent"))
     details = models.CharField(max_length=48, default="", blank=True, verbose_name=_("Admin details"))
     objects = ActivationManager()
 
@@ -99,7 +99,7 @@ class Activation(DatetimeModel, UUID128Model):
     def update_uuid(self, save=True):
         """ Modifier l'UUID de l'activation """
         self.uuid = ""
-        self.updates = self.updates + 1
+        self.updates += 1
         self.resends = 0
         if save:
             self.save(update_fields=['uuid', 'updates'])
@@ -112,8 +112,9 @@ class Activation(DatetimeModel, UUID128Model):
             # Envoyer un mail si le site est configuré correctement
             try:
                 mailable_event.send(None, category='account', mailtype='user.activation', recipient=self.user, data={'activation': self})
-                self.resends = self.resends + 1
-                self.save(update_fields=['resends'])
+                self.resends += 1
+                self.last_resend = timezone.now()
+                self.save(update_fields=['resends', 'last_resend'])
                 return True
             except MailType.DoesNotExist:
                 logger.warning("Cannot send activation info, mail type is not configured yet.")

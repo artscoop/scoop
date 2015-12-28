@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 import time
 
@@ -10,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from pretty_times import pretty
 from pytz import timezone as _tz
-
 from scoop.core.util.data.dateutil import now as now_
 from scoop.core.util.data.dateutil import datetime_round_day, from_now, to_timestamp
 from scoop.core.util.shortcuts import addattr

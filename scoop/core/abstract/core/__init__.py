@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from .birth import BirthManager, BirthModel
 from .data import DataModel, PipeListModel
 from .datetime import DatetimeModel

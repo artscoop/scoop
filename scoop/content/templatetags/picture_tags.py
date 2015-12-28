@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django import template
@@ -10,7 +8,6 @@ from django.template.defaultfilters import urlencode
 from django.template.loader import render_to_string
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.files import get_thumbnailer
-
 from scoop.content.models import Animation, Picture
 from scoop.content.util.picture import get_context_picture_url
 

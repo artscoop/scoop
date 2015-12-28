@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import random
 
 from django.db import models
@@ -10,7 +8,6 @@ from django.template.context import RequestContext
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.rectangle import RectangleModel
@@ -27,7 +24,7 @@ class AdvertisementManager(SingleDeleteManager):
         """ Renvoyer une annonce selon son nom """
         try:
             return self.get(name__iexact=name)
-        except:
+        except (Advertisement.DoesNotExist, Advertisement.MultipleObjectsReturned):
             return None
 
     def by_group(self, group):
@@ -68,6 +65,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
 
     # Constantes
     NETWORKS = [['gg', "Google Adsense"], ['af', "AdFever"], ['na', _("Custom")], ['ot', pgettext_lazy('adnetwork', "Other")]]
+
     # Champs
     name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
     active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('advertisement', "Active"))

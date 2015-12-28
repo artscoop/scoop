@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 from smtplib import SMTPException, SMTPResponseException
 
@@ -13,7 +11,6 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from pretty_times import pretty
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import one_line
@@ -130,9 +127,9 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
                 user = get_user_model().objects.get(email=email)
             except get_user_model().DoesNotExist:
                 user = None
-            if (user is None or user.can_send_mail()) and (mail_counter < mail_ceiling or forced or bypass_delay):
+            if (user is None or user.can_send_mail() or bypass_delay) and mail_counter < mail_ceiling:
                 # Traiter les mails non marqués comme *forcés*
-                mails = self.filter(email_sent=email, forced=forced, sent=False, discarded=False)
+                mails = self.filter(sent_email=email, forced=forced, sent=False, discarded=False)
                 # Envoyer chaque mail si son heure minimum d'envoi est atteinte
                 for mail in mails:
                     if mail.can_send() or bypass_delay:

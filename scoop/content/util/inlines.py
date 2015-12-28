@@ -3,8 +3,6 @@
 Inlines de templates
 Voir https://github.com/blturner/django_inlines
 """
-from __future__ import absolute_import
-
 from django_inlines import inlines
 from django_inlines.inlines import TemplateInline
 

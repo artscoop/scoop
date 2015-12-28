@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import csv
 import datetime
 import gc
@@ -21,12 +19,11 @@ from django.db import transaction
 from django.db.models import Q
 from django.db.utils import DatabaseError
 from django.utils import timezone
-from unidecode import unidecode
-
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import auto_open_file, open_zip_file
 from scoop.core.util.stream.urlutil import download_url_resource
 from scoop.location.models import City, CityName, Country, CountryName, Currency, Timezone
+from unidecode import unidecode
 
 # Codes Feature : http://www.geonames.org/export/codes.html
 # Fichiers Villes : http://download.geonames.org/export/dump/
@@ -107,7 +104,10 @@ def rename_countries(output_every=262144):
     # [0: alternate_id, 1: geonames_id, 2: lang, 3: name, 4: preferred, 5: short, 6: slang, 7: historic]
     filename = None
     try:
-        default_path = join(Paths.get_root_dir('files', 'geonames'), 'alternateNames.zip')
+        if not settings.TEST:
+            default_path = join(Paths.get_root_dir('files', 'geonames'), 'alternateNames.zip')
+        else:
+            default_path = join(Paths.get_root_dir('files', 'geonames', 'tests'), 'alternateNames.zip')
         filename = default_path if os.path.exists(default_path) else download_url_resource('http://download.geonames.org/export/dump/alternateNames.zip')
         reader = load_geoname_alternate_table_raw(filename, 'alternateNames')
         LANGUAGES = frozenset([item[0] for item in settings.LANGUAGES])
@@ -130,9 +130,6 @@ def rename_countries(output_every=262144):
         return True
     except Exception:
         return False
-    finally:
-        if filename:
-            os.unlink(filename)
 
 
 @transaction.atomic

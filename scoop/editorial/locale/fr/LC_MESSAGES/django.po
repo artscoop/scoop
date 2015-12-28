@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:21+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2015-02-23 09:10+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: français <>\n"
@@ -23,59 +23,59 @@ msgstr ""
 msgid "Editorial"
 msgstr "Rédaction"
 
-#: admin/admin.py:22
+#: admin/admin.py:20
 msgid "Configuration"
 msgstr "Configuration"
 
-#: admin/admin.py:23
+#: admin/admin.py:21
 msgid "Configurations"
 msgstr "Configurations"
 
-#: admin/admin.py:47 models/configuration.py:16
+#: admin/admin.py:45 models/configuration.py:15
 msgid "Page"
 msgstr "Page"
 
-#: admin/admin.py:55
+#: admin/admin.py:53
 msgid "Translation"
 msgstr "Traduction"
 
-#: admin/admin.py:56
+#: admin/admin.py:54
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/admin.py:70
+#: admin/admin.py:68
 msgid "Excerpt"
 msgstr "Extrait"
 
-#: admin/admin.py:98
+#: admin/admin.py:96
 msgid "Automatically fill selected templates information"
 msgstr "Remplir automatiquement les informations des gabarits sélectionnés"
 
-#: admin/admin.py:103
+#: admin/admin.py:101
 msgid "The selected templates have been updated."
 msgstr "Les gabarits sélectionnés ont été mis à jour."
 
-#: admin/admin.py:106 models/template.py:22
+#: admin/admin.py:104 models/template.py:22
 msgid "Positions"
 msgstr "Positions"
 
-#: models/configuration.py:17
+#: models/configuration.py:16
 msgid "Position"
 msgstr "Position"
 
-#: models/configuration.py:18 models/page.py:48
+#: models/configuration.py:17 models/page.py:47
 msgid "Template"
 msgstr "Gabarit"
 
-#: models/configuration.py:20
+#: models/configuration.py:19
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/configuration.py:21
+#: models/configuration.py:20
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: models/configuration.py:36
+#: models/configuration.py:35
 msgid "The block could not be rendered."
 msgstr "Impossible d'effectuer le rendu du bloc."
 
@@ -92,106 +92,106 @@ msgstr "configuration de bloc"
 msgid "block configurations"
 msgstr "configurations de blocs"
 
-#: models/excerpt.py:21
+#: models/excerpt.py:22
 msgid "Plain HTML"
 msgstr "HTML Simple"
 
-#: models/excerpt.py:21
+#: models/excerpt.py:22
 msgid "Markdown"
 msgstr "Markdown"
 
-#: models/excerpt.py:21
+#: models/excerpt.py:22
 msgid "Textile"
 msgstr "Textile"
 
-#: models/excerpt.py:21
+#: models/excerpt.py:22
 msgid "reStructured Text"
 msgstr "reStructured Text"
 
-#: models/excerpt.py:24 models/page.py:43 models/position.py:20
+#: models/excerpt.py:25 models/page.py:42 models/position.py:19
 #: models/template.py:19
 msgid "Name"
 msgstr "Nom"
 
-#: models/excerpt.py:25 models/page.py:44 models/position.py:21
+#: models/excerpt.py:26 models/page.py:43 models/position.py:20
 msgid "Title"
 msgstr "Titre"
 
-#: models/excerpt.py:26
+#: models/excerpt.py:27
 msgctxt "excerpt"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/excerpt.py:27
+#: models/excerpt.py:28
 msgid "Format"
 msgstr "Format"
 
-#: models/excerpt.py:28 models/page.py:45 models/position.py:22
+#: models/excerpt.py:29 models/page.py:44 models/position.py:21
 msgid "Description"
 msgstr "Description"
 
-#: models/excerpt.py:29
+#: models/excerpt.py:30
 msgid "{% load %} libraries, comma separated"
 msgstr "Bibliothèques {% load %} séparées par des virgules"
 
-#: models/excerpt.py:29
+#: models/excerpt.py:30
 msgid "Tag libs"
 msgstr "Bibliothèques de tags"
 
-#: models/excerpt.py:37 models/excerpt.py:72
+#: models/excerpt.py:39 models/excerpt.py:74
 msgid "Text"
 msgstr "Texte"
 
-#: models/excerpt.py:43
+#: models/excerpt.py:45
 msgid "(No text)"
 msgstr "(Aucun texte)"
 
-#: models/excerpt.py:50
+#: models/excerpt.py:52
 msgid "Languages"
 msgstr "Langues"
 
-#: models/excerpt.py:65
+#: models/excerpt.py:67
 msgid "excerpt"
 msgstr "extrait"
 
-#: models/excerpt.py:66
+#: models/excerpt.py:68
 msgid "excerpts"
 msgstr "extraits"
 
-#: models/page.py:46
+#: models/page.py:45
 msgid "Keywords"
 msgstr "Mots-clés"
 
-#: models/page.py:47
+#: models/page.py:46
 msgid "Page URL"
 msgstr "URL de la page"
 
-#: models/page.py:47 models/template.py:20
+#: models/page.py:46 models/template.py:20
 msgid "Path"
 msgstr "Chemin"
 
-#: models/page.py:49
+#: models/page.py:48
 msgctxt "page"
 msgid "Active"
 msgstr "Active"
 
-#: models/page.py:50
+#: models/page.py:49
 msgid "Page header extra code"
 msgstr "Code supplémentaire dans l'en-tête de page"
 
-#: models/page.py:51
+#: models/page.py:50
 msgid "Parent page, used in lists and breadcrumbs"
 msgstr "Page parente, utilisé dans les listes et les breadcrumbs"
 
-#: models/page.py:51
+#: models/page.py:50
 msgid "Parent"
 msgstr "Parent"
 
-#: models/page.py:53 models/position.py:24
+#: models/page.py:52 models/position.py:23
 msgid "Anonymous access"
 msgstr "Accès anonyme"
 
-#: models/page.py:54 models/position.py:25
+#: models/page.py:53 models/position.py:24
 msgid "Authenticated access"
 msgstr "Accès authentifié"
 
@@ -203,31 +203,31 @@ msgstr "page"
 msgid "pages"
 msgstr "pages"
 
-#: models/position.py:14
+#: models/position.py:13
 msgid "Menu"
 msgstr "Menu"
 
-#: models/position.py:14
+#: models/position.py:13
 msgid "Heading"
 msgstr "En-tête"
 
-#: models/position.py:14
+#: models/position.py:13
 msgid "Footer"
 msgstr "Pied de page"
 
-#: models/position.py:14
+#: models/position.py:13
 msgid "Js"
 msgstr "JS"
 
-#: models/position.py:14
+#: models/position.py:13
 msgid "Extra head"
 msgstr "Supplément Head"
 
-#: models/position.py:20
+#: models/position.py:19
 msgid "Name used for the position block in a template"
 msgstr "Nom utilisé pour l'emplacement/bloc dans un gabarit"
 
-#: models/position.py:26
+#: models/position.py:25
 msgid "Access for groups"
 msgstr "Accès aux groupes"
 
@@ -251,11 +251,11 @@ msgstr "Gabarit de page complète"
 msgid "File exists"
 msgstr "Le fichier existe"
 
-#: models/template.py:93
+#: models/template.py:94
 msgid "template"
 msgstr "gabarit"
 
-#: models/template.py:94
+#: models/template.py:95
 msgid "templates"
 msgstr "gabarits"
 

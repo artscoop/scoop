@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.dispatch.dispatcher import receiver
-
 from scoop.core.tasks.recorder import record_action_async
 from scoop.core.util.model.model import make_lazy_picklable
 from scoop.core.util.signals import record

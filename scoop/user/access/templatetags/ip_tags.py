@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import template
-
 from scoop.user.access.models.ip import IP
 from scoop.user.access.models.userip import UserIP
 

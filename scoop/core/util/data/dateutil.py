@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import calendar
 import datetime
 from random import randrange

@@ -1,25 +1,24 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.transaction import TransactionManagementError
+from django.db.utils import OperationalError
 from django.template.defaultfilters import truncatechars
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from translatable.models import get_translation_model, TranslatableModel
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
-from scoop.core.util.model.model import limit_to_model_names, SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 from scoop.core.util.shortcuts import addattr
 from scoop.rogue.util.signals import flag_closed, flag_created, flag_resolve
+from translatable.models import TranslatableModel, get_translation_model
 
 
 class FlagManager(SingleDeleteManager):
@@ -31,11 +30,13 @@ class FlagManager(SingleDeleteManager):
         return super(FlagManager, self).get_queryset()
 
     # Getter
-    def get_flags(self, *args, **kwargs):
+    def get_flags(self, **kwargs):
         """
         Filtrer les flags dont le type est celui de app.model
         :param days: flags plus récents que <days> jours
         :param model: app_label.model indiquant sur quel type d'objets filtrer
+        :type model: str
+        :type days: int
         """
         if 'model' in kwargs:
             app_model = kwargs['model'].split('.')
@@ -83,7 +84,7 @@ class FlagManager(SingleDeleteManager):
             flag.content_object = item
             flag.save()
             flag_created.send(sender=flag, flag=flag)
-        except:
+        except (TransactionManagementError, OperationalError):
             pass
 
     def flag_by_lookup(self, model_name, identifier, *args, **kwargs):
@@ -98,10 +99,11 @@ class FlagManager(SingleDeleteManager):
 
 class Flag(DatetimeModel):
     """ Signalement """
+
     # Constantes
     STATUSES = [[0, _("New")], [1, _("Being checked")], [2, _("Closed")], [3, _("Fixed")], [4, _("Will not fix")], [5, _("Postponed")], [6, _("Pending")]]
     NEW, CHECKING, CLOSED, FIXED, WONTFIX, POSTPONED, PENDING = 0, 1, 2, 3, 4, 5, 6
-    # Informations du flag
+    # Champs
     name = models.CharField(max_length=128, blank=True, editable=False, verbose_name=_("Object name"))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='flags_made', on_delete=models.SET_NULL, verbose_name=_("Author"))
     type = models.ForeignKey('rogue.FlagType', null=False, related_name='flags', verbose_name=_("Type"))
@@ -112,13 +114,13 @@ class Flag(DatetimeModel):
     automatic = models.BooleanField(default=False, db_index=True, editable=False, verbose_name=pgettext_lazy('flag', "Automatic"))
     action_done = models.BooleanField(default=False, db_index=True, verbose_name=_("Action done"))
     updated = models.DateTimeField(default=timezone.now, null=True, verbose_name=pgettext_lazy('flag', "Updated"))
-    objects = FlagManager()
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')  # limite des modèles concernés
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, limit_choices_to=limit, verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     url = models.CharField(max_length=128, blank=True, verbose_name=_("URL"))
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_flags', verbose_name=_("Moderators"))
+    objects = FlagManager()
 
     # Getter
     def get_siblings(self):
@@ -197,6 +199,8 @@ class Flag(DatetimeModel):
         """
         if not self.action_done:
             action_count = self.get_siblings().filter(action_done=True).count()
+            # Envoyer un signal. Les gestionnaires liés renvoient True ou False
+            # Si l'un des gestionnaires renvoie True, une mesure a été prise.
             result = flag_resolve.send(sender=self, iteration=action_count)
             if [True for item in result if item[1] is True]:
                 self.action_done = True

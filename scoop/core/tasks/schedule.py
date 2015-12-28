@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
 from django.apps.registry import apps
 from django.conf import settings
 from django.core.management import call_command
-
 from scoop.core.models.recorder import Record
 from scoop.core.models.redirection import Redirection
 from scoop.core.models.uuidentry import UUIDEntry
@@ -17,7 +14,7 @@ from scoop.core.util.stream.fileutil import clean_empty_folders, clean_orphans
 @periodic_task(run_every=timedelta(days=20))
 def clean_media_folders():
     """ Nettoyer les fichiers orphelins des répertoires MEDIA """
-    if apps.is_installed('content'):
+    if apps.is_installed('scoop.content'):
         from scoop.content.models.picture import Picture
         # Nettoyer les miniatures
         Picture.objects.clean_thumbnails()

@@ -1,11 +1,8 @@
 # coding: utf-8
-from __future__ import absolute_import
-
+from cmath import sqrt
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
-from cmath import sqrt
 from scoop.core.util.shortcuts import addattr
 
 

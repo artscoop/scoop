@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from datetime import timedelta
 
 from django.contrib.admin.filters import SimpleListFilter
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.admin.filters import FirstLetterFilter
 
 

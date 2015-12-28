@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import forms
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.user.util.forms import DataForm
 
 
@@ -14,12 +11,12 @@ class ConfigurationForm(DataForm):
     # Configuration
     name = 'user.configuration'
     defaults = {'session_timeout': 259200, 'login_destination': 0, 'receive_emails': True, 'receive_interval': 3600, 'receive_on_message': True, 'receive_on_staff': True,
-                'receive_on_favorite': True}
+                'receive_on_favorite': True, 'receive_on_subscription': True}
     saved_fields = None
 
     # Constantes
     SESSION_DURATIONS = [[900, _("15 minutes")], [1800, _("30 minutes")], [10800, _("3 hours")], [259200, _("3 days")], [2592000, _("30 days")]]
-    MAIL_INTERVALS = [[300, _("5 minutes")], [900, _("15 minutes")], [3600, _("1 hour")], [21600, _("6 hours")], [172800, _("2 days")]]
+    MAIL_INTERVALS = [[300, _("5 minutes")], [3600, _("1 hour")], [43200, _("12 hours")], [86400 * 2, _("2 days")]]
     DESTINATIONS = [[0, _("Home page")], [1, _("My profile")], [2, _("My messages")]]
     DESTINATION_URLS = {0: 'index', 1: 'user:self-view', 2: 'messaging:inbox'}
 
@@ -31,6 +28,7 @@ class ConfigurationForm(DataForm):
     # Options de réception de message
     receive_on_message = forms.BooleanField(initial=True, required=False, label=_("Receive when a user sends you a message"))
     receive_on_staff = forms.BooleanField(initial=True, required=False, label=_("Receive when a staff member sends you a message"))
+    receive_on_subscription = forms.BooleanField(initial=True, required=False, label=_("Receive when a content you've subscribed to is updated"))
 
     # Getter
     @classmethod

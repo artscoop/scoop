@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.dispatch.dispatcher import receiver
-
 from scoop.user.social.models.group import Group
 from scoop.user.social.util.signals import friend_pending_new, invite_accepted
 

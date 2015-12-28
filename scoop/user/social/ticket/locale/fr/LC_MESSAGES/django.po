@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 09:22+0200\n"
+"POT-Creation-Date: 2015-11-19 04:51+0100\n"
 "PO-Revision-Date: 2013-03-28 16:54+0009\n"
 "Last-Translator: Anonymous User <steve@localhost.local>\n"
 "Language-Team: français <>\n"
@@ -19,106 +19,106 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.15-compat\n"
 
-#: admin/admin.py:23
+#: admin/admin.py:21
 #, fuzzy
 msgid "Close selected tickets"
 msgstr "Ticket en rapport"
 
-#: admin/admin.py:28
+#: admin/admin.py:26
 msgid "Selected tickets have been successfully closed."
 msgstr ""
 
-#: models/resolution.py:10
+#: models/resolution.py:8
 msgid "Name"
 msgstr "Nom"
 
-#: models/resolution.py:11
+#: models/resolution.py:9
 msgid "Short name"
 msgstr "Nom court"
 
-#: models/resolution.py:12 models/ticket.py:45
+#: models/resolution.py:10 models/ticket.py:43
 msgid "Description"
 msgstr "Description"
 
-#: models/resolution.py:13
+#: models/resolution.py:11
 msgid "Does this mean ticket closure ?"
 msgstr "Équivaut à une fermeture de ticket ?"
 
-#: models/resolution.py:13
+#: models/resolution.py:11
 msgid "Closing"
 msgstr "Fermeture"
 
-#: models/resolution.py:22
+#: models/resolution.py:20
 #, fuzzy
 msgid "resolution status"
 msgstr "Statut de résolution"
 
-#: models/resolution.py:23
+#: models/resolution.py:21
 #, fuzzy
 msgid "resolution statuses"
 msgstr "Statuts de résolution"
 
-#: models/ticket.py:39
+#: models/ticket.py:37
 msgid "New"
 msgstr ""
 
-#: models/ticket.py:39 models/ticket.py:46
+#: models/ticket.py:37 models/ticket.py:44
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/ticket.py:43
+#: models/ticket.py:41
 msgid "Author"
 msgstr "Auteur"
 
-#: models/ticket.py:44
+#: models/ticket.py:42
 msgid "Title"
 msgstr "Titre"
 
-#: models/ticket.py:47
+#: models/ticket.py:45
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/ticket.py:49 models/update.py:26
+#: models/ticket.py:47 models/update.py:24
 msgid "Status"
 msgstr "État"
 
-#: models/ticket.py:50
+#: models/ticket.py:48
 #, fuzzy
 msgid "Related tickets"
 msgstr "Ticket en rapport"
 
-#: models/ticket.py:52
+#: models/ticket.py:50
 msgid "Administrators"
 msgstr "Administrateurs"
 
-#: models/ticket.py:104
+#: models/ticket.py:102
 #, fuzzy
 msgid "ticket"
 msgstr "Ticket"
 
-#: models/ticket.py:105
+#: models/ticket.py:103
 #, fuzzy
 msgid "tickets"
 msgstr "Tickets"
 
-#: models/ticket.py:106
+#: models/ticket.py:104
 msgid "Can close a ticket"
 msgstr "Peut clôturer un ticket"
 
-#: models/update.py:25
+#: models/update.py:23
 msgid "Ticket"
 msgstr "Ticket"
 
-#: models/update.py:27
+#: models/update.py:25
 msgid "Body"
 msgstr "Corps"
 
-#: models/update.py:32
+#: models/update.py:30
 #, fuzzy
 msgid "ticket update"
 msgstr "Mise à jour de ticket"
 
-#: models/update.py:33
+#: models/update.py:31
 #, fuzzy
 msgid "ticket updates"
 msgstr "Mises à jour de tickets"

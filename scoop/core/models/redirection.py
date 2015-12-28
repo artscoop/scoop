@@ -8,7 +8,6 @@ from django.http.response import HttpResponsePermanentRedirect, HttpResponseRedi
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModelMixin
 from scoop.core.util.model.model import SingleDeleteManager

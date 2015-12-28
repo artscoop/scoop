@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 
 from django.apps import apps
 from django.db.models.signals import post_save, pre_save
 from django.dispatch.dispatcher import receiver
-
 from scoop.content.models.comment import Comment
 from scoop.content.models.content import Content
 from scoop.content.tasks.content import populate_similar

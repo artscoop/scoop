@@ -1,12 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.db.models.signals import pre_save
 from django.dispatch.dispatcher import receiver
-
 from scoop.user.models.user import User
 
 

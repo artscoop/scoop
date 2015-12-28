@@ -1,12 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 
 import requests
+
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
-
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 
 

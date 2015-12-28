@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch.dispatcher import receiver
 from easy_thumbnails.signals import saved_file
-
 from scoop.content.models.animation import Animation
 from scoop.content.models.picture import Picture
 from scoop.content.tasks.picture import generate_aliases

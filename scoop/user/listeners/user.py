@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 from datetime import timedelta
 
@@ -12,7 +10,6 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.data.dateutil import date_age_days
 from scoop.core.util.signals import record
 from scoop.user.forms.configuration import ConfigurationForm
@@ -34,12 +31,15 @@ def user_created(sender, instance, raw, created, **kwargs):
             except:
                 pass
             # Générer un profil par défaut
+            """
             if not getattr(instance, 'profile', None):
+                print(get_profile_model())
                 instance.profile = get_profile_model().objects.create(user=instance)
+            """
             # Générer l'activation
             if getattr(settings, 'USER_ACTIVATION_NEEDED', False):
                 instance.update(is_active=False, save=True)
-                instance.activation = Activation.objects.create(user=instance)
+                # instance.activation = Activation.objects.create(user=instance)
                 instance.activation.active = True
                 instance.activation.save()
                 instance.activation.send_mail()

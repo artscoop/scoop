@@ -1,7 +1,5 @@
 # coding: utf-8
 """ Signaux de l'application User """
-from __future__ import absolute_import
-
 from django.dispatch import Signal
 
 # Inscription

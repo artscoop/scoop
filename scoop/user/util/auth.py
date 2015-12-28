@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 from functools import wraps
 
@@ -10,7 +8,6 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.fields import ContentType
 from django.http.response import Http404
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.user.models.profile import BaseProfile
 
 _LOGGER = logging.getLogger(__name__)

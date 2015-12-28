@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from admin_tools.dashboard.modules import DashboardModule
 from django.template.loader import render_to_string
 

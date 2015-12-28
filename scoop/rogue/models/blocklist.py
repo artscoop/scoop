@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager

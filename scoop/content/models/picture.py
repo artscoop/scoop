@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 import math
 import os
@@ -12,7 +10,13 @@ from traceback import print_exc
 from urllib import parse
 from urllib.parse import urljoin
 
+try:
+    import cv2
+except ImportError:
+    pass
 import simplejson
+from PIL import Image
+
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.core.cache import cache
@@ -28,9 +32,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
-from PIL import Image
-
-import cv2
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -228,7 +229,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def get_animation_duration(self):
         """ Renvoyer la durée des animations de l'image en secondes """
         if self.animated and self.has_animation():
-            return self.get_animations()[0].duration
+            return self.get_animations()[0].get_duration()
         return None
 
     @addattr(allow_tags=True, short_description=_("Image"))
@@ -244,7 +245,6 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 output = render_to_string(template_file, {'picture': self, 'href': self.image.url, 'title': escape(self.description), 'source': result.url})
                 return output
             except Exception as e:
-                print_exc(e)
                 return '<span class="text-error" title="path:{2}">{0}</span> ({1})'.format(pgettext_lazy('thumbnail', "None"), e, self.image.name)
         return '<span class="text-error">{}</span>'.format(pgettext_lazy('thumbnail', "None"))
 
@@ -374,7 +374,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             path = parts.path
             filename = os.path.basename(path)
             try:
-                self.image.save(filename, File(open(path)))
+                self.image.save(filename, File(open(path, 'rb')))
                 self.title = filename
                 self.save()
             except Exception as e:
@@ -513,7 +513,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             new_basename = os.path.basename(self.image.path).replace(extension, '.{}'.format(ext), 1)
             new_path = "{}.{}".format(path_basename, ext)
             subprocess.call(["convert", "{}[0]".format(self.image.path), new_path])
-            self.image.save(new_basename, File(open(new_path)))
+            self.image.save(new_basename, File(open(new_path, 'rb')))
             os.unlink(original_path)
 
     def optimize(self):
@@ -559,7 +559,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     def autocrop_feature_detection(self):
         """ Rogner automatiquement par zones d'intérêt """
-        if self.exists():
+        if self.exists() and 'cv2' in locals():
             image = cv2.imread(self.image.path)
             surf = cv2.xfeatures2d.SURF_create(200)
             points, _ = surf.detectAndCompute(image, None)
@@ -569,6 +569,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             subprocess.call(
                 ["convert", self.image.path, "-crop", "{0}x{1}+{2}x{3}".format(rectangle[2] - rectangle[0], rectangle[3] - rectangle[1], rectangle[0], rectangle[1]), self.image.path])
             self.update_size()
+        else:
+            logger.warning("OpenCV not available for feature detection, using basic cropping instead.")
+            self.autocrop()
 
     def quantize(self, save=True):
         """ Convertir l'image en 8 bits avec tramage """

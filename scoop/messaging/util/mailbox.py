@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import logging
 from mailbox import Maildir, NoSuchMailboxError
 from os.path import expanduser, join

@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.signals import record
 from scoop.messaging.models.alert import Alert
 from scoop.messaging.models.thread import Thread

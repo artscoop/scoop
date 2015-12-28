@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from urllib import parse
 
 from annoying.decorators import render_to
@@ -8,7 +6,6 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.util.micawber.oembed import bootstrap_oembed
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel

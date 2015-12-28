@@ -1,10 +1,7 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.contrib.auth.decorators import user_passes_test
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy as reverse
 from django.http import HttpResponseRedirect
-
 from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
 from scoop.user.util.auth import is_authenticated

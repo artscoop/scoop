@@ -1,8 +1,5 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django import template
-
 from scoop.messaging.models.negotiation import Negotiation
 
 register = template.Library()

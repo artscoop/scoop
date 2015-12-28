@@ -1,18 +1,15 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import from_now
 
 
-def get_default_expiry(self=None):
+def get_default_expiry(_=None):
     """ Renvoyer la date d'expiration par défaut """
     return from_now(days=2, timestamp=False)
 
@@ -25,9 +22,18 @@ class SanctionManager(models.Manager):
         """ Renvoyer si un utilisateur est sanctionné """
         return user.sanctions.exists()
 
+    def can_post(self, user):
+        """ Renvoyer s'il n'y a pas de sanction de posts """
+        return not user.sanctions.filter(type=0, expires__gt=timezone.now()).exists()
+
+    def can_read(self, user):
+        """ Renvoyer s'il n'y a pas de sanction de lecture """
+        return not user.sanctions.filter(type=1, expires__gt=timezone.now()).exists()
+
 
 class Sanction(DatetimeModel):
     """ Sanction utilisateur """
+
     # Constantes
     TYPES = [[0, _("Posting disabled")], [1, _("Reading disabled")]]
     DURATIONS = [[7200, _("2 hours")], [86400, _("1 day")], [86400 * 3, _("3 days")], [86400 * 7, _("1 week")]]

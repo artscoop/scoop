@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import datetime
 
 from django.conf import settings
@@ -12,7 +10,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.content.util.signals import comment_posted, comment_spam
 from scoop.core.abstract.content.acceptable import AcceptableModel
 from scoop.core.abstract.content.comment import CommentableModel

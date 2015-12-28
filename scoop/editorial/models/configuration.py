@@ -1,13 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
 

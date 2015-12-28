@@ -1,6 +1,4 @@
 # coding: utf-8
-from __future__ import absolute_import
-
 import traceback
 
 from django.conf import settings
@@ -9,7 +7,6 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy  # Fix pour django_extensions.reset_db
 from django.http.response import HttpResponseRedirect
-
 from scoop.core.util.django import formutil
 from scoop.user.forms import LoginForm
 from scoop.user.models import User
