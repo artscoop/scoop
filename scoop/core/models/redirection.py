@@ -53,7 +53,7 @@ class Redirection(GenericModelMixin, DatetimeModel):
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('redirection', "Active"))
     base = models.CharField(max_length=250, unique=True, blank=False, verbose_name=_("Original URL"))
     expires = models.DateTimeField(default=datetime.now() + timedelta(days=3650), verbose_name=_("Expiry"))  # 10 ans après démarrage du serveur
-    permanent = models.BooleanField(default=True, verbose_name=pgettext_lazy('redirection', "Permanent"))
+    permanent = models.BooleanField(default=True, help_text=_("Does the redirection use an HTTP 301?"), verbose_name=pgettext_lazy('redirection', "Permanent"))
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, limit_choices_to={'model__in': ['user', 'profile', 'content']}, verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')

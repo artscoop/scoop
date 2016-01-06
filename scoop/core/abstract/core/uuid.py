@@ -16,15 +16,9 @@ class UUIDField(models.CharField):
         """ Initialiser le champ """
         kwargs['unique'] = kwargs.get('unique', True)
         kwargs['editable'] = False
-        self.bits = int(kwargs.get('bits', 64))
-        if self.bits < 16:
-            self.bits = 16
-        if self.bits > 128:
-            self.bits = 128
+        self.bits = sorted((16, int(kwargs.pop('bits', 64)), 128))[1]  # clamp entre 16 et 128
         kwargs['max_length'] = int(ceil(self.bits / 6.0))
         kwargs['default'] = kwargs.get('default', self._generate)
-        if 'bits' in kwargs:
-            del kwargs['bits']
         kwargs.pop('verbose_name', None)
         models.CharField.__init__(self, *args, **kwargs)
 

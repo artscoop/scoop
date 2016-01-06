@@ -42,6 +42,8 @@ class UUIDEntryManager(SingleDeleteManager):
 
 class UUIDEntry(GenericModel):
     """ Entrée du registre d'UUID """
+
+    # Champs
     uuid = models.CharField(max_length=22, unique=True, blank=False, null=False, verbose_name=_("UUID"))
     objects = UUIDEntryManager()
 

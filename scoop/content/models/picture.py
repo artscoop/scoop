@@ -561,8 +561,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         """ Rogner automatiquement par zones d'intérêt """
         if self.exists() and 'cv2' in locals():
             image = cv2.imread(self.image.path)
-            surf = cv2.xfeatures2d.SURF_create(200)
-            points, _ = surf.detectAndCompute(image, None)
+            surf = cv2.ORB()  # Alternative libre à SIFT pour la détection de caractéristiques
+            points = surf.detect(image, None)
+            points, _ = surf.compute(image, points)
             coordinates = [point.pt for point in points]
             hull = convex_hull(coordinates)
             rectangle = convex_hull_to_rect(hull)
