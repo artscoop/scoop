@@ -9,7 +9,10 @@ from django.template.loader_tags import BlockNode, ExtendsNode
 
 
 def render_to_code(request, name, dictionary, code=200):
-    """ Renvoyer un HTTPResponse avec le contenu d'un template et le code HTTP désiré """
+    """
+    Renvoyer un HTTPResponse avec le contenu d'un template et le code HTTP désiré
+    :type name: str | list | tuple
+    """
     response = render_to_response(name, dictionary, context_instance=RequestContext(request))
     response.status_code = code
     return response
@@ -63,6 +66,7 @@ def render_block_to_string(template_name, block, extra_context=None, context_ins
     :param extra_context: contexte supplémentaire à passer
     :param block: nom du bloc à rendre
     :param context_instance: objet Context ou RequestContext
+    :type template_name: str | list | tuple
     """
     extra_context = extra_context or {}
     template = _get_template(template_name)
@@ -81,6 +85,7 @@ def render_block_to_response(request, template, block, extra_context=None, conte
     :param block: nom du bloc à rendre
     :param extra_context: contexte supplémentaire à passer
     :param content_type: type MIME de la sortie, ex.:text/html
+    :type template: str | list | tuple
     """
     if extra_context is None:
         extra_context = {}
@@ -105,6 +110,7 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
     :param headers: dictionnaire d'en-têtes de réponse
     :param status_code: code de retour HTTP
     :param string: indique si le rendu se fait dans une chaîne plutôt que HTTPResponse
+    :type template: str | list | tuple
     :returns un objet HTTPResponse, une chaîne ou l'objet retourné par la fonction décorée
     """
 
@@ -143,6 +149,7 @@ def do_render(data, request, template=None, content_type=None, headers=None, sta
     :param headers: dictionnaire d'en-têtes de réponse
     :param status_code: code de retour HTTP
     :param string: indique si le rendu se fait dans une chaîne plutôt que HTTPResponse
+    :type template: str | list | tuple
     """
     if not isinstance(data, dict):
         return data
