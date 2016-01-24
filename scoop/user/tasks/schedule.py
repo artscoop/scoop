@@ -27,7 +27,7 @@ def rebuild_users():
     """ Assurer l'intégrité des liens de clés étrangères """
     User = get_user_model()
     # Assigner des villes si absentes à celles des IP
-    if apps.is_installed('location'):
+    if apps.is_installed('scoop.location'):
         users = User.objects.filter(profile__city__isnull=True)
         for user in users:
             user.profile.city = UserIP.objects.get_city_for(user)

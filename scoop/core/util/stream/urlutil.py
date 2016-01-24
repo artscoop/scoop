@@ -38,7 +38,7 @@ def download_url_resource(path, output=None):
         logging.warn(_("The download destination file at %(path)s already exists. Skipped.") % {'path': output})
         return output
     resource = requests.get(path, headers=DEFAULT_HEADERS, allow_redirects=True, stream=True)
-    resource_file = NamedTemporaryFile(delete=False) if output is None else open(output, 'w')
+    resource_file = NamedTemporaryFile(delete=False) if output is None else open(output, 'wb')
     for chunk in resource.iter_content(16384):
         resource_file.write(chunk)
     resource_file.close()

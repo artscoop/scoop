@@ -70,15 +70,15 @@ def auto_open_file(path, filename):
 
 def open_zip_file(path, filename):
     """ Ouvrir un fichier filename dans un fichier zip """
-    archive = ZipFile(path, 'r')
-    names = archive.namelist()
-    name = names[0]
-    for n in names:
-        if n.lower().startswith("{}.".format(filename.lower())):
-            name = n
-            content = archive.open(name, 'rU')
-            content = io.TextIOWrapper(content, encoding='utf-8', newline='')
-            return content
+    if os.path.exists(path):
+        archive = ZipFile(path, 'r')
+        names = archive.namelist()
+        for n in names:
+            if n.lower().startswith("{}.".format(filename.lower())):
+                name = n
+                content = archive.open(name, 'rU')
+                content = io.TextIOWrapper(content, encoding='utf-8', newline='')
+                return content
     raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
 
 

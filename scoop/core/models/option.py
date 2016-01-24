@@ -41,7 +41,7 @@ class OptionManager(SingleDeleteManager):
         return self.get(group__id=group, code=code, **({'active': True} if active_only else {}))
 
 
-class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installed('content') else Model):
+class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installed('scoop.content') else Model):
     """ Option """
 
     # Choix de codes

@@ -126,7 +126,7 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
             if string is False:
                 response = render_to_response(tmpl, output, context_instance=RequestContext(request), content_type=content_type or 'text/html')
                 response.status_code = code
-                if type(head) == dict:
+                if type(head) is dict:
                     for key, value in head.items():
                         response[key] = value
                 return response
