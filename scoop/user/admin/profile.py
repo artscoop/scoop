@@ -65,14 +65,14 @@ class ProfileAdmin(AjaxSelectAdmin, UseredModelAdmin):
         """ Renvoyer le queryset par défaut """
         qs = super(ProfileAdmin, self).get_queryset(request)
         field_list = ('user__username', 'user__id', 'picture', 'picture__id', 'picture__image', 'gender', 'birth', 'user__email', 'user__date_joined',)
-        if apps.is_installed('location'):
+        if apps.is_installed('scoop.location'):
             field_list += ('city__id',)
         qs = qs.select_related('user', 'picture').only(*field_list)
         return qs
 
     def get_autocomplete_queryset(self, request, field_name):
         """ Renvoyer le queryset utilisé pour autocomplete """
-        if apps.is_installed('location') and field_name == 'city':
+        if apps.is_installed('scoop.location') and field_name == 'city':
             from scoop.location.models import City
             # Uniquement les communes et villes
             return City.objects.filter(city=True)

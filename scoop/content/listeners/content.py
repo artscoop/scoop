@@ -35,7 +35,7 @@ def new_content(sender, instance, raw, created, using, update_fields, **kwargs):
         if created:
             author = instance.authors.all().first()
             record.send(None, actor=author, action='content.create.content', target=instance)
-        elif apps.is_installed('forum'):
+        elif apps.is_installed('scoop.forum'):
             Read.objects.unset(instance)
     except Content.DoesNotExist as e:
         logger.warn(e)

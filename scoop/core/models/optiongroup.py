@@ -25,7 +25,7 @@ class OptionGroupManager(SingleDeleteManager):
             return None
 
 
-class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('content') else Model):
+class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('scoop.content') else Model):
     """ Groupe d'options """
 
     # Choix de codes
