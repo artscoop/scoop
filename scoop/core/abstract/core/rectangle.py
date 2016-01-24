@@ -21,6 +21,10 @@ class RectangleObject(object):
         """ Renvoyer si les dimensions de l'objet sont valides """
         return self.width and self.height
 
+    def get_dimension(self):
+        """ Renvoyer un tuple contenant les dimensions de l'objet """
+        return self.width, self.height
+
     def get_perimeter(self):
         """ Renvoyer le périmètre du rectangle """
         return self.width * 2 + self.height * 2 if self.has_dimension() else 0

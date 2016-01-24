@@ -36,3 +36,10 @@ class LinkTest(TestCase):
         link2 = Link.objects.create(url='http://a.com')  # inaccessible
         self.assertTrue(link1.exists(), "This URL should be working")
         self.assertFalse(link2.exists(), "This URL should not be working")
+
+    def test_link_html(self):
+        """ Vérifier que le HTML du lien est conforme """
+        link1 = Link.objects.create(url='http://example.com', nofollow=True)  # accessible
+        link2 = Link.objects.create(url='http://example.com', nofollow=False)  # accessible
+        self.assertContains(link1.html(), 'nofollow', "The generated HTML code must contain 'nofollow'")
+        self.assertNotContains(link2.html(), 'nofollow', "The generated HTML code should not contain 'nofollow'")
