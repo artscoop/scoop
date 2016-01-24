@@ -12,6 +12,7 @@ from scoop.user.models.user import User
 
 class CommentTest(TestCase):
     """ Test des commentaires """
+
     # Configuration
     fixtures = ['category', 'mailtype', 'options']
 

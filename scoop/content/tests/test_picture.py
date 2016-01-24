@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 from os.path import join
 
 from django.test import TestCase
@@ -35,3 +36,14 @@ class PictureTest(TestCase):
         self.assertTrue(self.picture2.get_extension() == '.jpg', "the downloaded picture should have been converted to a jpg still")
         self.assertGreater(self.picture2.get_animation_duration(), 0.1, "the picture animations should last longer than 0.1 seconds")
         self.assertFalse('screen' in self.picture2.get_filename(), "the picture has been created from scratch, this is not normal")
+
+    def test_autocrop(self):
+        """ Tester le fonctionnement du rognage automatique avec et sans OpenCV """
+        path = os.path.dirname(__file__)
+        picture1 = Picture.objects.create_from_file(join(path, 'croppable.jpg'), author=self.user, title='croppable picture')
+        self.assertTrue(picture1.exists(), "the loaded picture should work and be accessible")
+        self.assertEqual(picture1.get_dimension(), (545, 310), "the picture should be 545x310 by default")
+
+        picture2 = picture1.clone()
+        picture2.autocrop_feature_detection()
+        self.assertLess(picture2.height, 310, "the picture should be cropped by more than 50 pixels vertically")
