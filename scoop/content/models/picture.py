@@ -6,17 +6,12 @@ import subprocess
 import traceback
 from os.path import join
 from random import randrange
-from traceback import print_exc
 from urllib import parse
 from urllib.parse import urljoin
 
-try:
-    import cv2
-except ImportError:
-    pass
+import cv2
 import simplejson
 from PIL import Image
-
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.core.cache import cache
@@ -28,10 +23,11 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
+
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -46,6 +42,7 @@ from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
+
 
 logger = logging.getLogger(__name__)
 
@@ -559,16 +556,18 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     def autocrop_feature_detection(self):
         """ Rogner automatiquement par zones d'intérêt """
-        if self.exists() and 'cv2' in locals():
+        if self.exists():
             image = cv2.imread(self.image.path)
-            surf = cv2.ORB()  # Alternative libre à SIFT pour la détection de caractéristiques
-            points = surf.detect(image, None)
-            points, _ = surf.compute(image, points)
+            orb = cv2.ORB_create(nfeatures=500)  # Alternative libre à SIFT pour la détection de caractéristiques
+            points = orb.detect(image, None)
+            points, _ = orb.compute(image, points)
             coordinates = [point.pt for point in points]
             hull = convex_hull(coordinates)
-            rectangle = convex_hull_to_rect(hull)
-            subprocess.call(
-                ["convert", self.image.path, "-crop", "{0}x{1}+{2}x{3}".format(rectangle[2] - rectangle[0], rectangle[3] - rectangle[1], rectangle[0], rectangle[1]), self.image.path])
+            r = convex_hull_to_rect(hull)
+            subprocess.call(["convert",
+                             self.image.path,
+                             "-crop", "{0}x{1}+{2}x{3}".format(r[2] - r[0], r[3] - r[1], r[0], r[1]),
+                             self.image.path])
             self.update_size()
         else:
             logger.warning("OpenCV not available for feature detection, using basic cropping instead.")
@@ -603,11 +602,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             if save:
                 self.clone(self.description)
             os.system(
-                'convert "%s" \( -clone 0 -fill "#440000" -colorize 100%% \)  -compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%% -modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (
-                    self.image.path, self.image.path))
+                    'convert "%s" \( -clone 0 -fill "#440000" -colorize 100%% \)  -compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%% -modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (
+                        self.image.path, self.image.path))
             os.system(
-                'convert "%s" \( -clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6 \) -channel RGB -compose multiply -composite "%s"' % (
-                    self.image.path, self.image.path))
+                    'convert "%s" \( -clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6 \) -channel RGB -compose multiply -composite "%s"' % (
+                        self.image.path, self.image.path))
             os.system('convert "%s" \( -clone 0 -blur 30x15 \) -compose dissolve -define compose:args=20 -composite "%s"' % (self.image.path, self.image.path))
 
     def clone(self, description=None):
