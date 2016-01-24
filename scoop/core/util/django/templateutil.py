@@ -7,6 +7,8 @@ from django.template import Context, RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
 
+from scoop.core.util.stream.request import default_context
+
 
 def render_to_code(request, name, dictionary, code=200):
     """
@@ -164,5 +166,5 @@ def do_render(data, request, template=None, content_type=None, headers=None, sta
                 response[key] = value
         return response
     else:
-        rendered = render_to_string(tmpl, data, context_instance=RequestContext(request))
+        rendered = render_to_string(tmpl, data, context_instance=default_context())
         return rendered

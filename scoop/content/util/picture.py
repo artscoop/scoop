@@ -205,7 +205,7 @@ def convex_hull(points):
 
 def convex_hull_to_rect(hull):
     """ Convertir une coque convexe en sa boîte englobante """
-    coordinates = {'left': sys.maxint, 'right': 0, 'top': sys.maxint, 'bottom': 0}
+    coordinates = {'left': sys.maxsize, 'right': 0, 'top': sys.maxsize, 'bottom': 0}
     for point in hull:
         if point[0] < coordinates['left']:
             coordinates['left'] = int(floor(point[0]))

@@ -3,16 +3,13 @@ from importlib import import_module
 
 import loremipsum
 from django.conf import settings
-from django.test.testcases import TestCase
-from django.utils import timezone
-from scoop.content.models import Content
-from scoop.content.models.content import Category
+from django.test import TestCase
 from scoop.content.models.link import Link
-from scoop.user.models.user import User
 
 
 class LinkTest(TestCase):
     """ Test des liens """
+
     # Configuration
     fixtures = []
 
@@ -39,7 +36,7 @@ class LinkTest(TestCase):
 
     def test_link_html(self):
         """ Vérifier que le HTML du lien est conforme """
-        link1 = Link.objects.create(url='http://example.com', nofollow=True)  # accessible
-        link2 = Link.objects.create(url='http://example.com', nofollow=False)  # accessible
-        self.assertContains(link1.html(), 'nofollow', "The generated HTML code must contain 'nofollow'")
-        self.assertNotContains(link2.html(), 'nofollow', "The generated HTML code should not contain 'nofollow'")
+        link1 = Link.objects.create(url='http://example.com/1', nofollow=True)  # accessible
+        link2 = Link.objects.create(url='http://example.com/2', nofollow=False)  # accessible
+        self.assertTrue('nofollow' in link1.html(), "The generated HTML code must contain 'nofollow'")
+        self.assertFalse('nofollow' in link2.html(), "The generated HTML code should not contain 'nofollow'")

@@ -1,9 +1,9 @@
 # coding: utf-8
 from urllib import parse
 
-from annoying.decorators import render_to
 from django.core.validators import URLValidator
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from scoop.content.util.micawber.oembed import bootstrap_oembed
@@ -54,10 +54,9 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
     objects = LinkManager()
 
     # Getter
-    @render_to("content/display/link.html")
     def html(self):
         """ Renvoyer le code HTML du lien """
-        return {'link': self}
+        return render_to_string("content/display/link/link.html", {'item': self})
 
     @addattr(boolean=True)
     def is_valid(self):
