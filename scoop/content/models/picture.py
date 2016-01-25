@@ -12,6 +12,7 @@ from urllib.parse import urljoin
 import cv2
 import simplejson
 from PIL import Image
+
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.core.cache import cache
@@ -23,11 +24,10 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
-
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -42,7 +42,6 @@ from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
-
 
 logger = logging.getLogger(__name__)
 
@@ -278,9 +277,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def has_extension(self, extension):
         """
         Renvoyer si le fichier a une extension
-        :param extension: extension de fichier, ex. ".gif"
+        :param extension: extension de fichier, ex. ".gif" ou "png"
         """
-        return self.get_extension() == extension.lower()
+        return self.get_extension().lstrip('.') == extension.lower().lstrip('.')
 
     @addattr(short_description=_("Size"))
     def get_file_size(self, raw=False):
@@ -298,7 +297,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     @staticmethod
     def _parse_scheme(uri):
         """
-        Renvoyer le schema d'une URI
+        Renvoyer le schema d'une URI, ex. "http://"
         :param uri: chaîne d'URI de la ressource, au format protocole://ressource
         :type uri: str
         """
@@ -338,6 +337,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         return count
 
     # Setter
+    def set_description(self, description):
+        """ Définir la description de l'image """
+        self.description = description
+        self.save(update_fields=['description'])
+
     def set_marker(self, content, save=True):
         """ Définir le marqueur """
         content = content[0:Picture._meta.get_field('marker').max_length]
@@ -555,7 +559,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             self.update_size()
 
     def autocrop_feature_detection(self):
-        """ Rogner automatiquement par zones d'intérêt """
+        """ Rogner automatiquement selon les zones d'intérêt """
         if self.exists():
             image = cv2.imread(self.image.path)
             orb = cv2.ORB_create(nfeatures=500)  # Alternative libre à SIFT pour la détection de caractéristiques
@@ -564,10 +568,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             coordinates = [point.pt for point in points]
             hull = convex_hull(coordinates)
             r = convex_hull_to_rect(hull)
-            subprocess.call(["convert",
-                             self.image.path,
-                             "-crop", "{0}x{1}+{2}x{3}".format(r[2] - r[0], r[3] - r[1], r[0], r[1]),
-                             self.image.path])
+            subprocess.call(["convert", self.image.path, "-crop", "{0}x{1}+{2}x{3}".format(r[2] - r[0], r[3] - r[1], r[0], r[1]), self.image.path])
             self.update_size()
         else:
             logger.warning("OpenCV not available for feature detection, using basic cropping instead.")
@@ -585,7 +586,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             if save:
                 self.clone(self.description)
-            subprocess.call(["convert", self.image.path, "-modulate", "100,130,100", "-colorspace", "Lab", "-channel", "R", "-brightness-contrast", "4x30", "+channel", "-colorspace", "sRGB",
+            subprocess.call(["convert", self.image.path,
+                             "-modulate", "100,130,100", "-colorspace", "Lab", "-channel", "R",
+                             "-brightness-contrast", "4x30", "+channel", "-colorspace", "sRGB",
                              self.image.path])
 
     def liquid(self, width=80, height=80, save=True):
@@ -601,13 +604,12 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             if save:
                 self.clone(self.description)
-            os.system(
-                    'convert "%s" \( -clone 0 -fill "#440000" -colorize 100%% \)  -compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%% -modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (
-                        self.image.path, self.image.path))
-            os.system(
-                    'convert "%s" \( -clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6 \) -channel RGB -compose multiply -composite "%s"' % (
-                        self.image.path, self.image.path))
-            os.system('convert "%s" \( -clone 0 -blur 30x15 \) -compose dissolve -define compose:args=20 -composite "%s"' % (self.image.path, self.image.path))
+            os.system('convert "%s" \(-clone 0 -fill "#440000" -colorize 100%%\)'
+                      '-compose blend -define compose:args=20,80 -composite -sigmoidal-contrast 10x33%%'
+                      '-modulate 100,75,100 -adaptive-sharpen 1x0.6 "%s"' % (self.image.path, self.image.path))
+            os.system('convert "%s" \(-clone 0 -colorspace gray -channel RGB -threshold 50%% -fill "#ffddee" -opaque "#000000" -blur 12x6\)'
+                      '-channel RGB -compose multiply -composite "%s"' % (self.image.path, self.image.path))
+            os.system('convert "%s" \(-clone 0 -blur 30x15\) -compose dissolve -define compose:args=20 -composite "%s"' % (self.image.path, self.image.path))
 
     def clone(self, description=None):
         """ Dupliquer l'image """

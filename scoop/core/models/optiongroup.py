@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.apps.registry import apps
 from django.db import models
 from django.db.models.base import Model
 from django.db.utils import ProgrammingError
@@ -10,7 +11,6 @@ from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
 from translatable.models import TranslatableModel, get_translation_model
-from django.apps.registry import apps
 
 
 class OptionGroupManager(SingleDeleteManager):
