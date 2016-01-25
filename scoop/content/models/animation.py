@@ -15,16 +15,14 @@ from django.core.files.temp import gettempdir
 from django.db import models
 from django.template.defaultfilters import filesizeformat
 from django.template.loader import render_to_string
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.content.util.picture import get_animation_upload_path
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
-
 
 logger = logging.getLogger(__name__)
 
@@ -73,10 +71,10 @@ class AnimationManager(SingleDeleteManager):
                     temp_dir = gettempdir()
                     new_filename = "{0}.{extension}".format(uuid_bits(48), extension=extension)
                     temp_path = "/{tmp}/{0}".format(new_filename, tmp=temp_dir)
-                    subprocess.call(['convert', picture.image.path, '-coalesce', '/{tmp}/{0}%05d.jpg'.format(sequence_name, tmp=temp_dir)], stderr=open(os.devnull, 'wb'))
-                    subprocess.call(
-                            ['avconv', '-i', '/tmp/{0}%05d.jpg'.format(sequence_name), '-vf', 'scale=trunc(in_w/2)*2:trunc(in_h/2)*2', '-c', AnimationManager.CODECS[extension], temp_path],
-                            stderr=open(os.devnull, 'wb'))
+                    subprocess.call(['convert', picture.image.path, '-coalesce', '/{tmp}/{0}%05d.jpg'.format(sequence_name, tmp=temp_dir)],
+                                    stderr=open(os.devnull, 'wb'))
+                    subprocess.call(['avconv', '-i', '/tmp/{0}%05d.jpg'.format(sequence_name), '-vf', 'scale=trunc(in_w/2)*2:trunc(in_h/2)*2', '-c',
+                                     AnimationManager.CODECS[extension], temp_path], stderr=open(os.devnull, 'wb'))
                     animation = Animation(extension=extension, description=picture.description)
                     animation.picture = picture
                     animation.file.save(new_filename, File(open(temp_path, 'rb')))
@@ -95,7 +93,8 @@ class AnimationManager(SingleDeleteManager):
 
 class Animation(DatetimeModel, UUID128Model):
     """ Animation vidéo """
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='owned_animations', on_delete=models.SET_NULL, verbose_name=_("Author"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='owned_animations', on_delete=models.SET_NULL,
+                               verbose_name=_("Author"))
     file = models.FileField(max_length=192, upload_to=get_animation_upload_path, verbose_name=_("File"))
     picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.CASCADE, related_name='animations', verbose_name=_("Picture"))
     extension = models.CharField(max_length=8, default='mp4', verbose_name=_("Extension"))

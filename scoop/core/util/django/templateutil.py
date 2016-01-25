@@ -6,7 +6,6 @@ from django.shortcuts import render_to_response
 from django.template import Context, RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
-
 from scoop.core.util.stream.request import default_context
 
 

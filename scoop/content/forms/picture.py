@@ -2,11 +2,6 @@
 import os
 from zipfile import ZipFile
 
-try:
-    from captcha.fields import CaptchaField
-except RuntimeError:
-    def CaptchaField():
-        return None
 from django import forms
 from django.core.files.base import File
 from django.core.files.temp import NamedTemporaryFile
@@ -19,6 +14,12 @@ from form_utils.fields import ClearableImageField
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import CreationLicenseWidget, PictureInlineWidget
 from scoop.core.forms import BaseSearchForm
+
+try:
+    from captcha.fields import CaptchaField
+except RuntimeError:
+    def CaptchaField():
+        return None
 
 
 class PictureModelForm(forms.ModelForm):

@@ -5,10 +5,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.test.utils import override_settings
-
 from scoop.core.util.django.testing import TEST_CONFIGURATION
 from scoop.user.models.activation import Activation
-
 
 User = get_user_model()
 

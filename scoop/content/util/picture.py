@@ -1,7 +1,6 @@
 # coding: utf-8
 import logging
 import os
-import sys
 from math import ceil, floor
 from os.path import basename, splitext
 
@@ -205,14 +204,14 @@ def convex_hull(points):
 
 def convex_hull_to_rect(hull):
     """ Convertir une coque convexe en sa boîte englobante """
-    coordinates = {'left': sys.maxsize, 'right': 0, 'top': sys.maxsize, 'bottom': 0}
+    coordinates = {'left': None, 'right': None, 'top': None, 'bottom': None}
     for point in hull:
-        if point[0] < coordinates['left']:
+        if coordinates['left'] is None or point[0] < coordinates['left']:
             coordinates['left'] = int(floor(point[0]))
-        if point[0] > coordinates['right']:
+        if coordinates['right'] is None or point[0] > coordinates['right']:
             coordinates['right'] = int(ceil(point[0]))
-        if point[1] < coordinates['top']:
+        if coordinates['top'] is None or point[1] < coordinates['top']:
             coordinates['top'] = int(floor(point[1]))
-        if point[1] > coordinates['bottom']:
+        if coordinates['bottom'] is None or point[1] > coordinates['bottom']:
             coordinates['bottom'] = int(ceil(point[1]))
     return [coordinates['left'], coordinates['top'], coordinates['right'], coordinates['bottom']]
