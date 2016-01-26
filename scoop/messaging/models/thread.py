@@ -216,7 +216,7 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
         # Créer le sujet ou récupérer un sujet existant, si unique=True
         thread = None
         created = False
-        unique = unique or getattr(settings, 'MESSAGING_THREAD_UNIQUE', True)
+        unique = getattr(settings, 'MESSAGING_THREAD_UNIQUE', True) if unique is None else unique
         if unique is True:
             threads = self.filter(closed=False, deleted=False)
             for recipient in recipients:

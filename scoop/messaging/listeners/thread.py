@@ -13,7 +13,7 @@ def default_pre_thread(sender, author, recipients, request, unique, force, **kwa
     """ Traiter la pré-création d'un thread """
     errors = set()
     # Ne rien faire si le quota de sujets pour user est atteint
-    if Quota.objects.exceeded_for(author):
+    if Quota.objects.exceeded_for(author) and not force:
         errors.add(_("You have started discussions with too much people today."))
     # Ne rien faire s'il n'y a aucun participant ou juste author
     if set(recipients) == {author} or not recipients:

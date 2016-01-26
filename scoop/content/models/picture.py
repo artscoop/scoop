@@ -349,9 +349,16 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if save is True:
             self.save(update_fields=['marker'])
 
-    def set_license(self, license_id, author, save=True):
-        """ Définir la licence """
-        self.license = "{license}:{author}".format(license=license_id, author=author)
+    def set_license(self, license_id, author_name, save=True):
+        """
+        Définir la licence et le propriétaire légal
+
+        :param license_id: id de la license, voir scoop.core.abstract.content.license.CreationLicenseModel
+        :param author_name: Nom de l'auteur (1 ou +) possédant les droits
+        :type license_id: int
+        """
+        self.license = "{license}{sep}{author}".format(license=license_id, author=author_name,
+                                                       sep=CreationLicenseModel.LICENSE_SEPARATOR)
         if save is True:
             self.save(update_fields=['license'])
 
