@@ -23,16 +23,17 @@ class CityTest(TestCase):
         self.user = User.objects.create(username='commentuser', email='foo@foobar1.foo')
         self.user.set_password('commentuser')
         self.user.save()
-        # Peupler la Belgique
-        populate_countries()
-        self.countries = Country.objects.filter(code2="BE")
-        geonames_fill(self.countries)
 
     # Tests
     def test_cities(self):
         """ Tester les villes """
+        # Peupler la Belgique
+        populate_countries()
+        countries = Country.objects.filter(code2="BE")
+        geonames_fill(countries)
+
         languages = get_languages()
-        belgium = self.countries[0]
+        belgium = countries[0]
         liege = City.objects.find_by_name([50.63, 5.56], "Liège")
         brussels = City.objects.find_by_name([50.85, 4.35], "Brussels")
         italy = Country.objects.get_by_code2_or_none("IT")
@@ -44,6 +45,7 @@ class CityTest(TestCase):
         self.assertFalse(liege.has_name("4000"), "The postal code 4000 should not be a name of Liège")
         self.assertTrue(brussels.has_code("1000"), "Brussels should have a code of 1000")
         self.assertEqual(brussels.type, "PPLC", "Brussels is a PPL/Capital")
+
         if 'fr' in languages:
             self.assertTrue(liege.has_name("Liège"), "Liège was expected, got {} instead.".format(liege))
             self.assertFalse(liege.has_name("Liége"), "Liége is not a name of Liège.")

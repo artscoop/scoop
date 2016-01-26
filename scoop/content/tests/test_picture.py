@@ -4,7 +4,6 @@ from os.path import join
 
 from django.test import TestCase
 from scoop.content.models.picture import Picture
-from scoop.core.util.stream.directory import Paths
 from scoop.user.models.user import User
 
 
@@ -31,7 +30,7 @@ class PictureTest(TestCase):
         """ Tester l'état des images téléchargées """
         # Créer des images, une via Google Search, et une par URL
         picture1 = Picture.objects.create_from_uri("find://flower?id=0", author=self.user, title="Flower")
-        picture2 = Picture.objects.create_from_file(join(path, 'images', 'croppable.jpg', 'banana.gif'), author=self.user, title="Banana")
+        picture2 = Picture.objects.create_from_file(join(path, 'images', 'banana.gif'), author=self.user, title="Banana")
         self.assertIsNotNone(picture2, "picture 2 should not be None")
         self.assertIsNone(picture1.moderated, "picture 1 was moderated but should not by default")
         self.assertGreater(picture1.get_file_size(raw=True), 1800, "the downloaded picture should be bigger than 1800 bytes")
@@ -57,9 +56,17 @@ class PictureTest(TestCase):
         picture3.autocrop()
         self.assertGreater(picture3.height, 262, "the picture should be cropped by not many pixels vertically")
 
-    def test_marker(self):
+    def test_markers(self):
         """ Tester l'écriture et la lecture de marqueurs """
         picture1 = Picture.objects.create_from_file(join(path, 'images', 'croppable.jpg'), author=self.user, title='marked picture')
         picture1.set_marker('x,18,violence')
         self.assertEqual(picture1.get_markers(), ['x', '18', 'violence'], "the picture markers should be in order x, 18 ans violence")
         self.assertTrue(picture1.has_marker('18'), "the picture should have a marker named 18")
+
+    def test_license(self):
+        """ Tester l'écriture et la lecture de licence/auteur """
+        picture1 = Picture.objects.create_from_file(join(path, 'images', 'croppable.jpg'), author=self.user, title='marked picture')
+        picture1.set_license(1, "Robert Doisneau")
+        self.assertEqual(picture1.get_license_id(), 1)
+        self.assertEqual(picture1.get_license_name().lower(), 'copyright')
+        self.assertEqual(picture1.get_license_creator(), 'Robert Doisneau')

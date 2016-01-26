@@ -6,15 +6,18 @@ from django.utils.translation import pgettext_lazy
 
 class CreationLicenseModel(models.Model):
     """ Objet possédant une information de licence """
+
     # Constantes
     LICENSES = {0: pgettext_lazy('audience', 'None'), 1: 'Copyright', 10: 'CC-BY', 11: 'CC-BY-SA', 12: 'CC-BY-ND', 13: 'CC-BY-NC', 14: 'CC-BY-SA-NC', 15: 'CC-BY-ND-ND', 16: 'Public domain'}
+    LICENSE_SEPARATOR = ';'
+
     # Champs
     license = models.CharField(max_length=40, default=";", blank=True, verbose_name=_("License/Creator"))
 
     # Getter
     def get_license_id(self):
         """ Renvoyer l'id de la licence """
-        licens, _ = self.license.split(";", 1)
+        licens, _ = self.license.split(self.LICENSE_SEPARATOR, 1)
         return int(licens or 0)
 
     def get_license_name(self):
@@ -23,7 +26,7 @@ class CreationLicenseModel(models.Model):
 
     def get_license_creator(self):
         """ Renvoyer le nom de l'auteur """
-        _, creator = self.license.split(";", 1)
+        _, creator = self.license.split(self.LICENSE_SEPARATOR, 1)
         return creator or _("Not provided")
 
     # Métadonnées
@@ -33,10 +36,12 @@ class CreationLicenseModel(models.Model):
 
 class AudienceModel(models.Model):
     """ Objet indiquant le type de public approprié à son visionnage """
+
     # Constantes
     AUDIENCES = {0: _("Everyone"), 5: _("Adults only")}
     AUDIENCE_AGES = {0: 3, 5: 18}
     AUDIENCE_CHOICES = AUDIENCES.items()
+
     # Champs
     audience = models.SmallIntegerField(choices=AUDIENCE_CHOICES, default=0, verbose_name=_("Audience rating"))
 
