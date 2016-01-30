@@ -68,29 +68,30 @@ class BlocklistManager(SingleDeleteManager):
         return queryset
 
     # Setter
-    def enlist(self, recipient, sender, name=None):
+    def add(self, recipient, sender, name=None):
         """ Ajouter un utilisateur dans une blocklist """
         blocklist = self.get_by_user(recipient)
-        return blocklist.enlist(sender, name)
+        return blocklist.add(sender, name)
 
-    def unlist(self, recipient, sender, name=None):
+    def remove(self, recipient, sender, name=None):
         """ Retirer un utilisateur d'une blocklist """
         blocklist = self.get_by_user(recipient)
-        return blocklist.unlist(sender, name)
+        return blocklist.remove(sender, name)
 
     def toggle(self, recipient, sender, name=None):
         """ Basculer le listage d'un utilisateur dans une blocklist """
         blocklist = self.get_by_user(recipient)
         return blocklist.toggle(sender, name)
 
-    def reset(self, user, name=None):
+    def clear(self, user, name=None):
         """ Réinitialiser une blocklist """
         blocklist = self.get_by_user(user)
-        return blocklist.reset()
+        return blocklist.clear(name=name)
 
 
 class Blocklist(DatetimeModel, DataModel):
     """ Blocklist """
+
     # Constantes
     DATA_KEYS = ['blacklist', 'hidelist']
     # Champs
@@ -123,7 +124,7 @@ class Blocklist(DatetimeModel, DataModel):
         return None
 
     # Setter
-    def enlist(self, sender, name=None):
+    def add(self, sender, name=None):
         """
         Ajouter un utilisateur à une blocklist
         :type sender: scoop.user.models.User or int
@@ -137,7 +138,7 @@ class Blocklist(DatetimeModel, DataModel):
             return True
         return False
 
-    def unlist(self, sender, name=None):
+    def remove(self, sender, name=None):
         """
         Retirer un utilisateur d'une blocklist
         :type sender: scoop.user.models.User or int
@@ -156,13 +157,13 @@ class Blocklist(DatetimeModel, DataModel):
         :type sender: scoop.user.models.User or int
         """
         if self.is_listed(sender, name or DEFAULT_LIST):
-            self.unlist(sender, name or DEFAULT_LIST)
+            self.remove(sender, name or DEFAULT_LIST)
             return False
         else:
-            self.enlist(sender, name or DEFAULT_LIST)
+            self.add(sender, name or DEFAULT_LIST)
             return True
 
-    def reset(self, user, name=None):
+    def clear(self, name=None):
         """ Remettre une blocklist à zéro """
         self.set_data(name or DEFAULT_LIST, {}, save=True)
         return True

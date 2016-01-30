@@ -43,7 +43,8 @@ from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import TranslatableModel, get_translation_model, TranslatableModelManager
+
 
 logger = logging.getLogger(__name__)
 
@@ -104,8 +105,10 @@ class ContentQuerySetMixin(object):
         contents = self.filter(slug__icontains=word, **({'category': category} if category is not None else {}))  # filtrer les contenus contenant le mot le plus long
         try:
             closest = max(
-                [{'ratio': similarity, 'content': content} for content, similarity in zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if
-                 similarity > 7500], key=operator.itemgetter('ratio'))
+                [{'ratio': similarity, 'content': content} for content, similarity in
+                 zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if
+                 similarity > 7500
+                 ], key=operator.itemgetter('ratio'))
             return closest['content']
         except:
             return None
@@ -113,6 +116,7 @@ class ContentQuerySetMixin(object):
     def get_by_id(self, cid, exc=None):
         """
         Renvoyer le contenu ayant un ID précis
+
         :param cid: id du contenu à retrouver
         :param exc: exception à lever si l'ID n'existe pas
         """
@@ -127,6 +131,7 @@ class ContentQuerySetMixin(object):
     def by_category(self, categories, attribute='short_name', **kwargs):
         """
         Renvoyer les contenus correspondant à des catégories précises
+
         :param categories: liste de catégories ou liste de noms de catégories
         :param attribute: sur quel attribut de la classe catégorie effectuer la recherche
         """
@@ -139,6 +144,7 @@ class ContentQuerySetMixin(object):
     def by_tags(self, tags, **kwargs):
         """
         Renvoyer les contenus ayant des étiquettes précises
+
         :param tags: liste de noms de tags ou liste de tags
         :param kwargs: options de filtrage supplémentaires
         """
@@ -155,20 +161,22 @@ class ContentQuerySetMixin(object):
         """ Renvoyer la liste des jours de publication des articles """
         return self.visible(**kwargs).datetimes('created', 'day', order='DESC')
 
-    def by_month(self, month, *args, **kwargs):
+    def by_month(self, month, **kwargs):
         """
         Renvoyer les contenus créés pendant un mois
+
         :param month: date ou datetime situé dans le mois désiré
         """
         kwargs.update({'created__month': month.month, 'created__year': month.year})
         return self.visible(**kwargs).order_by('-created')
 
-    def on_day(self, day, *args, **kwargs):
+    def on_day(self, day, **kwargs):
         """
         Renvoyer les contenus créés un jour précis
+
         :param day: date ou datetime situé dans le jour désiré
         """
-        return self.visible().filter(created__year=day.year, created__month=day.month, created__day=day.day).order_by('-id')
+        return self.visible().filter(created__year=day.year, created__month=day.month, created__day=day.day, **kwargs).order_by('-id')
 
     def get_last_edit_time(self, **kwargs):
         """ Renvoyer la date la plus récente de modification des contenus """
@@ -194,6 +202,7 @@ class ContentQuerySetMixin(object):
     def publish_every(self, start=None, step=None):
         """
         Publier les contenus (max. 128 contenus) progressivement
+
         :param start: date correspondant au premier jour de publication
         :param step: à quel intervalle publier les contenus
         """
@@ -223,6 +232,7 @@ class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manag
     def post(self, authors, category, title, body, visible=True, **kwargs):
         """
         Créer un nouveau contenu
+
         :param authors: auteur ou liste des utilisateurs auteurs
         :param category: nom de catégorie du nouveau contenu
         :param title: titre du contenu
@@ -242,7 +252,7 @@ class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manag
             return None
 
 
-class CategoryManager(SingleDeleteManager):
+class CategoryManager(SingleDeleteManager, TranslatableModelManager):
     """ Manager des types de contenus """
 
     def get_by_name(self, name):
@@ -334,6 +344,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     def get_similarity(self, content):
         """
         Renvoyer l'indice de similarité avec un autre contenu
+
         :returns: similarité entre 0.0 et 1.0, 1.0 étant l'identité
         """
         labels = {'title', 'body', 'tags'}
@@ -406,6 +417,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     def _populate_similar(self, repopulate=False, result_count=10, categories=None):
         """
         Définir la liste des documents similaires à ce document
+
         :param repopulate: recréer la liste même si elle existe déjà
         :param result_count: nombre maximum de contenus similaires à enregistrer
         :param categories: liste de types de contenu à choisir ou None
@@ -503,7 +515,11 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
 
 
 class ContentApproval(ApprovalModel(Content)):
-    """ Approval data for content """
+    """
+    Approval data for content
+
+    Adds an approval 1:1 reverse relation to the Content model
+    """
     approval_fields = ['body', 'published', 'publish']
     approval_default = {'published': False, 'publish': None}
 
@@ -513,7 +529,15 @@ class ContentApproval(ApprovalModel(Content)):
 
 
 class Category(TranslatableModel, IconModel, DataModel):
-    """ Type de contenu """
+    """
+    Type de contenu
+
+    Sépare les contenus par URL de base.
+    Permet d'assigner des métadonnées à des types de contenu.
+    Permet aussi d'utiliser des templates différents selon
+    le tyoe de contenu.
+    """
+
     # Champs
     short_name = models.CharField(max_length=10, verbose_name=_("Identifier"))
     url = models.CharField(max_length=16, help_text=_("e.g. blog, story or article"), verbose_name=_("URL"))

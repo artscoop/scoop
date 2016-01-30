@@ -10,17 +10,19 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
-from scoop.core.abstract.user.authored import AuthoredModel
+from scoop.core.abstract.user.authorable import AuthorableModel
 from scoop.core.util.shortcuts import addattr
 from scoop.editorial.util.languages import get_country_code
 from translatable.models import TranslatableModel, get_translation_model
 
 
-class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UUID64Model):
+class Excerpt(TranslatableModel, DatetimeModel, AuthorableModel, WeightedModel, UUID64Model):
     """ Extrait de texte """
+
     # Constantes
     FORMATS = [[0, _("Plain HTML")], [1, _("Markdown")], [2, _("Textile")], [3, _("reStructured Text")], ]
     TRANSFORMS = {1: Markdown().convert}
+
     # Champs
     name = models.CharField(max_length=48, unique=True, blank=False, verbose_name=_("Name"))
     title = models.CharField(max_length=80, unique=True, blank=False, verbose_name=_("Title"))
@@ -48,6 +50,11 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthoredModel, WeightedModel, UU
         """ Renvoyer le code HTML de l'extrait (selon le format) """
         content = Excerpt.TRANSFORMS.get(self.format, lambda s: s)(self.get_text())
         return content
+
+    def get_load_tag(self):
+        """ Renvoyer le code de template pour les bibliothèques requises """
+        libs = " ".join([lib.strip() for lib in self.libraries.split(',')])
+        return '{{% load {0} %}}'.format(libs) if libs else ''
 
     @addattr(allow_tags=True, short_description=_("Languages"))
     def get_language_icons_html(self):

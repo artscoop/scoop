@@ -6,6 +6,7 @@ from datetime import timedelta
 import qsstats
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import UserManager as DefaultManager
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
 from django.contrib.contenttypes.fields import ContentType
@@ -162,7 +163,7 @@ class UserQuerySet(models.QuerySet, UserQuerySetMixin, SingleDeleteQuerySetMixin
     pass
 
 
-class UserManager(DefaultManager.from_queryset(UserQuerySet), models.Manager, UserQuerySetMixin):
+class UserManager(DefaultManager.from_queryset(UserQuerySet), BaseUserManager, UserQuerySetMixin):
     """ Manager des utilisateurs """
 
     def get_queryset(self):
@@ -181,15 +182,18 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     NAME_REGEX = r'^[A-Za-z][A-Za-z0-9_\-]+$'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
     NAME_REGEX_MESSAGE = _("Your name can only contain letters")
     ONLINE_DURATION, AWAY_DURATION = 900, 300
+
     # Champs
-    username = models.CharField(max_length=32, unique=True, validators=[RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE), MinLengthValidator(4)],
+    username = models.CharField(max_length=32, unique=True,
+                                validators=[RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE), MinLengthValidator(4)],
                                 verbose_name=_("Username"))
     name = models.CharField(max_length=24, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_("Name"))
     bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', "Bot"))
     email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_("Email"))
     is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', "Active"))
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', "Deleted"))
-    is_staff = models.BooleanField(default=False, help_text=_("Designates whether the user can log into this admin site."), verbose_name=pgettext_lazy('user', "Staff"))
+    is_staff = models.BooleanField(default=False, help_text=_("Designates whether the user can log into this admin site."),
+                                   verbose_name=pgettext_lazy('user', "Staff"))
     date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_("Date joined"))
     last_online = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))
     next_mail = models.DateTimeField(default=timezone.now, editable=False, verbose_name=_("Next possible mail for user"))

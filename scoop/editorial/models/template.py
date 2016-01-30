@@ -1,24 +1,36 @@
 # coding: utf-8
+import os
+
 from django.db import models
 from django.http import HttpRequest
 from django.template.base import TextNode
-from django.template.context import RequestContext
+from django.template.context import Context, RequestContext
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
-from django.template.loader_tags import BlockNode, ExtendsNode
+from django.template.loader_tags import BLOCK_CONTEXT_KEY, BlockNode, ExtendsNode
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.shortcuts import addattr
+from scoop.core.util.stream.request import default_context
 
 
 class Template(DatetimeModel):
     """ Template d'affichage d'une page """
+
     # Champs
     name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
     path = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_("Path"))
     full = models.BooleanField(default=False, help_text=_("Contains html, head and body tags."), verbose_name=_("Full page template"))
     positions = models.ManyToManyField('editorial.Position', blank=True, verbose_name=_("Positions"))
+
+    # Raccourcis
+    @staticmethod
+    def at_path(path, name=None):
+        if name is None:
+            name = os.path.basename(path)
+        template, _ = Template.objects.get_or_create(name=name, path=path)
+        return template
 
     # Actions
     def auto_fill(self):
@@ -54,6 +66,10 @@ class Template(DatetimeModel):
         """ Renvoyer si des blocs existent dans le template """
         return self.positions.exists()
 
+    def has_position(self, name):
+        """ Renvoyer si des blocs existent dans le template """
+        return self.positions.filter(name=name).exists()
+
     @addattr(short_description=_("Inner blocks"))
     def get_positions(self):
         """ Renvoyer les blocs existent dans le template """
@@ -61,7 +77,11 @@ class Template(DatetimeModel):
 
     def get_position(self, name):
         """ Renvoyer la position portant un nom """
-        return self.positions.get(name=name)
+        from scoop.editorial.models import Position
+        try:
+            return self.positions.get(name=name)
+        except Position.DoesNotExist:
+            return None
 
     @addattr(short_description=_("Inner blocks"))
     def get_position_count(self):
@@ -76,7 +96,8 @@ class Template(DatetimeModel):
         if len(extendlist) > 0:
             for block in extendlist[0].blocks:
                 yield block
-            for item in Template._get_block_names(extendlist[0].get_parent(RequestContext(HttpRequest()))):
+            parent_template = get_template(extendlist[0].parent_name.resolve(Context({})))
+            for item in Template._get_block_names(parent_template):
                 yield item
         else:
             nodelist = template.template.nodelist
@@ -91,7 +112,8 @@ class Template(DatetimeModel):
         extendlist = nodelist.get_nodes_by_type(ExtendsNode)
         textlist = nodelist.get_nodes_by_type(TextNode)
         if len(extendlist) > 0:
-            return False or Template._find_html_tags(extendlist[0].get_parent(RequestContext(HttpRequest())), tags)
+            parent_template = get_template(extendlist[0].parent_name.resolve(Context({})))
+            return False or Template._find_html_tags(parent_template, tags)
         elif len(textlist) > 0:
             tags_found = set()
             for text in textlist:

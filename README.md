@@ -1,6 +1,6 @@
 # Projet Scoop
 Par Steve Kossouho
-Mai 2011 - Janvier 2016
+Mai 2011 - Février 2016
 Séparé du projet One le 15 avril 2015
 
 ## Contenu du projet
@@ -16,3 +16,26 @@ Séparé du projet One le 15 avril 2015
 - `core` : le cœur du projet, contient tous les utilitaires et modèles utiles au moteur.
 - `user.social` : options sociales comme like, amitié et événements.
 - `user.social.people` : mise en logique de personnes réelles.
+
+## Settings
+
+### Content
+- `CONTENT_WEBLOG_PING` : *bool*, ping des services de blog lorsque les contenus sont mis à jour
+- `GENERICRELATION_PICTURE_FILTER` : *dict*, par défaut, comment filtrer les images attachées au objets PicturableModel
+- `DEFAULT_THUMBNAIL_DIMENSIONS` : *dict*, dimensions par défaut d'une miniature, avec les clés `width` et `height`
+- `CLASSIFY_LANGUAGE` : *str*, langue par défaut des stopwords, parmi ['english', 'french']
+
+### Core
+- `CORE_ACTION_RECORD` : *bool*, faut-il enregistrer les actions core.Record dans la base de données
+- `FORM_ALIASES` : *dict*, alias utilisés pour identifier les formulaires à valider en AJAX (voir scoop.core.views.ajax.validate_form)
+- `MAKEMESSAGES_DIRS` : *list*, liste de répertoires racines à parcourir à la recherche de locales à traduire
+
+### Messaging
+- `MESSAGING_MAX_BATCH` : *int*, nombre de mails à envoyer au maximum par batch d'envoi. 30 par défaut
+- `MESSAGING_MAIL_SENDER` : *str*, expéditeur par défaut pour l'application. DEFAULT_FROM_EMAIL par défaut
+- `MESSAGING_DEFAULT_THREAD_QUOTA` : *int*, nombre de threads que peut ouvrir un utilisateur par défaut par jour. 10 par défaut
+- `MESSAGING_FORCED_TYPES` : *list* of *str*, types de messages mail à envoyer quoi qu'il arrive. ['security', 'account'] par défaut
+- `MESSAGING_ONLINE_TYPES` : *list* of *str*, types de messages mail à envoyer même si l'utilisateur est en ligne. MESSAGING_FORCED_TYPES + ['newsletter']
+- `MESSAGING_BLACKLIST_ENABLE` : *bool*, autoriser la mise en liste noire pour la messagerie. False par défaut
+- `MESSAGING_THREAD_UNIQUE` : *bool*, la création de thread doit-elle réutiliser les threads existants. True par défaut
+- `MESSAGING_THREAD_TOGGLE_DELAY` : *int*, délai minimum en secondes avant de pouvoir modifier l'état ouvert/fermé d'un thread. 3600 par défaut

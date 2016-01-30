@@ -38,8 +38,8 @@ def tags_keep(value, valid=None):
 def linebreaks_convert(value):
     """ Transformer les sauts de ligne en sauts HTML """
     output = re.sub(r"(\n)+", "<br>", value)
-    output = re.sub(r"(\<br(\s)*\/?\>\s*){2,20}", "<br>", output, flags=re.I)
-    output = re.sub(r"^\<br\>", "", output, flags=re.I)  # supprimer au début de ligne
+    output = re.sub(r"(<br(\s)*/?>\s*){2,20}", "<br>", output, flags=re.I)
+    output = re.sub(r"^<br>", "", output, flags=re.I)  # supprimer au début de ligne
     return mark_safe(output)
 
 

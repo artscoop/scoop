@@ -15,26 +15,44 @@ SI_PREFIXES = ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 # Arithmétique
 @register.filter
 def subtract(value, amount):
-    """ Soustraire """
+    """
+    Soustraire
+    """
     return value - amount
 
 
 @register.filter
 def delta(value, amount):
-    """ Cardinal de la soustraction """
+    """
+    Renvoyer le cardinal de la soustraction
+
+    :returns: la valeur positive de la différence entre value et amount
+    """
     return abs(value - amount)
 
 
 @register.filter
 def round_multiple(x, base=1):
-    """ Renvoyer le multiple de *base* le plus proche de *x* """
-    return (base * math.floor(float(x) / base)) if type(base) in {int, float} and base > 0 else None
+    """
+    Renvoyer le multiple de *base* le plus proche de *x**
+
+    :param base: un multiple de cette valeur doit être renvoyé
+    :type base: float | int
+    ex. :
+    round_multiple(0, 25) == 0
+    round_multiple(12, 25) == 0
+    round_multiple(13, 25) == 25
+    round_multiple(-12, 25) == 0
+
+    """
+    return (base * round(float(x) / base)) if type(base) in {int, float} and base > 0 else None
 
 
 @register.filter
 def round_left(x, digits=2):
     """
     Arrondir un nombre aux n chiffres les plus significatifs
+
     :param digits: nombre de chiffres significatifs
     :returns: ex. 2 500 000 pour 2 567 890 123 avec digits=2
     """
@@ -45,6 +63,7 @@ def round_left(x, digits=2):
 def modulo(value, br):
     """
     Renvoyer un modulo ou comparer un modulo
+
     :param br: int, float ou chaîne de 2 nombres b et r séparés par une virgule
     :returns: value % br si br est un nombre, sinon renvoie si value % b est égal à r
     """
@@ -57,19 +76,24 @@ def modulo(value, br):
             if b > 0:
                 result = value % b
                 return result
-    except:
+    except ValueError:
         pass
     return False
 
 
 @register.filter
 def to_percent(value, ratio=None):
-    """ Convertir une valeur en pourcentage """
+    """
+    Convertir une valeur en pourcentage
+
+    :param ratio: définit quelle valeur de `value` correspond à 100%. 1.0 par défaut
+    :type ratio: int | float
+    """
     return (value * 100.0) / (float(ratio or 1))
 
 
 @register.filter
-def si_suffix(value):
+def si_prefix(value):
     """
     Renvoyer une représentation d'un nombre avec les unités du système international
     Ex. 234 567 renvoie 234k, 123 567 890 renvoie 123M
@@ -111,7 +135,7 @@ def nestedsort(value, item_index=0):
         item_index = int(item_index)
         value.sort(key=lambda item: item[item_index])
         return value
-    except:
+    except ValueError:
         return value
 
 
@@ -135,6 +159,7 @@ def field_error(value):
 def trace(value):
     """
     Renvoyer les données de traceback
+
     :returns: une liste de tuples de 4 éléments, dans l'ordre
         nom de fichier, numéro de ligne, nom de fonction, texte
     """

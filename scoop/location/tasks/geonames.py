@@ -8,7 +8,7 @@ from scoop.location.util.geonames import populate_cities, populate_currency, ren
 
 
 @task
-def geonames_fill(countries):
+def geonames_fill(countries, rename=True):
     """ Importer toutes les informations d'un ou plusieurs pays """
     renaming_allowed = False
     for country in countries:
@@ -23,7 +23,7 @@ def geonames_fill(countries):
         else:
             print(_("population has failed. please investigate."))
         gc.enable()
-    if renaming_allowed:
+    if renaming_allowed and rename:
         gc.disable()
         start_time = time.time()
         rename_cities()

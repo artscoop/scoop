@@ -84,9 +84,10 @@ class IPManager(GeoManager):
 
 class IP(DatetimeModel, CoordinatesModel):
     """ Adresse IP """
+
     # Constantes
     HARMFUL_LEVEL = 2
-    PROTECTED_IPS = [r'^127\.', r'^192\.168\.']
+    PROTECTED_IPS = [r'^127\.', r'^192\.168\.'] + list(getattr(settings, 'INTERNAL_IPS', []))
 
     # Champs
     ip = models.DecimalField(null=False, blank=True, unique=True, max_digits=39, decimal_places=0, db_index=True, verbose_name=_("Decimal"))
@@ -105,7 +106,7 @@ class IP(DatetimeModel, CoordinatesModel):
     # Getter
     def natural_key(self):
         """ Renvoyer une IP par sa clé naturelle """
-        return ('ip',)
+        return 'ip',
 
     def get_ip_address(self):
         """ Renvoyer la chaîne d'adresse de l'IP """
@@ -295,7 +296,7 @@ class IP(DatetimeModel, CoordinatesModel):
     @staticmethod
     def is_country_harmful(code):
         """ Renvoyer si un code pays est dangereux """
-        if code == '' or code.lower() in getattr(settings, 'LOCATION_SAFE_COUNTRIES', code.lower()):
+        if not code or code.lower() in getattr(settings, 'LOCATION_SAFE_COUNTRIES', code.lower()):
             return False
         return True
 

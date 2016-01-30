@@ -10,6 +10,7 @@ class DataForm(Form):
     """
     Classe de base de formulaire destiné à la sauvegarde de configurations
     utilisateur (voir user.models.FormConfiguration)
+
     Note: ne jamais changer le type d'un champ de formulaire.
     :cvar name: nom du formulaire, unique
     :cvar defaults: dictionnaire des valeurs par défaut des attributs champs

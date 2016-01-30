@@ -34,12 +34,18 @@ class ContentTest(TestCase):
         content4.publish = timezone.now() + timezone.timedelta(hours=1)
         content4.save()
         content5 = Content.objects.post(self.administrator, 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(12), visible=True)
+
         self.assertFalse(content1.is_published(), "content 1 should be unpublished")  # Approval sets published to False for base users
         self.assertFalse(content2.is_published(), "content 2 should be unpublished")
         self.assertFalse(content3.is_published(), "content 3 should be unpublished")
         self.assertFalse(content4.is_published(), "content 4 should be unpublished")
         self.assertFalse(content5.is_published(), "content 5 should be unpublished")
         self.assertEqual(Content.objects.visible().count(), 0, "there should be exactly 1 visible content")
+
+        # Approuver un contenu
+        content1.approval.approve(save=True)
+        self.assertTrue(content1.is_published(), "content 1 should be now published")
+
         # Tester le statut du contenu
         self.assertGreater(len(content1.html), 10, "the html display for the content should not be populated")
 

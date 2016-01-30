@@ -42,7 +42,7 @@ def display_image(context, image=None, **kwargs):
         image = Picture.objects.get_by_uuid(kwargs.pop('uuid', None), default=image)
     # N'afficher que si l'objet Picture est visible pour l'objet Request
     if image is not None and isinstance(image, (Picture, str, FieldFile)):
-        display['alias'] = kwargs.pop('alias', None)  # alias de vignette
+        display['alias'] = kwargs.pop('alias')  # alias de vignette
         display['options'] = kwargs.pop('options', "")  # options easy-thumbnails de type bool
         display['image_class'] = kwargs.pop('image_class', "")
         display['image_rel'] = kwargs.pop('image_rel', "")

@@ -15,6 +15,7 @@ register = template.Library()
 def is_date_new(value, by):
     """
     Renvoyer si un objet datetime ou DatetimeModel est plus récent que
+
     :param by: chaîne au format "#d #h #m" ou un nombre en jours
     """
     from scoop.core.abstract.core.datetime import DatetimeModel

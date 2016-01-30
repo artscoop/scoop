@@ -12,13 +12,12 @@ from scoop.core.templatetags.datetime_tags import is_date_new as tt_is_new
 from scoop.core.templatetags.html_tags import linebreaks_convert as tt_linebreaks
 from scoop.core.templatetags.html_tags import sanitize as tt_sanitize
 from scoop.core.templatetags.html_tags import tags_keep as tt_tags_keep
-from scoop.core.util.stream.directory import Paths
+from scoop.core.templatetags.html_tags import html_urlize as tt_html_urlize
+from scoop.core.util.django.testing import TEST_CONFIGURATION
 from scoop.user.models.user import User
 
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',
-                   EMAIL_FILE_PATH=Paths.get_root_dir('files', 'tests', 'mail'),
-                   DEFAULT_FROM_EMAIL='admin@test.com')
+@override_settings(**TEST_CONFIGURATION)
 class TemplateTagsTest(TestCase):
     """ Test des template tags """
     fixtures = ['mailtype', 'options']
@@ -65,6 +64,8 @@ class TemplateTagsTest(TestCase):
         filtered_sane = "<h1 style='margin-left: 1em;'>Titre</h1>Nous sommes les garants du bon fonctionnement de l'univers"
         sane = "<h1>Acceptable tag</h1><p>The quick brown fox<br>Jumps over the lazy dog</p>"
         lined_text = "\n\nBonjour,\n\n\n\nnous sommes heureux de vous accueillir.\n"
+        urlizable = "<span>This is www.google.fr</span>"
+
         # tags_keep
         self.assertNotEqual(insane, tt_tags_keep(insane))
         self.assertNotEqual(insane, tt_sanitize(insane))
@@ -72,5 +73,9 @@ class TemplateTagsTest(TestCase):
         self.assertEqual(sane, tt_sanitize(sane))
         self.assertNotEqual(filtered_sane, tt_tags_keep(filtered_sane))  # style non conservé
         self.assertNotEqual(filtered_sane, tt_sanitize(filtered_sane))  # style non conservé
+
         # linebreaks_convert
         self.assertEqual(tt_linebreaks(lined_text).count('<br>'), 2)  # les retours chariot en début de ligne sont enlevés
+
+        # html_urlize
+        self.assertEqual(tt_html_urlize(urlizable).count('</a>'), 1)

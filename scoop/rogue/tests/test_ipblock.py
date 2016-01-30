@@ -12,6 +12,7 @@ from scoop.user.models.user import User
 
 class IPBlockTest(TestCase):
     """ Test des blocages d'adresses IP """
+
     # Configuration
     fixtures = ['category', 'mailtype', 'options']
 
@@ -30,3 +31,5 @@ class IPBlockTest(TestCase):
         self.assertTrue(IPBlock.objects.is_blocked(IP.objects.get_by_ip(proxy_node))['blocked'], "The IP {} should be blocked.".format(proxy_node))
         localhost = IP.objects.get_by_ip('127.0.0.1')
         self.assertFalse(IPBlock.objects.is_blocked(localhost)['blocked'], "The IP {} should always be allowed.".format(localhost))
+        IPBlock.objects.block_ips('127.0.0.1')  # Même si l'IP est bloquée, elle est toujours considérée safe normalement
+        self.assertFalse(IPBlock.objects.is_blocked(localhost)['blocked'], "The IP {} should be protected here.".format(localhost))

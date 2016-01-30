@@ -25,7 +25,7 @@ class ReadManager(SingleDeleteManager):
             criteria = {'updated__gt': Read.objects.filter(category__short_name__iexact=Read.CONTENT_TYPE, user=user).latest('created').created}
             topics = Content.objects.filter(category__short_name__iexact=Read.CONTENT_TYPE, **criteria)
             return topics
-        except:
+        except (AttributeError, Read.DoesNotExist):
             return Content.objects.none()
 
     def is_read(self, content, user):
