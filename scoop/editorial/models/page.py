@@ -37,6 +37,10 @@ class PageManager(models.Manager):
 
 class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexModel):
     """ Page personnalisée """
+
+    # Constantes
+    DEFAULT_CACHE_DURATION = 300
+
     # Champs
     name = models.CharField(max_length=64, unique=True, blank=False, verbose_name=_("Name"))
     title = models.CharField(max_length=64, blank=False, verbose_name=_("Title"))
@@ -57,27 +61,27 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
         """ Rendre la page """
         cache_key = 'editorial.page.render.{id}'.format(id=self.id)
         output = cache.get(cache_key, [])
-        if output is not []:
+        if output:
             return output
         # Ligne extends
-        extends = '{{{{% extends "{path}" %}}}}'.format(path=self.template.path)
+        extends = '{{% extends "{path}" %}}'.format(path=self.template.path)
         filters = '{% load i18n panels inlines %}'
         output.append(extends)
         output.append(filters)
         # Blocs
-        for position in self.position_set.all():
-            if position.has_access(request.user):
+        for position in self.get_positions():
+            if position.has_access(request):
                 content = "{{block.super}}"
                 # Récupérer les configurations appartenant à ce block
                 for configuration in self.get_configurations(position).iterator():
                     content += configuration.render()
-                output.append("{{{{% block {name} %}}}}{content}{{{{% endblock %}}}}".format(name=position.name, content=content))
+                output.append("{{% block {name} %}}{content}{{% endblock %}}".format(name=position.name, content=content))
         # Utiliser le rendu comme un template
         output = "".join(output)
         template = Template(output)
         context = RequestContext(request, {'page': self})
         page_html = template.render(context)
-        cache.set(cache_key, page_html)
+        cache.set(cache_key, page_html, Page.DEFAULT_CACHE_DURATION)
         return page_html
 
     def get_children(self, active=True):
@@ -88,6 +92,14 @@ class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexMode
     def get_configurations(self, position):
         """ Renvoyer les configurations dans cette page à une position """
         return self.configurations.filter(position=position).order_by('weight')
+
+    def get_position(self, name):
+        """ Renvoyer la position portant un nom """
+        return self.template.get_position(name)
+
+    def get_positions(self):
+        """ Renvoyer les positions de la page """
+        return self.template.get_positions()
 
     def is_visible(self, request):
         """ Renvoyer si la page est accessible à l'utilisateur courant """

@@ -1,6 +1,8 @@
 # coding: utf-8
 from django.contrib.auth.models import AnonymousUser
+from django.core.handlers.wsgi import WSGIRequest
 from django.db import models
+from django.http.request import HttpRequest
 from django.template.defaultfilters import capfirst
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -35,14 +37,17 @@ class Position(DatetimeModel, IconModel):
 
     def has_access(self, user):
         """ Renvoyer si un utilisateur a accès à ce contenu """
+        # Si user est une request
+        if isinstance(user, (WSGIRequest, HttpRequest)):
+            return self.has_access(getattr(user, 'user', AnonymousUser()))
         # Pour les anonymes
-        if user == AnonymousUser:
+        elif user == AnonymousUser or user.is_anonymous():
             return self.anonymous
         # Pour les enregistrés
         elif user.is_authenticated() and self.authenticated:
             return True
         # Pour les enregistrés de certains groupes
-        elif self.groups.filter(user=user).exists():
+        elif hasattr(user, 'pk') and self.groups.filter(user=user).exists():
             return True
         return False
 

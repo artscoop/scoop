@@ -32,9 +32,11 @@ class Template(DatetimeModel):
                 position = Position.get(name)
                 self.positions.add(position)
             # Définir si le template est une page HTML ou non
-            self.full = True if Template._find_html_tags(template, ['html', 'head', 'body']) else False
-            self.save()
-        except:
+            full = True if Template._find_html_tags(template, ['html', 'head', 'body']) else False
+            if self.full != full:
+                self.full = full
+                Template.objects.filter(pk=self.pk).update(full=full)
+        except ValueError:
             pass
 
     # Getter
@@ -47,10 +49,29 @@ class Template(DatetimeModel):
         except TemplateDoesNotExist:
             return False
 
+    @addattr(boolean=True, short_description=_("Has inner blocks"))
+    def has_positions(self):
+        """ Renvoyer si des blocs existent dans le template """
+        return self.positions.exists()
+
+    @addattr(short_description=_("Inner blocks"))
+    def get_positions(self):
+        """ Renvoyer les blocs existent dans le template """
+        return self.positions.all()
+
+    def get_position(self, name):
+        """ Renvoyer la position portant un nom """
+        return self.positions.get(name=name)
+
+    @addattr(short_description=_("Inner blocks"))
+    def get_position_count(self):
+        """ Renvoyer le nombre de blocs existant dans le template """
+        return self.positions.count()
+
     @staticmethod
     def _get_block_names(template):
         """ Générer la liste des noms de blocs d'un template """
-        nodelist = template.nodelist
+        nodelist = template.template.nodelist
         extendlist = nodelist.get_nodes_by_type(ExtendsNode)
         if len(extendlist) > 0:
             for block in extendlist[0].blocks:
@@ -58,7 +79,7 @@ class Template(DatetimeModel):
             for item in Template._get_block_names(extendlist[0].get_parent(RequestContext(HttpRequest()))):
                 yield item
         else:
-            nodelist = template.nodelist
+            nodelist = template.template.nodelist
             for node in nodelist:
                 if isinstance(node, BlockNode):
                     yield node.name
@@ -66,17 +87,18 @@ class Template(DatetimeModel):
     @staticmethod
     def _find_html_tags(template, tags, find_all=True):
         """ Renvoyer si des tags HTML existent dans le template """
-        nodelist = template.nodelist
+        nodelist = template.template.nodelist
         extendlist = nodelist.get_nodes_by_type(ExtendsNode)
         textlist = nodelist.get_nodes_by_type(TextNode)
         if len(extendlist) > 0:
             return False or Template._find_html_tags(extendlist[0].get_parent(RequestContext(HttpRequest())), tags)
         elif len(textlist) > 0:
+            tags_found = set()
             for text in textlist:
-                tags_found = {tag.lower() for tag in tags if ('<{}>'.format(tag)) in text.s}
-                if tags_found and (not find_all or len(tags_found) == len(tags)):
-                    return True
-            return False
+                tags_found.update({tag.lower() for tag in tags if ('</{0}>'.format(tag)) in text.s})
+            if tags_found and (not find_all or len(tags_found) == len(tags)):
+                return True
+        return False
 
     # Overrides
     @python_2_unicode_compatible
@@ -87,6 +109,7 @@ class Template(DatetimeModel):
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
         super(Template, self).save(*args, **kwargs)
+        self.auto_fill()
 
     # Métadonnées
     class Meta:
