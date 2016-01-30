@@ -1,6 +1,7 @@
 # coding: utf-8
 import logging
 import os
+from traceback import print_exc
 from urllib.error import HTTPError
 from urllib.parse import unquote
 
@@ -28,7 +29,8 @@ def get_url_resource(path, **kwargs):
     try:
         resource = requests.get(path, headers=DEFAULT_HEADERS, timeout=6.0, allow_redirects=True)
         return resource.text
-    except (requests.ConnectionError, requests.Timeout, requests.TooManyRedirects, requests.HTTPError, requests.URLRequired, requests.RequestException):
+    except (requests.ConnectionError, requests.Timeout, requests.TooManyRedirects, requests.HTTPError, requests.URLRequired, requests.RequestException) as e:
+        print_exc(e)
         raise HTTPError(_("The resource at %(path)s was unavailable.") % {'path': path})
 
 

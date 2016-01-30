@@ -145,14 +145,14 @@ class FriendList(DataModel):
     # Setter
     @transaction.atomic
     def add_friend(self, user, when=None):
-        """ Ajouter une ami """
+        """ Ajouter un ami """
         if not self.is_friend(user) and user != self.user:
             now = when or timezone.now()
             friends = self.get_data('friends', {})
             friends[user.pk] = [now]
             self.set_data('friends', friends, save=True)
-            user.friends.add(self.user)
-            self.remove_pending(user)
+            user.friends.add_friend(self.user)
+            self.remove_received(user)
             return True
         return False
 

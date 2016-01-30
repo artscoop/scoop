@@ -12,11 +12,11 @@ from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
 from unidecode import unidecode
 
 
-class OptionManager(SingleDeleteManager):
+class OptionManager(SingleDeleteManager, TranslatableModelManager):
     """ Manager des options """
 
     # Getter

@@ -13,3 +13,5 @@ RELATIVE_CARDINAL = {0: _("to the east"), 1: _("to the east-north-east"), 2: _("
                      13: _("to the south-south-east"), 14: _("to the south-east"), 15: _("to the east-south-east")}
 
 SHORT_CARDINAL = {0: "E", 1: "ENE", 2: "NE", 3: "NNE", 4: "N", 5: "NNW", 6: "NW", 7: "WNW", 8: "W", 9: "WSW", 10: "SW", 11: "SSW", 12: "S", 13: "SSE", 14: "SE", 15: "ESE"}
+
+ANGLE_TICKS = {k: k for k in range(16)}

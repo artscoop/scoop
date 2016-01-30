@@ -21,7 +21,7 @@ def get_maildir(username):
         logger.error("The user mailbox directory {} does not exist. Either postfix was not configured properly, or this user cannot have a maildir".format(e.message))
     except OSError as e:
         logger.error("Most likely, this user does not exist but it was not detected")
-    except Exception as e:
+    except:
         logger.error("Uncaught exception")
     return None
 

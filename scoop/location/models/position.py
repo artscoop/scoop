@@ -1,6 +1,7 @@
 # coding: utf-8
 import datetime
 
+from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.contrib.gis.db.models.manager import GeoManager
 from django.contrib.gis.geos.point import Point
@@ -32,6 +33,7 @@ class PositionManager(SingleDeleteManager, GeoManager):
         position, _ = self.get_or_create(user=user)
         position.update(time=position.now(), position=Point(x=lon, y=lat))
         position.save()
+        return position
 
     # Maintenance
     def purge(self, days=2, user=None):
@@ -44,7 +46,7 @@ class Position(CoordinatesModel, DatetimeModel):
     """ Position utilisateur """
 
     # Champs
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='position', verbose_name=_("User"))
     objects = PositionManager()
 
     # Getter

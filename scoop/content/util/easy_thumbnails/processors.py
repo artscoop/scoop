@@ -11,6 +11,9 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
 
 
+BLUR_LEVELS = {'low': 2, 'medium': 8, 'high': 32}
+
+
 def _PIL_to_Qt(image):
     """ Convertir une image PIL vers une image QT """
     width, height = image.size
@@ -39,9 +42,9 @@ def blurring(image, blur=False, **kwargs):
     """
     Appliquer un flou gaussien sur l'image
     :param blur: False, 'low', 'medium' ou 'high'
+    :type blur: str | int
     """
-    LEVELS = {'low': 2, 'medium': 8, 'high': 32}
-    blur = LEVELS.get(blur, blur)
+    blur = BLUR_LEVELS.get(blur, blur)
     if blur and blur < 64:
         image = image.filter(ImageFilter.GaussianBlur(blur))
     return image
@@ -60,15 +63,15 @@ def pixelation(image, pixelate=False, **kwargs):
     return image
 
 
-def channel_select(image, channel_R=False, channel_G=False, channel_B=False, **kwargs):
+def channel_select(image, channel_r=False, channel_g=False, channel_b=False, **kwargs):
     """
     Appliquer un mélange des canaux R, V et B de l'image
-    :param channel_R: Conserver le canal rouge
-    :param channel_G: Conserver le canal vert
-    :param channel_B: Conserver le canal bleu
+    :param channel_r: Conserver le canal rouge
+    :param channel_g: Conserver le canal vert
+    :param channel_b: Conserver le canal bleu
     :return: Une image PIL dont 1 à 2 canaux manquent, sinon l'image originale
     """
-    channels = [int(channel_R) * 255, int(channel_G) * 255, int(channel_B) * 255, 255]
+    channels = [int(channel_r) * 255, int(channel_g) * 255, int(channel_b) * 255, 255]
     if channels != [0, 0, 0, 255]:
         width, height = image.size[0], image.size[1]
         mix_image = Image.new("RGBA", (width, height), color=tuple(channels))
@@ -76,7 +79,7 @@ def channel_select(image, channel_R=False, channel_G=False, channel_B=False, **k
     return image
 
 
-def saturate(image, saturate=False, **kwargs):
+def saturation(image, saturate=False, **kwargs):
     """
     Appliquer une saturation ou une désaturation de l'image
     :param saturate: False ou un nombre flottant positif
@@ -106,7 +109,8 @@ def hexagon_mask(image, hexa=False, **kwargs):
             # Dessiner un hexagone
             offset = hexa * 2.0
             width, height, bottom, top, t, l = qimage.width() - offset * 2, qimage.height() - offset * 2, 0.759, 0.241, offset, offset
-            points = [l + width / 2.0, t + 0, l + width, t + height * top, l + width, t + height * bottom, l + width / 2.0, t + height, l + 0, t + height * bottom, l + 0, t + height * top]
+            points = [l + width / 2.0, t + 0, l + width, t + height * top, l + width, t + height * bottom,
+                      l + width / 2.0, t + height, l + 0, t + height * bottom, l + 0, t + height * top]
             brush = QBrush(qimage)
             pen = QPen(brush, offset * 2.0, cap=Qt.RoundCap, join=Qt.RoundJoin)
             pen.setColor(QColor(0, 0, 0, 0))
@@ -167,7 +171,7 @@ def draw_cross(image, crossed=False, **kwargs):
         return image
 
 
-def lighten(image, lighten=False, **kwargs):
+def lightening(image, lighten=False, **kwargs):
     """
     Appliquer un filtre lumineux sur l'image.
     L'éclairage est obtenu en mode de composition PLUS, avec une
@@ -176,7 +180,7 @@ def lighten(image, lighten=False, **kwargs):
     """
     try:
         lighten_ = float(lighten)
-    except:
+    except ValueError:
         lighten_ = 0
     if lighten_ > 0:
         qimage = _PIL_to_Qt(image)

@@ -10,7 +10,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def url_page(request, value=''):
+def url_page(value):
     """ Renvoyer l'URL d'une page éditoriale via nom ou uuid """
     pages = Page.objects.filter(Q(uuid=value) | Q(name__iexact=value))
     if pages.exists():
@@ -22,5 +22,5 @@ def url_page(request, value=''):
 def excerpt(name):
     """ Renvoyer le contenu d'un extrait """
     item = Excerpt.objects.get(name=name)
-    template = Template(item.html(), name=item.name)
-    return template.render(default_context())
+    excerpt_template = Template(item.html(), name=item.name)
+    return excerpt_template.render(default_context())

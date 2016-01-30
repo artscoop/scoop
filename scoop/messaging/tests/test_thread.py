@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from django.test.utils import override_settings
+from scoop.core.util.django.testing import TEST_CONFIGURATION
 from scoop.core.util.stream.directory import Paths
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.models.negotiation import Negotiation
@@ -15,9 +16,7 @@ from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
 
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend',
-                   EMAIL_FILE_PATH=Paths.get_root_dir('files', 'tests', 'mail'),
-                   DEFAULT_FROM_EMAIL='admin@test.com')
+@override_settings(**TEST_CONFIGURATION)
 class ThreadTest(TestCase):
     """ Test des fils de discussion """
     fixtures = ['mailtype', 'options']
@@ -38,7 +37,7 @@ class ThreadTest(TestCase):
         MailEvent.objects.process('all')
 
     # Tests
-    def test_a_thread_access(self):
+    def test_thread_access(self):
         """ Tester l'accès aux threads """
         thread_12 = Thread.objects.new(self.user1, [self.user2], "Thread 1-2", "Thread 1-2 introductory message")['thread']
         # Accès au thread
@@ -61,7 +60,7 @@ class ThreadTest(TestCase):
         self.assertFalse(thread_12.is_unread(self.user2), "user2 updated thread_12 last, so it's read for user2")  # doit être lu par user2 seulement
         self.assertTrue(thread_12.set_closed(None, self.user4), "user4 is staff and should be able to open/close any thread, anytime")  # état prévu : ouvert
         # Blacklists
-        blacklisted = Blocklist.objects.enlist(self.user1, self.user2)  # empêcher user2 de répondre à user1
+        blacklisted = Blocklist.objects.add(self.user1, self.user2)  # empêcher user2 de répondre à user1
         self.assertTrue(blacklisted, "user2 should be blacklisted by user1")
         self.assertFalse(Thread.objects.simulate(self.user1, [self.user2]), "simulation of sending message should fail")
         self.assertRaises(PermissionDenied, thread_12.add_message, self.user2, "user2 is blacklisted and cannot answer to user1")
@@ -73,18 +72,18 @@ class ThreadTest(TestCase):
         opened = thread_12.set_closed(False, self.user4)
         self.assertTrue(opened, "The thread should have been opened by user4/staff")
         # Tester l'émission de courrier'
-        unsent = MailEvent.objects.get_unsent_count()
+        unsent_initial = MailEvent.objects.get_unsent_count()
         sent = MailEvent.objects.process(forced='all', bypass_delay=True)
-        remaining = MailEvent.objects.get_unsent_count()
-        self.assertGreater(unsent, 0, "at least one new mail should be waiting in the queue")
+        unsent_remaining = MailEvent.objects.get_unsent_count()
+        self.assertGreater(unsent_initial, 0, "at least one new mail should be waiting in the queue")
         self.assertGreater(sent, 0, "at least one new mail should have been sent")
-        self.assertGreater(unsent, remaining, "there should remain less mails to be sent")
+        self.assertGreater(unsent_initial, unsent_remaining, "there should remain less mails to be sent")
 
     def test_quota(self):
         """ Tester les quotas """
         self.assertFalse(Quota.objects.exceeded_for(self.user1), "user1 has sent nothing, quota not exceeded")
         for _ in range(100):
-            Thread.objects.new(self.user1, [self.user2], "Thread 1-2", "Thread 1-2 introductory message", unique=False, force=True)
+            Thread.objects.new(self.user1, [self.user2, self.user3], "Thread 1-2,3", "Thread 1-2,3 introductory message", unique=False, force=True)
         self.assertEqual(Quota.objects.get_threads_today_by(self.user1), 100, "user1 has created 100 threads")
         self.assertTrue(Quota.objects.exceeded_for(self.user1), "user1 has sent many threads, quota exceeded")
 

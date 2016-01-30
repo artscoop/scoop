@@ -6,7 +6,6 @@ from django.test import TestCase
 from scoop.content.models.picture import Picture
 from scoop.user.models.user import User
 
-
 path = os.path.dirname(__file__)
 
 

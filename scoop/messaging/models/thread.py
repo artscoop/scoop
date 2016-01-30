@@ -141,8 +141,8 @@ class ThreadQuerySetMixin(object):
     def get_user_threads_message_count(self, user, **kwargs):
         """ Renvoyer le nombre de messages envoyés par sujet par un utilisateur """
         from scoop.messaging.models import Recipient
-        # data = self.user_threads(user).filter(messages__author=user, **kwargs).values('id', 'updated', 'deleted', 'updater', 'closed').annotate(count=Count('messages'))
-        data = Recipient.objects.filter(user=user, **kwargs).values('thread_id', 'thread__updated', 'thread__deleted', 'thread__updater', 'thread__closed', 'counter')
+        data = Recipient.objects.filter(user=user, **kwargs).values('thread_id', 'thread__updated', 'thread__deleted',
+                                                                    'thread__updater', 'thread__closed', 'counter')
         return data
 
     def get_by_uuid(self, uuid, exception=Http404):
@@ -162,11 +162,27 @@ class ThreadQuerySetMixin(object):
         return self.filter(**kwargs)
 
     def get_inbox(self, user, name=None):  # name: [inbox|unread|replied|trash]
-        """ Renvoyer les informations d'une boîte de réception """
+        """
+        Renvoyer les informations d'une boîte de réception
+
+        :param name: nom de la boîte de messagerie, entre :
+            - inbox : boîte contenant tous les fils de discussion
+            - unread : boîte contenant les fils de discussion avec des messages non lus
+            - replied : boîte contenant les fils de discussion où une réponse est attendue
+            - trash : boîte contenant les fils de discussion supprimés par user
+            Si name est `None`, inbox est utilisé par défaut.
+            Si un nom inconnu est utilisé, aucun thread n'est renvoyé
+        :type name: str | None
+        """
         name = name or "inbox"
-        groups = {'inbox': self.user_active_threads(user), 'unread': self.unread_threads(user), 'replied': self.threads_not_updated_by(user),
+        groups = {'inbox': self.user_active_threads(user),
+                  'unread': self.unread_threads(user),
+                  'replied': self.threads_not_updated_by(user),
                   'trash': Thread.objects.closed().user_threads(user)}
-        titles = {'inbox': _("Inbox"), 'unread': _("Unread threads"), 'replied': _("Waiting for your reply"), 'trash': _("Trash")}
+        titles = {'inbox': _("Inbox"),
+                  'unread': _("Unread threads"),
+                  'replied': _("Waiting for your reply"),
+                  'trash': _("Trash")}
         return {'title': titles.get(name, ""), 'threads': groups.get(name, self.none())}
 
     def get_inbox_names(self):
@@ -195,8 +211,23 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
     """ Manager des fils de discussion """
 
     # Actions
-    def new(self, author, recipients, subject, body, request=None, closed=False, unique=None, as_mail=True, force=False, expiry=None, **kwargs):
-        """ Créer un nouveau fil de discussion """
+    def new(self, author, recipients, subject, body, request=None, closed=False, unique=None, as_mail=True, force=False, expiry=None):
+        """
+        Créer un nouveau fil de discussion
+
+        :param author: utilisateur ayant créé le fil de discussion
+        :param recipients: liste des utilisateurs destinataires du message
+        :param subject: titre du nouveau fil
+        :param body: corps du nouveau fil, en HTML
+        :param request: objet Request pour afficher des messages d'avertissement si besoin
+        :param closed: définit si le sujet doit être fermé dès sa création
+        :param unique: définit si le message doit réutiliser un sujet existant avec les mêmes destinataires
+        :param as_mail: définit si le message à envoyer provoque l'envoi d'un nouveau mail (selon conditions)
+        :param force: définit si un message envoyé à soi-même peur être envoyé
+        :param expiry: définit la date à laquelle le sujet va expirer
+        :returns: un dictionnaire avec les clés thread, message et created. Ou False en cas d'échec.
+        :rtype: dict | bool
+        """
         from scoop.messaging.models import Message, Recipient
         # Convertir les destinataires en liste si besoin
         recipients = make_iterable(recipients, set)
@@ -238,7 +269,7 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
             # Ajouter les participants
             thread.add_recipients(recipients)
         # Ack auteur
-        Recipient.objects.filter(user=author, thread=thread).update(acknowledged=True)
+        Recipient.objects.acknowledge(author, thread)
         # Ajouter le corps du message au sujet, si fourni
         message = Message.objects._add(thread, author, body, request, as_mail=as_mail) if body is not None else None
         return {'thread': thread, 'message': message, 'created': created}
@@ -253,7 +284,12 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
         return {'thread': thread}
 
     def simulate(self, author, recipients, unique=True, force=False, **kwargs):
-        """ Simuler l'envoi d'un fil de discussion. Renvoie True si simulation réussie """
+        """
+        Simuler l'envoi d'un fil de discussion.
+
+        :returns: True si le message peut être envoyé, False sinon.
+        :rtype: bool
+        """
         result = thread_pre_create.send(sender=Thread, author=author, recipients=recipients, request=None, unique=unique, force=force)
         for value in result:
             if value[1] is not True:
@@ -268,6 +304,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     INBOX_NAMES = ['inbox', 'unread', 'replied', 'trash']
     DATA_KEYS = ['last_toggle']
     TOGGLE_DELAY = getattr(settings, 'MESSAGING_THREAD_TOGGLE_DELAY', 3600)
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='threads', verbose_name=_("Author"))
     topic = models.CharField(max_length=128, blank=True, db_index=True, verbose_name=_("Topic"))

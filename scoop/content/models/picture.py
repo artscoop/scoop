@@ -97,7 +97,8 @@ class PictureQuerySetMixin(object):
 
     def find_by_keyword(self, keyword):
         """ Renvoyer des informations d'URL d'images pour une expression """
-        path = 'https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={keyword}&searchType=image&imgType=photo&fileType=jpg&rights=cc_sharealike&alt=json'
+        path = 'https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={keyword}' \
+               '&searchType=image&imgType=photo&fileType=jpg&rights=cc_sharealike&alt=json'
         response = get_url_resource(path.format(keyword=urlencode(keyword), key=settings.GOOGLE_API_KEY, cx=settings.GOOGLE_API_CX))
         data = simplejson.loads(response)  # récupérer les données JSON d'images correspondant à la recherche
         images = data.get('items')
@@ -287,7 +288,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             return filesizeformat(self.image.size) if not raw else self.image.size
         else:
-            return pgettext_lazy('size', "None")
+            return pgettext_lazy('size', "None") if not raw else 0
 
     @render_to('content/display/picture/license/default.html', string=True)
     def get_formatted_license_info(self):
@@ -408,7 +409,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             result = results[int(index)]
             self.title = result.get('title') or result.get('page')
             self.set_from_url(result.get('url'))
-        return True
+        return bool(results)
 
     def update_size(self):
         """ Mettre à jour les dimensions de l'image """

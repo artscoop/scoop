@@ -107,17 +107,18 @@ class MessageManager(SingleDeleteManager):
 
     def get_spam_data(self, user):
         """ Renvoyer les informations de spam pour un utilisateur """
-        data = {'total': self.get_user_message_count(user), '%': 0}
-        data['spam'] = self.get_user_message_count(user, spam__gt=Message.SPAM_THRESHOLD)
+        data = {'total': self.get_user_message_count(user), '%': 0, 'spam': self.get_user_message_count(user, spam__gt=Message.SPAM_THRESHOLD)}
         data['%'] = (100.0 * data['spam']) / data['total'] if data['total'] > 0 else 0
         return data
 
 
 class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
     """ Message de discussion """
+
     # Constantes
     DATA_KEYS = {'pasted', 'similar'}  # clés autorisées par datamodel
     SPAM_THRESHOLD = 0.83
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="messages_sent", on_delete=models.SET_NULL, verbose_name=_("Author"))
     name = models.CharField(max_length=32, verbose_name=_("Name"))

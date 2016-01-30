@@ -13,7 +13,8 @@ class Configuration(DatetimeModel, WeightedModel):
     """ Configuration d'un bloc de page """
     page = models.ForeignKey('editorial.Page', null=False, related_name='configurations', verbose_name=_("Page"))
     position = models.ForeignKey('editorial.Position', null=False, related_name='configurations', verbose_name=_("Position"))
-    template = models.ForeignKey('editorial.Template', null=False, related_name='configurations', limit_choices_to={'full': False}, verbose_name=_("Template"))
+    template = models.ForeignKey('editorial.Template', null=False, related_name='configurations', limit_choices_to={'full': False},
+                                 help_text=_(u"Select template to use to display the target"), verbose_name=_("Template"))
     limit = models.Q(name__in=['Excerpt', 'Picture', 'Content', 'Link'])  # limiter les modèles liés
     content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, verbose_name=_("Content type"), limit_choices_to=limit)
     object_id = models.PositiveIntegerField(null=False, blank=True, db_index=False, verbose_name=_("Object Id"))
@@ -33,6 +34,20 @@ class Configuration(DatetimeModel, WeightedModel):
         if settings.DEBUG:
             return _("The block could not be rendered.")
         return ""
+
+    # Setter
+    def move_to(self, position):
+        """
+        Déplacer dans une autre position
+        :type position: scoop.editorial.models.Position | str
+        :returns: True if the operation was successful
+        """
+        page_position = self.page.get_position(position if isinstance(position, str) else position.name)
+        if page_position is not None:
+            self.position = page_position
+            self.save()
+            return True
+        return False
 
     # Overrides
     @python_2_unicode_compatible

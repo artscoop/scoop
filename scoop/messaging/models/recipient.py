@@ -8,11 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager
 
 
 class RecipientManager(SingleDeleteManager):
     """ Manager des destinataires """
+
     # Constantes
     CACHE_KEY = {'unread': 'messaging.unread.{}.{}', 'unread.count': 'messaging.unread.count.{}'}
 
@@ -23,7 +25,14 @@ class RecipientManager(SingleDeleteManager):
         return self.filter(user=user, thread__started__gt=since, **filtering).count()
 
     def get_unread_count(self, user, since=None):  # (int, timedelta ou datetime)
-        """ Renvoyer le nombre de fils non lus par un utilisateur """
+        """
+        Renvoyer le nombre de fils non lus par un utilisateur
+
+        :param since: temps depuis lequel considérer les fils de discussion à compter
+            Si int, désigne le temps en secondes dans le passé.
+            Si None, considérer tous les fils de discussion
+        :type since: None | int | datetime.datetime | datetime.timedelta
+        """
         from scoop.messaging.models.thread import Thread
         # Traiter since
         if since is not None:
@@ -56,7 +65,12 @@ class RecipientManager(SingleDeleteManager):
         self.set_read(message.thread, message.author)
 
     def set_unread(self, thread, user):
-        """ MArquer qu'un utilisateur n'a pas lu un fil """
+        """
+        Marquer qu'un utilisateur n'a pas lu un fil
+
+        :param user: utilisateur ou requête
+        :type user: django.auth.models.User | django.http.HttpRequest
+        """
         user = user if isinstance(user, get_user_model()) else user.user
         if thread.is_recipient(user):
             self.filter(thread=thread, user=user, unread=False).update(unread=True, unread_date=timezone.now())
@@ -85,6 +99,7 @@ class RecipientManager(SingleDeleteManager):
 
     def acknowledge(self, user, threads):
         """ Prendre connaissance de l'existence d'un fil """
+        threads = make_iterable(threads)
         recipients = self.filter(user=user, thread__in=threads)
         updated = recipients.update(acknowledged=True)
         return updated
@@ -92,8 +107,10 @@ class RecipientManager(SingleDeleteManager):
 
 class Recipient(DatetimeModel, DataModel):
     """ Destinataire """
+
     # Constantes
     DATA_KEYS = ['is_important']
+
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name="user_recipients", on_delete=models.CASCADE, verbose_name=_("User"))
     thread = models.ForeignKey("messaging.Thread", null=False, related_name='recipients', on_delete=models.CASCADE, verbose_name=_("Thread"))

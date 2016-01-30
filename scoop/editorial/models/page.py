@@ -10,7 +10,7 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.seo.index import SEIndexModel
-from scoop.core.abstract.user.authored import AuthoredModel
+from scoop.core.abstract.user.authorable import AuthorableModel
 from unidecode import unidecode
 
 
@@ -35,7 +35,7 @@ class PageManager(models.Manager):
         return pages[0] if pages.exists() else None
 
 
-class Page(WeightedModel, DatetimeModel, AuthoredModel, UUID64Model, SEIndexModel):
+class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexModel):
     """ Page personnalisée """
 
     # Constantes
