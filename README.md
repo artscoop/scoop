@@ -1,6 +1,6 @@
 # Projet Scoop
 Par Steve Kossouho
-Mai 2011 - Avril 2015
+Mai 2011 - Janvier 2016
 Séparé du projet One le 15 avril 2015
 
 ## Contenu du projet
