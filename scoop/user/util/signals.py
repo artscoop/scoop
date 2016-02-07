@@ -24,8 +24,10 @@ userip_created = Signal()
 external_visit = Signal(['referrer', 'path', 'request'])
 
 # État d'abandon des profils
-check_stale = Signal(['user', 'profile'])  # vérifier qu'un profil est laissé à l'abandon
-check_unused = Signal(['user', 'profile'])  # Vérifier qu'un profil n'a jamais servi
+# vérifier qu'un profil est laissé à l'abandon
+check_stale = Signal(['user', 'profile'])  # le profil est abandonné si tous les listeners renvoient True
+# Vérifier qu'un profil n'a jamais servi.
+check_unused = Signal(['user', 'profile'])  # le profil est inutilisé si tous les listeners renvoient True
 
 # Manipuler le queryset de recherche par défaut de profils pour un utilisateur
 profile_default_search_criteria = Signal()

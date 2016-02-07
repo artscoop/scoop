@@ -1,5 +1,7 @@
 # coding: utf-8
+import hashlib
 import logging
+import urllib
 
 from django import template
 from django.conf import settings
@@ -113,3 +115,10 @@ def context_image_url(name, ext=None, *args):
 def all_pictures(request=None):
     """ Renvoyer toutes les images du site accessibles à l'utilisateur courant """
     return Picture.objects.by_request(request).select_related().all()
+
+
+@register.filter(name="gravatar")
+def gravatar_url(value, size=r'160x160'):
+    """ Renvoyer l'URL du gravatar pour une adresse donnée """
+    gravatar = "http://www.gravatar.com/avatar/{}?{}".format(hashlib.md5(value.lower()).hexdigest(), urllib.urlencode({'s': size}))
+    return gravatar

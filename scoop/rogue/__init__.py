@@ -5,8 +5,9 @@ Cela comprend entre autres, les utilisateurs escrocs, mythomanes, vulgaires
 et insultants, ainsi que les contenus insultants ou non accessibles à certains
 publics
 """
-__version__ = (1, 2013, 8)
 from django.apps.config import AppConfig
+
+__version__ = (1, 2016, 1)
 
 
 class RogueConfig(AppConfig):
