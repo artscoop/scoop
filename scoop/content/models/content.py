@@ -465,6 +465,8 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
             if not [False for item in result if item[1] is False]:
                 self.locked = value
                 self.save(update_fields=['locked'])
+                return True
+        return False
 
     def add_author(self, author):
         """ Ajouter un utilisateur aux auteurs du document """

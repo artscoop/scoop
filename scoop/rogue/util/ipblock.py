@@ -6,6 +6,8 @@ from os.path import isfile, join
 import requests
 
 from django.core.cache import cache
+from requests.exceptions import HTTPError
+
 from scoop.core.util.stream.directory import Paths
 
 PROXY_LIST_DIRECTORY = Paths.get_root_dir('isolated', 'database', 'rogue', 'proxies')
@@ -13,7 +15,8 @@ PROXY_LIST_DIRECTORY = Paths.get_root_dir('isolated', 'database', 'rogue', 'prox
 
 def get_tor_nodes(path='http://torstatus.blutmagie.de/ip_list_exit.php/Tor_ip_list_EXIT.csv'):
     """
-    Charger la liste de nœuds pour le réseau TOR
+    Charger la liste de nœuds pour le réseau TOR ou renvoyer celle en cache
+
     L'URL de la liste peut changer au cours du temps
     - 30.01.2013 : https://www.dan.me.uk/torlist/ (inaccessible via urllib)
     - 07.06.2014 : http://torstatus.blutmagie.de/ip_list_exit.php/Tor_ip_list_EXIT.csv
@@ -27,7 +30,7 @@ def get_tor_nodes(path='http://torstatus.blutmagie.de/ip_list_exit.php/Tor_ip_li
         data = requests.get(path)
         results = frozenset([row.strip() for row in data.content.split('\n') if row.strip()])
         cache.set('rogue.torlist', results, timeout=86400 * 3)
-    except:
+    except (IOError, HTTPError):
         results = frozenset()
         cache.set('rogue.torlist', results, timeout=3600 * 3)
     return results

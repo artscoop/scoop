@@ -106,21 +106,21 @@ class PictureQuerySetMixin(object):
         return results
 
     # Setter
-    def create_from_uri(self, path, **fields):
+    def create_from_uri(self, path, **extra_fields):
         """ Créer une image depuis une URI """
-        content_object = fields.pop('content_object', None)
+        content_object = extra_fields.pop('content_object', None)
         picture = Picture(description=path)
         picture.update_from_description()
         picture.content_object = content_object
-        for name in fields.keys():
-            if hasattr(picture, name):
-                setattr(picture, name, fields[name])
+        for name in extra_fields.keys():
+            if hasattr(picture, name) and not callable(getattr(picture, name)):
+                setattr(picture, name, extra_fields[name])
         picture.save()
         return picture
 
-    def create_from_file(self, path, **fields):
+    def create_from_file(self, path, **extra_fields):
         """ Créer depuis un fichier local, sans schéma d'URI """
-        picture = self.create_from_uri('file://{path}'.format(path=path), **fields)
+        picture = self.create_from_uri('file://{path}'.format(path=path), **extra_fields)
         return picture
 
     def clear_transient(self):
@@ -140,6 +140,10 @@ class PictureQuerySetMixin(object):
     def clean_thumbnails():
         """ Supprimer les miniatures """
         clean_thumbnails()
+
+    def clear_markers(self):
+        """ Supprimer les marqueurs des images du queryset """
+        self.update(marker='')
 
 
 class PictureQuerySet(models.QuerySet, PictureQuerySetMixin, ModeratedQuerySetMixin):

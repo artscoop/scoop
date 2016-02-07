@@ -75,8 +75,9 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
                                 verbose_name=_("Picture"))
     banned = models.BooleanField(default=False, verbose_name=pgettext_lazy('profile', "Banned"))
     harmful = models.NullBooleanField(default=None, verbose_name=pgettext_lazy('profile', "Harmful"))
-    city = models.ForeignKey('location.City', null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name="+", verbose_name=_("City")) if apps.is_installed(
-        'scoop.location') else None
+    city = models.ForeignKey('location.City', null=True, blank=True, default=None,
+                             on_delete=models.SET_NULL, related_name="+", verbose_name=_("City")
+                             ) if apps.is_installed('scoop.location') else None
 
     # Getter
     @addattr(boolean=True, admin_order_field='user__date_joined', short_description=_("New"))
@@ -122,7 +123,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
         # Choisir le nom de fichier par défaut
         if use_default is True:
             if not hasattr(settings, 'USER_DEFAULT_PICTURE_PATH'):
-                logging.warn(_("No default path for user pictures. Add a directory path relative to MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"))
+                logging.warning(_("No default path for user pictures. Add a directory path relative to MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"))
             else:
                 filename = getattr(settings, 'USER_DEFAULT_PICTURE_NAME', 'user-{0.gender}.jpg').format(self)
                 fullpath = os.path.join(settings.USER_DEFAULT_PICTURE_PATH, filename)
@@ -141,14 +142,12 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     def is_stale(self):
         """ Renvoyer si l'utilisateur est considéré comme abandonné """
         info = check_stale.send(sender=None, profile=self, user=self.user)  # Envoyer le signal de vérification
-        true, false = filter(lambda x: x[1], info), filter(lambda x: not x[1], info)
-        return true and not false
+        return info and False not in [item[1] for item in info]
 
     def is_unused(self):
         """ Renvoyer si l'utilisateur est totalement inutilisé """
         info = check_unused.send(sender=None, profile=self, user=self.user)  # Envoyer le signal de vérfication
-        true, false = [item[1] for item in info if item[1] is True], [item[1] for item in info if item[1] is False]
-        return true and not false
+        return info and False not in [item[1] for item in info]
 
     def get_admin_annotation(self):
         """ Renvoyer la note admin pour ce profil """
