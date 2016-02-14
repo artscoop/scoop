@@ -82,8 +82,11 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
     def queue(self, recipient, typename, data=None, forced=False):
         """
         Mettre en file un événement mail
+
         :param recipient: utilisateur ou email
         :param typename: type d'email enregistré (voir MailType)
+        :type recipient: str | User
+        :type typename: str
         """
         from scoop.messaging.models.mailtype import MailType
         # Convertir les éléments du dictionnaire passé en listes

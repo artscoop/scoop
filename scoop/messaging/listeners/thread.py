@@ -2,7 +2,6 @@
 from django.conf import settings
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.signals import record
 from scoop.messaging.models.quota import Quota
@@ -12,7 +11,7 @@ from scoop.rogue.models.blocklist import Blocklist
 
 
 @receiver(thread_pre_create)
-def default_pre_thread(sender, author, recipients, request, unique, force):
+def default_pre_thread(sender, author, recipients, request, unique, force, **kwargs):
     """ Traiter la pré-création d'un thread """
     errors = set()
     recipients = make_iterable(recipients)
@@ -32,12 +31,12 @@ def default_pre_thread(sender, author, recipients, request, unique, force):
 
 
 @receiver(thread_created)
-def default_post_thread(sender, author, thread):
+def default_post_thread(sender, author, thread, **kwargs):
     """ Traiter la création d'un nouveau thread """
     record.send(None, actor=author, action='messaging.create.thread', target=thread)
 
 
 @receiver(thread_read)
-def default_thread_read(sender, user, thread):
+def default_thread_read(sender, user, thread, **kwargs):
     """ Traiter la lecture d'un thread """
     Recipient.objects.acknowledge(user, thread)
