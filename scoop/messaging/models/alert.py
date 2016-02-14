@@ -43,7 +43,7 @@ class AlertManager(SingleDeleteManager):
         return self.filter(read=True, read_time__lt=timezone.now() - datetime.timedelta(minutes=minutes))
 
     # Setter
-    def alert(self, recipients, mailtypename, category, data, as_mail=True, **kwargs):
+    def alert(self, recipients, mailtypename, data, as_mail=True, **kwargs):
         """ Envoyer une alerte à un ou plusieurs utilisateurs """
         from scoop.messaging.models.mailtype import MailType
         # Maximum de 1000 membres à qui envoyer l'alerte
@@ -57,7 +57,7 @@ class AlertManager(SingleDeleteManager):
         for recipient in recipients:
             alerts.append(self.create(user=recipient, title=title, text=html))
             if as_mail is True:
-                mailable_event.send(sender=None, category=category, mailtype=mailtypename, recipient=recipient, data=data)
+                mailable_event.send(sender=None, mailtype=mailtypename, recipient=recipient, data=data)
         return alerts
 
 
