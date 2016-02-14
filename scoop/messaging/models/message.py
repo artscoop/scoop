@@ -59,10 +59,10 @@ class MessageManager(SingleDeleteManager):
         # Récupérer les destinataires
         recipients = thread.get_users(exclude=author)
         # Puis mettre en file des mails à envoyer aux destinataires
-        category = 'message_user' if not author.is_staff else 'staff'
+        mailtype = 'messaging.message.new' if not author.is_staff else 'messaging.message.staff'
         if as_mail is True and thread.deleted is False:
             for recipient in recipients:
-                mailable_event.send(sender=self, category=category, mailtype='messaging.message.new', recipient=recipient, data={'sender': [author], 'message': [message.text]})
+                mailable_event.send(sender=self, mailtype=mailtype, recipient=recipient, data={'sender': [author], 'message': [message.text]})
         # Mettre à jour la date de mise à jour du sujet
         if not author.is_bot() and author.is_active:
             thread.updater = author
