@@ -11,7 +11,7 @@ message_sent = Signal(['author', 'message', 'request'])
 message_set_spam = Signal(['message'])
 message_check_spam = Signal(['message'])  # ne pas sauvegarder l'objet
 # Événement provoquant l'envoi d'un mail
-mailable_event = Signal(['category', 'mailtype', 'recipient', 'data'])
+mailable_event = Signal(['mailtype', 'recipient', 'data'])
 # negotiation de messagerie
 negotiation_sent = Signal(['source', 'target'])
 negotiation_accepted = Signal(['source', 'target'])

@@ -29,7 +29,7 @@ class MailTypeTranslationInlineAdmin(admin.TabularInline):
 class MailTypeAdmin(admin.ModelAdmin):
     """ Administration des types de courrier """
     list_select_related = True
-    list_display = ['id', 'short_name', 'template', 'get_interval']
+    list_display = ['id', 'short_name', 'get_categories', 'template', 'get_interval']
     list_filter = []
     readonly_fields = []
     inlines = [MailTypeTranslationInlineAdmin]
