@@ -59,13 +59,10 @@ class ContentPictureInline(TemplateInline):
         return path
 
 
-# ===============================================================================
-# Inline d'intégration de liens
-# Format : {{link uuid}}
-# ===============================================================================
 class LinkInline(TemplateInline):
     """
     Inline d'insertion de liens
+
     Format : {{link uuid}}
     """
     inline_args = []

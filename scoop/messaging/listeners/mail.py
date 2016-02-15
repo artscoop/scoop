@@ -27,8 +27,10 @@ def default_mail_send(sender, mailtype, recipient, data, **kwargs):
     # Recenser les cas où le mail peut, doit ou ne peut pas être envoyé
     chose_to_receive = any([ConfigurationForm.get_option_for(recipient, category_option[category]) for category in categories if category in category_option])
     can_receive = all([category not in category_option for category in categories])  # Si aucune catégorie correspond à une option autoriser par défaut
-    restrict_online = recipient.is_active and recipient.is_online(600) and not mailtype.has_category('online')
     must_receive = mailtype.has_category('important')
+    restrict_online = False
+    if not isinstance(recipient, str):
+        restrict_online = recipient.is_active and recipient.is_online(600) and not mailtype.has_category('online')
     # Si le mail doit, ou peut être envoyé, ajouter en file
     if must_receive or ((chose_to_receive or can_receive) and not restrict_online):
         MailEvent.objects.queue(recipient, mailtype.short_name, data, forced=must_receive)

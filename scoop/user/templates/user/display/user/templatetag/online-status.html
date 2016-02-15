@@ -2,31 +2,31 @@
 {% if mode == "text" %}
     {% if user.is_online %}
         {% if user.is_away %}
-        <span class="text-warning">Absent</span>
+            <span class="text-warning">Absent</span>
         {% else %}
-        <span class="text-success">En ligne</span>
+            <span class="text-success">En ligne</span>
         {% endif %}
     {% else %}
-    <span class="muted">Déconnecté</span>
+        <span class="muted">Déconnecté</span>
     {% endif %}
 {% elif mode == "label" %}
     {% if user.is_online %}
         {% if user.is_away %}
-        <span class="label away">absent</span>
+            <span class="label away">absent</span>
         {% else %}
-        <span class="label online">En ligne</span>
+            <span class="label online">En ligne</span>
         {% endif %}
     {% else %}
-    <span class="label offline">{{ user.profile.gender|gender:"déconnecté;déconnectée;déconnecté-e" }}</span>
+        <span class="label offline">{{ user.profile.gender|gender:"déconnecté;déconnectée;déconnecté-e" }}</span>
     {% endif %}
 {% elif mode == "pill" %}
     {% if user.is_online %}
         {% if user.is_away %}
-        <span title="{{_("Away")}}" rel="tooltip" class="badge away disc"></span>
+            <span title="{{ _("Away") }}" rel="tooltip" class="badge away disc"></span>
         {% else %}
-        <span title="{{_("Online")}}" rel="tooltip" class="badge online disc"></span>
+            <span title="{{ _("Online") }}" rel="tooltip" class="badge online disc"></span>
         {% endif %}
     {% else %}
-    <span title="{{_("Offline")}}" rel="tooltip" class="badge offline disc"></span>
+        <span title="{{ _("Offline") }}" rel="tooltip" class="badge offline disc"></span>
     {% endif %}
 {% endif %}

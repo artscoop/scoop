@@ -205,16 +205,24 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         """ Renvoyer les images accessibles à l'utilisateur """
         return Picture.objects.by_request(request)
 
-    def is_visible(self, request):
-        """ Renvoyer si l'image est visible à l'utilisateur """
-        return (self.moderated and not self.deleted) or (request.user.is_authenticated() and request.user.is_staff)
+    def is_visible(self, request_user):
+        """
+        Renvoyer si l'image est visible à l'utilisateur
+
+        :type request_user: HttpRequest | User
+        """
+        if hasattr(request_user, 'user'):
+            return (self.moderated and not self.deleted) or (request_user.user.is_authenticated() and request_user.user.is_staff)
+        else:
+            return (self.moderated and not self.deleted) or (request_user.is_authenticated() and request_user.is_staff)
 
     def get_thumbnail(self, **kwargs):
         """
         Renvoyer l'URL d'une miniature de l'image
-        :param kwargs: options de miniature de easy-thumbnails
+
+        :param kwargs: options de miniature de easy-thumbnails.
+        ex. size:(w,h), crop:'smart', bw:bool, quality:0..100, format:'PNG'|'JPG'
         """
-        # kwargs : size:(w,h), crop:'smart', bw:bool, quality:0..100, format:'PNG'|'JPG'
         return get_thumbnailer(self.image.name).get_thumbnail(thumbnail_options=kwargs)
 
     def has_animation(self, extension=None):
@@ -273,6 +281,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def get_extension(self):
         """
         Renvoyer le suffixe du fichier avec le point
+
         :returns: ex. ".jpg"
         """
         if self.exists():
@@ -282,6 +291,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def has_extension(self, extension):
         """
         Renvoyer si le fichier a une extension
+
         :param extension: extension de fichier, ex. ".gif" ou "png"
         """
         return self.get_extension().lstrip('.') == extension.lower().lstrip('.')
@@ -303,6 +313,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def _parse_scheme(uri):
         """
         Renvoyer le schema d'une URI, ex. "http://"
+
         :param uri: chaîne d'URI de la ressource, au format protocole://ressource
         :type uri: str
         """
@@ -470,7 +481,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                     # Si après traitement, ce n'est toujours pas une image, supprimer
                     if self.get_extension() not in extensions:
                         self.delete(clear=True)
-                        logger.warn("Could not find a correct extension for {}, deleted".format(self.image.path))
+                        logger.warning("Could not find a correct extension for {}, deleted".format(self.image.path))
                 else:
                     self.delete(clear=True)
 
@@ -479,15 +490,18 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.transient is True:
             self.transient = False
             self.save(update_fields=['transient'])
+            return True
+        return False
 
     def paste(self, source_path, absolute=False, position='center center', offset=None):
         """
         Coller une autre image locale via son chemin sur cette image
+
         :param source_path: chemin local du fichier source, sans protocole
         :param absolute: si False, path est relatif à STATIC_ROOT
         :param position: texte de positionnement, "[left|right|center] [top|bottom|center]"
         :param offset: tuple d'offset en pixels depuis le positionnement texte
-        :type offset: tuple or list
+        :type offset: tuple | list
         """
         hpos, vpos = position.split(" ")
         current = Image.open(self.image.path, 'r')
@@ -497,7 +511,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         offset = offset or (0, 0)
         xposition = {'left': 0 + offset[0], 'center': (current.size[0] - overlay.size[0]) / 2 + offset[0], 'right': current.size[0] - overlay.size[0] + offset[0]}
         yposition = {'top': 0 + offset[1], 'center': (current.size[1] - overlay.size[1]) / 2 + offset[1], 'bottom': current.size[1] - overlay.size[1] + offset[1]}
-        current.paste(overlay, (xposition.get('hpos', 0), yposition.get('vpos', 0)))
+        current.paste(overlay, (xposition.get(hpos, 0), yposition.get(vpos, 0)))
         current.save(self.image.path)
 
     # Actions

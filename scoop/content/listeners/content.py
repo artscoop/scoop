@@ -38,10 +38,11 @@ def new_content(sender, instance, raw, created, using, update_fields, **kwargs):
         elif apps.is_installed('scoop.forum'):
             Read.objects.unset(instance)
     except Content.DoesNotExist as e:
-        logger.warn(e)
+        logger.warning(e)
 
 
 @receiver(check_indexable, sender=Content)
 def content_indexable(sender, instance=None, **kwargs):
     """ Renvoyer su un contenu est indexable par un moteur de recherche """
+    # TODO: Vérifier le contenu etc.
     return False

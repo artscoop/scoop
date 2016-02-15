@@ -173,11 +173,11 @@ def clean_empty_folders(path, output=True):
                         deleted += 1
                         total_deleted += 1
                 except Exception as e:
-                    logger.warn(e)
+                    logger.warning(e)
                     pass
     if output is True:
         trace = "{count} empty folders have been successfully deleted.".format(count=total_deleted)
-        logger.warn(trace)
+        logger.warning(trace)
     if total_deleted > 0:
         clean_empty_folders(path, output=output)
 

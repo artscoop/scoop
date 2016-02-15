@@ -62,9 +62,11 @@ class PicturedBaseModel(models.Model):
             description = "{name} ({index})".format(name=self.get_name(), index=number)
             try:
                 if isinstance(self, PicturableModel):
-                    picture = Picture.objects.create_from_uri(image['url'], content_object=self, title=description, description=image['title'], author=author or User.objects.get_superuser())
+                    picture = Picture.objects.create_from_uri(image['url'], content_object=self, title=description,
+                                                              description=image['title'], author=author or User.objects.get_superuser())
                 elif isinstance(self, PicturedModel):
-                    picture = Picture.objects.create_from_uri(image['url'], title=description, description=image['title'], author=author or User.objects.get_superuser())
+                    picture = Picture.objects.create_from_uri(image['url'], title=description,
+                                                              description=image['title'], author=author or User.objects.get_superuser())
                     if picture is not None:
                         self.pictures.add(picture)
                 if picture is not None:

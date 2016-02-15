@@ -39,6 +39,7 @@ class Configuration(DatetimeModel, WeightedModel):
     def move_to(self, position):
         """
         Déplacer dans une autre position
+
         :type position: scoop.editorial.models.Position | str
         :returns: True if the operation was successful
         """

@@ -68,6 +68,7 @@ class MailType(TranslatableModel):
         """ Renvoyer l'intervalle d'envoi pour ce type de mail """
         return datetime.timedelta(minutes=self.interval)
 
+    @addattr(short_description=_("Categories"))
     def get_categories(self):
         """ Renvoyer la liste des catégories liées au type de mail """
         return [name.lower().strip() for name in self.category.split(',') if name]

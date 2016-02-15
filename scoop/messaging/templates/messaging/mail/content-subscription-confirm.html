@@ -2,16 +2,16 @@
 {% load text_tags %}
 
 {% block title %}
-Veuillez confirmer votre abonnement au contenu
+    Veuillez confirmer votre abonnement au contenu
 {% endblock %}
 
 {% block text %}
-Bonjour {{event.email_sent}},
+    Bonjour {{ event.email_sent }},
 {% endblock %}
 
 
 {% block html_content %}
-<p>Bonjour {{event.email_sent}},</p>
-{{DOMAIN_NAME}}
+    <p>Bonjour {{ event.email_sent }},</p>
+    {{ DOMAIN_NAME }}
 
 {% endblock %}

@@ -37,7 +37,7 @@ def get_url_resource(path, **kwargs):
 def download_url_resource(path, output=None):
     """ Télécharger un fichier à une URL et renvoyer le chemin du fichier local téléchargé """
     if output and os.path.exists(output):
-        logging.warn(_("The download destination file at %(path)s already exists. Skipped.") % {'path': output})
+        logging.warning(_("The download destination file at %(path)s already exists. Skipped.") % {'path': output})
         return output
     resource = requests.get(path, headers=DEFAULT_HEADERS, allow_redirects=True, stream=True)
     resource_file = NamedTemporaryFile(delete=False) if output is None else open(output, 'wb')
@@ -49,7 +49,7 @@ def download_url_resource(path, output=None):
 
 def get_url_path(path):
     """ Renvoyer une URL sans paramètres et sans ancre """
-    filename = os.path.basename(path).split('?')[0].split('#')[0].encode('utf8')
+    filename = os.path.basename(path).split('?')[0].split('#')[0]
     return filename
 
 

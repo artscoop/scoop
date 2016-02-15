@@ -88,6 +88,7 @@ def download(instance, path, screenshot=True):
     from scoop.content.models.picture import Picture
 
     try:
+        path = path.decode('utf-8') if isinstance(path, bytes) else path
         outfile = download_url_resource(path)
         # Transformer le chemin de l'URL en nom de fichier utilisable
         filename = get_url_path(path)
