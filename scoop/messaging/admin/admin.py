@@ -5,6 +5,9 @@ from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.templatetags.html_tags import ul, ol
+from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms import MessageAdminForm, RecipientAdminForm
 from scoop.messaging.forms.machinery import QuotaAdminForm
 from scoop.messaging.models.alert import Alert
@@ -28,21 +31,20 @@ class MailTypeTranslationInlineAdmin(admin.TabularInline):
 
 class MailTypeAdmin(admin.ModelAdmin):
     """ Administration des types de courrier """
+
+    # Configuration
     list_select_related = True
-    list_display = ['id', 'short_name', 'get_categories', 'template', 'get_interval']
+    list_display = ['id', 'short_name', 'get_category_list', 'template', 'get_interval']
     list_filter = []
     readonly_fields = []
+    search_fields = ['short_name', 'translations__description', 'template', 'category']
     inlines = [MailTypeTranslationInlineAdmin]
 
-
-class MessageInlineAdmin(TabularInline):
-    """ Inline admin des messages d'un thread """
-    model = Message
-    form = make_ajax_form(Message, {'author': 'user'}, MessageAdminForm)
-    form.Meta.fields = MessageAdminForm.Meta.fields
-    form.Meta.widgets = MessageAdminForm.Meta.widgets
-    max_num = 20
-    extra = 0
+    # Getter
+    @addattr(short_description=_("Categories"), admin_order_field='category')
+    def get_category_list(self, obj):
+        """ Renvoyer la liste des catégories """
+        return ol(obj.get_categories())
 
 
 class RecipientInlineAdmin(TabularInline):

@@ -183,7 +183,7 @@ class ContentQuerySetMixin(object):
         assert isinstance(self, (models.QuerySet, models.Manager))
         try:
             return self.filter(**kwargs).latest('edited').edited
-        except:
+        except [AttributeError, Content.DoesNotExist]:
             return timezone.now()
 
     # Setter
@@ -217,7 +217,7 @@ class ContentQuerySetMixin(object):
                     content.update(save=True, publish=start)
                     start += step
             return True
-        logger.warn("You can schedule publication for 1 to 128 contents max.")
+        logger.warning("You can schedule publication for 1 to 128 contents max.")
         return False
 
 

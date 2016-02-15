@@ -1,5 +1,5 @@
 # Projet Scoop
-Par Steve Kossouho
+Par S. Kossouho
 Mai 2011 - Février 2016
 Séparé du projet One le 15 avril 2015
 
@@ -34,8 +34,6 @@ Séparé du projet One le 15 avril 2015
 - `MESSAGING_MAX_BATCH` : *int*, nombre de mails à envoyer au maximum par batch d'envoi. 30 par défaut
 - `MESSAGING_MAIL_SENDER` : *str*, expéditeur par défaut pour l'application. DEFAULT_FROM_EMAIL par défaut
 - `MESSAGING_DEFAULT_THREAD_QUOTA` : *int*, nombre de threads que peut ouvrir un utilisateur par défaut par jour. 10 par défaut
-- `MESSAGING_FORCED_TYPES` : *list* of *str*, types de messages mail à envoyer quoi qu'il arrive. ['security', 'account'] par défaut
-- `MESSAGING_ONLINE_TYPES` : *list* of *str*, types de messages mail à envoyer même si l'utilisateur est en ligne. MESSAGING_FORCED_TYPES + ['newsletter']
 - `MESSAGING_BLACKLIST_ENABLE` : *bool*, autoriser la mise en liste noire pour la messagerie. False par défaut
 - `MESSAGING_THREAD_UNIQUE` : *bool*, la création de thread doit-elle réutiliser les threads existants. True par défaut
 - `MESSAGING_THREAD_TOGGLE_DELAY` : *int*, délai minimum en secondes avant de pouvoir modifier l'état ouvert/fermé d'un thread. 3600 par défaut

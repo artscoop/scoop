@@ -14,7 +14,7 @@ class ExcerptInline(TemplateInline):
         # Vérifier que l'image existe
         try:
             excerpt = Excerpt.objects.get(name=identifier)
-        except:
+        except Excerpt.DoesNotExist:
             excerpt = None
         return {'excerpt': excerpt}
 

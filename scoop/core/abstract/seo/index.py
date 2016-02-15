@@ -18,12 +18,8 @@ class SEIndexQuerySetMixin(object):
         return self.filter(se_indexed=False, **kwargs)
 
 
-# ===============================================================================
-# Classe de base pour les objets qui peuvent être indexés ou non par un moteur
-# (via la balise HTML "meta robots")
-# ===============================================================================
 class SEIndexModel(models.Model):
-    """ Mixin de modèle dont on peut choisir l'indexation dans les moteurs de recherche """
+    """ Mixin de modèle dont on peut contrôler l'indexation dans les moteurs de recherche """
     se_indexed = models.BooleanField(default=False, null=False, db_index=True, verbose_name=_("Index in search engines"))
 
     # Getter

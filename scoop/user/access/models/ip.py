@@ -132,7 +132,7 @@ class IP(DatetimeModel, CoordinatesModel):
         try:
             return IP.objects.geoip.record_by_addr(self.string) or {}
         except Exception as e:
-            logger.warn(e)
+            logger.warning(e)
             return {'country_code': '', 'latitude': 0.0, 'longitude': 0.0}
 
     @addattr(short_description=_("Country"))

@@ -190,7 +190,7 @@ class Animation(DatetimeModel, UUID128Model):
             try:
                 default_storage.delete(self.file.name)
             except (NotImplementedError,):
-                logger.warn("Could not delete file {path}".format(path=self.file.name))
+                logger.warning("Could not delete file {path}".format(path=self.file.name))
                 pass
 
     # Overrides

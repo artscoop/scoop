@@ -2,7 +2,7 @@
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop
 
-__version__ = (1, 2013, 8)
+__version__ = (1, 2016, 2)
 
 gettext_noop("Editorial")
 

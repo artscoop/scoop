@@ -1,4 +1,6 @@
 # coding: utf-8
+from django.template.loader import render_to_string
+from django_languages.languages import LANGUAGES
 from markdown import Markdown
 
 from django.conf import settings
@@ -6,6 +8,8 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from translatable.exceptions import MissingTranslation
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -43,12 +47,12 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthorableModel, WeightedModel, 
         """ Renvoyer le texte de l'extrait """
         try:
             return self.get_translation().text
-        except:
+        except MissingTranslation:
             return _("(No text)")
 
     def html(self):
         """ Renvoyer le code HTML de l'extrait (selon le format) """
-        content = Excerpt.TRANSFORMS.get(self.format, lambda s: s)(self.get_text())
+        content = Excerpt.TRANSFORMS.get(int(self.format), lambda s: s)(self.get_text())
         return content
 
     def get_load_tag(self):
@@ -58,11 +62,13 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthorableModel, WeightedModel, 
 
     @addattr(allow_tags=True, short_description=_("Languages"))
     def get_language_icons_html(self):
-        """ Renvoyer une icone correspondant à la langue de l'extrait """
+        """ Renvoyer les icônes de langues pour toutes les traductions disponibles pour l'extrait """
         output = []
         for translation in self.translations.all():
-            output.append('<img src="%(url)stool/assets/icons/flag/png/%(code)s.png">' % {'code': get_country_code(translation.language), 'url': settings.STATIC_URL})
-        return " ".join(output)
+            code = get_country_code(translation.language)
+            name = LANGUAGES[code]
+            output.append(render_to_string('editorial/display/excerpt/language-icon.html', {'code': get_country_code(translation.language), 'title': name}))
+        return "".join(output)
 
     # Overrides
     def save(self, *args, **kwargs):

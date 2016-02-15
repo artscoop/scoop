@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from scoop.content.analysis.classifiers.base import BaseClassifier
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 
@@ -22,6 +22,7 @@ class Document(DatetimeModel, DataModel):
     # Actions
     def classify(self, category):
         """ Classifier le document dans une catégorie """
+        from scoop.content.analysis.classifiers.base import BaseClassifier
         BaseClassifier().learn(self, category)
         self.category = category
         self.save()

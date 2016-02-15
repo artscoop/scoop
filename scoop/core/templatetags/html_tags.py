@@ -72,8 +72,10 @@ def truncate_longwords_html(value, length=27):
 @register.filter(name="linkify")
 def linkify(value):
     """ Renvoyer un lien HTML vers un objet """
-    return mark_safe("<a href='%(domain)s%(url)s'>%(name)s</a>" % {'domain': get_domain(), 'url': getattr(value, 'get_absolute_url', lambda: "#")(),
-                                                                   'name': escape(value) or _("None")}) if value else ""
+    if hasattr(value, 'get_absolute_url'):
+        return mark_safe("<a href='{domain}{url}'>{name}</a>".format(domain=get_domain(), url=getattr(value, 'get_absolute_url', lambda: "#")(),
+                                                                     name=escape(value) or _("None"))) if value else ""
+    return escape(value)
 
 
 @register.filter
@@ -92,7 +94,7 @@ def html_urlize(value, autoescape=None):
     for link in links:
         if 'rel' in link:
             del link['rel']
-        link.attrs.append(('rel', 'nofollow'))
+        link.attrs['rel'] = 'nofollow'
     return mark_safe(str(soup))
 
 
@@ -106,7 +108,11 @@ def lightboxify(value):
 # Listes
 @register.filter(name="ul")
 def ul(value):
-    """ Renvoyer une liste d'objets en liste non ordonnée de liens """
+    """
+    Renvoyer une liste d'objets en liste non ordonnée de liens
+
+    :type value: list | tuple | set
+    """
     output = ["<ul>", "".join(["<li>%s</li>" % linkify(item) for item in value]), "</ul>"]
     return mark_safe("".join(output))
 

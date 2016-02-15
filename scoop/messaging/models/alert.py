@@ -1,6 +1,7 @@
 # coding: utf-8
 import datetime
 
+import simplejson
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -15,6 +16,7 @@ from scoop.core.util.data.textutil import one_line
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.stream.request import default_context
 from scoop.messaging.util.signals import mailable_event
 
 
@@ -43,19 +45,21 @@ class AlertManager(SingleDeleteManager):
         return self.filter(read=True, read_time__lt=timezone.now() - datetime.timedelta(minutes=minutes))
 
     # Setter
-    def alert(self, recipients, mailtypename, data, as_mail=True, **kwargs):
+    def alert(self, recipients, mailtypename, data, level=0, as_mail=True, **kwargs):
         """ Envoyer une alerte à un ou plusieurs utilisateurs """
         from scoop.messaging.models.mailtype import MailType
         # Maximum de 1000 membres à qui envoyer l'alerte
         recipients = make_iterable(recipients)[0:1000]
-        context = RequestContext(request=HttpRequest())
+        context = default_context()
         mailtype = MailType.objects.get(short_name=mailtypename)
         template = 'messaging/alert/{name}.html'.format(name=mailtype.template)
         title, html = [render_block_to_string(template, label, data, context_instance=context) for label in ['title', 'html']]
         title = one_line(title)
         alerts = []
         for recipient in recipients:
-            alerts.append(self.create(user=recipient, title=title, text=html))
+            data_json = simplejson.dumps(data)
+            new_alert = self.create(user=recipient, title=title, text=html, level=level, items=data_json)
+            alerts.append(new_alert)
             if as_mail is True:
                 mailable_event.send(sender=None, mailtype=mailtypename, recipient=recipient, data=data)
         return alerts
@@ -63,6 +67,7 @@ class AlertManager(SingleDeleteManager):
 
 class Alert(DatetimeModel, DataModel):
     """ Alerte """
+
     # Constantes
     ALERT_LEVELS = [[0, _("Warning")], [1, _("Important")], [2, _("Security")]]
 

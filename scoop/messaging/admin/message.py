@@ -1,6 +1,7 @@
 # coding: utf-8
 from ajax_select import make_ajax_form
 from django.contrib import admin
+from django.contrib.admin.options import TabularInline
 from django.forms.widgets import Textarea
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.user.authored import AuthoredModelAdmin
@@ -11,6 +12,8 @@ from scoop.messaging.models.message import Message
 
 class MessageAdmin(AuthoredModelAdmin):
     """ Administration des messages privés """
+
+    # Configuration
     list_select_related = True
     list_display = ('id', 'thread', 'get_author_link', 'name', 'text', 'deleted', 'is_spam', 'ip', 'get_position')
     list_display_links = ['id', 'thread']
@@ -43,8 +46,18 @@ class MessageAdmin(AuthoredModelAdmin):
     def get_queryset(self, request):
         """ Renvoyer le queryset par défaut de l'administration """
         qs = super(MessageAdmin, self).queryset(request)
-        # qs = qs.select_related('author','thread','ip').only('author__username','author__id','id','thread__id','thread__topic','text','name','deleted','spam','ip__id','ip__string','ip__ip')
         return qs
+
+
+class MessageInlineAdmin(TabularInline):
+    """ Inline admin des messages d'un thread """
+    model = Message
+    form = make_ajax_form(Message, {'author': 'user'}, MessageAdminForm)
+    form.Meta.fields = MessageAdminForm.Meta.fields
+    form.Meta.widgets = MessageAdminForm.Meta.widgets
+    max_num = 20
+    extra = 0
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Message, MessageAdmin)
