@@ -43,7 +43,7 @@ class MessageManager(SingleDeleteManager):
         if author is None:
             author = User.objects.get_bot() if (request is None or request.user.is_anonymous()) else request.user
         # Envoyer un signal de vérification
-        results = message_pre_send.send(sender=None, author=author, thread=thread, request=request)
+        results = message_pre_send.send(sender=Message, author=author, thread=thread, request=request)
         # Ne rien faire si le traitement l'interdit
         if any([result[1] is not True for result in results]):
             messages = [str(message) for message in reduce(lambda x, y: x + y, [result[1]['messages'] for result in results if result[1] is not True])]
@@ -55,14 +55,14 @@ class MessageManager(SingleDeleteManager):
         message.save(force_insert=True)
         Recipient.objects.set_unread_by_message(message)
         # Envoyer un signal indiquant qu'un message a été envoyé'
-        message_sent.send(sender=message, author=author, message=message, request=request)
+        message_sent.send(sender=Message, author=author, message=message, request=request)
         # Récupérer les destinataires
         recipients = thread.get_users(exclude=author)
         # Puis mettre en file des mails à envoyer aux destinataires
         mailtype = 'messaging.message.new' if not author.is_staff else 'messaging.message.staff'
         if as_mail is True and thread.deleted is False:
             for recipient in recipients:
-                mailable_event.send(sender=self, mailtype=mailtype, recipient=recipient, data={'sender': [author], 'message': [message.text]})
+                mailable_event.send(sender=Message, mailtype=mailtype, recipient=recipient, data={'sender': [author], 'message': [message.text]})
         # Mettre à jour la date de mise à jour du sujet
         if not author.is_bot() and author.is_active:
             thread.updater = author

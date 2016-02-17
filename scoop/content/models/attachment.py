@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import filesizeformat
+from django.template.loader import render_to_string
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext, pgettext_lazy
@@ -27,7 +28,7 @@ class AttachmentManager(SingleDeleteManager):
         """ Renvoyer un lien HTML vers un fichier portant un UUID spécifique """
         try:
             attachment = self.get(uuid=uuid)
-            result = """<a href="{url}">{name}</a>""".format(url=attachment.file.url, name=attachment.get_name())
+            result = render_to_string("content/display/attachment/link.html", {'attachment': attachment})
             return result
         except Attachment.DoesNotExist:
             return ""
@@ -82,7 +83,7 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
         return Attachment.objects.get_link_by_uuid(self.uuid)
 
     @addattr(short_description=_("Name"))
-    def get_name(self):
+    def get_filename(self):
         """ Renvoyer le nom du fichier """
         return os.path.basename(self.file.name)
 

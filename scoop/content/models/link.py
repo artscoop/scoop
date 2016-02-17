@@ -1,6 +1,8 @@
 # coding: utf-8
 from urllib import parse
+from urllib.error import HTTPError, URLError
 
+from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import models
 from django.template.loader import render_to_string
@@ -29,8 +31,8 @@ class LinkManager(models.Manager):
         """ Renvoyer le nombre de liens appartenant à un groupe """
         return self.in_group(name).count()
 
-    def get_with_url(self, text):
-        """ Renvoyer le nombre de liens dont l'URL contient un texte """
+    def with_url(self, text):
+        """ Renvoyer les liens dont l'URL contient un texte """
         return self.filter(url__icontains=text)
 
 
@@ -54,9 +56,15 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
     objects = LinkManager()
 
     # Getter
-    def html(self):
-        """ Renvoyer le code HTML du lien """
-        return render_to_string("content/display/link/link.html", {'item': self})
+    def html(self, display=None):
+        """
+        Renvoyer le code HTML du lien
+
+        :param display: mode d'affichage forcé du lien, mode du lien si None
+        :type display: int | None
+        """
+        display = display if display is not None else self.display
+        return render_to_string("content/display/link/link.html", {'item': self, display: display})
 
     @addattr(boolean=True)
     def is_valid(self):
@@ -64,7 +72,7 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
         parsed = parse.urlparse(self.url)
         try:
             URLValidator(self.url)
-        except:
+        except ValidationError:
             return False
         return parsed.scheme in ['http', 'https', ''] and parsed.netloc != ''
 
@@ -76,7 +84,7 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
                 get_url_resource(self.url)
                 return True
             return False
-        except:
+        except URLError:
             return False
 
     def get_oembed(self):

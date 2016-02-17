@@ -1,8 +1,9 @@
 # coding: utf-8
 import logging
 import os
+from _socket import gaierror
 from traceback import print_exc
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import unquote
 
 import requests
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
+from pip._vendor.requests.packages import urllib3
 from unidecode import unidecode
 
 # Constantes
@@ -29,9 +31,8 @@ def get_url_resource(path, **kwargs):
     try:
         resource = requests.get(path, headers=DEFAULT_HEADERS, timeout=6.0, allow_redirects=True)
         return resource.text
-    except (requests.ConnectionError, requests.Timeout, requests.TooManyRedirects, requests.HTTPError, requests.URLRequired, requests.RequestException) as e:
-        print_exc(e)
-        raise HTTPError(_("The resource at %(path)s was unavailable.") % {'path': path})
+    except (IOError, OSError, Exception) as e:
+        raise URLError("The resource at {path} was unavailable.".format(path=path), path)
 
 
 def download_url_resource(path, output=None):

@@ -43,10 +43,10 @@ class CoordinatesTest(TestCase):
         self.assertEqual(list(queryset), [position1, position3, position2])
 
         # Tester les propriétés
-        position1.point = [1.0, 1.0]
+        position1.point = (1.0, 1.0)
         position1.save()
-        self.assertEqual(position1.point, [1.0, 1.0])
-        self.assertNotEqual(position1.point, [0.0, 0.0])
+        self.assertEqual(position1.point, (1.0, 1.0))
+        self.assertNotEqual(position1.point, (0.0, 0.0))
 
 
 

@@ -33,6 +33,7 @@ class FlagManager(SingleDeleteManager):
     def get_flags(self, **kwargs):
         """
         Filtrer les flags dont le type est celui de app.model
+
         :param days: flags plus récents que <days> jours
         :param model: app_label.model indiquant sur quel type d'objets filtrer
         :type model: str
@@ -103,6 +104,7 @@ class Flag(DatetimeModel):
     # Constantes
     STATUSES = [[0, _("New")], [1, _("Being checked")], [2, _("Closed")], [3, _("Fixed")], [4, _("Will not fix")], [5, _("Postponed")], [6, _("Pending")]]
     NEW, CHECKING, CLOSED, FIXED, WONTFIX, POSTPONED, PENDING = 0, 1, 2, 3, 4, 5, 6
+
     # Champs
     name = models.CharField(max_length=128, blank=True, editable=False, verbose_name=_("Object name"))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='flags_made', on_delete=models.SET_NULL, verbose_name=_("Author"))
@@ -195,14 +197,15 @@ class Flag(DatetimeModel):
     def resolve(self, propagate=True):
         """
         Résoudre automatiquement un signalement via listeners
+
         :param propagate: attribuer la résolution aux flags identiques
         """
         if not self.action_done:
             action_count = self.get_siblings().filter(action_done=True).count()
             # Envoyer un signal. Les gestionnaires liés renvoient True ou False
             # Si l'un des gestionnaires renvoie True, une mesure a été prise.
-            result = flag_resolve.send(sender=self, iteration=action_count)
-            if [True for item in result if item[1] is True]:
+            result = flag_resolve.send(sender=self.content_type.model_class(), flag=self, iteration=action_count)
+            if any([item[1] is True for item in result]):
                 self.action_done = True
             # Fermer les clones
             if propagate:
