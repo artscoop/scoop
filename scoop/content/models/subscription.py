@@ -1,10 +1,10 @@
 # coding: utf-8
-from django.contrib.contenttypes.apps import ContentTypesConfig
 from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.db.utils import IntegrityError
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.models.content import Content
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModel
@@ -99,6 +99,11 @@ class Subscription(GenericModel, DatetimeModel, UUID64Model):
     def is_confirmed(self):
         """ Renvoyer si l'abonnement est confirmé """
         return self.confirmed
+
+    # Actions
+    def send_update_notice(self):
+        """ Envoyer un mail de mise à jour s"""
+        mailable_event.send(sender=self.content_object.model_class(), mailtype='content.subscription.update', recipient=self.email, data={})
 
     # Overrides
     def save(self, *args, **kwargs):

@@ -46,7 +46,7 @@ class Position(CoordinatesModel, DatetimeModel):
     """ Position utilisateur """
 
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='position', verbose_name=_("User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='position', verbose_name=_("User"))
     objects = PositionManager()
 
     # Getter

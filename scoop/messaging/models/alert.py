@@ -1,15 +1,13 @@
 # coding: utf-8
 import datetime
 
-import simplejson
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.http.request import HttpRequest
-from django.template.context import RequestContext
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.textutil import one_line
@@ -45,23 +43,22 @@ class AlertManager(SingleDeleteManager):
         return self.filter(read=True, read_time__lt=timezone.now() - datetime.timedelta(minutes=minutes))
 
     # Setter
-    def alert(self, recipients, mailtypename, data, level=0, as_mail=True, **kwargs):
+    def alert(self, recipients, mailtype_name, data, level=0, as_mail=True, **kwargs):
         """ Envoyer une alerte à un ou plusieurs utilisateurs """
         from scoop.messaging.models.mailtype import MailType
         # Maximum de 1000 membres à qui envoyer l'alerte
         recipients = make_iterable(recipients)[0:1000]
         context = default_context()
-        mailtype = MailType.objects.get(short_name=mailtypename)
+        mailtype = MailType.objects.get_named(mailtype_name)
         template = 'messaging/alert/{name}.html'.format(name=mailtype.template)
         title, html = [render_block_to_string(template, label, data, context_instance=context) for label in ['title', 'html']]
         title = one_line(title)
         alerts = []
         for recipient in recipients:
-            data_json = simplejson.dumps(data)
-            new_alert = self.create(user=recipient, title=title, text=html, level=level, items=data_json)
+            new_alert = self.create(user=recipient, title=title, text=html, level=level)
             alerts.append(new_alert)
             if as_mail is True:
-                mailable_event.send(sender=None, mailtype=mailtypename, recipient=recipient, data=data)
+                mailable_event.send(sender=None, mailtype=mailtype_name, recipient=recipient, data=data)
         return alerts
 
 
@@ -76,7 +73,7 @@ class Alert(DatetimeModel, DataModel):
     level = models.SmallIntegerField(default=0, choices=ALERT_LEVELS, validators=[MinValueValidator(0), MaxValueValidator(2)], verbose_name=_("Level"))
     title = models.CharField(max_length=80, blank=False, verbose_name=_("Title"))
     text = models.TextField(blank=False, verbose_name=_("Text"))
-    items = models.CharField(max_length=128, default="", blank=True, verbose_name=_("Items"))
+    items = models.CharField(max_length=160, default="", blank=True, verbose_name=_("Items"))
     read = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('alert', "Read"))
     read_time = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('alert.time', "Read"))
     objects = AlertManager()

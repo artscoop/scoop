@@ -55,6 +55,7 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
     def comment(self, request, author, target, body, name=None, email=None, url=None, force=False, **kwargs):
         """
         Commenter un contenu commentable
+
         :param request: requête (IP, utilisateur)
         :param author: auteur du commentaire
         :param target: objet cible du commentaire
@@ -68,7 +69,7 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
             comment = Comment(author=author, content_object=target, body=body, name=name or str(author), email=email or "", url=url or "")
             comment.set_request(request, save=True)
             if comment.moderated:
-                comment_posted.send(sender=comment, target=target)
+                comment_posted.send(sender=Comment, target=target)
             return comment
         return None
 

@@ -53,7 +53,7 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
     name = models.CharField(max_length=96, blank=False, verbose_name=_("Name"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('album', "Updated"))
-    parent = models.ForeignKey('content.Album', null=True, blank=True, related_name='children', verbose_name=_("Parent"))
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Parent"))
     visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('album', "Visible"))
     objects = AlbumManager()
 

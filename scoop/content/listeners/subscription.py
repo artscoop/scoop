@@ -17,4 +17,4 @@ def send_subscription_notices(sender, instance, **kwargs):
     """ Envoyer les mails pour les abonnés au contenu """
     if isinstance(instance, Content):
         for subscription in Subscription.objects.for_content(instance):
-            mailable_event.send(sender=instance, mailtype='content.subscription.update', recipient=subscription.email, data={})
+            subscription.send_update_notice()

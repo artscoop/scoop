@@ -10,39 +10,28 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.data.dateutil import date_age_days
 from scoop.core.util.signals import record
 from scoop.user.forms.configuration import ConfigurationForm
-from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
-from scoop.user.util.auth import get_profile_model
 from scoop.user.util.signals import check_stale, user_demoted
+
 
 logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=User)
 def user_created(sender, instance, raw, created, **kwargs):
-    """ Traiter lorsqu'un utilisateur vient d'être sauvegardé """
+    """ Traiter lorsqu'un nouvel utilisateur vient d'être sauvegardé """
     if created is True:
-        if instance and instance.id:
-            try:
-                instance.groups.add(Group.objects.get(name='members'))
-            except:
-                pass
-            # Générer un profil par défaut
-            """
-            if not getattr(instance, 'profile', None):
-                print(get_profile_model())
-                instance.profile = get_profile_model().objects.create(user=instance)
-            """
-            # Générer l'activation
-            if getattr(settings, 'USER_ACTIVATION_NEEDED', False):
-                instance.update(is_active=False, save=True)
-                # instance.activation = Activation.objects.create(user=instance)
-                instance.activation.active = True
-                instance.activation.save()
-                instance.activation.send_mail()
+        groups = Group.objects.filter(name='members')
+        instance.groups.add(list(groups))
+        # Générer l'activation si besoin
+        if getattr(settings, 'USER_ACTIVATION_NEEDED', False):
+            instance.update(is_active=False, save=True)
+            instance.activation.update(active=True, save=True)
+            instance.activation.send_mail()
 
 
 @receiver(user_logged_in, sender=User)

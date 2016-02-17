@@ -14,7 +14,7 @@ class MuteList(DataModel):
     DATA_KEYS = ['muted']
 
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, related_name='forum_mutelist', on_delete=models.CASCADE, verbose_name=_("User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, primary_key=False, related_name='forum_mutelist', on_delete=models.CASCADE, verbose_name=_("User"))
 
     # Setter
     def mute(self, user):

@@ -264,7 +264,7 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
         if thread is None:
             thread = super(self.__class__, self).create(author=author, updater=author, topic=subject, deleted=False, closed=closed, expires=expiry)
             created = True
-            thread_created.send(sender=thread, author=author, thread=thread)
+            thread_created.send(sender=Thread, author=author, thread=thread)
             logger.debug("A new thread with identifier {uuid} has been created".format(uuid=thread.uuid))
             # Ajouter les participants
             thread.add_recipients(recipients)

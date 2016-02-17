@@ -84,7 +84,12 @@ def get_animation_upload_path(animation, name, update=False):
 
 
 def download(instance, path, screenshot=True):
-    """ Télécharger une image pour un objet Picture """
+    """
+    Télécharger une image pour un objet Picture
+
+    :param instance: Objet Picture pour lequel télécharger l'image
+    :param screenshot: Effectuer un screenshot d'une URL si path n'est pas une image
+    """
     from scoop.content.models.picture import Picture
 
     try:
@@ -104,11 +109,11 @@ def download(instance, path, screenshot=True):
         # Sauver l'image dans le nouveau fichier
         instance.image.save(filename, File(open(outfile, 'rb')))
         super(Picture, instance).save()
-    except Exception:
+    except (KeyError, Exception):
         try:
-            img_temp = NamedTemporaryFile(suffix='.jpg', prefix='screen-')
-            image = PIL.Image.new('RGBA', [64, 64])
-            image.save(img_temp, optimize=True)
+            img_temp = NamedTemporaryFile(suffix='.jpg', prefix='screen-', delete=False)
+            image = PIL.Image.new('RGB', (64, 64))
+            image.save(img_temp.name, optimize=True)
             # Si une image était déjà liée à l'instance, supprimer le fichier
             if instance.exists():
                 instance.delete_file()
