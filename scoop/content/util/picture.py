@@ -49,8 +49,8 @@ def get_image_upload_path(picture, name, update=False):
     data.update(prefix_info)
     # Renvoyer le répertoire ou le chemin complet du fichier
     path = "file/pic/{year}/{month}{week}" if update else "file/pic/{year}/{month}{week}/{author}/{name}{ext}"
-    path = "test/{}".format(path) if settings.TEST else path
     path = path.format(**data)
+    path = "test/{}".format(path) if settings.TEST else path
     return path
 
 
@@ -78,8 +78,8 @@ def get_animation_upload_path(animation, name, update=False):
     data.update(prefix_info)
     # Renvoyer le répertoire ou le chemin complet du fichier
     path = "file/ani/{year}/{month}{week}" if update else "file/ani/{year}/{month}{week}/{author}/{name}{ext}"
-    path = "test/{}".format(path) if settings.TEST else path
     path = path.format(**data)
+    path = "test/{}".format(path) if settings.TEST else path
     return path
 
 
@@ -113,7 +113,7 @@ def download(instance, path, screenshot=True):
         try:
             img_temp = NamedTemporaryFile(suffix='.jpg', prefix='screen-', delete=False)
             image = PIL.Image.new('RGB', (64, 64))
-            image.save(img_temp.name, optimize=True)
+            image.save(img_temp.name, optimize=False)
             # Si une image était déjà liée à l'instance, supprimer le fichier
             if instance.exists():
                 instance.delete_file()
@@ -161,6 +161,7 @@ def clean_thumbnails():
 def get_context_picture_url(self, name, ext=None, *args):
     """
     Renvoyer un chemin d'image dans le répertoire d'images par défaut
+
     :param name: nom du contexte de l'image
     :param ext: None ou une extension de fichier, sans le point
     :param args: paramètres du contexte, utilisés dans le nom de fichier
@@ -181,6 +182,7 @@ def convex_hull(points):
     # Sort the points lexicographically (tuples are compared lexicographically).
     # Remove duplicates to detect the case we have just one unique point.
     points = sorted(set(points))
+
     # Boring case: no points or a single point, possibly repeated multiple times.
     if len(points) <= 1:
         return points
@@ -197,12 +199,14 @@ def convex_hull(points):
         while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
             lower.pop()
         lower.append(p)
+
     # Build upper hull
     upper = []
     for p in reversed(points):
         while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
             upper.pop()
         upper.append(p)
+
     # Concatenation of the lower and upper hulls gives the convex hull.
     # Last point of each list is omitted because it is repeated at the beginning of the other list.
     return lower[:-1] + upper[:-1]

@@ -93,6 +93,7 @@ class Validation(object):
 def handle_upload(request):
     """
     Traitement des uploads, Ajax, directs ou fragmentés
+
     Utilisation :
     - Vous utilisez une vue AJAX qui est appelée pour l'upload progressif
     - Récupérer le résultat de handle_upload dans la vue AJAX
@@ -100,30 +101,32 @@ def handle_upload(request):
     Vous pouvez ensuite, gérer ce résultat (par exemple) :
       picture.image.save(unidecode(result['name']), File(open(result['path'])))
     """
-    # Traiter la requête s'il y a un fichier à remonter
     if request.FILES:
-        image_file = request.FILES[request.FILES.keys()[0]]
-        image_name = image_file.name if 'name' not in request.POST else request.POST['name']
+        upload_file = request.FILES[request.FILES.keys()[0]]
+        upload_name = upload_file.name if 'name' not in request.POST else request.POST['name']
         # Par défaut, créer ou écrire à la fin du fichier existant
         file_mask = os.O_APPEND | os.O_WRONLY | os.O_CREAT if int(request.POST.get('chunk', 0)) > 0 else os.O_RDWR | os.O_CREAT | os.O_TRUNC
-        file_path = join(tempfile.gettempdir(), image_name)  # Chemin dans le répertoire temporaire de l'OS
+        file_path = join(tempfile.gettempdir(), upload_name)  # Chemin dans le répertoire temporaire de l'OS
         # Ouvrir le fichier et écrire les morceaux
         fd = os.open(file_path, file_mask)
-        for chunk in image_file.chunks():
+        for chunk in upload_file.chunks():
             os.write(fd, chunk)
         os.close(fd)
         # Renvoyer le nom du fichier si le dernier chunk a été écrit
         # Ou renvoyer None si la vue appelante ne doit pas effectuer d'action
         if int(request.POST.get('chunk', 0)) + 1 == int(request.POST.get('chunks', 1)):
-            return {'path': file_path, 'name': image_name}
+            return {'path': file_path, 'name': upload_name}
         else:
             return HttpResponse()
 
 
 def has_post(request, action=None):
     """
-    Dire si l'objet HttpRequest est en mode POST
-    Et contient un paramètre passé (en général le nom de l'action du formulaire')
+    Renvoyer si l'objet HttpRequest contient des données POST
+
+    :param action: nom de la donnée POST à chercher, ou None s'il faut uniquement
+        vérifier que la méthode actuelle est POST
+    :rtype: bool
     """
     posted = (request.method == 'POST')
     if posted and action is not None:
@@ -131,9 +134,11 @@ def has_post(request, action=None):
     return posted
 
 
-def _normalize_initial(initial, form):
+def _normalize_initial(initial, target_form):
     """
-    Parcourir les données initiales de formulaire et remplacer les instances par les ID etc.
+    Parcourir les données initiales de formulaire et remplacer les instances de Model par des ID etc.
+
+    :param target_form: classe de formulaire
     :type initial: dict
     """
 
@@ -147,15 +152,16 @@ def _normalize_initial(initial, form):
             return [convert_value(item) for item in value]
 
     output = dict()
-    for key, value in initial.items():
-        if form._meta.fields and key in form._meta.fields:
-            output[key] = convert_value(value)
+    for key, initial_value in initial.items():
+        if target_form._meta.fields and key in target_form._meta.fields:
+            output[key] = convert_value(initial_value)
     return output
 
 
 def form(request, config, initial=None):
     """
     Créer un formulaire initialisé selon l'état de la requête.
+
     Si request contient des données POST, créer le formulaire avec ces données.
     Ex.:
     >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z}), initial=None)

@@ -26,7 +26,7 @@ def user_created(sender, instance, raw, created, **kwargs):
     """ Traiter lorsqu'un nouvel utilisateur vient d'être sauvegardé """
     if created is True:
         groups = Group.objects.filter(name='members')
-        instance.groups.add(list(groups))
+        instance.groups.add(*list(groups))
         # Générer l'activation si besoin
         if getattr(settings, 'USER_ACTIVATION_NEEDED', False):
             instance.update(is_active=False, save=True)

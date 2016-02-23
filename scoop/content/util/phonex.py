@@ -8,8 +8,7 @@ import unidecode
 
 def phonex(query):
     """
-    Calcul de l'identifiant Phonex d'un mot
-    Le Phonex est un Soundex pour la langue française
+    Calcul de l'identifiant Phonex (Soundex-fr) d'un mot
     """
     # Nettoyer la chaîne de ses caractères superflus
     for char in " -+*/.,:;'_!?<>":

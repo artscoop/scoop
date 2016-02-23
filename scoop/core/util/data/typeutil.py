@@ -5,15 +5,21 @@ import webcolors
 
 
 def str_to(value, newtype, default=0):
-    """ Renvoyer une chaîne convertie en un autre type ou une valeur par défaut """
+    """
+    Renvoyer une chaîne convertie en un autre type ou une valeur par défaut (0)
+    """
     try:
         return newtype(value)
-    except:
+    except ValueError:
         return default
 
 
 def make_iterable(value, output_type=list):
-    """ Renvoyer un type d'itérable depuis un objet seul ou un itérable """
+    """
+    Renvoyer un type d'itérable depuis un objet seul ou un itérable
+
+    Renvoie un itérable vide si value est None
+    """
     if isinstance(value, (list, set, tuple)):
         return output_type(value)
     return output_type([value]) if value is not None else output_type()
@@ -22,7 +28,7 @@ def make_iterable(value, output_type=list):
 def hash_rgb(value):
     """ Renvoyer un hash de couleur depuis une chaîne """
     result = int(hashlib.md5(value).hexdigest(), 16)
-    red, green, blue = (result / 65536) % 256, (result / 256) % 256, (result) % 256
+    red, green, blue = (result / 65536) % 256, (result / 256) % 256, result % 256
     return red, green, blue
 
 

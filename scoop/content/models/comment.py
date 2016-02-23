@@ -69,7 +69,7 @@ class CommentManager(models.Manager.from_queryset(CommentQuerySet), models.Manag
             comment = Comment(author=author, content_object=target, body=body, name=name or str(author), email=email or "", url=url or "")
             comment.set_request(request, save=True)
             if comment.moderated:
-                comment_posted.send(sender=Comment, target=target)
+                comment_posted.send(sender=target.__class__, target=target)
             return comment
         return None
 

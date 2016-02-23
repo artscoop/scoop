@@ -39,6 +39,11 @@ class PictureTest(TestCase):
         self.assertGreater(picture2.get_animation_duration(), 0.1, "the picture animations should last longer than 0.1 seconds")
         self.assertFalse('screen' in picture2.get_filename(), "the picture has been created from scratch, this is not normal")
 
+    def test_exif_rotation(self):
+        """ Tester le fonctionnement de l'autorotation EXIF """
+        picture = Picture.objects.create_from_file(join(path, 'images', 'rotated.jpg'), author=self.user, title='rotated picture')
+        self.assertEqual(picture.get_dimension(), (235, 500))
+
     def test_autocrop(self):
         """ Tester le fonctionnement du rognage automatique avec et sans OpenCV """
         # Tester les dimensions de l'image par défaut

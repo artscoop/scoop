@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from scoop.core.util.django import formutil
+from scoop.core.util.django.apps import is_installed
 
 
 class RequestMixin:
@@ -61,17 +62,19 @@ class RequestMixin:
 
     def get_city(self):
         """ Renvoyer la ville présumée de la requête """
-        from scoop.location.models import City
-        # Renvoyer la ville
-        geoip = self.get_geoip()
-        if geoip is None:
-            return None
-        latitude = geoip['latitude']
-        longitude = geoip['longitude']
-        cityname = geoip['city']
-        # Trouver la ville alentours au bon nom
-        city = City.objects.find_by_name([latitude, longitude], cityname)
-        return city
+        if is_installed('scoop.location'):
+            from scoop.location.models import City
+            # Renvoyer la ville
+            geoip = self.get_geoip()
+            if geoip is None:
+                return None
+            latitude = geoip['latitude']
+            longitude = geoip['longitude']
+            cityname = geoip['city']
+            # Trouver la ville alentours au bon nom
+            city = City.objects.find_by_name([latitude, longitude], cityname)
+            return city
+        return None
 
     def list_to_queryset(self, post_param, base_queryset, attribute='pk', conversion=int):
         """
@@ -86,8 +89,8 @@ class RequestMixin:
         :type attribute: str
         :type conversion: type
         """
-        if post_param in self.REQUEST:
-            values = getattr(self, 'REQUEST').getlist(post_param)
+        if post_param in self.POST:
+            values = self.POST.getlist(post_param)
             values = [conversion(value) for value in values]
             filtering = {'{}__in'.format(attribute): values}
             return base_queryset.filter(**filtering)

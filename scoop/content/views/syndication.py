@@ -6,6 +6,7 @@ from scoop.content.models.content import Content
 
 class BlogContentFeed(Feed):
     """ Flux RSS des contenus blog """
+
     title = _("Recent blog entries published")
     link = "/syndication/blog.xml"
     description = _("RSS feed")

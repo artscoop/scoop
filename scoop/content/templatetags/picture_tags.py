@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 def string_to_dict(options):
     """
     Convertir une chaîne d'options k=v en dictionnaire
+
     :param options: chaîne du type 'a1 a2=v2 a3=v3'
     """
     output = dict()
@@ -36,7 +37,24 @@ def string_to_dict(options):
 
 @register.simple_tag(takes_context=True, name='image')
 def display_image(context, image=None, **kwargs):
-    """ Afficher une miniature avec ou sans lien """
+    """
+    Afficher une miniature avec ou sans lien
+
+    :param image: URL d'image ou objet du modèle content.Picture
+    :param kwargs: dictionnaire des paramètres
+        - alias : alias de configuration de miniature
+        - options : chaîne décrivant les options easy-thumbails de génération
+        - image_class : classe CSS de l'élément img
+        - image_rel : attribut rel de l'élément img
+        - link : doit-on afficher un lien autour de l'image ?
+        - link_title : attribut title de l'élément a
+        - link_class : classe CSS de l'élément a
+        - link_id : ID de l'élément a
+        - link_rel : attribut rel de l'élément a
+        - link_target : URL ou objet avec une méthode get_absolute_url
+        - image_title : attribut title de l'élément img
+        - image_alt : attribut alt de l'élément img
+    """
     request = context.get('request')
     display = dict()
     # Afficher une image par UUID (remplacer image par uuid)
