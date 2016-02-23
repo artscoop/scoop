@@ -454,8 +454,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             output_file = os.path.join(new_path, filename)
             old_path = self.image.name
             target_path = get_image_upload_path(self, output_file)
-            # Puis recréer l'image depuis le nouveau chemin
-            if target_path != old_path:  # ne rien faire si le chemin est inchangé, sinon : https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
+            # Puis recréer l'image dans le nouveau chemin
+            if target_path != old_path:  # https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
                 with File(self.image) as original:
                     self.image.open()
                     self.image.save(output_file, original)
@@ -465,7 +465,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         return False
 
     def set_correct_extension(self):
-        """ Renommer le fichier s'il possède la mauvaise extension """
+        """
+        Renommer le fichier s'il possède la mauvaise extension
+
+        :returns: True si le fichier est valide
+        """
         if self.exists():
             extensions = {'.jpe', '.jpg', '.gif', '.png', '.tga', '.tif', '.bmp', '.jpeg', '.tiff'}
             if self.get_extension() not in extensions:
@@ -482,8 +486,11 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                     if self.get_extension() not in extensions:
                         self.delete(clear=True)
                         logger.warning("Could not find a correct extension for {}, deleted".format(self.image.path))
+                        return False
+                    return True
                 else:
                     self.delete(clear=True)
+        return False
 
     def finalize(self):
         """ Définir l'image comme non temporaire """

@@ -14,6 +14,7 @@ def now():
 def to_timestamp(dt):
     """
     Convertit un objet date ou datetime en int(timestamp)
+
     :type dt: datetime.datetime | datetime.date
     """
     if isinstance(dt, datetime.date):
@@ -40,6 +41,7 @@ def date_age_days(date, today=None):
 def ages_dates(young, old=None, today=None):
     """
     Renvoie un tuple contenant les dates limites pour une plage d'âges.
+
     :param young: âge minimum
     :param old: âge maximum. ``None`` si identique à ``young``
     :param today: date à laquelle calculer les âges. ``None`` pour aujourd'hui
@@ -51,7 +53,7 @@ def ages_dates(young, old=None, today=None):
     old = young if (old is None or old < young) else old
     max_date = datetime.date(today.year - young, today.month, today.day)
     min_date = datetime.date(today.year - old - 1, today.month, today.day) + datetime.timedelta(days=1)
-    return (min_date, max_date)
+    return min_date, max_date
 
 
 def from_now(days=0, hours=0, minutes=0, seconds=0, timestamp=False):
@@ -102,5 +104,5 @@ def random_date(*date_range):
         delta = end - start
         int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
         random_second = randrange(int_delta)
-        return (start + datetime.timedelta(seconds=random_second))
+        return start + datetime.timedelta(seconds=random_second)
     return None

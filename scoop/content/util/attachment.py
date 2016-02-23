@@ -8,8 +8,8 @@ from unidecode import unidecode
 
 def get_attachment_upload_path(attachment, name, update=False):
     """
-    Définir le chemin et le nom de fichier par défaut des
-    uploads de pièces jointes.
+    Définir le chemin et le nom de fichier par défaut des uploads de pièces jointes.
+
     :param attachment: instance de modèle de pièce jointe
     :param name: nom du fichier uploadé
     :param update: mettre à jour le chemin mais conserver le nom de fichier
