@@ -125,7 +125,7 @@ class Activation(DatetimeModel, UUID128Model):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _("{}'s activation data").format(self.user.username)
+        return _("{username}'s activation data").format(username=self.user.username)
 
     def __repr__(self):
         """ Renvoyer la représentation texte de l'objet """

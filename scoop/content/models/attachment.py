@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
+from django.core.files.base import File
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import filesizeformat
@@ -54,6 +55,17 @@ class AttachmentManager(SingleDeleteManager):
                 attachment.save()
                 return True
         return False
+
+    def create_from_file(self, path):
+        """ Créer une pièce jointe depuis un fichier sur disque """
+        filename = os.path.basename(path)
+        attachment = self.create()
+        try:
+            attachment.image.save(filename, File(open(path, 'rb')))
+            attachment.title = filename
+            attachment.save()
+        except IOError:
+            pass
 
 
 class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
@@ -124,7 +136,7 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
                 self.mimetype = get_mime_type(self.file.path)
                 if save is True:
                     self.save()
-            except:
+            except IOError:
                 self.mimetype = 'application/octet-stream'
 
     # Overrides

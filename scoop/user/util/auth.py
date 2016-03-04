@@ -63,11 +63,12 @@ def staff_or_404(view_func):
 def check_permission(user, mode_name, app_label, model_name):
     """
     Renvoie si un utilisateur a une permission précise
+
     :param mode_name: généralement add, change ou delete
     :param app_label: étiquette de l'application
     :param model_name: nom du modèle dans les ContentTypes
     """
-    p = '{}.{}_{}}'.format(app_label, mode_name, model_name)
+    p = '{}.{}_{}'.format(app_label, mode_name, model_name)
     return user.is_active and user.has_perm(p)
 
 
@@ -83,6 +84,7 @@ def can_edit_or_404(request, user):
 def register_custom_permissions(permissions, app_label):
     """
     Créer une ou plusieurs nouvelles permissions
+
     :param permissions: tuple de tuples contenant le nom et l'étiquette de la permission
     :param app_label: étiquette de l'application
     """

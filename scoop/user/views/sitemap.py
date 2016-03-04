@@ -6,7 +6,7 @@ from scoop.user.models.user import User
 
 class ProfileSitemap(Sitemap):
     """ Sitemap des profils utilisateurs """
-    limit = getattr(settings, 'SITEMAPS_ITEMS_PER_PAGE', 50000)
+    limit = getattr(settings, 'SITEMAPS_ITEMS_PER_PAGE', 10000)
 
     # Getter
     def items(self):

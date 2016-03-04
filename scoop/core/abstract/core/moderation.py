@@ -23,6 +23,11 @@ class ModeratedQuerySetMixin(object):
         """ Renvoyer les objets refusés """
         return self.filter(moderated=False, **kwargs)
 
+    def random_unmoderated(self, **kwargs):
+        """ Renvoyer un objet non modéré au hasard """
+        items = self.pending(**kwargs).order_by('?')
+        return items.first() if items.exists() else None
+
 
 class ModeratedModel(models.Model):
     """ Mixin de modèle modéré """

@@ -31,7 +31,6 @@ class FriendlistTest(TestCase):
         user1 = User.objects.create(username='user1', email='user1@foo.bar', is_active=True)
         user2 = User.objects.create(username='user2', email='user2@foo.bar', is_active=True)
         user3 = User.objects.create(username='user3', email='user3@foo.bar')
-        user4 = User.objects.create(username='user4', email='user4@foo.bar')
 
         # Créer une demande d'amitié et un lien d'amitié
         user1.friends.add_sent(user3)

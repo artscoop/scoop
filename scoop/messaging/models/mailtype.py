@@ -7,7 +7,7 @@ from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model, TranslatableModelManager
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
 
 
 class MailTypeManager(SingleDeleteManager, TranslatableModelManager):

@@ -41,7 +41,7 @@ class VisitManager(models.Manager):
     # Setter
     def create(self, visitor, target_user):
         """ Consigner ou mettre à jour une visite à un profil """
-        if visitor != target_user:
+        if visitor.pk != target_user.pk:
             if self.filter(visitor=visitor, user=target_user).update(time=now()) == 0:
                 return super(VisitManager, self).create(visitor=visitor, user=target_user, time=now())
             return True
@@ -63,6 +63,8 @@ class VisitManager(models.Manager):
 
 class Visit(DatetimeModel):
     """ Visite de profil """
+
+    # Champs
     visitor = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='visits_maker', verbose_name=_("Visitor"))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='visits_receiver', verbose_name=_("User"))
     objects = VisitManager()

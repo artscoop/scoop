@@ -10,7 +10,7 @@ from scoop.user.util.auth import is_authenticated
 @user_passes_test(is_authenticated)
 def logout(request):
     """ Déconnecter un utilisateur """
-    target = request.REQUEST.get('next', reverse('index'))
+    target = request.GET.get('next', reverse('index'))
     User.sign(request, None, logout=True)
     return HttpResponseRedirect(target)
 
@@ -18,5 +18,5 @@ def logout(request):
 def profile_activate(request, username=None, uuid=None):
     """ Tenter d'activer un nouvel utilisateur """
     Activation.objects.activate(uuid, username, request)  # envoie un signal en cas de succès ou d'échec
-    target = request.REQUEST.get('next', reverse('index'))
+    target = request.GET.get('next', reverse('index'))
     return HttpResponseRedirect(target)

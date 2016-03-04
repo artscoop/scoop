@@ -14,6 +14,7 @@ from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 from scoop.core.util.shortcuts import addattr
+from translatable.exceptions import MissingTranslation
 from translatable.models import TranslatableModel, get_translation_model
 
 
@@ -22,12 +23,12 @@ class Axis(TranslatableModel, WeightedModel):
 
     def get_default_slug(self=None):
         """ Renvoyer un slug automatique """
-        result = ['auto']
-        result.append(''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(4)))
-        return slugify(" ".join(result))
+        result = 'auto-'
+        result += ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(4))
+        return slugify(result)
 
     # Champs
-    slug = models.SlugField(max_length=16, unique=True, blank=False, default=get_default_slug, verbose_name=_("Slug"))
+    slug = models.SlugField(max_length=32, unique=True, blank=False, default=get_default_slug, verbose_name=_("Slug"))
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')
     content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, limit_choices_to=limit, verbose_name=_("Content type"))
 
@@ -37,7 +38,7 @@ class Axis(TranslatableModel, WeightedModel):
         """ Renvoyer le nom de la catégorie """
         try:
             return self.get_translation().name
-        except:
+        except MissingTranslation:
             return _("(No name)")
 
     @addattr(short_description=_("Description"))
@@ -45,7 +46,7 @@ class Axis(TranslatableModel, WeightedModel):
         """ Renvoyer la description de la catégorie """
         try:
             return self.get_translation().description
-        except:
+        except MissingTranslation:
             return _("(No description)")
 
     # Propriétés
@@ -66,6 +67,7 @@ class Axis(TranslatableModel, WeightedModel):
 
 class AxisTranslation(get_translation_model(Axis, "axis"), TranslationModel):
     """ Traduction d'axe de notation """
+
     # Champs
     name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
@@ -93,9 +95,6 @@ class RatingManager(SingleDeleteManager):
 class Rating(DatetimeModel):
     """ Note donnée par un utilisateur à un objet arbitraire """
 
-    # Constantes
-    AXIS_NAMES = [[0, _("General")]]
-
     # Champs
     axis = models.ForeignKey('social.Axis', blank=True, null=True, related_name='ratings', verbose_name=_("Axis"))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='ratings_given', verbose_name=_("Author"))
@@ -121,12 +120,13 @@ class Rating(DatetimeModel):
     class Meta:
         verbose_name = _("rating")
         verbose_name_plural = _("ratings")
-        unique_together = ('author', 'axis', 'content_type', 'object_id')
+        unique_together = [['author', 'axis', 'content_type', 'object_id']]
         app_label = 'social'
 
 
 class RatedModel(models.Model):
     """ Mixin d'objet pouvant recevoir des notes """
+
     # Champs
     ratings = GenericRelation('social.Rating')
 

@@ -3,11 +3,10 @@ from datetime import datetime
 
 from django.test import TestCase
 from django.test.utils import override_settings
-
 from scoop.core.util.data.dateutil import date_age
 from scoop.core.util.data.numbers import round_left
-from scoop.core.util.data.textutil import text_to_list_of_lists, text_to_dict, one_line, replace_dict, count_words
-from scoop.core.util.data.typeutil import str_to, make_iterable, closest_color
+from scoop.core.util.data.textutil import count_words, one_line, replace_dict, text_to_dict, text_to_list_of_lists
+from scoop.core.util.data.typeutil import closest_color, make_iterable, str_to
 from scoop.core.util.django.testing import TEST_CONFIGURATION
 
 

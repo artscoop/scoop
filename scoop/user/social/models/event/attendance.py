@@ -8,9 +8,10 @@ from scoop.core.util.model.model import SingleDeleteManager
 
 class AttendanceManager(SingleDeleteManager):
     """ Manager des participations à des événements """
+
     # Constantes
     WAS_THERE, NOT_THERE, UNKNOWN = 1, 2, 0
-    WONT, MIGHT, WILL = 0, 1, 2
+    UNKNOWN, WONT, MIGHT, WILL = 0, 1, 2, 3
 
     # Getter
     def get_by_organizer(self, author):
@@ -34,11 +35,13 @@ class AttendanceManager(SingleDeleteManager):
 
 class Attendance(AuthoredModel):
     """ Participation à un événement """
+
     # Constantes
     STATUSES = [[1, _("I was there")], [2, _("I was not there")], [0, _("Unknown")]]
-    FORECASTS = [[0, _("I will not participate")], [1, _("I might participate")], [2, _("I will participate")]]
+    FORECASTS = [[0, _("N/A")], [1, _("I will not participate")], [2, _("I might participate")], [3, _("I will participate")]]
     WAS_THERE, NOT_THERE, UNKNOWN = 1, 2, 0
-    WONT, MIGHT, WILL = 0, 1, 2
+    UNKNOWN, WONT, MIGHT, WILL = 0, 1, 2, 3
+
     # Champs
     event = models.ForeignKey('social.Event', related_name='attendances', verbose_name=_("Event"))
     forecast = models.SmallIntegerField(choices=FORECASTS, default=MIGHT, db_index=True, verbose_name=_("Forecast"))

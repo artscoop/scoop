@@ -45,7 +45,6 @@ class FisherClassifier(BaseClassifier):
 
     def guess(self, document, categories, default=None):
         """ Trouver la meilleure catégorie pour un document """
-        # Loop through looking for the best result
         best = default
         maximum = 0.0
         for category in categories:

@@ -18,6 +18,7 @@ class FormConfigurationManager(models.Manager):
     def get_user_config(self, user, name, version=None):
         """
         Renvoyer les données de configuration utilisateur nom/version
+
         :rtype: dict
         """
         if user is not None:
@@ -66,9 +67,10 @@ class FormConfiguration(DatetimeModel):
     def get_data(self, name, default=None):
         """
         Renvoyer les données d'un champ de la configuration
-        :rtype: str | basestring
+
+        :rtype: str
         """
-        raw_information = self.data.get('name', default)
+        raw_information = self.data.get(name, default)
         return raw_information
 
     # Métadonnées

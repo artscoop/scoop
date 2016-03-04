@@ -43,6 +43,8 @@ class PictureTest(TestCase):
         """ Tester le fonctionnement de l'autorotation EXIF """
         picture = Picture.objects.create_from_file(join(path, 'images', 'rotated.jpg'), author=self.user, title='rotated picture')
         self.assertEqual(picture.get_dimension(), (235, 500))
+        picture.rotate(90)
+        self.assertEqual(picture.get_dimension(), (500, 235))
 
     def test_autocrop(self):
         """ Tester le fonctionnement du rognage automatique avec et sans OpenCV """

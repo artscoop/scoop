@@ -429,11 +429,13 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def update_size(self):
         """ Mettre à jour les dimensions de l'image """
         if self.exists():
+            width, height = self.width, self.height
             try:
                 self.width, self.height = Image.open(self.image.path).size
             except IOError:
                 self.width, self.height = None, None
-            super(Picture, self).save(update_fields=['width', 'height'])
+            if (width, height) != (self.width, self.height):
+                super(Picture, self).save(update_fields=['width', 'height'])
         else:
             Picture.objects.filter(pk=self.pk).update(width=None, height=None)
 
@@ -538,6 +540,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         """ Réorienter l'image jpeg avec un champ EXIF Rotation différent de 0 """
         if self.get_extension() in {'.jpg', '.jpeg'}:
             subprocess.call(["exiftran", "-a", "-i", "-p", self.image.path], stderr=open(os.devnull, 'wb'))
+            self.update_size()
 
     def convert(self, ext='jpg'):
         """ Convertir l'image en un format jpg ou png """
@@ -569,6 +572,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 width, height = settings.DEFAULT_THUMBNAIL_DIMENSIONS.values()
             if self.width >= width or self.height >= height:
                 subprocess.call(["convert", self.image.path, "-resize", "{}x{}>".format(width, height), self.image.path])
+                self.update_size()
 
     def remove_icc(self):
         """ Supprimer le profil de couleur et les métadonnées """
@@ -579,6 +583,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         """ Pivoter l'image dans le sens des aiguilles d'une montre """
         if self.exists():
             subprocess.call(["convert", self.image.path, "-rotate", "{}".format(angle), self.image.path])
+            self.update_size()
 
     def mirror(self, orientation='x'):
         """ Appliquer un miroir à l'image dans le sens x ou y """

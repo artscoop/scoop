@@ -10,13 +10,11 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.data.dateutil import date_age_days
 from scoop.core.util.signals import record
 from scoop.user.forms.configuration import ConfigurationForm
 from scoop.user.models.user import User
 from scoop.user.util.signals import check_stale, user_demoted
-
 
 logger = logging.getLogger(__name__)
 

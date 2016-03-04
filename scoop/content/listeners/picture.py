@@ -31,6 +31,7 @@ def picture_created(sender, instance, **kwargs):
         instance._fix_exif()
         instance.optimize()
         instance.set_correct_extension()
+        instance.update_size()
         record.send(sender, actor=instance.author, action='content.create.picture', target=instance)
     # Réenregistrer l'objet lié (généralement Picturable)
     if instance.content_object and instance.content_object._meta.model_name not in TARGET_MODELS_EXCLUDE_FROM_UPDATE:

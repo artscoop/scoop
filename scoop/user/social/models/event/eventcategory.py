@@ -33,6 +33,7 @@ class EventCategoryManager(SingleDeleteManager):
 
 class EventCategory(TranslatableModel, IconModel, UUID32Model):
     """ Catégorie d'événement """
+
     # Champs
     parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_("Parent"))
     public = models.BooleanField(default=True, verbose_name=_("Public"))
@@ -71,6 +72,7 @@ class EventCategory(TranslatableModel, IconModel, UUID32Model):
 
 class EventCategoryTranslation(get_translation_model(EventCategory, "eventcategory"), TranslationModel):
     """ Traduction de catégorie d'événements """
+
     # Champs
     name = models.CharField(max_length=48, blank=False, verbose_name=_("Name"))
     description = models.TextField(default="", blank=True, verbose_name=_("Description"))

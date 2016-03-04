@@ -58,6 +58,7 @@ class OccurrenceManager(models.Manager.from_queryset(OccurrenceQuerySet), models
 
 class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataModel, UUID64Model):
     """ Événement """
+
     # Champs
     title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
     description = models.TextField(blank=False, verbose_name=_("Description"))
@@ -89,10 +90,12 @@ class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataMod
 
 class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     """ Récurrence d'événement """
+
     # Constantes
     DEFAULT_CAPACITY = 20
     STATUSES = [[0, _("Open")], [1, _("Closed")], [2, _("Cancelled")]]
     OPEN, CLOSED, CANCELLED = 0, 1, 2
+
     # Champs
     event = models.ForeignKey('social.Event', related_name='occurrences', verbose_name=_("Event"))
     status = models.SmallIntegerField(default=0, choices=STATUSES, db_index=True, verbose_name=_("Status"))
@@ -101,6 +104,7 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     date = models.DateTimeField(null=False, verbose_name=_("Date"))
     address = models.ForeignKey('location.Venue', null=True, blank=True, related_name='event_occurrences', verbose_name=_("Address"))
     capacity = models.IntegerField(default=DEFAULT_CAPACITY, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_("Max attendants"))
+    group = models.CharField(max_length=11, blank=True, db_index=True, verbose_name=_("Group"))
     objects = OccurrenceManager()
 
     # Getter

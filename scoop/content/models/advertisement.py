@@ -43,6 +43,7 @@ class AdvertisementManager(SingleDeleteManager):
     def random(self, group=None, **kwargs):
         """
         Renvoyer une annonce au hasard dans un groupe
+
         La probabilité qu'une annonce soit choisie augmente avec son poids
         """
         # Récupérer les annonces à afficher

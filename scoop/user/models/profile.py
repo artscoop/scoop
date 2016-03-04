@@ -18,6 +18,7 @@ from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.namedfilter import NamedFilterManager
 from scoop.core.abstract.social.like import LikableModel
 from scoop.core.util.data.dateutil import is_new
+from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from scoop.location.models import City
@@ -96,11 +97,13 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
 
     def get_ips(self, as_ips=False):
         """ Renvoyer les IPs du profil """
-        from scoop.user.access.models import UserIP, IP
-        # Renvoyer des UserIP ou des IP
-        if as_ips is False:
-            return UserIP.objects.for_user(self.user)
-        return IP.objects.for_user(self.user)
+        if is_installed('scoop.user.access'):
+            from scoop.user.access.models import UserIP, IP
+            # Renvoyer des UserIP ou des IP
+            if as_ips is False:
+                return UserIP.objects.for_user(self.user)
+            return IP.objects.for_user(self.user)
+        return []
 
     def is_banned(self):
         """ Renvoyer si le profil est banni """

@@ -23,6 +23,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
+
+from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.content.util.signals import content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
@@ -43,8 +45,7 @@ from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model, TranslatableModelManager
-
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,8 @@ logger = logging.getLogger(__name__)
 class ContentQuerySetMixin(object):
     """
     Mixin de Manager et Queryset
-    :type ContentQuerySetMixin: models.QuerySet
+
+    :type: models.QuerySet
     """
 
     def by_request(self, request):
@@ -266,7 +268,8 @@ class CategoryManager(SingleDeleteManager, TranslatableModelManager):
         return candidates.first() if candidates.exists() else None
 
 
-class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel):
+class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, ClassifiableModel,
+              UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel):
     """ Contenu textuel """
 
     # Constantes
@@ -404,10 +407,14 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer si le tronçon d'URL de la catégorie du type est celui demandé """
         return self.get_category_url() == url.lower()
 
+    def get_document(self):
+        """ Renvoyer le texte de l'objet pour l'apprentissage de catégorisation """
+        return striptags(self.get_html())
+
     @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du contenu """
-        return ('content:content-view', [], {'category': self.category.url, 'slug': self.slug})
+        return 'content:content-view', [], {'category': self.category.url, 'slug': self.slug}
 
     # Privé
     def _populate_html(self):
