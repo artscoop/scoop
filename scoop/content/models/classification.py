@@ -44,7 +44,7 @@ class Tag(IconModel, PicturableModel):
     @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
-        return ('content:view-category', [self.short_name])
+        return 'content:view-category', [self.short_name]
 
     def get_children(self):
         """ Renvoyer les étiquettes enfants """

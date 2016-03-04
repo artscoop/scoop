@@ -5,8 +5,7 @@ from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-from scoop.core.templatetags.html_tags import ul, ol
+from scoop.core.templatetags.html_tags import ol, ul
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms import MessageAdminForm, RecipientAdminForm
 from scoop.messaging.forms.machinery import QuotaAdminForm

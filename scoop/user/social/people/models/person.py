@@ -21,12 +21,14 @@ class PersonManager(SingleDeleteManager, BirthManager):
 
 class Person(PicturedModel, WeightedModel, BirthModel, UUID32Model):
     """ Personne """
+
     # Constantes
     TITLES = [['m', _("Mister")], ['mme', _("Miss'ess")], ['mlle', _("Miss")], ['dr', _("Doctor")]]
+
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='person', on_delete=models.SET_NULL, verbose_name=_("User"))
     full_name = models.CharField(max_length=64, blank=False, verbose_name=_("Full name"))
-    prefix = models.CharField(max_length=4, blank=False, choices=TITLES, verbose_name=_("Prefix"))
+    title = models.CharField(max_length=10, blank=False, choices=TITLES, verbose_name=_("Title"))
     given_name = models.CharField(max_length=64, blank=True, verbose_name=_("Name given at birth"))
     additional_name = models.CharField(max_length=64, blank=True, verbose_name=_("Name given at birth"))
     family_name = models.CharField(max_length=64, blank=True, verbose_name=_("Family name"))
@@ -35,6 +37,7 @@ class Person(PicturedModel, WeightedModel, BirthModel, UUID32Model):
     email = models.EmailField(max_length=64, blank=True, verbose_name=_("Email"))
     telephone = models.CharField(max_length=128, blank=True, help_text=_("ex. Home:1114567, Fax:1114568, 1114569"), verbose_name=_("Phone numbers"))
     notes = models.TextField(blank=True, verbose_name=_("Additional notes"))
+
     # Lieu
     street_address = models.CharField(max_length=192, blank=True, help_text=_("Street number, name and appartment/suite"), verbose_name=_("Street address"))
     city = models.CharField(max_length=96, blank=True, verbose_name=_("City"))

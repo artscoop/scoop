@@ -8,11 +8,14 @@ from scoop.rogue.models.flag import Flag
 
 class FlagFilterSet(FilterSet):
     """ Filtre django-filters des signalements """
+
     # Constantes
     AUTOMATIC_CHOICES = (('1', _("Automatic")), ('0', _("Manual")),)
+
     # Champs
     automatic = ChoiceFilter(widget=LinkWidget, choices=AUTOMATIC_CHOICES, label=_("Automatic"))
 
+    # Overrides
     def __init__(self, *args, **kwargs):
         """ Initialiser le filtre """
         super(FlagFilterSet, self).__init__(*args, **kwargs)

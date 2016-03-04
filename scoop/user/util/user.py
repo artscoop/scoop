@@ -10,6 +10,7 @@ __all__ = ['get_user_email_domains', 'replace_user_email_domains', 'find_similar
 def get_user_email_domains(count=256):
     """
     Renvoyer tous les noms de domaine utilisés pour les emails de la base
+
     :returns: un tuple de tuples (ndd, occurrences) trié dans l'ordre décroissant d'apparition
     """
     users = get_user_model().objects.active()

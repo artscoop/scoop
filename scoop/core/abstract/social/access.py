@@ -11,6 +11,7 @@ class PrivacyModel(models.Model):
     if apps.is_installed('scoop.user.social'):
         # Constantes
         ACCESS_TYPES = [[0, _("Public")], [1, _("Friends")], [2, _("Personal")], [3, _("Friend groups")], [4, _("Registered users")]]
+
         # Champs
         access = models.SmallIntegerField(choices=ACCESS_TYPES, default=0, db_index=True, verbose_name=_("Access"))
         group_grants = GenericRelation('social.FriendGroupGrant', related_name="%(class)s_group_grants") if apps.is_installed('scoop.user.social') else None
@@ -50,8 +51,10 @@ class PrivacyModel(models.Model):
 
 class AccessLevelModel(models.Model):
     """ Mixin de modèle avec Niveau d'accès requis """
+
     # Constantes
     LEVEL_TYPES = [[0, _("Public")], [1, _("Members only")], [2, _("Staff only")]]
+
     # Champs
     access_level = models.SmallIntegerField(choices=LEVEL_TYPES, default=0, db_index=True, verbose_name=_("Access level"))
 

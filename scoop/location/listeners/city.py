@@ -15,5 +15,5 @@ def login_actions(sender, request, user, **kwargs):
         if hasattr(user, 'profile') and hasattr(user.profile, 'city'):
             # Récupérer la météo de sa ville
             getattr(weather_prefetch, 'delay')(user.profile.city)
-    except:
+    except (OSError, IOError):
         pass

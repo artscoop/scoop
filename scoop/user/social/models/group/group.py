@@ -2,7 +2,7 @@
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.db import models
-from django.db.models import permalink
+from django.db.models import Q, permalink
 from django.db.models.manager import Manager
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -11,7 +11,7 @@ from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.social.access import PrivacyModel
 from scoop.core.abstract.social.invite import InviteTargetModel
 from scoop.core.abstract.user.authored import AuthoredModel
-from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
+from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 
 
 class GroupQuerySetMixin(object):
@@ -29,6 +29,20 @@ class GroupQuerySetMixin(object):
     def by_moderator(self, user, **kwargs):
         """ Renvoyer les groupes modérés par un utilisateur """
         return self.filter(moderators=user, **kwargs).distinct()
+
+    def by_membership(self, membership, **kwargs):
+        """ Renvoyer les groupes modérés par un utilisateur """
+        return self.filter(membership=membership, **kwargs).distinct()
+
+    def by_request(self, request):
+        """ Renvoyer les groupes visibles pour la requête en cours """
+        user = request.user
+        if user.is_authenticated() and not user.is_staff:
+            return self.filter(Q(author=user) | Q(discreet=False))
+        elif user.is_staff:
+            return self.all()
+        elif user.is_anonymous():
+            return self.filter(discreet=False)
 
 
 class GroupQuerySet(models.QuerySet, GroupQuerySetMixin, SingleDeleteQuerySetMixin):
@@ -117,11 +131,12 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, 
     @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du groupe """
-        return ('social:group-view', [self.uuid])
+        return 'social:group-view', [self.uuid]
 
     # Métadonnées
     class Meta(object):
         verbose_name = _("group")
         verbose_name_plural = _("groups")
-        permissions = (("can_join_groups", "Can join groups"),)
+        permissions = [["can_join_groups", "Can join groups"],
+                       ["can_toggle_groups", "Can change group visibility"]]
         app_label = "social"

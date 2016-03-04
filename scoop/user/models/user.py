@@ -173,6 +173,7 @@ class UserManager(DefaultManager.from_queryset(UserQuerySet), BaseUserManager, U
 
 class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     """ Utilisateur """
+
     # Constantes
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'name']
@@ -217,6 +218,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     def sign(request, data, logout=False, fake=False, direct_user=None):
         """
         Connecter ou déconnecter un utilisateur
+
         :param request: Une connexion nécessite une requête
         :param data: Dictionnaire de connexion, login et password
         :param logout: Demander une déconnexion
@@ -373,7 +375,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
 
     def natural_key(self):
         """ Renvoyer un utilisateur par sa clé naturelle """
-        return (self.username,)
+        return self.username,
 
     def get_full_name(self):
         """ Renvoyer le nom affiché de l'utilisateur, son nom sinon son login  """
@@ -423,6 +425,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     def force_logout(self, timeout=10800):
         """
         Demander une déconnexion de cet utilisateur
+
         Nécessite user.middleware.auth.AutoLogoutMiddleware
         """
         cache.set(User.CACHE_KEY['logout.force'].format(self.id), 1, timeout)
@@ -433,6 +436,8 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             self.is_superuser = False
             self.is_staff = False
             self.save(update_fields=['is_superuser', 'is_staff'])
+            return True
+        return False
 
     def encrypt_password(self):
         """ Crypter le mot de passe stocké en clair """
@@ -452,6 +457,8 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             self.is_active = False
             self.save()
             user_deactivated.send(sender=self, user=self, request=None)
+            return True
+        return False
 
     def set_active(self):
         """ Activer l'utilisateur """
@@ -459,6 +466,8 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             self.is_active = True
             self.save()
             user_activated.send(sender=self, user=self, request=None, failed=False)
+            return True
+        return False
 
     # Permissions
     def can_see(self, user):
@@ -497,7 +506,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'utilisateur """
-        return ('user:profile-view', [], {'uid': str(self.id), 'name': self.username})
+        return 'user:profile-view', [], {'uid': str(self.id), 'name': self.username}
 
     # Privé
     def _get_fixed_username(self):

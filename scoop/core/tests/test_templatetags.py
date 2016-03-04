@@ -9,10 +9,10 @@ from django.utils import timezone
 from scoop.core.models.redirection import Redirection
 from scoop.core.templatetags.datetime_tags import days_from_now as tt_days_from_now
 from scoop.core.templatetags.datetime_tags import is_date_new as tt_is_new
+from scoop.core.templatetags.html_tags import html_urlize as tt_html_urlize
 from scoop.core.templatetags.html_tags import linebreaks_convert as tt_linebreaks
 from scoop.core.templatetags.html_tags import sanitize as tt_sanitize
 from scoop.core.templatetags.html_tags import tags_keep as tt_tags_keep
-from scoop.core.templatetags.html_tags import html_urlize as tt_html_urlize
 from scoop.core.util.django.testing import TEST_CONFIGURATION
 from scoop.user.models.user import User
 

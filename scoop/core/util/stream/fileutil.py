@@ -153,7 +153,11 @@ def check_file_extension(filename, resource_path, extensions):
 
 
 def get_mime_type(resource_path):
-    """ Renvoyer le type MIME d'un fichier local """
+    """
+    Renvoyer le type MIME d'un fichier local
+
+    :raises: IOError
+    """
     mime = Magic(mime=True)
     mimetype = mime.from_buffer(open(resource_path, 'rb').read())
     return mimetype

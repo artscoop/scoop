@@ -7,6 +7,7 @@ from scoop.user.models import User
 class UserInline(TemplateInline):
     """
     Inline d'insertion d'utilisateur
+
     Format : {{user id [style=link|etc.]}}
     Exemple : {{user 2490 style="link"}}
     """

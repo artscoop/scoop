@@ -43,7 +43,7 @@ class CommentQuerySetMixin(object):
             return self.filter(author=author).update(visible=False)
 
 
-class CommentQuerySet(models.QuerySet, CommentQuerySetMixin, SingleDeleteQuerySetMixin):
+class CommentQuerySet(models.QuerySet, CommentQuerySetMixin, SingleDeleteQuerySetMixin, ModeratedQuerySetMixin):
     """ Queryset des commentaires """
     pass
 
@@ -116,6 +116,13 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
             if request.user.is_staff or (self.author == request.user and now() < self.time + 600):
                 return True
         return False
+
+    def is_visible(self, request):
+        """ Renvoyer si l'utilisateur peut voir le commentaire """
+        is_public = self.visible and self.moderated and not self.removed
+        is_admin = request.user.is_staff
+        is_mine = self.author == request.user
+        return is_public or is_admin or is_mine
 
     @addattr(boolean=True, short_description=pgettext_lazy('comment', "Updated"))
     def is_updated(self):

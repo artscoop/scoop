@@ -2,6 +2,7 @@
 from decimal import Decimal, DivisionByZero
 from urllib.request import urlopen
 
+import requests
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -33,14 +34,14 @@ class Currency(models.Model):
     # Champs
     name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
     short_name = models.CharField(max_length=6, blank=False, unique=True, verbose_name=_("3 letter name"))
-    balance = models.DecimalField(max_digits=10, decimal_places=7, default=-1, verbose_name=pgettext_lazy('currency', "Quote"))
+    balance = models.DecimalField(max_digits=12, decimal_places=8, default=-1, verbose_name=pgettext_lazy('currency', "Quote"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('currency', "Updated"))
     objects = CurrencyManager()
 
     # Getter
     def natural_key(self):
         """ Renvoyer la clé naturelle de la devise """
-        return (self.short_name,)
+        return self.short_name,
 
     def get_amount(self, currency='USD', amount=1.0):
         """ Convertir un montant de cette devise vers une autre """
@@ -48,7 +49,7 @@ class Currency(models.Model):
             if not isinstance(currency, Currency):
                 try:
                     currency = Currency.objects.get(short_name=currency)
-                except:
+                except Currency.DoesNotExist:
                     pass
             return amount * (self.balance / currency.balance)
         except DivisionByZero:
@@ -58,9 +59,9 @@ class Currency(models.Model):
     def update_balance(self, save=True):
         """ Mettre à jour les valeurs de la devise """
         try:
-            req = urlopen('http://quote.yahoo.com/d/quotes.csv?s={}USD=X&f=l1&e=.csv'.format(self.short_name))
-            result = req.read()
-        except:
+            resource = requests.get('http://quote.yahoo.com/d/quotes.csv?s={}USD=X&f=l1&e=.csv'.format(self.short_name))
+            result = resource.text
+        except OSError:
             result = 0
         self.balance = Decimal(float(result))
         if save is True:

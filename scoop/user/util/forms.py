@@ -8,9 +8,9 @@ from scoop.user.models.forms import FormConfiguration
 
 class DataForm(Form):
     """
-    Classe de base de formulaire destiné à la sauvegarde de configurations
-    utilisateur (voir user.models.FormConfiguration)
+    Classe de base de formulaire destiné à la sauvegarde de configurations utilisateur
 
+    (voir user.models.FormConfiguration)
     Note: ne jamais changer le type d'un champ de formulaire.
     :cvar name: nom du formulaire, unique
     :cvar defaults: dictionnaire des valeurs par défaut des attributs champs
@@ -43,6 +43,7 @@ class DataForm(Form):
     def get_defaults(cls, user):
         """
         Renvoyer le dictionnaire par défaut des valeurs de formulaire
+
         Note : cette fonction peut être redéfinie pour renvoyer des valeurs
         par défaut adaptées à chaque utilisateur.
         """
@@ -53,6 +54,7 @@ class DataForm(Form):
         """
         Renvoyer la valeur stockée d'un champ du formulaire pour un utilisateur
         et dans une version nommée ou la version par défaut
+
         :param user: utilisateur pour lequel récupérer l'option
         :param field: nom du champ de formulaire pour lequel récupérer la valeur
         :param version: version du formulaire enregistré pour l'utilisateur, ou None
@@ -63,6 +65,7 @@ class DataForm(Form):
     def get_data_for(cls, user, version=None):
         """
         Renvoyer le dictionnaire de données initiales de fomulaire pour un utilisateur
+
         :param user: utilisateur pour lequel récupérer des données
         :param version: version des données à récupérer
         """
@@ -92,15 +95,16 @@ class DataForm(Form):
     def _fix_data(cls, data):
         """
         Remplacer les instances de Model en leurs clés primaires
-        Raison : Il n'est pas toujours possible d'utiliser une instance comme initial_value
+
+        Raison : Il n'est pas toujours possible d'utiliser une instance de Model dans une initial_value
         """
         if not isinstance(data, dict):
             return dict()
         for key, value in data.items():
-            # Dans le cas où la valeur n'est pas multiple
+            # Dans le cas où la valeur n'est pas multiple (valeur seule)
             if isinstance(value, Model):
                 data[key] = value.pk
-            # Si la valeur est multiple
+            # Si la valeur est multiple (liste de valeurs)
             if isinstance(value, (list, tuple)):
                 for idx, item in enumerate(value):
                     if isinstance(item, Model):
@@ -130,7 +134,7 @@ class DataForm(Form):
         """
         Enregistrer les données de champs du formulaire
         dans les données d'utilisateur et pour la version désirée
-        Nécessite l'appel de is_valid()
+        Nécessite l'appel de is_valid() au préalable
         """
         if user.is_authenticated():
             if hasattr(self, 'cleaned_data'):

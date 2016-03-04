@@ -44,6 +44,7 @@ class AnimationManager(SingleDeleteManager):
     def for_picture(self, picture):
         """
         Renvoie les objets animation pour l'image désignée
+
         :type picture: scoop.content.models.Picture
         """
         return self.filter(picture=picture)
@@ -52,7 +53,10 @@ class AnimationManager(SingleDeleteManager):
     def create_from_animation(self, picture, extensions=None, reset=False):
         """
         Créer des objets animation pour l'objet Picture
+
         :type picture: scoop.content.models.Picture | str
+        :param reset: Supprimer les animations existantes et les recréer ?
+        :type reset: bool
         """
         from scoop.content.models import Picture
 
@@ -93,6 +97,8 @@ class AnimationManager(SingleDeleteManager):
 
 class Animation(DatetimeModel, UUID128Model):
     """ Animation vidéo """
+
+    # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='owned_animations', on_delete=models.SET_NULL,
                                verbose_name=_("Author"))
     file = models.FileField(max_length=192, upload_to=get_animation_upload_path, verbose_name=_("File"))
@@ -174,9 +180,10 @@ class Animation(DatetimeModel, UUID128Model):
     def get_file_size(self, raw=False):
         """
         Renvoyer la taille du fichier en chaîne lisible
-        :param raw: définit si une taille en octets est retournée
+
+        :param raw: définit si une taille en octets est retournée (int)
         :returns: la taille du fichier en octets ou en chaîne lisible
-        :rtype: int or str
+        :rtype: int | str
         """
         if self.exists():
             return filesizeformat(self.file.size) if not raw else self.file.size
@@ -197,6 +204,7 @@ class Animation(DatetimeModel, UUID128Model):
     def delete(self, *args, **kwargs):
         """
         Supprimer l'objet de la base de données
+
         :param clear: supprimer totalement l'objet du disque et de la base
         :type clear: bool
         """
