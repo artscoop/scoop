@@ -1,11 +1,11 @@
 # coding: utf-8
 
 
-class AtttributeDict(dict):
+class Dictionary(dict):
     """ Dictionnaire auquel on peut assigner des attributs/métadonnées """
     pass
 
 
-class AttributeList(list):
+class List(list):
     """ Liste à laquelle on peut assigner des attributs/métadonnées """
     pass
