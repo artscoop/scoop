@@ -7,12 +7,14 @@ from scoop.analyze.util.corpus.file import FileCorpus
 
 
 class ClassifiableModel(models.Model):
-    """ Mixin de modèle dont le contenu peut être classifié """
+    """
+    Mixin de modèle dont le contenu peut être classifié
+    """
 
     __metaclass__ = ABCMeta
 
     # Attributs de classifiable
-    classifications = {'language': ('fr', 'en', 'NA')}  # {Fichier: Catégories}
+    classifications = {'language': ('fr', 'en', 'NA')}  # Obligatoire. {Fichier: Catégories}
     corpora = dict()
 
     # Getter
@@ -27,3 +29,7 @@ class ClassifiableModel(models.Model):
     @abstractmethod
     def get_document(self):
         raise NotImplemented("Your classifiable model must implement get_document")
+
+    # Métadonnées
+    class Meta:
+        abstract = True

@@ -15,9 +15,17 @@ class BaseCorpus:
         self.pathname = pathname
         super().__init__(*args, **kwargs)
 
+    def str(self):
+        """ Renvoyer une représentation chaîne de l'objet """
+        return "Classification corpus of type {name}".format(name=self.__class__)
+
+    def __repr__(self):
+        """ Renvoyer une représentation chaîne de l'objet """
+        return self.str()
+
     # Getter
     @abstractmethod
-    def get_set(self):
+    def get_corpus(self):
         """ Renvoie le set de corpus """
         raise NotImplemented()
 
@@ -32,6 +40,11 @@ class BaseCorpus:
         :param document: Texte, phrase ou mot à classer dans une catégorie
         :param category: Nom de catégorie.
         """
+        raise NotImplemented()
+
+    @abstractmethod
+    def retrain(self, signature, category):
+        """ Change la catégorie d'un document avec le hash passé """
         raise NotImplemented()
 
     @abstractmethod

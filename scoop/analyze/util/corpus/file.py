@@ -1,5 +1,5 @@
 # coding: utf-8
-import csv
+import unicodecsv as csv
 import time
 from os.path import join
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -8,7 +8,8 @@ from django.utils.six import StringIO
 from textblob.classifiers import MaxEntClassifier
 
 from scoop.analyze.util.corpus.base import BaseCorpus
-from scoop.analyze.util.types import AtttributeDict, AttributeList
+from scoop.analyze.util.formatters import format_base
+from scoop.analyze.util.types import Dictionary, List
 from scoop.core.util.stream.directory import Paths
 
 
@@ -16,17 +17,24 @@ CORPUS_PATH = ['isolated', 'database', 'classifier', 'corpus']
 
 
 class FileCorpus(BaseCorpus):
-    """ Corpus stocké dans un fichier texte CSV compressé """
+    """
+    Corpus stocké dans un fichier texte CSV compressé
+
+    J'estime qu'un corpus de 2↑15 (32768) documents devrait être utilisable
+    avec cette classe de corpus. Dans le cas contraire, il faudra penser
+    à développer son propre module CFFI.
+    """
 
     # Attributs
     corpus = None
     corpus_shadow = None
     classifier = None
 
-    def get_set(self):
+    # Getter
+    def get_corpus(self):
         """ Lire et peupler le corpus """
         if self.corpus is None:
-            self.corpus = AtttributeDict()
+            self.corpus = Dictionary()
             self.corpus.updated = time.time()
             try:
                 directory = Paths.get_root_dir(*CORPUS_PATH)
@@ -42,37 +50,55 @@ class FileCorpus(BaseCorpus):
             except IOError:
                 pass
         if self.corpus_shadow is None or self.corpus_shadow.updated < self.corpus.updated:
-            self.corpus_shadow = AttributeList(self.corpus.values())
+            self.corpus_shadow = List(self.corpus.values())
             self.corpus_shadow.updated = time.time()
             self.classifier = MaxEntClassifier(self.corpus_shadow)  # ou NaiveBayesClassifier
         return self.corpus_shadow
 
-    def untrain(self, signature):
-        """ Retirer du corpus """
-        self.get_set()
-        self.corpus.pop(signature, None)
-        self.corpus.updated = time.time()
+    def classify(self, document):
+        self.get_corpus()
+        return self.classifier.classify(document)
 
+    # Actions
     def save(self):
+        """ Enregistrer le corpus sur disque """
         directory = Paths.get_root_dir(*CORPUS_PATH)
         infile = '{name}.csv'.format(name=self.pathname)
         path = join(directory, '{name}.csv.zip'.format(name=self.pathname))
         # Écrire le CSV dans le fichier zip
-        with ZipFile(path, 'w', ZIP_DEFLATED) as zipfile:
-            buffer = StringIO()
-            writer = csv.writer(buffer, delimiter=",")
-            for row in self.corpus_shadow:
-                writer.writerow(row)
-            zipfile.writestr(infile, buffer.getvalue())
+        try:
+            with ZipFile(path, 'w', ZIP_DEFLATED) as zipfile:
+                buffer = StringIO()
+                writer = csv.writer(buffer, delimiter=",", encoding='utf-8')
+                for row in self.corpus_shadow:
+                    writer.writerow(row)
+                zipfile.writestr(infile, buffer.getvalue())
+            return True
+        except IOError:
+            return False
 
     def train(self, document, category):
-        self.get_set()
+        self.get_corpus()
+        document = format_base(document)
         signature = hash(document)
         self.corpus[signature] = (document, category)
+        self.corpus.updated = time.time()
 
-    def classify(self, document):
-        self.get_set()
-        return self.classifier.classify(document)
+    def retrain(self, signature, category):
+        """ Changer la catégorie d'un document déjà classifié """
+        self.get_corpus()
+        self.corpus[signature] = (self.corpus[signature][0], category)
+        self.corpus.updated = time.time()
+
+    def untrain(self, signature):
+        """
+        Retirer du corpus
+
+        :param signature: Hash du document
+        """
+        self.get_corpus()
+        self.corpus.pop(signature, None)
+        self.corpus.updated = time.time()
 
     # Overrides
     def __init__(self, pathname, *args, **kwargs):

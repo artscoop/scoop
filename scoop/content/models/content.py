@@ -278,6 +278,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     FORMAT_CHOICES = FORMATS.items()
     TRANSFORMS = {1: markdown.Markdown().convert, 2: textile.textile}  # fonctions de conversion vers HTML
     DATA_KEYS = ['similar', 'admin']
+    classifications = {'language-level': ('low', 'mid', 'hi')}
 
     # Champs
     title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
