@@ -8,9 +8,36 @@ from django.db.models.query import QuerySet
 from django.utils.text import smart_split
 from django.utils.translation import ugettext_lazy as _
 
+
 # Liste statique de mots vides/stopwords
-STOPWORDS_FR = "-elle,-il,10ème,1er,1ère,2ème,3ème,4ème,5ème,6ème,7ème,8ème,9ème,a,afin,ai,ainsi,ais,ait,alors,après,as,assez,au,aucun,aucune,auprès,auquel,auquelles,auquels,auraient,aurais,aurait,aurez,auriez,aurions,aurons,auront,aussi,aussitôt,autre,autres,aux,avaient,avais,avait,avant,avec,avez,aviez,avoir,avons,ayant,beaucoup,c',car,ce,ceci,cela,celle,celles,celui,cependant,certes,ces,cet,cette,ceux,chacun,chacune,chaque,chez,cinq,comme,d',d'abord,dans,de,dehors,delà,depuis,des,dessous,dessus,deux,deça,dix,doit,donc,dont,du,durant,dès,déjà,elle,elles,en,encore,enfin,entre,er,est,est-ce,et,etc,eu,eurent,eut,faut,fur,hormis,hors,huit,il,ils,j',je,jusqu',l',la,laquelle,le,lequel,les,lesquels,leur,leurs,lors,lorsque,lui,là,m',mais,malgré,me,melle,mes,mm,mme,moi,moins,mon,mr,même,mêmes,n',neuf,ni,non-,nos,notamment,notre,nous,néanmoins,nôtres,on,ont,ou,où,par,parce,parfois,parmi,partout,pas,pendant,peu,peut,peut-être,plus,plutôt,pour,pourquoi,près,puisqu',puisque,qu',quand,quant,quatre,que,quel,quelle,quelles,quelqu',quelque,quelquefois,quelques,quels,qui,quoi,quot,s',sa,sans,se,sept,sera,serai,seraient,serais,serait,seras,serez,seriez,serions,serons,seront,ses,si,sien,siennes,siens,sitôt,six,soi,sommes,son,sont,sous,souvent,suis,sur,t',toi,ton,toujours,tous,tout,toutefois,toutes,troiw,tu,un,une,unes,uns,voici,voilà,vos,votre,vous,vôtres,y,à,ème,étaient,étais,était,étant,étiez,étions,êtes,être,afin,ainsi,alors,après,aucun,aucune,auprès,auquel,aussi,autant,aux,avec,car,ceci,cela,celle,celles,celui,cependant,ces,cet,cette,ceux,chacun,chacune,chaque,chez,comme,comment,dans,des,donc,donné,dont,duquel,dès,déjà,elle,elles,encore,entre,étant,etc,été,eux,furent,grâce,hors,ici,ils,jusqu,les,leur,leurs,lors,lui,mais,malgré,mes,mien,mienne,miennes,miens,moins,moment,mon,même,mêmes,non,nos,notre,notres,nous,notre,oui,par,parce,parmi,plus,pour,près,puis,puisque,quand,quant,que,quel,quelle,quelque,quelquun,quelques,quels,qui,quoi,sans,sauf,selon,ses,sien,sienne,siennes,siens,soi,soit,sont,sous,suis,sur,tandis,tant,tes,tienne,tiennes,tiens,toi,ton,tous,tout,toute,toutes,trop,très,une,vos,votre,vous,étaient,était,étant,être"
-STOPWORDS_EN = 'a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your'
+STOPWORDS_FR = "-elle,-il,10ème,1er,1ère,2ème,3ème,4ème,5ème,6ème,7ème,8ème,9ème,a,afin,ai,ainsi,ais,ait,alors," \
+               "après,as,assez,au,aucun,aucune,auprès,auquel,auquelles,auquels,auraient,aurais,aurait,aurez,auriez," \
+               "aurions,aurons,auront,aussi,aussitôt,autre,autres,aux,avaient,avais,avait,avant,avec,avez,aviez," \
+               "avoir,avons,ayant,beaucoup,c',car,ce,ceci,cela,celle,celles,celui,cependant,certes,ces,cet,cette," \
+               "ceux,chacun,chacune,chaque,chez,cinq,comme,d',d'abord,dans,de,dehors,delà,depuis,des,dessous,dessus," \
+               "deux,deça,dix,doit,donc,dont,du,durant,dès,déjà,elle,elles,en,encore,enfin,entre,er,est,est-ce,et," \
+               "etc,eu,eurent,eut,faut,fur,hormis,hors,huit,il,ils,j',je,jusqu',l',la,laquelle,le,lequel,les," \
+               "lesquels,leur,leurs,lors,lorsque,lui,là,m',mais,malgré,me,melle,mes,mm,mme,moi,moins,mon,mr,même," \
+               "mêmes,n',neuf,ni,non-,nos,notamment,notre,nous,néanmoins,nôtres,on,ont,ou,où,par,parce,parfois," \
+               "parmi,partout,pas,pendant,peu,peut,peut-être,plus,plutôt,pour,pourquoi,près,puisqu',puisque,qu'," \
+               "quand,quant,quatre,que,quel,quelle,quelles,quelqu',quelque,quelquefois,quelques,quels,qui,quoi,quot," \
+               "s',sa,sans,se,sept,sera,serai,seraient,serais,serait,seras,serez,seriez,serions,serons,seront,ses,si," \
+               "sien,siennes,siens,sitôt,six,soi,sommes,son,sont,sous,souvent,suis,sur,t',toi,ton,toujours,tous,tout," \
+               "toutefois,toutes,troiw,tu,un,une,unes,uns,voici,voilà,vos,votre,vous,vôtres,y,à,ème,étaient,étais," \
+               "était,étant,étiez,étions,êtes,être,afin,ainsi,alors,après,aucun,aucune,auprès,auquel,aussi,autant," \
+               "aux,avec,car,ceci,cela,celle,celles,celui,cependant,ces,cet,cette,ceux,chacun,chacune,chaque,chez," \
+               "comme,comment,dans,des,donc,donné,dont,duquel,dès,déjà,elle,elles,encore,entre,étant,etc,été,eux," \
+               "furent,grâce,hors,ici,ils,jusqu,les,leur,leurs,lors,lui,mais,malgré,mes,mien,mienne,miennes,miens," \
+               "moins,moment,mon,même,mêmes,non,nos,notre,notres,nous,notre,oui,par,parce,parmi,plus,pour,près,puis," \
+               "puisque,quand,quant,que,quel,quelle,quelque,quelquun,quelques,quels,qui,quoi,sans,sauf,selon,ses," \
+               "sien,sienne,siennes,siens,soi,soit,sont,sous,suis,sur,tandis,tant,tes,tienne,tiennes,tiens,toi,ton," \
+               "tous,tout,toute,toutes,trop,très,une,vos,votre,vous,étaient,était,étant,être"
+STOPWORDS_EN = 'a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,' \
+               'cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,' \
+               'his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,' \
+               'no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,' \
+               'that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,' \
+               'which,while,who,whom,why,will,with,would,yet,you,your'
 DEFAULT_STOPWORDS = STOPWORDS_FR + STOPWORDS_EN
 
 # Récupérer le nom du moteur de base de données actuel
@@ -23,14 +50,17 @@ else:
 class BaseSearchForm(forms.Form):
     """
     Formulaire de base de recherche de texte dans plusieurs champs
+
     La classe dérivant de celle-ci doit contenir une sous-classe Meta
     contenant les champs suivants :
     - base_qs : Queryset minimum (avec le maximum d'objets), ex. Class.objects
     - search_fields : Liste d'attributs dans lesquels effectuer la recherche
     """
+
     # Constantes
     STOPWORD_LIST = DEFAULT_STOPWORDS.split(',')
     DEFAULT_OPERATOR = Q.__and__
+
     # Champs
     q = forms.CharField(label=_("Search"), required=False)
     order_by = forms.CharField(widget=forms.HiddenInput(), required=False)

@@ -343,7 +343,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du fil """
-        return ('messaging:thread-view', [], {'uuid': self.uuid})
+        return 'messaging:thread-view', [], {'uuid': self.uuid}
 
     # Actions
     def add_message(self, author, body, request=None, strip_tags=False, as_mail=True):

@@ -1,20 +1,21 @@
 # coding: utf-8
 from ajax_select import LookupChannel
-from scoop.core.util.model.model import search_query
-from scoop.forum.models.forum import Forum
 from unidecode import unidecode
 
+from scoop.core.util.model.model import search_query
+from scoop.forum.models.label import Label
 
-class ForumLookup(LookupChannel):
+
+class LabelLookup(LookupChannel):
     """ Lookup ajax-select des forums """
-    model = Forum
+    model = Label
     plugin_options = {'minLength': 4, 'position': {"my": "left bottom", "at": "left top", "collision": "flip"}}
 
     def get_query(self, q, request):
         """ Renvoyer les objets correspondant à la requête """
-        fields = ['name', 'description']
+        fields = ['short_name', 'translations__name']
         final_query = search_query(unidecode(q), fields)
-        items = Forum.objects.filter(final_query).distinct().order_by('-population')[0:12]
+        items = Label.objects.filter(final_query).distinct()[0:12]
         return items
 
     def get_result(self, obj):

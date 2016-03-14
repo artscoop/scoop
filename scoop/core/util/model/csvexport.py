@@ -1,5 +1,5 @@
 # coding: utf-8
-import csv
+import unicodecsv as csv
 import gzip
 import os
 from datetime import date, datetime
@@ -8,6 +8,7 @@ from datetime import date, datetime
 def csv_dump(queryset, path, compress=False):
     """
     Exporter un queryset au format CSV
+
     param compress: Enregistrer le dump dans un fichier gzip
     :type queryset: django.db.models.QuerySet
     :type path: unicode or str
@@ -15,11 +16,11 @@ def csv_dump(queryset, path, compress=False):
     """
     model = queryset.model
     if compress and not path.endswith(".gz"):
-        path = path + ".gz"
+        path += ".gz"
     folder = os.path.dirname(path)
     if not os.path.exists(folder):
         os.makedirs(folder)
-    writer = csv.writer(gzip.open(path, 'wb') if compress else open(path, 'w+'))
+    writer = csv.writer(gzip.open(path, 'wb') if compress else open(path, 'w+'), encoding='utf-8')
     # Écrire la liste des en-têtes
     headers = []
     for field in model._meta.fields:

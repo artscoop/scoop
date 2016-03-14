@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2015-05-08 01:07+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"PO-Revision-Date: 2016-03-07 23:21+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
-"X-Translated-Using: django-rosetta 0.7.6\n"
+"X-Translated-Using: django-rosetta 0.7.8\n"
 
 #: admin/activation.py:21
 msgid "Activate selected users"
@@ -334,10 +334,11 @@ msgstr "Vous devez avoir au moins {age:d} ans."
 #: forms/profile.py:42
 #, python-format
 msgid ""
-"%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"
+"%(input)s <span class='clear'>%(checkbox)s <span>Remove "
+"picture</span></span>"
 msgstr ""
-"%(input)s <span class='clear'>%(checkbox)s <span>Retirer l'image</span></"
-"span>"
+"%(input)s <span class='clear'>%(checkbox)s <span>Retirer "
+"l'image</span></span>"
 
 #: forms/profile.py:42
 msgid "Main picture"
@@ -347,8 +348,8 @@ msgstr "Image principale"
 msgid ""
 "Your picture may need to be reviewed by moderators before being visible."
 msgstr ""
-"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être "
-"visible."
+"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être"
+" visible."
 
 #: forms/profile.py:60 models/profile.py:70
 msgid "Gender"
@@ -429,7 +430,8 @@ msgstr "Se souvenir de moi"
 
 #: listeners/activation.py:19
 msgid "Congratulations! Your account is activated, you are now logged in."
-msgstr "Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
+msgstr ""
+"Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
 
 #: listeners/activation.py:23
 msgid "This activation code is invalid."
@@ -445,16 +447,15 @@ msgid "Thanks for visiting."
 msgstr "Merci de votre visite."
 
 #: middleware/impersonation.py:49
-#, fuzzy, python-brace-format
+#, python-brace-format
 #| msgid "Your impersonation session has been properly shut down."
 msgid "{name}, your impersonation session has been properly shut down."
-msgstr "Votre session d'imitation a été correctement terminée."
+msgstr "{name}, votre session d'imitation a été correctement terminée."
 
 #: middleware/impersonation.py:55
 #, python-brace-format
 msgid "You are viewing {path} as {name}. <a href=\"?{exit}\">Quit</a>"
-msgstr ""
-"Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
+msgstr "Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
 
 #: middleware/impersonation.py:57
 #, python-brace-format
@@ -612,7 +613,8 @@ msgstr "Supprimé"
 #: models/user.py:193
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
-"Indique si l'utilisateur peut se connecter ou non à ce site d'administration."
+"Indique si l'utilisateur peut se connecter ou non à ce site "
+"d'administration."
 
 #: models/user.py:193
 msgctxt "user"
@@ -850,8 +852,7 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 #~ msgstr "L'anniversaire d'un ami approche"
 
 #~ msgid "A member you follow has updated his publications"
-#~ msgstr ""
-#~ "Un membre dont vous suivez l'actualité a mis à jour ses publications"
+#~ msgstr "Un membre dont vous suivez l'actualité a mis à jour ses publications"
 
 #~ msgid "News have been published"
 #~ msgstr "Des nouveautés ont été publiées"
@@ -890,8 +891,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
 #~ msgid "Creating superuser with login=%(login)s and password=%(password)s"
 #~ msgstr ""
-#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de passe="
-#~ "%(password)s"
+#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de "
+#~ "passe=%(password)s"
 
 #~ msgid "None"
 #~ msgstr "Aucun"
@@ -1012,8 +1013,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
 #~ msgid "Configuration settings have been created for user %(user)s (%(id)s)"
 #~ msgstr ""
-#~ "Les informations de configuration ont été créées pour l'utilisateur "
-#~ "%(user)s (%(id)s)"
+#~ "Les informations de configuration ont été créées pour l'utilisateur %(user)s"
+#~ " (%(id)s)"
 
 #~ msgid "logged in"
 #~ msgstr "s'est connecté(e)"
@@ -1237,11 +1238,11 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 #~ msgstr "Bienvenue !"
 
 #~ msgid ""
-#~ "We just sent you an email with a link to confirm you are the owner of "
-#~ "your email address."
+#~ "We just sent you an email with a link to confirm you are the owner of your "
+#~ "email address."
 #~ msgstr ""
-#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui "
-#~ "confirmera que vous êtes bien le détenteur de cette adresse email."
+#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui confirmera "
+#~ "que vous êtes bien le détenteur de cette adresse email."
 
 #~ msgid "%s's profile"
 #~ msgstr "Profil de %s"

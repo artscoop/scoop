@@ -8,6 +8,7 @@ from django.utils.six import StringIO
 from textblob.classifiers import MaxEntClassifier
 
 from scoop.analyze.util.corpus.base import BaseCorpus
+from scoop.analyze.util.extractors import extractor_base
 from scoop.analyze.util.formatters import format_base
 from scoop.analyze.util.types import Dictionary, List
 from scoop.core.util.stream.directory import Paths
@@ -52,7 +53,7 @@ class FileCorpus(BaseCorpus):
         if self.corpus_shadow is None or self.corpus_shadow.updated < self.corpus.updated:
             self.corpus_shadow = List(self.corpus.values())
             self.corpus_shadow.updated = time.time()
-            self.classifier = MaxEntClassifier(self.corpus_shadow)  # ou NaiveBayesClassifier
+            self.classifier = MaxEntClassifier(self.corpus_shadow, feature_extractor=extractor_base)  # ou NaiveBayesClassifier
         return self.corpus_shadow
 
     def classify(self, document):

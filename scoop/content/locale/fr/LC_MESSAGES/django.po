@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2015-05-09 15:18+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"PO-Revision-Date: 2016-03-07 23:14+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.6\n"
+"X-Translated-Using: django-rosetta 0.7.8\n"
 
 #: __init__.py:8 admin/content.py:39
 msgid "Content"
@@ -1000,19 +1000,17 @@ msgstr "images"
 #: models/subscription.py:86 models/subscription.py:90
 msgctxt "content.subscription"
 msgid "Confirmed"
-msgstr ""
+msgstr "Confirmé"
 
 #: models/subscription.py:102
-#, fuzzy
 #| msgid "content revision"
 msgid "content subscription"
-msgstr "révision de contenu"
+msgstr "abonnement au contenu"
 
 #: models/subscription.py:103
-#, fuzzy
 #| msgid "content revisions"
 msgid "content subscriptions"
-msgstr "révisions de contenu"
+msgstr "abonnements au contenu"
 
 #: templates/admin/content/picture/change_list.html:50
 #: templates/admin/content/picture/upload_zip.html:6
@@ -1119,7 +1117,7 @@ msgstr "Ce modèle n'a pas de champ nommé pictures."
 
 #: util/admin.py:30
 msgid "\\U0001F58C"
-msgstr ""
+msgstr "\\U0001F58C"
 
 #: util/widgets.py:39 util/widgets.py:55
 msgid "Copyright"
@@ -1268,8 +1266,8 @@ msgstr "Flux RSS"
 #~ msgstr "%(image)s"
 
 #~ msgid ""
-#~ "Similarity can only be calculated with model instances having title and "
-#~ "body attributes."
+#~ "Similarity can only be calculated with model instances having title and body"
+#~ " attributes."
 #~ msgstr ""
 #~ "La similarité ne peut être calculée qu'entre instances de Model ayant des "
 #~ "attributs title et body."

@@ -27,8 +27,11 @@ class PageManager(models.Manager):
         return self.active().values_list('path', flat=True)
 
     def get_page(self, request):
-        """ Renvoyer la page à une URL, ou None """
-        # Définir l'URL à rechercher
+        """
+        Renvoyer la page à une URL, ou None
+
+        :param request: HttpRequest
+        """
         url = request.path if request.path.startswith('/') else ('/' + request.path)
         # Trouver les pages à l'URL
         pages = self.filter(path__iexact=url, active=True)
