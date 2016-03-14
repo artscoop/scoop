@@ -5,16 +5,28 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.data import DataModel
+from scoop.core.util.model.model import SingleDeleteManager
 
 
-class MuteList(DataModel):
+class MutelistManager(SingleDeleteManager):
+    """ Manager de listes de blocage """
+
+    # Getter
+    def get_by_user(self, user):
+        """ Renvoyer l'objet blocklist pour un utilisateur """
+        return self.get_or_create(user=user)[0] if user is not None else self.get_global()
+
+
+class Mutelist(DataModel):
     """ Liste de personnes ignorées """
 
     # Constantes
     DATA_KEYS = ['muted']
 
     # Champs
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, primary_key=False, related_name='forum_mutelist', on_delete=models.CASCADE, verbose_name=_("User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, primary_key=False, related_name='forum_mutelist',
+                             on_delete=models.CASCADE, verbose_name=_("User"))
+    objects = MutelistManager()
 
     # Setter
     def mute(self, user):

@@ -51,7 +51,7 @@ class IPPointModel(models.Model, IPPointMixin):
 class IPPointableModel(models.Model, IPPointMixin):
     """ Mixin de modèle pouvant pointer vers une IP """
     if apps.is_installed('scoop.user.access'):
-        ip = models.ForeignKey('access.IP', db_index=True, blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_("IP"))
+        ip = models.ForeignKey('access.IP', db_index=True, blank=True, null=True, on_delete=models.SET_NULL, related_name='+', verbose_name=_("IP"))
 
     # Métadonnées
     class Meta:

@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract import AuthoredModel, DatetimeModel, UUID128Model
 from scoop.core.abstract.content.picture import PicturableModel
+from scoop.core.abstract.core.data import DataModel
 from scoop.core.util.model.fields import LineListField
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
@@ -29,8 +30,11 @@ class PollManager(SingleDeleteManager):
         return self.get(slug=slug)
 
 
-class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
+class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel, DataModel):
     """ Sondage """
+
+    # Constantes
+    DATA_KEYS = ['statistics']
 
     # Champs
     title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
@@ -104,6 +108,14 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel):
         if not self.closed:
             self.closed = True
             self.save()
+            return True
+        return False
+
+    # Privé
+    def _prune_statistics(self):
+        """ TODO: Mettre à jour les données de stats pour le sondage et supprimer les votes individuels """
+        self.set_data('statistics', {}, save=True)
+        self.get_votes().delete()
 
     # Overrides
     @python_2_unicode_compatible

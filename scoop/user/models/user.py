@@ -203,7 +203,9 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        if not self.bot and self.name:
+        if self.deleted:
+            return _("{name} (deleted)").format(name=self.username)
+        elif not self.bot and self.name:
             return "{name}".format(name=self.name or self.username)
         elif self.bot:
             return _("Robot")

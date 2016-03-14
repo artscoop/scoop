@@ -5,6 +5,7 @@ import time
 
 class ExportProcessor(object):
     """ Exporteur de plusieurs documents """
+
     exporters = None  # liste de classes d'exporteurs de documents
     start_with = None  # classe exporter
 
@@ -36,6 +37,7 @@ class ImportProcessor(object):
     def setup(cls):
         """
         Préparer l'environnement d'import
+
         :returns: True si ok
         """
         pass
@@ -44,6 +46,8 @@ class ImportProcessor(object):
     def brushup(cls):
         """
         Actions sur la base après l'import
+
+        Fignoler l'import avec des calculs ou autres process de fin d'import
         """
         pass
 
@@ -87,4 +91,4 @@ class ImportProcessor(object):
                 elapsed = time.time() - start
                 minute, second = divmod(elapsed, 60)
                 print("*" * 80)
-                print("Import complete in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second))
+                print("Import completed in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second))

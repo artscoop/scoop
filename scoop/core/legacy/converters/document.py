@@ -15,15 +15,30 @@ class DocumentExporter(object):
 
     # Utilitaire
     def instance_for_ct(self, ct, oi):
-        """ Renvoyer une instance d'objet depuis un type de contenu et un id """
+        """
+        Renvoyer une instance d'objet depuis un type de contenu et un id
+
+        :param ct: instance ContentType
+        :param oi: id de l'instance d'obet
+        """
         raise NotImplementedError("Should return an instance from the content type and object id")
 
     def modelname_for_ct(self, ct):
-        """ Renvoyer le nom du modèle pour un type de contenu """
+        """
+        Renvoyer le nom du modèle pour un type de contenu
+
+        :param ct: instance ContentType
+        """
         raise NotImplementedError("Should return an instance from the content type and object id")
 
     def get_fields_data(self, obj, *fields):
-        """ Renvoyer les données des champs d'un objet """
+        """
+        Renvoyer les données des champs d'un objet
+
+        :param obj: instance de modèle
+        :param fields: liste de champs à exporter dans le dictionnaire de sortie
+        :rtype: dict
+        """
         output = dict()
         for field in fields:
             if hasattr(obj, field):
@@ -35,7 +50,14 @@ class DocumentExporter(object):
         return output
 
     def get_generic_data(self, obj, representation=None, ct=None, oi=None):
-        """ Renvoyer une représentation dictionnaire d'une GenericForeignKey """
+        """
+        Renvoyer une représentation dictionnaire d'une GenericForeignKey
+
+        :param obj: instance dont on retrouve les infos de GenericForeignKey
+        :param representation: chaîne représentant l'objet ciblé par *obj*. None pour utiliser la représentation par défaut.
+        :param ct: nom du champ ciblant un ContentType
+        :param oi: nom du champ contenant l'ID de l'objet cible
+        """
         ct = ct or 'content_type_id'
         oi = oi or 'object_id'
         if getattr(obj, ct, None) is not None:
@@ -47,7 +69,12 @@ class DocumentExporter(object):
         return output
 
     def get_foreign_data(self, obj, attribute):
-        """ Renvoyer la représentation texte d'un objet en clé étrangère """
+        """
+        Renvoyer la représentation texte d'un objet en clé étrangère
+
+        :param obj: instance de modèle
+        :param attribute: nom du champ de clé étrangère
+        """
         if getattr(obj, attribute, None) is not None:
             return str(getattr(obj, attribute))
         return None
@@ -63,7 +90,12 @@ class DocumentExporter(object):
 
     # Setter
     def exports(self, name=None, debug=False):
-        """ Exporter les données dans un fichier """
+        """
+        Exporter les données dans un fichier
+
+        :param name: nom du fichier de sortie
+        :param debug: écrire également un fichier de sortie lisible par un humain
+        """
         # Créer les données de sortie
         start = time.time()
         data = [self.get_object_export_data(item) for item in self.get_export_list() if item is not None]
@@ -93,6 +125,8 @@ class DocumentImporter(object):
         if ind % every == 0:
             percent = ind * 100.0 / total
             print("{label} - Progress - {pc:.01f}%".format(pc=percent, label=label or "Import"))
+        if ind == total - 1:
+            print("{label} - Done".format(label=label or "Import"))
 
     def get_data(self, name=None):
         """ Renvoyer les données du fichier exporté """

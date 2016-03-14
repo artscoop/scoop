@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2015-04-27 15:06+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"PO-Revision-Date: 2016-03-07 23:14+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.6\n"
+"X-Translated-Using: django-rosetta 0.7.8\n"
 
 #: __init__.py:6
 msgid "language"
@@ -78,7 +78,7 @@ msgstr "Type de public"
 
 #: abstract/content/picture.py:101 abstract/content/picture.py:112
 msgid "\\U0001f58c"
-msgstr ""
+msgstr "\\U0001f58c"
 
 #: abstract/content/picture.py:113
 msgid "Pictures"
@@ -150,7 +150,7 @@ msgstr "Anniversaire"
 
 #: abstract/core/birth.py:72
 msgid "Sign"
-msgstr ""
+msgstr "Signe"
 
 #: abstract/core/data.py:16 abstract/core/data.py:55 abstract/core/data.py:79
 msgid "Data"
@@ -200,10 +200,9 @@ msgid "Content object"
 msgstr "Objet de contenu"
 
 #: abstract/core/icon.py:41
-#, fuzzy
 #| msgid "Maximum size"
 msgid "Maximum size {}x{}"
-msgstr "Taille maximum"
+msgstr "Taille maximum {}x{}"
 
 #: abstract/core/icon.py:42 abstract/core/icon.py:47
 msgid "Icon"
@@ -1018,8 +1017,8 @@ msgstr ""
 #~ "MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"
 #~ msgstr ""
 #~ "Aucun chemin par défaut pour les portraits utilisateurs. Définissez un "
-#~ "chemin de dossier relatif à MEDIA_URL dans settings."
-#~ "USER_DEFAULT_PICTURE_PATH"
+#~ "chemin de dossier relatif à MEDIA_URL dans "
+#~ "settings.USER_DEFAULT_PICTURE_PATH"
 
 #~ msgid "Updating locale messages for %(dir)s"
 #~ msgstr "Mise à jour des messages pour %(dir)s"
@@ -1076,8 +1075,7 @@ msgstr ""
 #~ msgstr "Utilisé"
 
 #~ msgid "%(viewname)r is not callable"
-#~ msgstr ""
-#~ "%(viewname)r n'est pas un 'callable' et ne peut donc pas être exécuté"
+#~ msgstr "%(viewname)r n'est pas un 'callable' et ne peut donc pas être exécuté"
 
 #~ msgid "Help text"
 #~ msgstr "Texte d'aide"

@@ -30,6 +30,7 @@ from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
+from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.moderation import ModeratedModel, ModeratedQuerySetMixin
 from scoop.core.abstract.core.rectangle import RectangleModel
@@ -175,11 +176,11 @@ class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manag
         return self.filter(deleted=True, **kwargs)
 
 
-class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel):
+class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel, DataModel):
     """ Image """
 
     # Constantes
-    AUDIENCES = [[0, _("Everyone")], [5, _("Adults only")]]
+    DATA_KEYS = ['colors']
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_("Author"))

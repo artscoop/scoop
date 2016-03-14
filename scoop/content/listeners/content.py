@@ -9,7 +9,6 @@ from scoop.content.tasks.content import populate_similar
 from scoop.core.templatetags.html_tags import truncate_longwords_html
 from scoop.core.templatetags.text_tags import truncate_stuckkey
 from scoop.core.util.signals import check_indexable, record
-from scoop.forum.models.read import Read
 
 __all__ = ['auto_manage_content', 'new_content', 'content_indexable']
 
@@ -35,8 +34,6 @@ def new_content(sender, instance, raw, created, using, update_fields, **kwargs):
         if created:
             author = instance.authors.all().first()
             record.send(None, actor=author, action='content.create.content', target=instance)
-        elif apps.is_installed('scoop.forum'):
-            Read.objects.unset(instance)
     except Content.DoesNotExist as e:
         logger.warning(e)
 

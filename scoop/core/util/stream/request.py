@@ -166,13 +166,20 @@ def default_request():
 
 
 def default_context():
-    """ Contexte de requête par défaut """
+    """
+    Contexte de requête par défaut
+
+    Renvoie un contexte de template tel qu'on le trouve dans une vue standard.
+    Contient les clés de contexte définies par les CONTEXT_PROCESSORS et MIDDLEWARE
+    L'IP de requête pour le contexte est 127.0.0.1
+    """
     return RequestContext(default_request())
 
 
 def save_post_data(name):
     """
     Décorateur de vue, sauvegarde automatiquement les données POST
+
     see RequestMixin.save_post
     """
 

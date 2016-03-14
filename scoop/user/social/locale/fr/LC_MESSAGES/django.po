@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2013-11-04 23:47+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"PO-Revision-Date: 2016-03-07 23:21+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.3\n"
+"X-Translated-Using: django-rosetta 0.7.8\n"
 
 #: admin/admin.py:60
 msgid "Translation"
@@ -147,17 +147,16 @@ msgstr "Annulé"
 
 #: models/event/events.py:102
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: models/event/events.py:177
 msgid "event occurrence"
-msgstr ""
+msgstr "occurrence d'événement"
 
 #: models/event/events.py:178
-#, fuzzy
 #| msgid "event categories"
 msgid "event occurrences"
-msgstr "catégories d'événements"
+msgstr "occurrences d'événements"
 
 #: models/friend/friendgroup.py:14
 msgid "Family"
@@ -213,28 +212,25 @@ msgid "friend group grants"
 msgstr "autorisations aux groupes d'amis"
 
 #: models/friend/friendlist.py:47
-#, fuzzy
 #| msgid "Friends"
 msgid "Friend"
-msgstr "Amis"
+msgstr "Ami"
 
 #: models/friend/friendlist.py:47
-#, fuzzy
 #| msgid "Cancelled"
 msgid "Cancel request"
-msgstr "Annulé"
+msgstr "Annuler la demande"
 
 #: models/friend/friendlist.py:47
-#, fuzzy
 #| msgid "Pending friends"
 msgid "Add to friends"
-msgstr "Amis en attente"
+msgstr "Ajouter aux amis"
 
 #: models/friend/friendlist.py:240
-#, fuzzy, python-brace-format
+#, python-brace-format
 #| msgid "Friendship status for %(user)s"
 msgid "Friendship status for {user}"
-msgstr "État des amitiés pour %(user)s"
+msgstr "Statut des amitiés pour {user}"
 
 #: models/friend/friendlist.py:248
 msgid "friend status"
@@ -258,7 +254,7 @@ msgstr "Invitations seulement"
 
 #: models/group/group.py:37
 msgid "Define if the group is not in the public listings"
-msgstr ""
+msgstr "Définir si le groupe n'apparaît pas dans les listes publiques"
 
 #: models/group/group.py:37
 msgid "Discrete group"
@@ -270,7 +266,7 @@ msgstr "Type d'adhésion"
 
 #: models/group/group.py:41
 msgid "Moderators"
-msgstr ""
+msgstr "Modérateurs"
 
 #: models/group/group.py:42
 msgid "Members"
@@ -322,7 +318,7 @@ msgstr "Texte"
 
 #: models/post.py:41
 msgid "Deleted"
-msgstr ""
+msgstr "Supprimé"
 
 #: models/post.py:52
 msgid "user shout"
@@ -347,10 +343,10 @@ msgid "Object Id"
 msgstr "Id de l'objet"
 
 #: models/rating/like.py:80
-#, fuzzy, python-brace-format
+#, python-brace-format
 #| msgid "%(user)s likes %(target)s"
 msgid "{user} likes {target}"
-msgstr "%(user)s aime %(target)s"
+msgstr "{user} aime {target}"
 
 #: models/rating/like.py:84
 msgid "like"
@@ -367,7 +363,7 @@ msgstr "Slug"
 #: models/rating/rating.py:59
 #, python-brace-format
 msgid "{name}"
-msgstr ""
+msgstr "{name}"
 
 #: models/rating/rating.py:63
 msgid "rating axis"
@@ -390,10 +386,10 @@ msgid "Rating"
 msgstr "Note"
 
 #: models/rating/rating.py:113
-#, fuzzy, python-brace-format
+#, python-brace-format
 #| msgid "%(user)s gave %(item)s %(rating).03f points"
 msgid "{user} gave {item} {rating:.03f} points"
-msgstr "%(user)s a donné %(rating).03f points à %(item)s"
+msgstr "{user} a donné {rating:.03f} points à {item}"
 
 #: models/rating/rating.py:123
 msgid "rating"
@@ -429,7 +425,7 @@ msgstr "Mademoiselle"
 
 #: people/models/person.py:26
 msgid "Doctor"
-msgstr ""
+msgstr "Docteur"
 
 #: people/models/person.py:29
 msgid "Full name"
@@ -543,34 +539,27 @@ msgstr "personnes"
 #~ msgid "Can join groups"
 #~ msgstr "Peut rejoindre des groupes"
 
-#, fuzzy
 #~ msgid "Location"
 #~ msgstr "Candidatures"
 
-#, fuzzy
 #~ msgid "Selected tickets have been successfully closed."
 #~ msgstr "Votre demande d'amitié a bien été envoyée."
 
-#, fuzzy
 #~ msgid "Short name"
 #~ msgstr "(Sans nom)"
 
-#, fuzzy
 #~ msgid "Closing"
 #~ msgstr "Fermé"
 
-#, fuzzy
 #~ msgid "resolution status"
 #~ msgstr "statut d'amitié"
 
-#, fuzzy
 #~ msgid "resolution statuses"
 #~ msgstr "statuts d'amitié"
 
 #~ msgid "Updated"
 #~ msgstr "Mis à jour"
 
-#, fuzzy
 #~ msgid "ticket update"
 #~ msgstr "Date de naissance"
 

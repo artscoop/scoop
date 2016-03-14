@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2015-04-11 14:45+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"PO-Revision-Date: 2016-03-07 23:18+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Translated-Using: django-rosetta 0.7.6\n"
+"X-Translated-Using: django-rosetta 0.7.8\n"
 
 #: admin/filters.py:8
 msgid "status"
@@ -411,7 +411,7 @@ msgstr "Une permission de FAI doit autoriser un FAI valide."
 #: models/ipblock.py:326
 #, python-brace-format
 msgid "This rule type {number} is unknown."
-msgstr ""
+msgstr "Le type de règle {number} est inconnu."
 
 #: models/ipblock.py:331
 #, python-brace-format

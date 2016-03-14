@@ -19,7 +19,11 @@ class SanctionManager(models.Manager):
 
     # Getter
     def has_sanction(self, user):
-        """ Renvoyer si un utilisateur est sanctionné """
+        """
+        Renvoyer si un utilisateur est sanctionné
+
+        :param user: utilisateur
+        """
         return user.sanctions.exists()
 
     def can_post(self, user):
@@ -36,7 +40,7 @@ class Sanction(DatetimeModel):
 
     # Constantes
     TYPES = [[0, _("Posting disabled")], [1, _("Reading disabled")]]
-    DURATIONS = [[7200, _("2 hours")], [86400, _("1 day")], [86400 * 3, _("3 days")], [86400 * 7, _("1 week")]]
+    DURATIONS = [[7200, _("2 hours")], [86400, _("1 day")], [86400 * 3, _("3 days")], [86400 * 7, _("1 week")], [2592000, _("30 days")]]
 
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='sanctions', verbose_name=_("User"))
