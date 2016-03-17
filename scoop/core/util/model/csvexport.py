@@ -1,8 +1,9 @@
 # coding: utf-8
-import unicodecsv as csv
 import gzip
 import os
 from datetime import date, datetime
+
+import unicodecsv as csv
 
 
 def csv_dump(queryset, path, compress=False):

@@ -201,8 +201,15 @@ class IP(DatetimeModel, CoordinatesModel):
 
     @staticmethod
     def get_ip_value(ip_string):
-        """ Renvoyer la valeur décimale d'une IP """
-        return IPy.IP(ip_string).ip
+        """
+        Renvoyer la valeur décimale d'une IP
+
+        :param ip_string: chaîne de l'IP, de type A.B.C.D ou 128bits)
+        """
+        try:
+            return IPy.IP(ip_string).ip
+        except ValueError:
+            return 0
 
     @addattr(admin_order_field='ip', short_description=_("Hexadecimal"))
     def get_hex(self, group=2):

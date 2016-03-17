@@ -3,6 +3,7 @@ from decimal import Decimal, DivisionByZero
 from urllib.request import urlopen
 
 import requests
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy

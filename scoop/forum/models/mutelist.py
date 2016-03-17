@@ -36,17 +36,21 @@ class Mutelist(DataModel):
             muted.add(user.id)
             self.set_data('muted', muted, True)
 
-    def unmute(self, user, by_id=False):
-        """ Ne plus muter un utilisateur """
+    def unmute(self, user):
+        """
+        Ne plus muter un utilisateur
+
+        :param user: utilisateur à retirer de la liste des muets
+        """
         users = user if isinstance(user, [list, tuple, set]) else [user]
         muted = self.get_data('muted') or set()
         for user in users:
-            muted.discard(user if by_id else user.id)
+            muted.discard(user.id if hasattr(user, 'id') else user)
         self.set_data('muted', muted, True)
 
-    def reset(self):
+    def reset(self, save=True):
         """ Remettre à zéro la liste des ignorés """
-        self.set_data('muted', set(), True)
+        self.set_data('muted', set(), save=save)
 
     # Getter
     def is_muted(self, user):
@@ -62,7 +66,7 @@ class Mutelist(DataModel):
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        super(MuteList, self).save(*args, **kwargs)
+        super(Mutelist, self).save(*args, **kwargs)
 
     # Métadonnées
     class Meta:

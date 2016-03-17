@@ -23,7 +23,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
-
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.content.util.signals import content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel

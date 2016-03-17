@@ -2,10 +2,8 @@
 import logging
 
 from django.dispatch.dispatcher import receiver
-
 from scoop.content.models.content import Content
 from scoop.content.util.signals import comment_posted, content_updated
-
 
 __all__ = []
 

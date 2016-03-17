@@ -3,12 +3,36 @@ from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
-
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model
 from scoop.core.abstract.core.weight import WeightedModel
+from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySet
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
+
+
+class LabelManager(SingleDeleteQuerySet):
+    """ Manager des étiquettes """
+
+    # Getter
+    def visible(self):
+        """ Renvoyer les étiquettes publiées """
+        return self.filter(visible=True)
+
+    def primary(self):
+        """
+        Renvoyer les étiquettes principales
+
+        Les étiquettes principales correspondent à des sections de forum
+        """
+        return self.filter(primary=True)
+
+    def moderated_by(self, user):
+        """ Renvoyer les étiquettes modérées par un utilisateur """
+        if user.is_superuser:
+            return self
+        else:
+            return self.filter(moderators__pk=user.pk).distinct()
 
 
 class Label(TranslatableModel, UUID32Model, WeightedModel):
@@ -19,10 +43,11 @@ class Label(TranslatableModel, UUID32Model, WeightedModel):
     short_name = models.CharField(max_length=24, blank=False, unique=True, verbose_name=_("Short name"))
     slug = AutoSlugField(max_length=32, populate_from='short_name', unique=True, blank=True, editable=True, unique_with=('uuid',))
     primary = models.BooleanField(default=True, help_text=_("Can be set at thread creation"), verbose_name=_("Primary"))
-    status = models.BooleanField(default=False, help_text=_("Defines the status of the thread"), verbose_name=_("Status"))
+    status = models.BooleanField(default=False, help_text=_("Does the label define the status of the thread"), verbose_name=_("Status"))
     visible = models.BooleanField(default=True, verbose_name=_("Visible"))
     groups = models.ManyToManyField('auth.Group', blank=True, related_name='forum_labels', verbose_name=_("Groups allowed"))
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='+', limit_choices_to={'is_staff': True}, verbose_name=_("Moderators"))
+    objects = LabelManager.as_manager()
 
     # Getter
     def is_moderator(self, user):
