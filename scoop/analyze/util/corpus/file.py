@@ -1,18 +1,16 @@
 # coding: utf-8
-import unicodecsv as csv
 import time
 from os.path import join
-from zipfile import ZipFile, ZIP_DEFLATED
+from zipfile import ZIP_DEFLATED, ZipFile
 
+import unicodecsv as csv
 from django.utils.six import StringIO
-from textblob.classifiers import MaxEntClassifier
-
 from scoop.analyze.util.corpus.base import BaseCorpus
 from scoop.analyze.util.extractors import extractor_base
 from scoop.analyze.util.formatters import format_base
 from scoop.analyze.util.types import Dictionary, List
 from scoop.core.util.stream.directory import Paths
-
+from textblob.classifiers import MaxEntClassifier
 
 CORPUS_PATH = ['isolated', 'database', 'classifier', 'corpus']
 

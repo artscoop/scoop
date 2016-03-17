@@ -3,10 +3,9 @@
 from annoying.decorators import render_to
 from django.conf import settings
 from django.db import models
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
-
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -16,7 +15,6 @@ from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.data.dateutil import now
 from scoop.core.util.model.model import SingleDeleteManager, search_query
 from scoop.core.util.shortcuts import addattr
-
 
 __all__ = ['Message']
 
@@ -96,13 +94,9 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
         """ Renvoyer les informations GeoIP du message """
         return self.ip.get_geoip() if self.ip is not None else None
 
-    def get_recipients(self, only_active=True):
+    def get_participants(self, only_active=True):
         """ Renvoyer les destinataires du message """
-        return self.thread.get_recipients(only_active=only_active)
-
-    def get_recipients_to(self, only_active=True):
-        """ Renvoyer les destinataires ciblés par le message """
-        return self.thread.get_recipients(exclude=self.author, only_active=only_active)
+        return self.thread.get_participants(only_active=only_active)
 
     def get_similarity(self, message):
         """ Renvoyer l'indice de similarité entre ce message et un autre """
@@ -130,7 +124,6 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
         return len([True for message in messages if self.get_similarity(message) >= ratio])
 
     # Propriétés
-    recipients = property(get_recipients)
     geoip = property(get_geoip)
     html = property(get_text_html)
     ip_address = property(IPPointModel.get_ip_address, IPPointModel.set_ip)

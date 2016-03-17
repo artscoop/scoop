@@ -18,8 +18,7 @@ def get_open_weather(location, days=6, skip_cache=False):
             return cached
         # Appeler l'API de Open Weather Map et récupérer l'objet JSON
         url = "http://api.openweathermap.org/data/2.5/forecast/daily?lat={lat:.02f}&lon={lon:.02f}&cnt={days}&mode=json&units=metric&lang=fr"
-        url = url.format(lat=location.latitude, lon=location.longitude,
-                                                                                                                                           days=days)
+        url = url.format(lat=location.latitude, lon=location.longitude, days=days)
         resource = requests.get(url)
         value = resource.json()
         for item in value['list']:

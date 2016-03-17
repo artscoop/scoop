@@ -8,7 +8,6 @@ from django.db.models.query import QuerySet
 from django.utils.text import smart_split
 from django.utils.translation import ugettext_lazy as _
 
-
 # Liste statique de mots vides/stopwords
 STOPWORDS_FR = "-elle,-il,10ème,1er,1ère,2ème,3ème,4ème,5ème,6ème,7ème,8ème,9ème,a,afin,ai,ainsi,ais,ait,alors," \
                "après,as,assez,au,aucun,aucune,auprès,auquel,auquelles,auquels,auraient,aurais,aurait,aurez,auriez," \

@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.http.response import HttpResponse
-
 from scoop.content.models.attachment import Attachment
 from scoop.content.models.picture import Picture
 from scoop.core.util.django.formutil import handle_upload
@@ -40,6 +39,6 @@ def upload_attachment_ajax(request, **kwargs):
     if isinstance(upload_data, dict):
         attachment = Attachment.objects.create_from_file(upload_data['path'], **(kwargs.get('data', {})))
         # Ajouter l'image comme image temporaire de la session
-        request.session['transient_picture'] = picture.uuid
-        return picture
+        request.session['transient_picture'] = attachment.uuid
+        return attachment
     return HttpResponse()

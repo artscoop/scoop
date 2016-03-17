@@ -2,7 +2,6 @@
 """ Signaux de l'application User """
 from django.dispatch import Signal
 
-
 # Inscription
 registration_completed = Signal(providing_args=['request', 'user'])
 # Champs d'inscription : lever forms.ValidationError si invalide

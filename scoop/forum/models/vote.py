@@ -13,7 +13,13 @@ class VoteManager(SingleDeleteManager):
 
     # Actions
     def cast(self, author, poll, choice):
-        """ Voter dans un sondage """
+        """
+        Voter dans un sondage
+
+        :param author: utilisateur auteur du vote
+        :param poll: objet sondage
+        :param choice: indice de la réponse à la question
+        """
         if choice in poll.choices.all():
             vote, created = self.get_or_create(author=author, poll=poll, choice=choice)
             if created:

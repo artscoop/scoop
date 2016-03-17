@@ -60,4 +60,3 @@ class BaseCorpus:
     def save(self):
         """ Réécrit le corpus mis à jour """
         raise NotImplemented()
-
