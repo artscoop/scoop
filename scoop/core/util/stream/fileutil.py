@@ -226,6 +226,18 @@ def find_files_in_folder(path, extensions):
     return files
 
 
+def asset_file(*items):
+    """
+    Renvoyer une URL de fichier d'asset
+
+    Les fichiers d'assets sont dans STATIC_URL/tool/assets/...
+    :param items: éléments de nom de fichier relatifs au répertoire des assets
+    """
+    path = ['tool', 'assets']
+    path += items
+    return join(settings.STATIC_URL, *path)
+
+
 def get_free_disk_space(percent=False):
     """ Renvoyer l'espace disque disponible sur la partition du projet """
     s = os.statvfs(__file__)

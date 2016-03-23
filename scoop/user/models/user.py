@@ -49,8 +49,8 @@ class UserQuerySetMixin(object):
 
     def get_or_none(self, **kwargs):
         """ Renvoyer un utilisateur selon des paramètres de filtre, ou None """
-        user = self.filter(**kwargs)[:1]
-        return user.get() if user.exists() else None
+        user = self.filter(**kwargs)
+        return user.first() if user.exists() else None
 
     def get_or_raise(self, **kwargs):
         """
@@ -61,7 +61,7 @@ class UserQuerySetMixin(object):
         user = self.filter(**kwargs)
         if not user.exists():
             raise exception()
-        return user[0]
+        return user.first()
 
     def get_or_404(self, **kwargs):
         """ Renvoyer un utilisateur selon des paramètres de filtre, sinon lever un 404 """
@@ -84,7 +84,7 @@ class UserQuerySetMixin(object):
         try:
             return self.get(email__iexact=email)
         except User.DoesNotExist:
-            return False
+            return None
 
     def get_by_uuid(self, uuid, user=None, **kwargs):
         """ Renvoyer un utilisateur selon son uuid, sinon un utilisateur par défaut """
@@ -446,11 +446,20 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         self.set_password(self.password)
         self.save()
 
-    def reset_next_mail(self):
-        """ Avancer l'heure minimum du prochain mail recevable """
+    def reset_next_mail(self, snooze=None):
+        """
+        Avancer l'heure minimum du prochain mail recevable
+
+        :param snooze: nombre de minutes de retard pour le prochain mail
+        """
         from scoop.user.forms.configuration import ConfigurationForm
         # Calculer la date par rapport à la date actuelle
-        self.next_mail = timezone.now() + datetime.timedelta(seconds=ConfigurationForm.get_option_for(self, 'receive_interval'))
+        self.next_mail = timezone.now()
+        if snooze is None:
+            delta = datetime.timedelta(seconds=ConfigurationForm.get_option_for(self, 'receive_interval'))
+        else:
+            delta = datetime.timedelta(minutes=snooze)
+        self.next_mail += delta
         self.save(update_fields=['next_mail'])
 
     def set_inactive(self):

@@ -8,7 +8,8 @@ REGEX_DIGIT_SEQUENCE_4 = r"(\d\s*){4}"  # Séquence de 4+ chiffres
 REGEX_DIGIT_SEQUENCE_2 = r"(\d\s*){2}"  # Séquence de 2+ chiffres
 REGEX_DIGIT_PRESENCE_7 = r"(\d.*){7}"  # Présence de 7+ chiffres au total
 REGEX_CURRENCY_PRESENCE = r"((euro|dollar|yen)(s|[0-9]|\s|\W))|([€\$£¥])"
-REGEX_EMAIL_MARKERS = r"(@|ar+ow?ba)"
+REGEX_EMAIL_MARKERS = r"(@|ar+ow?ba)"  # TODO: Check
+REGEX_HYPERLINK_MARKER = r"(https?://.+)[\s\t\n]"  # TODO: Check
 
 
 def extractor_base(document, train_set=None):
@@ -20,4 +21,5 @@ def extractor_base(document, train_set=None):
     features['has_digits(7)'] = bool(re.search(REGEX_DIGIT_PRESENCE_7, document))
     features['has_curency()'] = bool(re.search(REGEX_CURRENCY_PRESENCE, document))
     features['has_email_markers()'] = bool(re.search(REGEX_EMAIL_MARKERS, document))
+    features['has_hyperlink()'] = bool(re.search(REGEX_HYPERLINK_MARKER, document))
     return features

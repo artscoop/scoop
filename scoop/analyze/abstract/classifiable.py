@@ -6,9 +6,7 @@ from scoop.analyze.util.corpus.file import FileCorpus
 
 
 class ClassifiableModel(models.Model):
-    """
-    Mixin de modèle dont le contenu peut être classifié
-    """
+    """ Mixin de modèle dont le contenu peut être classifié """
 
     __metaclass__ = ABCMeta
 

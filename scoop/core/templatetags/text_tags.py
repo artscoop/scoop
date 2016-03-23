@@ -32,7 +32,10 @@ def truncate_ellipsis(value, arg):
 def truncate_stuckkey(value, length=5):
     """
     Renvoyer une chaîne débarrassée de longues suites de la même lettre
+
     ex. « Saluuuuuuuut » devient « Salut »
+    :param value: texte en entrée
+    :param length: nombre de répétitions minimum d'une lettre à filtrer
     """
     re.DEBUG = settings.DEBUG
 
@@ -65,7 +68,7 @@ def truncate_longwords(value, length=27):
 
 @register.filter(name="disemvowel")
 def disemvowel(value):
-    """ Renvoyer le texte sans voyelles (+accents) """
+    """ Renvoyer le texte sans voyelles et sans accents """
     value = unidecode(value)
     value = value.replace(value, re.sub(r'[AEIOUYaeiouy]', '', value))
     return value
@@ -75,10 +78,14 @@ def disemvowel(value):
 def humanize_join(values, enum_count, singular_plural=None, as_links=False):
     """
     Renvoyer une représentation lisible d'une liste d'éléments
+
     Ex.:
         - a, b et 5 autres personnes
         - a, b, c et 1 autre carte
         - a, b et c
+    :param enum_count: nombre d'éléments à lister
+    :param singular_plural: nom du type d'objet affiché, au singulier et au pluriel, séparés par un point-virgule.
+    :param as_links: afficher les éléments listés comme des liens HTML
     """
     values = list(values)
     total = len(values)
@@ -106,6 +113,7 @@ def humanize_join(values, enum_count, singular_plural=None, as_links=False):
 def gender(value, text):
     """
     Renvoyer une chaîne dépendant du genre de l'objet
+
     :param value: un genre, 0=H, 1=F ou 2=ND
     :param text: une chaîne de trois textes séparés par des points-virgules
     """
@@ -115,5 +123,9 @@ def gender(value, text):
 
 @register.assignment_tag
 def compare(initial, other):
-    """ Renvoyer l'indice de similarité entre deux chaînes """
+    """
+    Renvoyer l'indice de similarité entre deux chaînes
+
+    :returns: un nombre entre 0 et 1
+    """
     return NGram.compare(initial, other)

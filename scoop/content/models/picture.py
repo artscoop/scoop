@@ -180,7 +180,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     """ Image """
 
     # Constantes
-    DATA_KEYS = ['colors']
+    DATA_KEYS = ['colors', 'clones']
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_("Author"))
@@ -337,6 +337,12 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def has_marker(self, name):
         """ Renvoyer si un marqueur est associé à l'image """
         return name.lower().strip() in self.get_markers()
+
+    def get_clones(self):
+        """ Renvoyer les clones directs de l'image """
+        uuids = self.get_data('clones', {})
+        clones = Picture.objects.filter(uuid__in=uuids)
+        return clones
 
     @addattr(boolean=True, short_description=_("Deletable transient"))
     def can_delete_transient(self):
@@ -651,12 +657,19 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             os.system('convert "%s" \(-clone 0 -blur 30x15\) -compose dissolve -define compose:args=20 -composite "%s"' % (self.image.path, self.image.path))
 
     def clone(self, description=None):
-        """ Dupliquer l'image """
+        """
+        Dupliquer l'image
+
+        :param description: texte descriptif de la nouvelle image
+        """
         if self.exists():
             clone = Picture(description=urljoin(settings.DOMAIN_NAME, self.image.url), title=self.title, author=self.author)
             clone.save()
             clone.description = (description or _("Clone of picture {uuid}")).format(uuid=self.uuid)
             clone.update_path(force_name=uuid_bits(48))
+            clones = set(self.get_data('clones') or {})
+            clones.add(clone.uuid)
+            self.set_data('clones', clones, save=True)
             return clone
 
     def update_from_description(self, *args, **kwargs):
@@ -674,6 +687,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 self.license = "1:N/A"
                 super(Picture, self).save(*args, **kwargs)
             self.description = ""
+            self.set_data('clones', {})
             return True
         return False
 
@@ -713,5 +727,6 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         verbose_name_plural = _('images')
         index_together = [['content_type', 'object_id']]
         permissions = [['can_upload_picture', "Can upload a picture"],
+                       ['can_download_description_picture', "Can download a picture using a URL in description"],
                        ['can_moderate_picture', "Can moderate pictures"]]
         app_label = 'content'

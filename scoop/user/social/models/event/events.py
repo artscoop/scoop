@@ -27,17 +27,17 @@ class OccurrenceQuerySetMixin(object):
         """ Renvoyer les événements fermés """
         return self.filter(status=1)
 
-    def get_from_now(self, hours=24):
+    def from_now(self, hours=24):
         """ Renvoyer les événements des n prochaines heures """
         now = timezone.now()
         then = now + datetime.timedelta(hours=hours)
         return self.filter(models.Q(start__range=(now, then)) | models.Q(end__range=(now, then)))
 
-    def get_finished(self):
+    def finished(self):
         """ Renvoyer les événements terminés """
         return self.filter(end__lt=timezone.now())
 
-    def get_by_city(self, city, **kwargs):
+    def by_city(self, city, **kwargs):
         """ Renvoyer les événements par ville """
         return self.filter(address__city=city, **kwargs)
 

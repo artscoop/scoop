@@ -11,6 +11,7 @@ from tinymce.widgets import TinyMCE
 
 class ContentForm(forms_.ModelForm):
     """ Formulaire de contenu """
+
     # Constantes
     TITLE_LENGTH_MIN = 4
     BODY_LENGTH_MIN = 32

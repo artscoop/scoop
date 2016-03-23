@@ -103,7 +103,7 @@ class DocumentExporter(object):
         # Écrire le fichier
         path = join(Paths.get_root_dir('files', 'legacy'), '{}.pickle'.format(name or self.name))
         with open(path, 'wb') as f:
-            pickle.dump(data, f, protocol=3)
+            pickle.dump(data, f, protocol=4)
         # Écrire un autre fichier pretty printed
         if debug:
             with io.open("{}.txt".format(path), "w", encoding="utf-8") as f:

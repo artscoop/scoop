@@ -3,6 +3,7 @@ from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model
 from scoop.core.abstract.core.weight import WeightedModel
@@ -34,6 +35,10 @@ class LabelManager(SingleDeleteQuerySet):
         else:
             return self.filter(moderators__pk=user.pk).distinct()
 
+    def get_by_slug(self, slug):
+        """ Renvoyer une étiquette selon son slug """
+        return self.get(slug=slug)
+
 
 class Label(TranslatableModel, UUID32Model, WeightedModel):
     """ Étiquette d'une discussion """
@@ -42,9 +47,9 @@ class Label(TranslatableModel, UUID32Model, WeightedModel):
     parent = models.ForeignKey('self', null=True, blank=False, limit_choices_to={'primary': True}, related_name='children', verbose_name=_("Parent"))
     short_name = models.CharField(max_length=24, blank=False, unique=True, verbose_name=_("Short name"))
     slug = AutoSlugField(max_length=32, populate_from='short_name', unique=True, blank=True, editable=True, unique_with=('uuid',))
-    primary = models.BooleanField(default=True, help_text=_("Can be set at thread creation"), verbose_name=_("Primary"))
+    primary = models.BooleanField(default=True, help_text=_("Can be set at thread creation"), verbose_name=pgettext_lazy('label', "Primary"))
     status = models.BooleanField(default=False, help_text=_("Does the label define the status of the thread"), verbose_name=_("Status"))
-    visible = models.BooleanField(default=True, verbose_name=_("Visible"))
+    visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('label', "Visible"))
     groups = models.ManyToManyField('auth.Group', blank=True, related_name='forum_labels', verbose_name=_("Groups allowed"))
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='+', limit_choices_to={'is_staff': True}, verbose_name=_("Moderators"))
     objects = LabelManager.as_manager()
@@ -75,6 +80,10 @@ class Label(TranslatableModel, UUID32Model, WeightedModel):
             return self.get_translation().name
         except MissingTranslation:
             return _("Unnamed")
+
+    def get_children(self):
+        """ Renvoie les descendants de l'étiquette """
+        return self.children.all()
 
     # Propriétés
     name = property(get_name)

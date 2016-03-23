@@ -39,6 +39,23 @@ class AccessManager(models.Manager):
         visits.query.group_by = ['user_id']
         return visits
 
+    def get_visit_count(self, path, siblings=False):
+        """
+        Renvoyer le nombre d'accès à une page ou aux pages enfants
+
+        :param path: URL relative à la racine du nom de domaine
+        :param siblings: doit-on également renvoyer les visites des pages enfants ?
+        """
+        from scoop.user.access.models.page import Page
+        # Siblings : Intégrer les pages ayant la même sous-URL
+        if not siblings:
+            visits = self.only('user').filter(page=Page.objects.get(path), user__isnull=False).order_by('-id').distinct()
+        else:
+            path_start = os.path.abspath(os.path.dirname(path))
+            visits = self.only('user').filter(page__path__istartswith=path_start, user__isnull=False).order_by('-id').distinct()
+        visits.query.group_by = ['user_id']
+        return visits.count()
+
     def by_user(self, user, limit=100):
         """
         Renvoyer les accès d'un utilisateur
@@ -135,6 +152,8 @@ class AccessManager(models.Manager):
 
 class Access(DatetimeModel, IPPointableModel):
     """ Entrée du journal d'accès """
+
+    # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="access_log", verbose_name=_("User"))
     page = models.ForeignKey('access.Page', null=False, related_name='access_log', verbose_name=_("Page"))
     referrer = models.CharField(max_length=192, verbose_name=_("Referrer"))

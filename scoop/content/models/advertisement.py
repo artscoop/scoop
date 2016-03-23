@@ -77,16 +77,19 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     network = models.CharField(choices=NETWORKS, default='na', max_length=4, db_index=True, verbose_name=_("Ad network"))
     objects = AdvertisementManager()
 
-    def render(self, view=True):
+    def render(self, request, view=True):
         """ Effectuer le rendu de l'annonce """
         template = Template(self.code)
-        context = RequestContext(default_request())
+        context = RequestContext(request)
         context.update({'ad': self})
-        # Incrémenter le compteur d'affichages
-        if view is True:
-            self.views += 1
-            self.save(update_fields=['views'])
-        return template.render(context)
+        if not request.user.has_perm('content.can_hide_advertisement'):
+            # Incrémenter le compteur d'affichages
+            if view is True:
+                self.views += 1
+                self.save(update_fields=['views'])
+            return template.render(context)
+        else:
+            return "{w}x{h} ad".format(w=self.width, h=self.height)
 
     @python_2_unicode_compatible
     def __str__(self):
@@ -101,4 +104,5 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     class Meta:
         verbose_name = _("advertisement")
         verbose_name_plural = _("advertisements")
+        permissions = [('can_hide_advertisements', "Can hide advertisements")]
         app_label = 'content'

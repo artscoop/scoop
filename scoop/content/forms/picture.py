@@ -11,6 +11,7 @@ from django.forms.models import modelformset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from form_utils.fields import ClearableImageField
+from rarfile import RarFile
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import CreationLicenseWidget, PictureInlineWidget
 from scoop.core.forms import BaseSearchForm
@@ -116,16 +117,23 @@ class ZipUploadForm(forms.Form):
         return self.cleaned_data
 
     def save_file(self, datafile):
-        """ Ouvrir le fichier uploadé et créer les images contenues """
+        """
+        Ouvrir le fichier uploadé et créer les images contenues
+
+        :param datafile: nom du fichier d'archive ou handle de fichier
+        """
         if isinstance(datafile, str):
             datafile = open(datafile, 'r')
         content_type = datafile.content_type
-        if content_type in {'application/zip', 'application/x-zip-compressed'}:
-            archive = ZipFile(datafile, 'r')
+        if content_type in {'application/zip', 'application/x-zip-compressed', 'application/x-rar-compressed'}:
+            if content_type in {'application/x-rar-compressed'}:
+                archive = RarFile(datafile, 'r')
+            else:
+                archive = ZipFile(datafile, 'r')
             names = archive.namelist()
             for name in names:
                 filename, fileext = os.path.splitext(name.lower())
-                if fileext in ['.png', '.jpg', '.jpeg']:
+                if fileext in ('.png', '.jpg', '.jpeg'):
                     item = archive.open(name)
                     with NamedTemporaryFile(prefix=slugify(filename), suffix=fileext, delete=False) as tfile:
                         tfile.write(item.read())
@@ -134,7 +142,7 @@ class ZipUploadForm(forms.Form):
                         picture.save()
             return self.cleaned_data
         else:
-            raise forms.ValidationError(_("File must be a zip file"))
+            raise forms.ValidationError(_("File must be a zip or rar file"))
 
     # Overrides
     def __init__(self, *args, **kwargs):

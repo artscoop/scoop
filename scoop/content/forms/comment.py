@@ -7,6 +7,7 @@ from scoop.content.models.comment import Comment
 
 class CommentForm(forms.ModelForm):
     """ Formulaire de commentaires """
+
     # Constantes
     BODY_LENGTH_MIN = 8
 
@@ -18,7 +19,8 @@ class CommentForm(forms.ModelForm):
     def clean_body(self):
         """ Valider le champ de texte """
         body = self.cleaned_data['body']
-        if len(striptags(body)) < CommentForm.BODY_LENGTH_MIN:
+        actual_content = striptags(body)
+        if len(actual_content) < CommentForm.BODY_LENGTH_MIN:
             raise forms.ValidationError(_("Your comment must be at least {length} characters long.").format(length=CommentForm.BODY_LENGTH_MIN))
         return body
 
@@ -27,7 +29,7 @@ class CommentForm(forms.ModelForm):
         data = super(CommentForm, self).clean()
         name, email, url = data['name'], data['email'], data['url']
         filled_count = (1 if name else 0) + (1 if email else 0) + (1 if url else 0)
-        if 1 <= filled_count <= 2:  # Les 3 champs doivent être remplis
+        if filled_count < 3:  # Les 3 champs doivent être remplis
             raise forms.ValidationError(_("You must fill all fields."))
 
     # Métadonnées

@@ -234,6 +234,7 @@ class IP(DatetimeModel, CoordinatesModel):
     def get_subnet_range(self, bits=24):
         """
         Renvoyer la plage d'IP (long) du sous réseau de l'IP
+
         :param bits: taille du masque, en bits
         """
         keep = 32 - bits
@@ -317,8 +318,9 @@ class IP(DatetimeModel, CoordinatesModel):
     def set_ip_address(self, ip_string, force_lookup=False, save=False):
         """
         Définir l'adresse IP de l'objet
+
         :param ip_string: chaîne du type A.B.C.D
-        :param force_lookup: forcer le lookup DNS si l'IP possède déjà des informations
+        :param force_lookup: forcer le lookup DNS même si l'instance IP possède déjà des informations
         :param save: Enregistrer l'IP directement après
         """
         try:

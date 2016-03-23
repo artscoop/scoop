@@ -24,6 +24,7 @@ class ContentTest(TestCase):
 
     def test_content_visibility(self):
         """ Tester la publication et la visibilité des contenus """
+
         # Créer des contenus variés
         content1 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True)
         content2 = Content.objects.post(self.user, 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(12), visible=False)

@@ -87,13 +87,19 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
         return is_new(self.user.date_joined, days)
 
     def get_access_log(self, since=None):
-        """ Renvoyer les accès de l'utilisateur """
-        from scoop.user.access.models import Access
-        # Renvoyer les accès depuis une certaine date ou tous
-        items = Access.objects.user_accesses(self.user)
-        if since is not None:
-            return items.filter(time__gt=Access.since(since))
-        return items
+        """
+        Renvoyer les accès de l'utilisateur
+
+        :param since: secondes, timedelta ou datetime
+        """
+        if is_installed('scoop.user.access'):
+            from scoop.user.access.models import Access
+            # Renvoyer les accès depuis une certaine date ou tous
+            items = Access.objects.user_accesses(self.user)
+            if since is not None:
+                return items.filter(time__gt=Access.since(since))
+            return items
+        return []
 
     def get_ips(self, as_ips=False):
         """ Renvoyer les IPs du profil """
@@ -138,7 +144,11 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
         return super(BaseProfile, self).get_pictures(exclude={'id': self.picture.id} if self.picture else {})
 
     def get_gravatar_url(self, size=r'160x160'):
-        """ Renvoyer l'URL du gravatar pour l'utilisateur """
+        """
+        Renvoyer l'URL du gravatar pour l'utilisateur
+
+        :param size: chaîne raw indiquant les dimensions du gravatar requis
+        """
         gravatar_url = "http://www.gravatar.com/avatar/{}?{}".format(hashlib.md5(self.user.email.lower()).hexdigest(), urllib.urlencode({'s': size}))
         return gravatar_url
 
@@ -162,7 +172,12 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
 
     # Setter
     def set_picture(self, picture, delete_previous=False):
-        """ Définir l'image principale du profil """
+        """
+        Définir l'image principale du profil
+
+        :param picture: instance de content.Picture
+        :param delete_previous: supprimer l'ancienne image ?
+        """
         previous = self.picture
         if previous is not picture:
             self.picture = picture

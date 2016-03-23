@@ -35,7 +35,7 @@ class SubscriptionManager(models.Manager):
     # Actions
     def subscribe(self, content, email):
         """ Ajouter un abonnement """
-        if is_installed('rogue'):
+        if is_installed('scoop.rogue'):
             from scoop.rogue.models import MailBlock
             if MailBlock.objects.is_blocked(email):
                 return False

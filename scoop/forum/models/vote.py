@@ -28,6 +28,8 @@ class VoteManager(SingleDeleteManager):
 
 class Vote(DatetimeModel, AuthoredModel):
     """ Réponse dans un sondage """
+
+    # Champs
     poll = models.ForeignKey('forum.Poll', null=False, related_name='votes', verbose_name=_("Poll"))
     choice = models.SmallIntegerField(default=None, blank=True, null=True, verbose_name=_("Choice"))
     objects = VoteManager()

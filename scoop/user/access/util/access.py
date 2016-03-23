@@ -23,6 +23,7 @@ STATUS_CHOICES = [
 def reverse_lookup(ip):
     """
     Résoudre une adresse IP en son nom inversé.
+
     @requires: dnspython3
     @param ip: chaîne de type A.B.C.D
     @return: dictionnaire aux clés "name" et "status"
@@ -30,8 +31,8 @@ def reverse_lookup(ip):
     address = reversename.from_address(ip)
     resolver = dnsresolver.Resolver()
     # Configurer le resolver
-    resolver.timeout = 1.5  # par serveur dns
-    resolver.lifetime = 4.5  # timeout total
+    resolver.timeout = 2.0  # par serveur dns
+    resolver.lifetime = 6.0  # timeout total
     # Demander le RRSet PTR, renvoyer timeout si timeout
     try:
         ptr_rrset = resolver.query(address, 'PTR').rrset
@@ -53,8 +54,9 @@ def reverse_lookup(ip):
 @lru_cache(16)
 def get_local_ip():
     """
-    Récupérer l'IP locale, normalement autre que 127.0.0.1, via l'interface
-    qui permet d'atteindre le DNS Google, à l'IP 8.8.8.8
+    Récupérer l'IP locale, normalement autre que 127.0.0.1
+
+    via l'interface qui permet d'atteindre le DNS Google, à l'IP 8.8.8.8
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -69,6 +71,7 @@ class VisitorIPManager(object):
     def get_ip_list(self):
         """
         Récupérer la liste des IPs
+
         @return: dictionnaire à clés IP dont la valeur est un timestamp
         """
         return cache.get('access.visitor.ip', dict())
@@ -76,6 +79,7 @@ class VisitorIPManager(object):
     def set_ip_list(self, data):
         """
         Définir la liste des IPs visiteurs
+
         @param data: liste d'IPs au format décimal
         """
         cache.set('access.visitor.ip', data or dict)
@@ -83,6 +87,7 @@ class VisitorIPManager(object):
     def add(self, request):
         """
         Ajouter une entrée à la liste d'accès par IP
+
         @param request: objet HttpRequest avec une IP valide
         """
         state = self.get_ip_list()
@@ -92,6 +97,7 @@ class VisitorIPManager(object):
     def clean(self, minutes=60):
         """
         Nettoyer les entrées plus anciennes que n minutes
+
         @param minutes: ancienneté minimum en minutes
         """
         limit = now() - minutes * 60

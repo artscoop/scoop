@@ -6,6 +6,7 @@ from scoop.content.models.album import Album
 
 class AlbumForm(forms.ModelForm):
     """ Formulaire d'albums """
+
     # Constantes
     NAME_LENGTH_MIN = 2
     DEFAULT_NAME = _("{author}'s album")

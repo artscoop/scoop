@@ -31,6 +31,7 @@ class CityQuerySetMixin(object):
     def city(self):
         """
         Renvoyer les villes uniquement
+
         :type self: django.db.models.Manager
         """
         return self.filter(city=True)
@@ -38,6 +39,7 @@ class CityQuerySetMixin(object):
     def by_level(self, country, level):
         """
         Renvoyer les éléments d'un niveau administratif
+
         :type self: django.db.models.Manager
         """
         return self.filter(country=country, level=level)
@@ -45,6 +47,7 @@ class CityQuerySetMixin(object):
     def by_name(self, name, city=True, **kwargs):
         """
         Renvoyer les villes portant un nom
+
         :type self: django.db.models.Manager
         """
         fields = ['alternates__ascii', 'country__alternates__name']
@@ -59,51 +62,71 @@ class CityQuerySetMixin(object):
     def by_population(self, country_codes, value, operator=">="):
         """
         Renvoyer les villes correspondant à un critère sur leur population
+
         :type self: django.db.models.Manager
         :param country_codes: liste de codes pays pour lesquels filtrer
         :param value: nombre d'habitants
         :param operator: modifie la sélection par rapport à un nombre d'habitants
             opérateur entre =, <, >, <= et >=
         """
-        criteria = {'population__{operator}'.format(operator=self.OPS.get(operator, 'gte')): value}
+        criteria = {'population__{operator}'.format(operator=CityQuerySetMixin.OPS.get(operator, 'gte')): value}
         return self.filter(country__code2__in=make_iterable(country_codes, list), **criteria)
 
     def by_country(self, country):
         """
         Renvoyer les éléments dans un pays
+
         :type self: django.db.models.Manager
+        :param country: code ISO ou instance de scoop.location.Country
         """
         return self.filter(country__code2__iexact=country) if isinstance(country, str) else self.filter(country__id=country.id)
 
     def in_box(self, box):
         """
         Renvoyer les villes uniquement situées dans un rectangle
+
         :type self: django.db.models.Manager
+        :param box: [lat1, lon1, lat2, lon2]
         """
         polygon = Polygon.from_bbox([box[1], box[0], box[3], box[2]])
         return self.filter(position__contained=polygon, city=True)
 
     def in_square(self, point, km):
-        """ Renvoyer les villes uniquement dans un carré avec un centre et une longueur de demi-diagonale """
+        """
+        Renvoyer les villes uniquement dans un carré avec un centre et une longueur de demi-diagonale
+
+        :param point: [lat, lon]
+        :param km: distance d'un coin au centre du carré, en km
+        """
         return self.in_box(City.get_bounding_box_at(point, km))
 
     def in_radius(self, point, km):
         """
         Renvoyer les villes uniquement dans un cercle de n km autour d'un point
+
         :type self: django.db.models.Manager
+        :param point: [lat, lon]
+        :param km: distance max au point en km
         """
         center = Point(point[1], point[0], srid=CoordinatesModel.SRID)
         return self.filter(position__distance_lt=(center, D(km=km)))
 
     def biggest(self, point, km=20):
-        """ Renvoyer la ville la plus peuplée à n km autour d'un point """
-        cities = self.in_radius(point, km).order_by('-population')
+        """ Renvoyer la ville la plus peuplée à n km autour d'un point
+
+        :param km: distance au point central, en km
+        :param point: point central de recherche
+        """
+        cities = self.in_square(point, km).order_by('-population')
         return cities.first() if cities.exists() else None
 
     def find_by_name(self, point, name):
         """
         Renvoyer une ville la plus proche d'un point, portant un nom si possible
+
         :type self: django.db.models.Manager, CityQuerySetMixin
+        :param point: [lat, lon] autour duquel chercher la ville
+        :param name: nom de ville à retrouver
         """
         name = unidecode(name).lower().strip() if name else '*'
         # Renvoyer le résultat en cache
@@ -138,6 +161,7 @@ class City(CoordinatesModel, PicturableModel):
 
     # Constantes
     LOOKUP_CACHE_TIMEOUT = 1800
+    AUTO_PARENT_CACHE_KEY = "location.city.ap:{id}.{level}"
 
     # Champs
     id = models.IntegerField(primary_key=True, null=False, verbose_name=_("Geonames ID"))
@@ -161,7 +185,12 @@ class City(CoordinatesModel, PicturableModel):
     # Getter
     @staticmethod
     def named(name):
-        """ Renvoyer une ville nommée *name* """
+        """
+        Renvoyer une ville nommée *name*
+
+        :param name: nom de ville
+        :returns: la première ville de la base de données qui possède le nom passé
+        """
         return City.objects.city().get_by_name(name)
 
     def get_children(self, city_only=False):
@@ -174,9 +203,14 @@ class City(CoordinatesModel, PicturableModel):
         return City.objects.filter(parent=self.parent, country=self.country, type=self.type, **kwargs).exclude(pk=self.pk)
 
     def get_with_common_ancestor(self, level=None, city_only=True):
-        """ Renvoyer les villes avec le même parent de niveau n """
+        """
+        Renvoyer les villes avec le même parent de niveau n
+
+        :param city_only: Renvoyer uniquement des villes
+        :param level: renvoyer les villes qui ont le même parent commun de niveau n
+        """
         level = self.country.subregional_level if level is None else level
-        level = self.level if (level > self.level and self.level >= 1) else level
+        level = self.level if level > self.level >= 1 else level
         criteria = {'a{}'.format(idx): getattr(self, 'a{}'.format(idx)) for idx in range(1, level + 1)}
         if city_only is True:
             criteria['city'] = True
@@ -187,14 +221,18 @@ class City(CoordinatesModel, PicturableModel):
         return _("{city}, {parent}, {country}").format(city=self.get_name(), parent=self.get_auto_parent(), country=self.country)
 
     def get_auto_parent(self, level=None):
-        """ Renvoyer l'élément parent le plus pertinent selon le pays """
+        """
+        Renvoyer l'élément parent le plus pertinent selon le pays
+
+        :param level: Niveau administratif de l'ancêtre/parent
+        :type level: int
+        """
         from scoop.location.models import Country
         # Pas de parent direct, renvoyer immédiatement le pays
         if self.parent_id is None:
             return self.country
         # Rechercher un résultat en cache
-        CACHE_KEY = "location.city.ap:{id}".format(id=self.id)
-        result = cache.get(CACHE_KEY, None)
+        result = cache.get(City.AUTO_PARENT_CACHE_KEY.format(id=self.id, level=level), None)
         if result is not None:
             parent = City.objects.filter(id=result) or Country.objects.filter(id=result)  # On a en cache soit un id de ville soit de pays
             return parent.first()
@@ -206,17 +244,26 @@ class City(CoordinatesModel, PicturableModel):
         # Si parent non trouvé, renvoyer le pays. Sinon mettre en cache
         if parent is None:
             parent = self.country
-        cache.set(CACHE_KEY, parent.pk, City.LOOKUP_CACHE_TIMEOUT)  # parent peut être None
+        cache.set(City.AUTO_PARENT_CACHE_KEY.format(id=self.id, level=level), parent.pk, City.LOOKUP_CACHE_TIMEOUT)  # parent peut être None
         return parent
 
     def get_close_cities(self, km, circle=False):
-        """ Renvoyer les villes les plus proches à n km """
-        cities = City.objects.in_radius(self.get_point(), km).filter(city=True)
-        return cities
+        """
+        Renvoyer les villes les plus proches à n km
+
+        :param circle: renvoyer les villes dans un cercle de n km ?
+        :param km: distance max en km
+        """
+        cities = City.objects.city()
+        return cities.in_radius(self.get_point(), km) if circle else cities.in_box(self.get_point(), km)
 
     def get_biggest_close_city(self, km=30):
-        """ Renvoyer la ville la plus proche dans les n km """
-        return City.objects.biggest(self.get_point(), km)
+        """
+        Renvoyer la ville la plus proche dans les n km
+
+        :param km: distance maximum
+        """
+        return City.objects.city().biggest(self.get_point(), km)
 
     def get_weather_forecast(self):
         """ Renvoyer la prévision météo de la ville """
@@ -313,6 +360,7 @@ class City(CoordinatesModel, PicturableModel):
 
 class CityName(models.Model):
     """ Nom alternatif de ville """
+
     # Champs
     id = models.IntegerField(primary_key=True, verbose_name=_("Alternate ID"))
     city = models.ForeignKey('location.City', null=False, on_delete=models.CASCADE, related_name='alternates', verbose_name=_("City"))
