@@ -8,10 +8,12 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.util.shortcuts import addattr
+from scoop.core.util.stream.fileutil import asset_file
 
 
 class CommentableModel(models.Model):
     """ Objet pouvant recevoir et gérer des commentaires """
+
     # Champs
     commentable = models.BooleanField(default=True, db_index=True, verbose_name=_("Commentable"))
     comment_count = models.IntegerField(default=0, verbose_name=_("Comments"))
@@ -28,13 +30,13 @@ class CommentableModel(models.Model):
         comments = self.comments.filter(visible=True).order_by('id')
         return comments.earliest('id') if comments.exists() else None
 
-    @addattr(short_description=mark_safe('<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
+    @addattr(short_description=mark_safe('<img src="{path}">'.format(path=asset_file('icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
     def get_comments(self, reverse=False):
         """ Renvoyer les commentaires de l'objet """
         result = self.comments.select_related().filter(visible=True)
         return result.order_by('time' if reverse else '-time')
 
-    @addattr(short_description=mark_safe('<img src="{path}">'.format(path=join(settings.STATIC_URL, 'tool', 'assets', 'icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
+    @addattr(short_description=mark_safe('<img src="{path}">'.format(path=asset_file('icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
     def get_comment_count(self):
         """ Renvoyer le nombre de commentaires de l'objet """
         return self.comments.filter(visible=True).count()

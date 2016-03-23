@@ -1,3 +1,4 @@
 # coding: utf-8
-from scoop.user.social.admin.admin import (EventAdmin, EventCategoryAdmin, EventCategoryInlineAdmin, FriendGroupAdmin, FriendListAdmin, GroupAdmin, LikeAdmin,
-                                           PostAdmin)
+from .admin import (GroupAdmin, LikeAdmin, PostAdmin)
+from .event import (EventAdmin, EventCategoryAdmin, EventCategoryInlineAdmin)
+from .friend import (FriendGroupAdmin, FriendListAdmin)

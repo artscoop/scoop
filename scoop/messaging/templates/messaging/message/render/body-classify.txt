@@ -1,2 +1,0 @@
-{{message.text}}
-usr-prf-age={{message.author.profile.age}}

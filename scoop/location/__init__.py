@@ -1,5 +1,5 @@
 # coding: utf-8
-__version__ = (1, 2015, 3, 8)
+__version__ = (1, 2016, 3, 9)
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop
 

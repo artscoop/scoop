@@ -82,7 +82,7 @@ class Participant(DatetimeModel, DataModel):
     thread = models.ForeignKey("forum.Thread", null=False, related_name='participants', on_delete=models.CASCADE, verbose_name=_("Thread"))
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('participant', "Is active"))
     unread = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('thread', "Unread"))
-    unread_date = models.DateTimeField(blank=True, null=True, default=None, verbose_name=_("Unread time"))
+    unread_date = models.DateTimeField(blank=True, null=True, default=None, verbose_name=pgettext_lazy('thread', "Unread time"))
     counter = models.PositiveIntegerField(default=0, db_index=True, verbose_name=_("Message count"))
     objects = ParticipantManager()
 

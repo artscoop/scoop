@@ -29,7 +29,7 @@ class AccessMiddleware(object):
 
     def process_response(self, request, response):
         """ Traiter l'objet Response renvoyé par la vue """
-        if response is not None and self.HTTP_MIN <= response.status_code <= self.HTTP_MAX:
+        if response is not None and AccessMiddleware.HTTP_MIN <= response.status_code <= AccessMiddleware.HTTP_MAX:
             # Ne rien faire si un chemin blacklisté apparaît dans l'URL
             if [True for i in AccessMiddleware.ACCESS_LOG_BLACKLIST if request.path.startswith(str(i))]:
                 return response

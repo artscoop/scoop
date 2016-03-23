@@ -62,7 +62,7 @@ class DataModel(models.Model):
             else:
                 try:
                     info = str(value)
-                except:
+                except ValueError:
                     info = _("Unknown data")
             output = "{key} -> {info}".format(key=key, info=info)
             lines.append(output)

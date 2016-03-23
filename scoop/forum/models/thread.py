@@ -5,6 +5,7 @@ from django.db.models import permalink
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.model.model import SingleDeleteQuerySet
@@ -25,10 +26,10 @@ class ThreadQuerySet(SingleDeleteQuerySet):
         return self.filter(visible=False)
 
 
-class Thread(DatetimeModel, UUID64Model, LabelledModel):
+class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel):
 
     # Constantes
-    DATA_KEYS = ['notes']
+    DATA_KEYS = ['notes', 'similar_threads']
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='public_threads', verbose_name=_("Author"))

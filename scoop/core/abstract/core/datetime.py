@@ -65,7 +65,11 @@ class DatetimeModel(models.Model):
 
     @staticmethod
     def since(delta=None):
-        """ Renvoyer une date ancienne d'un certain offset en secondes ou en timedelta """
+        """
+        Renvoyer une date ancienne d'un certain offset en secondes ou en timedelta
+
+        :param delta: différence en timedelta, en secondes, ou date
+        """
         if delta is not None:
             td = type(delta)
             if td == datetime.timedelta:
@@ -74,6 +78,7 @@ class DatetimeModel(models.Model):
                 timestamp = now_() - delta
             elif td == datetime.datetime:
                 timestamp = DatetimeModel.get_timestamp(delta)
+                timestamp = min(now_(), timestamp)
             return timestamp
         return now_()
 
@@ -86,27 +91,51 @@ class DatetimeModel(models.Model):
 
     @staticmethod
     def make_expiry(days, timestamp=True):
-        """ Renvoyer une date d'expiration dans le futur, en timestamp """
+        """
+        Renvoyer une date d'expiration dans le futur, en timestamp
+
+        :param days: nombre de jours à partir de maintenant
+        :param timestamp: renvoyer la date future en timestamp plutôt qu'en datetime
+        :type days: int
+        :type timestamp: bool
+        """
         value = from_now(days=days)
         value = DatetimeModel.get_timestamp(value) if timestamp else value
         return value
 
     @addattr(boolean=True, admin_order_field='time', short_description=_("New"))
     def is_new(self, days=7, hours=0, minutes=0):
-        """ Renvoyer si le timestamp de l'objet est récent """
+        """
+        Renvoyer si le timestamp de l'objet est récent
+
+        :param days: nombre de jours
+        :param hours: nombre d'heures
+        :param minutes: nombre de minutes
+        :type days: int
+        :type hours: int
+        :type minutes: int
+        """
         return self.time >= now_() - days * DELTA['day'] - hours * DELTA['hour'] - minutes * DELTA['minute']
 
     # Setter
     def set_datetime(self, value):
         """
         Définir le timestamp
+
         :param value: date/heure
         :type value: datetime.datetime
         """
         self.time = time.mktime(value.timetuple())
 
     def add_time(self, seconds=0, minutes=0, hours=0, days=0):
-        """ Avancer le timestamp d'un offset """
+        """
+        Avancer le timestamp d'un offset
+
+        :param days: nombre de jours
+        :param hours: nombre d'heures
+        :param minutes: nombre de minutes
+        :param seconds: nombre de secondes
+        """
         self.time += (seconds + days * DELTA['day'] + hours * DELTA['hour'] + minutes * DELTA['minute'])
 
     # Propriétés

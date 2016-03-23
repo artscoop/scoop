@@ -22,6 +22,7 @@ class ProfilerMiddleware(object):
     """ Middleware de profilage """
     # Constantes
     HTML_SIGNAL = "<!-- debug -->"
+    profiler = None
 
     def process_view(self, request, callback, callback_args, callback_kwargs):
         """ Traiter la vue """
@@ -32,7 +33,7 @@ class ProfilerMiddleware(object):
 
     def process_response(self, request, response):
         """ Traiter la réponse """
-        if settings.DEBUG and request.user.is_staff and hasattr(self, 'profiler'):
+        if settings.DEBUG and request.user.is_staff and self.profiler is not None:
             self.profiler.create_stats()
             stats = self.profiler.getstats()
             stats = sorted(stats, key=lambda k: -k.inlinetime)

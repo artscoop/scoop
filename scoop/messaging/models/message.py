@@ -9,6 +9,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
+from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -112,12 +113,13 @@ class MessageManager(SingleDeleteManager):
         return data
 
 
-class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
+class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, ClassifiableModel):
     """ Message de discussion """
 
     # Constantes
     DATA_KEYS = {'pasted', 'similar'}  # clés autorisées par datamodel
     SPAM_THRESHOLD = 0.83
+    classifications = {'spam': ('y', 'n')}
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="messages_sent", on_delete=models.SET_NULL, verbose_name=_("Author"))
@@ -186,10 +188,9 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel):
         """ Renvoyer le nombre de messages similaires dans un queryset de messages """
         return len([True for message in messages if self.get_similarity(message) >= ratio])
 
-    @render_to("messaging/message/body-classify.txt")
-    def _get_text_classify(self):
+    def get_document(self):
         """ Renvoyer une représentation tokenisée du texte de message pour la classification """
-        return {'message': self}
+        return self.text
 
     # Propriétés
     recipients = property(get_recipients)

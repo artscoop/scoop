@@ -24,9 +24,11 @@ class CommentTest(TestCase):
         self.user = User.objects.create(username='commentuser', email='foo@foobar1.foo')
         self.user.set_password('commentuser')
         self.user.save()
+
         # Créer des contenus commentables ou pas
         self.content1 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=True)
         self.content2 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=False)
+
         # Commenter l'utilisateur et tester l'état des commentaires
         self.comment1 = Comment.objects.comment(None, self.user, self.user, "Commentaire 1", force=True)
         self.comment2 = Comment.objects.comment(None, self.user, self.user, "Commentaire 2", force=True)
@@ -38,6 +40,7 @@ class CommentTest(TestCase):
 
     def test_commentability(self):
         """ Tester que les commentaires ont été créés ou non """
+
         self.assertIsNotNone(self.comment1, "this comment should be created")
         self.assertIsNotNone(self.comment2, "this comment should be created")
         self.assertIsNotNone(self.comment3, "this comment should be created")
@@ -48,4 +51,5 @@ class CommentTest(TestCase):
 
     def test_comment_status(self):
         """ Test properties of comments """
+
         self.assertEqual(self.comment1.get_name(), self.user.get_short_name(), "comment's name should be {0}, is {1} instead".format(self.user.get_short_name(), self.comment1.get_name()))

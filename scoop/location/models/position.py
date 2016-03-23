@@ -5,6 +5,7 @@ from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.contrib.gis.db.models.manager import GeoManager
 from django.contrib.gis.geos.point import Point
+from django.contrib.gis.measure import D
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -17,19 +18,36 @@ class PositionManager(SingleDeleteManager, GeoManager):
 
     # Getter
     def in_box(self, box, since=3600):
-        """ Renvoyer les positions dans une zone depuis un temps en secondes """
-        min_time = Position.now() - datetime.timedelta(seconds=since)
-        return Position.objects.filter(time__gt=min_time, latitude__range=(box[0], box[2]), longitude__range=(box[1], box[3]))
+        """
+        Renvoyer les positions dans une zone depuis un temps en secondes
 
-    def get_in_circle(self, center, radius, since=3600):
-        """ Renvoyer les positions dans une zone circulaire depuis un temps en secondes """
-        box = Position.get_bounding_box_at(center, radius)
-        positions = self.in_box(box, since)
-        return [position for position in positions if position.get_distance(center) <= radius]
+        :param box: [lat1, lon1, lat2, lon2]
+        :param since: renvoyer les mises à jour plus récentes que n secondes
+        """
+        min_time = Position.now() - since
+        return self.filter(time__gt=min_time, latitude__range=(box[0], box[2]), longitude__range=(box[1], box[3]))
+
+    def in_radius(self, point, km, since=3600):
+        """
+        Renvoyer les positions dans une zone circulaire depuis un temps en secondes
+
+        :param point: centre de recherche des positions
+        :param km: rayon de recherche en km
+        :param since: renvoyer les résultats mis à jour plus récemment que n secondes
+        """
+        min_time = Position.now() - since
+        center = Point(point[1], point[0], srid=CoordinatesModel.SRID)
+        return self.filter(time__gt=min_time, position__distance_lt=(center, D(km=km)))
 
     # Setter
     def set_position(self, user, lat=0.0, lon=0.0):
-        """ Définir la position d'un utilisateur """
+        """
+        Définir la position d'un utilisateur
+
+        :param user: utilisateur
+        :param lat: latitude WGS84
+        :param lon: longitude WGS84
+        """
         position, _ = self.get_or_create(user=user)
         position.update(time=position.now(), position=Point(x=lon, y=lat))
         position.save()
@@ -37,8 +55,12 @@ class PositionManager(SingleDeleteManager, GeoManager):
 
     # Maintenance
     def purge(self, days=2, user=None):
-        """ Supprimer les positions plus anciennes que n jours """
-        max_time = Position().now() - datetime.timedelta(days=days)
+        """ Supprimer les positions plus anciennes que n jours
+
+        :param user: utilisateur
+        :param days: nombre de jours d'ancienneté minimum
+        """
+        max_time = Position().now() - days * 86400
         self.filter(time__lt=max_time, user=user).delete()
 
 
@@ -51,7 +73,11 @@ class Position(CoordinatesModel, DatetimeModel):
 
     # Getter
     def get_close_users(self, km):
-        """ Renvoyer les utilisateurs proches à n km """
+        """
+        Renvoyer les utilisateurs proches à n km
+
+        :param km: distance max en km
+        """
         return Position.get_users_in(self.get_bounding_box(km))
 
     # Overrides

@@ -19,7 +19,8 @@ def generate_thumbnails(sender, fieldfile, **kwargs):
 @receiver(pre_save, sender=Picture)
 def picture_presave(sender, instance, **kwargs):
     """ Traiter une image avant qu'elle soit enregistrée """
-    instance.update_from_description()
+    if instance.author is None or instance.author.has_perm('content.can_download_description_picture'):
+        instance.update_from_description()
 
 
 @receiver(post_save, sender=Picture)

@@ -44,7 +44,7 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel, DataMode
     answers = LineListField(default="Yes\nNo", blank=False, help_text=_("Enter one answer per line"), verbose_name=_("Answers"))
     slug = AutoSlugField(max_length=100, populate_from='title', unique=True, blank=True, editable=False, unique_with=('id',))
     closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('poll', "Closed"))
-    content = models.ForeignKey('content.Content', null=True, blank=True, on_delete=models.SET_NULL, related_name='polls', verbose_name=_("Content"))
+    thread = models.ForeignKey('forum.Thread', null=True, blank=True, on_delete=models.SET_NULL, related_name='polls', verbose_name=_("Thread"))
     objects = PollManager()
 
     # Getter
