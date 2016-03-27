@@ -29,6 +29,7 @@ from django.utils.translation import pgettext_lazy
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
+from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -140,7 +141,7 @@ class PictureQuerySetMixin(object):
     @staticmethod
     def clean_thumbnails():
         """ Supprimer les miniatures """
-        clean_thumbnails()
+        return clean_thumbnails()
 
     def clear_markers(self):
         """ Supprimer les marqueurs des images du queryset """
@@ -176,7 +177,7 @@ class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manag
         return self.filter(deleted=True, **kwargs)
 
 
-class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel, DataModel):
+class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel, DataModel, ACLModel):
     """ Image """
 
     # Constantes
@@ -184,7 +185,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_("Author"))
-    image = WebImageField(upload_to=get_image_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64),
+    image = WebImageField(upload_to=ACLModel.get_acl_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64),
                           help_text=_("Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_("Image"))
     title = models.CharField(max_length=96, blank=True, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"), help_text=_("Description text. Enter an URL here to download a picture"))
@@ -277,6 +278,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             else:
                 return os.path.splitext(os.path.basename(self.image.path))[0]
         return pgettext_lazy('file', "None")
+
+    def _get_file_attribute_name(self):
+        """ Renvoyer le nom de l'attribut fichier """
+        return 'image'
 
     @addattr(short_description=_("Extension"))
     def get_extension(self):
@@ -446,32 +451,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         else:
             Picture.objects.filter(pk=self.pk).update(width=None, height=None)
 
-    def update_path(self, force_name=None):
-        """
-        Déplacer l'image vers son chemin par défaut
-        :param force_name: Forcer un nouveau nom de fichier
-        :type force_name: str
-        """
-        if self.exists():
-            # Supprimer les miniatures de l'image
-            self.clean_thumbnail()
-            # Changer la position du fichier
-            new_path = get_image_upload_path(self, self.get_filename(), update=True)
-            basename, ext = os.path.splitext(self.get_filename())
-            basename = force_name if force_name else basename
-            filename = "{}{}".format(slugify(basename), ext)
-            output_file = os.path.join(new_path, filename)
-            old_path = self.image.name
-            target_path = get_image_upload_path(self, output_file)
-            # Puis recréer l'image dans le nouveau chemin
-            if target_path != old_path:  # https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
-                with File(self.image) as original:
-                    self.image.open()
-                    self.image.save(output_file, original)
-                    self.save(force_update=True)
-                default_storage.delete(old_path)
-                return True
-        return False
+    def prepare_file_path_update(self):
+        """ Préparer au déplacement du nom de fichier """
+        self.clean_thumbnail()
 
     def set_correct_extension(self):
         """

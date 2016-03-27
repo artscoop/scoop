@@ -8,9 +8,11 @@ from django.utils.translation import ugettext_lazy as _
 class PrivacyModel(models.Model):
     """ Mixin de modèle avec contrôle d'accès """
 
+    # Constantes
+    ACCESS_TYPES = [[0, _("Public")], [1, _("Friends")], [2, _("Personal")], [3, _("Friend groups")], [4, _("Registered users")]]
+    PUBLIC, FRIENDS, PERSONAL, GROUPS, REGISTERED = 0, 1, 2, 3, 4
+
     if apps.is_installed('scoop.user.social'):
-        # Constantes
-        ACCESS_TYPES = [[0, _("Public")], [1, _("Friends")], [2, _("Personal")], [3, _("Friend groups")], [4, _("Registered users")]]
 
         # Champs
         access = models.SmallIntegerField(choices=ACCESS_TYPES, default=0, db_index=True, verbose_name=_("Access"))
@@ -29,18 +31,18 @@ class PrivacyModel(models.Model):
             """ Renvoyer si un utilisateur a accès au contenu """
             if user.has_perm('content.can_access_all_content'):
                 return True
-            elif self.access == 0:  # Public
+            elif self.access == PrivacyModel.PUBLIC:  # Public
                 return True
-            elif self.access == 1:  # Ami avec l'auteur
+            elif self.access == PrivacyModel.FRIENDS:  # Ami avec l'auteur
                 from scoop.user.social.models import FriendList
                 # C'est un succès si une amitié existe
                 if FriendList.objects.exists(user, self.author):
                     return True
-            elif self.access == 2 and user == self.author:  # Seulement moi
+            elif self.access == PrivacyModel.PERSONAL and user == self.author:  # Seulement moi
                 return True
-            elif self.access == 3:  # Dans un groupe d'amis autorisé
+            elif self.access == PrivacyModel.GROUPS:  # Dans un groupe d'amis autorisé
                 return self._is_user_granted_in_group_grants(user)
-            elif self.access == 4:  # Membres connectés
+            elif self.access == PrivacyModel.REGISTERED:  # Membres connectés
                 return user.is_authenticated()
             return False
 
@@ -54,6 +56,7 @@ class AccessLevelModel(models.Model):
 
     # Constantes
     LEVEL_TYPES = [[0, _("Public")], [1, _("Members only")], [2, _("Staff only")]]
+    PUBLIC, REGISTERED, STAFF = 0, 1, 2
 
     # Champs
     access_level = models.SmallIntegerField(choices=LEVEL_TYPES, default=0, db_index=True, verbose_name=_("Access level"))
@@ -61,11 +64,11 @@ class AccessLevelModel(models.Model):
     # Getter
     def is_accessible(self, user):
         """ Renvoyer si un utilisateur a accèss au contenu """
-        if self.access_level == 0:  # Public
+        if self.access_level == AccessLevelModel.PUBLIC:  # Public
             return True
-        elif self.access_level == 1:  # Authentifié
+        elif self.access_level == AccessLevelModel.REGISTERED:  # Authentifié
             return user.is_authenticated()
-        elif self.access_level == 2:  # Staff
+        elif self.access_level == AccessLevelModel.STAFF:  # Staff
             return user.is_staff
         return False
 

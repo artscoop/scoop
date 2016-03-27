@@ -13,6 +13,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext, pgettext_lazy
 from scoop.content.util.attachment import get_attachment_upload_path
+from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.user.authored import AuthoredModel
@@ -68,12 +69,12 @@ class AttachmentManager(SingleDeleteManager):
             pass
 
 
-class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
+class Attachment(DatetimeModel, AuthoredModel, UUID64Model, ACLModel):
     """ Pièce jointe fichier """
 
     # Champs
     group = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_("Group"))
-    file = models.FileField(max_length=192, upload_to=get_attachment_upload_path, verbose_name=_("File"), help_text=_("File to attach"))
+    file = models.FileField(max_length=192, upload_to=ACLModel.get_acl_upload_path, verbose_name=_("File"), help_text=_("File to attach"))
     name = models.CharField(max_length=64, blank=True, verbose_name=_("Name"))
     description = models.TextField(blank=True, default="", verbose_name=_("Description"))
     mimetype = models.CharField(max_length=40, blank=True, verbose_name=_("MIME type"))
@@ -99,6 +100,10 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
         """ Renvoyer le nom du fichier """
         return os.path.basename(self.file.name)
 
+    def _get_file_attribute_name(self):
+        """ Renvoyer le nom de l'attribut fichier """
+        return 'file'
+
     @addattr(short_description=_("Size"))
     def get_file_size(self):
         """ Renvoyer la taille du fichier au format lisible """
@@ -113,17 +118,6 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model):
         return self.content_object is None
 
     # Setter
-    def update_path(self):
-        """ Déplacer le fichier vers son chemin par défaut """
-        new_path = get_attachment_upload_path(self, "", update=True)
-        filename = self.get_filename()
-        output = os.path.join(settings.MEDIA_ROOT, new_path, filename)
-        output_file = os.path.join(new_path, filename)
-        os.renames(self.file.path, output)
-        # Recréer l'image depuis le nouveau chemin
-        self.file = output_file
-        self.save()
-
     def detach(self):
         """ Détacher la pièce jointe de sa cible """
         self.content_object = None

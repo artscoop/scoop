@@ -8,3 +8,4 @@ from .comment import Comment
 from .content import Content, Category, CategoryTranslation, ContentApproval
 from .link import Link
 from .picture import Picture
+from .acl import CustomACL

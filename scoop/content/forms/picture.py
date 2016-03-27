@@ -35,7 +35,7 @@ class PictureModelForm(forms.ModelForm):
     # Métadonnées
     class Meta:
         model = Picture
-        fields = ['image', 'title', 'description']
+        fields = ['image', 'title', 'description', 'acl_mode']
         widgets = {'image': PictureInlineWidget}
 
 
@@ -71,7 +71,7 @@ class PictureAdminForm(forms.ModelForm):
     # Métadonnées
     class Meta:
         model = Picture
-        fields = ['image', 'title', 'description', 'weight', 'author', 'content_type', 'object_id', 'license', 'audience']
+        fields = ['image', 'title', 'description', 'weight', 'author', 'content_type', 'object_id', 'acl_mode', 'license', 'audience']
         formfield_overrides = {models.ImageField: {'widget': PictureInlineWidget}, models.TextField: {'widget': widgets.Input(attrs={'maxlength': 1024})}}
         widgets = {'license': CreationLicenseWidget}
 

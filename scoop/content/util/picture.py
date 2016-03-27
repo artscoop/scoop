@@ -26,8 +26,8 @@ root_dir = Paths.get_root_dir
 
 def get_image_upload_path(picture, name, update=False):
     """
-    Renvoyer le chemin et le nom de fichier par défaut des
-    uploads d'images.
+    Renvoyer le chemin et le nom de fichier par défaut des uploads d'images.
+
     :param picture: instance de modèle d'image
     :param name: nom du fichier uploadé
     :param update: mettre à jour le chemin mais conserver le nom de fichier
@@ -56,8 +56,8 @@ def get_image_upload_path(picture, name, update=False):
 
 def get_animation_upload_path(animation, name, update=False):
     """
-    Renvoyer le chemin et le nom de fichier par défaut des
-    uploads d'animations.
+    Renvoyer le chemin et le nom de fichier par défaut des uploads d'animations.
+
     :param animation: instance de modèle d'animation
     :param name: nom du fichier uploadé
     :param update: mettre à jour le chemin mais conserver le nom de fichier
@@ -131,6 +131,7 @@ def download(instance, path, screenshot=True):
 
 def clean_thumbnails():
     """ Nettoyer toutes les miniatures cassées """
+    thumbnail_total = 0
     sources = Source.objects.all().iterator()
     for source in sources:
         if not default_storage.exists(source.name):
@@ -139,23 +140,28 @@ def clean_thumbnails():
                 try:
                     try:
                         default_storage.delete(thumb.name)
+                        thumbnail_total += 1
                     except Exception as e:
                         print(e)
                     thumb.delete()
+                    thumbnail_total += 1
                 except Exception as e:
                     print(e)
             source.delete()
     # Supprimer les miniatures qui ne correspondent pas à un fichier
-    thumbnails = Thumbnail.objects.all().iterator()
+    thumbnails = Thumbnail.objects.all()
     for thumbnail in thumbnails:
         if not default_storage.exists(thumbnail.name):
             thumbnail.delete()
+            thumbnail_total += 1
     # Supprimer les miniatures qui ne sont pas dans la base
     for root, _, files in walk(default_storage, 'thumb'):
         for file_ in files:
             path = os.path.join(root, file_)
             if not Thumbnail.objects.filter(name=path).exists():
                 default_storage.delete(path)
+                thumbnail_total += 1
+    return thumbnail_total
 
 
 def get_context_picture_url(self, name, ext=None, *args):

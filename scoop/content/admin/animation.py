@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.content.forms.animation import AnimationForm
 from scoop.content.models.animation import Animation
 from scoop.core.util.shortcuts import addattr
 
@@ -15,7 +17,7 @@ class AnimationAdmin(ModelAdmin):
     list_display = ['id', 'get_picture_id', 'picture', 'get_video_tag', 'extension', 'title', 'get_file_size', 'get_duration_unit', 'autoplay', 'loop', 'deleted']
     list_display_links = ['id']
     list_filter = ['picture__content_type']
-    form = make_ajax_form(Animation, {'author': 'user', 'picture': 'picture'})
+    form = make_ajax_form(Animation, {'author': 'user', 'picture': 'picture'}, AnimationForm)
     actions = ['delete_full']
 
     @addattr(short_description=_("Fully delete selected animations"))

@@ -13,4 +13,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """ Exécuter la commande """
         ThumbnailCollectionCleaner().clean_up()
-        Picture.objects.clean_thumbnails()
+        cleaned = Picture.objects.clean_thumbnails()
+        print("Cleaned {count} thumnails".format(count=cleaned))

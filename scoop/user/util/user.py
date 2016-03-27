@@ -40,6 +40,7 @@ def _get_splitted(name):
 def _get_distance(source, destination):
     """
     Renvoyer les distances levenshtein entre un NDD et un autre
+
     :returns: un tuple de type (int, int), avec la distance entre les NDD de niveau 2 et 1
     """
     nd_source, tld_source = _get_splitted(source)
@@ -52,6 +53,7 @@ def _get_distance(source, destination):
 def find_similar_email_domains(source, max_distance=None):
     """
     Renvoyer les noms de domaine connus les plus ressemblants
+
     :param max_distance: tuple d'entiers de distance lenvenshtein max (ndd, tld)
     """
     if max_distance is None:
