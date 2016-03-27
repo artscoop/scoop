@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 try:
                     (descriptor, filename) = tempfile.mkstemp()
                     temp = os.fdopen(descriptor, "w")
-                    temp.write(destination['output'])
+                    temp.write(destination['output'].decode('utf-8'))
                     temp.close()
                     newname = destination['destination']
                     subprocess.Popen(['sudo', 'cp', filename, newname]).wait()

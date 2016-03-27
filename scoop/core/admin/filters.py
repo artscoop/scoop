@@ -52,7 +52,7 @@ class TimestampFilter(SimpleListFilter):
     def lookups(self, request, model_admin):
         """ Renvoyer les valeurs possibles de filtre """
         today = timezone.now()
-        day, month, year = today.strftime('%A,%B,%Y').decode('utf-8').split(',')
+        day, month, year = today.strftime('%A,%B,%Y').split(',')
         return (('l24', _("last 24 hours")), ('l72', _("last 72 hours")), ('lweek', _("past 7 days")), ('lmonth', _("past 30 days")),
                 ('today', _("today ({day})").format(day=day)), ('month', _("this month ({month})").format(month=month)), ('month-1', _("last month")),
                 ('year', _("this year ({year})").format(year=year)), ('year-1', _("last year")),)

@@ -18,6 +18,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.content.util.picture import get_animation_upload_path
+from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.uuid import uuid_bits
@@ -95,13 +96,13 @@ class AnimationManager(SingleDeleteManager):
             super(Picture, picture).save()
 
 
-class Animation(DatetimeModel, UUID128Model):
+class Animation(DatetimeModel, UUID128Model, ACLModel):
     """ Animation vidéo """
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='owned_animations', on_delete=models.SET_NULL,
                                verbose_name=_("Author"))
-    file = models.FileField(max_length=192, upload_to=get_animation_upload_path, verbose_name=_("File"))
+    file = models.FileField(max_length=192, upload_to=ACLModel.get_acl_upload_path, verbose_name=_("File"))
     picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.CASCADE, related_name='animations', verbose_name=_("Picture"))
     extension = models.CharField(max_length=8, default='mp4', verbose_name=_("Extension"))
     duration = models.FloatField(default=0.0, editable=False, db_index=True, help_text=_("In seconds"), verbose_name=_("Duration"))
@@ -189,6 +190,10 @@ class Animation(DatetimeModel, UUID128Model):
             return filesizeformat(self.file.size) if not raw else self.file.size
         else:
             return pgettext_lazy('size', "None")
+
+    def _get_file_attribute_name(self):
+        """ Renvoyer le nom de l'attribut fichier """
+        return 'file'
 
     # Setter
     def delete_file(self):

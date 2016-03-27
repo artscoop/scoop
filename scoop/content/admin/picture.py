@@ -40,7 +40,7 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     actions = ['resave', 'clone', 'delete_pictures', 'delete_thumbnails', 'recalculate_size', 'fix_extension', 'optimize', 'update_picture_path', 'clean_everything', 'rien', 'quantize', 'rien', 'contrast', 'liquid', 'remove_icc', 'autocrop',
                'autocrop_extra', 'rotate90', 'rotate180', 'rotate270', 'mirror_x', 'mirror_y', 'enhance', 'clone']
     form = make_ajax_form(Picture, {'author': 'user'}, PictureAdminForm)
-    fieldsets = ((_("Picture"), {'fields': ('author', 'license', 'content_type', 'object_id', 'image', 'title', 'description', 'weight')}), (_("Plus"), {'fields': ('audience',)}))
+    fieldsets = ((_("Picture"), {'fields': ('author', 'license', 'content_type', 'object_id', 'image', 'title', 'description', 'weight')}), (_("Plus"), {'fields': ('audience', 'acl_mode')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     admin_integration_enabled = True
 
@@ -188,7 +188,7 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     def update_picture_path(self, request, queryset):
         """ Mettre à jour le chemin des images en utilisant les paramètres par défaut des nouveaux fichiers """
         for picture in queryset:
-            picture.update_path()
+            picture.update_file_path()
         self.message_user(request, _("The selected pictures paths have been updated."))
 
     @addattr(short_description=_("Delete empty media folders"))

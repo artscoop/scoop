@@ -75,9 +75,13 @@ class ContentQuerySetMixin(object):
         assert isinstance(self, (models.QuerySet, models.Manager))
         return self.filter(deleted=True)
 
-    def featured(self, **kwargs):
+    def featured(self):
         """ Renvoyer les contenus magazine (mis en avant) """
         return self.visible(featured=True)
+
+    def unfeatured(self):
+        """ Renvoyer les contenus non magazine (mis en avant) """
+        return self.visible(featured=False)
 
     def by_author(self, user):
         """ Renvoyer les contenus créés par un utilisateur """
@@ -87,6 +91,7 @@ class ContentQuerySetMixin(object):
     def get_by_slug(self, slug, exact=True, category=None, exc=None):
         """
         Renvoyer le contenu correspondant à un slug
+
         :param slug: slug du contenu à retrouver
         :param exact: échouer si le slug exact n'existe pas
         :param category: nom du type de contenu
@@ -111,7 +116,7 @@ class ContentQuerySetMixin(object):
                  similarity > 7500
                  ], key=operator.itemgetter('ratio'))
             return closest['content']
-        except:
+        except ValueError:
             return None
 
     def get_by_id(self, cid, exc=None):
@@ -243,8 +248,7 @@ class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manag
         try:
             [kwargs.pop(name, None) for name in ['category', 'title', 'body', 'visible']]
             category_instance = Category.objects.get_by_name(category)
-            content = Content(category=category_instance, title=title, body=body, published=visible, **kwargs)
-            content.save()
+            content, _ = self.get_or_create(category=category_instance, title=title, body=body, published=visible, **kwargs)
             authors = make_iterable(authors, list)
             content.authors.add(*authors)
             return content
