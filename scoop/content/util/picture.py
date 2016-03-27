@@ -2,85 +2,22 @@
 import logging
 import os
 from math import ceil, floor
-from os.path import basename, splitext
 
 import PIL
-
 from django.conf import settings
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.core.files.temp import NamedTemporaryFile
-from django.template.defaultfilters import slugify
-from django.utils import timezone
 from easy_thumbnails.models import Source, Thumbnail
+
 from scoop.content.util.webkit import Screenshot
-from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import check_file_extension, walk
 from scoop.core.util.stream.urlutil import download_url_resource, get_url_path, unquote_url
-from unidecode import unidecode
+
 
 logger = logging.getLogger(__name__)
 root_dir = Paths.get_root_dir
-
-
-def get_image_upload_path(picture, name, update=False):
-    """
-    Renvoyer le chemin et le nom de fichier par défaut des uploads d'images.
-
-    :param picture: instance de modèle d'image
-    :param name: nom du fichier uploadé
-    :param update: mettre à jour le chemin mais conserver le nom de fichier
-    """
-    name = unidecode(name).lower() if name else picture.get_filename() if picture else uuid_bits(64)
-    name = name.split('?')[0].split('#')[0]
-    name = name or uuid_bits(64)  # si le ? est au début de la chaîne, générer un nom de fichier
-    # Créer les dictionnaires de données de noms de fichiers
-    now = picture.get_datetime() if picture else timezone.now()
-    fmt = now.strftime
-    # Remplir le dictionnaire avec les informations de répertoire
-    picture_type = picture.content_type
-    author = slugify(picture.author.username) if picture.author is not None else "__no_author"
-    dir_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d"), 'picture_type': picture_type}
-    name_info = {'name': slugify(splitext(basename(name))[0]), 'ext': splitext(basename(name))[1]}
-    prefix_info = {'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'week': fmt("%W"), 'author': author}
-    data = dir_info
-    data.update(name_info)
-    data.update(prefix_info)
-    # Renvoyer le répertoire ou le chemin complet du fichier
-    path = "file/pic/{year}/{month}{week}" if update else "file/pic/{year}/{month}{week}/{author}/{name}{ext}"
-    path = path.format(**data)
-    path = "test/{}".format(path) if settings.TEST else path
-    return path
-
-
-def get_animation_upload_path(animation, name, update=False):
-    """
-    Renvoyer le chemin et le nom de fichier par défaut des uploads d'animations.
-
-    :param animation: instance de modèle d'animation
-    :param name: nom du fichier uploadé
-    :param update: mettre à jour le chemin mais conserver le nom de fichier
-    """
-    name = unidecode(name).lower() if name else animation.get_filename() if animation else uuid_bits(64)
-    name = name.split('?')[0].split('#')[0]
-    name = name or uuid_bits(64)  # si le ? est au début de la chaîne, générer un nom de fichier
-    # Créer les dictionnaires de données de noms de fichiers
-    now = animation.get_datetime() if animation else timezone.now()
-    fmt = now.strftime
-    # Remplir le dictionnaire avec les informations de répertoire
-    author = slugify(animation.author.username) if animation.author is not None else "__no_author"
-    dir_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d")}
-    name_info = {'name': slugify(splitext(basename(name))[0]), 'ext': splitext(basename(name))[1]}
-    prefix_info = {'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'week': fmt("%W"), 'author': author}
-    data = dir_info
-    data.update(name_info)
-    data.update(prefix_info)
-    # Renvoyer le répertoire ou le chemin complet du fichier
-    path = "file/ani/{year}/{month}{week}" if update else "file/ani/{year}/{month}{week}/{author}/{name}{ext}"
-    path = path.format(**data)
-    path = "test/{}".format(path) if settings.TEST else path
-    return path
 
 
 def download(instance, path, screenshot=True):
