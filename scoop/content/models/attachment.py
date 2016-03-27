@@ -1,7 +1,6 @@
 # coding: utf-8
 import os
 
-from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
 from django.core.files.base import File
@@ -10,9 +9,9 @@ from django.db.models import Q
 from django.template.defaultfilters import filesizeformat
 from django.template.loader import render_to_string
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext, pgettext_lazy
-from scoop.content.util.attachment import get_attachment_upload_path
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -79,7 +78,8 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model, ACLModel):
     description = models.TextField(blank=True, default="", verbose_name=_("Description"))
     mimetype = models.CharField(max_length=40, blank=True, verbose_name=_("MIME type"))
     limit = models.Q(model__in={'Profile', 'Content'})  # limite des content types
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, related_name='attachments', limit_choices_to=limit, verbose_name=_("Content type"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, related_name='attachments', limit_choices_to=limit,
+                                     verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     objects = AttachmentManager()

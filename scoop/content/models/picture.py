@@ -12,23 +12,23 @@ from urllib.parse import urljoin
 import cv2
 import simplejson
 from PIL import Image
-
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.core.cache import cache
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.db import models, transaction
-from django.template.defaultfilters import filesizeformat, slugify, urlencode
+from django.template.defaultfilters import filesizeformat, urlencode
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
-from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download, get_image_upload_path
+
+from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
 from scoop.core.abstract.core.data import DataModel
@@ -44,6 +44,7 @@ from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
+
 
 logger = logging.getLogger(__name__)
 
@@ -184,8 +185,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     DATA_KEYS = ['colors', 'clones']
 
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL, verbose_name=_("Author"))
-    image = WebImageField(upload_to=ACLModel.get_acl_upload_path, max_length=200, db_index=True, width_field='width', height_field='height', min_dimensions=(64, 64),
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL,
+                               verbose_name=_("Author"))
+    image = WebImageField(upload_to=ACLModel.get_acl_upload_path, max_length=200, db_index=True, width_field='width', height_field='height',
+                          min_dimensions=(64, 64),
                           help_text=_("Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_("Image"))
     title = models.CharField(max_length=96, blank=True, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"), help_text=_("Description text. Enter an URL here to download a picture"))
@@ -507,8 +510,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             source_path = join(settings.STATIC_ROOT, source_path)
         overlay = Image.open(source_path, 'r')
         offset = offset or (0, 0)
-        xposition = {'left': 0 + offset[0], 'center': (current.size[0] - overlay.size[0]) / 2 + offset[0], 'right': current.size[0] - overlay.size[0] + offset[0]}
-        yposition = {'top': 0 + offset[1], 'center': (current.size[1] - overlay.size[1]) / 2 + offset[1], 'bottom': current.size[1] - overlay.size[1] + offset[1]}
+        xposition = {'left': 0 + offset[0], 'center': (current.size[0] - overlay.size[0]) / 2 + offset[0],
+                     'right': current.size[0] - overlay.size[0] + offset[0]}
+        yposition = {'top': 0 + offset[1], 'center': (current.size[1] - overlay.size[1]) / 2 + offset[1],
+                     'bottom': current.size[1] - overlay.size[1] + offset[1]}
         current.paste(overlay, (xposition.get(hpos, 0), yposition.get(vpos, 0)))
         current.save(self.image.path)
 
