@@ -8,277 +8,426 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2015-04-11 14:42+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"POT-Creation-Date: 2016-03-28 06:14+0200\n"
+"PO-Revision-Date: 2016-03-28 06:28+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.6\n"
+"X-Translated-Using: django-rosetta 0.7.10\n"
 
-#: __init__.py:6 admin/forum.py:29
+#: __init__.py:6
 msgid "Forum"
 msgstr "Forum"
 
-#: admin/forum.py:29
-msgid "Settings"
-msgstr "Paramètres"
-
-#: admin/forum.py:32
-msgid "Update topic count"
-msgstr "Mettre à jour le décompte de sujets"
-
-#: admin/forum.py:37
-msgid "Forum topic counts have been updated."
-msgstr "Le nombre de sujets des forums a été mis à jour."
-
-#: admin/forum.py:40
-msgid "Picture"
-msgstr "Image"
-
-#: admin/forum.py:45
-msgid "Found in"
-msgstr "Trouvé dans"
-
-#: admin/poll.py:16 models/vote.py:26
+#: admin/poll.py:15 models/vote.py:33
 msgid "Poll"
 msgstr "Sondage"
 
-#: models/forum.py:27
-msgid "Forum index"
-msgstr "Index du forum"
+#: models/label.py:47
+msgid "Parent"
+msgstr "Parent"
 
-#: models/forum.py:74
-msgid "Name"
-msgstr "Nom"
+#: models/label.py:48
+msgid "Short name"
+msgstr "Nom court"
 
-#: models/forum.py:75 models/poll.py:37 models/sanction.py:36
-msgid "Description"
-msgstr "Description"
+#: models/label.py:50
+msgid "Can be set at thread creation"
+msgstr "Peut-être défini à la création du fil"
 
-#: models/forum.py:76
-msgid "Protected from the creation of new topics"
-msgstr "Protégé contre la création de nouveaux sujets"
+#: models/label.py:50
+msgctxt "label"
+msgid "Primary"
+msgstr "Primaire"
 
-#: models/forum.py:76
-msgctxt "forum"
-msgid "Locked"
-msgstr "Verrouillé"
+#: models/label.py:51
+msgid "Does the label define the status of the thread"
+msgstr "L'étiquette définit-elle le statut du fil ?"
 
-#: models/forum.py:77
-msgctxt "forum"
+#: models/label.py:51
+msgid "Status"
+msgstr "Statut"
+
+#: models/label.py:52
+#| msgctxt "forum"
+#| msgid "Visible"
+msgctxt "label"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/forum.py:80
-msgid "Topics count"
-msgstr "Nombre de sujets"
+#: models/label.py:53
+msgid "Groups allowed"
+msgstr "Groupes autorisés"
 
-#: models/forum.py:81
-msgid "Posts count"
-msgstr "Nombre de messages"
-
-#: models/forum.py:83
-msgid "Appears on the forum index"
-msgstr "Fait partie de l'index des forums"
-
-#: models/forum.py:83
-msgid "Root"
-msgstr "Racine"
-
-#: models/forum.py:84
-msgid "Subforums"
-msgstr "Sous-forums"
-
-#: models/forum.py:86 models/forum.py:134 models/forum.py:146
-msgid "Topics"
-msgstr "Sujets"
-
-#: models/forum.py:88
-msgid "Members who can moderate topics in this forum"
-msgstr "Membres autorisés à modérer les sujets de ce forum"
-
-#: models/forum.py:89
+#: models/label.py:54
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/forum.py:151
-msgid "Posts"
-msgstr "Messages"
+#: models/label.py:82
+msgid "Unnamed"
+msgstr "Sans nom"
 
-#: models/forum.py:167
-msgid "Has forums"
-msgstr "A des forums"
+#: models/label.py:93
+msgid "Label"
+msgstr "Étiquette"
 
-#: models/forum.py:172
-msgid "Locked"
-msgstr "Verrouillé"
+#: models/label.py:94 models/label.py:123
+msgid "Labels"
+msgstr "Étiquettes"
 
-#: models/forum.py:177
-msgid "Group"
-msgstr "Groupe"
+#: models/label.py:102 models/message.py:77
+msgid "Name"
+msgstr "Nom"
 
-#: models/forum.py:186
-msgid "Circular"
-msgstr "Circulaire"
+#: models/label.py:103 models/poll.py:41 models/sanction.py:48
+msgid "Description"
+msgstr "Description"
 
-#: models/forum.py:234
-msgid "forum"
-msgstr "forum"
+#: models/label.py:104
+#| msgid "Description"
+msgid "HTML description"
+msgstr "Description HTML"
 
-#: models/forum.py:235
-msgid "forums"
-msgstr "forums"
+#: models/label.py:113
+#| msgid "sanction"
+msgid "translation"
+msgstr "traduction"
 
-#: models/ignorelist.py:16 models/read.py:56 models/sanction.py:34
+#: models/label.py:114
+#| msgid "sanctions"
+msgid "translations"
+msgstr "traductions"
+
+#: models/label.py:121
+msgid "Main label"
+msgstr "Étiquette principale"
+
+#: models/label.py:122
+msgid "Status label"
+msgstr "Étiquette de statut"
+
+#: models/message.py:76 models/thread.py:35
+msgid "Author"
+msgstr "Auteur"
+
+#: models/message.py:78 models/participant.py:82 models/poll.py:47
+msgid "Thread"
+msgstr "Fil de discussion"
+
+#: models/message.py:79
+msgid "Text"
+msgstr "Texte"
+
+#: models/message.py:80
+msgctxt "message"
+msgid "Deleted"
+msgstr "Supprimé"
+
+#: models/message.py:170
+msgid "message"
+msgstr "message"
+
+#: models/message.py:171
+msgid "messages"
+msgstr "messages"
+
+#: models/mutelist.py:28 models/participant.py:81 models/sanction.py:46
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/ignorelist.py:56
-msgid "ignore list"
+#: models/mutelist.py:73
+#| msgid "ignore list"
+msgid "mute list"
 msgstr "liste d'ignorés"
 
-#: models/ignorelist.py:57
-msgid "ignore lists"
+#: models/mutelist.py:74
+#| msgid "ignore lists"
+msgid "mute lists"
 msgstr "listes d'ignorés"
 
-#: models/poll.py:36
+#: models/participant.py:83
+msgctxt "participant"
+msgid "Is active"
+msgstr "Est actif"
+
+#: models/participant.py:84
+#| msgid "Thread"
+msgctxt "thread"
+msgid "Unread"
+msgstr "Non lu"
+
+#: models/participant.py:85
+msgctxt "thread"
+msgid "Unread time"
+msgstr "Non lu le"
+
+#: models/participant.py:86 models/thread.py:41
+#| msgid "Posts count"
+msgid "Message count"
+msgstr "Nombre de messages"
+
+#: models/participant.py:121
+msgid "participant"
+msgstr "participant"
+
+#: models/participant.py:122
+msgid "participants"
+msgstr "participants"
+
+#: models/poll.py:40
 msgid "Title"
 msgstr "Titre"
 
-#: models/poll.py:38
+#: models/poll.py:42
 msgctxt "poll"
 msgid "Published"
 msgstr "Publié"
 
-#: models/poll.py:39
+#: models/poll.py:43
 msgid "Expires"
 msgstr "Expire"
 
-#: models/poll.py:40
+#: models/poll.py:44
 msgid "Enter one answer per line"
 msgstr "Entrez une réponse par ligne"
 
-#: models/poll.py:40
+#: models/poll.py:44
 msgid "Answers"
 msgstr "Réponses"
 
-#: models/poll.py:42
+#: models/poll.py:46
 msgctxt "poll"
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/poll.py:43
-msgid "Content"
-msgstr "Contenu"
-
-#: models/poll.py:63
+#: models/poll.py:67
 msgid "Has votes"
 msgstr "A des votes"
 
-#: models/poll.py:90
+#: models/poll.py:76
+#| msgid "Vote"
+msgid "Votes"
+msgstr "Votes"
+
+#: models/poll.py:95
 msgid "Expired"
 msgstr "Expiré"
 
-#: models/poll.py:95
+#: models/poll.py:100
 msgid "Open"
 msgstr "Ouvert"
 
-#: models/poll.py:116
+#: models/poll.py:129
 msgid "poll"
 msgstr "sondage"
 
-#: models/poll.py:117
+#: models/poll.py:130
 msgid "polls"
 msgstr "sondages"
 
-#: models/read.py:55
-msgid "Thread"
-msgstr "Fil de discussion"
-
-#: models/read.py:57 models/sanction.py:37
-msgid "Expiry"
-msgstr "Expiration"
-
-#: models/read.py:58
-msgctxt "forum.read"
-msgid "Created"
-msgstr "Créée"
-
-#: models/read.py:64
-msgid "topic read"
-msgstr "sujet"
-
-#: models/read.py:65
-msgid "topics read"
-msgstr "sujets"
-
-#: models/sanction.py:30
+#: models/sanction.py:42
 msgid "Posting disabled"
 msgstr "Réponses désactivées"
 
-#: models/sanction.py:30
+#: models/sanction.py:42
 msgid "Reading disabled"
 msgstr "Lecture désactivée"
 
-#: models/sanction.py:31
+#: models/sanction.py:43
 msgid "2 hours"
 msgstr "2 heures"
 
-#: models/sanction.py:31
+#: models/sanction.py:43
 msgid "1 day"
 msgstr "1 jour"
 
-#: models/sanction.py:31
+#: models/sanction.py:43
 msgid "3 days"
 msgstr "3 jours"
 
-#: models/sanction.py:31
+#: models/sanction.py:43
 msgid "1 week"
 msgstr "1 semaine"
 
-#: models/sanction.py:35
+#: models/sanction.py:43
+#| msgid "3 days"
+msgid "30 days"
+msgstr "30 jours"
+
+#: models/sanction.py:47
 msgid "Type"
 msgstr "Type"
 
-#: models/sanction.py:38
+#: models/sanction.py:49
+msgid "Expiry"
+msgstr "Expiration"
+
+#: models/sanction.py:50
 msgctxt "sanction"
 msgid "Revoked"
 msgstr "Révoquée"
 
-#: models/sanction.py:55
+#: models/sanction.py:67
 msgid "sanction"
 msgstr "sanction"
 
-#: models/sanction.py:56
+#: models/sanction.py:68
 msgid "sanctions"
 msgstr "sanctions"
 
-#: models/vote.py:27
+#: models/thread.py:36
+#| msgid "Topics"
+msgid "Topic"
+msgstr "Sujet"
+
+#: models/thread.py:37
+msgctxt "thread"
+msgid "Was started"
+msgstr "Démarré"
+
+#: models/thread.py:38
+msgctxt "thread"
+msgid "Updated"
+msgstr "Mis à jour"
+
+#: models/thread.py:39
+msgid "Last speaker"
+msgstr "Dernier participant"
+
+#: models/thread.py:40
+msgctxt "thread"
+msgid "Deleted"
+msgstr "Supprimé"
+
+#: models/thread.py:42
+#| msgid "Locked"
+msgctxt "thread"
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: models/thread.py:43
+msgid "Always on top"
+msgstr "Toujours en tête"
+
+#: models/thread.py:44
+#| msgctxt "forum"
+#| msgid "Visible"
+msgctxt "thread"
+msgid "Visible"
+msgstr "Visible"
+
+#: models/thread.py:48
+msgid "All messages"
+msgstr "Tous les messages"
+
+#: models/thread.py:55
+msgid "Messages"
+msgstr "Messages"
+
+#: models/thread.py:99
+#| msgid "Thread"
+msgid "thread"
+msgstr "fil de discussion"
+
+#: models/thread.py:100
+#| msgid "Thread"
+msgid "threads"
+msgstr "fils de discussion"
+
+#: models/vote.py:34
 msgid "Choice"
 msgstr "Choix"
 
-#: models/vote.py:34
+#: models/vote.py:41
 #, python-brace-format
 msgid "Vote: {vote} in poll \"{poll}\""
 msgstr "Vote : {vote} dans le sondage « {poll} »"
 
-#: models/vote.py:39
+#: models/vote.py:46
 msgid "vote"
 msgstr "a des votes"
 
-#: models/vote.py:40
+#: models/vote.py:47
 msgid "votes"
 msgstr "votes"
 
+#~ msgid "Settings"
+#~ msgstr "Paramètres"
+
+#~ msgid "Update topic count"
+#~ msgstr "Mettre à jour le décompte de sujets"
+
+#~ msgid "Forum topic counts have been updated."
+#~ msgstr "Le nombre de sujets des forums a été mis à jour."
+
+#~ msgid "Picture"
+#~ msgstr "Image"
+
+#~ msgid "Found in"
+#~ msgstr "Trouvé dans"
+
+#~ msgid "Forum index"
+#~ msgstr "Index du forum"
+
+#~ msgid "Protected from the creation of new topics"
+#~ msgstr "Protégé contre la création de nouveaux sujets"
+
+#~ msgctxt "forum"
+#~ msgid "Locked"
+#~ msgstr "Verrouillé"
+
+#~ msgid "Topics count"
+#~ msgstr "Nombre de sujets"
+
+#~ msgid "Appears on the forum index"
+#~ msgstr "Fait partie de l'index des forums"
+
+#~ msgid "Root"
+#~ msgstr "Racine"
+
+#~ msgid "Subforums"
+#~ msgstr "Sous-forums"
+
+#~ msgid "Members who can moderate topics in this forum"
+#~ msgstr "Membres autorisés à modérer les sujets de ce forum"
+
+#~ msgid "Posts"
+#~ msgstr "Messages"
+
+#~ msgid "Has forums"
+#~ msgstr "A des forums"
+
+#~ msgid "Group"
+#~ msgstr "Groupe"
+
+#~ msgid "Circular"
+#~ msgstr "Circulaire"
+
+#~ msgid "forum"
+#~ msgstr "forum"
+
+#~ msgid "forums"
+#~ msgstr "forums"
+
+#~ msgid "Content"
+#~ msgstr "Contenu"
+
+#~ msgctxt "forum.read"
+#~ msgid "Created"
+#~ msgstr "Créée"
+
+#~ msgid "topic read"
+#~ msgstr "sujet"
+
+#~ msgid "topics read"
+#~ msgstr "sujets"
+
 #~ msgid "Root forum"
 #~ msgstr "Forum de l'index"
-
-#~ msgid "Text"
-#~ msgstr "Texte"
 
 #~ msgid "choice"
 #~ msgstr "choix"
@@ -306,9 +455,6 @@ msgstr "votes"
 
 #~ msgid "Recent"
 #~ msgstr "Récent"
-
-#~ msgid "Vote"
-#~ msgstr "Vote"
 
 #~ msgid "Forum groups"
 #~ msgstr "Groupes de forums"

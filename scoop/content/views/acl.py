@@ -1,58 +1,69 @@
 # coding: utf-8
-import mimetypes
+import logging
 
 from django.conf import settings
 from django.http.response import HttpResponse
-from os.path import join
 
 from scoop.core.abstract.content.acl import ACLModel
+from scoop.core.util.django.apps import is_installed
 from scoop.user.models.user import User
 
 
-def manage_acl_file_service(request):
+logger = logging.getLogger('acl')
+ACL_ENABLED = getattr(settings, 'CONTENT_ACL_ENABLED', True)
+DENIED_RESPONSE = HttpResponse(status=403)
+
+
+def acl_file_serve(request, resource):
     """
     Traiter une requête à un chemin dans les répertoires avec ACL
 
+    Renvoie un objet HTTPResponse avec éventuellement un header X-Accel-Redirect pointant
+    vers une *location* nginx portant la directive internal.
     :param request: HTTPRequest
+    :param resource: chemin du fichier relatif au répertoire media
     :type request: django.http.HTTPRequest
+    :type resource: str
+    :returns: un objet HTTPResponse
     """
-    resource = request.path
     user = request.user
-    media_path = join(settings.MEDIA_ROOT, resource)
-    content_type = mimetypes.guess_type(media_path)
-    resource_items = [item for item in resource.split('/') if item][1:]  # retirer la partie MEDIA_URL
-    response = HttpResponse(content_type=content_type)
-    granted = False
-    # Traiter le chemin
-    if len(resource_items) and resource_items[0] in ACLModel.ACL_PATHS_START:
-        if user.is_staff:
+    path_folders = [item for item in resource.split('/', 5) if item]
+    granted = not ACL_ENABLED or user.is_staff  # Autoriser par défaut si settings.CONTENT_ACL_ENABLED est False
+
+    # Traiter l'autorisation par le nom du premier répertoire
+    if not granted and len(path_folders) and path_folders[0] in ACLModel.ACL_PATHS_START:
+        if path_folders[0] == ACLModel.ACL_PATHS[ACLModel.PUBLIC]:
+            logger.debug("ACL: Public file {0}".format(resource))
             granted = True
-        elif resource_items[0] == ACLModel.ACL_PATHS[ACLModel.PUBLIC]:
-            granted = True
-        elif resource_items[0] == ACLModel.ACL_PATHS[ACLModel.PRIVATE]:
-            username = resource_items[4]  # les indices 1 2 et 3 font partie du hash de spread
+        elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.PRIVATE]:
+            logger.debug("ACL: Private file {0}".format(resource))
+            username = path_folders[4]  # les indices 1 2 et 3 font partie du hash de spread ici
             if user.username == username:
                 granted = True
-        elif resource_items[0] == ACLModel.ACL_PATHS[ACLModel.FRIENDS]:
-            username = resource_items[4]  # les indices 1 2 et 3 font partie du hash de spread
+        elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.FRIENDS] and is_installed('scoop.user.social'):
+            username = path_folders[4]  # les indices 1 2 et 3 font partie du hash de spread ici
             path_user = User.objects.get_by_name(username)
-            if user.friends.is_friend(path_user):
+            logger.debug("ACL: File accessible only to friends of {1}, {0}".format(resource, username))
+            if user.friends.is_friend(path_user) or username == user.username:
                 granted = True
-        elif resource_items[0] == ACLModel.ACL_PATHS[ACLModel.REGISTERED]:
+        elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.REGISTERED]:
+            logger.debug("ACL: File accessible only to registered users, {0}".format(resource))
             if user.is_authenticated():
                 granted = True
         else:
+            logger.debug("ACL: File processing not ready yet, {0}".format(resource))
             granted = True
     else:
         # Toujours considérer le fichier comme public dans les cas inconnus
+        logger.debug("ACL: Unrecognized public file, {0}".format(resource))
         granted = True
-    if granted is True:
-        resource = resource.replace(settings.MEDIA_URL, '/acl_media/', 1)
-        response['X-Accel-Redirect'] = resource
-        print("ACL granted to {path}".format(path=resource))
-    else:
-        response.status_code = 403
-        response.content = 'Access denied'
-        print("Access denied to {path}".format(path=resource))
-    return response
 
+    # Demander à nginx de servir le fichier ou renvoyer un contenu HTTP403
+    if granted is True:
+        response = HttpResponse(content_type="")
+        response['X-Accel-Redirect'] = '/acl_media/%s' % resource
+        logger.debug("ACL: Access granted to file {path}".format(path=resource))
+        return response
+    else:
+        logger.debug("ACL: Access denied to file {path}".format(path=resource))
+        return DENIED_RESPONSE

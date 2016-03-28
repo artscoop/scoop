@@ -7,21 +7,30 @@ from django.conf import settings
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.db import models
+from django.db.models.fields.files import FileField
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from unidecode import unidecode
 
 from scoop.core.util.data.uuid import uuid_bits
 
 
 class ACLModel(models.Model):
-    """ Configuration utilisateur de protection des contenus média """
+    """
+    Modèle dont le contenu fichier est protégé d'accès par des règles
+
+    Le modèle non abstrait héritant de cette classe doit posséder un champ
+    dérivé de FileField et un seul de préférence, et dont la propriété
+    upload_to est définie à ACLModel.get_acl_upload_path
+    """
 
     __metaclass__ = ABCMeta
 
     # Constantes
-    ACL_MODES = [(0, _("Public")), (1, _("Registered")), (2, _("Private")), (3, _("Friends")), (5, _("Custom"))]
+    ACL_MODES = [(0, pgettext_lazy('acl', "Public")), (1, pgettext_lazy('acl', "Registered")),
+                 (2, pgettext_lazy('acl', "Private")), (3, pgettext_lazy('acl', "Friends")),
+                 (5, pgettext_lazy('acl', "Custom"))]
     PUBLIC, REGISTERED, PRIVATE, FRIENDS, CUSTOM = 0, 1, 2, 3, 5
     ACL_PATHS = {0: 'public', 1: 'auth', 3: 'friends', 5: 'custom', 2: 'hidden'}
     ACL_PATHS_START = ('public', 'auth', 'friends', 'custom', 'hidden')
@@ -70,7 +79,8 @@ class ACLModel(models.Model):
         data.update(timestamp_info)
         # Renvoyer le répertoire ou le chemin complet du fichier (documenter)
         path = "".join(["test/" if settings.TEST else "",
-                        "{acl}/{type}/{year}/{month}{week}",
+                        "{acl}/{type}",
+                        "/{year}/{month}{week}",
                         "/{author}/{name}{ext}" if not update else ""]
                        ).format(**data)
         return path
@@ -109,8 +119,19 @@ class ACLModel(models.Model):
         :returns: un sous-chemin de 3 répertoires, 6 caractères hexa.
         """
         digest = hashlib.sha1(name.encode('utf-8')).hexdigest()
-        parts = [digest[idx, idx + 2] for idx in range(0, 6, 2)]
+        parts = [digest[idx:idx + 2] for idx in range(0, 6, 2)]
         return '/'.join(parts)
+
+    def _is_file_path_obsolete(self):
+        """ Renvoie si une mise à jour du chemin de fichier aura un quelconque effet """
+        file_attribute = self.get_file_attribute()
+        new_path = self.get_acl_upload_path(self.get_filename(extension=True), update=True)
+        name_only, ext = splitext(self.get_filename(extension=True))
+        filename = "{}{}".format(slugify(name_only), ext)
+        output_file = join(new_path, filename)
+        old_path = file_attribute.name
+        target_path = self.get_acl_upload_path(output_file)
+        return target_path != old_path
 
     # Action
     def update_file_path(self, force_name=None):
@@ -161,7 +182,6 @@ class ACLModel(models.Model):
         """
         raise NotImplemented("Your model must implement get_filename.")
 
-    @abstractmethod
     def _get_file_attribute_name(self):
         """
         Renvoie le nom de l'attribut fichier pour le modèle
@@ -169,11 +189,20 @@ class ACLModel(models.Model):
         :rtype: str
         :returns: ex. 'image' ou 'file'
         """
-        raise NotImplemented("Your model must implement get_file_attribute_name")
+        # Par défaut, parcourir les champs à la recherche d'un FileField
+        return (field.name for field in self._meta.get_fields() if isinstance(field, FileField))[0]
 
     def get_file_attribute(self):
         """ Renvoie directement le champ fichier de l'instance """
         return getattr(self, self._get_file_attribute_name())
+
+    # Overrides
+    def save(self, *args, **kwargs):
+        """ Sauvegarder l'objet """
+        super(ACLModel, self).save(*args, **kwargs)
+        if getattr(settings, 'CONTENT_ACL_AUTO_UPDATE_PATHS', False):
+            if self._is_file_path_obsolete():
+                self.update_file_path()
 
     # Métadonnées
     class Meta:

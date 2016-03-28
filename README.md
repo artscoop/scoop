@@ -1,10 +1,12 @@
 # Projet Scoop
 Par S. Kossouho
-Mai 2011 - Mars 2016
+Mai 2011 - Avril 2016
 Séparé du projet One le 15 avril 2015
 
+Nécessite python 3.4, nginx et Django 1.9
+
 ## Contenu du projet
-- `content` : objets de contenu, images et commentaires. lié à `user` et `core`.
+- `content` : objets de contenu, images et commentaires + ACL fichiers. lié à `user` et `core`.
 - `editorial` : partie CMS du système, possibilité d'enregistrer des extraits de texte et d'agencer les contenus dans des templates.
 - `forum` : hiérarchie de conteneurs de sujets de discussion.
 - `location` : représentation en base de données de pays, villes et lieux réels.
@@ -24,6 +26,8 @@ Séparé du projet One le 15 avril 2015
 - `GENERICRELATION_PICTURE_FILTER` : *dict*, par défaut, comment filtrer les images attachées au objets PicturableModel
 - `DEFAULT_THUMBNAIL_DIMENSIONS` : *dict*, dimensions par défaut d'une miniature, avec les clés `width` et `height`
 - `CLASSIFY_LANGUAGE` : *str*, langue par défaut des stopwords, parmi ['english', 'french']
+- `CONTENT_ACL_ENABLED` : *bool* (True), si False, toujours autoriser l'accès aux fichiers media protégés par ACL 
+- `CONTENT_ACL_AUTO_UPDATE_PATHS` : *bool* (False), si True, chaque fichier ACL utilisera le modèle de nommage courant lors de sa sauvegarde. 
 
 ### Core
 - `CORE_ACTION_RECORD` : *bool*, faut-il enregistrer les actions core.Record dans la base de données
