@@ -8,62 +8,66 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 04:51+0100\n"
-"PO-Revision-Date: 2015-02-23 09:10+0009\n"
-"Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
+"POT-Creation-Date: 2016-03-28 06:14+0200\n"
+"PO-Revision-Date: 2016-03-28 06:21+0009\n"
+"Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.5\n"
+"X-Translated-Using: django-rosetta 0.7.10\n"
 
 #: __init__.py:7
 msgid "Editorial"
 msgstr "Rédaction"
 
-#: admin/admin.py:20
+#: admin/admin.py:19
 msgid "Configuration"
 msgstr "Configuration"
 
-#: admin/admin.py:21
+#: admin/admin.py:20
 msgid "Configurations"
 msgstr "Configurations"
 
-#: admin/admin.py:45 models/configuration.py:15
+#: admin/admin.py:44 models/configuration.py:14
 msgid "Page"
 msgstr "Page"
 
-#: admin/admin.py:53
+#: admin/admin.py:52
 msgid "Translation"
 msgstr "Traduction"
 
-#: admin/admin.py:54
+#: admin/admin.py:53
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/admin.py:68
+#: admin/admin.py:67
 msgid "Excerpt"
 msgstr "Extrait"
 
-#: admin/admin.py:96
+#: admin/admin.py:95
 msgid "Automatically fill selected templates information"
 msgstr "Remplir automatiquement les informations des gabarits sélectionnés"
 
-#: admin/admin.py:101
+#: admin/admin.py:100
 msgid "The selected templates have been updated."
 msgstr "Les gabarits sélectionnés ont été mis à jour."
 
-#: admin/admin.py:104 models/template.py:22
+#: admin/admin.py:103 models/template.py:25
 msgid "Positions"
 msgstr "Positions"
 
-#: models/configuration.py:16
+#: models/configuration.py:15
 msgid "Position"
 msgstr "Position"
 
-#: models/configuration.py:17 models/page.py:47
+#: models/configuration.py:17
+msgid "Select template to use to display the target"
+msgstr "Sélectionnez le gabarit à utiliser pour afficher la cible"
+
+#: models/configuration.py:17 models/page.py:53
 msgid "Template"
 msgstr "Gabarit"
 
@@ -79,183 +83,191 @@ msgstr "Id de l'objet"
 msgid "The block could not be rendered."
 msgstr "Impossible d'effectuer le rendu du bloc."
 
-#: models/configuration.py:42
+#: models/configuration.py:57
 #, python-format
 msgid "%(page)s/%(item)s at %(position)s"
 msgstr "%(page)s/%(item)s à %(position)s"
 
-#: models/configuration.py:50
+#: models/configuration.py:65
 msgid "block configuration"
 msgstr "configuration de bloc"
 
-#: models/configuration.py:51
+#: models/configuration.py:66
 msgid "block configurations"
 msgstr "configurations de blocs"
 
-#: models/excerpt.py:22
+#: models/excerpt.py:26
 msgid "Plain HTML"
 msgstr "HTML Simple"
 
-#: models/excerpt.py:22
+#: models/excerpt.py:26
 msgid "Markdown"
 msgstr "Markdown"
 
-#: models/excerpt.py:22
+#: models/excerpt.py:26
 msgid "Textile"
 msgstr "Textile"
 
-#: models/excerpt.py:22
+#: models/excerpt.py:26
 msgid "reStructured Text"
 msgstr "reStructured Text"
 
-#: models/excerpt.py:25 models/page.py:42 models/position.py:19
-#: models/template.py:19
+#: models/excerpt.py:30 models/page.py:48 models/position.py:20
+#: models/template.py:22
 msgid "Name"
 msgstr "Nom"
 
-#: models/excerpt.py:26 models/page.py:43 models/position.py:20
+#: models/excerpt.py:31 models/page.py:49 models/position.py:21
 msgid "Title"
 msgstr "Titre"
 
-#: models/excerpt.py:27
+#: models/excerpt.py:32
 msgctxt "excerpt"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/excerpt.py:28
+#: models/excerpt.py:33
 msgid "Format"
 msgstr "Format"
 
-#: models/excerpt.py:29 models/page.py:44 models/position.py:21
+#: models/excerpt.py:34 models/page.py:50 models/position.py:22
 msgid "Description"
 msgstr "Description"
 
-#: models/excerpt.py:30
+#: models/excerpt.py:35
 msgid "{% load %} libraries, comma separated"
 msgstr "Bibliothèques {% load %} séparées par des virgules"
 
-#: models/excerpt.py:30
+#: models/excerpt.py:35
 msgid "Tag libs"
 msgstr "Bibliothèques de tags"
 
-#: models/excerpt.py:39 models/excerpt.py:74
+#: models/excerpt.py:44 models/excerpt.py:86
 msgid "Text"
 msgstr "Texte"
 
-#: models/excerpt.py:45
+#: models/excerpt.py:50
 msgid "(No text)"
 msgstr "(Aucun texte)"
 
-#: models/excerpt.py:52
+#: models/excerpt.py:62
 msgid "Languages"
 msgstr "Langues"
 
-#: models/excerpt.py:67
+#: models/excerpt.py:79
 msgid "excerpt"
 msgstr "extrait"
 
-#: models/excerpt.py:68
+#: models/excerpt.py:80
 msgid "excerpts"
 msgstr "extraits"
 
-#: models/page.py:45
+#: models/page.py:51
 msgid "Keywords"
 msgstr "Mots-clés"
 
-#: models/page.py:46
+#: models/page.py:52
 msgid "Page URL"
 msgstr "URL de la page"
 
-#: models/page.py:46 models/template.py:20
+#: models/page.py:52 models/template.py:23
 msgid "Path"
 msgstr "Chemin"
 
-#: models/page.py:48
+#: models/page.py:54
 msgctxt "page"
 msgid "Active"
 msgstr "Active"
 
-#: models/page.py:49
+#: models/page.py:55
 msgid "Page header extra code"
 msgstr "Code supplémentaire dans l'en-tête de page"
 
-#: models/page.py:50
+#: models/page.py:56
 msgid "Parent page, used in lists and breadcrumbs"
 msgstr "Page parente, utilisé dans les listes et les breadcrumbs"
 
-#: models/page.py:50
+#: models/page.py:56
 msgid "Parent"
 msgstr "Parent"
 
-#: models/page.py:52 models/position.py:23
+#: models/page.py:58 models/position.py:24
 msgid "Anonymous access"
 msgstr "Accès anonyme"
 
-#: models/page.py:53 models/position.py:24
+#: models/page.py:59 models/position.py:25
 msgid "Authenticated access"
 msgstr "Accès authentifié"
 
-#: models/page.py:116
+#: models/page.py:130
 msgid "page"
 msgstr "page"
 
-#: models/page.py:117
+#: models/page.py:131
 msgid "pages"
 msgstr "pages"
 
-#: models/position.py:13
+#: models/position.py:14
 msgid "Menu"
 msgstr "Menu"
 
-#: models/position.py:13
+#: models/position.py:14
 msgid "Heading"
 msgstr "En-tête"
 
-#: models/position.py:13
+#: models/position.py:14
 msgid "Footer"
 msgstr "Pied de page"
 
-#: models/position.py:13
+#: models/position.py:14
 msgid "Js"
 msgstr "JS"
 
-#: models/position.py:13
+#: models/position.py:14
 msgid "Extra head"
 msgstr "Supplément Head"
 
-#: models/position.py:19
+#: models/position.py:20
 msgid "Name used for the position block in a template"
 msgstr "Nom utilisé pour l'emplacement/bloc dans un gabarit"
 
-#: models/position.py:25
+#: models/position.py:26
 msgid "Access for groups"
 msgstr "Accès aux groupes"
 
-#: models/position.py:70
+#: models/position.py:74
 msgid "position"
 msgstr "position"
 
-#: models/position.py:71
+#: models/position.py:75
 msgid "positions"
 msgstr "positions"
 
-#: models/template.py:21
+#: models/template.py:24
 msgid "Contains html, head and body tags."
 msgstr "Contient les balises html, head et body."
 
-#: models/template.py:21
+#: models/template.py:24
 msgid "Full page template"
 msgstr "Gabarit de page complète"
 
-#: models/template.py:42
+#: models/template.py:55
 msgid "File exists"
 msgstr "Le fichier existe"
 
-#: models/template.py:94
+#: models/template.py:64
+msgid "Has inner blocks"
+msgstr "Possède des blocs internes"
+
+#: models/template.py:73 models/template.py:86
+msgid "Inner blocks"
+msgstr "Blocs internes"
+
+#: models/template.py:138
 msgid "template"
 msgstr "gabarit"
 
-#: models/template.py:95
+#: models/template.py:139
 msgid "templates"
 msgstr "gabarits"
 

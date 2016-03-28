@@ -27,7 +27,9 @@ __all__ = ['PictureAdmin']
 class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
     """ Administration des images """
 
-    list_display = ['id', 'get_thumbnail', 'title', 'description', 'width', 'height', 'get_file_size', 'get_content_type_info', 'get_content_object_info', 'get_uuid_html', 'get_updated_date', 'get_deleted', 'moderated']
+    list_display = ['id', 'get_thumbnail', 'title', 'description', 'width', 'height', 'get_file_size',
+                    'get_content_type_info', 'get_content_object_info', 'get_uuid_html', 'get_updated_date',
+                    'get_deleted', 'acl_mode', 'moderated']
     list_filter = ['content_type', 'deleted', DimensionsFilter, 'moderated', TimestampFilter]
     list_display_links = ['id']
     list_editable = ['title', 'moderated']

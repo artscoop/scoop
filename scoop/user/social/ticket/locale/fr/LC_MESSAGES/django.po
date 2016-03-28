@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 04:51+0100\n"
+"POT-Creation-Date: 2016-03-28 06:14+0200\n"
 "PO-Revision-Date: 2013-03-28 16:54+0009\n"
 "Last-Translator: Anonymous User <steve@localhost.local>\n"
 "Language-Team: français <>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.15-compat\n"
 
-#: admin/admin.py:21
+#: admin/admin.py:20
 #, fuzzy
 msgid "Close selected tickets"
 msgstr "Ticket en rapport"
 
-#: admin/admin.py:26
+#: admin/admin.py:25
 msgid "Selected tickets have been successfully closed."
 msgstr ""
 
@@ -36,7 +36,7 @@ msgstr "Nom"
 msgid "Short name"
 msgstr "Nom court"
 
-#: models/resolution.py:10 models/ticket.py:43
+#: models/resolution.py:10 models/ticket.py:42
 msgid "Description"
 msgstr "Description"
 
@@ -58,67 +58,67 @@ msgstr "Statut de résolution"
 msgid "resolution statuses"
 msgstr "Statuts de résolution"
 
-#: models/ticket.py:37
+#: models/ticket.py:36
 msgid "New"
 msgstr ""
 
-#: models/ticket.py:37 models/ticket.py:44
+#: models/ticket.py:36 models/ticket.py:43
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/ticket.py:41
+#: models/ticket.py:40
 msgid "Author"
 msgstr "Auteur"
 
-#: models/ticket.py:42
+#: models/ticket.py:41
 msgid "Title"
 msgstr "Titre"
 
-#: models/ticket.py:45
+#: models/ticket.py:44
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/ticket.py:47 models/update.py:24
+#: models/ticket.py:46 models/update.py:23
 msgid "Status"
 msgstr "État"
 
-#: models/ticket.py:48
+#: models/ticket.py:47
 #, fuzzy
 msgid "Related tickets"
 msgstr "Ticket en rapport"
 
-#: models/ticket.py:50
+#: models/ticket.py:49
 msgid "Administrators"
 msgstr "Administrateurs"
 
-#: models/ticket.py:102
+#: models/ticket.py:101
 #, fuzzy
 msgid "ticket"
 msgstr "Ticket"
 
-#: models/ticket.py:103
+#: models/ticket.py:102
 #, fuzzy
 msgid "tickets"
 msgstr "Tickets"
 
-#: models/ticket.py:104
+#: models/ticket.py:103
 msgid "Can close a ticket"
 msgstr "Peut clôturer un ticket"
 
-#: models/update.py:23
+#: models/update.py:22
 msgid "Ticket"
 msgstr "Ticket"
 
-#: models/update.py:25
+#: models/update.py:24
 msgid "Body"
 msgstr "Corps"
 
-#: models/update.py:30
+#: models/update.py:29
 #, fuzzy
 msgid "ticket update"
 msgstr "Mise à jour de ticket"
 
-#: models/update.py:31
+#: models/update.py:30
 #, fuzzy
 msgid "ticket updates"
 msgstr "Mises à jour de tickets"

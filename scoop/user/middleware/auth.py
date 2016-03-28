@@ -1,5 +1,6 @@
 # coding: utf-8
 import traceback
+from random import randint
 
 from django.conf import settings
 from django.contrib import messages
@@ -10,11 +11,13 @@ from django.http.response import HttpResponseRedirect
 from scoop.core.util.django import formutil
 from scoop.user.forms import LoginForm
 from scoop.user.models import User
+from scoop.user.forms.configuration import ConfigurationForm
 
 
 class LoginMiddleware(object):
     """
     Middleware de connexion utilisateur
+
     Pour connecter l'utilisateur, nécessite :
     - un attribut POST submit-login
     - des attributs POST username et password
@@ -27,11 +30,10 @@ class LoginMiddleware(object):
     # Exécuter le middleware
     def process_request(self, request):
         """ Traiter la requête """
-        if request.user.is_anonymous() and request.has_post('submit-login'):
+        if request.has_post('submit-login') and request.user.is_anonymous():
             form = request.form([LoginForm])
             if formutil.are_valid([form]):
                 try:
-                    from scoop.user.forms.configuration import ConfigurationForm
                     # Retrouver l'adresse de destination après connexion
                     user = User.sign(request, request.POST)
                     target = request.GET.get('next', ConfigurationForm.get_login_destination(user))
@@ -51,6 +53,7 @@ class LoginMiddleware(object):
 class AutoLogoutMiddleware(object):
     """
     Middleware de déconnexion automatique de l'utilisateur
+
     Déconnecte un membre connecté dans les cas suivants :
     - est en ligne mais désactivé
     - est en ligne et une déconnexion a été demandée
@@ -58,8 +61,9 @@ class AutoLogoutMiddleware(object):
 
     def process_request(self, request):
         """ Traiter la requête """
-        user = request.user
-        if user.is_authenticated() and (user.deleted or not user.is_active or user.is_logout_forced()):
-            User.sign(request, None, logout=True)
-            cache.delete(User.CACHE_KEY['logout.force'].format(user.pk))
+        if randint(0, 5) == 0:
+            user = request.user
+            if user.is_authenticated() and (user.deleted or not user.is_active or user.is_logout_forced()):
+                User.sign(request, None, logout=True)
+                cache.delete(User.CACHE_KEY['logout.force'].format(user.pk))
         return None
