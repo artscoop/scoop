@@ -1,8 +1,10 @@
 # coding: utf-8
 """
 Données de configuration utilisateur via formulaires
+
 Les formulaires qui permettent d'enregistrer des informations
 de configuration héritent de user.util.forms.DataForm
+:seealso: scoop.user.util.forms.DataForm
 """
 import picklefield
 from django.conf import settings
@@ -56,6 +58,8 @@ class FormConfigurationManager(models.Manager):
 
 class FormConfiguration(DatetimeModel):
     """ Configuration utilisateur via formulaire """
+
+    # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='configurations', on_delete=models.CASCADE, verbose_name=_("User"))
     name = models.CharField(max_length=32, verbose_name=_("Form name"))
     version = models.CharField(max_length=24, blank=True, help_text=_("Variation name"), verbose_name=_("Version"))

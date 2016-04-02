@@ -72,13 +72,12 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='profile', primary_key=True, on_delete=models.PROTECT, verbose_name=_("User"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('profile', "Updated"))
     gender = models.SmallIntegerField(null=False, blank=False, choices=GENDER, default=0, db_index=True, verbose_name=_("Gender"))
-    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, help_text=_("Select the main profile picture"), related_name='+',
-                                verbose_name=_("Picture"))
+    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, help_text=_("Select the main profile picture"),
+                                related_name='+', verbose_name=_("Picture"))
     banned = models.BooleanField(default=False, verbose_name=pgettext_lazy('profile', "Banned"))
     harmful = models.NullBooleanField(default=None, verbose_name=pgettext_lazy('profile', "Harmful"))
-    city = models.ForeignKey('location.City', null=True, blank=True, default=None,
-                             on_delete=models.SET_NULL, related_name="+", verbose_name=_("City")
-                             ) if apps.is_installed('scoop.location') else None
+    if apps.is_installed('scoop.location'):
+        city = models.ForeignKey('location.City', null=True, blank=True, default=None, on_delete=models.SET_NULL, related_name="+", verbose_name=_("City"))
 
     # Getter
     @addattr(boolean=True, admin_order_field='user__date_joined', short_description=_("New"))
@@ -95,7 +94,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
         if is_installed('scoop.user.access'):
             from scoop.user.access.models import Access
             # Renvoyer les accès depuis une certaine date ou tous
-            items = Access.objects.user_accesses(self.user)
+            items = Access.objects.by_user(self.user, limit=None)
             if since is not None:
                 return items.filter(time__gt=Access.since(since))
             return items

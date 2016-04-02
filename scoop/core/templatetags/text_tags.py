@@ -4,6 +4,7 @@ import re
 from django import template
 from django.conf import settings
 from django.db.models.base import Model
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
@@ -129,3 +130,10 @@ def compare(initial, other):
     :returns: un nombre entre 0 et 1
     """
     return NGram.compare(initial, other)
+
+
+@register.filter
+def site_brand(value):
+    """ Remplace des occurrences de texte par une version améliorée du nom du site """
+    replacement = render_to_string("core/display/site-name.txt").strip('\n ')
+    return value.replace(settings.CORE_BRAND_NAME_MARKER, replacement)

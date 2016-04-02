@@ -159,7 +159,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
 
     def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
-        return """Message #{thread:010} "{message}" """.format(thread=self.thread_id, message=truncate_ellipsis(self.text, 24))
+        return """Post #{thread:010} "{message}" """.format(thread=self.thread_id, message=truncate_ellipsis(self.text, 24))
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """

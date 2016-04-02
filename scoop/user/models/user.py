@@ -55,6 +55,7 @@ class UserQuerySetMixin(object):
     def get_or_raise(self, **kwargs):
         """
         Renvoyer un utilisateur selon des paramètres de filtre, sinon lever une exception
+
         :param exception: classe de l'exception à lever en cas d'absence de l'utilisateur
         """
         exception = kwargs.pop('exception', Http404)
@@ -94,21 +95,23 @@ class UserQuerySetMixin(object):
     def by_online_range(self, start, duration):
         """
         Renvoyer des utilisateurs selon la période pendant laquelle ils ont été en ligne
+
         :param start: datetime de départ
         :param duration: timedelta positif ou négatif d'offset de fin
         """
         online_range = [start, start + duration] if duration > datetime.timedelta() else [start - duration, start]
         return self.filter(last_online__range=online_range)
 
-    def get_bot(self, name=None):
+    def get_bot(self, name=None, include_superuser=True):
         """ Renvoyer un robot, sinon un superutilisateur, sinon un nouveau robot """
         criteria = {'username': name} if name else {}
         bots = self.filter(bot=True, **criteria)
         if bots.exists():
             return bots.first()
-        bots = self.filter(is_superuser=True)
-        if bots.exists():
-            return bots.first()
+        if include_superuser:
+            bots = self.filter(is_superuser=True)
+            if bots.exists():
+                return bots.first()
         new_bot = self.create(username='bot-{}'.format(slugify(name or "default")), name=name or "Bot", email='rescuebot@localhost.com', bot=True)
         return new_bot
 

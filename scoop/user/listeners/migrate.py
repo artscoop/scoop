@@ -16,13 +16,13 @@ logger = logging.getLogger(__name__)
 @receiver(signals.post_migrate)
 def create_testuser(sender, app_config, verbosity, interactive, using, **kwargs):
     """ Traiter une migration réussie """
-    if settings.SYNCDB_MAKE_USERS is True and (not settings.TEST or isinstance(sender, UserConfig)):
+    if settings.USER_MIGRATION_MAKE_USERS is True and (not settings.TEST or isinstance(sender, UserConfig)):
         from scoop.user.models import Activation
         # Informations utiliasteur par défaut
-        DEFAULT_ADMIN_NAME = getattr(settings, 'SYNCDB_SUPERUSER_NAME', 'admin')
-        DEFAULT_PASSWORD = getattr(settings, 'SYNCDB_SUPERUSER_PASSWORD', 'admin')
-        DEFAULT_EMAIL = getattr(settings, 'SYNCDB_SUPERUSER_EMAIL', 'admin@localhost.local')
-        DEFAULT_USER_COUNT = getattr(settings, 'SYNCDB_DEFAULT_USER_COUNT', 0)
+        DEFAULT_ADMIN_NAME = getattr(settings, 'USER_MIGRATION_SUPERUSER_NAME', 'admin')
+        DEFAULT_PASSWORD = getattr(settings, 'USER_MIGRATION_SUPERUSER_PASSWORD', 'admin')
+        DEFAULT_EMAIL = getattr(settings, 'USER_MIGRATION_SUPERUSER_EMAIL', 'admin@localhost.local')
+        DEFAULT_USER_COUNT = getattr(settings, 'USER_MIGRATION_DEFAULT_USER_COUNT', 0)
         current_count = get_user_model().objects.all().count()
         created_count = 0
         # Créer l'admin et le compte de test si inexistants

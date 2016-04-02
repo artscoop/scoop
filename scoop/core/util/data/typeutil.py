@@ -27,8 +27,8 @@ def make_iterable(value, output_type=list):
 
 def hash_rgb(value):
     """ Renvoyer un hash de couleur depuis une chaîne """
-    result = int(hashlib.md5(value).hexdigest(), 16)
-    red, green, blue = (result / 65536) % 256, (result / 256) % 256, result % 256
+    result = int(hashlib.md5(value.encode('utf-8')).hexdigest(), 16)
+    red, green, blue = (result // 65536) % 256, (result // 256) % 256, result % 256
     return red, green, blue
 
 

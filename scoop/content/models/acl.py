@@ -2,9 +2,11 @@
 
 from autoslug.fields import AutoSlugField
 from django.conf import settings
+from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.core.uuid import UUID64Model
 
 
@@ -19,8 +21,8 @@ class CustomACLQuerySet(models.QuerySet):
         :type path: str
         :returns: un objet ACL pour la resource, ou None
         """
-        elements = path.split('/')
-        if len(elements) > 3:
+        elements = path.split('/', 6)
+        if len(elements) >= 6:
             if elements[0] == 'password':
                 owner = elements[1]
                 slug = elements[2]
@@ -48,11 +50,21 @@ class CustomACL(UUID64Model):
     # Getter
     def get_acl_directory(self):
         """" Renvoyer le nom de répertoire d'ACL pour l'objet """
-        return "{acl}/{owner}/{name}".format(acl=self.ACL_PATHS[self.PASSWORD], owner=self.owner.username, name=self.get_slug())
+        return "{acl}/{spread}/{owner}/{name}".format(acl=self.ACL_PATHS[self.PASSWORD], name=self.get_slug(),
+                                                      owner=self.owner.username, spread=ACLModel._get_hash_path(self.owner.username))
 
     def get_slug(self):
         """ Renvoyer le nom du répertoire ACL """
         return self.slug or 'default'
+
+    def check_password(self, password):
+        """ Renvoyer si un mot de passe correspond à cette configuration """
+        return check_password(password)
+
+    # Setter
+    def set_password(self, password):
+        """ Définit le mot de passe de la configuration ACL """
+        self.password = make_password(password)
 
     # Métadonnées
     class Meta:

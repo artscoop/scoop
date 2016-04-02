@@ -1,7 +1,9 @@
 # coding: utf-8
 from django.contrib.contenttypes.fields import ContentType
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.utils import IntegrityError
+from django.forms.fields import EmailField
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.content.models.content import Content
@@ -18,6 +20,15 @@ class SubscriptionManager(models.Manager):
     """ Manager des abonnements """
 
     # Getter
+    def is_valid(self, email):
+        """ Renvoyer si une adresse email a un format valide """
+        field = EmailField()
+        try:
+            field.clean(email)
+            return True
+        except ValidationError:
+            return False
+
     def for_email(self, email, confirmed=None):
         """
         Renvoyer les abonnements pour une adresse email
@@ -35,19 +46,22 @@ class SubscriptionManager(models.Manager):
     # Actions
     def subscribe(self, content, email):
         """ Ajouter un abonnement """
-        if is_installed('scoop.rogue'):
-            from scoop.rogue.models import MailBlock
-            if MailBlock.objects.is_blocked(email):
-                return False
-        if isinstance(content, Content):
-            try:
-                subscription = Subscription(email=email.lower())
-                subscription.content_object = content
-                subscription.save()
-                mailable_event.send(sender=content, mailtype='content.subscription.confirm', recipient=subscription.email, data={})
-                return True
-            except IntegrityError:
-                return False
+        if self.is_valid(email):
+            if is_installed('scoop.rogue'):
+                from scoop.rogue.models import MailBlock
+                if MailBlock.objects.is_blocked(email):
+                    return False
+            if isinstance(content, Content):
+                try:
+                    subscription = Subscription(email=email.lower())
+                    subscription.content_object = content
+                    subscription.save()
+                    mailable_event.send(sender=content, mailtype='content.subscription.confirm', recipient=subscription.email, data={})
+                    return True
+                except IntegrityError:
+                    return False
+        else:
+            return False
 
     def confirm(self, uuid):
         """
@@ -82,7 +96,7 @@ class SubscriptionManager(models.Manager):
 
     def purge(self):
         """ Supprimer les abonnement non-validés dans les 6 dernières heures """
-        self.filter(time__gt=from_now(hours=-6, timestamp=True)).delete()
+        self.filter(time__lt=from_now(hours=-6, timestamp=True), confirmed=False).delete()
 
 
 class Subscription(GenericModel, DatetimeModel, UUID64Model):

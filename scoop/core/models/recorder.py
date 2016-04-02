@@ -66,13 +66,18 @@ class RecordManager(SingleDeleteManager):
     def record(self, user, codename, target=None, container=None):
         """
         Enregistrer une nouvelle action
+
         :param codename: nom d'action en 3 parties séparées par des points, du type app.action.model
         :param target: objet concerné par l'action de user
+        :type target: models.Model | str | object
         :param container: si target est dans un conteneur, l'ajouter
         """
         try:
+            target_object = target if isinstance(target, models.Model) else None
+            target_name = str(target) if target is not None else ""
             action_type = ActionType.objects.get(codename=codename)
-            entry = Record(user=user, type=action_type, target_object=target, container_object=container)
+            entry = Record(user=user, type=action_type, target_object=target_object, target_name=target_name,
+                           container_object=container)
             entry.save()
         except ActionType.DoesNotExist:
             logger.warning("The action type {type} must be registered in order to create this record.".format(type=codename))

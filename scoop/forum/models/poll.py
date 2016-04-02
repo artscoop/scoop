@@ -29,6 +29,18 @@ class PollManager(SingleDeleteManager):
         """ Renvoyer un sondage par son slug """
         return self.get(slug=slug)
 
+    def answered(self, user):
+        """
+        Renvoyer les sondages auxquels utilisateur a déjà donné une réponse
+
+        :param user: utilisateur
+        """
+        return self.filter(votes__author=user).distinct()
+
+    def closed(self):
+        """ Renvoyer les sondages fermés """
+        return self.filter(closed=True)
+
 
 class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel, DataModel):
     """ Sondage """
@@ -63,6 +75,10 @@ class Poll(DatetimeModel, AuthoredModel, UUID128Model, PicturableModel, DataMode
     def get_form_choices(self):
         """ Renvoyer les choix de champ de formulaire """
         return tuple(enumerate(self.answers))
+
+    def get_choice_count(self):
+        """ Renvoie le nombre de choix disponibles """
+        return len(self.get_choices())
 
     @addattr(boolean=True, short_description=_("Has votes"))
     def has_votes(self):

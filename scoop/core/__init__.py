@@ -1,8 +1,20 @@
 # coding: utf-8
+"""
+Cœur des applications scoop.
+
+Classes abstraites pour les autres applications scoop
+Modèles centraux :
+- Options (choices, mais en base de données avec plus d'options)
+- Recorder de tous éléments possédant un UUID
+- Recorder des actions effectuées sur le système
+- Redirections
+Legacy pour import/export de données legacy de DB
+Profiling et mesures de performances de requêtes (middleware)
+"""
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop as _
 
-__version__ = (1, 2015, 3)
+__version__ = (1, 2016, 3)
 _("language"), _("gender"), _("Profiles"), _("Profile")
 
 

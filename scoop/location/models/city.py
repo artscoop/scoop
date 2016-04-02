@@ -255,7 +255,7 @@ class City(CoordinatesModel, PicturableModel):
         :param km: distance max en km
         """
         cities = City.objects.city()
-        return cities.in_radius(self.get_point(), km) if circle else cities.in_box(self.get_point(), km)
+        return cities.in_radius(self.get_point(), km) if circle else cities.in_square(self.get_point(), km)
 
     def get_biggest_close_city(self, km=30):
         """
@@ -317,6 +317,16 @@ class City(CoordinatesModel, PicturableModel):
             return names[0].name
         return self.name
 
+    def get_names(self):
+        """
+        Renvoyer tous les noms de la ville (hors codes)
+
+        :rtype: list
+        :returns: une liste de noms
+        """
+        names = self.alternates.exclude(language__in=['post', 'link']).order_by('name').values_list('name', flat=True)
+        return names
+
     def has_name(self, name):
         """ Renvoyer si la ville porte un nom """
         name = name.strip().lower()
@@ -326,13 +336,17 @@ class City(CoordinatesModel, PicturableModel):
     def get_code(self):
         """ Renvoyer le code postal par défaut de la ville """
         names = self.alternates.filter(language='post').order_by('-preferred', '-short', 'name')
-        if names.exists() and not self.code:
+        if not self.code and names.exists():
             self.code = names[0].name
             self.save()
         return self.code
 
     def get_codes(self):
-        """ Renvoyer tous les codes postaux de la ville """
+        """
+        Renvoyer tous les codes postaux de la ville
+
+        :rtype: list
+        """
         return self.alternates.filter(language='post').order_by('-preferred', 'name').values_list('name', flat=True)
 
     def has_code(self, code):

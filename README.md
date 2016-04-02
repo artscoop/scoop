@@ -27,10 +27,12 @@ Nécessite python 3.4, nginx et Django 1.9
 - `DEFAULT_THUMBNAIL_DIMENSIONS` : *dict*, dimensions par défaut d'une miniature, avec les clés `width` et `height`
 - `CLASSIFY_LANGUAGE` : *str*, langue par défaut des stopwords, parmi ['english', 'french']
 - `CONTENT_ACL_ENABLED` : *bool* (True), si False, toujours autoriser l'accès aux fichiers media protégés par ACL 
-- `CONTENT_ACL_AUTO_UPDATE_PATHS` : *bool* (False), si True, chaque fichier ACL utilisera le modèle de nommage courant lors de sa sauvegarde. 
+- `CONTENT_ACL_AUTO_UPDATE_PATHS` : *bool* (False), si True, chaque fichier ACL utilisera le modèle de nommage courant lors de sa sauvegarde.
+- `CONTENT_ACL_MEDIA_URL` : *str*, chemin de redirection vers le répertoire _location_ internal de nginx
 
 ### Core
 - `CORE_ACTION_RECORD` : *bool*, faut-il enregistrer les actions core.Record dans la base de données
+- `CORE_BRAND_NAME_MARKER` : *str*, lorsque le tag text_tags.brand est utilisé, quel texte doit être remplacé par le nom du site ? ex. '%brand%'
 - `FORM_ALIASES` : *dict*, alias utilisés pour identifier les formulaires à valider en AJAX (voir scoop.core.views.ajax.validate_form)
 - `MAKEMESSAGES_DIRS` : *list*, liste de répertoires racines à parcourir à la recherche de locales à traduire
 

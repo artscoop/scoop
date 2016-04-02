@@ -30,6 +30,7 @@ class IPBlockManager(SingleDeleteManager):
     def is_blocked(self, ip):
         """
         Renvoyer si une IP est bloquée
+
         :type ip: scoop.user.access.models.IP
         """
         from scoop.location.models import Country
@@ -216,10 +217,12 @@ class IPBlock(DatetimeModel):
     CATEGORIES = [[0, _("General")], [1, _("Proxy")], [2, _("Server")], [3, _("Compromised IP")], [4, _("Repeated trouble")], [10, _("Tor network")], [11, _("Anonymous network")],
                   [12, _("VPN")]]
     HARM = [[1, _("Rarely harmful")], [2, _("Often harmful")], [3, _("Always harmful")]]
+    SINGLE, RANGE, HOST, HOST_EXCLUSION, ISP_EXCLUSION, COUNTRY, HOST_ALLOWED, ISP_ALLOWED = 0, 1, 2, 3, 4, 5, 6, 7
+
     # Champs
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('ipblocking', "Active"))
     expires = models.DateTimeField(default=None, blank=True, null=True, verbose_name=_("Expires"))
-    type = models.SmallIntegerField(choices=TYPES, default=0, db_index=True, verbose_name=_("Type"))
+    type = models.SmallIntegerField(choices=TYPES, default=SINGLE, db_index=True, verbose_name=_("Type"))
     category = models.SmallIntegerField(choices=CATEGORIES, default=0, db_index=True, verbose_name=_("Category"))
     description = models.TextField(default="", blank=True, verbose_name=_("Description"))
     harm = models.SmallIntegerField(choices=HARM, default=2, validators=[MaxValueValidator(4)], verbose_name=_("Harm level"))
@@ -237,25 +240,25 @@ class IPBlock(DatetimeModel):
         """ Renvoyer les adresses IP bloquées par ce seul filtre """
         from scoop.user.access.models import IP
         # Renvoyer pour une IP simple
-        if self.type == 0:
+        if self.type == IPBlock.SINGLE:
             return IP.objects.filter(ip=self.ip1)
         # Renvoyer pour une plage d'IP
-        elif self.type == 1:
+        elif self.type == IPBlock.RANGE:
             return IP.objects.filter(ip__range=(self.ip1, self.ip2))
         # Renvoyer pour le nom d'hôte
-        elif self.type == 2 and self.hostname:
+        elif self.type == IPBlock.HOST and self.hostname:
             return IP.objects.filter(reverse__icontains=self.hostname)
         # Renvoyer pour le nom d'hôte avec exclusion
-        elif self.type == 3 and self.hostname:
+        elif self.type == IPBlock.HOST_EXCLUSION and self.hostname:
             return IP.objects.filter(reverse__icontains=self.hostname).exclude(**({'reverse__iregex': self.hostname_exclude} if self.hostname_exclude else {}))
         # Renvoyer pour le nom de FAI avec exclusion
-        elif self.type == 4:
+        elif self.type == IPBlock.ISP_EXCLUSION:
             items = IP.objects.filter(isp__istartswith=self.isp)
             if self.hostname_exclude != "":
                 items = items.exclude(reverse__iregex=self.hostname_exclude)
             return items
         # Renvoyer pour le pays
-        elif self.type == 5:
+        elif self.type == IPBlock.COUNTRY:
             return IP.objects.filter(country=self.country_code)
         # Renvoyer 0 pour un mode Allowed
         else:
@@ -265,10 +268,10 @@ class IPBlock(DatetimeModel):
         """ Renvoyer les adresses IP en liste blanche pour ce filtre """
         from scoop.user.access.models import IP
         # Nom d'hôte
-        if self.type == 6:
+        if self.type == IPBlock.HOST_ALLOWED:
             return IP.objects.filter(reverse__iregex=self.hostname)
         # FAI
-        elif self.type == 7:
+        elif self.type == IPBlock.ISP_ALLOWED:
             return IP.objects.filter(isp=self.isp)
         else:
             return IP.objects.none()

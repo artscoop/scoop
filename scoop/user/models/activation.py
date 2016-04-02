@@ -66,6 +66,7 @@ class ActivationManager(models.Manager):
 
 class Activation(DatetimeModel, UUID128Model):
     """ Activation ou réactivation utilisateur """
+
     # Constantes
     MAX_RESENDS = 5  # Maximum de renvois de mails de confirmation
 
@@ -73,7 +74,7 @@ class Activation(DatetimeModel, UUID128Model):
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='activation', primary_key=True, verbose_name=_("User"))
     # Dans le cas où l'email est indisponible, utiliser question secrète
     question = models.IntegerField(null=True, verbose_name=_("Secret question"))
-    answer = models.CharField(max_length=48, blank=True, verbose_name=_("Answer"))
+    answer = models.CharField(max_length=96, blank=True, verbose_name=_("Answer"))
     # Activation possible ?
     active = models.BooleanField(default=True, verbose_name=pgettext_lazy('activation', "Active"))
     updates = models.SmallIntegerField(default=0, verbose_name=_("Updates"))
@@ -85,7 +86,7 @@ class Activation(DatetimeModel, UUID128Model):
     # Getter
     def is_answer_ok(self, phrase):
         """ Renvoyer si une expression correspond à la réponse secrète """
-        return phrase.lower() == self.answer.lower()
+        return phrase.lower().strip() == self.answer.lower().strip()
 
     def is_valid(self):
         """ Renvoyer si l'état de la validation est cohérent """

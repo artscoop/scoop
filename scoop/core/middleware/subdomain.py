@@ -7,6 +7,7 @@ from django.conf import settings
 class SubdomainsMiddleware(object):
     """
     Middleware qui remplace complètement la Root URL configuration
+
     selon le nom de sous-domaine actuel.
     La liste des sous-domaines est décrite dans settings.SUBDOMAINS.
     Le fichier URLconf à utiliser pour chaque sous-domaine de la liste se trouve

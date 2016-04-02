@@ -95,6 +95,7 @@ def handle_upload(request):
     Traitement des uploads, Ajax, directs ou fragmentés
 
     Utilisation :
+    - Vous utilisez une bibliothèque d'upload type PLUpload
     - Vous utilisez une vue AJAX qui est appelée pour l'upload progressif
     - Récupérer le résultat de handle_upload dans la vue AJAX
     - Si le résultat est un dictionnaire, l'upload est terminé.

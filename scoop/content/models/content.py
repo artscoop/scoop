@@ -310,7 +310,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     objects = ContentManager()
 
     # Getter
-    @addattr(boolean=True, short_description=_("Published"))
+    @addattr(boolean=True, admin_order_field='published', short_description=_("Published"))
     def is_published(self):
         """ Renvoyer si le contenu est publié """
         return self.published
@@ -506,6 +506,11 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         # Envoyer un signal insiquand que le contenu est mis à jour
         if self.moderated:
             content_updated.send(instance=self)
+
+    def auto_process(self, authors=None):
+        """ Automatisation de la modération (approval) """
+        if any([author.is_staff for author in authors]):
+            self.approve()
 
     @python_2_unicode_compatible
     def __str__(self):

@@ -1,5 +1,6 @@
 # coding: utf-8
 import logging
+from urllib import parse
 
 from django.conf import settings
 from django.http.response import HttpResponse
@@ -11,6 +12,7 @@ from scoop.user.models.user import User
 
 logger = logging.getLogger('acl')
 ACL_ENABLED = getattr(settings, 'CONTENT_ACL_ENABLED', True)
+ACL_MEDIA = getattr(settings, 'CONTENT_ACL_MEDIA_URL', '/acl/')
 DENIED_RESPONSE = HttpResponse(status=403)
 
 
@@ -61,7 +63,7 @@ def acl_file_serve(request, resource):
     # Demander à nginx de servir le fichier ou renvoyer un contenu HTTP403
     if granted is True:
         response = HttpResponse(content_type="")
-        response['X-Accel-Redirect'] = '/acl_media/%s' % resource
+        response['X-Accel-Redirect'] = ACL_MEDIA + parse.quote(resource)  # il faut renvoyer une URL quotée
         logger.debug("ACL: Access granted to file {path}".format(path=resource))
         return response
     else:

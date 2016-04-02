@@ -65,7 +65,7 @@ class ThreadAdmin(admin.ModelAdmin):
     # Overrides
     def get_queryset(self, request):
         """ Renvoyer le queryset par défaut de l'administration """
-        qs = super(ThreadAdmin, self).queryset(request)
+        qs = super(ThreadAdmin, self).get_queryset(request)
         qs = qs.select_related('author').only('author__username', 'author__id', 'id', 'topic', 'started', 'deleted', 'updated', 'closed', 'expires')
         return qs
 
