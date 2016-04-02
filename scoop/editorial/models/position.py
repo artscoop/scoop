@@ -16,6 +16,7 @@ DEFAULT_NAMES = [_("Menu"), _("Heading"), _("Footer"), _("Js"), _("Extra head"),
 
 class Position(DatetimeModel, IconModel):
     """ Emplacement dans un template """
+
     # Champs
     name = models.SlugField(max_length=64, unique=True, blank=False, help_text=_("Name used for the position block in a template"), verbose_name=_("Name"))
     title = models.CharField(max_length=64, blank=False, verbose_name=_("Title"))

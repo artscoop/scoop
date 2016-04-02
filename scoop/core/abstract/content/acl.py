@@ -1,7 +1,7 @@
 # coding: utf-8
 import hashlib
 from abc import ABCMeta, abstractmethod
-from os.path import splitext, basename, join
+from os.path import splitext, basename
 
 from django.conf import settings
 from django.core.files.base import File
@@ -11,7 +11,6 @@ from django.db.models.fields.files import FileField
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
-from unidecode import unidecode
 
 from scoop.core.util.data.uuid import uuid_bits
 
@@ -50,7 +49,7 @@ class ACLModel(models.Model):
         elif self.acl_mode == self.FRIENDS:
             owner = self.get_acl_owner()
             return "{acl}/{spread}/{owner}".format(acl=self.ACL_PATHS[self.FRIENDS], owner=owner, spread=self._get_hash_path(owner))
-        elif self.acl_mode == self.CUSTOM:
+        elif self.acl_mode == self.CUSTOM and self.acl_custom:
             return self.acl_custom.get_acl_directory()
         else:
             return self.ACL_PATHS[self.PUBLIC]
@@ -63,27 +62,16 @@ class ACLModel(models.Model):
         :param filename: nom du fichier uploadé. Peut être None
         :param update: indique que le fichier existait déjà et est resauvegardé
         """
-        filename = unidecode(filename).lower() if filename else self.get_filename() if self else uuid_bits(64)
-        filename = filename.split('?')[0].split('#')[0]
-        filename = filename or uuid_bits(64)  # si le ? est au début de la chaîne, générer un nom de fichier
+        filename = filename.lower() if filename else self.get_filename() if self else uuid_bits(64)
+        filename = filename.split('?')[0].split('#')[0] or uuid_bits(64)
         # Créer les dictionnaires de données de noms de fichiers
-        now = self.get_datetime() if self else timezone.now()
-        fmt = now.strftime
+        f = (self.get_datetime() if self else timezone.now()).strftime
         # Remplir le dictionnaire avec les informations de répertoire
-        data = self.get_acl_upload_info()
-        dir_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d"), 'type': self._meta.model_name, 'acl': self.get_acl_directory()}
-        name_info = {'name': slugify(splitext(basename(filename))[0]), 'ext': splitext(basename(filename))[1]}
-        timestamp_info = {'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'week': fmt("%W")}
-        data.update(dir_info)
-        data.update(name_info)
-        data.update(timestamp_info)
+        data = self.get_acl_upload_info()  # author
+        data.update({'name': splitext(basename(filename))[0], 'ext': splitext(basename(filename))[1], 'type': self._meta.model_name,
+                     'acl': self.get_acl_directory(), 'Y': f("%Y"), 'M': f("%m"), 'W': f("%W"), 'h': f("%H"), 'm': f("%M"), 's': f("%S")})
         # Renvoyer le répertoire ou le chemin complet du fichier (documenter)
-        path = "".join(["test/" if settings.TEST else "",
-                        "{acl}/{type}",
-                        "/{year}/{month}{week}",
-                        "/{author}/{name}{ext}" if not update else ""]
-                       ).format(**data)
-        return path
+        return "".join(["test/" if settings.TEST else "", "{acl}/{type}/{Y}/{M}", "/{author}/{name}{ext}" if not update else ""]).format(**data)
 
     def get_acl_upload_info(self):
         """
@@ -115,23 +103,30 @@ class ACLModel(models.Model):
         Couper un nom en hash de répertoires
 
         ex. 'jean-michel' devient 'ac/2f/1d'
-        Le chemin est calculé à partir des 24 premiers bits du hachage SHA1
+        Le chemin est calculé à partir des 24 premiers bits du hachage SHA1.
+        Le hachage en sous-répertoires a plusieurs utilités :
+        - il vaut mieux généralement avoir des répertoires pas trop peuplés. Si par exemple nous avons 100 000
+          utilisateurs, et que l'on n'utilise pas de hash, on se retrouve alors avec un répertoire /friends,
+          contenant potentiellement *tous* les noms d'utilisateur. Avec un hash, les noms d'utilisateur sont
+          distribués sur une arborescence avec maximum 256 entrées par niveau et une dispersion à 1:16 777 216
+        - il vaut mieux utiliser des hashs que les premières lettres des noms d'utilisateur. Si tout le monde
+          s'appelle r'^johnny\d+', on risque une concentration élevée d'entrées dans /jo/hn/ny. Avec un hash,
+          on suppose généralement que 'johnny1' se trouve complètement ailleurs que 'johnny2'
+        - un hachage solide évite d'utiliser les collisions de hash à des fins de saturation/DOS
         :returns: un sous-chemin de 3 répertoires, 6 caractères hexa.
         """
-        digest = hashlib.sha1(name.encode('utf-8')).hexdigest()
+        digest = hashlib.sha256(name.encode('utf-8')).digest()
+        for _ in range(79):
+            digest = hashlib.sha256(digest).digest()
+        digest = digest.hex()
         parts = [digest[idx:idx + 2] for idx in range(0, 6, 2)]
         return '/'.join(parts)
 
     def _is_file_path_obsolete(self):
         """ Renvoie si une mise à jour du chemin de fichier aura un quelconque effet """
-        file_attribute = self.get_file_attribute()
-        new_path = self.get_acl_upload_path(self.get_filename(extension=True), update=True)
-        name_only, ext = splitext(self.get_filename(extension=True))
-        filename = "{}{}".format(slugify(name_only), ext)
-        output_file = join(new_path, filename)
-        old_path = file_attribute.name
-        target_path = self.get_acl_upload_path(output_file)
-        return target_path != old_path
+        new_path = self.get_acl_upload_path(None)
+        old_path = self.get_file_attribute().name
+        return new_path != old_path
 
     # Action
     def update_file_path(self, force_name=None):
@@ -146,18 +141,13 @@ class ACLModel(models.Model):
             self.prepare_file_path_update()
             # Changer la position du fichier
             file_attribute = self.get_file_attribute()
-            new_path = self.get_acl_upload_path(self.get_filename(extension=True), update=True)
-            name_only, ext = splitext(self.get_filename(extension=True))
-            name_only = force_name if force_name else name_only
-            filename = "{}{}".format(slugify(name_only), ext)
-            output_file = join(new_path, filename)
+            new_path = self.get_acl_upload_path(force_name, update=bool(force_name))
             old_path = file_attribute.name
-            target_path = self.get_acl_upload_path(output_file)
             # Puis recréer l'image dans le nouveau chemin
-            if target_path != old_path:  # https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
+            if new_path != old_path:  # https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
                 with File(file_attribute) as original:
                     file_attribute.open()
-                    file_attribute.save(output_file, original)
+                    file_attribute.save(new_path, original)
                     self.save(force_update=True)
                 default_storage.delete(old_path)
                 return True

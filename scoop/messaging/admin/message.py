@@ -45,7 +45,7 @@ class MessageAdmin(AuthoredModelAdmin):
 
     def get_queryset(self, request):
         """ Renvoyer le queryset par défaut de l'administration """
-        qs = super(MessageAdmin, self).queryset(request)
+        qs = super(MessageAdmin, self).get_queryset(request)
         return qs
 
 

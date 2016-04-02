@@ -81,12 +81,33 @@ class Label(TranslatableModel, UUID32Model, WeightedModel):
         except MissingTranslation:
             return _("Unnamed")
 
+    def get_description(self):
+        """ Renvoyer la description du label """
+        try:
+            return self.get_translation().description
+        except MissingTranslation:
+            return _("No description")
+
+    def get_html(self):
+        """ Renvoyer la description HTML du label """
+        try:
+            return self.get_translation().html
+        except MissingTranslation:
+            return _("No description")
+
     def get_children(self):
         """ Renvoie les descendants de l'étiquette """
         return self.children.all()
 
+    # Overrides
+    def __str__(self):
+        """ Renvoyer la représentation de l'objet """
+        return _("Forum label: [{name}]").format(name=self.name)
+
     # Propriétés
     name = property(get_name)
+    description = property(get_description)
+    html = property(get_html)
 
     # Métadonnées
     class Meta:

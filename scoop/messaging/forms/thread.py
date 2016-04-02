@@ -1,5 +1,5 @@
 # coding: utf-8
-import floppyforms as forms
+import floppyforms.__future__ as forms
 from django import forms as baseforms
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import striptags

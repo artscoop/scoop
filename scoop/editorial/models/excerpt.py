@@ -85,6 +85,11 @@ class ExcerptTranslation(get_translation_model(Excerpt, "excerpt"), TranslationM
     """ Traduction d'un extrait """
     text = models.TextField(blank=False, verbose_name=_("Text"))
 
+    # Overrides
+    def __str__(self):
+        """ Renoyer la représentation chaîne de l'objet """
+        return "Excerpt {uuid}/{lang}".format(uuid=self.model.uuid, lang=self.language)
+
     # Métadonnées
     class Meta:
         app_label = 'editorial'

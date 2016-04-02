@@ -29,7 +29,7 @@ from unidecode import unidecode
 # Fichiers Villes : http://download.geonames.org/export/dump/
 # Total des noms alternatifs : http://www.geonames.org/statistics/
 csv.field_size_limit(16777216)
-ALTERNATES_COUNT = 10223616  # 2015/08/09
+ALTERNATES_COUNT = 10946746  # 2016/04/01
 
 
 class ExcelNoQuote(excel_tab):
@@ -102,8 +102,8 @@ def populate_countries(rename=True):
 def rename_countries(output_every=262144):
     """ Peupler les noms alternatifs des pays """
     # [0: alternate_id, 1: geonames_id, 2: lang, 3: name, 4: preferred, 5: short, 6: slang, 7: historic]
-    filename = None
     try:
+        gc.disable()
         if not settings.TEST:
             default_path = join(Paths.get_root_dir('files', 'geonames'), 'alternateNames.zip')
         else:
@@ -142,6 +142,7 @@ def populate_cities(country, output_every=8192):
     """
     # [0id, 1name, 2ascii, 3alternate, 4latitude, 5longitude, 6f1, 7feature, 8country, 9c1, 10zone1, 11zone2, 12zone3, 13zone4, 14population, 15elevation, 16gtopo, 17timezone, 18updated]
     if not settings.DEBUG:
+        gc.disable()
         try:
             used_features, unused_features = {'ADM', 'PPL'}, {'PCLH', 'PCLI', 'PCLIX', 'PCLS', 'ADM1H', 'ADM2H', 'ADM3H', 'ADM4H', 'PPLCH', 'PPLF', 'PPLH', 'PPLQ', 'PPLR', 'PPLW'}
             country_name = country.get_name()
@@ -207,6 +208,7 @@ def rename_cities(output_every=262144):
     """ Peupler les noms alternatifs des villes """
     # [0:altid,1:geoid,2:lang,3:name,4:preferred,5:short,6:slang,7:historic]
     if not settings.DEBUG:
+        gc.disable()
         try:
             default_path = join(Paths.get_root_dir('files', 'geonames'), 'alternateNames.zip')
             filename = default_path if os.path.exists(default_path) else download_url_resource('http://download.geonames.org/export/dump/alternateNames.zip')
@@ -257,6 +259,7 @@ def populate_currency(country):
 def reparent_cities(country, clear=False, output_every=256):
     """ Réorganiser la hiérarchie des villes d'un pays """
     if not settings.DEBUG:
+        gc.disable()
         # Récupérer les éléments de type A (ex. ADM1)
         if clear:
             City.objects.filter(country=country).update(parent=None)

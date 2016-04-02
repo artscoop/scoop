@@ -20,6 +20,10 @@ class TagManager(models.Manager):
         """ Renvoyer les tags appartenant à un groupe """
         return self.filter(group__iexact=name)
 
+    def get_by_slug(self, slug):
+        """ Renvoyer le tag correspondant à un slug """
+        return self.get(short_name=slug)
+
 
 class Tag(IconModel, PicturableModel):
     """ Étiquette de contenu """

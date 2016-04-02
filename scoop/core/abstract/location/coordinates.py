@@ -85,6 +85,13 @@ class CoordinatesModel(models.Model):
         return result
 
     @staticmethod
+    def get_bounding_poly_at(point, km):
+        """ Renvoyer les coordonnées d'un rectangle dont les coins sont à n km autour de l'objet """
+        box = CoordinatesModel.get_bounding_box_at(point, km)
+        result = Polygon.from_bbox([box[1], box[0], box[3], box[2]])
+        return result
+
+    @staticmethod
     def sexagesimal_from_degrees(degrees, longitudinal=True):
         """ Renvoyer une valeur horaire depuis une valeur en degrés """
         letters = _("WE") if longitudinal else _("SN")
@@ -165,7 +172,7 @@ class CoordinatesModel(models.Model):
         # Calculer automatiquement la classe de modèle lié selon field
         related_model = queryset.model
         if related_field:
-            for subfield in related_field.split('__'):
+            for subfield in related_field.split('__')[:-1]:
                 related_model = getattr(related_model, subfield).get_queryset().model
 
         if isinstance(queryset, QuerySet) and (issubclass(queryset.model, CoordinatesModel) or issubclass(related_model, CoordinatesModel)):

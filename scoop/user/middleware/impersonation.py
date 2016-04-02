@@ -4,8 +4,11 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.util.signals import record
 from scoop.core.util.stream.urlutil import remove_get_parameter
 
 logger = logging.getLogger(__name__)
@@ -41,8 +44,9 @@ class ImpersonationMiddleware(object):
     def process_request(self, request):
         """ Traiter la requête """
         if request.user.is_superuser and settings.STATIC_URL not in request.path:
-            if IMPERSONATE_PARAMETER in request.GET:
+            if IMPERSONATE_PARAMETER in request.GET and SESSION_ITEM not in request.session:
                 request.session[SESSION_ITEM] = request.GET[IMPERSONATE_PARAMETER]
+                record.send(None, actor=request.user, action='user.impersonate', target=request.GET[IMPERSONATE_PARAMETER])
             elif EXIT_PARAMETER in request.GET and SESSION_ITEM in request.session:
                 del request.session[SESSION_ITEM]
                 messages.info(request, _("{name}, your impersonation session has been properly shut down.").format(name=request.user.get_short_name()))
@@ -52,6 +56,6 @@ class ImpersonationMiddleware(object):
                     request.user = get_user_model().objects.active().get(username__iexact=request.session[SESSION_ITEM])
                     messages.info(request,
                                   _("""You are viewing {path} as {name}. <a href="?{exit}">Quit</a>""").format(name=request.session[SESSION_ITEM], path=request.path, exit=EXIT_PARAMETER))
-                except:
+                except ObjectDoesNotExist:
                     messages.error(request, _("There is no active user with the username {name}.").format(name=request.session[SESSION_ITEM]))
                     del request.session[SESSION_ITEM]

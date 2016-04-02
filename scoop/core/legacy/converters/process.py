@@ -17,6 +17,7 @@ class ExportProcessor(object):
             start_index = cls.exporters.index(cls.start_with) if cls.start_with else 0
             exporters = cls.exporters[start_index:]
             count = len(exporters)
+            gc.disable()
             for ind, exporter in enumerate(exporters, start=1):
                 print("Exporting model {ind}/{count} using {name}".format(ind=ind, count=count, name=exporter.__name__))
                 exporter().exports()
@@ -62,6 +63,7 @@ class ImportProcessor(object):
                 # Import première passe
                 importers = [importer() for importer in importers]
                 count = len(importers)
+                gc.disable()
                 # Import première passe
                 for ind, importer in enumerate(importers, start=1):
                     print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))

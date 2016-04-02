@@ -32,7 +32,7 @@ class BlocklistManager(SingleDeleteManager):
             return True
         if self.is_globally_listed(sender):
             return False
-        recipients = recipients if isinstance(recipients, (list, models.QuerySet)) else [recipients]
+        recipients = recipients if isinstance(recipients, (list, tuple, models.QuerySet)) else [recipients]
         blocklists = self.filter(user__in=recipients)
         for blocklist in blocklists:
             items = blocklist.get_data(name or 'blacklist') or []
@@ -43,7 +43,7 @@ class BlocklistManager(SingleDeleteManager):
     def exists(self, recipient, sender, name=None):
         """ Renvoyer s'il existe une blocklist créée par recipient vers sender """
         blocklist = self.get_by_user(recipient)
-        return blocklist.is_listed(sender)
+        return blocklist.is_listed(sender, name)
 
     def get_user_ids(self, user, name=None):
         """ Renvoyer les ids d'utilisateurs dans une blocklist de user """
@@ -94,6 +94,7 @@ class Blocklist(DatetimeModel, DataModel):
 
     # Constantes
     DATA_KEYS = ['blacklist', 'hidelist']
+
     # Champs
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, related_name='blocklist', on_delete=models.CASCADE, verbose_name=_("Blocker"))
     objects = BlocklistManager()
@@ -127,7 +128,10 @@ class Blocklist(DatetimeModel, DataModel):
     def add(self, sender, name=None):
         """
         Ajouter un utilisateur à une blocklist
+
+        Un utilisateur du staff ne peut pas être ajouté à une blocklist
         :type sender: scoop.user.models.User or int
+        :param name: nom de la liste de blocage
         """
         if getattr(sender, 'pk', sender) not in self.get_ids(name) and not getattr(sender, 'is_staff', False):
             now = timezone.now()
@@ -141,7 +145,9 @@ class Blocklist(DatetimeModel, DataModel):
     def remove(self, sender, name=None):
         """
         Retirer un utilisateur d'une blocklist
+
         :type sender: scoop.user.models.User or int
+        :param name: nom de la liste de blocage
         """
         if getattr(sender, 'pk', sender) in self.get_ids(name):
             data = self.get_data(name or DEFAULT_LIST)
@@ -154,7 +160,9 @@ class Blocklist(DatetimeModel, DataModel):
     def toggle(self, sender, name=None):
         """
         Basculer l'enrôlement d'un utilisateur à une blocklist
+
         :type sender: scoop.user.models.User or int
+        :param name: nom de la liste de blocage
         """
         if self.is_listed(sender, name or DEFAULT_LIST):
             self.remove(sender, name or DEFAULT_LIST)

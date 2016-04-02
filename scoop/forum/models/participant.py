@@ -44,6 +44,7 @@ class ParticipantManager(SingleDeleteManager):
         Marquer qu'un utilisateur n'a pas lu un fil
 
         :param user: utilisateur ou requête
+        :param thread: fil de discussion
         :type user: django.auth.models.User | django.http.HttpRequest
         """
         user = user if isinstance(user, get_user_model()) else user.user
@@ -59,7 +60,8 @@ class ParticipantManager(SingleDeleteManager):
     def set_read(self, thread, user=None):
         """ Marquer comme lu un sujet par un utilisateur """
         if thread:
-            self.filter(thread=thread, unread=True, **({'user': user} if user else {})).update(unread=False, acknowledged=True, unread_date=timezone.now())
+            return self.filter(thread=thread, unread=True, **({'user': user} if user else {})).update(unread=False, acknowledged=True, unread_date=timezone.now())
+        return False
 
     def update_counter(self, user, thread):
         """ Mettre à jour le nombre de messages envoyés par un utilisateur dans un fil """
@@ -67,8 +69,9 @@ class ParticipantManager(SingleDeleteManager):
             recipient = self.get(user=user, thread=thread)
             recipient.counter = thread.get_user_message_count(user)
             recipient.save(update_fields=['counter'])
+            return True
         except Participant.DoesNotExist:
-            pass
+            return False
 
 
 class Participant(DatetimeModel, DataModel):

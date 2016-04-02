@@ -41,7 +41,7 @@ class RegistrationForm(forms_.ModelForm):
         """ Valider et renvoyer les données du champ email """
         email = self.cleaned_data['email'].lower()
         credentials_form_check_email.send(sender=self, email=email)
-        if User.objects.filter(email__iexact=email):
+        if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError(_("This e-mail address is already in use."))
         return email
 
