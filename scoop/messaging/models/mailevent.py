@@ -25,7 +25,7 @@ class MailEventQuerySetMixin(object):
     """ Mixin de manager des événements mail """
 
     # Getter
-    def clearable(self, user):
+    def discardable(self, user):
         """
         Renvoyer les événements supprimables si l'utilisateur passe en ligne
         :type self: django.db.models.Queryset
@@ -42,6 +42,7 @@ class MailEventQuerySetMixin(object):
     def discard(self):
         """
         Marquer comme annulés les événements mails du queryset
+
         :type self: django.db.models.Queryset
         """
         return self.update(discarded=True)
@@ -84,7 +85,11 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
         Mettre en file un événement mail
 
         :param recipient: utilisateur ou email
-        :param typename: type d'email enregistré (voir MailType)
+        :param typename: type d'email enregistré (voir MailType) ex. 'messaging.message.staff'
+        :param data: données à attacher au mail
+        :param forced: indique si le mail fait partie des contenus prioritaires
+        :type data: dict
+        :type forced: bool
         :type recipient: str | User
         :type typename: str
         """
@@ -105,7 +110,13 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
 
     @transaction.atomic
     def process(self, forced=False, bypass_delay=False):
-        """ Traiter la file d'attente et expédier des mails """
+        """
+        Traiter la file d'attente et expédier des mails
+
+        :param bypass_delay: envoyer les mails même si l'utilisateur a défini des limites empêchant d'envoyer maintenant
+        :param forced: True, False ou 'all', définit le type d'emails à envoyer.
+        :returns: le nombre d'emails effectivement envoyés
+        """
         if forced == 'all':
             return self.process(forced=False, bypass_delay=bypass_delay) + self.process(forced=True, bypass_delay=bypass_delay)
         # Pas besoin de process si aucun mail à expédier
@@ -151,7 +162,8 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
         # sera impossible de mettre à jour la base de données. (server gone)
         # Ici, on envoie donc les mails après avoir mis à jour la base.
         for mail in mails_to_send:
-            self._send_mail(*mail)
+            if self._send_mail(*mail) is False:
+                mail_counter -= 1
         return mail_counter
 
 
