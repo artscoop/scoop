@@ -101,6 +101,10 @@ class MailTypeTranslation(get_translation_model(MailType, "mailtype"), Translati
         """ Enregistrer l'objet dans la base de données """
         super(MailTypeTranslation, self).save(*args, **kwargs)
 
+    def __str__(self):
+        """ Renvoyer la représentation chaîne de l'objet """
+        return "Mail type {name}/{lang}".format(name=self.model.short_name, lang=self.language)
+
     # Métadonnées
     class Meta:
         app_label = 'messaging'

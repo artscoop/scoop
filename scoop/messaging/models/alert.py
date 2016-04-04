@@ -89,6 +89,8 @@ class Alert(DatetimeModel, DataModel):
             self.read = True
             self.read_time = timezone.now()
             self.save(update_fields=['read', 'read_time'])
+            return True
+        return False
 
     # Overrides
     def __str__(self):

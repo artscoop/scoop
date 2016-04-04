@@ -279,7 +279,7 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
         if not isinstance(recipients, list):
             recipients = [recipients]
         title, text = [render_block_to_string("messaging/warning/{}.html".format(name), label, kwargs) for label in ['title', 'text']]
-        author = getattr(get_user_model().objects, 'get_bot_or_admin')()
+        author = getattr(get_user_model().objects, 'get_bot')()
         thread = self.new(author, recipients, title, text, closed=True, as_mail=as_mail)
         return {'thread': thread}
 
@@ -299,6 +299,7 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
 
 class Thread(UUID64Model, LabelableModel, DataModel):
     """ Fil de discussion """
+
     # Constantes
     CACHE_KEY = {'unread': 'messaging.thread.unread.{}'}
     INBOX_NAMES = ['inbox', 'unread', 'replied', 'trash']
@@ -353,7 +354,11 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         return Message.objects._add(self, author, body, request, strip_tags, as_mail)
 
     def add_bot_message(self, template, as_mail=True, data=None):
-        """ Ajouter un message template d'un bot au fil """
+        """
+        Ajouter un message template d'un bot au fil
+
+        :param template: nom de fichier sans extension, relatif à messaging/message/bot
+        """
         from scoop.messaging.models import Message
         # Ajouter le message
         data = data or dict()

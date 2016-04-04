@@ -37,9 +37,16 @@ class QuotaManager(SingleDeleteManager):
 
 class Quota(models.Model):
     """ Quota de messages """
+
+    # Champs
     group = models.OneToOneField('auth.Group', null=False, primary_key=True, related_name='message_quota', on_delete=models.CASCADE, verbose_name=_("Group"))
     max_threads = models.SmallIntegerField(default=getattr(settings, 'MESSAGING_DEFAULT_THREAD_QUOTA', 32), verbose_name=_("Max threads/day"))
     objects = QuotaManager()
+
+    # Overrides
+    def __str__(self):
+        """ Renvoyer la version texte de l'objet """
+        return "Messaging quota for group {group}".format(self.group.name)
 
     # Métadonnées
     class Meta:

@@ -155,7 +155,7 @@ class Recipient(DatetimeModel, DataModel):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return "{name}".format(name=self.user.username)
+        return "{name} in {thread}".format(name=self.user, thread=self.thread)
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
