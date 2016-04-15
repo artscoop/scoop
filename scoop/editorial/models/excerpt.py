@@ -1,4 +1,5 @@
 # coding: utf-8
+import textile
 from markdown import Markdown
 
 from django.conf import settings
@@ -23,14 +24,15 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthorableModel, WeightedModel, 
     """ Extrait de texte """
 
     # Constantes
-    FORMATS = [[0, _("Plain HTML")], [1, _("Markdown")], [2, _("Textile")], [3, _("reStructured Text")], ]
-    TRANSFORMS = {1: Markdown().convert}
+    FORMATS = [[0, _("Plain HTML")], [1, _("Markdown")], [2, _("Textile")],]
+    TRANSFORMS = {1: Markdown().convert, 2: textile.textile}
+    PLAIN_HTML, MARKDOWN, TEXTILE = 0, 1, 2
 
     # Champs
     name = models.CharField(max_length=48, unique=True, blank=False, verbose_name=_("Name"))
     title = models.CharField(max_length=80, unique=True, blank=False, verbose_name=_("Title"))
     visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('excerpt', "Visible"))
-    format = models.SmallIntegerField(choices=FORMATS, default=0, verbose_name=_("Format"))
+    format = models.SmallIntegerField(choices=FORMATS, default=PLAIN_HTML, verbose_name=_("Format"))
     description = models.TextField(default="", blank=True, verbose_name=_("Description"))
     libraries = models.CharField(max_length=40, help_text=_("{% load %} libraries, comma separated"), verbose_name=_("Tag libs"))
 

@@ -52,7 +52,11 @@ def walk(storage, top='/', topdown=False, onerror=None):
 def auto_open_file(path, filename):
     """
     Ouvrir un fichier dans le répertoire path
+
+    Cherche un fichier filename.* dans path.
+    S'il existe, l'ouvre et y cherche éventuellement une entrée filename.*
     Reconnaît les fichiers gzip et zip
+    :param path: chemin du répertoire où chercher le fichier
     :param filename: nom de fichier sans extension
     """
     for files in os.listdir(path):
@@ -71,7 +75,7 @@ def auto_open_file(path, filename):
 def open_zip_file(path, filename):
     """ Ouvrir un fichier filename dans un fichier zip """
     if os.path.exists(path):
-        archive = ZipFile(path, 'r')
+        archive = ZipFile(open(path, 'rb'))
         names = archive.namelist()
         for n in names:
             if n.lower().startswith("{}.".format(filename.lower())):

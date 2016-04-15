@@ -30,8 +30,10 @@ def rebuild_users():
     if apps.is_installed('scoop.location'):
         users = User.objects.filter(profile__city__isnull=True)
         for user in users:
-            user.profile.city = UserIP.objects.get_city_for(user)
-            user.profile.save()
+            city = UserIP.objects.get_city_for(user)
+            if city is not None:
+                user.profile.city = city
+                user.profile.save()
     return True
 
 

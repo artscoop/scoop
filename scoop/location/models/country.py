@@ -64,8 +64,9 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
     """ Pays """
 
     # Constantes
-    CONTINENTS = [['AF', _("Africa")], ['AS', _("Asia")], ['EU', _("Europe")], ['NA', _("North America")], ['OC', _("Oceania")], ['SA', _("South America")], ['AN', _("Antarctica")]]
     DATA_KEYS = ['neighbours']
+    CONTINENTS = [['AF', _("Africa")], ['AS', _("Asia")], ['EU', _("Europe")], ['NA', _("North America")],
+                  ['OC', _("Oceania")], ['SA', _("South America")], ['AN', _("Antarctica")]]
 
     # Champs
     name = models.CharField(max_length=100, blank=False, verbose_name=_("Name"))
@@ -113,7 +114,7 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
     @addattr(allow_tags=True, admin_order_field='code2', short_description=_("Icon"))
     def get_icon(self, directory="png24"):
         """ Renvoyer une icône du pays """
-        return get_country_icon_html(self.code2, self.get_name())
+        return get_country_icon_html(self.code2, self.get_name(), directory=directory)
 
     @addattr(admin_order_field='area', short_description=pgettext_lazy('country', "Area"))
     def get_area(self, unit=None):
@@ -135,6 +136,11 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
         country_names = [name.upper().strip() for name in self.get_data('neighbours', '').split(',')]
         countries = Country.objects.filter(code2__in=country_names)
         return countries
+
+    @staticmethod
+    def by_code2(code):
+        """ Renvoyer le pays correspondant au code ISO 2 lettres """
+        return Country.objects.get_by_code2_or_none(code)
 
     # Overrides
     @python_2_unicode_compatible
@@ -175,7 +181,7 @@ class CountryName(models.Model):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _("Name for {}").format(self.country.name)
+        return _("Name for {country}/{lang}").format(country=self.country.name, lang=self.language)
 
     # Métadonnées
     class Meta:

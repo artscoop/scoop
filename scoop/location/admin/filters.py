@@ -57,11 +57,3 @@ class LevelFilter(SimpleListFilter):
         """ Renvoyer les objets correspondant aux valeurs du filtre """
         if self.value():
             return queryset.filter(level=int(self.value()))
-        if self.value() == '1':
-            return queryset.filter(a2='').exclude(a1='')
-        if self.value() == '2':
-            return queryset.filter(a3='').exclude(a2='')
-        if self.value() == '3':
-            return queryset.filter(a4='').exclude(a3='')
-        if self.value() == '4':
-            return queryset.exclude(a4='')

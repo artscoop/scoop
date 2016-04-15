@@ -7,6 +7,6 @@ class BrandingMiddleware(object):
 
     def process_response(self, request, response):
         """ Traiter le contenu HTML de la réponse """
-        if 'text' in response['Content-Type']:
+        if response.status_code == 200 and 'text' in response['Content-Type']:
             response.content = site_brand(response.content)
         return response

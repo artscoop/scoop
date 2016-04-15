@@ -95,6 +95,10 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
         """ Renvoyer l'URL de l'objet """
         return 'content:view-category', [self.short_name]
 
+    def __str__(self):
+        """ Renvoyer la version texte de l'objet """
+        return "Picture album {name} by {author}".format(name=self.name, author=self.author)
+
     # Métadonnées
     class Meta:
         verbose_name = _("picture album")

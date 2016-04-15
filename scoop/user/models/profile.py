@@ -72,7 +72,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, related_name='profile', primary_key=True, on_delete=models.PROTECT, verbose_name=_("User"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('profile', "Updated"))
     gender = models.SmallIntegerField(null=False, blank=False, choices=GENDER, default=0, db_index=True, verbose_name=_("Gender"))
-    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, help_text=_("Select the main profile picture"),
+    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, help_text=_("Main profile picture"),
                                 related_name='+', verbose_name=_("Picture"))
     banned = models.BooleanField(default=False, verbose_name=pgettext_lazy('profile', "Banned"))
     harmful = models.NullBooleanField(default=None, verbose_name=pgettext_lazy('profile', "Harmful"))

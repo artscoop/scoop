@@ -43,3 +43,6 @@ Nécessite python 3.4, nginx et Django 1.9
 - `MESSAGING_BLACKLIST_ENABLE` : *bool*, autoriser la mise en liste noire pour la messagerie. False par défaut
 - `MESSAGING_THREAD_UNIQUE` : *bool*, la création de thread doit-elle réutiliser les threads existants. True par défaut
 - `MESSAGING_THREAD_TOGGLE_DELAY` : *int*, délai minimum en secondes avant de pouvoir modifier l'état ouvert/fermé d'un thread. 3600 par défaut
+
+### Migrations
+- Créer les migrations avec ```dj makemigrations content core editorial forum location messaging rogue user access social```

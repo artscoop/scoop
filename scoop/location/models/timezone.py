@@ -8,26 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.util.shortcuts import addattr
 
 
-class Timezone(models.Model):
-    """ Fuseau horaire """
-
-    # Champs
-    name = models.CharField(max_length=80, blank=False, unique=True, verbose_name=_("Name"))
-    code = models.BigIntegerField(primary_key=True, editable=True, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
+class TimezoneManager(models.QuerySet):
+    """ Queryset des fuseaux horaires """
 
     # Getter
-    @staticmethod
-    def _hash_name(name):
-        """
-        Renvoyer le hash d'un nom de timezone
-        :type name: str
-        """
-        return zlib.adler32(bytes(name, 'UTF-8'))
-
-    @staticmethod
-    def by_name(name):
+    def by_name(self, name):
         """ Renvoyer un fuseau horaire par son nom """
-        timezone = Timezone.objects.filter(code=Timezone._hash_name(name))
+        timezone = self.filter(code=Timezone._hash_name(name))
         if timezone.exists():
             return timezone.first()
         else:
@@ -39,9 +26,42 @@ class Timezone(models.Model):
             except:
                 raise
 
+    def by_names(self, names):
+        """ Renvoyer tous les fuseaux horaires correspondant à une liste de noms """
+        hashes = [Timezone._hash_name(name) for name in names]
+        return self.filter(code__in=hashes)
+
+
+class Timezone(models.Model):
+    """ Fuseau horaire """
+
+    # Champs
+    name = models.CharField(max_length=80, blank=False, unique=True, verbose_name=_("Name"))
+    code = models.BigIntegerField(primary_key=True, editable=True, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
+    objects = TimezoneManager.as_manager()
+
+    # Getter
+    @staticmethod
+    def _hash_name(name):
+        """
+        Renvoyer le hash d'un nom de timezone
+
+        :type name: str
+        """
+        return zlib.adler32(bytes(name, 'UTF-8'))
+
+    @staticmethod
+    def by_name(name):
+        """ Renvoyer un fuseau horaire par son nom """
+        return Timezone.objects.by_name(name)
+
     @staticmethod
     def get_dict():
-        """ Renvoyer un dictionnaire de nom:timezone """
+        """
+        Renvoyer un dictionnaire de nom:timezone
+
+        :returns: un dictionnaire avec les noms de timezones connues en clés, et les objets Timezone en valeurs.
+        """
         for name in pytz.common_timezones:
             Timezone.by_name(name)
         timezones = Timezone.objects.all()
@@ -53,7 +73,7 @@ class Timezone(models.Model):
 
     @addattr(short_description=_("UTC Offset"))
     def get_utc_offset(self, as_str=True):
-        """ Renvoyer le décalage UTC du fuseau horaire """
+        """ Renvoyer le décalage UTC du fuseau horaire (avec décalage d'été/hiver) """
         offset = self.get_info().utcoffset(datetime.datetime.now())
         return Timezone._get_offset_str(offset) if as_str else offset
 

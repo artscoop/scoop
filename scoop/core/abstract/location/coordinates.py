@@ -157,7 +157,7 @@ class CoordinatesModel(models.Model):
         angle_tick = int(rounded_angle / 22.5)
         cardinal_modes = {'name': ANGLE_CARDINAL, 'relative': RELATIVE_CARDINAL, 'short': SHORT_CARDINAL, 'tick': ANGLE_TICKS}
         result = cardinal_modes.get(mode or 'relative', RELATIVE_CARDINAL)
-        return result[angle_tick] if result else int(angle)
+        return result[angle_tick % 16] if result else int(angle)
 
     def annotate_distance(self, queryset, related_field=None):
         """

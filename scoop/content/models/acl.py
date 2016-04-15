@@ -37,19 +37,19 @@ class CustomACL(UUID64Model):
 
     # Constantes
     ACL_CUSTOM_MODES = [(0, _("Password"))]
-    PASSWORD = 0
     ACL_PATHS = {0: 'password'}
+    PASSWORD = 0
 
     # Champs
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, verbose_name=_("Owner"))
     mode = models.PositiveSmallIntegerField(default=PASSWORD, verbose_name=_("Mode"))
     name = models.CharField(max_length=24, blank=False, verbose_name=_("Name"))
-    slug = AutoSlugField(max_length=32, populate_from='name', unique_with=('uuid',), verbose_name=_("Slug"))
+    slug = AutoSlugField(max_length=32, populate_from='name', unique_with=['uuid'], db_index=True, verbose_name=_("Slug"))
     password = models.CharField(max_length=128, blank=False, verbose_name=_("Password"))
 
     # Getter
     def get_acl_directory(self):
-        """" Renvoyer le nom de répertoire d'ACL pour l'objet """
+        """ Renvoyer le nom de répertoire d'ACL pour l'objet """
         return "{acl}/{spread}/{owner}/{name}".format(acl=self.ACL_PATHS[self.PASSWORD], name=self.get_slug(),
                                                       owner=self.owner.username, spread=ACLModel._get_hash_path(self.owner.username))
 
@@ -71,4 +71,5 @@ class CustomACL(UUID64Model):
         verbose_name = _("ACL configuration")
         verbose_name_plural = _("ACL configurations")
         unique_together = [('owner', 'name')]
+        index_together = [('mode', 'slug')]
         app_label = 'content'

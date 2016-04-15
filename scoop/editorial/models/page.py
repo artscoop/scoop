@@ -46,7 +46,7 @@ class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexMo
 
     # Champs
     name = models.CharField(max_length=64, unique=True, blank=False, verbose_name=_("Name"))
-    title = models.CharField(max_length=64, blank=False, verbose_name=_("Title"))
+    title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     keywords = models.CharField(max_length=160, blank=True, verbose_name=_("Keywords"))
     path = models.CharField(max_length=160, help_text=_("Page URL"), verbose_name=_("Path"))

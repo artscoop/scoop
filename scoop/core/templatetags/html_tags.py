@@ -38,7 +38,7 @@ def tags_keep(value, valid=None):
 def linebreaks_convert(value):
     """ Transformer les sauts de ligne en sauts HTML """
     output = re.sub(r"(\n)+", "<br>", value)
-    output = re.sub(r"(<br(\s)*/?>\s*){2,20}", "<br>", output, flags=re.I)
+    output = re.sub(r"(<br\s*/?>\s*){2,20}", "<br>", output, flags=re.I)
     output = re.sub(r"^<br>", "", output, flags=re.I)  # supprimer au début de ligne
     return mark_safe(output)
 
@@ -131,9 +131,9 @@ def list_enumerate(valueset, as_links=True):
     length = len(valueset)
     finaljoin = _(" and ")
     for idx, item in enumerate(valueset):
-        if idx > 0 and idx < length - 1:
+        if 0 < idx < length - 1:
             output.append(", ")
-        if idx > 0 and idx == length - 1:
+        if idx == length - 1 > 0:
             output.append(finaljoin)
         output.append(linkify(item) if as_links else str(item))
     return mark_safe("".join(output))

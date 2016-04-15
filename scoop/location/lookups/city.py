@@ -9,8 +9,10 @@ from unidecode import unidecode
 
 class CityLookup(LookupChannel):
     """ Lookup ajax-select des villes """
+
     model = City
-    plugin_options = {'minLength': 4, 'delay': 250, 'position': {"my": "left bottom", "at": "left top", "collision": "flip"}}
+    plugin_options = {'minLength': 2, 'delay': 500, 'position': {"my": "left bottom", "at": "left top", "collision": "flip"}}
+
     # Constantes
     CACHE_KEY = 'lookup.city.{}'
 
@@ -79,11 +81,11 @@ class CityPublicMinimalLookup(CityLookup):
         items_cache = cache.get(self.CACHE_KEY.format(q), None)
         if items_cache is not None:
             return items_cache
-        fields = ['alternates__ascii', 'ascii', 'country__code2']
+        fields = ['alternates__ascii', 'country__code2']
         final_query = search_query(q, fields)
         final_query = models.Q(city=True, country__public=True) & final_query
         items = City.objects.filter(final_query).distinct().order_by('-population')[0:10]
-        cache.set(self.CACHE_KEY.format(q), items, 1800)
+        cache.set(self.CACHE_KEY.format(q), list(items), 1800)
         return items
 
     def format_item_display(self, obj):

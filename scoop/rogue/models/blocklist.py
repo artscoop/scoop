@@ -28,7 +28,7 @@ class BlocklistManager(SingleDeleteManager):
 
     def is_safe(self, sender, recipients, name=None):
         """ Renvoyer si deux utilisateurs n'ont pas de blocklist entre eux """
-        if sender.is_staff or getattr(sender, 'bot', False):
+        if sender.is_staff or getattr(sender, 'bot', False) or sender.has_perm('rogue.can_bypass_blocks'):
             return True
         if self.is_globally_listed(sender):
             return False
@@ -186,4 +186,5 @@ class Blocklist(DatetimeModel, DataModel):
     class Meta:
         verbose_name = _("blocklists")
         verbose_name_plural = _("blocklists")
+        permissions = [['can_bypass_block', "Can bypass blocks"]]
         app_label = "rogue"

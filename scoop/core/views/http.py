@@ -7,7 +7,7 @@ from scoop.core.util.django.templateutil import render_to
 
 
 @render_to("http/500.html", status_code=500)
-def http_500(request, template_name='http/500.html'):
+def http_500(request):
     """ Rendre la page d'erreur serveur """
 
     # Récupérer tous les attributs de settings
@@ -41,7 +41,7 @@ def http_410(request):
     return {}
 
 
-@render_to("http/robots.txt", content_type='text/plain')
+@render_to("http/robots.txt", content_type='text/plain', use_request=False)
 def robots_txt(request):
     """ Rendre le fichier robots.txt """
     return {}

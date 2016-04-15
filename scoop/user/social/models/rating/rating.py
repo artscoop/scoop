@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.weight import WeightedModel
+from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
@@ -21,14 +22,8 @@ from translatable.models import TranslatableModel, get_translation_model
 class Axis(TranslatableModel, WeightedModel):
     """ Axe de notation """
 
-    def get_default_slug(self=None):
-        """ Renvoyer un slug automatique """
-        result = 'auto-'
-        result += ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(4))
-        return slugify(result)
-
     # Champs
-    slug = models.SlugField(max_length=32, unique=True, blank=False, default=get_default_slug, verbose_name=_("Slug"))
+    slug = models.SlugField(max_length=32, unique=True, blank=False, default=uuid_bits, verbose_name=_("Slug"))
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')
     content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, limit_choices_to=limit, verbose_name=_("Content type"))
 

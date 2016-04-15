@@ -653,7 +653,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             clone = Picture(description=urljoin(settings.DOMAIN_NAME, self.image.url), title=self.title, author=self.author)
             clone.save()
             clone.description = (description or _("Clone of picture {uuid}")).format(uuid=self.uuid)
-            clone.update_path(force_name=uuid_bits(48))
+            clone.update_file_path(force_name=uuid_bits(48))
             clones = set(self.get_data('clones') or {})
             clones.add(clone.uuid)
             self.set_data('clones', clones, save=True)

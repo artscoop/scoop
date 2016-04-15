@@ -1,12 +1,14 @@
 # coding: utf-8
+from datetime import timedelta
 from decimal import Decimal, DivisionByZero
-from urllib.request import urlopen
 
 import requests
-
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.model.model import SingleDeleteManager
 
 
@@ -18,11 +20,39 @@ class CurrencyManager(SingleDeleteManager):
         """ Renvoyer une devise par clé naturelle """
         return self.get(short_name=name)
 
+    def name_exists(self, name):
+        """
+        Renvoyer si une devise avec le nom passé est connue
+
+        :param name: nom de devise, ex. USD ou US Dollar
+        """
+        return self.filter(Q(short_name__iexact=name) | Q(name__iexact=name)).exists()
+
+    def get_amount(self, amount, source, destination):
+        """
+        Renvoyer la conversion de amount source en destination
+
+        ex. Renvoyer la conversion de 15 EUR en USD
+        :param amount: montant
+        :param source: devise source, ex. USD, EUR, JPY ou Euro
+        :param destination: devise de destination, ex. USD, AUD
+        :raises: models.DoesNotExist si la devise n'existe pas
+        """
+        source_currency = self.get(Q(short_name__iexact=source) | Q(name__iexact=source))
+        return source_currency.get_amount(destination, amount)
+
     # Setter
     def update_balances(self, names=None):
-        """ Mettre à jour le cours des devises """
+        """
+        Mettre à jour le cours des devises
+
+        La méthode ne met à jour que les devises n'ayant pas été mises à jour dans les
+        48 dernières heures, ou n'ayant pas de balance valide.
+        """
         try:
-            for currency in (self.all() if names is None else self.filter(short_name__in=names)):
+            update_limit = timezone.now() - timedelta(days=2)
+            base_queryset = self.filter(Q(updated__gt=update_limit) | Q(balance=-1))
+            for currency in (base_queryset if names is None else base_queryset.filter(short_name__in=names)):
                 currency.update_balance()
             return True
         except:
@@ -62,7 +92,7 @@ class Currency(models.Model):
         try:
             resource = requests.get('http://quote.yahoo.com/d/quotes.csv?s={}USD=X&f=l1&e=.csv'.format(self.short_name))
             result = resource.text
-        except OSError:
+        except (OSError, ValueError):
             result = 0
         self.balance = Decimal(float(result))
         if save is True:

@@ -20,7 +20,7 @@ class VenueManager(SingleDeleteManager, GeoManager):
     def venues_around(self, coordinates_instance, km=1):
         """ Renvoyer les lieux à n km autour d'une instance de CoordinatesModel """
         if isinstance(coordinates_instance, CoordinatesModel):
-            return self.get_venues_in(coordinates_instance.get_bounding_box(km))
+            return self.venues_in(coordinates_instance.get_bounding_box(km))
         return None
 
 
@@ -32,7 +32,7 @@ class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
     name = models.CharField(max_length=64, db_index=True, verbose_name=_("Name"))
     street = models.CharField(max_length=80, db_index=True, help_text=_("Way number, type and name"), verbose_name=_("Way"))
     city = models.ForeignKey('location.City', related_name='venues', verbose_name=_("City"))
-    full = models.CharField(max_length=250, help_text=_("Full address, lines separated by semicolons"), verbose_name=_("Full address"))
+    full = models.TextField(help_text=_("Full address, lines separated by semicolons or returns"), verbose_name=_("Full address"))
     url = models.URLField(max_length=160, blank=True, verbose_name=_("URL"))
     objects = VenueManager()
 
@@ -51,7 +51,7 @@ class Venue(CoordinatesModel, PicturableModel, DatetimeModel, AuthorableModel):
 
     def get_full_address(self):
         """ Renvoyer l'adresse complète du lieu """
-        return self.full.split(";")
+        return self.full.replace('\n', ';').split(";")
 
     # Propriétés
     split_full = property(get_full_address)
