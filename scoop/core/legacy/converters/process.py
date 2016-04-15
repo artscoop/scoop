@@ -2,6 +2,8 @@
 import gc
 import time
 
+from django.db import transaction
+
 
 class ExportProcessor(object):
     """ Exporteur de plusieurs documents """
@@ -17,7 +19,6 @@ class ExportProcessor(object):
             start_index = cls.exporters.index(cls.start_with) if cls.start_with else 0
             exporters = cls.exporters[start_index:]
             count = len(exporters)
-            gc.disable()
             for ind, exporter in enumerate(exporters, start=1):
                 print("Exporting model {ind}/{count} using {name}".format(ind=ind, count=count, name=exporter.__name__))
                 exporter().exports()
@@ -40,6 +41,7 @@ class ImportProcessor(object):
         Préparer l'environnement d'import
 
         :returns: True si ok
+        :rtype: bool
         """
         pass
 
@@ -58,38 +60,42 @@ class ImportProcessor(object):
         start_index = cls.importers.index(cls.start_with) if cls.start_with else 0
         importers = cls.importers[start_index:]
         start = time.time()
-        if cls.setup() is True:
+        setup_cleared = cls.setup()
+        if setup_cleared is True:
             if cls.importers and isinstance(cls.importers, list):
                 # Import première passe
                 importers = [importer() for importer in importers]
                 count = len(importers)
-                gc.disable()
                 # Import première passe
-                for ind, importer in enumerate(importers, start=1):
-                    print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
-                    i_start = time.time()
-                    importer.imports()
-                    i_elapsed = time.time() - i_start
-                    gc.collect()
-                    print("Model successfully imported in {:.01f}s.".format(i_elapsed))
+                with transaction.atomic(savepoint=False):
+                    for ind, importer in enumerate(importers, start=1):
+                        print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
+                        i_start = time.time()
+                        importer.imports()
+                        i_elapsed = time.time() - i_start
+                        print("Model successfully imported in {:.01f}s.".format(i_elapsed))
                 # Import deuxième passe
-                for ind, importer in enumerate(importers, start=1):
-                    print("Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
-                    i_start = time.time()
-                    importer.post_imports()
-                    i_elapsed = time.time() - i_start
-                    gc.collect()
-                    print("Model successfully updated in {:.01f}s.".format(i_elapsed))
+                with transaction.atomic(savepoint=False):
+                    for ind, importer in enumerate(importers, start=1):
+                        print("Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
+                        i_start = time.time()
+                        importer.post_imports()
+                        i_elapsed = time.time() - i_start
+                        print("Model successfully updated in {:.01f}s.".format(i_elapsed))
                 # Import troisième passe
-                for ind, importer in enumerate(importers, start=1):
-                    print("Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
-                    i_start = time.time()
-                    importer.brushup()
-                    i_elapsed = time.time() - i_start
-                    gc.collect()
-                    print("End of model process updated in {:.01f}s.".format(i_elapsed))
+                with transaction.atomic(savepoint=False):
+                    for ind, importer in enumerate(importers, start=1):
+                        print("Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
+                        i_start = time.time()
+                        importer.brushup()
+                        i_elapsed = time.time() - i_start
+                        print("End of model process updated in {:.01f}s.".format(i_elapsed))
                 # Touche de fin
-                cls.brushup()
+                with transaction.atomic(savepoint=False):
+                    i_start = time.time()
+                    cls.brushup()
+                    i_elapsed = time.time() - i_start
+                    print("Last bit of process updated in {:.01f}s.".format(i_elapsed))
                 elapsed = time.time() - start
                 minute, second = divmod(elapsed, 60)
                 print("*" * 80)

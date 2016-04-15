@@ -1,7 +1,7 @@
 # coding: utf-8
+import base64
 import csv
 import datetime
-import gc
 import os
 import re
 import sys
@@ -14,22 +14,24 @@ from traceback import print_exc
 import pytz
 from celery import task
 from django.conf import settings
+from django.contrib.gis.db.models.aggregates import Extent
 from django.contrib.gis.geos.point import Point
 from django.db import transaction
 from django.db.models import Q
-from django.db.utils import DatabaseError
 from django.utils import timezone
+from unidecode import unidecode
+
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import auto_open_file, open_zip_file
 from scoop.core.util.stream.urlutil import download_url_resource
 from scoop.location.models import City, CityName, Country, CountryName, Currency, Timezone
-from unidecode import unidecode
+
 
 # Codes Feature : http://www.geonames.org/export/codes.html
 # Fichiers Villes : http://download.geonames.org/export/dump/
 # Total des noms alternatifs : http://www.geonames.org/statistics/
-csv.field_size_limit(16777216)
-ALTERNATES_COUNT = 10946746  # 2016/04/01
+csv.field_size_limit(16384)
+ALTERNATES_COUNT = 11010048  # 2016/04/01
 
 
 class ExcelNoQuote(excel_tab):
@@ -40,14 +42,14 @@ class ExcelNoQuote(excel_tab):
 def load_geoname_table_raw(path, filename):
     """ Renvoyer un reader CSV vers une table de pays Geonames """
     handle = open_zip_file(path, filename)
-    # columns = ['id', 'name', 'ascii', 'alternate', 'latitude', 'longitude', 'f1', 'feature', 'country', 'c1', 'zone1', 'zone2', 'zone3', 'zone4', 'population', 'elevation', 'gtopo', 'timezone', 'updated']
     return csv.reader(handle, dialect='excel-tab')
 
 
 def load_currency_table(path, filename):
     """ Renvoyer un reader CSV sur la liste de pays avec devises """
     handle = auto_open_file(path, filename)
-    columns = ['sortorder', 'commonname', 'formalname', 'type', 'subtype', 'sovereignty', 'capital', 'iso4217currencycode', 'iso4217currencyname', 'ituttelephonecCode', 'iso316612lettercode',
+    columns = ['sortorder', 'commonname', 'formalname', 'type', 'subtype', 'sovereignty', 'capital', 'iso4217currencycode', 'iso4217currencyname',
+               'ituttelephonecCode', 'iso316612lettercode',
                'iso316613lettercode', 'iso31661number', 'ianacountrycodetld']
     return csv.DictReader(handle, columns, dialect='excel'), handle
 
@@ -55,14 +57,14 @@ def load_currency_table(path, filename):
 def load_geoname_alternate_table_raw(path, filename):
     """ Renvoyer un reader CSV sur la table de noms alternatifs Geonames """
     handle = open_zip_file(path, filename)
-    # columns = ['altid','geoid','lang','name','preferred','short','slang','historic']
     return csv.reader(handle, dialect=ExcelNoQuote)
 
 
 def load_geoname_country_table(path, filename):
     """ Renvoyer un reader CSV sur une table de pays """
     handle = auto_open_file(path, filename)
-    columns = ['code2', 'code3', 'iso', 'fips', 'name', 'capital', 'area', 'population', 'continent', 'tld', 'currency', 'currencyname', 'phone', 'postalformat', 'postalregex', 'languages',
+    columns = ['code2', 'code3', 'iso', 'fips', 'name', 'capital', 'area', 'population', 'continent', 'tld', 'currency', 'currencyname', 'phone',
+               'postalformat', 'postalregex', 'languages',
                'geoid', 'neighbours', 'eqfips']
     return csv.DictReader(handle, columns, dialect='excel-tab')
 
@@ -72,11 +74,9 @@ def output_progress(s, idx, rows, every, items):
     if idx % every == 0 or idx == rows:
         percent = round(100.0 * idx / rows, 1)
         items.update({'pc': percent, 'idx': idx, 'rows': rows})
-        sys.stdout.write((s + " " * 20 + "\r").format(**items))
-        sys.stdout.flush()
+        print((s + " " * 20 + "\r").format(**items))
 
 
-@transaction.atomic
 def populate_countries(rename=True):
     """ Peupler la base des pays """
     try:
@@ -88,7 +88,8 @@ def populate_countries(rename=True):
                 phone_prefix = phone_extract[0] if phone_extract else ""
                 kwargs = {'id': row['geoid'], 'name': row['name'], 'code2': row['code2'], 'code3': row['code3']}
                 country, _ = Country.objects.update_or_create(**kwargs)
-                country.update(**{'capital': row['capital'], 'population': row['population'] or 0, 'area': row['area'] or 0, 'continent': row['continent'], 'phone': phone_prefix})
+                country.update(**{'capital': row['capital'], 'population': row['population'] or 0, 'area': row['area'] or 0, 'continent': row['continent'],
+                                  'phone': phone_prefix})
                 country.set_data('neighbours', row['neighbours'])
                 country.save()
         if rename is True:
@@ -98,12 +99,10 @@ def populate_countries(rename=True):
         return False
 
 
-@transaction.atomic
 def rename_countries(output_every=262144):
     """ Peupler les noms alternatifs des pays """
-    # [0: alternate_id, 1: geonames_id, 2: lang, 3: name, 4: preferred, 5: short, 6: slang, 7: historic]
+    # [0:alternate_id, 1:geonames_id, 2:lang, 3:name, 4:preferred, 5:short, 6:slang, 7:historic]
     try:
-        gc.disable()
         if not settings.TEST:
             default_path = join(Paths.get_root_dir('files', 'geonames'), 'alternateNames.zip')
         else:
@@ -120,46 +119,51 @@ def rename_countries(output_every=262144):
             if row[2] and row[1] and not (row[6] or row[7]) and row[2] in LANGUAGES:
                 geonames_id, alternate_id = int(row[1]), int(row[0])
                 if geonames_id in COUNTRY_IDS:
-                    CountryName.objects.create(id=alternate_id, country_id=geonames_id, language=row[2], name=row[3], preferred=row[4] == '1', short=row[5] == '1')
+                    CountryName.objects.create(id=alternate_id, country_id=geonames_id, language=row[2], name=row[3], preferred=row[4] == '1',
+                                               short=row[5] == '1')
                     affected += 1
             if idx % output_every == 0 or idx == rows:
                 output_progress("Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)", idx, rows, output_every, {'affected': affected})
         sys.stdout.write("\n")
         reader.close()
-        gc.collect()
         return True
     except Exception:
         return False
 
 
-@transaction.atomic
+@transaction.atomic(savepoint=False)
 def populate_cities(country, output_every=8192):
     """
     Peupler la base de données avec des subdivisions administratives
+
     Ces subdivisions sont : ^ADM\d$ et ^PPL.{0,2}$
     ADM : Zone administrative : région, département, etc. jusqu'à commune ( :/ )
     PPL : Ville, lieu habité nommé (contient beaucoup de spam)
     """
-    # [0id, 1name, 2ascii, 3alternate, 4latitude, 5longitude, 6f1, 7feature, 8country, 9c1, 10zone1, 11zone2, 12zone3, 13zone4, 14population, 15elevation, 16gtopo, 17timezone, 18updated]
+    # [0:id,1:name,2:ascii,3:altname,4:lat,5:lon,6:f,7:type,8:country,9:c1,10:a1,11:a2,12:a3,13:a4,14:population,15:elevation,16:gtopo,17:tz,18:updated]
     if not settings.DEBUG:
-        gc.disable()
         try:
-            used_features, unused_features = {'ADM', 'PPL'}, {'PCLH', 'PCLI', 'PCLIX', 'PCLS', 'ADM1H', 'ADM2H', 'ADM3H', 'ADM4H', 'PPLCH', 'PPLF', 'PPLH', 'PPLQ', 'PPLR', 'PPLW'}
+            used_features = {'ADM', 'PPL'}
+            unused_features = {'PCLH', 'PCLI', 'PCLIX', 'PCLS', 'ADM1H', 'ADM2H', 'ADM3H', 'ADM4H', 'PPLCH', 'PPLF', 'PPLH', 'PPLQ', 'PPLR', 'PPLW'}
             country_name = country.get_name()
             # Remplir un dictionnaire avec la liste des lignes
             default_path = join(Paths.get_root_dir('files', 'geonames'), '{country}.zip'.format(country=country.code2.upper()))
-            filename = default_path if os.path.exists(default_path) else download_url_resource('http://download.geonames.org/export/dump/{country}.zip'.format(country=country.code2.upper()),
-                                                                                               '{path}/geonames-country-{country}.zip'.format(path=tempfile.gettempdir(),
-                                                                                                                                              country=country.code2.upper()))
-            reader, table = load_geoname_table_raw(filename, unidecode(country.code2)), {}
+            if os.path.exists(default_path):
+                filename = default_path
+            else:
+                filename = download_url_resource('http://download.geonames.org/export/dump/{country}.zip'.
+                                                 format(country=country.code2.upper()),
+                                                 '{path}/geonames-country-{country}.zip'.
+                                                 format(path=tempfile.gettempdir(), country=country.code2.upper()))
+            reader, table = load_geoname_table_raw(filename, unidecode(country.code2)), dict()
             for row in reader:
-                if len(row) > 17 and row[7][:3] in used_features and row[7] not in unused_features:
+                if len(row) in {18, 19} and row[7][:3] in used_features and row[7] not in unused_features:
                     table[int(row[0])] = row
             # Récupérer la taille de la table en lignes
             timezones = Timezone.get_dict()
             rows, updated_count = len(table), 0
             # Mettre à jour la table des villes du pays
-            if City.objects.filter(country=country).exists():
+            if country.has_entries():
                 db_ids = frozenset(set(City.objects.filter(country=country).values_list('id', flat=True)))
                 # Effacer de la base les éléments qui ne sont plus dans la nouvelle table (ex. PPL devenu MNT)
                 table_ids = frozenset(set(table.keys()))
@@ -169,11 +173,15 @@ def populate_cities(country, output_every=8192):
                 sys.stdout.flush()
                 # Traiter le reste
                 for idx, row in enumerate(table.values(), start=1):
-                    geoid, updateable = int(row[0]), datetime.datetime.strptime(row[18], '%Y-%m-%d').replace(tzinfo=pytz.utc) >= country.updated
-                    latitude, longitude = float(row[4]), float(row[5])
-                    city = City(id=geoid, level=0, country=country, timezone=timezones[row[17]], name=row[1], ascii=row[2].lower(), a1=row[10], a2=row[11], a3=row[12], a4=row[13], type=row[7],
-                                feature=row[6], city=(row[6] == 'P'), population=int(row[14]), position=Point(longitude, latitude))
+                    geoid = int(row[0])
+                    updateable = datetime.datetime.strptime(row[18], '%Y-%m-%d').replace(tzinfo=pytz.utc) >= country.updated
                     if updateable or geoid not in db_ids:
+                        # Le acode est un hash de tous les codes A1, A2, A3 et A4. AAAA est le hash de la chaîne vide (ou 0)
+                        # Note : en base64, 4 caractères permettent de représenter 24 bits
+                        acode = ''.join([base64.b64encode((hash(code) & 0xffffff).to_bytes(3, 'big')).decode('ascii') for code in row[10:14]])
+                        latitude, longitude = float(row[4]), float(row[5])
+                        city = City(id=geoid, level=0, country=country, timezone=timezones[row[17]], name=row[1], ascii=row[2].lower(), acode=acode,
+                                    type=row[7], feature=row[6], city=(row[6] == 'P'), population=int(row[14]), position=Point(longitude, latitude))
                         city.save()
                         updated_count += int(updateable)
                     if idx % output_every == 0 or idx == rows - 1:
@@ -181,17 +189,18 @@ def populate_cities(country, output_every=8192):
                                         {'country': country_name, 'updated': updated_count})
             # Peupler la liste des villes si aucune n'existe pour le pays
             else:
-                bulk = []
+                bulk = list()
+                append = bulk.append
                 for idx, row in enumerate(table.values(), start=1):
                     latitude, longitude = float(row[4]), float(row[5])
-                    city = City(id=int(row[0]), level=0, country=country, timezone=timezones[row[17]], name=row[1], ascii=row[2], a1=row[10], a2=row[11], a3=row[12], a4=row[13], type=row[7],
-                                feature=row[6], city=row[6] == 'P', population=int(row[14]), position=Point(longitude, latitude))
-                    bulk.append(city)
+                    acode = ''.join([base64.b64encode((hash(code) & 0xffffff).to_bytes(3, 'big')).decode('ascii') for code in row[10:14]])
+                    city = City(id=int(row[0]), level=0, country=country, timezone=timezones[row[17]], name=row[1], ascii=row[2], acode=acode, type=row[7],
+                                feature=row[6], city=row[6] == 'P', population=int(row[14]), position=Point(longitude, latitude, srid=4326))
+                    append(city)
                     if idx % output_every == 0 or idx == rows - 1:
                         output_progress("Filling {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10})", idx, rows, output_every, {'country': country_name})
-                City.objects.bulk_create(bulk)
+                City.objects.bulk_create(bulk, batch_size=16384)
             # Les portions de ville sont ensuite marquées comme non villes
-            gc.collect()
             City.objects.filter(type='PPLX').update(city=False)
             country.update(updated=timezone.now(), public=True, save=True)
             return True
@@ -203,12 +212,11 @@ def populate_cities(country, output_every=8192):
 
 
 @task
-@transaction.atomic
+@transaction.atomic(savepoint=False)
 def rename_cities(output_every=262144):
     """ Peupler les noms alternatifs des villes """
     # [0:altid,1:geoid,2:lang,3:name,4:preferred,5:short,6:slang,7:historic]
     if not settings.DEBUG:
-        gc.disable()
         try:
             default_path = join(Paths.get_root_dir('files', 'geonames'), 'alternateNames.zip')
             filename = default_path if os.path.exists(default_path) else download_url_resource('http://download.geonames.org/export/dump/alternateNames.zip')
@@ -216,24 +224,27 @@ def rename_cities(output_every=262144):
             languages = frozenset([language[0] for language in settings.LANGUAGES] + ['post', ''])
             affected, existing = 0, frozenset(set(City.objects.values_list('id', flat=True)))
             citynames = []
+            appender = citynames.append
             # Traiter immédiatement le ficiher
             CityName.objects.all().delete()
             for idx, row in enumerate(reader, start=1):
                 if (row[2] in languages and row[1]) and not (row[6] or row[7]):
                     if int(row[1]) in existing:
                         ascii = unidecode(row[3].decode('utf-8') if type(row[3]) != str else row[3]).lower()
-                        cityname = CityName(id=int(row[0]), city_id=int(row[1]), language=row[2], name=row[3], ascii=ascii, preferred=(row[4] == '1'), short=(row[5] == '1'))
-                        citynames.append(cityname)
+                        cityname = CityName(id=int(row[0]), city_id=int(row[1]), language=row[2], name=row[3], ascii=ascii, preferred=(row[4] == '1'),
+                                            short=(row[5] == '1'))
+                        appender(cityname)
                         affected += 1
                 if idx % output_every == 0 or idx == ALTERNATES_COUNT:
-                    output_progress("Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)", idx, ALTERNATES_COUNT, output_every, {'affected': affected})
-            CityName.objects.bulk_create(citynames, batch_size=32768)
+                    output_progress("Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)", idx, ALTERNATES_COUNT, output_every,
+                                    {'affected': affected})
+            CityName.objects.bulk_create(citynames)
             return True
         except Exception as e:
             print_exc(e)
             return False
         finally:
-            gc.collect()
+            pass
     return False
 
 
@@ -255,11 +266,10 @@ def populate_currency(country):
 
 
 @task
-@transaction.atomic
+@transaction.atomic(savepoint=False)
 def reparent_cities(country, clear=False, output_every=256):
     """ Réorganiser la hiérarchie des villes d'un pays """
     if not settings.DEBUG:
-        gc.disable()
         # Récupérer les éléments de type A (ex. ADM1)
         if clear:
             City.objects.filter(country=country).update(parent=None)
@@ -268,32 +278,30 @@ def reparent_cities(country, clear=False, output_every=256):
         country_name = country.get_name()
         # Parcourir ces éléments et mettre à jour les enfants directs
         for idx, parent in enumerate(parents, start=1):
-            level, acodes = 1, [parent.a1, parent.a2, parent.a3, parent.a4]
+            level, acode = 1, parent.acode
             # Trouver le niveau administratif actuel de l'élément
-            for i, acode in enumerate(acodes, start=1):
-                level = i if acode != "" else level
+            for i, codestart in enumerate(range(0, 16, 4), start=1):
+                level = i if acode[codestart:codestart + 4] != "AAAA" else level
             # Update les P et ADMD enfants
-            criteria = {'a{0}'.format(i): v for i, v in enumerate(acodes, start=1)}
-            criteria.update({'country': country, 'parent': None})
+            criteria = {'acode': acode, 'country': country, 'parent__isnull': True}
             type_filter = (Q(feature='P') | Q(type="ADMD")) if parent.type != 'ADMD' else Q(feature='P')
             City.objects.filter(type_filter, **criteria).exclude(id=parent.id).update(parent_id=parent.id, level=level)
             # Update les A enfants
-            if level < 4 and parent.feature == "A" and parent.type not in {'ADMD'}:
-                criteria.update({'feature': 'A'})
-                del criteria['a{0}'.format(level + 1)]
-                exclusion = {'a{0}'.format(level + 1): ''}
-                City.objects.filter(**criteria).exclude(id=parent.id, **exclusion).update(parent_id=parent.id, level=level)
+            if level < 4 and parent.feature == "A" and parent.type != 'ADMD':
+                criteria['feature'] = 'A'
+                criteria['acode__startswith'] = acode[0:level * 4]
+                criteria['acode__endswith'] = "A" * (16 - 4 * (level + 1))
+                del criteria['acode']
+                City.objects.filter(**criteria).exclude(id=parent.id).update(parent_id=parent.id, level=level)
             # Sortie logging ou console
             if idx % output_every == 0 or idx == rows - 1:
                 output_progress("Rebuilding {country}: {pc:>5.1f}% ({idx:>10}/{rows:>10})", idx, rows, output_every, {'country': country_name})
         # Calculer la latitude et longitude moyennes du pays
-        all_cities = City.objects.filter(country=country, city=True).only('position')
-        city_count = all_cities.count()
-        average_latitude = sum([city.position.y for city in all_cities]) / city_count
-        average_longitude = sum([city.position.x for city in all_cities]) / city_count
+        extent = City.objects.filter(country=country, city=True).aggregate(bounds=Extent('position'))
+        average_latitude = (extent['bounds'][1] + extent['bounds'][3]) / 2
+        average_longitude = (extent['bounds'][0] + extent['bounds'][2]) / 2
         country.position = Point(average_longitude, average_latitude)
         country.updated = timezone.now()
         country.save()
-        gc.collect()
         return True
     return False

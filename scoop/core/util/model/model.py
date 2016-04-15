@@ -27,6 +27,13 @@ def patch_methods(cls, *bases):
             setattr(cls, base.__name__, base)
 
 
+class DummyModel():
+    """ Instanciation d'un objet avec des attributs pour bulk_create """
+    def __init__(self, *args, **kwargs):
+        for kwarg in kwargs:
+            setattr(self, kwarg, kwargs[kwarg])
+
+
 class DictUpdateModel():
     """
     Mixin pour Model ajoutant une fonction update

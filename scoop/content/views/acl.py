@@ -1,5 +1,4 @@
 # coding: utf-8
-import logging
 from urllib import parse
 
 from django.conf import settings
@@ -10,7 +9,6 @@ from scoop.core.util.django.apps import is_installed
 from scoop.user.models.user import User
 
 
-logger = logging.getLogger('acl')
 ACL_ENABLED = getattr(settings, 'CONTENT_ACL_ENABLED', True)
 ACL_MEDIA = getattr(settings, 'CONTENT_ACL_MEDIA_URL', '/acl/')
 DENIED_RESPONSE = HttpResponse(status=403)
@@ -29,43 +27,35 @@ def acl_file_serve(request, resource):
     :returns: un objet HTTPResponse
     """
     user = request.user
-    path_folders = [item for item in resource.split('/', 5) if item]
+    path_folders = filter(None, resource.split('/', 5))
     granted = not ACL_ENABLED or user.is_staff  # Autoriser par défaut si settings.CONTENT_ACL_ENABLED est False
 
     # Traiter l'autorisation par le nom du premier répertoire
     if not granted and len(path_folders) and path_folders[0] in ACLModel.ACL_PATHS_START:
         if path_folders[0] == ACLModel.ACL_PATHS[ACLModel.PUBLIC]:
-            logger.debug("ACL: Public file {0}".format(resource))
             granted = True
         elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.PRIVATE]:
-            logger.debug("ACL: Private file {0}".format(resource))
             username = path_folders[4]  # les indices 1 2 et 3 font partie du hash de spread ici
             if user.username == username:
                 granted = True
         elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.FRIENDS] and is_installed('scoop.user.social'):
             username = path_folders[4]  # les indices 1 2 et 3 font partie du hash de spread ici
             path_user = User.objects.get_by_name(username)
-            logger.debug("ACL: File accessible only to friends of {1}, {0}".format(resource, username))
             if user.friends.is_friend(path_user) or username == user.username:
                 granted = True
         elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.REGISTERED]:
-            logger.debug("ACL: File accessible only to registered users, {0}".format(resource))
             if user.is_authenticated():
                 granted = True
         else:
-            logger.debug("ACL: File processing not ready yet, {0}".format(resource))
             granted = True
     else:
         # Toujours considérer le fichier comme public dans les cas inconnus
-        logger.debug("ACL: Unrecognized public file, {0}".format(resource))
         granted = True
 
     # Demander à nginx de servir le fichier ou renvoyer un contenu HTTP403
     if granted is True:
         response = HttpResponse(content_type="")
-        response['X-Accel-Redirect'] = ACL_MEDIA + parse.quote(resource)  # il faut renvoyer une URL quotée
-        logger.debug("ACL: Access granted to file {path}".format(path=resource))
+        response['X-Accel-Redirect'] = ACL_MEDIA + parse.quote(resource)  # il faut renvoyer une URL quotée à nginx
         return response
     else:
-        logger.debug("ACL: Access denied to file {path}".format(path=resource))
         return DENIED_RESPONSE

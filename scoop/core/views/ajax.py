@@ -12,12 +12,14 @@ from scoop.core.util.shortcuts import import_fullname
 def validate_form(request, *args, **kwargs):
     """
     Vue de validation de formulaire (AJAX)
+
     Valider ou non un formulaire et renvoyer des données AJAX des erreurs
     :param form_classes: classe de formulaire à valider
-    :param alias: alias de chemin de classe de settings.FORM_ALIASES
+    :param alias: alias de classes de formulaire (voir settings.FORM_ALIASES)
     La validation AJAX frontend se fait via le plugin jQuery.LiveValidation.js
-    (se trouve dans static/tool/jQuery/One).
-    Le paramètre Django FORM_ALIASES est de la forme :
+    (se trouve dans static/tool/jQuery/One). La page appelle liveValidate sur un
+    élément formulaire.
+    Le paramètre settings.FORM_ALIASES est de la forme :
     - Dictionnaire {alias: [FQN de classes de formulaires]}
     - Dictionnaire {alias: FQN de classe de formulaire}
     """

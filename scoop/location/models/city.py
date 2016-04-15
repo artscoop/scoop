@@ -1,9 +1,11 @@
 # coding: utf-8
+from Levenshtein import distance
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from django.contrib.gis.measure import D
 from django.core.cache import cache
 from django.db import models
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import translation
 from django.utils.encoding import python_2_unicode_compatible
@@ -41,23 +43,40 @@ class CityQuerySetMixin(object):
         Renvoyer les éléments d'un niveau administratif
 
         :type self: django.db.models.Manager
+        :param country: pays de recherche
+        :param level: niveau administratif des éléments à renvoyer
+        :type level: int
+        :returns: des objets City correspodant au niveau administratif l d'un pays
         """
         return self.filter(country=country, level=level)
 
-    def by_name(self, name, city=True, **kwargs):
+    def by_name(self, name, **kwargs):
         """
         Renvoyer les villes portant un nom
 
         :type self: django.db.models.Manager
+        :param name: nom de ville à rechercher
+        :param city: ne renvoyer que des communes
+        :type city: bool
         """
-        fields = ['alternates__ascii', 'country__alternates__name']
-        final_query = search_query(unidecode(name), fields, queryset=self.filter(city=city, **kwargs))
+        fields = ['ascii', 'alternates__ascii', 'country__alternates__name']
+        final_query = search_query(unidecode(name), fields, queryset=self.filter(**kwargs))
         return final_query.distinct().order_by('-population')
 
-    def get_by_name(self, name, city=True, **kwargs):
+    def get_by_name(self, name, **kwargs):
         """ Renvoyer la ville la plus peuplée parmi celles portant un nom """
-        cities = self.by_name(name, city, **kwargs)
-        return cities.first()
+        cities = self.by_name(name, **kwargs)
+        min_distance = None
+        fittest_city = None
+        for c in cities:
+            for city_name in c.get_names():
+                current_distance = distance(name.lower(), city_name.lower())
+                if min_distance is None or current_distance < min_distance:
+                    min_distance = current_distance
+                    fittest_city = c
+                    if current_distance == 0:
+                        return fittest_city
+        return fittest_city
 
     def by_population(self, country_codes, value, operator=">="):
         """
@@ -120,26 +139,28 @@ class CityQuerySetMixin(object):
         cities = self.in_square(point, km).order_by('-population')
         return cities.first() if cities.exists() else None
 
-    def find_by_name(self, point, name):
+    def find_by_name(self, point, name, quick=True):
         """
         Renvoyer une ville la plus proche d'un point, portant un nom si possible
 
         :type self: django.db.models.Manager, CityQuerySetMixin
         :param point: [lat, lon] autour duquel chercher la ville
         :param name: nom de ville à retrouver
+        :param quick: ne pas trier les villes par distance
         """
         name = unidecode(name).lower().strip() if name else '*'
         # Renvoyer le résultat en cache
-        cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=point[0], lon=point[1], name=name or '*')
+        cache_key = "location.city.find:{lat:.1f}:{lon:.1f}:{name}".format(lat=point[0], lon=point[1], name=name or '*')
         result = cache.get(cache_key, None)
         if result is not None:
             return self.get(id=result)
         # Ou retrouver la ville la plus proche
-        cities = self.filter(city=True, alternates__ascii=name).in_square(point, 128).distinct()  # recherche par cityname.ascii -> 128km
-        cities = cities if cities.exists() else self.filter(city=True, ascii=name).in_square(point, 128).distinct()  # recherche par city.ascii -> 128km
+        cities = self.filter(Q(ascii=name) | Q(alternates__ascii=name), city=True).in_square(point, 64).distinct()  # recherche par cityname.ascii -> 128km
+        cities = cities if cities.exists() else self.filter(city=True, ascii=name).in_square(point, 64).distinct()  # recherche par city.ascii -> 128km
         cities = cities if cities.exists() else self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
         if cities.exists():
-            cities = cities.annotate(distance=Distance('position', Point(point[1], point[0], srid=4326))).order_by('distance')
+            if quick is False:
+                cities = cities.annotate(distance=Distance('position', Point(point[1], point[0], srid=4326))).order_by('distance')
             closest_city = cities.first()
             cache.set(cache_key, closest_city.pk)
             return closest_city
@@ -165,18 +186,15 @@ class City(CoordinatesModel, PicturableModel):
 
     # Champs
     id = models.IntegerField(primary_key=True, null=False, verbose_name=_("Geonames ID"))
-    city = models.BooleanField(default=False, db_index=True, verbose_name=_("City?"))
+    city = models.BooleanField(default=False, verbose_name=_("City?"))
     type = models.CharField(max_length=8, verbose_name=_("Type"))
     feature = models.CharField(max_length=1, verbose_name=_("Feature"))
-    a1 = models.CharField(max_length=16, blank=True, verbose_name="A1")
-    a2 = models.CharField(max_length=16, blank=True, verbose_name="A2")
-    a3 = models.CharField(max_length=16, blank=True, verbose_name="A3")
-    a4 = models.CharField(max_length=16, blank=True, verbose_name="A4")
+    acode = models.CharField(max_length=16, blank=True, db_index=True, verbose_name=_("A1-4 hash"))
     country = models.ForeignKey('location.Country', null=False, related_name='cities', verbose_name=_("Country"))
-    name = models.CharField(max_length=200, blank=False, verbose_name=_("Name"))
-    ascii = models.CharField(max_length=200, db_index=True, blank=False, verbose_name=_("ASCII"))
+    name = models.CharField(max_length=128, blank=False, verbose_name=_("Name"))
+    ascii = models.CharField(max_length=128, blank=False, db_index=True, verbose_name=_("ASCII"))
     code = models.CharField(max_length=32, blank=True, verbose_name=_("Code"))
-    population = models.IntegerField(default=0, db_index=True, verbose_name=_("Population"))
+    population = models.IntegerField(default=0, db_index=False, verbose_name=_("Population"))
     timezone = models.ForeignKey('location.Timezone', null=True, db_index=False, related_name='cities', verbose_name=_("Timezone"))
     level = models.SmallIntegerField(default=0, verbose_name=_("Level"))
     parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_("Parent"))
@@ -305,8 +323,7 @@ class City(CoordinatesModel, PicturableModel):
     def get_path(self):
         """ Renvoyer la représentation texte de l'arborescence de la ville """
         city_tree = self.get_tree()
-        output = render_to_string("location/format/tree.html", {'tree': city_tree})
-        return output
+        return render_to_string("location/format/tree.html", {'tree': city_tree, 'city': self})
 
     @addattr(admin_order_field='name', short_description=_("Name"))
     def get_name(self, language=None):
@@ -324,12 +341,14 @@ class City(CoordinatesModel, PicturableModel):
         :rtype: list
         :returns: une liste de noms
         """
-        names = self.alternates.exclude(language__in=['post', 'link']).order_by('name').values_list('name', flat=True)
-        return names
+        names = self.alternates.exclude(language__in=['post', 'link']).values_list('name', flat=True)
+        return set(list(names) + [self.name, self.ascii])
 
     def has_name(self, name):
         """ Renvoyer si la ville porte un nom """
         name = name.strip().lower()
+        if name == self.name.lower():
+            return True
         return self.name.lower() == name or self.alternates.filter(name__iexact=name).exclude(language__in=['post', 'link']).exists()
 
     @addattr(short_description=_("Code"))
@@ -359,6 +378,10 @@ class City(CoordinatesModel, PicturableModel):
         """ Renvoyer la représentation unicode de l'objet """
         return "{name}".format(name=self.get_name(), country=self.country.code2)
 
+    def __repr__(self):
+        """ Renvoyer la représentation python de l'objet """
+        return "{code}:{type}/{name}".format(type=self.type, name=self.get_name(), code=self.country.code2)
+
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
         super(City, self).save(*args, **kwargs)
@@ -367,7 +390,6 @@ class City(CoordinatesModel, PicturableModel):
     class Meta:
         verbose_name = _("city")
         verbose_name_plural = _("cities")
-        index_together = [['a1', 'a2', 'a3', 'a4']]
         app_label = 'location'
         abstract = False
 
@@ -379,8 +401,8 @@ class CityName(models.Model):
     id = models.IntegerField(primary_key=True, verbose_name=_("Alternate ID"))
     city = models.ForeignKey('location.City', null=False, on_delete=models.CASCADE, related_name='alternates', verbose_name=_("City"))
     language = models.CharField(max_length=10, blank=True, verbose_name=_("Language name"))
-    name = models.CharField(max_length=200, blank=False, verbose_name=_("Name"))
-    ascii = models.CharField(max_length=200, db_index=True, blank=False, verbose_name=_("Name"))
+    name = models.CharField(max_length=128, blank=False, verbose_name=_("Name"))
+    ascii = models.CharField(max_length=128, db_index=True, blank=False, verbose_name=_("Name"))
     preferred = models.BooleanField(default=False, verbose_name=_("Preferred"))
     short = models.BooleanField(default=False, verbose_name=_("Short version"))
 
@@ -404,7 +426,7 @@ class CityName(models.Model):
     @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
-        return _("Name for {}").format(self.city.ascii)
+        return _("Name for {city}/{lang}").format(city=self.city.ascii, lang=self.language or 'all')
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -415,6 +437,6 @@ class CityName(models.Model):
     class Meta:
         verbose_name = _("city name")
         verbose_name_plural = _("city names")
-        index_together = [['city', 'language', 'preferred']]
+        index_together = [['city', 'language']]
         app_label = 'location'
         abstract = False

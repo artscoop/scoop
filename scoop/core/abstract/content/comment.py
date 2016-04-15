@@ -15,7 +15,7 @@ class CommentableModel(models.Model):
     """ Objet pouvant recevoir et gérer des commentaires """
 
     # Champs
-    commentable = models.BooleanField(default=True, db_index=True, verbose_name=_("Commentable"))
+    commentable = models.BooleanField(default=True, verbose_name=_("Commentable"))
     comment_count = models.IntegerField(default=0, verbose_name=_("Comments"))
     comments = GenericRelation('content.Comment')
 
@@ -37,19 +37,21 @@ class CommentableModel(models.Model):
         return result.order_by('time' if reverse else '-time')
 
     @addattr(short_description=mark_safe('<img src="{path}">'.format(path=asset_file('icons', 'black', 'chat_bubble_message_square_icon&16.png'))))
-    def get_comment_count(self):
+    def get_comment_count(self, cached=False):
         """ Renvoyer le nombre de commentaires de l'objet """
-        return self.comments.filter(visible=True).count()
+        return self.comments.filter(visible=True).count() if not cached else self.comment_count
 
     @addattr(allow_tags=True, short_description=mark_safe('<center title="{label}">&#x1f5db;</center>'.format(label=_("Comments"))))
     def get_comment_count_admin(self):
         """ Renvoyer le nombre de commentaires (pour l'admin) """
         return "<center><span class='badge'>{count}</span></center>".format(count=self.get_comment_count())
 
+    @addattr(boolean=True, short_description=_("Comments"))
     def has_comments(self):
         """ Renvoyer si l'objet possède des commentaires """
         return self.comments.exists()
 
+    @addattr(boolean=True, short_description=_("Commentable"))
     def is_commentable(self):
         """ Renvoyer si le contenu peut être commenté """
         return self.commentable

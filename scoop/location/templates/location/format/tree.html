@@ -1,1 +1,1 @@
-{% for component in tree %}{% ifchanged component.get_name %}{% if not forloop.first %} → {% endif %} {{component.get_name|safe}}\n{% endifchanged %}{% endfor %}
+{{ city.get_country_icon }}{% for component in tree %}{% ifchanged component.get_name %}{% if not forloop.first %} → {% endif %} {{component.get_name|safe}}\n{% endifchanged %}{% endfor %}

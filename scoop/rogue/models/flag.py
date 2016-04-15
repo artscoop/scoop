@@ -71,22 +71,25 @@ class FlagManager(SingleDeleteManager):
     # Setter
     def flag(self, item, *args, **kwargs):
         """ Signaler un objet """
-        try:
-            from scoop.rogue.models import FlagType
-            # Permettre d'utiliser une chaîne pour type en utilisant typename
-            if kwargs.get('typename', False):
-                kwargs['type'] = FlagType.objects.get_by_name(kwargs.get('typename'))
-                kwargs.pop('typename')
-            # Les flags auto ont un auteur robot ou admin
-            if kwargs.get('automatic', False):
-                kwargs['author'] = get_user_model().objects.get_bot_or_admin()
-            # Créer le flag
-            flag = Flag(**kwargs)
-            flag.content_object = item
-            flag.save()
-            flag_created.send(sender=flag, flag=flag)
-        except (TransactionManagementError, OperationalError):
-            pass
+        if 'author' not in kwargs or kwargs['author'].has_perm('rogue.can_flag'):
+            try:
+                from scoop.rogue.models import FlagType
+                # Permettre d'utiliser une chaîne pour type en utilisant typename
+                if kwargs.get('typename', False):
+                    kwargs['type'] = FlagType.objects.get_by_name(kwargs.get('typename'))
+                    kwargs.pop('typename')
+                # Les flags auto ont un auteur robot ou admin
+                if kwargs.get('automatic', False):
+                    kwargs['author'] = get_user_model().objects.get_bot_or_admin()
+                # Créer le flag
+                flag = Flag(**kwargs)
+                flag.content_object = item
+                flag.save()
+                flag_created.send(sender=flag, flag=flag)
+                return True
+            except (TransactionManagementError, OperationalError):
+                pass
+        return False
 
     def flag_by_lookup(self, model_name, identifier, *args, **kwargs):
         """ Signaler un objet via app_label.model et id """

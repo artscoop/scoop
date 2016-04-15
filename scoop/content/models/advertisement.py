@@ -75,6 +75,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     views = models.IntegerField(default=0, editable=False, verbose_name=_("Views"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     network = models.CharField(choices=NETWORKS, default='na', max_length=4, db_index=True, verbose_name=_("Ad network"))
+    updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('advertisement', "Updated"))
     objects = AdvertisementManager()
 
     def render(self, request, view=True):

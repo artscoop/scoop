@@ -24,7 +24,7 @@ from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
 from scoop.analyze.abstract.classifiable import ClassifiableModel
-from scoop.content.util.signals import content_pre_lock, content_updated
+from scoop.content.util.signals import content_pre_lock, content_updated, content_format_html
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -279,22 +279,26 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     DEFAULT_TEASER_SIZE = 20  # Taille du teaser en mots
     FORMATS = {0: _("Plain HTML"), 1: _("Markdown"), 2: _("Textile")}
     FORMAT_CHOICES = FORMATS.items()
+    PLAIN_HTML, MARKDOWN, TEXTILE = 0, 1, 2
     TRANSFORMS = {1: markdown.Markdown().convert, 2: textile.textile}  # fonctions de conversion vers HTML
     DATA_KEYS = ['similar', 'admin']
     classifications = {'language-level': ('low', 'mid', 'hi')}
 
     # Champs
+    authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='contents', verbose_name=_("Authors"))
+    # Contenu texte
     title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
     slug = AutoSlugField(max_length=128, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
-    category = models.ForeignKey('content.Category', null=False, related_name='contents', verbose_name=_("Category"))
-    authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='contents', verbose_name=_("Authors"))
     body = models.TextField(blank=True, verbose_name=_("Text"))
+    format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=PLAIN_HTML, verbose_name=_("Format"))
     html = models.TextField(blank=True, help_text=_("HTML output from body"), verbose_name=_("HTML"))
     teaser = models.TextField(blank=True, verbose_name=_("Introduction"))
-    format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=0, verbose_name=_("Format"))
-    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, related_name='contents', help_text=_("Main picture"), verbose_name=_("Picture"))
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Follow up of"))
+    # Informations attachées
+    category = models.ForeignKey('content.Category', null=False, related_name='contents', verbose_name=_("Category"))
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='children', verbose_name=_("Follow up of"))
     tags = models.ManyToManyField('content.Tag', blank=True, related_name='contents', verbose_name=_("Classification tags"))
+    picture = models.ForeignKey('content.Picture', null=True, blank=True, on_delete=models.SET_NULL, related_name='contents',
+                                help_text=_("Main picture"), verbose_name=_("Picture"))
     # Toutes les dates du contenu
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', "Deleted"))
     created = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('content', "Created"))
@@ -424,6 +428,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     def _populate_html(self):
         """ Définir le code HTML selon le corps original du document """
         self.html = Content.TRANSFORMS.get(self.format, lambda s: s)(self.body)
+        content_format_html.send(sender=None, instance=self)
 
     def _populate_similar(self, repopulate=False, result_count=10, categories=None):
         """

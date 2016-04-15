@@ -2,21 +2,28 @@
 from functools import wraps
 
 from django.http.response import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import Context, RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
 from scoop.core.util.stream.request import default_context
 
 
-def render_to_code(request, name, dictionary, code=200):
+def render_to_code(request, template, context, status_code=200):
     """
     Renvoyer un HTTPResponse avec le contenu d'un template et le code HTTP désiré
-    :type name: str | list | tuple
+
+    :param request: objet HttpRequest
+    :param template: nom du template à rendre
+    :param context: données de contexte à passer au template
+    :param status_code: code de statut HTTP
+    :type status_code: int
+    :type context: dict
+    :type request: HttpRequest
+    :type template: str | list | tuple
+    :rtype: HttpResponse
     """
-    response = render_to_response(name, dictionary, context_instance=RequestContext(request))
-    response.status_code = code
-    return response
+    return do_render(context, request, template=template, status_code=status_code)
 
 
 def _get_template(template):
@@ -31,13 +38,13 @@ class BlockNotFound(Exception):
 
 
 def render_template_block(template, block, context):
-    """ Effectuer le rendu d'un bloc unique d'un template """
+    """ Effectuer le rendu d'un bloc unique d'un template Django """
     template.render(context)
     return _render_template_block_nodelist(template.template.nodelist, block, context)
 
 
 def _render_template_block_nodelist(nodelist, block, context):
-    """ Parcourir le template à la recherche d'un noeud de type block """
+    """ Parcourir un template Django à la recherche d'un noeud de type block """
     for node in nodelist:
         if isinstance(node, BlockNode) and node.name == block:
             return node.render(context)
@@ -63,7 +70,8 @@ def _render_template_block_nodelist(nodelist, block, context):
 
 def render_block_to_string(template_name, block, extra_context=None, context_instance=None):
     """
-    Rendre un seul block de template dans une chaîne
+    Rendre un seul block de template Django dans une chaîne
+
     :param extra_context: contexte supplémentaire à passer
     :param block: nom du bloc à rendre
     :param context_instance: objet Context ou RequestContext
@@ -80,7 +88,8 @@ def render_block_to_string(template_name, block, extra_context=None, context_ins
 
 def render_block_to_response(request, template, block, extra_context=None, content_type=None, **kwargs):
     """
-    Rendre un seul block de template dans un objet HTTPResponse
+    Rendre un seul block de template Django dans un objet HTTPResponse
+
     :param request: objet Request
     :param template: nom du template à parcourir
     :param block: nom du bloc à rendre
@@ -102,16 +111,22 @@ def render_block_to_response(request, template, block, extra_context=None, conte
     return HttpResponse(render_template_block(template, block, c), content_type=content_type or 'text/html')
 
 
-def render_to(template=None, content_type=None, headers=None, status_code=200, string=False):
+def render_to(template=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):
     """
     Décorateur de rendu d'un template.
+
+    Prend comme fonction une vue Django (premier paramètre positionnel request)
+    Fonctionne avec tous les moteurs de template.
+
     La fonction en argument peut renvoyer un objet HTTPResponse ou un dictionnaire
     :param template: nom du template à rendre
     :param content_type: type MIME de la sortie
     :param headers: dictionnaire d'en-têtes de réponse
     :param status_code: code de retour HTTP
     :param string: indique si le rendu se fait dans une chaîne plutôt que HTTPResponse
+    :param use_request: utiliser un contexte de requête, avec context_processors appliqués
     :type template: str | list | tuple
+    :type use_request: bool
     :returns un objet HTTPResponse, une chaîne ou l'objet retourné par la fonction décorée
     """
 
@@ -119,30 +134,25 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
         @wraps(function)
         def wrapper(request, *args, **kwargs):
             output = function(request, *args, **kwargs)
-            if not isinstance(output, (dict, type(None))):
-                return output
-            tmpl = output.pop('set.template', template)
-            head = output.pop('set.headers', headers)
-            code = output.pop('set.status_code', status_code)
-            if string is False:
-                response = render_to_response(tmpl, output, context_instance=RequestContext(request), content_type=content_type or 'text/html')
-                response.status_code = code
-                if type(head) is dict:
-                    for key, value in head.items():
-                        response[key] = value
-                return response
-            else:
-                rendered = render_to_string(tmpl, output, context_instance=RequestContext(request))
-                return rendered
+            return do_render(output, request, template=template, content_type=content_type,
+                             headers=headers, status_code=status_code, string=string, use_request=use_request)
 
         return wrapper
 
     return renderer
 
 
-def do_render(data, request, template=None, content_type=None, headers=None, status_code=200, string=False):
+def do_render(data, request, template=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):
     """
-    Rendre un template.
+    Rendre un template. Fonctionne avec tous les moteurs de template.
+
+    Si use_request est à False, le rendu du template s'effectue sans accès
+    aux context_processors et sans accès à l'objet request.
+    Ainsi, impossible de récupérer l'utilisateur, et des données comme
+    MEDIA_URL et STATIC_URL etc. Cela peut cependant légèrement améliorer
+    les performances du template, vu l'absence d'appel aux context_processors
+    (qui peuvent être inutiles avec certains tmeplates)
+
     :param data: contexte supplémentaire
     :param request: objet HTTPRequest
     :param template: nom du template à rendre
@@ -150,7 +160,9 @@ def do_render(data, request, template=None, content_type=None, headers=None, sta
     :param headers: dictionnaire d'en-têtes de réponse
     :param status_code: code de retour HTTP
     :param string: indique si le rendu se fait dans une chaîne plutôt que HTTPResponse
+    :param use_request: use a request context with processors data added
     :type template: str | list | tuple
+    :type use_request: bool
     """
     if not isinstance(data, dict):
         return data
@@ -158,12 +170,14 @@ def do_render(data, request, template=None, content_type=None, headers=None, sta
     head = data.pop('set.headers', headers)
     code = data.pop('set.status_code', status_code)
     if string is False:
-        response = render_to_response(tmpl, data, context_instance=RequestContext(request), content_type=content_type)
+        response = render(template_name=tmpl, context=data, content_type=content_type, request=request if use_request else None)
         response.status_code = code
         if type(head) == dict:
             for key, value in head.items():
                 response[key] = value
         return response
     else:
-        rendered = render_to_string(tmpl, data, context_instance=default_context())
+        if use_request:
+            data.update(default_context().flatten())
+        rendered = render_to_string(tmpl, data)
         return rendered

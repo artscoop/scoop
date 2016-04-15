@@ -1,5 +1,6 @@
 # coding: utf-8
 from ajax_select.admin import AjaxSelectAdmin
+from ajax_select.fields import AutoCompleteSelectField
 from django.apps.registry import apps
 from django.contrib import admin, messages
 from django.contrib.admin.options import StackedInline
@@ -119,6 +120,12 @@ class ProfileAdminFormset(BaseInlineFormSet):
         """ Initialiser le formset """
         super(ProfileAdminFormset, self).__init__(*args, **kwargs)
         self.can_delete = False
+
+    # that adds the field in, overwriting the previous default field
+    def add_fields(self, form, index):
+        super(ProfileAdminFormset, self).add_fields(form, index)
+        form.fields["city"] = AutoCompleteSelectField('citypm')
+        form.fields["picture"] = AutoCompleteSelectField('picture')
 
 
 class ProfileInlineAdmin(StackedInline):

@@ -23,6 +23,7 @@ e403Probability = int(getattr(settings, 'MISERY_403_PROBABILITY', 5))
 e404Probability = int(getattr(settings, 'MISERY_404_PROBABILITY', 10))
 whiteScreenProbability = int(getattr(settings, 'MISERY_WHITE_SCREEN_PROBABILITY', 15))
 ASPdeathProbability = int(getattr(settings, 'MISERY_ASP_ERROR_PROBABILITY', 10))
+
 # Vérifier les niveaux
 assert 0 <= logoutProbability <= 100
 assert 0 <= e403Probability <= 100
@@ -33,6 +34,7 @@ assert 0 <= ASPdeathProbability <= 100
 
 class BanMiddleware(object):
     """ Ajouter une information de ban au cookie d'un banni """
+
     # Liste des répertoires à ne pas compter dans le logging
     RESOURCE_WHITELIST = {'media/', 'static/', '/ajax', '/admin/', '__debug'}
     BAN_COOKIE_NAME = 'client_bmid'  # ban marker id

@@ -1,19 +1,17 @@
 # coding: utf-8
-import datetime
 
 from annoying.fields import AutoOneToOneField
 from django.conf import settings
-from django.contrib.gis.db.models.manager import GeoManager
 from django.contrib.gis.geos.point import Point
 from django.contrib.gis.measure import D
-from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.model.model import SingleDeleteManager
 
 
-class PositionManager(SingleDeleteManager, GeoManager):
+class PositionManager(SingleDeleteManager):
     """ Manager des positions """
 
     # Getter

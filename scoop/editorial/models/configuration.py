@@ -7,14 +7,20 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
+from scoop.core.util.django.templateutil import render_to
+from scoop.core.util.shortcuts import import_fullname
 
 
 class Configuration(DatetimeModel, WeightedModel):
     """ Configuration d'un bloc de page """
+
+    # Champs
     page = models.ForeignKey('editorial.Page', null=False, related_name='configurations', verbose_name=_("Page"))
     position = models.ForeignKey('editorial.Position', null=False, related_name='configurations', verbose_name=_("Position"))
     template = models.ForeignKey('editorial.Template', null=False, related_name='configurations', limit_choices_to={'full': False},
-                                 help_text=_(u"Select template to use to display the target"), verbose_name=_("Template"))
+                                 help_text=_("Select template to use to display the target"), verbose_name=_("Template"))
+    # Cible
+    view_path = models.CharField(max_length=96, blank=True, verbose_name=_("View path"))
     limit = models.Q(name__in=['Excerpt', 'Picture', 'Content', 'Link'])  # limiter les modèles liés
     content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, verbose_name=_("Content type"), limit_choices_to=limit)
     object_id = models.PositiveIntegerField(null=False, blank=True, db_index=False, verbose_name=_("Object Id"))
@@ -27,10 +33,17 @@ class Configuration(DatetimeModel, WeightedModel):
             return True
         return False
 
-    def render(self, force=False):
+    def render(self, request=None, force=False):
         """ Rendre la configuration """
         if force or self.is_valid():
-            return render_to_string(self.template.path, {'item': self.content_object, 'page': self.page})
+            if self.view_path:
+                try:
+                    view = import_fullname(self.view_path)
+                    return render_to(string=True)(view(request))
+                except ImportError:
+                    return _("The view at path could not be imported.")
+            else:
+                return render_to_string(self.template.path, {'item': self.content_object, 'page': self.page})
         if settings.DEBUG:
             return _("The block could not be rendered.")
         return ""

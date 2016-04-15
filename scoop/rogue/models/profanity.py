@@ -13,7 +13,7 @@ class ProfanityManager(SingleDeleteManager):
     """ Manager des filtres de grossièretés """
 
     # Getter
-    def get_profanities_for(self, text):
+    def for_text(self, text):
         """ Renvoyer tous les filtres ayant eu un effet sur la chaîne """
         return [profanity for profanity in self.all() if profanity.check_text(text)]
 

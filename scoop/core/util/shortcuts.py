@@ -1,5 +1,6 @@
 # coding: utf-8
 import importlib
+from operator import itemgetter
 
 from django.conf import settings
 
@@ -7,7 +8,9 @@ from django.conf import settings
 def import_fullname(name):
     """
     Importer un attribut d'un module
+
     :param name: Nom pleinement qualifié du module, ex. os.path.join
+    :returns: module
     """
     name, member = name.rsplit(".", 1)
     mod = importlib.import_module(name)
@@ -15,7 +18,12 @@ def import_fullname(name):
 
 
 def get_fullname(item):
-    """ Renvoyer le nom pleinement qualifié d'un objet """
+    """
+    Renvoyer le nom pleinement qualifié d'un objet
+
+    :returns: ex. 'posixpath.join' pour os.path.join
+    :rtype: str
+    """
     name = item.__name__ if callable(item) else item.__class__.__name__
     fullname = "{module}.{name}".format(**{'module': item.__module__, 'name': name})
     return fullname
@@ -23,7 +31,7 @@ def get_fullname(item):
 
 def get_languages():
     """ Renvoyer la liste des codes de langues installées dans la configuration """
-    return map(lambda l: l[0], settings.LANGUAGES)
+    return map(itemgetter(1), settings.LANGUAGES)
 
 
 def addattr(**kwargs):
