@@ -3,8 +3,10 @@ import psutil
 from admin_tools.dashboard.modules import DashboardModule
 from django.core.cache import cache
 from django.template.loader import render_to_string
+
 from scoop.core.models.recorder import Record
 from scoop.core.util.stream.fileutil import get_free_disk_space
+
 
 PROCESS_NAMES = ['gunicorn', 'django', 'celery']
 try:
@@ -25,7 +27,8 @@ class SystemModule(DashboardModule):
         if not output:
             cpu_usage = psutil.cpu_percent(interval=0, percpu=True)
             memuse = psutil.virtual_memory()._asdict()
-            memory_usage_mb = {'total': memuse['total'] / 1024.0 ** 3, 'used': memuse['used'] / 1024.0 ** 3, 'free': memuse['free'] / 1024.0 ** 3, 'percent': memuse['percent'],
+            memory_usage_mb = {'total': memuse['total'] / 1024.0 ** 3, 'used': memuse['used'] / 1024.0 ** 3, 'free': memuse['free'] / 1024.0 ** 3,
+                               'percent': memuse['percent'],
                                'programs': (memuse['total'] - memuse['available']) / 1024.0 ** 3}
             disk_stats = {'free': get_free_disk_space() / 1024.0 ** 3, 'percent': get_free_disk_space(percent=True)}
             if disk_stats['percent'] <= 100:
@@ -36,7 +39,8 @@ class SystemModule(DashboardModule):
                 disk_stats['status'] = 'danger'
             for process in processes:
                 process.cpu_percent = process.get_cpu_percent(interval=0)
-            output = render_to_string("core/dashboard/system.html", {'cpu_usage': cpu_usage, 'memory': memory_usage_mb, 'disk': disk_stats, 'processes': processes})
+            output = render_to_string("core/dashboard/system.html",
+                                      {'cpu_usage': cpu_usage, 'memory': memory_usage_mb, 'disk': disk_stats, 'processes': processes})
             cache.set('dashboard.sysinfo', output, 5)
         self.pre_content = output
 

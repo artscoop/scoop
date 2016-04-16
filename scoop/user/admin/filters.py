@@ -5,6 +5,7 @@ from django.contrib.admin.filters import SimpleListFilter
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.admin.filters import FirstLetterFilter
 
 
@@ -122,7 +123,8 @@ class MailFilter(SimpleListFilter):
     def queryset(self, request, queryset):
         """ Renvoyer les profils correspondant aux valeurs du filtre """
         if self.value() == 'live':
-            return queryset.filter(Q(user__email__icontains='@live') | Q(user__email__icontains='@hotmail') | Q(user__email__icontains='@outlook') | Q(user__email__icontains='@msn.'))
+            return queryset.filter(Q(user__email__icontains='@live') | Q(user__email__icontains='@hotmail') | Q(user__email__icontains='@outlook') | Q(
+                user__email__icontains='@msn.'))
         if self.value() == 'yahoo':
             return queryset.filter(user__email__icontains='@yahoo')
         if self.value() == 'gmail':

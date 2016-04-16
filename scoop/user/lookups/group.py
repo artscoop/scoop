@@ -2,6 +2,7 @@
 from ajax_select import LookupChannel
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
+
 from scoop.core.util.model.model import search_query
 
 

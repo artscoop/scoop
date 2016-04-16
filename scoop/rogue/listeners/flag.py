@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
+
 from scoop.core.util.signals import record
 from scoop.rogue.util.signals import flag_created
 

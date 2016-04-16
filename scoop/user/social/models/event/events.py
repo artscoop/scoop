@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel

@@ -4,11 +4,12 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.db import models
 from django.http.request import HttpRequest
 from django.template.defaultfilters import capfirst
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
+
 
 # Positions à traduire par défaut
 DEFAULT_NAMES = [_("Menu"), _("Heading"), _("Footer"), _("Js"), _("Extra head"), ]
@@ -61,7 +62,6 @@ class Position(DatetimeModel, IconModel):
         return self.title
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return ugettext(self.auto_title())

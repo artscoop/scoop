@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.apps.config import AppConfig
 
+
 __version__ = (1, 2014, 8)
 
 

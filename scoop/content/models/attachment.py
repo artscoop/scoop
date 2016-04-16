@@ -8,7 +8,6 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import filesizeformat
 from django.template.loader import render_to_string
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import pgettext, pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -134,7 +133,6 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model, ACLModel):
                 self.mimetype = 'application/octet-stream'
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{}".format(self.file.name)

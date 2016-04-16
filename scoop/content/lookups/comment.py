@@ -1,9 +1,10 @@
 # coding: utf-8
 from ajax_select import LookupChannel
 from django.core.exceptions import PermissionDenied
+from unidecode import unidecode
+
 from scoop.content.models.comment import Comment
 from scoop.core.util.model.model import search_query
-from unidecode import unidecode
 
 
 class CommentLookup(LookupChannel):

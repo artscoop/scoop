@@ -1,6 +1,7 @@
 # coding: utf-8
 from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
+
 from scoop.user.social.models.friend.friendgroup import FriendGroup
 from scoop.user.social.models.friend.friendlist import FriendList
 

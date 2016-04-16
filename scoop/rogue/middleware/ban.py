@@ -13,7 +13,9 @@ from django.http.response import Http404, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.utils import timezone
+
 from scoop.core.util.shortcuts import get_fullname
+
 
 logger = logging.getLogger('django_misery')
 

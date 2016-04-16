@@ -8,8 +8,10 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
-from scoop.core.templatetags.html_tags import linkify
 from unidecode import unidecode
+
+from scoop.core.templatetags.html_tags import linkify
+
 
 register = template.Library()
 
@@ -92,14 +94,14 @@ def humanize_join(values, enum_count, singular_plural=None, as_links=False):
     total = len(values)
     rest = total - enum_count
     if singular_plural is not None:
-        singular, plural = [word.strip() for word in singular_plural.split(";")]
+        singular, plural = [word.strip() for word in singular_plural.split(";", 1)]
     elif total > 0 and isinstance(values[0], Model):
         singular, plural = values[0]._meta.verbose_name, values[0]._meta.verbose_name_plural
     else:
         raise TypeError("Values must be a list of Model instances or singular_plural must be passed as an argument.")
     values = [linkify(value) for value in values] if as_links else [str(value) for value in values]
     if rest > 0:
-        output = _("%(join)s and %(rest)d %(unit)s") % {'join': ", ".join(values[:enum_count]), 'rest': rest, 'unit': singular if rest == 1 else plural}
+        output = _("{join} and {rest} {unit}").format(join=", ".join(values[:enum_count]), rest=rest, unit=singular if rest == 1 else plural)
     else:
         if total == 0:
             output = ""

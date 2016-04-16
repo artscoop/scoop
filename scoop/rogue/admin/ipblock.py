@@ -2,6 +2,7 @@
 import IPy
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 from scoop.rogue.forms import IPBlockForm
 from scoop.rogue.models import IPBlock
@@ -11,7 +12,8 @@ class IPBlockAdmin(admin.ModelAdmin):
     """ Administration des blocages d'adresses IP """
     # Configuration
     list_select_related = True
-    list_display = ['id', 'active', 'get_blocked_ip_count', 'type', 'representation', 'hostname', 'hostname_exclude', 'isp', 'get_ip1', 'get_ip2', 'get_expires']
+    list_display = ['id', 'active', 'get_blocked_ip_count', 'type', 'representation', 'hostname', 'hostname_exclude', 'isp', 'get_ip1', 'get_ip2',
+                    'get_expires']
     list_filter = ['active', 'type', 'category', 'hostname', 'harm']
     list_display_links = ['id']
     list_editable = ['active']
@@ -51,6 +53,7 @@ class IPBlockAdmin(admin.ModelAdmin):
         if obj.expires is None:
             return _("Never")
         return obj.expires
+
 
 # Enregistrer les classes d'administration
 admin.site.register(IPBlock, IPBlockAdmin)

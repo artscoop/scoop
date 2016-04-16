@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.social.access import PrivacyModel
 from scoop.core.abstract.social.like import LikableModel

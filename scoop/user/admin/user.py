@@ -1,16 +1,17 @@
 # coding: utf-8
-import locale
-
 from ajax_select import make_ajax_form
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.template.defaultfilters import escape
 from django.utils.translation import ugettext_lazy as _
+
+import locale
 from scoop.core.util.shortcuts import addattr
 from scoop.user.admin.filters import InitialFilter, LastOnlineFilter, OnlineFilter
 from scoop.user.admin.profile import ProfileInlineAdmin
 from scoop.user.forms.user import UserAdminForm
+
 
 __all__ = ['UserAdmin']
 
@@ -25,7 +26,8 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 25
     search_fields = ['username', 'email', 'id']
     exclude = ('last_login',)
-    fieldsets = ((_("User"), {'fields': ('username', 'email', 'password', 'name')}), (_("Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),)
+    fieldsets = ((_("User"), {'fields': ('username', 'email', 'password', 'name')}),
+                 (_("Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),)
     form = make_ajax_form(get_user_model(), {'user_permissions': 'permission', 'groups': 'group'}, UserAdminForm)
     inlines = [ProfileInlineAdmin]
     save_on_top = False
@@ -92,7 +94,9 @@ class UserAdmin(admin.ModelAdmin):
     def get_image(self, obj):
         """ Renvoyer une vignette de l'image de profil de l'utilisateur """
         if obj.profile.picture is not None:
-            return "{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width, obj.profile.picture.height)
+            return "{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width,
+                                                    obj.profile.picture.height)
+
 
 # Enregistrer les classes d'administration
 admin.site.register(get_user_model(), UserAdmin)

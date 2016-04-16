@@ -3,6 +3,7 @@
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop
 
+
 __version__ = (1, 2015, 3)
 
 gettext_noop("Content")
@@ -16,6 +17,7 @@ class ContentConfig(AppConfig):
     def ready(self):
         """ Lorsque le registre est prêt """
         from scoop.content import listeners
+
 
 # Charger la configuration ci-dessus par défaut
 default_app_config = 'scoop.content.ContentConfig'

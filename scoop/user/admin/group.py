@@ -4,6 +4,7 @@ from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 
 
@@ -23,6 +24,7 @@ class GroupAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     def get_permissions(self, obj):
         """ Renvoyer la représentation texte des permissions du groupe """
         return " | ".join([item.codename for item in obj.permissions.all()])
+
 
 # Enregistrer les classes d'administration
 try:

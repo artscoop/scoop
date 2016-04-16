@@ -1,7 +1,7 @@
 # coding: utf-8
 import hashlib
 from abc import ABCMeta, abstractmethod
-from os.path import splitext, basename
+from os.path import basename, splitext
 
 from django.conf import settings
 from django.core.files.base import File
@@ -10,7 +10,8 @@ from django.db import models
 from django.db.models.fields.files import FileField
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _, pgettext_lazy
+from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 
 from scoop.core.util.data.uuid import uuid_bits
 

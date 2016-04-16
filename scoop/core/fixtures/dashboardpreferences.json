@@ -1,1 +1,35 @@
-[{"pk": 1, "model": "dashboard.dashboardpreferences", "fields": {"dashboard_id": "dashboard", "data": "{}", "user": ["steve"]}}, {"pk": 2, "model": "dashboard.dashboardpreferences", "fields": {"dashboard_id": "location-dashboard", "data": "{}", "user": ["steve"]}}, {"pk": 3, "model": "dashboard.dashboardpreferences", "fields": {"dashboard_id": "treemenus-dashboard", "data": "{}", "user": ["steve"]}}]
+[
+  {
+    "pk": 1,
+    "model": "dashboard.dashboardpreferences",
+    "fields": {
+      "dashboard_id": "dashboard",
+      "data": "{}",
+      "user": [
+        "steve"
+      ]
+    }
+  },
+  {
+    "pk": 2,
+    "model": "dashboard.dashboardpreferences",
+    "fields": {
+      "dashboard_id": "location-dashboard",
+      "data": "{}",
+      "user": [
+        "steve"
+      ]
+    }
+  },
+  {
+    "pk": 3,
+    "model": "dashboard.dashboardpreferences",
+    "fields": {
+      "dashboard_id": "treemenus-dashboard",
+      "data": "{}",
+      "user": [
+        "steve"
+      ]
+    }
+  }
+]

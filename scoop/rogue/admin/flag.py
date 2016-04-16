@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.user.authored import AutoAuthoredModelAdmin
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr
@@ -17,7 +18,8 @@ class FlagAdmin(AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
     """ Administration des signalements """
     # Configuration
     list_select_related = True
-    list_display = ['id', 'author', 'get_content_type_info', 'get_content_object_info', 'type', 'get_status', 'get_url', 'details', 'automatic', 'get_datetime_ago']
+    list_display = ['id', 'author', 'get_content_type_info', 'get_content_object_info', 'type', 'get_status', 'get_url', 'details', 'automatic',
+                    'get_datetime_ago']
     list_editable = ()
     list_display_links = ('id',)
     search_fields = ['details', 'status', 'name']
@@ -29,7 +31,8 @@ class FlagAdmin(AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
     readonly_fields = []
     save_on_top = False
     fieldsets = (
-        (_("Flag"), {'fields': ('author', ('content_type', 'object_id',), 'type', 'status', 'details')}), ('Plus', {'fields': ('moderators', 'admin', 'automatic', 'url', 'priority')}))
+        (_("Flag"), {'fields': ('author', ('content_type', 'object_id',), 'type', 'status', 'details')}),
+        ('Plus', {'fields': ('moderators', 'admin', 'automatic', 'url', 'priority')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
     # Actions
@@ -91,6 +94,7 @@ class FlagTypeAdmin(admin.ModelAdmin, GenericModelUtil):
     inlines = [FlagTypeTranslationInlineAdmin, ]
     fieldsets = ((_("Flag type"), {'fields': ('short_name', 'content_type', 'icon')}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Flag, FlagAdmin)

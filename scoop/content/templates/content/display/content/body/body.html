@@ -1,5 +1,5 @@
 {% load inlines micawber_tags smiley_tags %}
 <div class="text">
-	{% process_inlines content.body as body %}
-	{{body|oembed_html|safe}}
+    {% process_inlines content.body as body %}
+    {{ body|oembed_html|safe }}
 </div>

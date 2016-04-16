@@ -7,6 +7,7 @@ publics
 """
 from django.apps.config import AppConfig
 
+
 __version__ = (1, 2016, 1)
 
 
@@ -18,6 +19,7 @@ class RogueConfig(AppConfig):
     def ready(self):
         """ Le registre d'applications est prêt """
         from scoop.rogue import listeners
+
 
 # Charger la configuration ci-dessus par défaut
 default_app_config = 'scoop.rogue.RogueConfig'

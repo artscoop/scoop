@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.db.utils import ProgrammingError
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModel
 from scoop.core.abstract.user.authored import AuthoredModel

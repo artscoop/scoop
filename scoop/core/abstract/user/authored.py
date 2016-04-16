@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.db import models
 from django.template.defaultfilters import escape
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 
 
@@ -114,7 +115,8 @@ class AutoManyAuthoredModelAdmin(admin.ModelAdmin):
         form.base_fields['authors'].initial = request.user.id
         try:
             if obj is not None and obj.authors.count() > 0:
-                form.base_fields['authors'].queryset = form.base_fields['authors'].queryset.filter(models.Q(id=request.user.id) | models.Q(id=obj.authors.all()[0].id))
+                form.base_fields['authors'].queryset = form.base_fields['authors'].queryset.filter(
+                    models.Q(id=request.user.id) | models.Q(id=obj.authors.all()[0].id))
             else:
                 form.base_fields['authors'].queryset = form.base_fields['authors'].queryset.filter(id=request.user.id)
         except:

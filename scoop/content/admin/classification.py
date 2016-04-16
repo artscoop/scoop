@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.contrib import admin
+
 from scoop.content.models.classification import Tag
 
 
@@ -11,6 +12,7 @@ class TagAdmin(admin.ModelAdmin):
     list_filter = ['active']
     search_fields = ['name', 'description']
     fields = ['short_name', 'name', 'description', 'parent', 'icon']
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Tag, TagAdmin)

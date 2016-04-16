@@ -3,9 +3,10 @@
 from annoying.decorators import render_to
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
+
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -14,7 +15,7 @@ from scoop.core.abstract.user.ippoint import IPPointableModel, IPPointModel
 from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.data.dateutil import now
 from scoop.core.util.model.model import SingleDeleteManager, search_query
-from scoop.core.util.shortcuts import addattr
+
 
 __all__ = ['Message']
 

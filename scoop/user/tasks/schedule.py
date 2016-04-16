@@ -7,8 +7,10 @@ from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
+
 from scoop.user.access.models import UserIP
 from scoop.user.models import User
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,32 +1,39 @@
 {% load picture_tags thumbnail %}
 <div id="inline-thumbnails" class="row-fluid">
-	{% for picture in value.get_pictures %}
-		{% if not picture.deleted %}
-		<div class="span1">
-			<div class="overlay-container" style="display:inline-block;">
-				<img class="insertable" src="{{picture.image|thumbnail_url:'96x72'}}" alt="{{picture.uuid}}" title="{{picture.uuid}}">
-				<div class="overlay-status"><span class="label label-important">{{picture.uuid}}</span></div>
-				<div class="overlay-caption"><span class="label label-inverse">{{picture.width}}x{{picture.height}}</span></div>
-			</div>
-		</div>
-		{% endif %}
-	{% endfor %}
+    {% for picture in value.get_pictures %}
+        {% if not picture.deleted %}
+            <div class="span1">
+                <div class="overlay-container" style="display:inline-block;">
+                    <img class="insertable" src="{{ picture.image|thumbnail_url:'96x72' }}" alt="{{ picture.uuid }}" title="{{ picture.uuid }}">
+                    <div class="overlay-status"><span class="label label-important">{{ picture.uuid }}</span></div>
+                    <div class="overlay-caption"><span class="label label-inverse">{{ picture.width }}x{{ picture.height }}</span></div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
 </div>
 
 <script type="text/javascript">
-	$(".insertable").click(function(){
-		uuident = $(this).attr("alt")
-		$('textarea').each(function(){
-			$(this).val($(this).val() + " \{\{image " + uuident + " size=100x0\}\}");
-		});
-		$('iframe').each(function(){
-			html = $(this).contents().find('body #page').html();
-			$(this).contents().find('body #page').html(html + " \{\{image " + uuident + " size=100x0\}\}");
-		});
-	});
+    $(".insertable").click(function () {
+        uuident = $(this).attr("alt")
+        $('textarea').each(function () {
+            $(this).val($(this).val() + " \{\{image " + uuident + " size=100x0\}\}");
+        });
+        $('iframe').each(function () {
+            html = $(this).contents().find('body #page').html();
+            $(this).contents().find('body #page').html(html + " \{\{image " + uuident + " size=100x0\}\}");
+        });
+    });
 </script>
 
 <style>
-	#inline-thumbnails > div {opacity:0.75; border-radius:4px; cursor: pointer;}
-	#inline-thumbnails > div:hover {opacity:1.0;}
+    #inline-thumbnails > div {
+        opacity: 0.75;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #inline-thumbnails > div:hover {
+        opacity: 1.0;
+    }
 </style>

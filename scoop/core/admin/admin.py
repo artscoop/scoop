@@ -2,6 +2,7 @@
 from admin_tools.dashboard.models import DashboardPreferences
 from django.contrib import admin
 
+
 __all__ = ['DashboardPreferencesAdmin']
 
 
@@ -20,6 +21,7 @@ class DashboardPreferencesAdmin(admin.ModelAdmin):
     exclude = []
     actions_on_top = True
     order_by = ['id']
+
 
 # Enregistrer les classes d'administration
 admin.site.register(DashboardPreferences, DashboardPreferencesAdmin)

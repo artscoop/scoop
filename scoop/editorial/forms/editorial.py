@@ -1,9 +1,10 @@
 # coding: utf-8
 from django import forms
+from tinymce.widgets import TinyMCE
+
 from scoop.content.util.tinymce import TINYMCE_CONFIG_CONTENT
 from scoop.editorial.models.configuration import Configuration
 from scoop.editorial.models.excerpt import ExcerptTranslation
-from tinymce.widgets import TinyMCE
 
 
 class ConfigurationInlineForm(forms.ModelForm):

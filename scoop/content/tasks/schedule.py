@@ -5,6 +5,7 @@ from celery.task import periodic_task
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
+
 from scoop.content.models.picture import Picture
 from scoop.core.util.django.sitemaps import ping_feed
 

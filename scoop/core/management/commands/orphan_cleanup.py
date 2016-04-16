@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 from scoop.core.util.stream.fileutil import clean_empty_folders, clean_orphans
 
 

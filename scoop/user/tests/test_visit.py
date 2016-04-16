@@ -4,7 +4,9 @@ from importlib import import_module
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+
 from scoop.user.models import Visit
+
 
 User = get_user_model()
 

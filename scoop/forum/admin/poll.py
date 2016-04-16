@@ -3,6 +3,7 @@ from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.forum.models import Poll
 
 
@@ -17,6 +18,7 @@ class PollAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     inlines = []
     filter_horizontal = []
     search_fields = ['title', 'description']
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Poll, PollAdmin)

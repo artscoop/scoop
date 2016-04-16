@@ -2,10 +2,11 @@
 from functools import wraps
 
 from django.http.response import HttpResponse
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render
 from django.template import Context, RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
+
 from scoop.core.util.stream.request import default_context
 
 

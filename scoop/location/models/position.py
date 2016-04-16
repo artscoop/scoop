@@ -1,5 +1,4 @@
 # coding: utf-8
-
 from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.contrib.gis.geos.point import Point

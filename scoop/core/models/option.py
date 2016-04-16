@@ -3,17 +3,17 @@ from django.apps.registry import apps
 from django.db import models
 from django.db.models.base import Model
 from django.template.loader import render_to_string
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy, ugettext
+from django.utils.translation import ugettext_lazy as _
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
+from unidecode import unidecode
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
-from unidecode import unidecode
 
 
 class OptionManager(SingleDeleteManager, TranslatableModelManager):
@@ -103,7 +103,6 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
     description = property(get_description)
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return self.get_name()

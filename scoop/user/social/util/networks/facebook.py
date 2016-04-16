@@ -19,6 +19,7 @@ import simplejson as json
 
 def parse_signed_request(signed_request, secret):
     """ Parcourir une requête signée venant de Facebook """
+
     def base64_url_decode(encoded):
         padding_factor = (4 - len(encoded) % 4) % 4
         encoded += "=" * padding_factor

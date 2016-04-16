@@ -16,6 +16,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from floppyforms.widgets import SelectDateWidget as SelectDateWidgetBase
 
+
 # Constantes
 RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
 
@@ -165,7 +166,7 @@ class ColumnCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
                     label_for = ''
 
                 cb = forms.CheckboxInput(
-                    final_attrs, check_test=lambda value: value in str_values)
+                        final_attrs, check_test=lambda value: value in str_values)
                 option_value = str(option_value)
                 rendered_cb = cb.render(name, option_value)
                 option_label = conditional_escape(str(option_label))

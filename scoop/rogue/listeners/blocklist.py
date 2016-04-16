@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
+
 from scoop.rogue.util.signals import blocklist_added
 
 

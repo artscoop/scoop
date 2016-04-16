@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.signals import record
 from scoop.messaging.models.quota import Quota

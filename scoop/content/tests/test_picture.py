@@ -3,8 +3,10 @@ import os
 from os.path import join
 
 from django.test import TestCase
+
 from scoop.content.models.picture import Picture
 from scoop.user.models.user import User
+
 
 path = os.path.dirname(__file__)
 
@@ -19,6 +21,7 @@ class PictureTest(TestCase):
     def setUp(self):
         """ Définir l'environnement de test """
         self.user = User.objects.create(username='pictureuser', email='foo@foobar3.foo')
+        self.downloaduser = User.objects.create(username='downloaduser', email='foo@foobar4.foo', is_superuser=True)
 
     def tearDown(self):
         """ Nettoyer l'environnement des tests """
@@ -38,6 +41,7 @@ class PictureTest(TestCase):
         self.assertTrue(picture2.get_extension() == '.jpg', "the downloaded picture should have been converted to a jpg still")
         self.assertGreater(picture2.get_animation_duration(), 0.1, "the picture animations should last longer than 0.1 seconds")
         self.assertFalse('screen' in picture2.get_filename(), "the picture has been created from scratch, this is not normal")
+        self.assertTrue(picture2.exists(), "the picture should be detected as a valid file")
 
     def test_exif_rotation(self):
         """ Tester le fonctionnement de l'autorotation EXIF """
@@ -45,6 +49,27 @@ class PictureTest(TestCase):
         self.assertEqual(picture.get_dimension(), (235, 500))
         picture.rotate(90)
         self.assertEqual(picture.get_dimension(), (500, 235))
+
+    def test_cloning(self):
+        """ Tester le clonage d'image """
+        picture = Picture.objects.create_from_file(join(path, 'images', 'rotated.jpg'), author=self.user, title='rotated picture')
+        picture2 = picture.clone()
+        self.assertTrue(picture2.exists(), "picture 2 should be a successful clone")
+
+    def test_description_download(self):
+        """ Tester les droits de download d'une image """
+        picture1 = Picture(description='file://{}'.format(join(path, 'images', 'croppable.jpg')),
+                           author=self.user, title='croppable picture')
+        picture2 = Picture(description='file://{}'.format(join(path, 'images', 'croppable.jpg')),
+                           author=self.downloaduser, title='croppable picture')
+        picture3 = Picture(description='file://{}'.format(join(path, 'images', 'croppable.jpg')),
+                           author=None, title='croppable picture')
+        picture1.save()
+        picture2.save()
+        picture3.save()
+        self.assertFalse(picture1.exists(), "the author should not be allowed to download image")
+        self.assertTrue(picture2.exists(), "the author should be allowed to download image")
+        self.assertTrue(picture3.exists(), "the image should be downloaded when there's no author")
 
     def test_autocrop(self):
         """ Tester le fonctionnement du rognage automatique avec et sans OpenCV """
@@ -55,7 +80,7 @@ class PictureTest(TestCase):
         # Tester les dimensions de l'image rognée autour de la zone importante
         picture2 = picture1.clone()
         picture2.autocrop_feature_detection()
-        self.assertLess(picture2.height, 200, "the picture should be cropped by more than 48 pixels vertically")
+        self.assertLess(picture2.height, 200, "the picture should have been cropped to less than 200 pixels high")
         self.assertGreater(picture2.height, 160, "the picture viable content is more than 160 pixels high")
         # Tester les dimensions de l'image rognée par couleur de bordure
         picture3 = picture1.clone()
@@ -66,7 +91,7 @@ class PictureTest(TestCase):
         """ Tester l'écriture et la lecture de marqueurs """
         picture1 = Picture.objects.create_from_file(join(path, 'images', 'croppable.jpg'), author=self.user, title='marked picture')
         picture1.set_marker('x,18,violence')
-        self.assertEqual(picture1.get_markers(), ['x', '18', 'violence'], "the picture markers should be in order x, 18 ans violence")
+        self.assertEqual(picture1.get_markers(), ['x', '18', 'violence'], "the picture markers should be in order x, 18 and violence")
         self.assertTrue(picture1.has_marker('18'), "the picture should have a marker named 18")
 
     def test_license(self):

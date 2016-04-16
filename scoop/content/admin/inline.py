@@ -5,6 +5,7 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
 from django.forms import widgets
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.forms.picture import PictureAdminInlineForm
 from scoop.content.models.content import Category, CategoryTranslation
 from scoop.content.models.picture import Picture
@@ -31,5 +32,5 @@ class CategoryTranslationInlineAdmin(admin.TabularInline):
     verbose_name_plural = _("Translations")
     model = CategoryTranslation
     max_num = len(settings.LANGUAGES)
-    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}, }
+    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget},}
     extra = 1

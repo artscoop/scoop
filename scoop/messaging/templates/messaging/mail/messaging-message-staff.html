@@ -2,19 +2,19 @@
 {% load text_tags %}
 
 {% block title %}
-Vous avez reçu {{message|length|pluralize:"un message, des messages"}} de l'équipe du site
+    Vous avez reçu {{ message|length|pluralize:"un message, des messages" }} de l'équipe du site
 {% endblock %}
 
 {% block text %}
-Bonjour {{event.recipient}},
-	Un administrateur vous a envoyé {{message|length|pluralize:"un message privé,des messages privés"}}.
-Vous pouvez consulter tous vos messages privés en vous connectant avec votre compte utilisateur, et en vous rendant à l'adresse internet suivante :
-{{DOMAIN_NAME}}{% url "messaging:inbox" %}
+    Bonjour {{ event.recipient }},
+    Un administrateur vous a envoyé {{ message|length|pluralize:"un message privé,des messages privés" }}.
+    Vous pouvez consulter tous vos messages privés en vous connectant avec votre compte utilisateur, et en vous rendant à l'adresse internet suivante :
+    {{ DOMAIN_NAME }}{% url "messaging:inbox" %}
 {% endblock %}
 
 {% block html_content %}
-<p>Bonjour {{event.recipient}},</p>
-	Un administrateur vous a envoyé {{message|length|pluralize:"un message privé,des messages privés"}}.
-Vous pouvez consulter tous vos messages privés en vous connectant avec votre compte utilisateur, et en vous rendant à l'adresse internet suivante :
-{{DOMAIN_NAME}}{% url "messaging:inbox" %}
+    <p>Bonjour {{ event.recipient }},</p>
+    Un administrateur vous a envoyé {{ message|length|pluralize:"un message privé,des messages privés" }}.
+    Vous pouvez consulter tous vos messages privés en vous connectant avec votre compte utilisateur, et en vous rendant à l'adresse internet suivante :
+    {{ DOMAIN_NAME }}{% url "messaging:inbox" %}
 {% endblock %}

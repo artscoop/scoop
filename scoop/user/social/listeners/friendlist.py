@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
-from scoop.user.social.models.group import Group
-from scoop.user.social.util.signals import friend_pending_new, invite_accepted
+
+from scoop.user.social.util.signals import friend_pending_new
 
 
 @receiver(friend_pending_new)

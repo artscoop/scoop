@@ -10,6 +10,7 @@ from PIL import Image, ImageChops, ImageEnhance, ImageFilter
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
 
+
 BLUR_LEVELS = {'low': 2, 'medium': 8, 'high': 32}
 
 

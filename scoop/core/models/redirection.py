@@ -5,12 +5,13 @@ from datetime import datetime, timedelta
 from django.contrib.contenttypes import fields
 from django.db import models
 from django.http.response import HttpResponsePermanentRedirect, HttpResponseRedirect
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModelMixin
 from scoop.core.util.model.model import SingleDeleteManager
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +55,8 @@ class Redirection(GenericModelMixin, DatetimeModel):
     base = models.CharField(max_length=250, unique=True, blank=False, verbose_name=_("Original URL"))
     expires = models.DateTimeField(default=datetime.now() + timedelta(days=3650), verbose_name=_("Expiry"))  # 10 ans après démarrage du serveur
     permanent = models.BooleanField(default=True, help_text=_("Does the redirection use an HTTP 301?"), verbose_name=pgettext_lazy('redirection', "Permanent"))
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, limit_choices_to={'model__in': ['user', 'profile', 'content']}, verbose_name=_("Content type"))
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, limit_choices_to={'model__in': ['user', 'profile', 'content']},
+                                     verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     content_object.short_description = _("Content object")
@@ -85,7 +87,6 @@ class Redirection(GenericModelMixin, DatetimeModel):
         """ Initialiser l'objet """
         super(Redirection, self).__init__(*args, **kwargs)
 
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("HTTP {http} Redirection from {base} to {new}").format(http=self.get_http_code(), base=self.base, new=self.get_new_url())

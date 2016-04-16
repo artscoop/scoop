@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
+
 from scoop.core.abstract.content.picture import PicturedModel
 from scoop.core.abstract.core.birth import BirthManager, BirthModel
 from scoop.core.abstract.core.uuid import UUID32Model

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.user.util.signals import credentials_form_check_email, credentials_form_check_name, credentials_form_check_username
 
 
@@ -73,7 +74,8 @@ class RegistrationForm(forms_.ModelForm):
         # Renvoyer une erreur si le pseudo est trop court ou long
         if length > RegistrationForm.USERNAME_LENGTH_MAX or length < RegistrationForm.USERNAME_LENGTH_MIN:
             raise forms.ValidationError(
-                _("Your nickname should be between {min} and {max} characters long.").format(min=RegistrationForm.USERNAME_LENGTH_MIN, max=RegistrationForm.USERNAME_LENGTH_MAX))
+                    _("Your nickname should be between {min} and {max} characters long.").format(min=RegistrationForm.USERNAME_LENGTH_MIN,
+                                                                                                 max=RegistrationForm.USERNAME_LENGTH_MAX))
         return name.lower()
 
     def clean_eula(self):
@@ -97,14 +99,16 @@ class RegistrationForm(forms_.ModelForm):
 class EULAForm(forms_.Form):
     """ Formulaire de validation des CGU """
     eula = forms_.BooleanField(required=True,
-                               help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(website=getattr(settings, 'SITE_NAME', 'N/A'))),
+                               help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(
+                                   website=getattr(settings, 'SITE_NAME', 'N/A'))),
                                label=_("EULA"))
 
 
 class RegistrationEULAForm(RegistrationForm):
     """ Formulaire d'inscription avec CGU à valider """
     eula = forms_.BooleanField(required=True,
-                               help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(website=getattr(settings, 'SITE_NAME', 'N/A'))),
+                               help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(
+                                   website=getattr(settings, 'SITE_NAME', 'N/A'))),
                                label=_("EULA"))
 
 

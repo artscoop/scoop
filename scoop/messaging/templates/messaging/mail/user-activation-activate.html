@@ -2,15 +2,16 @@
 {% load text_tags %}
 
 {% block title %}
-{{event.recipient}}, voici vos informations d'activation
+    {{ event.recipient }}, voici vos informations d'activation
 {% endblock %}
 
 {% block text %}
-Bonjour {{event.recipient}},
-voici vos informations d'activation : {{DOMAIN_NAME}}{% url "user:profile-activate" username=event.recipient.username uuid=activation.0.uuid %}
+    Bonjour {{ event.recipient }},
+    voici vos informations d'activation : {{ DOMAIN_NAME }}{% url "user:profile-activate" username=event.recipient.username uuid=activation.0.uuid %}
 {% endblock %}
 
 {% block html_content %}
-<p>Bonjour {{event.recipient}},</p>
-<p>Veuillez cliquer sur ce lien pour activer votre profil : <a href="{{DOMAIN_NAME}}{% url "user:profile-activate" username=event.recipient.username uuid=activation.0.uuid %}">Votre lien d'activation</a></p>
+    <p>Bonjour {{ event.recipient }},</p>
+    <p>Veuillez cliquer sur ce lien pour activer votre profil : <a
+            href="{{ DOMAIN_NAME }}{% url "user:profile-activate" username=event.recipient.username uuid=activation.0.uuid %}">Votre lien d'activation</a></p>
 {% endblock %}

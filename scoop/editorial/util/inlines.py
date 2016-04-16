@@ -24,5 +24,6 @@ class ExcerptInline(TemplateInline):
         path = "editorial/%s" % base
         return path
 
+
 # Enregistrer les classes d'inlines
 inlines.registry.register('snip', ExcerptInline)

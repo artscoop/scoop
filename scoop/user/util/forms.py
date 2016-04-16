@@ -2,6 +2,7 @@
 from django.db.models.base import Model
 from django.forms.forms import Form
 from django.http.request import HttpRequest
+
 from scoop.core.util.django.formutil import form
 from scoop.user.models.forms import FormConfiguration
 
@@ -76,7 +77,8 @@ class DataForm(Form):
         result, defaults = dict(), cls.get_defaults(user)
         if isinstance(defaults, dict):
             result.update(defaults)
-        data = FormConfiguration.objects.get_user_config(user, cls.name, version=version) if user else FormConfiguration.objects.get_template_config(cls.name, version=version)
+        data = FormConfiguration.objects.get_user_config(user, cls.name, version=version) if user else FormConfiguration.objects.get_template_config(cls.name,
+                                                                                                                                                     version=version)
         data = cls._fix_data(data)
         result.update(data)
         return result or None

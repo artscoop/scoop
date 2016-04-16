@@ -7,7 +7,6 @@ import traceback
 from os.path import join
 from random import randrange
 from urllib import parse
-from urllib.parse import urljoin
 
 import cv2
 import simplejson
@@ -21,7 +20,6 @@ from django.db import models, transaction
 from django.template.defaultfilters import filesizeformat, urlencode
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
 from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -38,7 +36,6 @@ from scoop.core.abstract.core.rectangle import RectangleModel
 from scoop.core.abstract.core.uuid import FreeUUIDModel, UUIDField
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.data.dateutil import now
-from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.django.templateutil import render_to
 from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
@@ -604,6 +601,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             self.update_size()
         else:
             logger.warning("OpenCV not available for feature detection, using basic cropping instead.")
+            print("OpenCV not available for feature detection, using basic cropping instead.")
             self.autocrop()
 
     def quantize(self, save=True):
@@ -650,10 +648,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         :param description: texte descriptif de la nouvelle image
         """
         if self.exists():
-            clone = Picture(description=urljoin(settings.DOMAIN_NAME, self.image.url), title=self.title, author=self.author)
-            clone.save()
-            clone.description = (description or _("Clone of picture {uuid}")).format(uuid=self.uuid)
-            clone.update_file_path(force_name=uuid_bits(48))
+            clone = Picture(title=self.title, author=self.author,
+                            description=description or _("Clone of picture {uuid}").format(uuid=self.uuid))
+            clone.set_from_file(self.image.path)
             clones = set(self.get_data('clones') or {})
             clones.add(clone.uuid)
             self.set_data('clones', clones, save=True)
@@ -679,7 +676,6 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         return False
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("{image}").format(image=self.title or self.description or self.get_filename())

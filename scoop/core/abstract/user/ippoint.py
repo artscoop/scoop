@@ -1,9 +1,8 @@
 # coding: utf-8
+from IPy import IP as IP_
 from django.apps.registry import apps
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from IPy import IP as IP_
 
 
 class IPPointMixin():
@@ -29,7 +28,6 @@ class IPPointMixin():
             self.ip = IP.objects.get_by_ip(ip)
 
         # Overrides
-        @python_2_unicode_compatible
         def __str__(self):
             """ Renvoyer la représentation unicode de l'objet """
             return _("{}").format(self.get_ip())

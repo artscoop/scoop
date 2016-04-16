@@ -1,10 +1,12 @@
 # coding: utf-8
 from autoslug.fields import AutoSlugField
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.db.models import Q, permalink
+from django.db.models import Q
 from django.db.models.manager import Manager
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -128,10 +130,9 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, 
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du groupe """
-        return 'social:group-view', [self.uuid]
+        return reverse_lazy('social:group-view', args=[self.uuid])
 
     # Métadonnées
     class Meta(object):

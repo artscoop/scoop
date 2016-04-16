@@ -4,6 +4,7 @@ from mailbox import Maildir, NoSuchMailboxError
 from os.path import expanduser, join
 from pwd import getpwnam
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -18,7 +19,8 @@ def get_maildir(username):
     except KeyError as e:
         logger.error("The user account for {} does not exist".format(username))
     except NoSuchMailboxError as e:
-        logger.error("The user mailbox directory {} does not exist. Either postfix was not configured properly, or this user cannot have a maildir".format(e.message))
+        logger.error(
+            "The user mailbox directory {} does not exist. Either postfix was not configured properly, or this user cannot have a maildir".format(e.message))
     except OSError as e:
         logger.error("Most likely, this user does not exist but it was not detected")
     except:

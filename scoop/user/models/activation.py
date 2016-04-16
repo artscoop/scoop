@@ -6,14 +6,16 @@ from django.conf import settings
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+from unidecode import unidecode
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import text_to_list_of_lists
 from scoop.messaging.util.signals import mailable_event
 from scoop.user.util.signals import user_activated
-from unidecode import unidecode
+
 
 logger = logging.getLogger(__name__)
 

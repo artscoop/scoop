@@ -1,8 +1,10 @@
 # coding: utf-8
 from django import template
+
 from scoop.messaging.models import Message, Recipient, Thread
 from scoop.messaging.models.alert import Alert
 from scoop.messaging.util.text import format_message
+
 
 register = template.Library()
 

@@ -7,48 +7,48 @@
 
 
 {% block content %}
-<div class="row">
-    <div class="col-xs-24">
-        
-        <h1>The roof is on fire!</h1>
-        <p>Une erreur s'est produite sur le serveur.</p>
-        
-        {% if request.user.is_staff %}
-            <h2 class="headline">Informations staff</h2>
-            <h3>Traceback</h3>
-            <p><strong>{{exception_type}}</strong> : {{exception.1}}</p>
-            <table class="table table-striped table-condensed">
-                <thead>
+    <div class="row">
+        <div class="col-xs-24">
+
+            <h1>The roof is on fire!</h1>
+            <p>Une erreur s'est produite sur le serveur.</p>
+
+            {% if request.user.is_staff %}
+                <h2 class="headline">Informations staff</h2>
+                <h3>Traceback</h3>
+                <p><strong>{{ exception_type }}</strong> : {{ exception.1 }}</p>
+                <table class="table table-striped table-condensed">
+                    <thead>
                     <th>Emplacement</th>
                     <th>Code</th>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for trace in exception.2|traceback %}
-                    <tr>
-                        <td>
-                            <strong>{{trace.2}}</strong>
-                            <span class="badge badge-info pull-right" title="{{trace.0}}">{{trace.1}}</span>
-                        </td>
-                        <td>
-                            <code>{{trace.3|truncatechars:80}}</code>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <strong>{{ trace.2 }}</strong>
+                                <span class="label" title="{{ trace.0 }}">{{ trace.1 }}</span>
+                            </td>
+                            <td>
+                                <code>{{ trace.3|truncatechars:80 }}</code>
+                            </td>
+                        </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-            <h3>Paramètres</h3>
-            <table class="table table-bordered table-condensed table-striped">
-                <tbody>
+                    </tbody>
+                </table>
+                <h3>Paramètres</h3>
+                <table class="table table-bordered table-condensed table-striped">
+                    <tbody>
                     {% for setting in settings_data %}
-                    <tr>
-                        <td>{{setting.0}}</td>
-                        <td>{{setting.1}}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ setting.0 }}</td>
+                            <td>{{ setting.1 }}</td>
+                        </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+                    </tbody>
+                </table>
+            {% endif %}
 
+        </div>
     </div>
-</div>
 {% endblock %}

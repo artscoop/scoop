@@ -5,15 +5,16 @@ import pytz
 from django.conf import settings
 from django.db import models
 from django.utils import timezone, translation
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+from unidecode import unidecode
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
-from unidecode import unidecode
+
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +144,6 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
         return Country.objects.get_by_code2_or_none(code)
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.get_name()

@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 from scoop.user.social.ticket.models.ticket import Ticket
 from scoop.user.social.ticket.models.update import Update
@@ -33,6 +34,7 @@ class UpdateAdmin(admin.ModelAdmin):
     search_fields = ['body']
     readonly_fields = ['time']
     raw_id_fields = ['author', 'ticket']
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Ticket, TicketAdmin)

@@ -3,11 +3,12 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from unidecode import unidecode
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.ippoint import IPPointModel
 from scoop.core.util.data.dateutil import now
 from scoop.user.util.signals import userip_created
-from unidecode import unidecode
 
 
 class UserIPManager(models.Manager):

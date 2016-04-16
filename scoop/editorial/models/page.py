@@ -3,15 +3,15 @@ from django.core.cache import cache
 from django.db import models
 from django.template.base import Template
 from django.template.context import RequestContext
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+from unidecode import unidecode
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.seo.index import SEIndexModel
 from scoop.core.abstract.user.authorable import AuthorableModel
-from unidecode import unidecode
 
 
 class PageManager(models.Manager):
@@ -50,10 +50,12 @@ class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexMo
     description = models.TextField(blank=True, verbose_name=_("Description"))
     keywords = models.CharField(max_length=160, blank=True, verbose_name=_("Keywords"))
     path = models.CharField(max_length=160, help_text=_("Page URL"), verbose_name=_("Path"))
-    template = models.ForeignKey('editorial.Template', blank=False, null=False, related_name='pages', limit_choices_to={'full': True}, verbose_name=_("Template"))
+    template = models.ForeignKey('editorial.Template', blank=False, null=False, related_name='pages', limit_choices_to={'full': True},
+                                 verbose_name=_("Template"))
     active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('page', "Active"))
     heading = models.TextField(blank=True, verbose_name=_("Page header extra code"))
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', help_text=_("Parent page, used in lists and breadcrumbs"), verbose_name=_("Parent"))
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', help_text=_("Parent page, used in lists and breadcrumbs"),
+                               verbose_name=_("Parent"))
     # Accès
     anonymous = models.BooleanField(default=True, blank=True, verbose_name=_("Anonymous access"))
     authenticated = models.BooleanField(default=True, blank=True, verbose_name=_("Authenticated access"))
@@ -115,7 +117,6 @@ class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexMo
         return self.path
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name

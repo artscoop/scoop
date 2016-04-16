@@ -9,17 +9,18 @@ from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
+
 from scoop.core.util.data.dateutil import datetime_round_hour
 from scoop.core.util.data.typeutil import get_color_name, hash_rgb
 from scoop.core.util.model.csvexport import csv_dump
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.directory import Paths
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,8 @@ class RecordManager(SingleDeleteManager):
         """ Consigner les données dans un fichier CSV """
         if queryset.model == Record:
             fmt = timezone.now().strftime
-            filename_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d"), 'hour': fmt("%H"), 'minute': fmt("%M"), 'second': fmt("%S"), 'rows': queryset.count()}
+            filename_info = {'year': fmt("%Y"), 'month': fmt("%m"), 'week': fmt("%W"), 'day': fmt("%d"), 'hour': fmt("%H"), 'minute': fmt("%M"),
+                             'second': fmt("%S"), 'rows': queryset.count()}
             path = join(Paths.get_root_dir('isolated', 'var', 'log'), "record-log-{year}-{month}-{day}-{hour}-{minute}-{rows}.csv.gz".format(**filename_info))
             csv_dump(queryset, path, compress=True)
 
@@ -124,7 +126,8 @@ class Record(models.Model):
     @addattr(short_description=_("Description"))
     def get_description(self):
         """ Renvoyer le texte descriptif de l'action """
-        output = self.type.sentence % {'actor': self.user, 'target': self.target_object or self.target_name, 'container': self.container_object or self.container_name,
+        output = self.type.sentence % {'actor': self.user, 'target': self.target_object or self.target_name,
+                                       'container': self.container_object or self.container_name,
                                        'when': self.get_datetime_ago()}
         return output
 
@@ -166,7 +169,6 @@ class Record(models.Model):
             self.container_name = self.container_object.__str__()
         super(Record, self).save(*args, **kwargs)
 
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.get_description()
@@ -199,7 +201,8 @@ class ActionType(models.Model):
         """ Renvoyer la vignette de code couleur du type d'action """
         rgb = hash_rgb(self.codename)
         colorname = get_color_name(rgb)
-        output = """<span class="pill" style="background-color: rgb({r},{g},{b});" title="{name}"></span>""".format(r=rgb[0], g=rgb[1], b=rgb[2], name=colorname)
+        output = """<span class="pill" style="background-color: rgb({r},{g},{b});" title="{name}"></span>""".format(r=rgb[0], g=rgb[1], b=rgb[2],
+                                                                                                                    name=colorname)
         return mark_safe(output)
 
     @addattr(boolean=True, short_description=_("Valid"))
@@ -211,7 +214,6 @@ class ActionType(models.Model):
         return length >= 2 and ContentType.objects.filter(app_label=app_label).exists()
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.verb or self.codename

@@ -1,9 +1,11 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 from scoop.user.access.admin.filters import IPCountryFilter
 from scoop.user.access.models.ip import IP
+
 
 __all__ = ['IPAdmin']
 
@@ -35,6 +37,7 @@ class IPAdmin(admin.ModelAdmin):
             item.set_ip_address(item.string)
             item.save()
         self.message_user(request, _("{} IP adresses were successfully updated.").format(count))
+
 
 # Enregistrer les classes d'administration
 admin.site.register(IP, IPAdmin)

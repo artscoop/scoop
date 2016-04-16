@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.models.option import Option, OptionTranslation
 from scoop.core.models.optiongroup import OptionGroup, OptionGroupTranslation
 from scoop.core.util.shortcuts import addattr
@@ -16,7 +17,7 @@ class OptionTranslationInlineAdmin(admin.TabularInline):
     model = OptionTranslation
     max_num = len(settings.LANGUAGES)
     extra = 2
-    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget}, }
+    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget},}
 
 
 class OptionAdmin(admin.ModelAdmin):
@@ -50,7 +51,7 @@ class OptionGroupTranslationInlineAdmin(admin.TabularInline):
     model = OptionGroupTranslation
     max_num = len(settings.LANGUAGES)
     extra = 4
-    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}, }
+    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget},}
 
 
 class OptionGroupAdmin(admin.ModelAdmin):
@@ -67,6 +68,7 @@ class OptionGroupAdmin(admin.ModelAdmin):
     fieldsets = ((_("Option group"), {'fields': ('code', 'short_name')}),)
     inlines = [OptionGroupTranslationInlineAdmin, ]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Option, OptionAdmin)

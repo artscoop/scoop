@@ -8,21 +8,23 @@ from django.apps.registry import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models.manager import GeoManager
+from django.core.urlresolvers import reverse_lazy
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.backends.dummy.base import IntegrityError
-from django.db.models import permalink
 from django.db.models.aggregates import Count
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from django_countries.data import COUNTRIES
 from pygeoip import GeoIP
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
 from scoop.user.access.util.access import STATUS_CHOICES, reverse_lookup
+
 
 logger = logging.getLogger(__name__)
 
@@ -380,10 +382,9 @@ class IP(DatetimeModel, CoordinatesModel):
         """ Renvoyer la représentation ASCII de l'objet """
         return "@{}".format(self.ip_address)
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de la page de l'objet """
-        return ('access:ip-view', [self.id])
+        return reverse_lazy('access:ip-view', args=[self.id])
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """

@@ -1,4 +1,5 @@
 {% load picture_tags %}
 <span class="picture-form-widget" style="white-space:nowrap;">
-	{% if image and image.url %}{% image image alias="i64x48" link_title=_("Picture") %}{% else %}<span class="text-muted gap-after">{{_("None")}}</span>{% endif %} {{widget}}
+	{% if image and image.url %}{% image image alias="i64x48" link_title=_("Picture") %}{% else %}
+        <span class="text-muted gap-after">{{ _("None") }}</span>{% endif %} {{ widget }}
 </span>

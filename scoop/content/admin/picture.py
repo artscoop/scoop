@@ -12,6 +12,7 @@ from django.template.defaultfilters import date as datefilter
 from django.utils.timezone import localtime
 from django.utils.translation import ugettext_lazy as _
 from genericadmin.admin import GenericAdminModelAdmin
+
 from scoop.content.admin.filters import DimensionsFilter
 from scoop.content.forms.picture import PictureAdminForm, ZipUploadForm
 from scoop.content.models.picture import Picture
@@ -20,6 +21,7 @@ from scoop.core.admin.filters import TimestampFilter
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import clean_empty_folders, clean_orphans
+
 
 __all__ = ['PictureAdmin']
 
@@ -39,10 +41,12 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     search_fields = ['description', 'title', 'image', 'id']
     ordering = ['-id']
     raw_id_fields = []
-    actions = ['resave', 'clone', 'delete_pictures', 'delete_thumbnails', 'recalculate_size', 'fix_extension', 'optimize', 'update_picture_path', 'clean_everything', 'rien', 'quantize', 'rien', 'contrast', 'liquid', 'remove_icc', 'autocrop',
+    actions = ['resave', 'clone', 'delete_pictures', 'delete_thumbnails', 'recalculate_size', 'fix_extension', 'optimize', 'update_picture_path',
+               'clean_everything', 'rien', 'quantize', 'rien', 'contrast', 'liquid', 'remove_icc', 'autocrop',
                'autocrop_extra', 'rotate90', 'rotate180', 'rotate270', 'mirror_x', 'mirror_y', 'enhance', 'clone']
     form = make_ajax_form(Picture, {'author': 'user'}, PictureAdminForm)
-    fieldsets = ((_("Picture"), {'fields': ('author', 'license', 'content_type', 'object_id', 'image', 'title', 'description', 'weight')}), (_("Plus"), {'fields': ('audience', 'acl_mode')}))
+    fieldsets = ((_("Picture"), {'fields': ('author', 'license', 'content_type', 'object_id', 'image', 'title', 'description', 'weight')}),
+                 (_("Plus"), {'fields': ('audience', 'acl_mode')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     admin_integration_enabled = True
 
@@ -233,7 +237,8 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     @addattr(allow_tags=True, admin_order_field='updated', short_description=_("Upd."))
     def get_updated_date(self, obj):
         """ Renvoyer la date de dernière mise à jour """
-        return '<span title="{title}">{anchor}</span>'.format(anchor=datefilter(localtime(obj.updated), "H:i"), title=datefilter(localtime(obj.updated), "d F Y H:i"))
+        return '<span title="{title}">{anchor}</span>'.format(anchor=datefilter(localtime(obj.updated), "H:i"),
+                                                              title=datefilter(localtime(obj.updated), "d F Y H:i"))
 
     @addattr(boolean=True, admin_order_field='deleted', short_description=_("Del."))
     def get_deleted(self, obj):
@@ -248,7 +253,8 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
         if form.is_valid():
             form.save_file(form.cleaned_data['zipfile'])
             self.message_user(request, _("File has been processed."))
-        return render_to_response("admin/content/picture/upload_zip.html", {'adminform': form, 'app_label': app_label, 'opts': opts}, context_instance=RequestContext(request))
+        return render_to_response("admin/content/picture/upload_zip.html", {'adminform': form, 'app_label': app_label, 'opts': opts},
+                                  context_instance=RequestContext(request))
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         """ Renvoyer un champ de formulaire pour un champ db """
@@ -259,6 +265,7 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
         urls = super(PictureAdmin, self).get_urls()
         extra = patterns('', (r'^upload_zip/$', self.admin_site.admin_view(self.zip_upload)))
         return extra + urls
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Picture, PictureAdmin)

@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block html %}
-	<style>
-		div.main {width:512px; margin:10px auto;}
-	</style>
-	<div class="main">
-	{% block html_content %}
-	{% endblock %}
-	</div>
+    <style>
+        div.main {
+            width: 512px;
+            margin: 10px auto;
+        }
+    </style>
+    <div class="main">
+        {% block html_content %}
+        {% endblock %}
+    </div>
 {% endblock html %}

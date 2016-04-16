@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-28 06:14+0200\n"
+"POT-Creation-Date: 2016-04-16 07:22+0200\n"
 "PO-Revision-Date: 2016-03-28 06:34+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.10\n"
 
@@ -90,22 +90,22 @@ msgstr "Public"
 
 #: models/event/eventcategory.py:43 models/event/eventcategory.py:77
 #: models/friend/friendgroup.py:27 models/group/group.py:65
-#: models/rating/rating.py:36 models/rating/rating.py:72
+#: models/rating/rating.py:31 models/rating/rating.py:67
 msgid "Name"
 msgstr "Nom"
 
-#: models/event/eventcategory.py:49 models/rating/rating.py:42
+#: models/event/eventcategory.py:49 models/rating/rating.py:37
 msgid "(No name)"
 msgstr "(Sans nom)"
 
 #: models/event/eventcategory.py:51 models/event/eventcategory.py:78
 #: models/event/events.py:64 models/event/events.py:103
-#: models/group/group.py:68 models/rating/rating.py:44
-#: models/rating/rating.py:73
+#: models/group/group.py:68 models/rating/rating.py:39
+#: models/rating/rating.py:68
 msgid "Description"
 msgstr "Description"
 
-#: models/event/eventcategory.py:57 models/rating/rating.py:50
+#: models/event/eventcategory.py:57 models/rating/rating.py:45
 msgid "(No description)"
 msgstr "(Pas de description)"
 
@@ -328,17 +328,17 @@ msgstr "statut textuel"
 msgid "user shouts"
 msgstr "statuts textuels"
 
-#: models/rating/like.py:64 models/rating/rating.py:100
+#: models/rating/like.py:64 models/rating/rating.py:95
 #: models/rating/score.py:44
 msgid "Author"
 msgstr "Auteur"
 
-#: models/rating/like.py:65 models/rating/rating.py:33
-#: models/rating/rating.py:103
+#: models/rating/like.py:65 models/rating/rating.py:28
+#: models/rating/rating.py:98
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/rating/like.py:66 models/rating/rating.py:104
+#: models/rating/like.py:66 models/rating/rating.py:99
 msgid "Object Id"
 msgstr "Id de l'objet"
 
@@ -355,41 +355,41 @@ msgstr "mention j'aime"
 msgid "likes"
 msgstr "mentions j'aime"
 
-#: models/rating/rating.py:31
+#: models/rating/rating.py:26
 msgid "Slug"
 msgstr "Slug"
 
-#: models/rating/rating.py:59
+#: models/rating/rating.py:54
 #, python-brace-format
 msgid "{name}"
 msgstr "{name}"
 
-#: models/rating/rating.py:63
+#: models/rating/rating.py:58
 msgid "rating axis"
 msgstr "axe de notation"
 
-#: models/rating/rating.py:64
+#: models/rating/rating.py:59
 msgid "rating axes"
 msgstr "axes de notation"
 
-#: models/rating/rating.py:99 models/rating/score.py:46
+#: models/rating/rating.py:94 models/rating/score.py:46
 msgid "Axis"
 msgstr "Axe"
 
-#: models/rating/rating.py:101
+#: models/rating/rating.py:96
 msgid "Rating"
 msgstr "Note"
 
-#: models/rating/rating.py:111
+#: models/rating/rating.py:106
 #, python-brace-format
 msgid "{user} gave {item} {rating:.03f} points"
 msgstr "{user} a donné {rating:.03f} points à {item}"
 
-#: models/rating/rating.py:121
+#: models/rating/rating.py:116
 msgid "rating"
 msgstr "note"
 
-#: models/rating/rating.py:122
+#: models/rating/rating.py:117
 msgid "ratings"
 msgstr "notes"
 

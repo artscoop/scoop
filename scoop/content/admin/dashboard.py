@@ -1,6 +1,7 @@
 # coding: utf-8
 from admin_tools.dashboard.modules import DashboardModule
 from django.template.loader import render_to_string
+
 from scoop.content.models import Content, Picture
 
 

@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
+
 from scoop.user.social.models.group import Group
 from scoop.user.social.util.signals import invite_accepted
 

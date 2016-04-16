@@ -7,19 +7,20 @@ import qsstats
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import UserManager as DefaultManager
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
+from django.contrib.auth.models import UserManager as DefaultManager
 from django.contrib.contenttypes.fields import ContentType
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse_lazy
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
-from django.db.models import permalink
 from django.http import Http404
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
@@ -180,7 +181,8 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     # Constantes
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'name']
-    CACHE_KEY = {'online': 'user.profile.online.{}', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count', 'logout.force': 'user.profile.logout.{}'}
+    CACHE_KEY = {'online': 'user.profile.online.{}', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count',
+                 'logout.force': 'user.profile.logout.{}'}
     USERNAME_REGEX = r'^[A-Za-z0-9][A-Za-z0-9_]+$'  # Contient lettres, chiffres et underscores
     USERNAME_REGEX_MESSAGE = _("Your name must start with a letter and can only contain letters, digits and underscores")
     NAME_REGEX = r'^[A-Za-z][A-Za-z0-9_\-]+$'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
@@ -517,10 +519,9 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             self.username = fixed_username
         super(User, self).save(*args, **kwargs)
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'utilisateur """
-        return 'user:profile-view', [], {'uid': str(self.id), 'name': self.username}
+        return reverse_lazy('user:profile-view', kwargs={'uid': str(self.id), 'name': self.username})
 
     # Privé
     def _get_fixed_username(self):

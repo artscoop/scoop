@@ -2,9 +2,9 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import from_now
 
@@ -56,7 +56,6 @@ class Sanction(DatetimeModel):
         return self.revoked is False and self.expires > timezone.now()
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "sanction on {user}: {type}".format(user=self.user, type=self.get_type_display())

@@ -1,5 +1,4 @@
 # coding: utf-8
-from datetime import datetime
 
 import floppyforms.__future__ as forms_
 from django import forms
@@ -7,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from form_utils.fields import ClearableImageField
+
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import PictureInlineWidget
 from scoop.core.util.data.dateutil import date_age
@@ -40,7 +40,8 @@ class ProfilePictureForm(forms_.ModelForm):
     """ Formulaire d'édition d'image de profil """
 
     # Champs
-    image = ClearableImageField(widget=PictureInlineWidget, template=_("%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"), label=_("Main picture"))
+    image = ClearableImageField(widget=PictureInlineWidget, template=_("%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"),
+                                label=_("Main picture"))
 
     # Validation
     def is_valid(self):

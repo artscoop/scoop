@@ -6,12 +6,13 @@ from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.test.utils import override_settings
+
 from scoop.core.util.data.typeutil import list_contains
 from scoop.core.util.django.testing import TEST_CONFIGURATION
-from scoop.core.util.stream.directory import Paths
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.user.models.activation import Activation
 from scoop.user.templatetags.user_tags import distance_to
+
 
 User = get_user_model()
 
@@ -80,7 +81,8 @@ class UserTest(TestCase):
         unsent = MailEvent.objects.get_unsent_count()
         sent = MailEvent.objects.process('all')
         remaining = MailEvent.objects.get_unsent_count()
-        self.assertEqual(settings.EMAIL_BACKEND, 'django.core.mail.backends.filebased.EmailBackend', "the email backend is {} but should be file based".format(settings.EMAIL_BACKEND))
+        self.assertEqual(settings.EMAIL_BACKEND, 'django.core.mail.backends.filebased.EmailBackend',
+                         "the email backend is {} but should be file based".format(settings.EMAIL_BACKEND))
         self.assertGreater(unsent, 0, "at least one activation mail should be waiting in the queue")
         self.assertGreater(sent, 0, "at least one activation mail should have been sent")
         self.assertGreater(unsent, remaining, "there should remain less mails to be sent")

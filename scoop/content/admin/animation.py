@@ -14,7 +14,8 @@ class AnimationAdmin(ModelAdmin):
     """ Modération des animations vidéo (via GIF) """
 
     list_select_related = True
-    list_display = ['id', 'get_picture_id', 'picture', 'get_video_tag', 'extension', 'title', 'get_file_size', 'get_duration_unit', 'autoplay', 'loop', 'deleted']
+    list_display = ['id', 'get_picture_id', 'picture', 'get_video_tag', 'extension', 'title', 'get_file_size', 'get_duration_unit', 'autoplay', 'loop',
+                    'deleted']
     list_display_links = ['id']
     list_filter = ['picture__content_type']
     form = make_ajax_form(Animation, {'author': 'user', 'picture': 'picture'}, AnimationForm)
@@ -44,6 +45,7 @@ class AnimationAdmin(ModelAdmin):
         duration = obj.get_duration()
         minutes, seconds = divmod(duration, 60.0)
         return ("{minutes:.0f}m{seconds}s" if minutes else "{seconds}s").format(minutes=minutes, seconds=localize(seconds))
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Animation, AnimationAdmin)

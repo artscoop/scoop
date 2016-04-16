@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.model.model import SingleDeleteManager
@@ -35,7 +35,6 @@ class Vote(DatetimeModel, AuthoredModel):
     objects = VoteManager()
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Représentation unicode de l'objet """
         return _('Vote: {vote} in poll "{poll}"').format(poll=self.poll, vote=self.choice)

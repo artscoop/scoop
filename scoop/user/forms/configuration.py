@@ -2,6 +2,7 @@
 from django import forms
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.user.util.forms import DataForm
 
 
@@ -10,7 +11,8 @@ class ConfigurationForm(DataForm):
 
     # Configuration
     name = 'user.configuration'
-    defaults = {'session_timeout': 259200, 'login_destination': 0, 'receive_emails': True, 'receive_interval': 3600, 'receive_on_message': True, 'receive_on_staff': True,
+    defaults = {'session_timeout': 259200, 'login_destination': 0, 'receive_emails': True, 'receive_interval': 3600, 'receive_on_message': True,
+                'receive_on_staff': True,
                 'receive_on_favorite': True, 'receive_on_subscription': True}
     saved_fields = None
 

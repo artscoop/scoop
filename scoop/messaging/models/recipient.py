@@ -4,8 +4,9 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.typeutil import make_iterable
@@ -118,7 +119,8 @@ class Recipient(DatetimeModel, DataModel):
     unread = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('thread', "Unread"))
     unread_date = models.DateTimeField(blank=True, null=True, default=None, verbose_name=_("Unread time"))
     counter = models.PositiveSmallIntegerField(default=0, verbose_name=_("Message count"))
-    acknowledged = models.BooleanField(default=False, verbose_name=pgettext_lazy('thread', "Acknowledged"))  # Le destinataire a-t-il vu au moins une fois le sujet
+    acknowledged = models.BooleanField(default=False,
+                                       verbose_name=pgettext_lazy('thread', "Acknowledged"))  # Le destinataire a-t-il vu au moins une fois le sujet
     objects = RecipientManager()
 
     # Getter

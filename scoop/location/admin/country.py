@@ -6,12 +6,14 @@ from django.contrib import admin, messages
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
 from scoop.location.models.city import City
 from scoop.location.models.country import Country, CountryName
 from scoop.location.tasks.geonames import geonames_fill
 from scoop.location.util.geonames import populate_cities, populate_currency, rename_cities, reparent_cities
+
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,7 @@ class CountryAlternatesInlineAdmin(admin.TabularInline):
     model = CountryName
     max_num = 10
     extra = 4
-    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget}, }
+    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget},}
 
 
 class CountryAdmin(ViewOnlyModelAdmin):
@@ -35,7 +37,8 @@ class CountryAdmin(ViewOnlyModelAdmin):
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     fieldsets = ((_("Country"), {'fields': ('code2', 'code3', 'currency', 'regional_level', 'subregional_level', 'public', 'safe')}),)
     inlines = [CountryAlternatesInlineAdmin, ]
-    list_display = ['id', 'get_icon', 'get_name', 'get_sexagesimal_coordinates', 'code2', 'code3', 'continent', 'population', 'get_area', 'public', 'safe', 'get_last_update']
+    list_display = ['id', 'get_icon', 'get_name', 'get_sexagesimal_coordinates', 'code2', 'code3', 'continent', 'population', 'get_area', 'public', 'safe',
+                    'get_last_update']
     list_display_links = ['id', 'get_name']
     list_editable = ['public', 'safe']
     list_filter = ['continent', 'public', 'currency__name']
@@ -112,6 +115,7 @@ class CountryAdmin(ViewOnlyModelAdmin):
     def get_last_update(self, obj):
         """ Renvoyer la date de dernier update des villes """
         return obj.updated.strftime("%d/%m/%Y %H:%M")
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Country, CountryAdmin)

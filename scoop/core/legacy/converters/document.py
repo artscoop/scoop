@@ -6,6 +6,7 @@ import time
 from os.path import join
 
 from django.db.models.base import Model
+
 from scoop.core.util.stream.directory import Paths
 
 
@@ -153,8 +154,8 @@ class DocumentImporter(object):
 
     def post_imports(self, name=None):
         """ Traiter la seconde passe d'import """
-        pass
+        return
 
     def brushup(self, name=None):
         """ Traiter la dernière passe """
-        pass
+        return

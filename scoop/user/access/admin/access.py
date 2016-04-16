@@ -1,10 +1,12 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from user.access.admin.filters import AccessIPCountryFilter
+
 from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
 from scoop.user.access.models.access import Access
-from user.access.admin.filters import AccessIPCountryFilter
+
 
 __all__ = ['AccessAdmin']
 
@@ -52,6 +54,7 @@ class AccessAdmin(ViewOnlyModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Access, AccessAdmin)

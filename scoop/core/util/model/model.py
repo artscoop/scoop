@@ -29,6 +29,7 @@ def patch_methods(cls, *bases):
 
 class DummyModel():
     """ Instanciation d'un objet avec des attributs pour bulk_create """
+
     def __init__(self, *args, **kwargs):
         for kwarg in kwargs:
             setattr(self, kwarg, kwargs[kwarg])

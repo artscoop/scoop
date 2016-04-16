@@ -3,6 +3,7 @@ import sys
 
 from django.conf import settings
 from django.views.decorators.cache import cache_page
+
 from scoop.core.util.django.templateutil import render_to
 
 

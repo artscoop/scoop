@@ -3,10 +3,11 @@ import floppyforms as forms_
 from django import forms
 from django.template.defaultfilters import striptags
 from django.utils.translation import ugettext_lazy as _
+from tinymce.widgets import TinyMCE
+
 from scoop.content.models import Content
 from scoop.content.util.tinymce import TINYMCE_CONFIG_CONTENT
 from scoop.core.forms.search import BaseSearchForm
-from tinymce.widgets import TinyMCE
 
 
 class ContentForm(forms_.ModelForm):
@@ -37,7 +38,7 @@ class ContentForm(forms_.ModelForm):
         model = Content
         widgets = {'title': forms_.TextInput(attrs={'size': 80}), 'body': TinyMCE(mce_attrs=TINYMCE_CONFIG_CONTENT)}
         exclude = ['content_type', 'object_id', 'similar', 'tags']
-        fields = ['category', 'title', 'body', 'published', 'commentable', 'access']
+        fields = ['category', 'title', 'body', 'published', 'commentable']
 
 
 class ContentAdminForm(forms.ModelForm):

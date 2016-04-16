@@ -3,6 +3,7 @@ from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.models.link import Link
 from scoop.core.abstract.user.authored import AutoAuthoredModelAdmin
 
@@ -15,7 +16,8 @@ class LinkAdmin(AutoAuthoredModelAdmin, AjaxSelectAdmin):
     list_editable = ['nofollow']
     list_filter = ['nofollow', 'group']
     search_fields = ['url', 'anchor', 'title']
-    fieldsets = ((_("Link"), {'fields': ('author', 'group', 'url', 'anchor', 'title', 'target', 'nofollow')}), ('Plus', {'fields': (('content_type', 'object_id'), 'remainder', 'information')}))
+    fieldsets = ((_("Link"), {'fields': ('author', 'group', 'url', 'anchor', 'title', 'target', 'nofollow')}),
+                 ('Plus', {'fields': (('content_type', 'object_id'), 'remainder', 'information')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     form = make_ajax_form(Link, {'author': 'user'})
 

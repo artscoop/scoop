@@ -3,8 +3,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager
@@ -21,7 +22,7 @@ class ParticipantManager(SingleDeleteManager):
 
     def get_acknowledged_count(self, user):
         """ Renvoyer le nombre de fils dont un utilisateur a connaissance """
-        return self.filter(user=user, acknowledged=True).count()
+        return self.filter(user=user).count()
 
     def is_unread(self, thread, user):
         """
@@ -55,12 +56,12 @@ class ParticipantManager(SingleDeleteManager):
 
     def set_all_read_for(self, user):
         """ Marquer tous les sujets comme lus pour un utilisateur """
-        self.filter(user=user).update(unread=False, acknowledged=True)
+        self.filter(user=user).update(unread=False)
 
     def set_read(self, thread, user=None):
         """ Marquer comme lu un sujet par un utilisateur """
         if thread:
-            return self.filter(thread=thread, unread=True, **({'user': user} if user else {})).update(unread=False, acknowledged=True, unread_date=timezone.now())
+            return self.filter(thread=thread, unread=True, **({'user': user} if user else {})).update(unread=False, unread_date=timezone.now())
         return False
 
     def update_counter(self, user, thread):

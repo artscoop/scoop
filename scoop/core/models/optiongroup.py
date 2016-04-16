@@ -3,14 +3,14 @@ from django.apps.registry import apps
 from django.db import models
 from django.db.models.base import Model
 from django.db.utils import ProgrammingError
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
 
 
 class OptionGroupManager(SingleDeleteManager):
@@ -63,7 +63,6 @@ class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('scoop
     description = property(get_description)
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "%(id)s : %(name)s" % {'id': self.id, 'name': self.get_name() or self.short_name, 'short': self.short_name}

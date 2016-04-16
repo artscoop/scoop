@@ -2,6 +2,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
+
 from scoop.core.models.redirection import Redirection
 from scoop.core.util.django.admin import GenericModelUtil, ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
@@ -26,6 +27,7 @@ class RedirectionAdmin(ViewOnlyModelAdmin, GenericModelUtil):
     def get_expires(self, obj):
         """ Renvoyer la date d'expiration d'une redirection """
         return pretty.date(obj.expires).replace(' ', '&nbsp;')
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Redirection, RedirectionAdmin)

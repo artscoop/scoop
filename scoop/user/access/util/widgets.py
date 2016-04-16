@@ -1,10 +1,9 @@
 # coding: utf-8
-from django import forms
 from IPy import IP
+from django import forms
 
 
 class IPIntegerField(forms.IntegerField):
-
     """ Champ de saisie d'IP. Accepte n'importe quel format d'IP, le stocke en long """
 
     def to_python(self, value):

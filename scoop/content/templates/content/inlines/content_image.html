@@ -1,1 +1,4 @@
-{% load thumbnail %}{% if image %}<div class="content-image{{class}}"><a rel="lightbox" title="{{image.title}}" href="{{image.image.url}}"><img alt="{{image.description}}" class="thumbnail" src="{% if size %}{% thumbnail image.image size crop="smart" %}{% else %}{{image.image.url}}{% endif %}"></a></div>{% endif %} 
+{% load thumbnail %}{% if image %}
+    <div class="content-image{{ class }}"><a rel="lightbox" title="{{ image.title }}" href="{{ image.image.url }}"><img alt="{{ image.description }}"
+                                                                                                                        class="thumbnail" src="
+            {% if size %}{% thumbnail image.image size crop="smart" %}{% else %}{{ image.image.url }}{% endif %}"></a></div>{% endif %}

@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
+
 from scoop.content.models.content import Content
 from scoop.rogue.util.signals import flag_resolve
 

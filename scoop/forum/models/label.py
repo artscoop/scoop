@@ -2,14 +2,15 @@
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
+
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model
 from scoop.core.abstract.core.weight import WeightedModel
-from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySet
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from scoop.core.util.model.model import SingleDeleteQuerySet
 
 
 class LabelManager(SingleDeleteQuerySet):
@@ -51,7 +52,8 @@ class Label(TranslatableModel, UUID32Model, WeightedModel):
     status = models.BooleanField(default=False, help_text=_("Does the label define the status of the thread"), verbose_name=_("Status"))
     visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('label', "Visible"))
     groups = models.ManyToManyField('auth.Group', blank=True, related_name='forum_labels', verbose_name=_("Groups allowed"))
-    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='+', limit_choices_to={'is_staff': True}, verbose_name=_("Moderators"))
+    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='+', limit_choices_to={'is_staff': True},
+                                        verbose_name=_("Moderators"))
     objects = LabelManager.as_manager()
 
     # Getter
@@ -137,7 +139,6 @@ class LabelTranslation(get_translation_model(Label, "label"), TranslationModel):
 
 
 class LabelledModel(models.Model):
-
     # Champs
     main_label = models.ForeignKey('forum.Label', null=True, limit_choices_to={'primary': True}, related_name='+', verbose_name=_("Main label"))
     status_label = models.ForeignKey('forum.Label', null=True, limit_choices_to={'status': True}, related_name='+', verbose_name=_("Status label"))
