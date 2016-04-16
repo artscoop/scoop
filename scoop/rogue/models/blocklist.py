@@ -3,14 +3,12 @@ from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
-
 
 DEFAULT_LIST = 'blacklist'
 
@@ -36,6 +34,10 @@ class BlocklistManager(SingleDeleteManager):
             return False
         recipients = recipients if isinstance(recipients, (list, tuple, models.QuerySet)) else [recipients]
         blocklists = self.filter(user__in=recipients)
+        sender_blocks = sender.blocklist.get_data(name or 'blacklist') or []
+        for recipient in recipients:
+            if recipient.pk in sender_blocks:
+                return False
         for blocklist in blocklists:
             items = blocklist.get_data(name or 'blacklist') or []
             if sender.pk in items:
