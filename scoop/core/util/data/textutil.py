@@ -72,7 +72,8 @@ def count_words(text, html=False):
 
 def clean_html(text):
     """ Renvoyer un texte HTML filtré à certains tags et attributs """
-    allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'br', 'strong', 'em', 'strike', 'b', 'small', 'code', 'pre', 'blockquote', 'hr', 'dt', 'dd', 'ul', 'li', 'ol', 'span',
+    allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'br', 'strong', 'em', 'strike', 'b', 'small', 'code', 'pre', 'blockquote', 'hr', 'dt', 'dd',
+                    'ul', 'li', 'ol', 'span',
                     'center', 'site', 'address', '', 'caption']
     allowed_attr = ['href', 'src', 'class', 'id', 'title', 'alt', 'target', 'rel', 'align', 'style']
     allowed_styles = ['text-align']

@@ -10,8 +10,9 @@ from django.conf import settings
 from django.db import models
 from django.db.models.manager import Manager
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.birth import BirthManager, BirthModel
 from scoop.core.abstract.core.data import DataModel
@@ -21,8 +22,8 @@ from scoop.core.util.data.dateutil import is_new
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
-from scoop.location.models import City
 from scoop.user.util.signals import check_stale, check_unused, profile_banned, profile_picture_changed
+
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,8 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     GENDER = [[0, _("Male")], [1, _("Female")], [2, _("Other")]]
     MALE, FEMALE, GENDER_OTHER = 0, 1, 2
     NULLABLE_GENDER = [['', pgettext_lazy('gender', "All")]] + GENDER
-    CACHE_KEY = {'online': 'user.profile.online.%d', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count', 'logout.force': 'user.profile.logout.%d'}
+    CACHE_KEY = {'online': 'user.profile.online.%d', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count',
+                 'logout.force': 'user.profile.logout.%d'}
     DATA_KEYS = {'baninfo', 'admin', 'deactivation', 'logins'}
 
     # Champs

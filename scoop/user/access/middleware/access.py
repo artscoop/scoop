@@ -3,8 +3,10 @@ import logging
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
+
 from scoop.user.access.tasks import add_access
 from scoop.user.util.signals import external_visit
+
 
 logger = logging.getLogger(__name__)
 

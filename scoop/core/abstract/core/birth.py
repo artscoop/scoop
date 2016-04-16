@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
+
 from scoop.core.util.data.dateutil import date_age
 from scoop.core.util.shortcuts import addattr
 
@@ -29,7 +30,8 @@ class BirthManager(object):
 class BirthModel(models.Model):
     """ Mixin de modèle avec date de naissance, d'anniversaire et âge """
     # Constantes
-    SIGNS = {120: _("Capricorn"), 218: _("Aquarius"), 320: _("Pisces"), 420: _("Aries"), 521: _("Taurus"), 621: _("Gemini"), 722: _("Cancer"), 823: _("Leo"), 923: _("Virgo"),
+    SIGNS = {120: _("Capricorn"), 218: _("Aquarius"), 320: _("Pisces"), 420: _("Aries"), 521: _("Taurus"), 621: _("Gemini"), 722: _("Cancer"), 823: _("Leo"),
+             923: _("Virgo"),
              1023: _("Libra"), 1122: _("Scorpion"), 1222: _("Sagittarius"), 1232: _("Capricorn")}
     # Champs
     birth = models.DateField(null=False, default=datetime.date(1990, 1, 1), blank=False, verbose_name=_("Birth date"))

@@ -13,7 +13,9 @@ from django.conf import settings
 from django.db import connection
 from django.template.context import RequestContext
 from django.template.loader import render_to_string
+
 from scoop.core.util.django.templateutil import render_to_code
+
 
 logger = logging.getLogger(__name__)
 
@@ -41,10 +43,12 @@ class ProfilerMiddleware(object):
             total_calls = reduce(lambda x, y: x + y.callcount, stats, 0)
             insert_pos = str(response.content, 'utf-8').rfind(ProfilerMiddleware.HTML_SIGNAL)
             if insert_pos != -1:
-                output = render_to_string('core/middleware/profiling.html', {'stats': stats, 'total_time': total_time, 'total_calls': total_calls}, context_instance=RequestContext(request))
+                output = render_to_string('core/middleware/profiling.html', {'stats': stats, 'total_time': total_time, 'total_calls': total_calls},
+                                          context_instance=RequestContext(request))
                 response.content = response.content.decode('utf-8').replace(ProfilerMiddleware.HTML_SIGNAL, output, 1)
             elif 'profile' in request.GET:
-                output = render_to_string('core/middleware/profiling.html', {'stats': stats, 'total_time': total_time, 'total_calls': total_calls}, context_instance=RequestContext(request))
+                output = render_to_string('core/middleware/profiling.html', {'stats': stats, 'total_time': total_time, 'total_calls': total_calls},
+                                          context_instance=RequestContext(request))
                 response.content += output
         return response
 

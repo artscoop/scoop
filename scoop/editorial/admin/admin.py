@@ -3,6 +3,7 @@ from ajax_select import make_ajax_form
 from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.user.authored import AutoAuthoredModelAdmin
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr
@@ -41,7 +42,8 @@ class PageAdmin(AutoAuthoredModelAdmin):
     list_filter = ['active', 'anonymous', 'authenticated']
     search_fields = []
     fieldsets = (
-        (_("Page"), {'fields': ('path', 'name', 'title', 'description', 'author', 'template', 'parent', 'active',)}), ('Plus', {'fields': ('anonymous', 'authenticated', 'heading',)}))
+        (_("Page"), {'fields': ('path', 'name', 'title', 'description', 'author', 'template', 'parent', 'active',)}),
+        ('Plus', {'fields': ('anonymous', 'authenticated', 'heading',)}))
     form = make_ajax_form(Page, {'author': 'user'})
     inlines = [ConfigurationInlineAdmin, ]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
@@ -104,6 +106,7 @@ class TemplateAdmin(admin.ModelAdmin):
     def get_position_count(self, obj):
         """ Renvoyer le nombre de positions dans le template """
         return obj.positions.all().count()
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Configuration, ConfigurationAdmin)

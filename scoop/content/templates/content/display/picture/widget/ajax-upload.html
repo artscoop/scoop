@@ -13,18 +13,18 @@
         try {
             // Créer l'objet PLUpload
             var uploader = new plupload.Uploader({
-                                                     container: 'upload-container',
-                                                     browse_button: 'upload-open-file-dialog',
-                                                     multipart: true,
-                                                     multipart_params: {'csrfmiddlewaretoken': "{{csrf_token}}"},
-                                                     runtimes: 'html5, html4, flash, html5, silverlight, browserplus',
-                                                     max_file_size: '10mb',
-                                                     chunk_size: '16kb',
-                                                     resize: {width: 1536, height: 1152, quality: 90},
-                                                     url: '{% url urlname parameter %}',
-                                                     flash_swf_url: '{{STATIC_URL}}tool/jquery/features/plupload/js/Moxie.swf',
-                                                     filters: [{title: "{% trans 'Image files' %}", extensions: "jpg, gif, png"},]
-                                                 });
+                container: 'upload-container',
+                browse_button: 'upload-open-file-dialog',
+                multipart: true,
+                multipart_params: {'csrfmiddlewaretoken': "{{csrf_token}}"},
+                runtimes: 'html5, html4, flash, html5, silverlight, browserplus',
+                max_file_size: '10mb',
+                chunk_size: '16kb',
+                resize: {width: 1536, height: 1152, quality: 90},
+                url: '{% url urlname parameter %}',
+                flash_swf_url: '{{STATIC_URL}}tool/jquery/features/plupload/js/Moxie.swf',
+                filters: [{title: "{% trans 'Image files' %}", extensions: "jpg, gif, png"},]
+            });
 
             // Démarrage / Arrêt
             uploader.bind('StateChanged', function (up) {

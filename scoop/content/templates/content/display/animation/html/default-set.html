@@ -1,6 +1,6 @@
-<video controls width="{{width}}" {% if animations.0.loop %}loop{% endif %}>
+<video controls width="{{ width }}" {% if animations.0.loop %}loop{% endif %}>
     {% for animation in animations %}
-    <source src="{{animation.file.url}}" type="video/{{animation.extension}}">
+        <source src="{{ animation.file.url }}" type="video/{{ animation.extension }}">
     {% endfor %}
     Video not supported.
 </video>

@@ -1,22 +1,10 @@
 # coding: utf-8
-from datetime import timedelta
-from importlib import import_module
 
-from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils import timezone
-from scoop.core.models.redirection import Redirection
-from scoop.core.templatetags.datetime_tags import days_from_now as tt_days_from_now
-from scoop.core.templatetags.datetime_tags import is_date_new as tt_is_new
-from scoop.core.templatetags.html_tags import html_urlize as tt_html_urlize
-from scoop.core.templatetags.html_tags import linebreaks_convert as tt_linebreaks
-from scoop.core.templatetags.html_tags import sanitize as tt_sanitize
-from scoop.core.templatetags.html_tags import tags_keep as tt_tags_keep
+
 from scoop.core.util.django.testing import TEST_CONFIGURATION
-from scoop.core.util.stream.request import default_request
-from scoop.core.util.stream.urlutil import add_get_parameter, get_url_path, remove_get_parameter, unquote_url
-from scoop.user.models.user import User
+from scoop.core.util.stream.urlutil import get_url_path, unquote_url
 
 
 @override_settings(**TEST_CONFIGURATION)

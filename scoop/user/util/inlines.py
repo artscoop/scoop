@@ -1,6 +1,7 @@
 # coding: utf-8
 from django_inlines import inlines
 from django_inlines.inlines import TemplateInline
+
 from scoop.user.models import User
 
 
@@ -26,6 +27,7 @@ class UserInline(TemplateInline):
         base = super(UserInline, self).get_template_name()[0]
         path = "user/%s" % base
         return path
+
 
 # Enregistrer les classes d'inlines
 inlines.registry.register('user', UserInline)

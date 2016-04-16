@@ -3,11 +3,12 @@ import datetime
 
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
-from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from django.contrib import admin
 from django.template.defaultfilters import date as datefilter
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from scoop.content.admin.inline import CategoryTranslationInlineAdmin, PictureInlineAdmin
 from scoop.content.forms.content import ContentAdminForm
 from scoop.content.models.content import Category, Content, ContentApproval
@@ -17,13 +18,15 @@ from scoop.core.templatetags.html_tags import list_enumerate
 from scoop.core.util.model.widgets import AdminSplitDateTime
 from scoop.core.util.shortcuts import addattr
 
+
 __all__ = ['ContentAdminModelAdmin', 'CategoryAdmin']
 
 
 class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmin):
     """ Administration des contenus """
 
-    list_display = ['id', 'get_uuid_html', 'title', 'get_authors', 'get_created', 'is_published', 'featured', 'sticky', 'get_comment_count_admin', 'category', 'access', 'get_image', 'has_picture', 'get_picture_set']
+    list_display = ['id', 'get_uuid_html', 'title', 'get_authors', 'get_created', 'is_published', 'featured', 'sticky', 'get_comment_count_admin', 'category',
+                    'get_image', 'has_picture', 'get_picture_set']
     list_filter = ['published', 'category', 'featured', 'sticky', 'pictured']
     list_display_links = ['id', 'title']
     list_per_page = 25
@@ -35,7 +38,7 @@ class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmi
     inlines = [PictureInlineAdmin]
     filter_horizontal = ['tags', 'authors']
     form = make_ajax_form(Content, {'authors': 'user', 'picture': 'picture', 'parent': 'content'}, ContentAdminForm)
-    fieldsets = ((_("Content"), {'fields': ('title', 'body', 'format', 'authors', 'category', 'access', 'published', 'sticky', 'commentable', 'picture')}),
+    fieldsets = ((_("Content"), {'fields': ('title', 'body', 'format', 'authors', 'category', 'published', 'sticky', 'commentable', 'picture')}),
                  (_("Plus"), {'fields': ('slug', 'parent', 'locked', 'featured', 'teaser', 'created', 'publish', 'expire', 'tags')}))
     actions = ['publish', 'unpublish', 'stick', 'unstick']
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'

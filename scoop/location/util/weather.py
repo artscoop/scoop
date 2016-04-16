@@ -3,10 +3,10 @@ import datetime
 
 import requests
 from django.conf import settings
-
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
 from django.template.defaultfilters import slugify
+
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 
 

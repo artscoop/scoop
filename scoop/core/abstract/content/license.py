@@ -1,14 +1,15 @@
 # coding: utf-8
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 
 
 class CreationLicenseModel(models.Model):
     """ Objet possédant une information de licence """
 
     # Constantes
-    LICENSES = {0: pgettext_lazy('audience', 'None'), 1: 'Copyright', 10: 'CC-BY', 11: 'CC-BY-SA', 12: 'CC-BY-ND', 13: 'CC-BY-NC', 14: 'CC-BY-SA-NC', 15: 'CC-BY-ND-ND', 16: 'Public domain'}
+    LICENSES = {0: pgettext_lazy('audience', 'None'), 1: 'Copyright', 10: 'CC-BY', 11: 'CC-BY-SA', 12: 'CC-BY-ND', 13: 'CC-BY-NC', 14: 'CC-BY-SA-NC',
+                15: 'CC-BY-ND-ND', 16: 'Public domain'}
     LICENSE_SEPARATOR = ';'
 
     # Champs

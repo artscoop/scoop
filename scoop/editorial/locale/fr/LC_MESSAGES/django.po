@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-28 06:14+0200\n"
-"PO-Revision-Date: 2016-03-28 06:21+0009\n"
+"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"PO-Revision-Date: 2016-04-16 07:25+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "Configuration"
 msgid "Configurations"
 msgstr "Configurations"
 
-#: admin/admin.py:44 models/configuration.py:14
+#: admin/admin.py:44 models/configuration.py:18
 msgid "Page"
 msgstr "Page"
 
@@ -59,106 +59,111 @@ msgstr "Les gabarits sélectionnés ont été mis à jour."
 msgid "Positions"
 msgstr "Positions"
 
-#: models/configuration.py:15
+#: models/configuration.py:19
 msgid "Position"
 msgstr "Position"
 
-#: models/configuration.py:17
+#: models/configuration.py:21
 msgid "Select template to use to display the target"
 msgstr "Sélectionnez le gabarit à utiliser pour afficher la cible"
 
-#: models/configuration.py:17 models/page.py:53
+#: models/configuration.py:21 models/page.py:53
 msgid "Template"
 msgstr "Gabarit"
 
-#: models/configuration.py:19
+#: models/configuration.py:23
+msgid "View path"
+msgstr "Chemin de la vue"
+
+#: models/configuration.py:25
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/configuration.py:20
+#: models/configuration.py:26
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: models/configuration.py:35
+#: models/configuration.py:44
+#| msgid "The block could not be rendered."
+msgid "The view at path could not be imported."
+msgstr "La vue correspondant au chemin n'a pas pu être importée."
+
+#: models/configuration.py:48
 msgid "The block could not be rendered."
 msgstr "Impossible d'effectuer le rendu du bloc."
 
-#: models/configuration.py:57
+#: models/configuration.py:70
 #, python-format
 msgid "%(page)s/%(item)s at %(position)s"
 msgstr "%(page)s/%(item)s à %(position)s"
 
-#: models/configuration.py:65
+#: models/configuration.py:78
 msgid "block configuration"
 msgstr "configuration de bloc"
 
-#: models/configuration.py:66
+#: models/configuration.py:79
 msgid "block configurations"
 msgstr "configurations de blocs"
 
-#: models/excerpt.py:26
+#: models/excerpt.py:27
 msgid "Plain HTML"
 msgstr "HTML Simple"
 
-#: models/excerpt.py:26
+#: models/excerpt.py:27
 msgid "Markdown"
 msgstr "Markdown"
 
-#: models/excerpt.py:26
+#: models/excerpt.py:27
 msgid "Textile"
 msgstr "Textile"
 
-#: models/excerpt.py:26
-msgid "reStructured Text"
-msgstr "reStructured Text"
-
-#: models/excerpt.py:30 models/page.py:48 models/position.py:20
+#: models/excerpt.py:32 models/page.py:48 models/position.py:21
 #: models/template.py:22
 msgid "Name"
 msgstr "Nom"
 
-#: models/excerpt.py:31 models/page.py:49 models/position.py:21
+#: models/excerpt.py:33 models/page.py:49 models/position.py:22
 msgid "Title"
 msgstr "Titre"
 
-#: models/excerpt.py:32
+#: models/excerpt.py:34
 msgctxt "excerpt"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/excerpt.py:33
+#: models/excerpt.py:35
 msgid "Format"
 msgstr "Format"
 
-#: models/excerpt.py:34 models/page.py:50 models/position.py:22
+#: models/excerpt.py:36 models/page.py:50 models/position.py:23
 msgid "Description"
 msgstr "Description"
 
-#: models/excerpt.py:35
+#: models/excerpt.py:37
 msgid "{% load %} libraries, comma separated"
 msgstr "Bibliothèques {% load %} séparées par des virgules"
 
-#: models/excerpt.py:35
+#: models/excerpt.py:37
 msgid "Tag libs"
 msgstr "Bibliothèques de tags"
 
-#: models/excerpt.py:44 models/excerpt.py:86
+#: models/excerpt.py:46 models/excerpt.py:88
 msgid "Text"
 msgstr "Texte"
 
-#: models/excerpt.py:50
+#: models/excerpt.py:52
 msgid "(No text)"
 msgstr "(Aucun texte)"
 
-#: models/excerpt.py:62
+#: models/excerpt.py:64
 msgid "Languages"
 msgstr "Langues"
 
-#: models/excerpt.py:79
+#: models/excerpt.py:81
 msgid "excerpt"
 msgstr "extrait"
 
-#: models/excerpt.py:80
+#: models/excerpt.py:82
 msgid "excerpts"
 msgstr "extraits"
 
@@ -191,11 +196,11 @@ msgstr "Page parente, utilisé dans les listes et les breadcrumbs"
 msgid "Parent"
 msgstr "Parent"
 
-#: models/page.py:58 models/position.py:24
+#: models/page.py:58 models/position.py:25
 msgid "Anonymous access"
 msgstr "Accès anonyme"
 
-#: models/page.py:59 models/position.py:25
+#: models/page.py:59 models/position.py:26
 msgid "Authenticated access"
 msgstr "Accès authentifié"
 
@@ -227,19 +232,19 @@ msgstr "JS"
 msgid "Extra head"
 msgstr "Supplément Head"
 
-#: models/position.py:20
+#: models/position.py:21
 msgid "Name used for the position block in a template"
 msgstr "Nom utilisé pour l'emplacement/bloc dans un gabarit"
 
-#: models/position.py:26
+#: models/position.py:27
 msgid "Access for groups"
 msgstr "Accès aux groupes"
 
-#: models/position.py:74
+#: models/position.py:75
 msgid "position"
 msgstr "position"
 
-#: models/position.py:75
+#: models/position.py:76
 msgid "positions"
 msgstr "positions"
 
@@ -270,6 +275,9 @@ msgstr "gabarit"
 #: models/template.py:139
 msgid "templates"
 msgstr "gabarits"
+
+#~ msgid "reStructured Text"
+#~ msgstr "reStructured Text"
 
 #~ msgid "[%(language)s] %(name)s"
 #~ msgstr "[%(language)s] %(name)s"

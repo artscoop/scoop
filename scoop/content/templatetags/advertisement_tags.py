@@ -1,11 +1,12 @@
 # coding: utf-8
 from bs4 import BeautifulSoup
-
 from django import template
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.models.advertisement import Advertisement
+
 
 register = template.Library()
 

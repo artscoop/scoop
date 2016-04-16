@@ -186,6 +186,7 @@ class AttachmentInline(TemplateInline):
         path = "content/{}".format(base)
         return path
 
+
 # Enregistrer les classes d'inlines
 inlines.registry.register('album', AlbumInline)
 inlines.registry.register('attachment', AttachmentInline)

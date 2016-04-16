@@ -5,9 +5,10 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.fields import ThumbnailerImageField
+
 from scoop.core.util.shortcuts import addattr
 
 
@@ -36,8 +37,10 @@ class IconModel(models.Model):
     # Constantes
     ICON_MAX_SIZE = {'w': 64, 'h': 64}
     # Champs
-    icon = ThumbnailerImageField(max_length=96, blank=True, resize_source={'size': (ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']), 'crop': 'smart'}, width_field='icon_width',
-                                 height_field='icon_height', upload_to=get_icon_upload_path, help_text=_("Maximum size {}x{}").format(ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']),
+    icon = ThumbnailerImageField(max_length=96, blank=True, resize_source={'size': (ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']), 'crop': 'smart'},
+                                 width_field='icon_width',
+                                 height_field='icon_height', upload_to=get_icon_upload_path,
+                                 help_text=_("Maximum size {}x{}").format(ICON_MAX_SIZE['w'], ICON_MAX_SIZE['h']),
                                  verbose_name=_("Icon"))
     icon_width = models.IntegerField(blank=True, null=True, editable=False, verbose_name=pgettext_lazy("geometry", "Width"))
     icon_height = models.IntegerField(blank=True, null=True, editable=False, verbose_name=pgettext_lazy("geometry", "Height"))

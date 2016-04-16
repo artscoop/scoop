@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-28 06:14+0200\n"
-"PO-Revision-Date: 2016-03-28 06:38+0009\n"
+"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"PO-Revision-Date: 2016-04-16 07:28+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Activate selected users"
 msgstr "Activer les utilisateurs sélectionnés"
 
-#: admin/configuration.py:25 models/forms.py:61
+#: admin/configuration.py:25 models/forms.py:65
 msgid "Version"
 msgstr "Version"
 
@@ -32,7 +32,7 @@ msgstr "Version"
 msgid "Default"
 msgstr "Par défaut"
 
-#: admin/configuration.py:30 models/forms.py:62
+#: admin/configuration.py:30 models/forms.py:66
 msgid "Data"
 msgstr "Données"
 
@@ -160,38 +160,38 @@ msgstr "première lettre du pseudonyme"
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin/profile.py:23 admin/profile.py:98 admin/user.py:28
-#: models/activation.py:73 models/forms.py:59 models/profile.py:72
+#: admin/profile.py:24 admin/profile.py:99 admin/user.py:28
+#: models/activation.py:74 models/forms.py:63 models/profile.py:72
 #: models/visit.py:69
 msgid "User"
 msgstr "Utilisateur"
 
-#: admin/profile.py:40 admin/user.py:38
+#: admin/profile.py:41 admin/user.py:38
 msgid "Deactivate selected users"
 msgstr "Désactiver les utilisateurs sélectionnés"
 
-#: admin/profile.py:44
+#: admin/profile.py:45
 #, python-format
 msgid "%(count)d users have been successfully deactivated."
 msgstr "%(count)d utilisateurs ont été correctement désactivés."
 
-#: admin/profile.py:46
+#: admin/profile.py:47
 msgid "Reset the selected users pictures"
 msgstr "Réinitialiser les portraits des utilisateurs sélectionnés"
 
-#: admin/profile.py:55
+#: admin/profile.py:56
 msgid "Shuffle profile"
 msgstr "Mélanger les données du profil"
 
-#: admin/profile.py:93
+#: admin/profile.py:94
 msgid "Id"
 msgstr "Id"
 
-#: admin/profile.py:103 forms/registration.py:21 models/user.py:193
+#: admin/profile.py:104 forms/registration.py:21 models/user.py:196
 msgid "Email"
 msgstr "Email"
 
-#: admin/profile.py:108 admin/user.py:91
+#: admin/profile.py:109 admin/user.py:91
 msgid "User picture"
 msgstr "Portrait utilisateur"
 
@@ -283,7 +283,6 @@ msgid "1 hour"
 msgstr "1 heure"
 
 #: forms/configuration.py:19
-#| msgid "1 hour"
 msgid "12 hours"
 msgstr "12 heures"
 
@@ -439,8 +438,6 @@ msgstr ""
 "Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
 
 #: listeners/activation.py:23
-#| msgid ""
-#| "Congratulations! Your account is activated, you are now logged in."
 msgid "Congratulations! Your account is activated, you can now log in."
 msgstr ""
 "Félicitations ! Votre compte est activé, vous pouvez désormais vous "
@@ -459,82 +456,80 @@ msgstr "Bonjour, {name} !"
 msgid "Thanks for visiting."
 msgstr "Merci de votre visite."
 
-#: middleware/impersonation.py:48
+#: middleware/impersonation.py:52
 #, python-brace-format
 msgid "{name}, your impersonation session has been properly shut down."
 msgstr "{name}, votre session d'imitation a été correctement terminée."
 
-#: middleware/impersonation.py:54
+#: middleware/impersonation.py:58
 #, python-brace-format
 msgid "You are viewing {path} as {name}. <a href=\"?{exit}\">Quit</a>"
 msgstr "Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
 
-#: middleware/impersonation.py:56
+#: middleware/impersonation.py:60
 #, python-brace-format
 msgid "There is no active user with the username {name}."
 msgstr "Aucun utilisateur actif trouvé avec le nom {name}."
 
-#: models/activation.py:75
+#: models/activation.py:76
 msgid "Secret question"
 msgstr "Question secrète"
 
-#: models/activation.py:76
+#: models/activation.py:77
 msgid "Answer"
 msgstr "Réponse"
 
-#: models/activation.py:78
+#: models/activation.py:79
 msgctxt "activation"
 msgid "Active"
 msgstr "Active"
 
-#: models/activation.py:79
+#: models/activation.py:80
 msgid "Updates"
 msgstr "Mises à jour"
 
-#: models/activation.py:80
+#: models/activation.py:81
 msgid "Mail send count"
 msgstr "Nombre d'emails envoyés"
 
-#: models/activation.py:81
-#| msgid "Mail send count"
+#: models/activation.py:82
 msgid "Mail sent"
 msgstr "Email envoyé"
 
-#: models/activation.py:82
+#: models/activation.py:83
 msgid "Admin details"
 msgstr "Détails admin"
 
-#: models/activation.py:128
+#: models/activation.py:129
 #, python-brace-format
-#| msgid "{}'s activation data"
 msgid "{username}'s activation data"
 msgstr "Activation utilisateur pour {username}"
 
-#: models/activation.py:145
+#: models/activation.py:146
 msgid "user activation"
 msgstr "activation utilisateur"
 
-#: models/activation.py:146
+#: models/activation.py:147
 msgid "user activations"
 msgstr "activations utilisateur"
 
-#: models/forms.py:60
+#: models/forms.py:64
 msgid "Form name"
 msgstr "Nom du formulaire"
 
-#: models/forms.py:61
+#: models/forms.py:65
 msgid "Variation name"
 msgstr "Variation"
 
-#: models/forms.py:63
+#: models/forms.py:67
 msgid "Description"
 msgstr "Description"
 
-#: models/forms.py:78
+#: models/forms.py:82
 msgid "user configuration"
 msgstr "configuration utilisateur"
 
-#: models/forms.py:79
+#: models/forms.py:83
 msgid "user configurations"
 msgstr "configurations utilisateurs"
 
@@ -561,8 +556,9 @@ msgid "Updated"
 msgstr "Mis à jour"
 
 #: models/profile.py:75
-msgid "Select the main profile picture"
-msgstr "Choisissez la photo principale du profil"
+#| msgid "Main picture"
+msgid "Main profile picture"
+msgstr "Image principale du profil"
 
 #: models/profile.py:76
 msgid "Picture"
@@ -582,11 +578,11 @@ msgstr "Offensif"
 msgid "City"
 msgstr "Ville"
 
-#: models/profile.py:84
+#: models/profile.py:83
 msgid "New"
 msgstr "Nouveau"
 
-#: models/profile.py:135
+#: models/profile.py:134
 msgid ""
 "No default path for user pictures. Add a directory path relative to "
 "MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"
@@ -594,7 +590,7 @@ msgstr ""
 "Pas de chemin par défaut pour les imamges utilisateur. Ajoutez un chemin "
 "relatif à MEDIA_URL dans settings.USER_DEFAULT_PICTURE_PATH"
 
-#: models/user.py:182
+#: models/user.py:185
 msgid ""
 "Your name must start with a letter and can only contain letters, digits and "
 "underscores"
@@ -602,105 +598,105 @@ msgstr ""
 "Votre nom doit commencer par une lettre et ne contenir que des lettres, des "
 "chiffres et des tirets bas (_)"
 
-#: models/user.py:184
+#: models/user.py:187
 msgid "Your name can only contain letters"
 msgstr "Votre nom ne peut contenir que des lettres"
 
-#: models/user.py:190
+#: models/user.py:193
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: models/user.py:191
+#: models/user.py:194
 msgid "Name"
 msgstr "Nom"
 
-#: models/user.py:192
+#: models/user.py:195
 msgctxt "user"
 msgid "Bot"
 msgstr "Robot"
 
-#: models/user.py:194
+#: models/user.py:197
 msgctxt "user"
 msgid "Active"
 msgstr "Actif"
 
-#: models/user.py:195
+#: models/user.py:198
 msgctxt "user"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/user.py:196
+#: models/user.py:199
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 "Indique si l'utilisateur peut se connecter ou non à ce site "
 "d'administration."
 
-#: models/user.py:197
+#: models/user.py:200
 msgctxt "user"
 msgid "Staff"
 msgstr "Équipe"
 
-#: models/user.py:198
+#: models/user.py:201
 msgid "Date joined"
 msgstr "Date d'inscription"
 
-#: models/user.py:199
+#: models/user.py:202
 msgctxt "user"
 msgid "Last online"
 msgstr "Vu en ligne"
 
-#: models/user.py:200
+#: models/user.py:203
 msgid "Next possible mail for user"
 msgstr "Prochain courrier possible pour l'utilisateur"
 
-#: models/user.py:207
+#: models/user.py:210
 #, python-brace-format
 msgid "{name} (deleted)"
 msgstr "{name} (supprimé)"
 
-#: models/user.py:211
+#: models/user.py:214
 msgid "Robot"
 msgstr "Robot"
 
-#: models/user.py:237
+#: models/user.py:240
 msgid "The value passed has no login value"
 msgstr "La valeur passée ne contient pas d'information d'identification"
 
-#: models/user.py:245
+#: models/user.py:248
 msgid "Bad username and/or password."
 msgstr "Mauvais nom d'utilisateur et/ou mot de passe."
 
-#: models/user.py:247
+#: models/user.py:250
 msgid "This account is currently not active."
 msgstr "Ce compte est actuellement inactif."
 
-#: models/user.py:249
+#: models/user.py:252
 msgid "This user cannot log in."
 msgstr "Cet utilisateur ne peut pas se connecter."
 
-#: models/user.py:256
+#: models/user.py:259
 #: templates/user/display/user/templatetag/online-status.html:27
 msgid "Online"
 msgstr "En ligne"
 
-#: models/user.py:265
+#: models/user.py:268
 #: templates/user/display/user/templatetag/online-status.html:25
 msgid "Away"
 msgstr "Absent(e)"
 
-#: models/user.py:270
+#: models/user.py:273
 msgid "Online time"
 msgstr "En ligne depuis"
 
-#: models/user.py:276
+#: models/user.py:279
 msgid "Time online"
 msgstr "en ligne"
 
-#: models/user.py:529
+#: models/user.py:532
 msgid "user"
 msgstr "utilisateur"
 
-#: models/user.py:530 templates/user/dashboard/online.html.py:5
+#: models/user.py:533 templates/user/dashboard/online.html.py:5
 msgid "users"
 msgstr "utilisateurs"
 
@@ -772,8 +768,6 @@ msgstr "Statut en ligne"
 
 #: templates/user/dashboard/online.html:28
 #, python-format
-#| msgid "%(count)s user is currently online"
-#| msgid_plural "%(count)s users are currently online"
 msgid "%(count)s user is currently online"
 msgid_plural ""
 "%(count)s users are currently\n"
@@ -856,6 +850,9 @@ msgstr "non"
 #: util/auth.py:81
 msgid "You have no permission over this user."
 msgstr "Vous n'avez pas de permissions sur cet utilisateur."
+
+#~ msgid "Select the main profile picture"
+#~ msgstr "Choisissez la photo principale du profil"
 
 #~ msgid "6 hours"
 #~ msgstr "6 heures"

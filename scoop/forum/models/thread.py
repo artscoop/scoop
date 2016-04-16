@@ -1,10 +1,11 @@
 # coding: utf-8
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.db.models import permalink
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -27,7 +28,6 @@ class ThreadQuerySet(SingleDeleteQuerySet):
 
 
 class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel):
-
     # Constantes
     DATA_KEYS = ['notes', 'similar_threads']
 
@@ -36,7 +36,8 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel):
     topic = models.CharField(max_length=128, blank=True, db_index=True, verbose_name=_("Topic"))
     started = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('thread', "Was started"))
     updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('thread', "Updated"))
-    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='forum_threads_where_last', on_delete=models.SET_NULL, verbose_name=_("Last speaker"))
+    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='forum_threads_where_last', on_delete=models.SET_NULL,
+                                verbose_name=_("Last speaker"))
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Deleted"))
     counter = models.IntegerField(default=0, verbose_name=_("Message count"))
     locked = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Locked"))
@@ -89,10 +90,9 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel):
         """ Renvoyer une représentation unicode de l'objet """
         return self.topic
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du fil """
-        return 'forum:thread-view', [], {'uuid': self.uuid}
+        return reverse_lazy('forum:thread-view', kwargs={'uuid': self.uuid})
 
     # Métadonnées
     class Meta:

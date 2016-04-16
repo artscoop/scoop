@@ -1,6 +1,5 @@
 # coding: utf-8
-from django.db import models
-from django.db.models import permalink
+from django.core.urlresolvers import reverse_lazy
 
 
 class FlaggableModelUtil:
@@ -9,10 +8,9 @@ class FlaggableModelUtil:
     Monkey-patching done in scoop.core.__init__
     """
 
-    @permalink
     def get_flag_url(self):
         """ Renvoyer l'URL pour signaler l'objet """
         from django.contrib.contenttypes.fields import ContentType
         content_type_id = ContentType.objects.get_for_model(self).id
         identifier = self.id
-        return ('rogue:flag-new', [content_type_id, identifier])
+        return reverse_lazy('rogue:flag-new', args=[content_type_id, identifier])

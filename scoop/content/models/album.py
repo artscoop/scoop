@@ -1,9 +1,10 @@
 # coding: utf-8
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.db.models import permalink
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.content.picture import PicturedModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel
@@ -90,10 +91,9 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
             self.parent = None
         super(Album, self).save(*args, **kwargs)
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
-        return 'content:view-category', [self.short_name]
+        return reverse_lazy('content:view-category', args=[self.short_name])
 
     def __str__(self):
         """ Renvoyer la version texte de l'objet """

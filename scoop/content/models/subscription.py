@@ -4,8 +4,9 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.utils import IntegrityError
 from django.forms.fields import EmailField
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.models.content import Content
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModel

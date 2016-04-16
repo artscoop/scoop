@@ -3,8 +3,8 @@ from django import forms
 from django.forms import widgets
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 
 
 class PictureInlineWidget(forms.FileInput):
@@ -37,7 +37,8 @@ class CreationLicenseWidget(forms.MultiWidget):
     """ Widget de licence ou copyright """
     # Constantes
     COPYRIGHTED = {1: _("Copyright")}
-    CREATIVE_COMMONS = {10: _("CC BY - Attribution"), 11: _("CC BY-SA - Share alike"), 12: _("CC BY-ND - Cannot edit"), 13: _("CC BY-NC - Non commercial"), 14: _("CC BY-NC-SA - SA+NC"),
+    CREATIVE_COMMONS = {10: _("CC BY - Attribution"), 11: _("CC BY-SA - Share alike"), 12: _("CC BY-ND - Cannot edit"), 13: _("CC BY-NC - Non commercial"),
+                        14: _("CC BY-NC-SA - SA+NC"),
                         15: _("CC BY-NC-ND - ND+NC"), 16: _("Public domain")}
 
     def __init__(self, attrs=None, widget=None):

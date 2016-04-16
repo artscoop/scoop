@@ -1,3 +1,4 @@
 {% if item.display == 0 %}
-    <a href="{{ item.url }}{% if item.anchor %}#{{ item.anchor }}{% endif %}"{% if item.nofollow %} nofollow{% endif %}{% if item.remainder %} {{ item.remainder }}{% endif %}>{{ item.title|default:"Link" }}</a>
+    <a href="{{ item.url }}{% if item.anchor %}#{{ item.anchor }}{% endif %}"{% if item.nofollow %} nofollow{% endif %}{% if item.remainder %}
+        {{ item.remainder }}{% endif %}>{{ item.title|default:"Link" }}</a>
 {% endif %}

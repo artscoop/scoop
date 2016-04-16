@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.util.admin import PicturedModelAdmin
 from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
@@ -12,6 +13,7 @@ from scoop.location.forms import VenueForm
 from scoop.location.models import Venue
 from scoop.location.models.currency import Currency
 from scoop.location.models.timezone import Timezone
+
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +82,7 @@ class TimezoneAdmin(ViewOnlyModelAdmin):
     actions = []
     actions_on_bottom = True
     save_on_top = True
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Venue, VenueAdmin)

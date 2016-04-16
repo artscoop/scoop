@@ -1,6 +1,8 @@
 {% load thumbnail i18n %}
-{% if image %}<div class="content-image{{class}}">
-    <a rel="lightbox" title="{{image.title}}" href="{{image.image.url}}" class="">
-        <img alt="{{image.description}}" class="" src="{% if size %} {% thumbnail image.image size crop="smart" radius=radius lighten=0 upscale %}{% else %}{{image.image.url}}{% endif %}">
-    </a>
-</div>{% else %}{% if DEBUG %}{{_("Image not found")}}{% endif %}{% endif %}
+{% if image %}
+    <div class="content-image{{ class }}">
+        <a rel="lightbox" title="{{ image.title }}" href="{{ image.image.url }}" class="">
+            <img alt="{{ image.description }}" class=""
+                 src="{% if size %} {% thumbnail image.image size crop="smart" radius=radius lighten=0 upscale %}{% else %}{{ image.image.url }}{% endif %}">
+        </a>
+    </div>{% else %}{% if DEBUG %}{{ _("Image not found") }}{% endif %}{% endif %}

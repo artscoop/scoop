@@ -1,5 +1,4 @@
 # coding: utf-8
-import random
 
 from django.conf import settings
 from django.contrib.contenttypes import fields
@@ -7,16 +6,16 @@ from django.contrib.contenttypes.fields import ContentType, GenericRelation
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.aggregates import Avg, Count, Sum
-from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 from scoop.core.util.shortcuts import addattr
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
 
 
 class Axis(TranslatableModel, WeightedModel):

@@ -6,15 +6,17 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.db.models import Q, permalink
+from django.db.models import Q
 from django.db.models.aggregates import Count
 from django.http.response import Http404
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import to_timestamp
@@ -25,6 +27,7 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 from scoop.messaging.models.label import LabelableModel
 from scoop.messaging.util.signals import thread_created, thread_pre_create
+
 
 logger = logging.getLogger(__name__)
 
@@ -311,7 +314,8 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     topic = models.CharField(max_length=128, blank=True, db_index=True, verbose_name=_("Topic"))
     started = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('thread', "Was started"))
     updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('thread', "Updated"))
-    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='threads_where_last', on_delete=models.SET_NULL, verbose_name=_("Last speaker"))
+    updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='threads_where_last', on_delete=models.SET_NULL,
+                                verbose_name=_("Last speaker"))
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Deleted"))
     counter = models.IntegerField(default=0, verbose_name=_("Message count"))
     population = models.IntegerField(default=0, verbose_name=_("Recipient count"))
@@ -341,10 +345,9 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         """ Renvoyer une représentation unicode de l'objet """
         return self.topic
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du fil """
-        return 'messaging:thread-view', [], {'uuid': self.uuid}
+        return reverse_lazy('messaging:thread-view', kwargs={'uuid': self.uuid})
 
     # Actions
     def add_message(self, author, body, request=None, strip_tags=False, as_mail=True):

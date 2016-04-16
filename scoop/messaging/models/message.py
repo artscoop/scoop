@@ -6,9 +6,10 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
+
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -20,6 +21,7 @@ from scoop.core.util.model.model import SingleDeleteManager, search_query
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.util.signals import mailable_event, message_check_spam, message_pre_send, message_sent, message_set_spam
 from scoop.messaging.util.text import format_message
+
 
 __all__ = ['Message']
 

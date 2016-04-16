@@ -1,12 +1,13 @@
 # coding: utf-8
 import math
 from random import shuffle
-
 from xmlrpc import server
 
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse_lazy as reverse
+
 from scoop.core.util.signals import ping_failed
+
 
 # Liste de moteurs de Ping de sitemap ou RSS
 PING_ENGINES = [

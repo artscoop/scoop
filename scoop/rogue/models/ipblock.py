@@ -7,10 +7,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models, transaction
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from django_countries import countries
 from django_countries.fields import CountryField
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager
@@ -212,9 +213,11 @@ class IPBlock(DatetimeModel):
     règles de blocage.
     """
     # Constantes
-    TYPES = [[0, _("Single address")], [1, _("Address range")], [2, _("Partial host")], [3, _("Partial host with exclusion")], [4, _("ISP with host exclusion")], [5, _("Country code")],
+    TYPES = [[0, _("Single address")], [1, _("Address range")], [2, _("Partial host")], [3, _("Partial host with exclusion")],
+             [4, _("ISP with host exclusion")], [5, _("Country code")],
              [6, _("Allowed host")], [7, _("Allowed ISP")]]
-    CATEGORIES = [[0, _("General")], [1, _("Proxy")], [2, _("Server")], [3, _("Compromised IP")], [4, _("Repeated trouble")], [10, _("Tor network")], [11, _("Anonymous network")],
+    CATEGORIES = [[0, _("General")], [1, _("Proxy")], [2, _("Server")], [3, _("Compromised IP")], [4, _("Repeated trouble")], [10, _("Tor network")],
+                  [11, _("Anonymous network")],
                   [12, _("VPN")]]
     HARM = [[1, _("Rarely harmful")], [2, _("Often harmful")], [3, _("Always harmful")]]
     SINGLE, RANGE, HOST, HOST_EXCLUSION, ISP_EXCLUSION, COUNTRY, HOST_ALLOWED, ISP_ALLOWED = 0, 1, 2, 3, 4, 5, 6, 7
@@ -338,8 +341,9 @@ class IPBlock(DatetimeModel):
         elif self.type == 3:
             return _("Blocking of reverse {reverse} but not with {exclude}").format(reverse=self.hostname, exclude=self.hostname_exclude)
         elif self.type == 4:
-            return _("Blocking of ISP {isp}").format(isp=self.isp) if self.hostname_exclude == "" else _("Blocking of ISP {isp} minus {exclude}").format(isp=self.isp,
-                                                                                                                                                         exclude=self.hostname_exclude)
+            return _("Blocking of ISP {isp}").format(isp=self.isp) if self.hostname_exclude == "" else _("Blocking of ISP {isp} minus {exclude}").format(
+                isp=self.isp,
+                exclude=self.hostname_exclude)
         elif self.type == 5:
             return _("Blocking of country with code {code}").format(code=self.country_code)
         elif self.type == 6:

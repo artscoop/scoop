@@ -1,54 +1,55 @@
 {% load i18n html_tags endless user_tags type_tags thumbnail datetime_tags %}
 {% paginate 24 pictures using 'pic_p' %}
 <div id="dashboard-picture">
-	<p class="dashboard-buttons text-right">
+    <p class="dashboard-buttons text-right">
 		<span class="btn-group text-right" style="display: inline-block;">
 			<a class="btn btn-mini btn-primary" href="{% url 'admin:content_picture_changelist' %}"><b class="icon-picture"></b></a>
 			<a class="btn btn-mini btn-primary" href="{% url 'admin:content_picture_add' %}"><b class="icon-plus-sign"></b></a>
 			<a target="_blank" class="btn btn-mini btn-primary" href="{% url 'content:picture-moderation' %}"><b class="icon-check-sign"></b></a>
 			<a class="btn btn-mini" href="{% url 'admin:content_album_changelist' %}"><b class="icon-book"></b></a>
 		</span>
-	</p>
-	<div class="picture-list">
-		{% for picture in pictures %}
-		{% if forloop.counter|add:"-1"|divisibleby:6 %}<div class="row-fluid row-spaced">{% endif %}
-		<div class="span2 overlay-container">
-		    {% if picture.exists %}
+    </p>
+    <div class="picture-list">
+        {% for picture in pictures %}
+            {% if forloop.counter|add:"-1"|divisibleby:6 %}
+                <div class="row-fluid row-spaced">{% endif %}
+        <div class="span2 overlay-container">
+            {% if picture.exists %}
                 {% thumbnail picture.image "64x48" crop="smart" as thumb %}
-                <a href='{{picture.image.url}}' rel='lightbox'>
-                    <img src="{{MEDIA_URL}}{{thumb|urlencode}}" alt="{{picture.description}}" title="
+                <a href='{{ picture.image.url }}' rel='lightbox'>
+                    <img src="{{ MEDIA_URL }}{{ thumb|urlencode }}" alt="{{ picture.description }}" title="
                         {% autoescape on %}
-                            <strong class='span2'>Titre</strong> {{picture.title}}<br>
-                            <strong class='span2'>Description</strong> {{picture.description}}<br>
-                            <strong class='span2'>Taille</strong> {{picture.get_dimension_string}}<br>
-                            <strong class='span2'>Auteur</strong> {{picture.author}}<br>
-                            <strong class='span2'>Code</strong> {{picture.uuid}}<br>
-                            <strong class='span2'>Poids</strong> {{picture.get_file_size}}<br>
-                            <strong class='span2'>Cible</strong> {{picture.content_object|model_name}}<br>
-                            <strong class='span2'>Attaché à</strong> {{picture.content_object}}<br>
+                            <strong class='span2'>Titre</strong> {{ picture.title }}<br>
+                            <strong class='span2'>Description</strong> {{ picture.description }}<br>
+                            <strong class='span2'>Taille</strong> {{ picture.get_dimension_string }}<br>
+                            <strong class='span2'>Auteur</strong> {{ picture.author }}<br>
+                            <strong class='span2'>Code</strong> {{ picture.uuid }}<br>
+                            <strong class='span2'>Poids</strong> {{ picture.get_file_size }}<br>
+                            <strong class='span2'>Cible</strong> {{ picture.content_object|model_name }}<br>
+                            <strong class='span2'>Attaché à</strong> {{ picture.content_object }}<br>
                         {% endautoescape %}
                     "/>
                 </a>
-			{% endif %}
-			<div class="overlay-status">
-				<span class="badge{% if picture|is_new:"30m" %} badge-important{% else %} badge-inverse{% endif %}">{{picture.pk}}</span>
-			</div>
-		</div>
-		{% if forloop.counter|divisibleby:6 or forloop.last %}</div>{% endif %}
-		{% empty %}
-			<p class="text-right">{% blocktrans %}There are no pictures in this database yet.{% endblocktrans %}</p>
-		{% endfor %}
-	</div>
+            {% endif %}
+            <div class="overlay-status">
+                <span class="badge{% if picture|is_new:"30m" %} badge-important{% else %} badge-inverse{% endif %}">{{ picture.pk }}</span>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:6 or forloop.last %}</div>{% endif %}
+        {% empty %}
+            <p class="text-right">{% blocktrans %}There are no pictures in this database yet.{% endblocktrans %}</p>
+        {% endfor %}
+    </div>
 
     <div class="table-div">
         <table class="table table-bordered table-condensed table-striped condensed-table">
             <tbody>
-                <tr>
-                    <th>{{_("Count")}}</th>
-                    <td>{{stats.count}}</td>
-                    <th></th>
-                    <td></td>
-                </tr>
+            <tr>
+                <th>{{ _("Count") }}</th>
+                <td>{{ stats.count }}</td>
+                <th></th>
+                <td></td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -56,12 +57,20 @@
 </div>
 {% get_pages %}
 {% if pages.is_paginated %}
-<div class="pagination">{% show_pages %}</div>
+    <div class="pagination">{% show_pages %}</div>
 {% endif %}
 
 <script type="text/javascript">
-	// Refresh des données du dashboard
-	var picture_dashboard_refresh = 15000;
-	function refresh_picture_dashboard() { $('#dashboard-picture').load("{% url 'content:pictures-dashboard' %}?pic_p={{request.GET.pic_p}} #dashboard-picture", function(resp, status, xhr){ setTimeout(refresh_picture_dashboard, picture_dashboard_refresh); $('.picture-list').trigger('addedHTML') }) }
-	if (undefined == picture_dashboard_flag) { setTimeout(refresh_picture_dashboard, picture_dashboard_refresh); var picture_dashboard_flag = true;}
+    // Refresh des données du dashboard
+    var picture_dashboard_refresh = 15000;
+    function refresh_picture_dashboard() {
+        $('#dashboard-picture').load("{% url 'content:pictures-dashboard' %}?pic_p={{request.GET.pic_p}} #dashboard-picture", function (resp, status, xhr) {
+            setTimeout(refresh_picture_dashboard, picture_dashboard_refresh);
+            $('.picture-list').trigger('addedHTML')
+        })
+    }
+    if (undefined == picture_dashboard_flag) {
+        setTimeout(refresh_picture_dashboard, picture_dashboard_refresh);
+        var picture_dashboard_flag = true;
+    }
 </script>

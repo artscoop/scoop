@@ -2,6 +2,7 @@
 from django.db.backends.signals import connection_created
 from django.dispatch.dispatcher import receiver
 
+
 __all__ = ['activate_pragmas']
 
 

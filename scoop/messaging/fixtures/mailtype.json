@@ -1,1 +1,170 @@
-[{"model": "messaging.mailtype", "pk": 1, "fields": {"short_name": "messaging.message.new", "category": "message", "template": "messaging-message-new", "interval": 10}}, {"model": "messaging.mailtype", "pk": 2, "fields": {"short_name": "user.activation", "category": "important,online", "template": "user-activation-activate", "interval": 0}}, {"model": "messaging.mailtype", "pk": 3, "fields": {"short_name": "content.picture.approved", "category": "moderation", "template": "content-picture-approved", "interval": 60}}, {"model": "messaging.mailtype", "pk": 4, "fields": {"short_name": "content.subscription.update", "category": "subscription,online", "template": "content-subscription-update", "interval": 30}}, {"model": "messaging.mailtype", "pk": 5, "fields": {"short_name": "content.subscription.confirm", "category": "subscription,important,online", "template": "content-subscription-confirm", "interval": 0}}, {"model": "messaging.mailtype", "pk": 11, "fields": {"short_name": "messaging.message.staff", "category": "message,staff", "template": "messaging-message-staff", "interval": 0}}, {"model": "messaging.mailtypetranslation", "pk": 1, "fields": {"model": 1, "language": "en", "description": "A new message was sent"}}, {"model": "messaging.mailtypetranslation", "pk": 2, "fields": {"model": 1, "language": "fr", "description": "Un nouveau message a \u00e9t\u00e9 envoy\u00e9"}}, {"model": "messaging.mailtypetranslation", "pk": 3, "fields": {"model": 2, "language": "en", "description": "Activation information has been generated"}}, {"model": "messaging.mailtypetranslation", "pk": 4, "fields": {"model": 2, "language": "fr", "description": "Les informations d'activation ont \u00e9t\u00e9 g\u00e9n\u00e9r\u00e9es"}}, {"model": "messaging.mailtypetranslation", "pk": 5, "fields": {"model": 3, "language": "en", "description": "Picture submitted was approved by a moderator"}}, {"model": "messaging.mailtypetranslation", "pk": 6, "fields": {"model": 3, "language": "fr", "description": "L'image envoy\u00e9e a \u00e9t\u00e9 accept\u00e9e par un mod\u00e9rateur"}}, {"model": "messaging.mailtypetranslation", "pk": 7, "fields": {"model": 4, "language": "en", "description": "A subscribed content was updated"}}, {"model": "messaging.mailtypetranslation", "pk": 8, "fields": {"model": 4, "language": "fr", "description": "Un contenu avec abonnement a \u00e9t\u00e9 mis \u00e0 jour"}}, {"model": "messaging.mailtypetranslation", "pk": 9, "fields": {"model": 5, "language": "en", "description": "A subscription needs to be confirmed before taking effect"}}, {"model": "messaging.mailtypetranslation", "pk": 10, "fields": {"model": 5, "language": "fr", "description": "Un abonnement doit \u00eatre confirm\u00e9 avant de prendre effet"}}, {"model": "messaging.mailtypetranslation", "pk": 11, "fields": {"model": 11, "language": "en", "description": "A new message from a staff member was received"}}, {"model": "messaging.mailtypetranslation", "pk": 12, "fields": {"model": 11, "language": "fr", "description": "Une nouveau message d'un membre de l'\u00e9quipe du site a \u00e9t\u00e9 re\u00e7u"}}]
+[
+  {
+    "model": "messaging.mailtype",
+    "pk": 1,
+    "fields": {
+      "short_name": "messaging.message.new",
+      "category": "message",
+      "template": "messaging-message-new",
+      "interval": 10
+    }
+  },
+  {
+    "model": "messaging.mailtype",
+    "pk": 2,
+    "fields": {
+      "short_name": "user.activation",
+      "category": "important,online",
+      "template": "user-activation-activate",
+      "interval": 0
+    }
+  },
+  {
+    "model": "messaging.mailtype",
+    "pk": 3,
+    "fields": {
+      "short_name": "content.picture.approved",
+      "category": "moderation",
+      "template": "content-picture-approved",
+      "interval": 60
+    }
+  },
+  {
+    "model": "messaging.mailtype",
+    "pk": 4,
+    "fields": {
+      "short_name": "content.subscription.update",
+      "category": "subscription,online",
+      "template": "content-subscription-update",
+      "interval": 30
+    }
+  },
+  {
+    "model": "messaging.mailtype",
+    "pk": 5,
+    "fields": {
+      "short_name": "content.subscription.confirm",
+      "category": "subscription,important,online",
+      "template": "content-subscription-confirm",
+      "interval": 0
+    }
+  },
+  {
+    "model": "messaging.mailtype",
+    "pk": 11,
+    "fields": {
+      "short_name": "messaging.message.staff",
+      "category": "message,staff",
+      "template": "messaging-message-staff",
+      "interval": 0
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 1,
+    "fields": {
+      "model": 1,
+      "language": "en",
+      "description": "A new message was sent"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 2,
+    "fields": {
+      "model": 1,
+      "language": "fr",
+      "description": "Un nouveau message a \u00e9t\u00e9 envoy\u00e9"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 3,
+    "fields": {
+      "model": 2,
+      "language": "en",
+      "description": "Activation information has been generated"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 4,
+    "fields": {
+      "model": 2,
+      "language": "fr",
+      "description": "Les informations d'activation ont \u00e9t\u00e9 g\u00e9n\u00e9r\u00e9es"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 5,
+    "fields": {
+      "model": 3,
+      "language": "en",
+      "description": "Picture submitted was approved by a moderator"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 6,
+    "fields": {
+      "model": 3,
+      "language": "fr",
+      "description": "L'image envoy\u00e9e a \u00e9t\u00e9 accept\u00e9e par un mod\u00e9rateur"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 7,
+    "fields": {
+      "model": 4,
+      "language": "en",
+      "description": "A subscribed content was updated"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 8,
+    "fields": {
+      "model": 4,
+      "language": "fr",
+      "description": "Un contenu avec abonnement a \u00e9t\u00e9 mis \u00e0 jour"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 9,
+    "fields": {
+      "model": 5,
+      "language": "en",
+      "description": "A subscription needs to be confirmed before taking effect"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 10,
+    "fields": {
+      "model": 5,
+      "language": "fr",
+      "description": "Un abonnement doit \u00eatre confirm\u00e9 avant de prendre effet"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 11,
+    "fields": {
+      "model": 11,
+      "language": "en",
+      "description": "A new message from a staff member was received"
+    }
+  },
+  {
+    "model": "messaging.mailtypetranslation",
+    "pk": 12,
+    "fields": {
+      "model": 11,
+      "language": "fr",
+      "description": "Une nouveau message d'un membre de l'\u00e9quipe du site a \u00e9t\u00e9 re\u00e7u"
+    }
+  }
+]

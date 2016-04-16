@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.contrib.auth.backends import ModelBackend
+
 from scoop.user.models.user import User
 
 

@@ -8,23 +8,24 @@ from traceback import print_exc
 
 import markdown
 import textile
-
-from approval.models.approval import ApprovalModel
 from autoslug.fields import AutoSlugField
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.db.models import permalink
 from django.template.defaultfilters import striptags, truncatewords
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
 from ngram import NGram
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
+
+from approval.models.approval import ApprovalModel
 from scoop.analyze.abstract.classifiable import ClassifiableModel
-from scoop.content.util.signals import content_pre_lock, content_updated, content_format_html
+from scoop.content.util.signals import content_format_html, content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -43,8 +44,7 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
+
 
 logger = logging.getLogger(__name__)
 
@@ -108,13 +108,14 @@ class ContentQuerySetMixin(object):
                 else:
                     raise exc("No content found with this slug")
         word = max(slug.split('-'), key=len)  # utiliser le mot le plus long pour filtrer
-        contents = self.filter(slug__icontains=word, **({'category': category} if category is not None else {}))  # filtrer les contenus contenant le mot le plus long
+        contents = self.filter(slug__icontains=word,
+                               **({'category': category} if category is not None else {}))  # filtrer les contenus contenant le mot le plus long
         try:
             closest = max(
-                [{'ratio': similarity, 'content': content} for content, similarity in
-                 zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if
-                 similarity > 7500
-                 ], key=operator.itemgetter('ratio'))
+                    [{'ratio': similarity, 'content': content} for content, similarity in
+                     zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if
+                     similarity > 7500
+                     ], key=operator.itemgetter('ratio'))
             return closest['content']
         except ValueError:
             return None
@@ -309,7 +310,8 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     # État du contenu
     published = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('content', "Published"))
     sticky = models.BooleanField(default=False, db_index=True, help_text=_("Will stay on top of lists"), verbose_name=pgettext_lazy('content', "Sticky"))
-    featured = models.BooleanField(default=False, db_index=True, help_text=_("Will appear in magazine editorial content"), verbose_name=pgettext_lazy('content', "Featured"))
+    featured = models.BooleanField(default=False, db_index=True, help_text=_("Will appear in magazine editorial content"),
+                                   verbose_name=pgettext_lazy('content', "Featured"))
     locked = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', "Locked"))
     objects = ContentManager()
 
@@ -359,7 +361,8 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         :returns: similarité entre 0.0 et 1.0, 1.0 étant l'identité
         """
         labels = {'title', 'body', 'tags'}
-        this, that = ({label: render_block_to_string("content/similarity/content.djhtml", item, {'content': self}) for label in labels} for item in [self, content])
+        this, that = ({label: render_block_to_string("content/similarity/content.djhtml", item, {'content': self}) for label in labels} for item in
+                      [self, content])
         weights = text_to_dict(render_to_string("content/similarity/weights.txt", {}), evaluate=True)  # texte de la forme key:value\n
         return sum([NGram.compare(this[label], that[label]) * weights[label] for label in labels]) / sum(weights.values())
 
@@ -419,10 +422,9 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         """ Renvoyer le texte de l'objet pour l'apprentissage de catégorisation """
         return striptags(self.get_html())
 
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL du contenu """
-        return 'content:content-view', [], {'category': self.category.url, 'slug': self.slug}
+        return reverse_lazy('content:content-view', kwargs={'category': self.category.url, 'slug': self.slug})
 
     # Privé
     def _populate_html(self):
@@ -517,7 +519,6 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         if any([author.is_staff for author in authors]):
             self.approve()
 
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode """
         return self.title
@@ -613,7 +614,6 @@ class Category(TranslatableModel, IconModel, DataModel):
         if not self.content_set.all().exists():
             super(Category, self).delete(*args, **kwargs)
 
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return str(self.get_name())

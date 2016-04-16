@@ -1,12 +1,11 @@
 # coding: utf-8
-from os.path import join
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import ContentType, GenericRelation
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import asset_file
 
@@ -59,7 +58,8 @@ class CommentableModel(models.Model):
     def get_commenters(self):
         """ Renvoyer les utilisateurs ayant commenté l'objet """
         content_type = ContentType.objects.get_for_model(self)
-        return get_user_model().objects.by_request().filter(author_comment__content_type=content_type, author_comment__object_id=self.pk, author_comment__visible=True).distinct()
+        return get_user_model().objects.by_request().filter(author_comment__content_type=content_type, author_comment__object_id=self.pk,
+                                                            author_comment__visible=True).distinct()
 
     # Setter
     def set_commentable(self, commentable=True):

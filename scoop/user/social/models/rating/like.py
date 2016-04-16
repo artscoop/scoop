@@ -4,6 +4,7 @@ from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.signals import record
@@ -62,7 +63,8 @@ class Like(DatetimeModel):
     """ Annotation "J'aime" sur un objet arbitraire. """
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='likees', verbose_name=_("Author"))
-    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=False, verbose_name=_("Content type"), limit_choices_to={'app_label__in': ['content']})
+    content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=False, verbose_name=_("Content type"),
+                                     limit_choices_to={'app_label__in': ['content']})
     object_id = models.PositiveIntegerField(null=True, blank=False, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
     objects = LikeManager()

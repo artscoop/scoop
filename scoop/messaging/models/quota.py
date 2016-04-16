@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.model.model import SingleDeleteManager
 
 
@@ -29,7 +30,8 @@ class QuotaManager(SingleDeleteManager):
         if user.has_perm('messaging.unlimited_threads') or user.has_perm('messaging.unlimited_messages'):
             return False
         # Retrouver le quota maximum parmi les groupes de l'utilisateur
-        quota = max([getattr(getattr(group, 'quota', None), 'max_threads', 0) for group in user.groups]) if user.groups.exists() else settings.MESSAGING_DEFAULT_THREAD_QUOTA
+        quota = max([getattr(getattr(group, 'quota', None), 'max_threads', 0) for group in
+                     user.groups]) if user.groups.exists() else settings.MESSAGING_DEFAULT_THREAD_QUOTA
         # Effectuer le calcul le reste du temps
         thread_count = self.get_threads_today_by(user)
         return thread_count > quota

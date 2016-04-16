@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.util.signals import record
 from scoop.core.util.stream.urlutil import remove_get_parameter
 
+
 logger = logging.getLogger(__name__)
 
 # Constantes
@@ -55,7 +56,8 @@ class ImpersonationMiddleware(object):
                 try:
                     request.user = get_user_model().objects.active().get(username__iexact=request.session[SESSION_ITEM])
                     messages.info(request,
-                                  _("""You are viewing {path} as {name}. <a href="?{exit}">Quit</a>""").format(name=request.session[SESSION_ITEM], path=request.path, exit=EXIT_PARAMETER))
+                                  _("""You are viewing {path} as {name}. <a href="?{exit}">Quit</a>""").format(name=request.session[SESSION_ITEM],
+                                                                                                               path=request.path, exit=EXIT_PARAMETER))
                 except ObjectDoesNotExist:
                     messages.error(request, _("There is no active user with the username {name}.").format(name=request.session[SESSION_ITEM]))
                     del request.session[SESSION_ITEM]

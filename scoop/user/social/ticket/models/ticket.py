@@ -1,10 +1,10 @@
 # coding: utf-8
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.core.validators import MinLengthValidator
 from django.db import models
-from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 
@@ -91,14 +91,13 @@ class Ticket(DatetimeModel, UUID64Model):
         """ Renvoyer la représentation unicode de l'objet """
         return self.title
 
-    @permalink
-    def get_aboslute_path(self):
+    def get_absolute_url(self):
         """ Renvoyer l'URL du ticket """
-        return ('ticket:ticket-view', [self.uuid])
+        return reverse_lazy('ticket:ticket-view', args=[self.uuid])
 
     # Métadonnées
     class Meta:
         verbose_name = _("ticket")
         verbose_name_plural = _("tickets")
-        permissions = (('can_close_ticket', ugettext("Can close a ticket")),)
+        permissions = (('can_close_ticket', "Can close a ticket"),)
         app_label = 'ticket'

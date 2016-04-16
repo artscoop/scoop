@@ -1,9 +1,9 @@
 # coding: utf-8
 from importlib import import_module
 
-import loremipsum
 from django.conf import settings
 from django.test import TestCase
+
 from scoop.content.models.link import Link
 
 

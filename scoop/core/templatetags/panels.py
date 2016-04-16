@@ -5,6 +5,7 @@ from django.core.exceptions import ViewDoesNotExist
 from django.template import Library, Node, TemplateSyntaxError, Variable
 from django.utils.translation import ugettext_lazy as _
 
+
 register = Library()
 
 
@@ -131,6 +132,7 @@ def do_view_func(parser, token):
                 raise TemplateSyntaxError("Syntax error at panel argument {argument}".format(argument=token))
         return ViewFuncNode(view, args, kwargs)
     raise TemplateSyntaxError("{tag} requires one or more arguments".format(tag=token.contents.split()[0]))
+
 
 # Enregistrer les tags
 register.tag('panel', do_view_func)

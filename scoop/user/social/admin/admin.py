@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.contrib import admin
+
 from scoop.core.admin.filters import TimestampFilter
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.user.social.models.group import Group

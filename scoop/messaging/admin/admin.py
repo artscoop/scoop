@@ -5,14 +5,14 @@ from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from scoop.core.templatetags.html_tags import ol, ul
+
+from scoop.core.templatetags.html_tags import ol
 from scoop.core.util.shortcuts import addattr
-from scoop.messaging.forms import MessageAdminForm, RecipientAdminForm
+from scoop.messaging.forms import RecipientAdminForm
 from scoop.messaging.forms.machinery import QuotaAdminForm
 from scoop.messaging.models.alert import Alert
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.models.mailtype import MailType, MailTypeTranslation
-from scoop.messaging.models.message import Message
 from scoop.messaging.models.quota import Quota
 from scoop.messaging.models.recipient import Recipient
 
@@ -23,7 +23,7 @@ class MailTypeTranslationInlineAdmin(admin.TabularInline):
     verbose_name_plural = _("Translations")
     model = MailTypeTranslation
     max_num = len(settings.LANGUAGES)
-    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}, }
+    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget},}
     max_num = len(settings.LANGUAGES)
     extra = 2
 
@@ -80,6 +80,7 @@ class AlertAdmin(admin.ModelAdmin):
     list_display_links = ['id']
     list_filter = []
     readonly_fields = []
+
 
 # Enregistrer les classes d'administration
 admin.site.register(MailType, MailTypeAdmin)

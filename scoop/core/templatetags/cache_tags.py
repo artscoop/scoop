@@ -3,6 +3,7 @@ from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 
+
 register = template.Library()
 
 

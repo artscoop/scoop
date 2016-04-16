@@ -2,10 +2,11 @@
 import logging
 
 from django.dispatch.dispatcher import receiver
+
 from scoop.content.models.content import Content
 from scoop.content.models.subscription import Subscription
 from scoop.content.util.signals import content_updated
-from scoop.messaging.util.signals import mailable_event
+
 
 __all__ = []
 

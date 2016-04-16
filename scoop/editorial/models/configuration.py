@@ -3,8 +3,8 @@ from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.db import models
 from django.template.loader import render_to_string
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.django.templateutil import render_to
@@ -64,7 +64,6 @@ class Configuration(DatetimeModel, WeightedModel):
         return False
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _("%(page)s/%(item)s at %(position)s") % {'page': self.page, 'item': self.content_object}

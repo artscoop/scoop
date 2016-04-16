@@ -4,6 +4,7 @@ import datetime
 from django.contrib.admin.filters import SimpleListFilter
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import now as now_
 
@@ -80,4 +81,5 @@ class TimestampFilter(SimpleListFilter):
         if self.value() == 'year':
             return queryset.filter(time__gte=DatetimeModel.get_timestamp(datetime.datetime(year=now.year)))
         if self.value() == 'year-1':
-            return queryset.filter(time__range=[DatetimeModel.get_timestamp(datetime.datetime(now.year - 1, 1, 1)), DatetimeModel.get_timestamp(datetime.datetime(now.year, 1, 1))])
+            return queryset.filter(time__range=[DatetimeModel.get_timestamp(datetime.datetime(now.year - 1, 1, 1)),
+                                                DatetimeModel.get_timestamp(datetime.datetime(now.year, 1, 1))])

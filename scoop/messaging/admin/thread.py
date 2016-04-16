@@ -4,6 +4,7 @@ import datetime
 from ajax_select import make_ajax_form
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.model.widgets import AdminSplitDateTime
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms.thread import ThreadAdminForm
@@ -13,7 +14,8 @@ from scoop.messaging.models.thread import Thread
 class ThreadAdmin(admin.ModelAdmin):
     """ Administration des fils de discussion """
     list_select_related = True
-    list_display = ['id', 'topic', 'author', 'get_recipient_pictures', 'get_message_count', 'get_started', 'get_updated', 'deleted', 'closed', 'get_expires', 'get_label_count']
+    list_display = ['id', 'topic', 'author', 'get_recipient_pictures', 'get_message_count', 'get_started', 'get_updated', 'deleted', 'closed', 'get_expires',
+                    'get_label_count']
     list_filter = ['started', 'deleted', 'closed']
     list_display_links = ['id', 'topic']
     search_fields = ['topic', 'recipients__user__username']
@@ -24,7 +26,8 @@ class ThreadAdmin(admin.ModelAdmin):
     inlines = []
     save_on_top = False
     actions_on_top = True
-    fieldsets = ((_("Thread"), {'fields': ('author', 'topic', 'deleted', 'closed')}), (_("Expiry"), {'fields': ('expires', 'expiry_on_read', 'started', 'updated')}),)
+    fieldsets = (
+    (_("Thread"), {'fields': ('author', 'topic', 'deleted', 'closed')}), (_("Expiry"), {'fields': ('expires', 'expiry_on_read', 'started', 'updated')}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
     # Getter
@@ -74,6 +77,7 @@ class ThreadAdmin(admin.ModelAdmin):
         if db_field.name == 'expires':
             kwargs['widget'] = AdminSplitDateTime()
         return super(ThreadAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
 
 # Enregistrer les classes d'administration
 admin.site.register(Thread, ThreadAdmin)

@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point, Polygon
 from django.contrib.gis.measure import D
 from django.core.cache import cache
 from django.db import models
-from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import translation
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from unidecode import unidecode
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.data.typeutil import make_iterable
@@ -18,7 +18,6 @@ from scoop.core.util.model.model import search_query
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 from scoop.location.util.weather import get_open_weather
-from unidecode import unidecode
 
 
 class CityQuerySetMixin(object):
@@ -155,7 +154,7 @@ class CityQuerySetMixin(object):
         if result is not None:
             return self.get(id=result)
         # Ou retrouver la ville la plus proche
-        cities = self.filter(Q(ascii=name) | Q(alternates__ascii=name), city=True).in_square(point, 64).distinct()  # recherche par cityname.ascii -> 128km
+        cities = self.filter(alternates__ascii=name, city=True).in_square(point, 64).distinct()  # recherche par cityname.ascii -> 128km
         cities = cities if cities.exists() else self.filter(city=True, ascii=name).in_square(point, 64).distinct()  # recherche par city.ascii -> 128km
         cities = cities if cities.exists() else self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
         if cities.exists():
@@ -373,7 +372,6 @@ class City(CoordinatesModel, PicturableModel):
         return code in self.get_codes()
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{name}".format(name=self.get_name(), country=self.country.code2)
@@ -423,7 +421,6 @@ class CityName(models.Model):
             self.save(update_fields=['name', 'ascii'])
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer une représentation unicode de l'objet """
         return _("Name for {city}/{lang}").format(city=self.city.ascii, lang=self.language or 'all')

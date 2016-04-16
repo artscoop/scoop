@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.conf.urls import patterns, url
 
+
 urlpatterns = patterns('',
                        # AJAX Villes
                        url(r'^city/suggest$', 'scoop.location.views.ajax.complete', name='city-ajax-suggest'),

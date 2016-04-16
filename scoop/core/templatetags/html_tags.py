@@ -1,15 +1,16 @@
 # coding: utf-8
 import re
 
-from bs4 import BeautifulSoup
-
 import bleach
+from bs4 import BeautifulSoup
 from django import template
 from django.conf import settings
 from django.utils.html import escape, urlize
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
+
 from scoop.core.util.stream.urlutil import get_domain
+
 
 register = template.Library()
 
@@ -101,8 +102,9 @@ def html_urlize(value, autoescape=None):
 @register.filter(name="lightboxify")
 def lightboxify(value):
     """ Créer un lien lightbox vers un objet """
-    return mark_safe("<a href='%(url)s' title='%(name)s' rel='iframe'>%(name)s</a>" % {'url': value.get_absolute_url() if hasattr(value, 'get_absolute_url') else "#",
-                                                                                       'name': escape(value) or _("None")}) if value else ""
+    return mark_safe(
+        "<a href='%(url)s' title='%(name)s' rel='iframe'>%(name)s</a>" % {'url': value.get_absolute_url() if hasattr(value, 'get_absolute_url') else "#",
+                                                                          'name': escape(value) or _("None")}) if value else ""
 
 
 # Listes

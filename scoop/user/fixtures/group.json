@@ -1,1 +1,45 @@
-[{"fields": {"name": "members", "permissions": []}, "model": "auth.group", "pk": 1}, {"fields": {"name": "plus_members", "permissions": []}, "model": "auth.group", "pk": 3}, {"fields": {"name": "harm_members", "permissions": []}, "model": "auth.group", "pk": 4}, {"fields": {"name": "redactors", "permissions": [["add_content", "content", "content"], ["change_content", "content", "content"]]}, "model": "auth.group", "pk": 5}]
+[
+  {
+    "fields": {
+      "name": "members",
+      "permissions": []
+    },
+    "model": "auth.group",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "name": "plus_members",
+      "permissions": []
+    },
+    "model": "auth.group",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "name": "harm_members",
+      "permissions": []
+    },
+    "model": "auth.group",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "name": "redactors",
+      "permissions": [
+        [
+          "add_content",
+          "content",
+          "content"
+        ],
+        [
+          "change_content",
+          "content",
+          "content"
+        ]
+      ]
+    },
+    "model": "auth.group",
+    "pk": 5
+  }
+]

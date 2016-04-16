@@ -1,5 +1,6 @@
 # coding: utf-8
 from django import forms
+
 from scoop.user.social.ticket.models.ticket import Ticket
 
 

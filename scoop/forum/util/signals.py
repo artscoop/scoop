@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.dispatch import Signal
 
+
 # Vote effectué
 poll_vote_cast = Signal()
 # Sondage fermé / ouvert

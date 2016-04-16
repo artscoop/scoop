@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-28 06:14+0200\n"
-"PO-Revision-Date: 2016-03-28 06:17+0009\n"
+"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"PO-Revision-Date: 2016-04-16 07:24+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgid "Selected content has been unpinned."
 msgstr "Le contenu sélectionné n'est plus épinglé."
 
 #: admin/content.py:83 admin/picture.py:45 admin/picture.py:228
-#: admin/thumbnail.py:18 models/animation.py:107 models/content.py:295
+#: admin/thumbnail.py:18 models/animation.py:107 models/content.py:301
 #: templates/content/display/picture/widget/inline.html:3
 msgid "Picture"
 msgstr "Image"
@@ -114,7 +114,7 @@ msgstr "Image"
 msgid "Created"
 msgstr "Créé"
 
-#: admin/content.py:94 models/content.py:290 models/content.py:327
+#: admin/content.py:94 models/content.py:288 models/content.py:331
 #: templates/content/dashboard/blogs.html:15
 msgid "Authors"
 msgstr "Auteurs"
@@ -381,7 +381,6 @@ msgid "File must be a zip file"
 msgstr "Le fichier doit être une archive zip"
 
 #: forms/picture.py:145
-#| msgid "File must be a zip file"
 msgid "File must be a zip or rar file"
 msgstr "Le fichier doit être une archive zip ou rar"
 
@@ -391,36 +390,34 @@ msgstr ""
 "Supprimer les références orphelines d'images et de miniatures de la base de "
 "données"
 
-#: models/acl.py:37 models/acl.py:46
+#: models/acl.py:39 models/acl.py:48
 msgid "Password"
 msgstr "Mot de passe"
 
-#: models/acl.py:42
+#: models/acl.py:44
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: models/acl.py:43
+#: models/acl.py:45
 msgid "Mode"
 msgstr "Mode"
 
-#: models/acl.py:44 models/advertisement.py:71 models/album.py:53
-#: models/attachment.py:77 models/attachment.py:98 models/classification.py:30
-#: models/comment.py:82 models/comment.py:102 models/content.py:562
-#: models/content.py:621
+#: models/acl.py:46 models/advertisement.py:71 models/album.py:53
+#: models/attachment.py:77 models/attachment.py:98 models/classification.py:34
+#: models/comment.py:82 models/comment.py:102 models/content.py:572
+#: models/content.py:631
 msgid "Name"
 msgstr "Nom"
 
-#: models/acl.py:45
+#: models/acl.py:47
 msgid "Slug"
 msgstr "Slug"
 
-#: models/acl.py:59
-#| msgid "Animation"
+#: models/acl.py:71
 msgid "ACL configuration"
 msgstr "configuration ACL"
 
-#: models/acl.py:60
-#| msgid "Animations"
+#: models/acl.py:72
 msgid "ACL configurations"
 msgstr "configurations ACL"
 
@@ -459,8 +456,8 @@ msgid "Views"
 msgstr "Affichages"
 
 #: models/advertisement.py:76 models/album.py:54 models/animation.py:111
-#: models/attachment.py:78 models/classification.py:31 models/content.py:578
-#: models/content.py:623 models/link.py:55 models/picture.py:194
+#: models/attachment.py:78 models/classification.py:35 models/content.py:588
+#: models/content.py:633 models/link.py:55 models/picture.py:194
 msgid "Description"
 msgstr "Description"
 
@@ -468,16 +465,23 @@ msgstr "Description"
 msgid "Ad network"
 msgstr "Régie publicitaire"
 
-#: models/advertisement.py:97
+#: models/advertisement.py:78
+#| msgctxt "album"
+#| msgid "Updated"
+msgctxt "advertisement"
+msgid "Updated"
+msgstr "Mise à jour"
+
+#: models/advertisement.py:98
 #, python-brace-format
 msgid "Advertisement {name}"
 msgstr "Annonce {name}"
 
-#: models/advertisement.py:105
+#: models/advertisement.py:106
 msgid "advertisement"
 msgstr "publicité"
 
-#: models/advertisement.py:106
+#: models/advertisement.py:107
 msgid "advertisements"
 msgstr "publicités"
 
@@ -491,7 +495,7 @@ msgctxt "album"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/album.py:56 models/classification.py:33
+#: models/album.py:56 models/classification.py:37
 msgid "Parent"
 msgstr "Parent"
 
@@ -500,11 +504,11 @@ msgctxt "album"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/album.py:100
+#: models/album.py:104
 msgid "picture album"
 msgstr "album d'images"
 
-#: models/album.py:101
+#: models/album.py:105
 msgid "picture albums"
 msgstr "albums d'images"
 
@@ -520,7 +524,7 @@ msgstr "Extension"
 msgid "In seconds"
 msgstr "En secondes"
 
-#: models/animation.py:110 models/content.py:287 models/link.py:50
+#: models/animation.py:110 models/content.py:290 models/link.py:50
 #: models/picture.py:193 templates/content/dashboard/blogs.html.py:14
 msgid "Title"
 msgstr "Titre"
@@ -548,18 +552,16 @@ msgid "Updated"
 msgstr "Mise à jour"
 
 #: models/animation.py:119
-#| msgid "Visible"
 msgctxt "animation"
 msgid "Visible"
 msgstr "Visible"
 
 #: models/animation.py:126 models/animation.py:132
-#| msgid "Valid"
 msgctxt "animation"
 msgid "Valid"
 msgstr "Valide"
 
-#: models/animation.py:137 models/content.py:292
+#: models/animation.py:137 models/content.py:294
 msgid "HTML"
 msgstr "HTML"
 
@@ -589,7 +591,7 @@ msgstr "Animation"
 msgid "Animations"
 msgstr "Animations"
 
-#: models/attachment.py:75 models/classification.py:28 models/link.py:46
+#: models/attachment.py:75 models/classification.py:32 models/link.py:46
 msgid "Group"
 msgstr "Groupe"
 
@@ -626,28 +628,28 @@ msgstr "pièce jointe"
 msgid "attachments"
 msgstr "pièces jointes"
 
-#: models/classification.py:29
+#: models/classification.py:33
 msgid "Category if this tag is specific to one"
 msgstr "Catégorie, si cette étiquette est spécifique"
 
-#: models/classification.py:29 models/content.py:289
+#: models/classification.py:33 models/content.py:297
 msgid "Category"
 msgstr "Catégorie"
 
-#: models/classification.py:32
+#: models/classification.py:36
 msgid "Short name"
 msgstr "Nom court"
 
-#: models/classification.py:34
+#: models/classification.py:38
 msgctxt "tag"
 msgid "Active"
 msgstr "Active"
 
-#: models/classification.py:75
+#: models/classification.py:79
 msgid "tag"
 msgstr "tag"
 
-#: models/classification.py:76
+#: models/classification.py:80
 msgid "tags"
 msgstr "tags"
 
@@ -655,12 +657,12 @@ msgstr "tags"
 msgid "Body"
 msgstr "Corps"
 
-#: models/comment.py:84 models/comment.py:94 models/content.py:556
+#: models/comment.py:84 models/comment.py:94 models/content.py:566
 #: models/link.py:48
 msgid "URL"
 msgstr "URL"
 
-#: models/comment.py:85 models/subscription.py:92
+#: models/comment.py:85 models/subscription.py:106
 msgid "Email"
 msgstr "Email"
 
@@ -720,175 +722,175 @@ msgstr "Markdown"
 msgid "Textile"
 msgstr "Textile"
 
-#: models/content.py:291 models/link.py:43
+#: models/content.py:292 models/link.py:43
 msgid "Text"
 msgstr "Texte"
 
-#: models/content.py:292
-msgid "HTML output from body"
-msgstr "Sortie HTML"
-
 #: models/content.py:293
-msgid "Introduction"
-msgstr "Introduction"
-
-#: models/content.py:294
 msgid "Format"
 msgstr "Formatage"
 
-#: models/content.py:295
-msgid "Main picture"
-msgstr "Image principale"
+#: models/content.py:294
+msgid "HTML output from body"
+msgstr "Sortie HTML"
 
-#: models/content.py:296
+#: models/content.py:295
+msgid "Introduction"
+msgstr "Introduction"
+
+#: models/content.py:298
 msgid "Follow up of"
 msgstr "Suite de"
 
-#: models/content.py:297
+#: models/content.py:299
 msgid "Classification tags"
 msgstr "Étiquettes de classement"
 
-#: models/content.py:299
+#: models/content.py:301
+msgid "Main picture"
+msgstr "Image principale"
+
+#: models/content.py:303
 msgctxt "content"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/content.py:300
+#: models/content.py:304
 msgctxt "content"
 msgid "Created"
 msgstr "Créé"
 
-#: models/content.py:301
+#: models/content.py:305
 msgctxt "content"
 msgid "Edited"
 msgstr "Modifié"
 
-#: models/content.py:302
+#: models/content.py:306
 msgctxt "content"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/content.py:303
+#: models/content.py:307
 msgid "Publish when"
 msgstr "Publier le"
 
-#: models/content.py:304
+#: models/content.py:308
 msgid "Unpublish when"
 msgstr "Dépublier le"
 
-#: models/content.py:306
+#: models/content.py:310
 msgctxt "content"
 msgid "Published"
 msgstr "Publié"
 
-#: models/content.py:307
+#: models/content.py:311
 msgid "Will stay on top of lists"
 msgstr "Demeurera en tête des listes"
 
-#: models/content.py:307
+#: models/content.py:311
 msgctxt "content"
 msgid "Sticky"
 msgstr "Épinglé"
 
-#: models/content.py:308
+#: models/content.py:312
 msgid "Will appear in magazine editorial content"
 msgstr "Apparaîtra dans le contenu éditorial du magazine"
 
-#: models/content.py:308
+#: models/content.py:312
 msgctxt "content"
 msgid "Featured"
 msgstr "À la une"
 
-#: models/content.py:309
+#: models/content.py:313
 msgctxt "content"
 msgid "Locked"
 msgstr "Verrouillé"
 
-#: models/content.py:313
+#: models/content.py:317
 msgid "Published"
 msgstr "Publié"
 
-#: models/content.py:318
+#: models/content.py:322
 msgid "Commentable"
 msgstr "Commentable"
 
-#: models/content.py:336
+#: models/content.py:340
 msgid "Authors count"
 msgstr "Nombre d'auteurs"
 
-#: models/content.py:345
+#: models/content.py:349
 msgid "New"
 msgstr "Nouveau"
 
-#: models/content.py:362
+#: models/content.py:366
 msgid "Teaser"
 msgstr "Introduction"
 
-#: models/content.py:374
+#: models/content.py:378
 msgid "Similar content"
 msgstr "Contenu similaire"
 
-#: models/content.py:380
+#: models/content.py:384
 msgid "Has similar content"
 msgstr "A du contenu similaire"
 
-#: models/content.py:386
+#: models/content.py:390
 msgid "Tags"
 msgstr "Tags"
 
-#: models/content.py:391
+#: models/content.py:395
 msgid "Children"
 msgstr "Enfants"
 
-#: models/content.py:521
+#: models/content.py:531
 msgid "content"
 msgstr "contenu"
 
-#: models/content.py:522 templates/content/dashboard/blogs.html.py:5
+#: models/content.py:532 templates/content/dashboard/blogs.html.py:5
 msgid "contents"
 msgstr "contenus"
 
-#: models/content.py:555
+#: models/content.py:565
 msgid "Identifier"
 msgstr "Identifiant"
 
-#: models/content.py:556
+#: models/content.py:566
 msgid "e.g. blog, story or article"
 msgstr "ex. blog, story ou article"
 
-#: models/content.py:557
+#: models/content.py:567
 msgid "Has index"
 msgstr "A une page d'index"
 
-#: models/content.py:558
+#: models/content.py:568
 msgid "Visible"
 msgstr "Visible"
 
-#: models/content.py:568 models/content.py:576
+#: models/content.py:578 models/content.py:586
 msgid "(No name)"
 msgstr "(Sans nom)"
 
-#: models/content.py:570 models/content.py:622
+#: models/content.py:580 models/content.py:632
 msgid "Plural"
 msgstr "Pluriel"
 
-#: models/content.py:584
+#: models/content.py:594
 msgid "(No description)"
 msgstr "(Sans description)"
 
-#: models/content.py:613
+#: models/content.py:623
 msgid "content type"
 msgstr "type de contenu"
 
-#: models/content.py:614 templates/content/dashboard/blogs.html.py:7
+#: models/content.py:624 templates/content/dashboard/blogs.html.py:7
 msgid "content types"
 msgstr "types de contenu"
 
-#: models/content.py:635
+#: models/content.py:645
 msgid "translation"
 msgstr "traduction"
 
-#: models/content.py:636
+#: models/content.py:646
 msgid "translations"
 msgstr "traductions"
 
@@ -1033,16 +1035,16 @@ msgstr "image"
 msgid "images"
 msgstr "images"
 
-#: models/subscription.py:93 models/subscription.py:97
+#: models/subscription.py:107 models/subscription.py:111
 msgctxt "content.subscription"
 msgid "Confirmed"
 msgstr "Confirmé"
 
-#: models/subscription.py:114
+#: models/subscription.py:128
 msgid "content subscription"
 msgstr "abonnement au contenu"
 
-#: models/subscription.py:115
+#: models/subscription.py:129
 msgid "content subscriptions"
 msgstr "abonnements au contenu"
 

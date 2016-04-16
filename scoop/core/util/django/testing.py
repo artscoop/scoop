@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.conf import settings
 from django.test.runner import DiscoverRunner
+
 from scoop.core.util.stream.directory import Paths
 
 

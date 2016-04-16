@@ -1,10 +1,11 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from translatable.models import get_translation_model
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.shortcuts import addattr
-from translatable.models import get_translation_model
 
 
 class VenueType(PicturableModel):

@@ -8,7 +8,8 @@ class WeightedModel(models.Model):
     # Constantes
     WEIGHTS = ((x, x) for x in range(0, 100))
     # Champs
-    weight = models.SmallIntegerField(db_index=True, null=False, choices=WEIGHTS, default=10, help_text=_("Items with lower weights come first"), verbose_name=_("Weight"))
+    weight = models.SmallIntegerField(db_index=True, null=False, choices=WEIGHTS, default=10, help_text=_("Items with lower weights come first"),
+                                      verbose_name=_("Weight"))
 
     # Métadonnées
     class Meta:
@@ -20,7 +21,8 @@ class PriorityModel(models.Model):
     # Constantes
     WEIGHTS = ((x, x) for x in range(0, 100))
     # Champs
-    weight = models.SmallIntegerField(db_index=True, null=False, choices=WEIGHTS, default=10, help_text=_("Items with lower weights have lower priority"), verbose_name=_("Weight"))
+    weight = models.SmallIntegerField(db_index=True, null=False, choices=WEIGHTS, default=10, help_text=_("Items with lower weights have lower priority"),
+                                      verbose_name=_("Weight"))
 
     # Setter
     def increase_priority(self, save=True, amount=1):

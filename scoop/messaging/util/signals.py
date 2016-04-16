@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.dispatch import Signal
 
+
 # Fil de discussion sur le point d'être créé
 thread_pre_create = Signal(['author', 'recipients', 'request', 'unique', 'force'])  # renvoie True ou un dict {'messages': list}
 thread_created = Signal(['author', 'thread'])

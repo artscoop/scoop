@@ -1,1 +1,102 @@
-[{"fields": {"short_name": "blog", "visible": true, "icon_width": null, "has_index": true, "icon_height": null, "url": "blog", "data": "gAJ9Lg==", "icon": ""}, "model": "content.category", "pk": 1}, {"fields": {"short_name": "article", "visible": true, "icon_width": null, "has_index": true, "icon_height": null, "url": "article", "data": "gAJ9Lg==", "icon": ""}, "model": "content.category", "pk": 2}, {"fields": {"short_name": "flash", "visible": true, "icon_width": null, "has_index": true, "icon_height": null, "url": "flash", "data": "gAJ9Lg==", "icon": ""}, "model": "content.category", "pk": 3}, {"fields": {"short_name": "forum", "visible": true, "icon_width": null, "has_index": true, "icon_height": null, "url": "forum", "data": "gAJ9Lg==", "icon": ""}, "model": "content.category", "pk": 4}, {"fields": {"model": 1, "plural": "blog", "name": "blog", "language": "en", "description": ""}, "model": "content.categorytranslation", "pk": 1}, {"fields": {"model": 2, "plural": "article", "name": "article", "language": "en", "description": ""}, "model": "content.categorytranslation", "pk": 2}, {"fields": {"model": 3, "plural": "flash", "name": "flash", "language": "en", "description": ""}, "model": "content.categorytranslation", "pk": 3}, {"fields": {"model": 4, "plural": "forum", "name": "forum", "language": "en", "description": ""}, "model": "content.categorytranslation", "pk": 4}]
+[
+  {
+    "fields": {
+      "short_name": "blog",
+      "visible": true,
+      "icon_width": null,
+      "has_index": true,
+      "icon_height": null,
+      "url": "blog",
+      "data": "gAJ9Lg==",
+      "icon": ""
+    },
+    "model": "content.category",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "short_name": "article",
+      "visible": true,
+      "icon_width": null,
+      "has_index": true,
+      "icon_height": null,
+      "url": "article",
+      "data": "gAJ9Lg==",
+      "icon": ""
+    },
+    "model": "content.category",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "short_name": "flash",
+      "visible": true,
+      "icon_width": null,
+      "has_index": true,
+      "icon_height": null,
+      "url": "flash",
+      "data": "gAJ9Lg==",
+      "icon": ""
+    },
+    "model": "content.category",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "short_name": "forum",
+      "visible": true,
+      "icon_width": null,
+      "has_index": true,
+      "icon_height": null,
+      "url": "forum",
+      "data": "gAJ9Lg==",
+      "icon": ""
+    },
+    "model": "content.category",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "model": 1,
+      "plural": "blog",
+      "name": "blog",
+      "language": "en",
+      "description": ""
+    },
+    "model": "content.categorytranslation",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "model": 2,
+      "plural": "article",
+      "name": "article",
+      "language": "en",
+      "description": ""
+    },
+    "model": "content.categorytranslation",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "model": 3,
+      "plural": "flash",
+      "name": "flash",
+      "language": "en",
+      "description": ""
+    },
+    "model": "content.categorytranslation",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "model": 4,
+      "plural": "forum",
+      "name": "forum",
+      "language": "en",
+      "description": ""
+    },
+    "model": "content.categorytranslation",
+    "pk": 4
+  }
+]

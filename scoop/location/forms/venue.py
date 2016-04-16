@@ -1,6 +1,7 @@
 # coding: utf-8
 from ajax_select.fields import AutoCompleteSelectWidget
 from django import forms
+
 from scoop.location.models import Venue
 
 

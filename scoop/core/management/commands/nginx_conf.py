@@ -9,6 +9,7 @@ from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils.text import slugify
+
 from scoop.core.util.stream.request import default_context
 
 
@@ -28,7 +29,8 @@ class Command(BaseCommand):
         output = render_to_string("core/configuration/nginx-site.conf", data, context).encode('utf-8')
         output_base = render_to_string("core/configuration/nginx.conf", data, context).encode('utf-8')
         confname = slugify(Site.objects.get_current().name)
-        destinations = [{'output': output, 'destination': '/etc/nginx/sites-enabled/{name}'.format(name=confname)}, {'output': output_base, 'destination': '/etc/nginx/nginx.conf'}]
+        destinations = [{'output': output, 'destination': '/etc/nginx/sites-enabled/{name}'.format(name=confname)},
+                        {'output': output_base, 'destination': '/etc/nginx/nginx.conf'}]
         # Récupérer la liste des options
         export = options.get('export', False)
         # Effectuer un export ou bien effectuer une sortie

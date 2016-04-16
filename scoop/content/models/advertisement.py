@@ -5,16 +5,15 @@ from django.db import models
 from django.db.models.aggregates import Sum
 from django.template.base import Template
 from django.template.context import RequestContext
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.rectangle import RectangleModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.model.model import SingleDeleteManager
-from scoop.core.util.stream.request import default_request
 
 
 class AdvertisementManager(SingleDeleteManager):
@@ -92,7 +91,6 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
         else:
             return "{w}x{h} ad".format(w=self.width, h=self.height)
 
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer auformat unicode """
         return _("Advertisement {name}").format(name=self.name)

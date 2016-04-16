@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.template.defaultfilters import striptags
+
 from scoop.core.templatetags.text_tags import truncate_longwords, truncate_stuckkey
 from scoop.core.util.data.textutil import one_line
 

@@ -1,15 +1,9 @@
 # coding: utf-8
-from importlib import import_module
 
-from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.test import TestCase
-from scoop.core.util.shortcuts import get_languages
-from scoop.location.models.city import City
-from scoop.location.models.country import Country
+
 from scoop.location.models.position import Position
-from scoop.location.tasks.geonames import geonames_fill
-from scoop.location.util.geonames import populate_countries
 from scoop.user.models.user import User
 
 

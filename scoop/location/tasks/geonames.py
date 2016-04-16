@@ -1,10 +1,9 @@
 # coding: utf-8
-import gc
 import time
 
 from celery import task
-from django.db import transaction
 from django.utils.translation import ugettext as _
+
 from scoop.location.util.geonames import populate_cities, populate_currency, rename_cities, reparent_cities
 
 

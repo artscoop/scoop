@@ -6,8 +6,9 @@ from django.contrib.admin.templatetags.admin_static import static
 from django.contrib.contenttypes.fields import ContentType
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
 
 

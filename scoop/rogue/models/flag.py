@@ -10,15 +10,16 @@ from django.db.utils import OperationalError
 from django.template.defaultfilters import truncatechars
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+from translatable.models import TranslatableModel, get_translation_model
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 from scoop.core.util.shortcuts import addattr
 from scoop.rogue.util.signals import flag_closed, flag_created, flag_resolve
-from translatable.models import TranslatableModel, get_translation_model
 
 
 class FlagManager(SingleDeleteManager):

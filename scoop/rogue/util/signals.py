@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.dispatch import Signal
 
+
 # IP bloquée pour un utilisateur
 user_has_ip_blocked = Signal(['ip', 'harm'])
 # IP définie offensive

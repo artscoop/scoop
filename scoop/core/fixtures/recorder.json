@@ -1,1 +1,137 @@
-[{"model": "core.actiontype", "pk": 1, "fields": {"codename": "content.create.flag", "sentence": "%(actor)s flagged %(target)s", "verb": "flagged"}}, {"model": "core.actiontype", "pk": 2, "fields": {"codename": "content.create.picture", "sentence": "%(actor)s created a picture %(target)s", "verb": "created picture"}}, {"model": "core.actiontype", "pk": 3, "fields": {"codename": "user.ban.user", "sentence": "%(actor)s was banned", "verb": "was banned"}}, {"model": "core.actiontype", "pk": 4, "fields": {"codename": "content.delete.picture", "sentence": "%(actor)s deleted %(target)s", "verb": "deleted picture"}}, {"model": "core.actiontype", "pk": 5, "fields": {"codename": "content.lock.content", "sentence": "%(actor)s locked %(target)s", "verb": "locked content"}}, {"model": "core.actiontype", "pk": 6, "fields": {"codename": "content.create.content", "sentence": "%(actor)s created %(container)s", "verb": "created content"}}, {"model": "core.actiontype", "pk": 7, "fields": {"codename": "messaging.create.message", "sentence": "%(actor)s sent a message to %(target)s", "verb": "sent message"}}, {"model": "core.actiontype", "pk": 8, "fields": {"codename": "messaging.create.thread", "sentence": "%(actor)s opened a new thread with %(container)s", "verb": "opened thread"}}, {"model": "core.actiontype", "pk": 9, "fields": {"codename": "user.login", "sentence": "%(actor)s logged in", "verb": "logged in"}}, {"model": "core.actiontype", "pk": 10, "fields": {"codename": "user.logout", "sentence": "%(actor)s logged out", "verb": "logged out"}}, {"model": "core.actiontype", "pk": 11, "fields": {"codename": "user.activate.user", "sentence": "%(actor)s activated his/her profile", "verb": "activated profile"}}, {"model": "core.actiontype", "pk": 12, "fields": {"codename": "user.demote", "sentence": "%(actor)s staff privileges were removed.", "verb": "demoted"}}, {"model": "core.actiontype", "pk": 13, "fields": {"codename": "content.allow.picture", "sentence": "picture %(actor)s was accepted", "verb": "accepted"}}, {"model": "core.actiontype", "pk": 14, "fields": {"codename": "content.deny.picture", "sentence": "picture %(actor)s was refused", "verb": "refused"}}, {"model": "core.actiontype", "pk": 15, "fields": {"codename": "user.impersonate", "sentence": "%(actor)s started to impersonate %(target)s", "verb": "impersonated"}}]
+[
+  {
+    "model": "core.actiontype",
+    "pk": 1,
+    "fields": {
+      "codename": "content.create.flag",
+      "sentence": "%(actor)s flagged %(target)s",
+      "verb": "flagged"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 2,
+    "fields": {
+      "codename": "content.create.picture",
+      "sentence": "%(actor)s created a picture %(target)s",
+      "verb": "created picture"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 3,
+    "fields": {
+      "codename": "user.ban.user",
+      "sentence": "%(actor)s was banned",
+      "verb": "was banned"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 4,
+    "fields": {
+      "codename": "content.delete.picture",
+      "sentence": "%(actor)s deleted %(target)s",
+      "verb": "deleted picture"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 5,
+    "fields": {
+      "codename": "content.lock.content",
+      "sentence": "%(actor)s locked %(target)s",
+      "verb": "locked content"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 6,
+    "fields": {
+      "codename": "content.create.content",
+      "sentence": "%(actor)s created %(container)s",
+      "verb": "created content"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 7,
+    "fields": {
+      "codename": "messaging.create.message",
+      "sentence": "%(actor)s sent a message to %(target)s",
+      "verb": "sent message"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 8,
+    "fields": {
+      "codename": "messaging.create.thread",
+      "sentence": "%(actor)s opened a new thread with %(container)s",
+      "verb": "opened thread"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 9,
+    "fields": {
+      "codename": "user.login",
+      "sentence": "%(actor)s logged in",
+      "verb": "logged in"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 10,
+    "fields": {
+      "codename": "user.logout",
+      "sentence": "%(actor)s logged out",
+      "verb": "logged out"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 11,
+    "fields": {
+      "codename": "user.activate.user",
+      "sentence": "%(actor)s activated his/her profile",
+      "verb": "activated profile"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 12,
+    "fields": {
+      "codename": "user.demote",
+      "sentence": "%(actor)s staff privileges were removed.",
+      "verb": "demoted"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 13,
+    "fields": {
+      "codename": "content.allow.picture",
+      "sentence": "picture %(actor)s was accepted",
+      "verb": "accepted"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 14,
+    "fields": {
+      "codename": "content.deny.picture",
+      "sentence": "picture %(actor)s was refused",
+      "verb": "refused"
+    }
+  },
+  {
+    "model": "core.actiontype",
+    "pk": 15,
+    "fields": {
+      "codename": "user.impersonate",
+      "sentence": "%(actor)s started to impersonate %(target)s",
+      "verb": "impersonated"
+    }
+  }
+]

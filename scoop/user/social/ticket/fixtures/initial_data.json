@@ -1,1 +1,66 @@
-[{"pk": 1, "model": "ticket.resolution", "fields": {"short": "new", "name": "New"}}, {"pk": 2, "model": "ticket.resolution", "fields": {"short": "open", "name": "Open"}}, {"pk": 3, "model": "ticket.resolution", "fields": {"short": "clos", "name": "Closed"}}, {"pk": 4, "model": "ticket.resolution", "fields": {"short": "wont", "name": "Won't fix"}}, {"pk": 5, "model": "ticket.resolution", "fields": {"short": "dupl", "name": "Duplicate"}}, {"pk": 6, "model": "ticket.resolution", "fields": {"short": "pend", "name": "Pending"}}, {"pk": 7, "model": "ticket.resolution", "fields": {"short": "watc", "name": "Watched"}}, {"pk": 8, "model": "ticket.resolution", "fields": {"short": "fixe", "name": "Fixed"}}]
+[
+  {
+    "pk": 1,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "new",
+      "name": "New"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "open",
+      "name": "Open"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "clos",
+      "name": "Closed"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "wont",
+      "name": "Won't fix"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "dupl",
+      "name": "Duplicate"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "pend",
+      "name": "Pending"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "watc",
+      "name": "Watched"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "ticket.resolution",
+    "fields": {
+      "short": "fixe",
+      "name": "Fixed"
+    }
+  }
+]

@@ -3,12 +3,12 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.models.content import Content
 from scoop.core.templatetags.text_tags import humanize_join
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.signals import record
 from scoop.messaging.models.alert import Alert
-from scoop.messaging.models.thread import Thread
 from scoop.user.util.auth import is_staff
 
 

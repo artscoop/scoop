@@ -1,6 +1,7 @@
 # coding: utf-8
 from ajax_select import make_ajax_form
 from django.contrib import admin
+
 from scoop.rogue.forms.mailblock import MailBlockForm
 from scoop.rogue.models import MailBlock, Profanity
 
@@ -24,6 +25,7 @@ class ProfanityAdmin(admin.ModelAdmin):
     list_editable = ['active']
     list_filter = ['active', 'standalone']
     search_fields = ['regex']
+
 
 # Enregistrer les classes d'administration
 admin.site.register(MailBlock, MailBlockAdmin)

@@ -3,8 +3,8 @@ from importlib import import_module
 
 import loremipsum
 from django.conf import settings
-from django.db.models.base import Model
 from django.test import TestCase
+
 from scoop.content.models.comment import Comment
 from scoop.content.models.content import Content
 from scoop.user.models.user import User
@@ -26,8 +26,10 @@ class CommentTest(TestCase):
         self.user.save()
 
         # Créer des contenus commentables ou pas
-        self.content1 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=True)
-        self.content2 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True, commentable=False)
+        self.content1 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True,
+                                             commentable=True)
+        self.content2 = Content.objects.post([self.user], 'blog', loremipsum.get_sentence()[0:100], loremipsum.get_paragraphs(8), visible=True,
+                                             commentable=False)
 
         # Commenter l'utilisateur et tester l'état des commentaires
         self.comment1 = Comment.objects.comment(None, self.user, self.user, "Commentaire 1", force=True)
@@ -52,4 +54,5 @@ class CommentTest(TestCase):
     def test_comment_status(self):
         """ Test properties of comments """
 
-        self.assertEqual(self.comment1.get_name(), self.user.get_short_name(), "comment's name should be {0}, is {1} instead".format(self.user.get_short_name(), self.comment1.get_name()))
+        self.assertEqual(self.comment1.get_name(), self.user.get_short_name(),
+                         "comment's name should be {0}, is {1} instead".format(self.user.get_short_name(), self.comment1.get_name()))

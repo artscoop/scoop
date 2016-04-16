@@ -151,7 +151,8 @@ class WebImageField(ImageField):
                 if image.format not in WebImageField.ACCEPTED_FORMATS:
                     raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
                 if sorted(image.size) < self.min_dimensions:
-                    raise ValidationError(_("Image not accepted. Minimum accepted size is {mw}x{mh}.").format(mw=self.min_dimensions[0], mh=self.min_dimensions[1]))
+                    raise ValidationError(
+                        _("Image not accepted. Minimum accepted size is {mw}x{mh}.").format(mw=self.min_dimensions[0], mh=self.min_dimensions[1]))
             except IOError:  # PIL cannot load and handle the image
                 raise ValidationError(_("This image cannot be handled. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
             except ImportError:  # Maybe an error with PIL only on PyPy

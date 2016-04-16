@@ -8,7 +8,9 @@ from django.contrib.auth import get_user_model
 from django.db.models import signals
 from django.dispatch.dispatcher import receiver
 from django.utils.text import slugify
+
 from scoop.user import UserConfig
+
 
 logger = logging.getLogger(__name__)
 

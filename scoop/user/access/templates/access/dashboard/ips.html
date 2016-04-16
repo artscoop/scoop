@@ -28,7 +28,8 @@
                     <td title="{{ userip.ip.isp }}">{{ userip.ip.isp|truncatewords:2|default:_("None") }}</td>
                     <td width="1">
                         <div class="btn-group">
-                            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">{{ userip.ip.get_user_count }}<u class="icon-caret-down"></u></a>
+                            <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">{{ userip.ip.get_user_count }}<u
+                                    class="icon-caret-down"></u></a>
                             <ul class="dropdown-menu">
                                 {% for user in userip.ip.get_users|slice:"0:6" %}
                                     <li>

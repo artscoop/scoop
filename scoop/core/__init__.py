@@ -14,6 +14,7 @@ Profiling et mesures de performances de requêtes (middleware)
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop as _
 
+
 __version__ = (1, 2016, 3)
 _("language"), _("gender"), _("Profiles"), _("Profile")
 

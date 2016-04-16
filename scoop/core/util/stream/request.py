@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
+
 from scoop.core.util.django import formutil
 from scoop.core.util.django.apps import is_installed
 

@@ -1,13 +1,14 @@
 # coding: utf-8
 from autoslug.fields import AutoSlugField
+from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.db.models import permalink
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.models.content import Content
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.icon import IconModel
+
 
 __all__ = ['Tag']
 
@@ -39,16 +40,14 @@ class Tag(IconModel, PicturableModel):
     objects = TagManager()
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.name
 
     # Getter
-    @permalink
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'objet """
-        return 'content:view-category', [self.short_name]
+        return reverse_lazy('content:view-category', args=[self.short_name])
 
     def get_children(self):
         """ Renvoyer les étiquettes enfants """

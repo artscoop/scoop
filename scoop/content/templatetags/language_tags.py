@@ -5,6 +5,7 @@ from classytags.core import Options, Tag
 from django import template
 from django.utils.translation import pgettext_lazy
 
+
 register = template.Library()
 
 BASIC_CHANGES = {
@@ -19,7 +20,7 @@ class Language(Tag):
     """ Tag remplaçant les erreurs de langage, ex. « de le » devient « du » """
     name = 'language'
     options = Options(
-        blocks=[('endlanguage', 'nodelist')],
+            blocks=[('endlanguage', 'nodelist')],
     )
 
     def render_tag(self, context, **kwargs):

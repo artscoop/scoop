@@ -16,7 +16,9 @@ from django.db.models.manager import Manager
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from magic import Magic
+
 from scoop.core.util.data.typeutil import make_iterable
+
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +127,8 @@ def clean_orphans(output_log=True, delete=False):
                 deleted -= 1
     # Sortie de journalisation
     if output_log is True:
-        output = render_to_string('core/view/orphan-log.txt', {'counter': counter, 'deleted': deleted, 'files_delete': deletable, 'files': db_files, 'fields': fields})
+        output = render_to_string('core/view/orphan-log.txt',
+                                  {'counter': counter, 'deleted': deleted, 'files_delete': deletable, 'files': db_files, 'fields': fields})
         logger.info(output)
         print(output)
         return output

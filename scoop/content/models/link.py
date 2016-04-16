@@ -1,13 +1,13 @@
 # coding: utf-8
 from urllib import parse
-from urllib.error import HTTPError, URLError
+from urllib.error import URLError
 
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import models
 from django.template.loader import render_to_string
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.util.micawber.oembed import bootstrap_oembed
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel
@@ -95,7 +95,6 @@ class Link(DatetimeModel, NullableGenericModel, AuthorableModel, IconModel, Weig
         return result[1][self.url]
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.url

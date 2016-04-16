@@ -5,8 +5,8 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from django.test.utils import override_settings
+
 from scoop.core.util.django.testing import TEST_CONFIGURATION
-from scoop.core.util.stream.directory import Paths
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.models.negotiation import Negotiation
 from scoop.messaging.models.quota import Quota

@@ -6,10 +6,10 @@ from django.contrib.contenttypes.fields import ContentType
 from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import Truncator
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.content.util.signals import comment_posted, comment_spam
 from scoop.core.abstract.content.acceptable import AcceptableModel
 from scoop.core.abstract.content.comment import CommentableModel
@@ -78,7 +78,8 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
     """ Commentaire """
 
     # Champs
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="comments_made", verbose_name=_("Author"))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="comments_made",
+                               verbose_name=_("Author"))
     name = models.CharField(max_length=24, verbose_name=_("Name"))
     body = models.TextField(blank=False, verbose_name=_("Body"))
     url = models.URLField(max_length=100, blank=True, verbose_name=_("URL"))
@@ -158,7 +159,6 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
         comment_posted.send(sender=self, target=self.content_object)
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return _('{name} says: "{teaser}..."').format(name=self.get_name(), teaser=self.get_teaser())

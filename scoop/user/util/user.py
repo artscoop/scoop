@@ -4,6 +4,7 @@ from collections import Counter
 import Levenshtein
 from django.contrib.auth import get_user_model
 
+
 __all__ = ['get_user_email_domains', 'replace_user_email_domains', 'find_similar_email_domains']
 
 

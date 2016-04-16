@@ -2,17 +2,15 @@
 import os
 
 from django.db import models
-from django.http import HttpRequest
 from django.template.base import TextNode
-from django.template.context import Context, RequestContext
+from django.template.context import Context
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
-from django.template.loader_tags import BLOCK_CONTEXT_KEY, BlockNode, ExtendsNode
-from django.utils.encoding import python_2_unicode_compatible
+from django.template.loader_tags import BlockNode, ExtendsNode
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.shortcuts import addattr
-from scoop.core.util.stream.request import default_context
 
 
 class Template(DatetimeModel):
@@ -123,7 +121,6 @@ class Template(DatetimeModel):
         return False
 
     # Overrides
-    @python_2_unicode_compatible
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return "{name} ({count})".format(name=self.name, count=self.positions.count())

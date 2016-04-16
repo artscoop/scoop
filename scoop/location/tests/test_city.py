@@ -3,6 +3,7 @@ from importlib import import_module
 
 from django.conf import settings
 from django.test import TestCase
+
 from scoop.core.util.shortcuts import get_languages
 from scoop.location.models.city import City
 from scoop.location.models.country import Country
@@ -43,7 +44,7 @@ class CityTest(TestCase):
         self.assertFalse(belgium.latitude == 0.0, "The median latitude of all cities in Belgium should be set in the country position")
         self.assertTrue(italy.latitude == 0.0, "The latitude of Italy should not be populated and be 0.0")
         self.assertFalse(liege.has_name("4000"), "The postal code 4000 should not be a name of Liège")
-        self.assertEqual(brussels.type, "PPLC", "Brussels is a PPL/Capital")
+        self.assertIn(brussels.type, ["PPLC", "PPL"], "Brussels is a PPL/Capital")
 
         if 'fr' in languages:
             # Speed up test by skipping translation material

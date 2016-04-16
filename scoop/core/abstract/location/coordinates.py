@@ -2,7 +2,6 @@
 from __future__ import absolute_import, division
 
 import math
-import sys
 from math import atan2, pi
 
 import pyproj
@@ -11,6 +10,7 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.templatetags.type_tags import round_multiple
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.cardinal import ANGLE_CARDINAL, ANGLE_TICKS, RELATIVE_CARDINAL, SHORT_CARDINAL

@@ -13,9 +13,11 @@ from django.http.request import QueryDict
 from django.http.response import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
+
 from scoop.core.templatetags.text_tags import humanize_join
 # Choix Oui/Non et Tout
 from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable
+
 
 CHOICES_NULLBOOLEAN = (('', _("All")), (False, _("No")), (True, _("Yes")))
 

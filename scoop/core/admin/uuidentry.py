@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.contrib import admin
+
 from scoop.core.models.uuidentry import UUIDEntry
 from scoop.core.util.django.admin import GenericModelUtil, ViewOnlyModelAdmin
 
@@ -17,6 +18,7 @@ class UUIDEntryAdmin(ViewOnlyModelAdmin, GenericModelUtil):
     exclude = []
     actions_on_top = False
     order_by = ['content_type']
+
 
 # Enregistrer les classes d'administration
 admin.site.register(UUIDEntry, UUIDEntryAdmin)
