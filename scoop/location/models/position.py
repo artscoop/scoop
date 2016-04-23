@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.gis.geos.point import Point
 from django.contrib.gis.measure import D
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.model.model import SingleDeleteManager

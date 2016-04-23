@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.forms.widgets import Textarea
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.user.authored import AuthoredModelAdmin
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms import MessageAdminForm

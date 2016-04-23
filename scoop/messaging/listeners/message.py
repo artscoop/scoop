@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.db.models.signals import pre_save
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.templatetags.html_tags import linebreaks_convert
 from scoop.core.util.signals import record
 from scoop.messaging.models.message import Message

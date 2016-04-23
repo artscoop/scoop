@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.template import Context, RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
-
 from scoop.core.util.stream.request import default_context
 
 
@@ -135,15 +134,15 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
         @wraps(function)
         def wrapper(request, *args, **kwargs):
             output = function(request, *args, **kwargs)
-            return do_render(output, request, template=template, content_type=content_type,
-                             headers=headers, status_code=status_code, string=string, use_request=use_request)
+            return do_render(request, template=template, data=output, content_type=content_type, headers=headers, status_code=status_code, string=string,
+                             use_request=use_request)
 
         return wrapper
 
     return renderer
 
 
-def do_render(data, request, template=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):
+def do_render(request, template=None, data=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):
     """
     Rendre un template. Fonctionne avec tous les moteurs de template.
 
@@ -165,20 +164,17 @@ def do_render(data, request, template=None, content_type=None, headers=None, sta
     :type template: str | list | tuple
     :type use_request: bool
     """
-    if not isinstance(data, dict):
-        return data
-    tmpl = data.pop('set.template', template)
-    head = data.pop('set.headers', headers)
-    code = data.pop('set.status_code', status_code)
-    if string is False:
-        response = render(template_name=tmpl, context=data, content_type=content_type, request=request if use_request else None)
-        response.status_code = code
-        if type(head) == dict:
-            for key, value in head.items():
-                response[key] = value
-        return response
+    if isinstance(data, dict):
+        template = data.pop('set.template', template)
+        if string is False:
+            headers = data.pop('set.headers', headers)
+            status_code = data.pop('set.status_code', status_code)
+            response = render(request if use_request else None, template, context=data, content_type=content_type, status=status_code)
+            if isinstance(headers, dict):
+                for key, value in headers.items():
+                    response[key] = value
+            return response
+        else:
+            return render_to_string(template, context=data, request=request if use_request else None)
     else:
-        if use_request:
-            data.update(default_context().flatten())
-        rendered = render_to_string(tmpl, data)
-        return rendered
+        return data

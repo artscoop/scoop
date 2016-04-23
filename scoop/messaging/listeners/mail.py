@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
-
 from scoop.messaging.models import MailEvent, MailType
 from scoop.messaging.util.signals import mailable_event
 from scoop.user.forms.configuration import ConfigurationForm

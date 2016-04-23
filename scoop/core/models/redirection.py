@@ -5,13 +5,11 @@ from datetime import datetime, timedelta
 from django.contrib.contenttypes import fields
 from django.db import models
 from django.http.response import HttpResponsePermanentRedirect, HttpResponseRedirect
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModelMixin
 from scoop.core.util.model.model import SingleDeleteManager
-
 
 logger = logging.getLogger(__name__)
 

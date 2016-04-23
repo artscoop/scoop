@@ -1,9 +1,7 @@
 # coding: utf-8
 from django import template
-
 from scoop.user.access.models.ip import IP
 from scoop.user.access.models.userip import UserIP
-
 
 register = template.Library()
 

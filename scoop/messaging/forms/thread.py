@@ -4,13 +4,12 @@ from django import forms as baseforms
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import striptags
 from django.utils.translation import ugettext_lazy as _
-from tinymce.widgets import TinyMCE
-
 from scoop.content.util.tinymce import TINYMCE_CONFIG_CONTENT
 from scoop.core.util.model.widgets import SelectDateWidget
 from scoop.messaging.models.message import Message
 from scoop.messaging.models.recipient import Recipient
 from scoop.messaging.models.thread import Thread
+from tinymce.widgets import TinyMCE
 
 
 class MessageForm(forms.Form):

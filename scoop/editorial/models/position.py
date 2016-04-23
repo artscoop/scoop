@@ -4,12 +4,10 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.db import models
 from django.http.request import HttpRequest
 from django.template.defaultfilters import capfirst
-from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import ugettext
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
-
 
 # Positions à traduire par défaut
 DEFAULT_NAMES = [_("Menu"), _("Heading"), _("Footer"), _("Js"), _("Extra head"), ]

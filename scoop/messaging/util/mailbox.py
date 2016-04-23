@@ -4,7 +4,6 @@ from mailbox import Maildir, NoSuchMailboxError
 from os.path import expanduser, join
 from pwd import getpwnam
 
-
 logger = logging.getLogger(__name__)
 
 

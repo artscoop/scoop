@@ -6,7 +6,6 @@ from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
-
 from scoop.core.models.redirection import Redirection
 from scoop.core.templatetags.datetime_tags import days_from_now as tt_days_from_now
 from scoop.core.templatetags.datetime_tags import is_date_new as tt_is_new

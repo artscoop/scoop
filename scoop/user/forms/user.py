@@ -2,7 +2,6 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.forms.search import BaseSearchForm
 from scoop.user.models.user import User
 

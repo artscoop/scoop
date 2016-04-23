@@ -5,7 +5,6 @@ from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
 from django.utils import timezone
 
-
 logger = logging.getLogger(__name__)
 
 

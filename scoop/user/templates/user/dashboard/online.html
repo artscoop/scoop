@@ -39,7 +39,7 @@
                     <div class="overlay-caption">
 					<span class="badge badge-inverse">
 						<a title="{% trans "Edit" %}" href="{% url "admin:user_user_change" user.id %}"><b class="icon-cog"></b></a>
-						<a title="{% trans "View" %}" class="modal-action" href="{% url "user:profile-view" uid=user.id name=user.username %}"><u
+						<a title="{% trans "View" %}" class="modal-action" href="{{ user.get_absolute_url }}"><u
                                 class="icon-user"></u></a>
 					</span>
                     </div>

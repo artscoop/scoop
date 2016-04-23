@@ -5,7 +5,6 @@ from classytags.core import Options, Tag
 from django import template
 from django.utils.translation import pgettext_lazy
 
-
 register = template.Library()
 
 BASIC_CHANGES = {

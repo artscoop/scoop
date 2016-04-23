@@ -1,7 +1,6 @@
 # coding: utf-8
 from ajax_select import LookupChannel
 from django.core.exceptions import PermissionDenied
-
 from scoop.content.models.picture import Picture
 from scoop.core.util.model.model import search_query
 

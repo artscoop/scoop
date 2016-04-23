@@ -1,9 +1,7 @@
 # coding: utf-8
 from django import template
-
 from scoop.content.models.content import Content
 from scoop.core.util.data.textutil import clean_html
-
 
 register = template.Library()
 

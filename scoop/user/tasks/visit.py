@@ -1,6 +1,5 @@
 # coding: utf-8
 from celery import task
-
 from scoop.user.models import Visit
 
 

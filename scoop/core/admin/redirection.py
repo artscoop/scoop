@@ -2,7 +2,6 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
-
 from scoop.core.models.redirection import Redirection
 from scoop.core.util.django.admin import GenericModelUtil, ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr

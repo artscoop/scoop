@@ -1,8 +1,8 @@
 # coding: utf-8
-from IPy import IP as IP_
 from django.apps.registry import apps
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from IPy import IP as IP_
 
 
 class IPPointMixin():

@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.utils.translation import ugettext_lazy as _
 
-
 # Constantes : Noms des points cardinaux à 1/16 (steps à Pi/8)
 ANGLE_CARDINAL = {0: _("east"), 1: _("east-north-east"), 2: _("north-east"), 3: _("north-north-east"), 4: _("north"),
                   5: _("north-north-west"), 6: _("north-west"), 7: _("west-north-west"), 8: _("west"),

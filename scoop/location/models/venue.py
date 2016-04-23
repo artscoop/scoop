@@ -2,7 +2,6 @@
 from django.contrib.gis.db.models.manager import GeoManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel

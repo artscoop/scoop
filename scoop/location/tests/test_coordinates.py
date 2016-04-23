@@ -2,7 +2,6 @@
 
 from django.contrib.gis.db.models.functions import Distance
 from django.test import TestCase
-
 from scoop.location.models.position import Position
 from scoop.user.models.user import User
 

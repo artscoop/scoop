@@ -2,7 +2,6 @@
 """ Signaux de l'application contenu """
 from django.dispatch import Signal
 
-
 content_created = Signal(['instance'])
 content_expired = Signal(['instance'])
 content_pre_save = Signal(['instance'])

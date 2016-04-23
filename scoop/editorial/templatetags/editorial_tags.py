@@ -2,11 +2,9 @@
 from django import template
 from django.db.models import Q
 from django.template import Template
-
 from scoop.core.util.stream.request import default_context
 from scoop.editorial.models.excerpt import Excerpt
 from scoop.editorial.models.page import Page
-
 
 register = template.Library()
 

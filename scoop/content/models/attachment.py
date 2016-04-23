@@ -8,9 +8,8 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import filesizeformat
 from django.template.loader import render_to_string
-from django.utils.translation import pgettext, pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext, pgettext_lazy
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model

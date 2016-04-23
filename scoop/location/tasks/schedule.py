@@ -2,7 +2,6 @@
 from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.location.models import City, Currency
 
 

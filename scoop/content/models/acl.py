@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.core.uuid import UUID64Model
 

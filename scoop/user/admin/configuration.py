@@ -2,12 +2,10 @@
 from django.contrib import admin
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.admin.filters import TimestampFilter
 from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.shortcuts import addattr
 from scoop.user.models.forms import FormConfiguration
-
 
 __all__ = ['ConfigurationAdmin']
 

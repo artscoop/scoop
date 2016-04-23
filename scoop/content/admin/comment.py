@@ -5,14 +5,12 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
 from django.forms.widgets import TextInput
 from django.utils.translation import ugettext_lazy as _
-from tinymce.widgets import TinyMCE
-
 from scoop.content.admin.inline import PictureInlineAdmin
 from scoop.content.forms.comment import CommentAdminForm, CommentForm
 from scoop.content.models.comment import Comment
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr
-
+from tinymce.widgets import TinyMCE
 
 __all__ = ['CommentAdmin']
 

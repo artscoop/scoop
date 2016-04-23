@@ -1,14 +1,13 @@
 # coding: utf-8
 import socket
 
-from django.core.cache import cache
-from django.utils.lru_cache import lru_cache
-from django.utils.translation import ugettext_lazy as _
 from dns import resolver as dnsresolver
 from dns import reversename
 
+from django.core.cache import cache
+from django.utils.lru_cache import lru_cache
+from django.utils.translation import ugettext_lazy as _
 from scoop.core.util.data.dateutil import now
-
 
 # Codes de statut de résolution
 STATUS = {'ok': 0, 'timeout': 1, 'noanswer': 2, 'nonameservers': 3, 'nxdomain': 4}

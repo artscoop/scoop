@@ -4,7 +4,6 @@ import datetime
 from ajax_select import make_ajax_form
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.model.widgets import AdminSplitDateTime
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms.thread import ThreadAdminForm
@@ -27,7 +26,7 @@ class ThreadAdmin(admin.ModelAdmin):
     save_on_top = False
     actions_on_top = True
     fieldsets = (
-    (_("Thread"), {'fields': ('author', 'topic', 'deleted', 'closed')}), (_("Expiry"), {'fields': ('expires', 'expiry_on_read', 'started', 'updated')}),)
+        (_("Thread"), {'fields': ('author', 'topic', 'deleted', 'closed')}), (_("Expiry"), {'fields': ('expires', 'expiry_on_read', 'started', 'updated')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
     # Getter

@@ -5,7 +5,6 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import models
 from django.forms import widgets
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.forms.picture import PictureAdminInlineForm
 from scoop.content.models.content import Category, CategoryTranslation
 from scoop.content.models.picture import Picture

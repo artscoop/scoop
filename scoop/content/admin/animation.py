@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.forms.animation import AnimationForm
 from scoop.content.models.animation import Animation
 from scoop.core.util.shortcuts import addattr

@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
-
 from scoop.user.tasks.visit import add_visit
 from scoop.user.util.signals import profile_viewed
 

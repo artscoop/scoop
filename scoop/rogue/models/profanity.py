@@ -2,10 +2,9 @@
 import re
 
 from django.db import models
-from django.utils.translation import get_language, pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, pgettext_lazy
 from django_languages.fields import LanguageField
-
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.rogue.templatetags.profanity_tags import ProfanitiesFilter
 

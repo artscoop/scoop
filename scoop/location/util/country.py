@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.template.loader import render_to_string
-
 from scoop.core.util.stream.request import default_context
 
 

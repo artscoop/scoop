@@ -7,9 +7,8 @@ from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils import timezone
 from django.utils.text import Truncator
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.content.util.signals import comment_posted, comment_spam
 from scoop.core.abstract.content.acceptable import AcceptableModel
 from scoop.core.abstract.content.comment import CommentableModel

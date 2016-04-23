@@ -5,9 +5,8 @@ from django.db import models
 from django.db.models.aggregates import Sum
 from django.template.base import Template
 from django.template.context import RequestContext
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.rectangle import RectangleModel
@@ -58,6 +57,20 @@ class AdvertisementManager(SingleDeleteManager):
                 return item
         # Population vide ou annonces avec des poids nuls : renvoyer None
         return None
+
+    def select_ad(self, group=None, name=None, size=None):
+        """ Renvoyer une annonce selon des critères de recherche """
+        if group is None and name is None and size is None:
+            return _("[group/name missing]")
+        if group is not None:
+            return self.random(group)
+        elif name is not None:
+            return self.get_by_name(name)
+        elif size is not None:
+            width, height = [int(item) for item in size.split('x')]
+            return self.random_by_size(width, height)
+        else:
+            return None
 
 
 class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, RectangleModel):

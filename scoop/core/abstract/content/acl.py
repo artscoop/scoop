@@ -10,9 +10,8 @@ from django.db import models
 from django.db.models.fields.files import FileField
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.util.data.uuid import uuid_bits
 
 

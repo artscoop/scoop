@@ -6,7 +6,6 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.manager import Manager
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.uuid import UUID64Model

@@ -6,14 +6,12 @@ from django.contrib import admin, messages
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
 from scoop.location.models.city import City
 from scoop.location.models.country import Country, CountryName
 from scoop.location.tasks.geonames import geonames_fill
 from scoop.location.util.geonames import populate_cities, populate_currency, rename_cities, reparent_cities
-
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +25,7 @@ class CountryAlternatesInlineAdmin(admin.TabularInline):
     model = CountryName
     max_num = 10
     extra = 4
-    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget},}
+    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget}}
 
 
 class CountryAdmin(ViewOnlyModelAdmin):

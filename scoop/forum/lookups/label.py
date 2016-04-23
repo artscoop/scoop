@@ -1,9 +1,8 @@
 # coding: utf-8
 from ajax_select import LookupChannel
-from unidecode import unidecode
-
 from scoop.core.util.model.model import search_query
 from scoop.forum.models.label import Label
+from unidecode import unidecode
 
 
 class LabelLookup(LookupChannel):

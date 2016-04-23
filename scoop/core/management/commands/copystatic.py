@@ -9,4 +9,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """ Exécuter la commande """
-        call_command('collectstatic', interactive=False, link=False)
+        call_command('collectstatic', interactive=False, link=True)

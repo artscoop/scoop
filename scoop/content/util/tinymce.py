@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.conf import settings
 
-
 TINYMCE_CONFIG_CONTENT = {'menubar': False, 'statusbar': False,
                           'toolbar': 'undo redo | styleselect | bold italic underline | link | bullist | code',
                           'plugins': 'code link autolink preview autoresize',

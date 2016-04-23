@@ -2,15 +2,14 @@
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.db import models
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.model.model import SingleDeleteQuerySet
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
 
 
 class LabelManager(SingleDeleteQuerySet):

@@ -4,17 +4,16 @@ import os
 from math import ceil, floor
 
 import PIL
+
 from django.conf import settings
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.core.files.temp import NamedTemporaryFile
 from easy_thumbnails.models import Source, Thumbnail
-
 from scoop.content.util.webkit import Screenshot
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import check_file_extension, walk
 from scoop.core.util.stream.urlutil import download_url_resource, get_url_path, unquote_url
-
 
 logger = logging.getLogger(__name__)
 root_dir = Paths.get_root_dir

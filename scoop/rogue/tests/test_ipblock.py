@@ -4,7 +4,6 @@ from random import choice
 
 from django.conf import settings
 from django.test import TestCase
-
 from scoop.rogue.models.ipblock import IPBlock
 from scoop.rogue.util.ipblock import PROXY_LIST_DIRECTORY, get_proxy_nodes
 from scoop.user.access.models.ip import IP

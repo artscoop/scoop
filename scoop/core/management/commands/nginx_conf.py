@@ -9,7 +9,6 @@ from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils.text import slugify
-
 from scoop.core.util.stream.request import default_context
 
 

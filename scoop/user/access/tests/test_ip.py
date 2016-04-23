@@ -1,7 +1,6 @@
 # coding: utf-8
 
 from django.test import TestCase
-
 from scoop.user.access.models.ip import IP
 
 

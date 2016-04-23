@@ -4,13 +4,12 @@ from django.db import models
 from django.db.models.base import Model
 from django.db.utils import ProgrammingError
 from django.utils.translation import ugettext_lazy as _
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, get_translation_model
 
 
 class OptionGroupManager(SingleDeleteManager):

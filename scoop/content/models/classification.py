@@ -2,13 +2,11 @@
 from autoslug.fields import AutoSlugField
 from django.core.urlresolvers import reverse_lazy
 from django.db import models
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.content.models.content import Content
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.icon import IconModel
-
 
 __all__ = ['Tag']
 

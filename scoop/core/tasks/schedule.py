@@ -4,7 +4,6 @@ from celery.task import periodic_task
 from django.apps.registry import apps
 from django.conf import settings
 from django.core.management import call_command
-
 from scoop.core.models.recorder import Record
 from scoop.core.models.redirection import Redirection
 from scoop.core.models.uuidentry import UUIDEntry

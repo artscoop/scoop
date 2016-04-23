@@ -3,12 +3,11 @@ import datetime
 
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
+from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from django.contrib import admin
 from django.template.defaultfilters import date as datefilter
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
-from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from scoop.content.admin.inline import CategoryTranslationInlineAdmin, PictureInlineAdmin
 from scoop.content.forms.content import ContentAdminForm
 from scoop.content.models.content import Category, Content, ContentApproval
@@ -17,7 +16,6 @@ from scoop.content.util.admin import PicturedModelAdmin
 from scoop.core.templatetags.html_tags import list_enumerate
 from scoop.core.util.model.widgets import AdminSplitDateTime
 from scoop.core.util.shortcuts import addattr
-
 
 __all__ = ['ContentAdminModelAdmin', 'CategoryAdmin']
 

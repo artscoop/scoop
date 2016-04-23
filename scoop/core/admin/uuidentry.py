@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.contrib import admin
-
 from scoop.core.models.uuidentry import UUIDEntry
 from scoop.core.util.django.admin import GenericModelUtil, ViewOnlyModelAdmin
 

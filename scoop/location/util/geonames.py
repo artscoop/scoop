@@ -19,13 +19,11 @@ from django.contrib.gis.geos.point import Point
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
-from unidecode import unidecode
-
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import auto_open_file, open_zip_file
 from scoop.core.util.stream.urlutil import download_url_resource
 from scoop.location.models import City, CityName, Country, CountryName, Currency, Timezone
-
+from unidecode import unidecode
 
 # Codes Feature : http://www.geonames.org/export/codes.html
 # Fichiers Villes : http://download.geonames.org/export/dump/

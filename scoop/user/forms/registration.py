@@ -5,18 +5,19 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.user.util.signals import credentials_form_check_email, credentials_form_check_name, credentials_form_check_username
 
 
 class RegistrationForm(forms_.ModelForm):
     """ Formulaire d'inscription """
+
     # Constantes
     PASSWORD_LENGTH_MIN = 4
     USERNAME_LENGTH_MIN = 3
     USERNAME_LENGTH_MAX = 20
     FIRST_NAME_LENGTH_MAX = 20
     LAST_NAME_LENGTH_MAX = 40
+
     # Champs
     username = forms_.SlugField(max_length=30, min_length=4, widget=forms_.TextInput(attrs={'size': 20}), label=_("User name"))
     email = forms_.EmailField(widget=forms_.TextInput(attrs={'size': 20}), label=_("Email"))
@@ -74,8 +75,8 @@ class RegistrationForm(forms_.ModelForm):
         # Renvoyer une erreur si le pseudo est trop court ou long
         if length > RegistrationForm.USERNAME_LENGTH_MAX or length < RegistrationForm.USERNAME_LENGTH_MIN:
             raise forms.ValidationError(
-                    _("Your nickname should be between {min} and {max} characters long.").format(min=RegistrationForm.USERNAME_LENGTH_MIN,
-                                                                                                 max=RegistrationForm.USERNAME_LENGTH_MAX))
+                _("Your nickname should be between {min} and {max} characters long.").format(min=RegistrationForm.USERNAME_LENGTH_MIN,
+                                                                                             max=RegistrationForm.USERNAME_LENGTH_MAX))
         return name.lower()
 
     def clean_eula(self):

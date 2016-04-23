@@ -11,21 +11,23 @@ from urllib import parse
 import cv2
 import simplejson
 from PIL import Image
+
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.core.cache import cache
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.db import models, transaction
+from django.db.models.fields.files import FieldFile
 from django.template.defaultfilters import filesizeformat, urlencode
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
+from easy_thumbnails.alias import aliases
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
-
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
@@ -36,12 +38,12 @@ from scoop.core.abstract.core.rectangle import RectangleModel
 from scoop.core.abstract.core.uuid import FreeUUIDModel, UUIDField
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.data.dateutil import now
+from scoop.core.util.data.typeutil import string_to_dict
 from scoop.core.util.django.templateutil import render_to
 from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
-
 
 logger = logging.getLogger(__name__)
 
@@ -363,6 +365,69 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         resource = get_url_resource(url)
         count = resource.count('h3 class="r"')
         return count
+
+    @staticmethod
+    def get_display(request, image=None, **kwargs):
+        """
+        Renvoyer des informations pour afficher une miniature d'image
+
+        :param image: URL d'image ou objet du modèle content.Picture
+        :param request: requête HTTP
+        :param kwargs: dictionnaire des paramètres
+            - alias : alias de configuration de miniature
+            - options : chaîne décrivant les options easy-thumbails de génération
+            - image_class : classe CSS de l'élément img
+            - image_rel : attribut rel de l'élément img
+            - link : doit-on afficher un lien autour de l'image ?
+            - link_title : attribut title de l'élément a
+            - link_class : classe CSS de l'élément a
+            - link_id : ID de l'élément a
+            - link_rel : attribut rel de l'élément a
+            - link_target : URL ou objet avec une méthode get_absolute_url
+            - image_title : attribut title de l'élément img
+            - image_alt : attribut alt de l'élément img
+        :rtype: dict
+        """
+        display = dict()
+        # Afficher une image par UUID (remplacer image par uuid)
+        if 'uuid' in kwargs:
+            image = Picture.objects.get_by_uuid(kwargs.pop('uuid', None), default=image)
+        # N'afficher que si l'objet Picture est visible pour l'objet Request
+        if image is not None and isinstance(image, (Picture, str, FieldFile)):
+            # Définir les informations d'affichage selon que image est un chemin ou un Picture
+            if isinstance(image, Picture) and image.is_visible(request) and image.exists():
+                display['image_url'] = image.image
+                display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image.image))
+                display['image_title'] = kwargs.pop('image_title', image.title)
+                display['image_alt'] = kwargs.pop('image_alt', image.description)
+            elif isinstance(image, (str, FieldFile)):
+                display['image_url'] = image
+                display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image))
+                display['image_title'] = kwargs.pop('image_title', None)
+                display['image_alt'] = kwargs.pop('image_alt', None)
+            else:
+                display['image_url'] = None
+            # Définir les autres options d'affichage si l'URL d'image est définie
+            if display['image_url']:
+                display['alias'] = kwargs.pop('alias')  # alias de vignette
+                display['options'] = kwargs.pop('options', None)  # options easy-thumbnails de type bool
+                display['image_class'] = kwargs.pop('image_class', None)
+                display['image_rel'] = kwargs.pop('image_rel', None)
+                display['link_title'] = kwargs.pop('link_title', None)
+                display['link_class'] = kwargs.pop('link_class', None)
+                display['link_id'] = kwargs.pop('link_id', None)
+                display['link_rel'] = kwargs.pop('link_rel', None)
+                display['link'] = kwargs.pop('link', True)
+                # Si link_target est un objet, convertir en URL
+                if 'link_target' in display and hasattr(display['link_target'], 'get_absolute_url'):
+                    display['link_target'] = display['link_target'].get_absolute_url()
+                # Convertir l'image en thumbnail si possible
+                options = kwargs
+                options.update(aliases.get(display['alias']) or {'size': display['alias']})
+                options.update(string_to_dict(display['options']))
+                display['image_thumbnail'] = get_thumbnailer(display['image_url']).get_thumbnail(options)
+            return display
+        return None
 
     # Setter
     def set_description(self, description):

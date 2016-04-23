@@ -1,10 +1,8 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 from scoop.user.models.activation import Activation
-
 
 __all__ = ['ActivationAdmin']
 

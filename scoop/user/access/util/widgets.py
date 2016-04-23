@@ -1,6 +1,6 @@
 # coding: utf-8
-from IPy import IP
 from django import forms
+from IPy import IP
 
 
 class IPIntegerField(forms.IntegerField):

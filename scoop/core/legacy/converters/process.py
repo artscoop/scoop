@@ -67,24 +67,24 @@ class ImportProcessor(object):
                 importers = [importer() for importer in importers]
                 count = len(importers)
                 # Import première passe
-                with transaction.atomic(savepoint=False):
-                    for ind, importer in enumerate(importers, start=1):
+                for ind, importer in enumerate(importers, start=1):
+                    with transaction.atomic(savepoint=False):
                         print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                         i_start = time.time()
                         importer.imports()
                         i_elapsed = time.time() - i_start
                         print("Model successfully imported in {:.01f}s.".format(i_elapsed))
                 # Import deuxième passe
-                with transaction.atomic(savepoint=False):
-                    for ind, importer in enumerate(importers, start=1):
+                for ind, importer in enumerate(importers, start=1):
+                    with transaction.atomic(savepoint=False):
                         print("Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                         i_start = time.time()
                         importer.post_imports()
                         i_elapsed = time.time() - i_start
                         print("Model successfully updated in {:.01f}s.".format(i_elapsed))
                 # Import troisième passe
-                with transaction.atomic(savepoint=False):
-                    for ind, importer in enumerate(importers, start=1):
+                for ind, importer in enumerate(importers, start=1):
+                    with transaction.atomic(savepoint=False):
                         print("Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                         i_start = time.time()
                         importer.brushup()

@@ -14,17 +14,15 @@ from django.db import models
 from django.db.backends.dummy.base import IntegrityError
 from django.db.models.aggregates import Count
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from django_countries.data import COUNTRIES
 from pygeoip import GeoIP
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
 from scoop.user.access.util.access import STATUS_CHOICES, reverse_lookup
-
 
 logger = logging.getLogger(__name__)
 

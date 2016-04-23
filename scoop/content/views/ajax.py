@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.http.response import HttpResponse
-
 from scoop.content.models.attachment import Attachment
 from scoop.content.models.picture import Picture
 from scoop.core.util.django.formutil import handle_upload

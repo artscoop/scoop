@@ -2,7 +2,6 @@
 from django.core.management.base import BaseCommand
 from django.utils.translation import ugettext
 from easy_thumbnails.management.commands.thumbnail_cleanup import ThumbnailCollectionCleaner
-
 from scoop.content.models.picture import Picture
 
 

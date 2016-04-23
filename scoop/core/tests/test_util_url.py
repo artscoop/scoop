@@ -2,7 +2,6 @@
 
 from django.test import TestCase
 from django.test.utils import override_settings
-
 from scoop.core.util.django.testing import TEST_CONFIGURATION
 from scoop.core.util.stream.urlutil import get_url_path, unquote_url
 

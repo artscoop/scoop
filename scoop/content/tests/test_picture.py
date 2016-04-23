@@ -3,10 +3,9 @@ import os
 from os.path import join
 
 from django.test import TestCase
-
 from scoop.content.models.picture import Picture
+from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
-
 
 path = os.path.dirname(__file__)
 
@@ -21,7 +20,9 @@ class PictureTest(TestCase):
     def setUp(self):
         """ Définir l'environnement de test """
         self.user = User.objects.create(username='pictureuser', email='foo@foobar3.foo')
-        self.downloaduser = User.objects.create(username='downloaduser', email='foo@foobar4.foo', is_superuser=True)
+        self.downloaduser = User.objects.create(username='downloaduser', email='foo@foobar4.foo', is_superuser=True, is_staff=True)
+        Activation.objects.activate(None, 'downloaduser')
+        self.downloaduser = User.objects.get_by_name('downloaduser')  # refresh permissions
 
     def tearDown(self):
         """ Nettoyer l'environnement des tests """

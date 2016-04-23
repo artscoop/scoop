@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.signals import check_indexable
 

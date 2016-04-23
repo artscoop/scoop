@@ -1,8 +1,6 @@
 # coding: utf-8
 from django.template import Library
-
 from scoop.rogue.models.ipblock import IPBlock
-
 
 register = Library()
 

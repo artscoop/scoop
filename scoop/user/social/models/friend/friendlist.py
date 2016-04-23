@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.user.social.util.signals import friend_accepted, friend_denied, friend_pending_new

@@ -2,7 +2,6 @@
 
 from django.http.response import HttpResponse
 from django.test import TestCase
-
 from scoop.core.util.stream.request import default_request
 from scoop.editorial.models.configuration import Configuration
 from scoop.editorial.models.excerpt import Excerpt

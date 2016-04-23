@@ -6,13 +6,11 @@ from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.test.utils import override_settings
-
 from scoop.core.util.data.typeutil import list_contains
 from scoop.core.util.django.testing import TEST_CONFIGURATION
 from scoop.messaging.models.mailevent import MailEvent
 from scoop.user.models.activation import Activation
 from scoop.user.templatetags.user_tags import distance_to
-
 
 User = get_user_model()
 

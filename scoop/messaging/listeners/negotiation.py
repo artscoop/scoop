@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.signals import record
 from scoop.messaging.util.signals import negotiation_accepted, negotiation_denied, negotiation_sent
 

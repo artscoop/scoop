@@ -2,7 +2,6 @@
 from django.db.models.base import Model
 from django.forms.forms import Form
 from django.http.request import HttpRequest
-
 from scoop.core.util.django.formutil import form
 from scoop.user.models.forms import FormConfiguration
 

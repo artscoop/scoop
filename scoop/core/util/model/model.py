@@ -13,6 +13,7 @@ from django.db.transaction import atomic
 def patch_methods(cls, *bases):
     """
     Monkey-patcher une classe avec les méthodes d'autres classes
+
     :param bases: Classes depuis lesquelles copier les fonctions
     :type bases: callable | class
     """

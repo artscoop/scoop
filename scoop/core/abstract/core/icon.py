@@ -5,10 +5,9 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from easy_thumbnails.fields import ThumbnailerImageField
-
 from scoop.core.util.shortcuts import addattr
 
 

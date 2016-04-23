@@ -2,12 +2,13 @@
 from autoslug.fields import AutoSlugField
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
-from scoop.core.abstract import AuthoredModel, DatetimeModel, UUID128Model
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
+from scoop.core.abstract.core.datetime import DatetimeModel
+from scoop.core.abstract.core.uuid import UUID128Model
+from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.model.fields import LineListField
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
