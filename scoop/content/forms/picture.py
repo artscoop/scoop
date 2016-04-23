@@ -12,11 +12,9 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from form_utils.fields import ClearableImageField
 from rarfile import RarFile
-
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import CreationLicenseWidget, PictureInlineWidget
 from scoop.core.forms import BaseSearchForm
-
 
 try:
     from captcha.fields import CaptchaField

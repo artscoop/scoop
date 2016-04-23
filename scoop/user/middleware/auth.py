@@ -8,7 +8,6 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy  # Fix pour django_extensions.reset_db
 from django.http.response import HttpResponseRedirect
-
 from scoop.core.util.django import formutil
 from scoop.user.forms import LoginForm
 from scoop.user.forms.configuration import ConfigurationForm

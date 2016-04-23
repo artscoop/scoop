@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.dispatch import Signal
 
-
 # Création d'un nouvel enregistrement
 record = Signal(['actor', 'action', 'target', 'content'])
 # Un ping de serveur XMLRPC de blog a échoué

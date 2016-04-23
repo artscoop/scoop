@@ -16,7 +16,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from floppyforms.widgets import SelectDateWidget as SelectDateWidgetBase
 
-
 # Constantes
 RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
 

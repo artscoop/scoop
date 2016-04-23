@@ -7,10 +7,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.signals import record
 from scoop.core.util.stream.urlutil import remove_get_parameter
-
 
 logger = logging.getLogger(__name__)
 

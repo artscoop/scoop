@@ -1,10 +1,11 @@
 # coding: utf-8
+from functools import lru_cache
+
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
-
 from scoop.core.util.django import formutil
 from scoop.core.util.django.apps import is_installed
 
@@ -80,6 +81,7 @@ class RequestMixin:
     def list_to_queryset(self, post_param, base_queryset, attribute='pk', conversion=int):
         """
         Renvoyer un queryset filtré par les valeurs d'un attribut POST/GET
+
         :type self: django.http.HttpRequest
         :param post_param: nom du paramètre POST/GET contenant une liste d'identifiants
         :param base_queryset: queryset de base
@@ -104,6 +106,7 @@ class RequestMixin:
     def form(self, config, initial=None):
         """
         Créer un ou plusieurs formulaires selon l'état de la requête
+
         Si la méthode de requete est POST, générer les formulaires depuis les données POST.
         Si la méthode de requete est GET, générer les formulaires par défaut.
         """
@@ -112,6 +115,7 @@ class RequestMixin:
     def get_id_selection(self, full, selected):
         """
         Renvoyer une liste d'ID cochés et décochés depuis des données POST
+
         :param full: attribut POST contenant la liste des champs hidden
         :param selected: attribut POST contenant la liste des cases cochées
         :type self: django.http.HttpRequest |
@@ -126,8 +130,10 @@ class RequestMixin:
     def save_post(self, name):
         """
         Sauvegarder des données POST pour l'utilisateur courant
+
         avec un nom d'enregistrement.
         :type self: django.http.HttpRequest, RequestMixin
+        :param name: nom du slot des données POST
         """
         key = self.POST_CACHE_KEY % {'user': self.user.id, 'name': slugify(name)}
         cache.set(key, self.POST, 2592000)
@@ -135,6 +141,7 @@ class RequestMixin:
     def load_post(self, name):
         """
         Charger des données POST en cache, pour l'utilisateur courant
+
         et avec le nom d'enregistrement spécifié
         """
         key = self.POST_CACHE_KEY % {'user': self.user.id, 'name': slugify(name)}
@@ -143,6 +150,7 @@ class RequestMixin:
     def __reduce__(self):
         """
         Préparer l'objet au pickling
+
         :type self: django.http.HttpRequest
         """
         if hasattr(self, 'user'):
@@ -159,6 +167,7 @@ class RequestMixin:
 SIMPLE_META = {'REMOTE_ADDR': '127.0.0.1', 'SERVER_NAME': '127.0.0.1', 'SERVER_PORT': 80, 'REQUEST_METHOD': 'GET'}
 
 
+@lru_cache()
 def default_request():
     """ Créer une requête par défaut """
     request = HttpRequest()

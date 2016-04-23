@@ -4,7 +4,6 @@ import os
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.commands.compilemessages import Command as CompileMessages
-
 from scoop.core.util.stream.directory import Paths
 
 

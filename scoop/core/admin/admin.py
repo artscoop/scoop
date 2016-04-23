@@ -2,7 +2,6 @@
 from admin_tools.dashboard.models import DashboardPreferences
 from django.contrib import admin
 
-
 __all__ = ['DashboardPreferencesAdmin']
 
 

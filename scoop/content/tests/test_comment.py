@@ -4,7 +4,6 @@ from importlib import import_module
 import loremipsum
 from django.conf import settings
 from django.test import TestCase
-
 from scoop.content.models.comment import Comment
 from scoop.content.models.content import Content
 from scoop.user.models.user import User

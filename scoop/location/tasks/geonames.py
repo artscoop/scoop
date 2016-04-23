@@ -3,7 +3,6 @@ import time
 
 from celery import task
 from django.utils.translation import ugettext as _
-
 from scoop.location.util.geonames import populate_cities, populate_currency, rename_cities, reparent_cities
 
 

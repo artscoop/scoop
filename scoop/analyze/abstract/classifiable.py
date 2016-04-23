@@ -2,7 +2,6 @@
 from abc import ABCMeta, abstractmethod
 
 from django.db import models
-
 from scoop.analyze.util.corpus.file import FileCorpus
 
 

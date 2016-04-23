@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
-
 from scoop.content.models.content import Content
 from scoop.core.util.data.dateutil import is_new
 

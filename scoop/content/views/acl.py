@@ -3,11 +3,9 @@ from urllib import parse
 
 from django.conf import settings
 from django.http.response import HttpResponse
-
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.util.django.apps import is_installed
 from scoop.user.models.user import User
-
 
 ACL_ENABLED = getattr(settings, 'CONTENT_ACL_ENABLED', True)
 ACL_MEDIA = getattr(settings, 'CONTENT_ACL_MEDIA_URL', '/acl/')

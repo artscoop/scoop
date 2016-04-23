@@ -5,6 +5,7 @@ import logging
 import os
 import subprocess
 import time
+from io import BufferedReader
 from mimetypes import guess_extension
 from os.path import join
 from zipfile import ZipFile
@@ -16,9 +17,7 @@ from django.db.models.manager import Manager
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from magic import Magic
-
 from scoop.core.util.data.typeutil import make_iterable
-
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +81,7 @@ def open_zip_file(path, filename):
         for n in names:
             if n.lower().startswith("{}.".format(filename.lower())):
                 name = n
-                content = archive.open(name, 'rU')
+                content = BufferedReader(archive.open(name, 'rU'), buffer_size=16777216)
                 content = io.TextIOWrapper(content, encoding='utf-8', newline='')
                 return content
     raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})

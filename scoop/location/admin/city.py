@@ -5,14 +5,12 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AdminTextInputWidget
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.util.admin import PicturedModelAdmin
 from scoop.core.admin.filters import RandomOrderFilter
 from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
 from scoop.location.admin.filters import LevelFilter, ParentedFilter, PostalCodedFilter
 from scoop.location.models.city import City, CityName
-
 
 logger = logging.getLogger(__name__)
 

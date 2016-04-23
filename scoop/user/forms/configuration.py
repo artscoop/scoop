@@ -2,7 +2,6 @@
 from django import forms
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.user.util.forms import DataForm
 
 

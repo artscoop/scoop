@@ -3,17 +3,16 @@ from django.apps.registry import apps
 from django.db import models
 from django.db.models.base import Model
 from django.template.loader import render_to_string
-from django.utils.translation import pgettext_lazy, ugettext
 from django.utils.translation import ugettext_lazy as _
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
-from unidecode import unidecode
-
+from django.utils.translation import pgettext_lazy, ugettext
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
+from unidecode import unidecode
 
 
 class OptionManager(SingleDeleteManager, TranslatableModelManager):
@@ -92,11 +91,11 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
         items.append(self.group)
         return items.reverse()
 
-    def html(self, **kwargs):
+    def html(self, mode='default', **kwargs):
         """ Renvoyer une représentation HTML de l'option """
-        mode = kwargs.get('mode', r"default")
-        kwargs.update({'item': self})
-        return render_to_string("core/display/option-{mode}.html".format(mode=mode), kwargs)
+        kwargs['item'] = self
+        return render_to_string(["mako/core/display/option-{mode}.html".format(mode=mode),
+                                 "core/display/option-{mode}.html".format(mode=mode)], kwargs)
 
     # Propriétés
     name = property(get_name)

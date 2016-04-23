@@ -10,7 +10,6 @@ from django.template import Node, TemplateSyntaxError
 from django.template.base import Parser
 from django.template.loader_tags import BlockNode, do_block
 
-
 register = template.Library()
 
 

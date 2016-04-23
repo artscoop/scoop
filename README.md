@@ -35,6 +35,8 @@ Nécessite python 3.4, nginx et Django 1.9
 - `CORE_BRAND_NAME_MARKER` : *str*, lorsque le tag text_tags.brand est utilisé, quel texte doit être remplacé par le nom du site ? ex. '%brand%'
 - `FORM_ALIASES` : *dict*, alias utilisés pour identifier les formulaires à valider en AJAX (voir scoop.core.views.ajax.validate_form)
 - `MAKEMESSAGES_DIRS` : *list*, liste de répertoires racines à parcourir à la recherche de locales à traduire
+- `OPENING_HOURS` : *list*, liste de plages d'heures d'ouverture du site, si le middleware opening est actif.
+- `OPENING_HOURS_GROUPS_EXCLUDE` : *list*, permet aux groupes d'outrepasser les heures de fermeture
 
 ### Messaging
 - `MESSAGING_MAX_BATCH` : *int*, nombre de mails à envoyer au maximum par batch d'envoi. 30 par défaut

@@ -1,6 +1,5 @@
 # coding: utf-8
 from haystack import indexes
-
 from scoop.content.models.picture import Picture
 
 

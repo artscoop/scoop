@@ -8,10 +8,9 @@ from django.core.mail.message import EmailMultiAlternatives
 from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from pretty_times import pretty
-
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import one_line

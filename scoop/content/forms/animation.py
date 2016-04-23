@@ -1,9 +1,7 @@
 # coding: utf-8
 
 from django import forms
-
 from scoop.content.models.animation import Animation
-
 
 try:
     from captcha.fields import CaptchaField

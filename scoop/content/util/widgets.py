@@ -3,8 +3,8 @@ from django import forms
 from django.forms import widgets
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 
 
 class PictureInlineWidget(forms.FileInput):

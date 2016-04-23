@@ -1,7 +1,6 @@
 # coding: utf-8
 from ajax_select import make_ajax_form
 from django.contrib import admin
-
 from scoop.rogue.forms.mailblock import MailBlockForm
 from scoop.rogue.models import MailBlock, Profanity
 

@@ -7,7 +7,6 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.util.micawber.oembed import bootstrap_oembed
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel

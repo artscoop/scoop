@@ -4,9 +4,8 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.typeutil import make_iterable

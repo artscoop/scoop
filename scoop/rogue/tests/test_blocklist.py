@@ -3,7 +3,6 @@ from importlib import import_module
 
 from django.conf import settings
 from django.test import TestCase
-
 from scoop.rogue.models.blocklist import Blocklist
 from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
@@ -36,3 +35,11 @@ class BlocklistTest(TestCase):
         self.assertFalse(Blocklist.objects.is_safe(self.user1, self.user2, 'blacklist'))
         self.assertTrue(Blocklist.objects.is_safe(self.user1, self.user3, 'blacklist'))
         self.assertTrue(Blocklist.objects.is_safe(self.user1, self.user2, 'hidelist'))
+
+        hidden = self.user1.blocklist.add(self.user2, 'hidelist')
+        self.assertTrue(hidden, "user2 should be hidden by user1")
+        self.assertFalse(Blocklist.objects.is_safe(self.user1, self.user2, 'hidelist'))
+
+        # Blocklist n'accepte que les listes blacklist et hidelist. Ignorer le reste.
+        bidulbukd = self.user1.blocklist.add(self.user2, 'bidulbuklist')
+        self.assertFalse(bidulbukd, "user2 should not be bidulbukd by user1")

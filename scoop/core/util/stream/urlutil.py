@@ -5,13 +5,13 @@ from urllib.error import URLError
 from urllib.parse import unquote, urlparse
 
 import requests
+from urllib3.util.retry import Retry
+
 from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
 from unidecode import unidecode
-from urllib3.util.retry import Retry
-
 
 # Constantes
 DEFAULT_HEADERS = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/39.0'}

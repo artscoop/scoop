@@ -3,7 +3,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.models import Thumbnail
-
 from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
 

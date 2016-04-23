@@ -5,7 +5,6 @@ from autofixture import AutoFixture, register
 from autofixture.generators import LoremSentenceGenerator
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import ContentType
-
 from scoop.rogue.models import FlagType
 from scoop.rogue.models.flag import Flag
 

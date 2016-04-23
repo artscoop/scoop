@@ -5,7 +5,6 @@ from django.core.exceptions import ViewDoesNotExist
 from django.template import Library, Node, TemplateSyntaxError, Variable
 from django.utils.translation import ugettext_lazy as _
 
-
 register = Library()
 
 

@@ -3,7 +3,6 @@ from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
 from django.conf import settings
 from django.db.models import Q
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 
 

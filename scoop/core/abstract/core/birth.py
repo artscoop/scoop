@@ -6,7 +6,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
-
 from scoop.core.util.data.dateutil import date_age
 from scoop.core.util.shortcuts import addattr
 

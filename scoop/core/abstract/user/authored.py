@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.db import models
 from django.template.defaultfilters import escape
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 
 

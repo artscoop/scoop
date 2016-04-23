@@ -8,6 +8,8 @@ from traceback import print_exc
 
 import markdown
 import textile
+
+from approval.models.approval import ApprovalModel
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -16,14 +18,10 @@ from django.template.defaultfilters import striptags, truncatewords
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
-
-from approval.models.approval import ApprovalModel
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.content.util.signals import content_format_html, content_pre_lock, content_updated
 from scoop.core.abstract.content.comment import CommentableModel
@@ -44,7 +42,8 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
-
+from translatable.exceptions import MissingTranslation
+from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
 
 logger = logging.getLogger(__name__)
 

@@ -6,7 +6,6 @@ from django import template
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.template import Node, Variable, resolve_variable
 
-
 register = template.Library()
 
 

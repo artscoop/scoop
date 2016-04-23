@@ -1,5 +1,4 @@
 # coding: utf-8
-from Levenshtein import distance
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from django.contrib.gis.measure import D
@@ -9,8 +8,7 @@ from django.template.loader import render_to_string
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from unidecode import unidecode
-
+from Levenshtein import distance
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
 from scoop.core.util.data.typeutil import make_iterable
@@ -18,6 +16,7 @@ from scoop.core.util.model.model import search_query
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 from scoop.location.util.weather import get_open_weather
+from unidecode import unidecode
 
 
 class CityQuerySetMixin(object):

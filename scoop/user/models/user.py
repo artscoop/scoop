@@ -7,8 +7,8 @@ import qsstats
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
 from django.contrib.auth.models import UserManager as DefaultManager
+from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
 from django.contrib.contenttypes.fields import ContentType
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
@@ -18,9 +18,8 @@ from django.db import models
 from django.http import Http404
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
@@ -416,9 +415,11 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         results = check_stale.send(User, user=self, profile=self.profile)
         return any([result[1] for result in results])
 
-    def get_picture(self):
+    def get_picture(self, request=None, use_default=True):
         """ Renvoyer l'image principale du profil de l'utilisateur """
-        return self.profile.picture
+        return self.profile.get_picture(request=request, use_default=use_default)
+
+    picture = property(get_picture)
 
     def is_logout_forced(self):
         """ Renvoyer si une demande de déconnexion est en attente """
@@ -521,7 +522,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'utilisateur """
-        return reverse_lazy('user:profile-view', kwargs={'uid': str(self.id), 'name': self.username})
+        return reverse_lazy('user:profile-view', kwargs={'key': str(self.id), 'name': self.username})
 
     # Privé
     def _get_fixed_username(self):

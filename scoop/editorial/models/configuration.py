@@ -4,7 +4,6 @@ from django.contrib.contenttypes import fields
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.django.templateutil import render_to

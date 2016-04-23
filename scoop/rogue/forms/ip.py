@@ -1,6 +1,5 @@
 # coding: utf-8
 from django import forms
-
 from scoop.rogue.models import IPBlock
 from scoop.user.access.util.widgets import IPIntegerField
 

@@ -13,11 +13,9 @@ from django.http.request import QueryDict
 from django.http.response import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
-
 from scoop.core.templatetags.text_tags import humanize_join
 # Choix Oui/Non et Tout
 from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable
-
 
 CHOICES_NULLBOOLEAN = (('', _("All")), (False, _("No")), (True, _("Yes")))
 
@@ -223,12 +221,17 @@ def message_on_invalid(forms, request, message, level=None, extra_tags=None):
     forms = make_iterable(forms)
     for form in forms:
         if not form.is_valid():
-            messages.add_message(request, level or messages.SUCCESS, message, extra_tags=extra_tags)
+            messages.add_message(request, level or messages.SUCCESS, message.format(errors=error_labels(forms)), extra_tags=extra_tags)
 
 
-def error_labels(form):
+def error_labels(forms):
     """ Renvoyer la liste des étiquettes de champs pour les erreurs d'un formulaire """
-    if form.errors:
-        labels = [field.label for field in form if field.errors]
+    forms = make_iterable(forms)
+    labels = []
+    for form in forms:
+        if form.errors:
+            labels = labels + [field.label for field in form if field.errors]
+    if labels:
         return humanize_join(labels, 10, "field;fields")
-    return None
+    else:
+        return None

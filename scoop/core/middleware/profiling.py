@@ -13,9 +13,7 @@ from django.conf import settings
 from django.db import connection
 from django.template.context import RequestContext
 from django.template.loader import render_to_string
-
 from scoop.core.util.django.templateutil import render_to_code
-
 
 logger = logging.getLogger(__name__)
 

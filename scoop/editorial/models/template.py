@@ -8,7 +8,6 @@ from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode, ExtendsNode
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.shortcuts import addattr
 

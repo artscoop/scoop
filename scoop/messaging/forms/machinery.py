@@ -1,6 +1,5 @@
 # coding: utf-8
 from django import forms
-
 from scoop.messaging.models.quota import Quota
 
 

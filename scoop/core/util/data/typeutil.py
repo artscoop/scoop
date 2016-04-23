@@ -14,6 +14,24 @@ def str_to(value, newtype, default=0):
         return default
 
 
+def string_to_dict(options):
+    """
+    Convertir une chaîne d'options k=v en dictionnaire
+
+    :param options: chaîne du type 'a1 a2=v2 a3=v3'
+    """
+    output = dict()
+    tokens = (options or '').split()
+    for token in tokens:
+        if token.strip():
+            if '=' in token:
+                arg, value = token.split('=')
+                output[arg] = value
+            else:
+                output[token] = True
+    return output
+
+
 def make_iterable(value, output_type=list):
     """
     Renvoyer un type d'itérable depuis un objet seul ou un itérable

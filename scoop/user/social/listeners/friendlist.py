@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.dispatch.dispatcher import receiver
-
 from scoop.user.social.util.signals import friend_pending_new
 
 

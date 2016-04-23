@@ -8,10 +8,8 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
-from unidecode import unidecode
-
 from scoop.core.templatetags.html_tags import linkify
-
+from unidecode import unidecode
 
 register = template.Library()
 

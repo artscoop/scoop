@@ -34,12 +34,12 @@ class BlocklistManager(SingleDeleteManager):
             return False
         recipients = recipients if isinstance(recipients, (list, tuple, models.QuerySet)) else [recipients]
         blocklists = self.filter(user__in=recipients)
-        sender_blocks = sender.blocklist.get_data(name or 'blacklist') or []
+        sender_blocks = sender.blocklist.get_data(name or DEFAULT_LIST) or []
         for recipient in recipients:
             if recipient.pk in sender_blocks:
                 return False
         for blocklist in blocklists:
-            items = blocklist.get_data(name or 'blacklist') or []
+            items = blocklist.get_data(name or DEFAULT_LIST) or []
             if sender.pk in items:
                 return False
         return True
@@ -141,9 +141,10 @@ class Blocklist(DatetimeModel, DataModel):
             now = timezone.now()
             data = self.get_data(name or DEFAULT_LIST, {})
             data[getattr(sender, 'pk', sender)] = [now]
-            self.set_data(name or DEFAULT_LIST, data)
-            self.save()
-            return True
+            success = self.set_data(name or DEFAULT_LIST, data)
+            if success:
+                self.save()
+                return True
         return False
 
     def remove(self, sender, name=None):

@@ -2,13 +2,12 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-from unidecode import unidecode
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.messaging.util.signals import negotiation_accepted, negotiation_denied, negotiation_sent
+from unidecode import unidecode
 
 
 class NegotiationManager(SingleDeleteManager):

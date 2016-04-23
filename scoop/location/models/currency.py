@@ -3,12 +3,12 @@ from datetime import timedelta
 from decimal import Decimal, DivisionByZero
 
 import requests
+
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.util.model.model import SingleDeleteManager
 
 

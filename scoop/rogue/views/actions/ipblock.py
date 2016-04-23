@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.contrib.auth.decorators import user_passes_test
-
 from scoop.rogue.models.ipblock import IPBlock
 from scoop.user.access.models.ip import IP
 from scoop.user.util.auth import is_superuser

@@ -5,7 +5,6 @@ import loremipsum
 from django.conf import settings
 from django.test.testcases import TestCase
 from django.utils import timezone
-
 from scoop.content.models import Content
 from scoop.content.models.content import Category
 from scoop.user.models.user import User

@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.templatetags.html_tags import ol
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms import RecipientAdminForm
@@ -23,7 +22,7 @@ class MailTypeTranslationInlineAdmin(admin.TabularInline):
     verbose_name_plural = _("Translations")
     model = MailTypeTranslation
     max_num = len(settings.LANGUAGES)
-    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget},}
+    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}}
     max_num = len(settings.LANGUAGES)
     extra = 2
 

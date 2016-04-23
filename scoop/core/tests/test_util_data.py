@@ -3,7 +3,6 @@ from datetime import datetime
 
 from django.test import TestCase
 from django.test.utils import override_settings
-
 from scoop.core.util.data.dateutil import date_age
 from scoop.core.util.data.numbers import round_left
 from scoop.core.util.data.textutil import count_words, one_line, replace_dict, text_to_dict, text_to_list_of_lists

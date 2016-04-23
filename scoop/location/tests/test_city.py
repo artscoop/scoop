@@ -3,7 +3,6 @@ from importlib import import_module
 
 from django.conf import settings
 from django.test import TestCase
-
 from scoop.core.util.shortcuts import get_languages
 from scoop.location.models.city import City
 from scoop.location.models.country import Country

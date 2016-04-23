@@ -2,8 +2,8 @@
 import re
 
 from bs4 import BeautifulSoup as bs
-from html5print.html5print import HTMLBeautifier
 
+from html5print.html5print import HTMLBeautifier
 from scoop.core.util.data.textutil import replace_dict
 
 

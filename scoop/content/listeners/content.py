@@ -4,7 +4,6 @@ import logging
 from django.db.models.signals import post_save, pre_save
 from django.dispatch.dispatcher import receiver
 from django.template.defaultfilters import striptags
-
 from scoop.content.models.content import Content
 from scoop.content.tasks.content import populate_similar
 from scoop.content.util.signals import content_format_html
@@ -12,7 +11,6 @@ from scoop.core.templatetags.html_tags import truncate_longwords_html
 from scoop.core.templatetags.text_tags import truncate_stuckkey
 from scoop.core.util.data.textutil import count_words, replace_dict
 from scoop.core.util.signals import check_indexable, record
-
 
 __all__ = ['auto_manage_content', 'new_content', 'content_indexable']
 

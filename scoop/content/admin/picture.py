@@ -12,7 +12,6 @@ from django.template.defaultfilters import date as datefilter
 from django.utils.timezone import localtime
 from django.utils.translation import ugettext_lazy as _
 from genericadmin.admin import GenericAdminModelAdmin
-
 from scoop.content.admin.filters import DimensionsFilter
 from scoop.content.forms.picture import PictureAdminForm, ZipUploadForm
 from scoop.content.models.picture import Picture
@@ -21,7 +20,6 @@ from scoop.core.admin.filters import TimestampFilter
 from scoop.core.util.django.admin import GenericModelUtil
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import clean_empty_folders, clean_orphans
-
 
 __all__ = ['PictureAdmin']
 

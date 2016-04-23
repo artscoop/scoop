@@ -2,7 +2,6 @@
 import floppyforms as forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.user.models.user import User
 
 

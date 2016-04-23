@@ -6,7 +6,6 @@ from django.contrib import admin, messages
 from django.contrib.admin.options import StackedInline
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.admin.inline import PictureInlineAdmin
 from scoop.core.abstract.user.authored import UseredModelAdmin
 from scoop.core.util.data.dateutil import ages_dates, random_date

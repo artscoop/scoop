@@ -1,11 +1,9 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import addattr
 from scoop.user.access.admin.filters import IPCountryFilter
 from scoop.user.access.models.ip import IP
-
 
 __all__ = ['IPAdmin']
 

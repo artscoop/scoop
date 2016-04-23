@@ -2,10 +2,8 @@
 import logging
 
 from django.dispatch.dispatcher import receiver
-
 from scoop.core.util.signals import record
 from scoop.user.util.signals import profile_banned
-
 
 logger = logging.getLogger(__name__)
 

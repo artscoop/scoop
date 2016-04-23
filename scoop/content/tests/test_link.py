@@ -3,7 +3,6 @@ from importlib import import_module
 
 from django.conf import settings
 from django.test import TestCase
-
 from scoop.content.models.link import Link
 
 

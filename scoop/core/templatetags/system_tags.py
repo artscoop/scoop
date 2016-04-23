@@ -1,9 +1,7 @@
 # coding: utf-8
 import psutil
 from django import template
-
 from scoop.core.util.stream.directory import Paths
-
 
 register = template.Library()
 

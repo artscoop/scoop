@@ -2,7 +2,6 @@
 """ Signaux de l'application Social """
 from django.dispatch import Signal
 
-
 # Demande d'amitié à lancer
 friend_pending_new = Signal(['recipient'])
 friend_accepted = Signal(['recipient'])

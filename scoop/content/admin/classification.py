@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.contrib import admin
-
 from scoop.content.models.classification import Tag
 
 

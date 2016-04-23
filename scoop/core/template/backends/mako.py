@@ -1,14 +1,16 @@
 # coding: utf-8
+import re
 import tempfile
 from os.path import join
+
+from mako import exceptions as mako_exceptions
+from mako.template import Template as MakoTemplate
 
 from django.template import TemplateDoesNotExist, TemplateSyntaxError
 from django.template.backends.base import BaseEngine
 from django.template.backends.utils import csrf_input_lazy, csrf_token_lazy
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
-from mako import exceptions as mako_exceptions
-from mako.template import Template as MakoTemplate
 
 
 class MakoTemplates(BaseEngine):
@@ -41,12 +43,10 @@ class MakoTemplates(BaseEngine):
 
         # Defaut values for initializing the TemplateLookup class
         # You can define them in the backend OPTIONS dict.
-        options.setdefault('collection_size', 5000)
         options.setdefault('module_directory', tempfile.gettempdir())
         options.setdefault('output_encoding', 'utf-8')
         options.setdefault('input_encoding', 'utf-8')
         options.setdefault('encoding_errors', 'replace')
-        options.setdefault('filesystem_checks', True)
         options.setdefault('directories', self.template_dirs)
 
         # Use context processors like Django

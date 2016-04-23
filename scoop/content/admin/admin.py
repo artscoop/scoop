@@ -3,7 +3,6 @@ from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.models.advertisement import Advertisement
 from scoop.content.models.album import Album
 from scoop.content.models.attachment import Attachment
