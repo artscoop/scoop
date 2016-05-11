@@ -1,6 +1,7 @@
 # coding: utf-8
 import logging
 import os
+import re
 from urllib.error import URLError
 from urllib.parse import unquote, urlparse
 
@@ -113,3 +114,27 @@ def add_breadcrumb(request, initial, *args, **kwargs):
     extra_breadcrumbs = [(str(item), item.get_absolute_url()) for item in args]
     if extra_breadcrumbs:
         request.breadcrumbs(extra_breadcrumbs)
+
+
+def active(request, pattern, value="active"):
+    """ Renvoyer un texte si le chmin correspond à un pattern """
+    return value if re.search(pattern, request.path) else ""
+
+
+def active_named(request, name, value="active"):
+    """ Renvoyer un texte si le chemin correspond à une URL nommée """
+    url = "^{}$".format(reverse(name))
+    return value if re.search(url, request.path) else ""
+
+
+def url_named(request, name):
+    """ Renvoyer si le chemin correspond à une URL nommée """
+    return request.resolver_match.url_name == name
+
+
+def url_name(request):
+    """ Renvoyer le nom d'URL de la page """
+    try:
+        return request.resolver_match.url_name
+    except AttributeError:
+        return ""

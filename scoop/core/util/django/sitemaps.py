@@ -65,4 +65,4 @@ def ping_feed(url_name, args=None, kwargs=None, percent=25):
             result = engine.weblogUpdates.ping(full_path)
         except:
             ping_failed.send(None, engine=url, feed=full_path)
-    return locals().get('result')
+    return locals().get('result', None)

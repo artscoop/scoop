@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"POT-Creation-Date: 2016-05-09 13:14+0200\n"
 "PO-Revision-Date: 2015-04-27 15:05+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgstr "Décimal"
 msgid "String"
 msgstr "Chaîne"
 
-#: models/ip.py:95 models/ip.py:186 templates/access/dashboard/ips.html.py:17
+#: models/ip.py:95 models/ip.py:186 templates/access/dashboard/ips.html:17
 msgid "Reverse"
 msgstr "Inversé"
 

@@ -1,9 +1,11 @@
 # coding: utf-8
 import calendar
 import datetime
+import re
 from random import randrange
 
 from django.utils import timezone
+from pytz import timezone as tz_
 
 
 def now():
@@ -20,6 +22,11 @@ def to_timestamp(dt):
     if isinstance(dt, datetime.date):
         dt = datetime.datetime(dt.year, dt.month, dt.day)
     return calendar.timegm(dt.utctimetuple())
+
+
+def to_datetime(value):
+    """ Convertir un timestamp en date """
+    return datetime.datetime.fromtimestamp(value, tz_('UTC'))
 
 
 def date_age(date, today=None):
@@ -65,6 +72,31 @@ def from_now(days=0, hours=0, minutes=0, seconds=0, timestamp=False):
 def is_new(date, days=7, hours=0, minutes=0, seconds=0, now=None):
     """ Renvoyer si une date est plus récente que n jours """
     return date > ((now or timezone.now()) - datetime.timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds))
+
+
+def is_object_new(value, by):
+    """
+    Renvoyer si un objet datetime ou DatetimeModel est plus récent que
+
+    :param by: chaîne au format "#d #h #m" ou un nombre en jours
+    :param value: une instance de DatetimeModel ou un datetime
+    """
+    from scoop.core.abstract.core.datetime import DatetimeModel
+    # Traiter le cas possibles, ou False si non supporté
+    if isinstance(by, str):
+        days = int(getattr(re.search(r"(\d+)d", by, re.IGNORECASE), 'groups', lambda: [0])()[0])
+        hours = int(getattr(re.search(r"(\d+)h", by, re.IGNORECASE), 'groups', lambda: [0])()[0])
+        minutes = int(getattr(re.search(r"(\d+)m", by, re.IGNORECASE), 'groups', lambda: [0])()[0])
+        if isinstance(value, DatetimeModel):
+            return value.is_new(days=days, hours=hours, minutes=minutes)
+        elif isinstance(value, datetime.datetime):
+            return is_new(value, days=days, hours=hours, minutes=minutes)
+    elif isinstance(by, (int, float)):
+        if isinstance(value, DatetimeModel):
+            return value.is_new(days=by)
+        elif isinstance(value, datetime.datetime):
+            return is_new(value, days=by)
+    return False
 
 
 # Arrondir un objet Datetime

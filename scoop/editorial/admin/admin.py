@@ -58,14 +58,14 @@ class ExcerptTranslationInlineAdmin(admin.TabularInline):
     extra = 2
 
 
-class ExcerptAdmin(admin.ModelAdmin):
+class ExcerptAdmin(AutoAuthoredModelAdmin):
     """ Administration des extraits de texte """
     list_select_related = True
-    list_display = ['id', 'name', 'visible', 'uuid']
-    list_editable = ['visible']
-    search_fields = ['name', 'translations__text']
-    list_filter = ['visible']
-    fieldsets = ((_("Excerpt"), {'fields': ('name', 'author', 'format', 'visible', 'weight',)}),)
+    list_display = ['id', 'name', 'title', 'visible', 'level']
+    list_editable = ['visible', 'level', 'title']
+    search_fields = ['name', 'title', 'translations__text']
+    list_filter = ['visible', 'level']
+    fieldsets = ((_("Excerpt"), {'fields': ('name', 'title', 'author', 'format', 'visible', 'weight', 'level')}),)
     form = make_ajax_form(Excerpt, {'author': 'user'})
     inlines = [ExcerptTranslationInlineAdmin]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'

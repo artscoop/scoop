@@ -21,5 +21,5 @@ class ExcerptTranslationInlineForm(forms.ModelForm):
     # Métadonnées
     class Meta:
         model = ExcerptTranslation
-        widgets = {'text': TinyMCE(mce_attrs=TINYMCE_CONFIG_CONTENT)}
+        #widgets = {'text': TinyMCE(mce_attrs=TINYMCE_CONFIG_CONTENT)}
         exclude = []

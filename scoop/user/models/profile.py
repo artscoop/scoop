@@ -61,7 +61,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     """ Profil de base """
 
     # Constantes
-    GENDER = [[0, _("Male")], [1, _("Female")], [2, _("Other")]]
+    GENDER = [[0, _("a male")], [1, _("a female")], [2, pgettext_lazy('gender', "non-binary")]]
     MALE, FEMALE, GENDER_OTHER = 0, 1, 2
     NULLABLE_GENDER = [['', pgettext_lazy('gender', "All")]] + GENDER
     CACHE_KEY = {'online': 'user.profile.online.%d', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count',

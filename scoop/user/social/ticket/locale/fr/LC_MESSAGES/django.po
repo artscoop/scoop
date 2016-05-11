@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"POT-Creation-Date: 2016-05-09 13:14+0200\n"
 "PO-Revision-Date: 2013-03-28 16:54+0009\n"
 "Last-Translator: Anonymous User <steve@localhost.local>\n"
 "Language-Team: français <>\n"
@@ -36,7 +36,7 @@ msgstr "Nom"
 msgid "Short name"
 msgstr "Nom court"
 
-#: models/resolution.py:10 models/ticket.py:42
+#: models/resolution.py:10 models/ticket.py:41
 msgid "Description"
 msgstr "Description"
 
@@ -58,52 +58,48 @@ msgstr "Statut de résolution"
 msgid "resolution statuses"
 msgstr "Statuts de résolution"
 
-#: models/ticket.py:36
+#: models/ticket.py:35
 msgid "New"
 msgstr ""
 
-#: models/ticket.py:36 models/ticket.py:43
+#: models/ticket.py:35 models/ticket.py:42
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/ticket.py:40
+#: models/ticket.py:39
 msgid "Author"
 msgstr "Auteur"
 
-#: models/ticket.py:41
+#: models/ticket.py:40
 msgid "Title"
 msgstr "Titre"
 
-#: models/ticket.py:44
+#: models/ticket.py:43
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/ticket.py:46 models/update.py:23
+#: models/ticket.py:45 models/update.py:23
 msgid "Status"
 msgstr "État"
 
-#: models/ticket.py:47
+#: models/ticket.py:46
 #, fuzzy
 msgid "Related tickets"
 msgstr "Ticket en rapport"
 
-#: models/ticket.py:49
+#: models/ticket.py:48
 msgid "Administrators"
 msgstr "Administrateurs"
 
-#: models/ticket.py:101
+#: models/ticket.py:99
 #, fuzzy
 msgid "ticket"
 msgstr "Ticket"
 
-#: models/ticket.py:102
+#: models/ticket.py:100
 #, fuzzy
 msgid "tickets"
 msgstr "Tickets"
-
-#: models/ticket.py:103
-msgid "Can close a ticket"
-msgstr "Peut clôturer un ticket"
 
 #: models/update.py:22
 msgid "Ticket"
@@ -122,6 +118,9 @@ msgstr "Mise à jour de ticket"
 #, fuzzy
 msgid "ticket updates"
 msgstr "Mises à jour de tickets"
+
+#~ msgid "Can close a ticket"
+#~ msgstr "Peut clôturer un ticket"
 
 #~ msgid "Location"
 #~ msgstr "Lieu"

@@ -1,1 +1,1 @@
-<span>SITENAME</span>
+<span class="brand-text">Lovelive</span>

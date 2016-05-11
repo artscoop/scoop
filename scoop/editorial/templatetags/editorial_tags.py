@@ -1,10 +1,12 @@
 # coding: utf-8
 from django import template
 from django.db.models import Q
-from django.template import Template
-from scoop.core.util.stream.request import default_context
+from django.template.loader import render_to_string
+from functools import lru_cache
+
 from scoop.editorial.models.excerpt import Excerpt
 from scoop.editorial.models.page import Page
+
 
 register = template.Library()
 
@@ -19,8 +21,17 @@ def url_page(value):
 
 
 @register.simple_tag
-def excerpt(name):
+# @lru_cache(256)
+def excerpt(name, request=None, mode=None):
     """ Renvoyer le contenu d'un extrait """
-    item = Excerpt.objects.get(name=name)
-    excerpt_template = Template(item.html(), name=item.name)
-    return excerpt_template.render(default_context())
+    try:
+        item = Excerpt.objects.get(name=name)
+        template_path = 'editorial/display/excerpt/excerpt-{mode}.html'.format(mode=mode or 'default')
+        data = {'excerpt': item}
+        if request is not None:
+            data['request'] = request
+            data['user'] = request.user
+        output = render_to_string(template_path, data)
+        return output
+    except Excerpt.DoesNotExist:
+        return "<span class='excerpt-na'></span>"

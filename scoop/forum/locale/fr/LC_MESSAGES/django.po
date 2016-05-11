@@ -8,22 +8,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"POT-Creation-Date: 2016-05-09 13:14+0200\n"
 "PO-Revision-Date: 2016-04-16 07:26+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.10\n"
 
-#: __init__.py:6
+#: __init__.py:7
 msgid "Forum"
 msgstr "Forum"
 
-#: admin/poll.py:15 models/vote.py:33
+#: admin/poll.py:15 models/vote.py:32
 msgid "Poll"
 msgstr "Sondage"
 
@@ -61,49 +61,48 @@ msgstr "Visible"
 msgid "Groups allowed"
 msgstr "Groupes autorisés"
 
-#: models/label.py:54
+#: models/label.py:55
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/label.py:82
+#: models/label.py:83
 msgid "Unnamed"
 msgstr "Sans nom"
 
-#: models/label.py:89 models/label.py:96
-#| msgid "HTML description"
+#: models/label.py:90 models/label.py:97
 msgid "No description"
 msgstr "Aucune description"
 
-#: models/label.py:105
+#: models/label.py:106
 #, python-brace-format
 msgid "Forum label: [{name}]"
 msgstr "Étiquette de forum : [{name}]"
 
-#: models/label.py:114
+#: models/label.py:115
 msgid "Label"
 msgstr "Étiquette"
 
-#: models/label.py:115 models/label.py:144
+#: models/label.py:116 models/label.py:144
 msgid "Labels"
 msgstr "Étiquettes"
 
-#: models/label.py:123 models/message.py:77
+#: models/label.py:124 models/message.py:76
 msgid "Name"
 msgstr "Nom"
 
-#: models/label.py:124 models/poll.py:53 models/sanction.py:48
+#: models/label.py:125 models/poll.py:54 models/sanction.py:47
 msgid "Description"
 msgstr "Description"
 
-#: models/label.py:125
+#: models/label.py:126
 msgid "HTML description"
 msgstr "Description HTML"
 
-#: models/label.py:134
+#: models/label.py:135
 msgid "translation"
 msgstr "traduction"
 
-#: models/label.py:135
+#: models/label.py:136
 msgid "translations"
 msgstr "traductions"
 
@@ -115,32 +114,32 @@ msgstr "Étiquette principale"
 msgid "Status label"
 msgstr "Étiquette de statut"
 
-#: models/message.py:76 models/thread.py:35
+#: models/message.py:75 models/thread.py:34
 msgid "Author"
 msgstr "Auteur"
 
-#: models/message.py:78 models/participant.py:85 models/poll.py:59
+#: models/message.py:77 models/participant.py:85 models/poll.py:60
 msgid "Thread"
 msgstr "Fil de discussion"
 
-#: models/message.py:79
+#: models/message.py:78
 msgid "Text"
 msgstr "Texte"
 
-#: models/message.py:80
+#: models/message.py:79
 msgctxt "message"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/message.py:170
+#: models/message.py:169
 msgid "message"
 msgstr "message"
 
-#: models/message.py:171
+#: models/message.py:170
 msgid "messages"
 msgstr "messages"
 
-#: models/mutelist.py:28 models/participant.py:84 models/sanction.py:46
+#: models/mutelist.py:28 models/participant.py:84 models/sanction.py:45
 msgid "User"
 msgstr "Utilisateur"
 
@@ -179,45 +178,45 @@ msgstr "participant"
 msgid "participants"
 msgstr "participants"
 
-#: models/poll.py:52
+#: models/poll.py:53
 msgid "Title"
 msgstr "Titre"
 
-#: models/poll.py:54
+#: models/poll.py:55
 msgctxt "poll"
 msgid "Published"
 msgstr "Publié"
 
-#: models/poll.py:55
+#: models/poll.py:56
 msgid "Expires"
 msgstr "Expire"
 
-#: models/poll.py:56
+#: models/poll.py:57
 msgid "Enter one answer per line"
 msgstr "Entrez une réponse par ligne"
 
-#: models/poll.py:56
+#: models/poll.py:57
 msgid "Answers"
 msgstr "Réponses"
 
-#: models/poll.py:58
+#: models/poll.py:59
 msgctxt "poll"
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/poll.py:83
+#: models/poll.py:84
 msgid "Has votes"
 msgstr "A des votes"
 
-#: models/poll.py:92
+#: models/poll.py:93
 msgid "Votes"
 msgstr "Votes"
 
-#: models/poll.py:111
+#: models/poll.py:112
 msgid "Expired"
 msgstr "Expiré"
 
-#: models/poll.py:116
+#: models/poll.py:117
 msgid "Open"
 msgstr "Ouvert"
 
@@ -229,65 +228,65 @@ msgstr "sondage"
 msgid "polls"
 msgstr "sondages"
 
-#: models/sanction.py:42
+#: models/sanction.py:41
 msgid "Posting disabled"
 msgstr "Réponses désactivées"
 
-#: models/sanction.py:42
+#: models/sanction.py:41
 msgid "Reading disabled"
 msgstr "Lecture désactivée"
 
-#: models/sanction.py:43
+#: models/sanction.py:42
 msgid "2 hours"
 msgstr "2 heures"
 
-#: models/sanction.py:43
+#: models/sanction.py:42
 msgid "1 day"
 msgstr "1 jour"
 
-#: models/sanction.py:43
+#: models/sanction.py:42
 msgid "3 days"
 msgstr "3 jours"
 
-#: models/sanction.py:43
+#: models/sanction.py:42
 msgid "1 week"
 msgstr "1 semaine"
 
-#: models/sanction.py:43
+#: models/sanction.py:42
 msgid "30 days"
 msgstr "30 jours"
 
-#: models/sanction.py:47
+#: models/sanction.py:46
 msgid "Type"
 msgstr "Type"
 
-#: models/sanction.py:49
+#: models/sanction.py:48
 msgid "Expiry"
 msgstr "Expiration"
 
-#: models/sanction.py:50
+#: models/sanction.py:49
 msgctxt "sanction"
 msgid "Revoked"
 msgstr "Révoquée"
 
-#: models/sanction.py:67
+#: models/sanction.py:65
 msgid "sanction"
 msgstr "sanction"
 
-#: models/sanction.py:68
+#: models/sanction.py:66
 msgid "sanctions"
 msgstr "sanctions"
 
-#: models/thread.py:36
+#: models/thread.py:35
 msgid "Topic"
 msgstr "Sujet"
 
-#: models/thread.py:37
+#: models/thread.py:36
 msgctxt "thread"
 msgid "Was started"
 msgstr "Démarré"
 
-#: models/thread.py:38
+#: models/thread.py:37
 msgctxt "thread"
 msgid "Updated"
 msgstr "Mis à jour"
@@ -323,28 +322,28 @@ msgstr "Tous les messages"
 msgid "Messages"
 msgstr "Messages"
 
-#: models/thread.py:99
+#: models/thread.py:98
 msgid "thread"
 msgstr "fil de discussion"
 
-#: models/thread.py:100
+#: models/thread.py:99
 msgid "threads"
 msgstr "fils de discussion"
 
-#: models/vote.py:34
+#: models/vote.py:33
 msgid "Choice"
 msgstr "Choix"
 
-#: models/vote.py:41
+#: models/vote.py:39
 #, python-brace-format
 msgid "Vote: {vote} in poll \"{poll}\""
 msgstr "Vote : {vote} dans le sondage « {poll} »"
 
-#: models/vote.py:46
+#: models/vote.py:44
 msgid "vote"
 msgstr "a des votes"
 
-#: models/vote.py:47
+#: models/vote.py:45
 msgid "votes"
 msgstr "votes"
 

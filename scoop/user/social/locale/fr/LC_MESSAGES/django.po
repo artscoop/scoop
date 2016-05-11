@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"POT-Creation-Date: 2016-05-09 13:14+0200\n"
 "PO-Revision-Date: 2016-03-28 06:34+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
@@ -89,23 +89,23 @@ msgid "Public"
 msgstr "Public"
 
 #: models/event/eventcategory.py:43 models/event/eventcategory.py:77
-#: models/friend/friendgroup.py:27 models/group/group.py:65
-#: models/rating/rating.py:31 models/rating/rating.py:67
+#: models/friend/friendgroup.py:27 models/group/group.py:66
+#: models/rating/rating.py:29 models/rating/rating.py:65
 msgid "Name"
 msgstr "Nom"
 
-#: models/event/eventcategory.py:49 models/rating/rating.py:37
+#: models/event/eventcategory.py:49 models/rating/rating.py:35
 msgid "(No name)"
 msgstr "(Sans nom)"
 
 #: models/event/eventcategory.py:51 models/event/eventcategory.py:78
 #: models/event/events.py:64 models/event/events.py:103
-#: models/group/group.py:68 models/rating/rating.py:39
-#: models/rating/rating.py:68
+#: models/group/group.py:69 models/rating/rating.py:37
+#: models/rating/rating.py:66
 msgid "Description"
 msgstr "Description"
 
-#: models/event/eventcategory.py:57 models/rating/rating.py:45
+#: models/event/eventcategory.py:57 models/rating/rating.py:43
 msgid "(No description)"
 msgstr "(Pas de description)"
 
@@ -240,39 +240,39 @@ msgstr "statut d'amitié"
 msgid "friend statuses"
 msgstr "statuts d'amitié"
 
-#: models/group/group.py:62
+#: models/group/group.py:63
 msgid "Anyone can join"
 msgstr "Tout le monde peut s'inscrire"
 
-#: models/group/group.py:62
+#: models/group/group.py:63
 msgid "Administrators must confirm first"
 msgstr "Les administrateurs doivent d'abord confirmer"
 
-#: models/group/group.py:62
+#: models/group/group.py:63
 msgid "Invites only"
 msgstr "Invitations seulement"
 
-#: models/group/group.py:67
+#: models/group/group.py:68
 msgid "Define if the group is not in the public listings"
 msgstr "Définir si le groupe n'apparaît pas dans les listes publiques"
 
-#: models/group/group.py:67
+#: models/group/group.py:68
 msgid "Discrete group"
 msgstr "Groupe discret"
 
-#: models/group/group.py:69
+#: models/group/group.py:70
 msgid "Membership type"
 msgstr "Type d'adhésion"
 
-#: models/group/group.py:72
+#: models/group/group.py:73
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/group/group.py:73
+#: models/group/group.py:74
 msgid "Members"
 msgstr "Membres"
 
-#: models/group/group.py:74
+#: models/group/group.py:75
 msgid "Applications"
 msgstr "Candidatures"
 
@@ -328,68 +328,68 @@ msgstr "statut textuel"
 msgid "user shouts"
 msgstr "statuts textuels"
 
-#: models/rating/like.py:64 models/rating/rating.py:95
+#: models/rating/like.py:64 models/rating/rating.py:93
 #: models/rating/score.py:44
 msgid "Author"
 msgstr "Auteur"
 
-#: models/rating/like.py:65 models/rating/rating.py:28
-#: models/rating/rating.py:98
+#: models/rating/like.py:65 models/rating/rating.py:26
+#: models/rating/rating.py:96
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/rating/like.py:66 models/rating/rating.py:99
+#: models/rating/like.py:67 models/rating/rating.py:97
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: models/rating/like.py:79
+#: models/rating/like.py:80
 #, python-brace-format
 msgid "{user} likes {target}"
 msgstr "{user} aime {target}"
 
-#: models/rating/like.py:83
+#: models/rating/like.py:84
 msgid "like"
 msgstr "mention j'aime"
 
-#: models/rating/like.py:84
+#: models/rating/like.py:85
 msgid "likes"
 msgstr "mentions j'aime"
 
-#: models/rating/rating.py:26
+#: models/rating/rating.py:24
 msgid "Slug"
 msgstr "Slug"
 
-#: models/rating/rating.py:54
+#: models/rating/rating.py:52
 #, python-brace-format
 msgid "{name}"
 msgstr "{name}"
 
-#: models/rating/rating.py:58
+#: models/rating/rating.py:56
 msgid "rating axis"
 msgstr "axe de notation"
 
-#: models/rating/rating.py:59
+#: models/rating/rating.py:57
 msgid "rating axes"
 msgstr "axes de notation"
 
-#: models/rating/rating.py:94 models/rating/score.py:46
+#: models/rating/rating.py:92 models/rating/score.py:46
 msgid "Axis"
 msgstr "Axe"
 
-#: models/rating/rating.py:96
+#: models/rating/rating.py:94
 msgid "Rating"
 msgstr "Note"
 
-#: models/rating/rating.py:106
+#: models/rating/rating.py:104
 #, python-brace-format
 msgid "{user} gave {item} {rating:.03f} points"
 msgstr "{user} a donné {rating:.03f} points à {item}"
 
-#: models/rating/rating.py:116
+#: models/rating/rating.py:114
 msgid "rating"
 msgstr "note"
 
-#: models/rating/rating.py:117
+#: models/rating/rating.py:115
 msgid "ratings"
 msgstr "notes"
 
