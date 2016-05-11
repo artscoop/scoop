@@ -11,22 +11,16 @@ from ngram import NGram
 from scoop.core.templatetags.html_tags import linkify
 from unidecode import unidecode
 
+from scoop.core.util.data.textutil import truncate_repeats, truncate_ellipsis, truncate_longwords, disemvowel
+
+
 register = template.Library()
 
 
-@register.filter
-def truncate_ellipsis(value, arg):
+@register.filter(name='truncate_ellipsis')
+def truncate_with_ellipsis(value, arg):
     """ Renvoyer une chaîne tronquée et y ajouter une ellipse """
-    try:
-        length = int(arg)
-    except ValueError:
-        return value
-    if not isinstance(value, str):
-        value = str(value)
-    if len(value) > length:
-        return value[:length].strip() + "…"
-    else:
-        return value
+    return truncate_ellipsis(value, arg)
 
 
 @register.filter
@@ -38,41 +32,19 @@ def truncate_stuckkey(value, length=5):
     :param value: texte en entrée
     :param length: nombre de répétitions minimum d'une lettre à filtrer
     """
-    re.DEBUG = settings.DEBUG
-
-    # Sous fonction : récupère un match et le coupe
-    def cut_match(match):
-        return match.group()[0:1]
-
-    # Supprimer toutes les séquences de la même lettre par cut_match
-    pattern = r"(?i)(\w)\1{%d,100}" % (int(length))
-    result = re.sub(pattern, cut_match, str(value))
-    return result
+    return truncate_repeats(value, length=length)
 
 
-@register.filter
-def truncate_longwords(value, length=27):
+@register.filter(name='truncate_longwords')
+def truncate_for_longwords(value, length=27):
     """ Découper les mots plus long que le mot français le plus long """
-    re.DEBUG = settings.DEBUG
-
-    def cut_match(match):
-        """ Couper une correspondance du reste du texte """
-        portion = list(match.group())
-        portion.insert(length - 1, " ")
-        return "".join(portion)
-
-    # Supprimer toutes les séquences de la même lettre par cut_match
-    pattern = r"\S{%(length)d}" % {'length': int(length)}
-    result = re.sub(pattern, cut_match, value)
-    return result
+    return truncate_longwords(value, length)
 
 
 @register.filter(name="disemvowel")
-def disemvowel(value):
+def disemvowel_(value):
     """ Renvoyer le texte sans voyelles et sans accents """
-    value = unidecode(value)
-    value = value.replace(value, re.sub(r'[AEIOUYaeiouy]', '', value))
-    return value
+    return disemvowel(value)
 
 
 @register.simple_tag
@@ -136,4 +108,7 @@ def compare(initial, other):
 def site_brand(value):
     """ Remplace des occurrences de texte par une version améliorée du nom du site """
     replacement = render_to_string("core/display/site-name.txt").strip('\n ')
-    return value.replace(settings.CORE_BRAND_NAME_MARKER, replacement)
+    output = re.sub(r'(<(?P<tag>input|textarea).*>)(.*)({0})(.*)(</(?P=tag)>)'.format(settings.CORE_BRAND_NAME_MARKER),
+                    '\1\2§brand§\4\5', value)
+    output = output.replace(settings.CORE_BRAND_NAME_MARKER, replacement).replace('§brand§', settings.CORE_BRAND_NAME_MARKER)
+    return output

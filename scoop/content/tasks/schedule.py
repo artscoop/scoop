@@ -1,10 +1,11 @@
 # coding: utf-8
-from datetime import timedelta
-
 from celery.task import periodic_task
+from celery.schedules import timedelta, crontab
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
+from easy_thumbnails.files import generate_all_aliases
+
 from scoop.content.models.picture import Picture
 from scoop.core.util.django.sitemaps import ping_feed
 
@@ -18,13 +19,23 @@ def clean_transient_pictures():
         picture.delete(clear=True)
 
 
-@periodic_task(run_every=timedelta(minutes=4))
+@periodic_task(run_every=timedelta(minutes=8))
 def update_unsized_pictures():
     """ Mettre à jour les dimensions des images sans dimensions """
     with transaction.atomic():
         pictures = Picture.objects.filter(width__in=[0, 1], height__in=[0, 1]).order_by('?')[:256]
         for picture in pictures:
             picture.update_size()
+    return True
+
+
+@periodic_task(run_every=crontab(0, [2, 4], [1, 4]))  # lun+jeu à 2h et 4h
+def create_random_picture_aliases():
+    """ Créer toutes les miniatures pour des images aléatoires """
+    with transaction.atomic():
+        pictures = Picture.objects.filter(width__in=[0, 1], height__in=[0, 1]).order_by('?')[:2048]
+        for picture in pictures:
+            generate_all_aliases(picture.image, include_global=True)
     return True
 
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 07:22+0200\n"
-"PO-Revision-Date: 2016-04-16 07:28+0009\n"
+"POT-Creation-Date: 2016-05-09 13:14+0200\n"
+"PO-Revision-Date: 2016-05-10 18:03+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
-"X-Translated-Using: django-rosetta 0.7.10\n"
+"X-Translated-Using: django-rosetta 0.7.11\n"
 
 #: admin/activation.py:20
 msgid "Activate selected users"
@@ -36,7 +36,7 @@ msgstr "Par défaut"
 msgid "Data"
 msgstr "Données"
 
-#: admin/filters.py:13 admin/user.py:66
+#: admin/filters.py:13 admin/user.py:67
 msgid "last online"
 msgstr "vu en ligne"
 
@@ -140,19 +140,19 @@ msgstr "Orange"
 msgid "Bouygues"
 msgstr "Bouygues"
 
-#: admin/filters.py:144
+#: admin/filters.py:145
 msgid "picture"
 msgstr "image"
 
-#: admin/filters.py:150
+#: admin/filters.py:151
 msgid "Has pictures"
 msgstr "A des images"
 
-#: admin/filters.py:151
+#: admin/filters.py:152
 msgid "Has no picture"
 msgstr "N'a pas d'image"
 
-#: admin/filters.py:164
+#: admin/filters.py:165
 msgid "first username letter"
 msgstr "première lettre du pseudonyme"
 
@@ -166,7 +166,7 @@ msgstr "Permissions"
 msgid "User"
 msgstr "Utilisateur"
 
-#: admin/profile.py:41 admin/user.py:38
+#: admin/profile.py:41 admin/user.py:39
 msgid "Deactivate selected users"
 msgstr "Désactiver les utilisateurs sélectionnés"
 
@@ -187,53 +187,53 @@ msgstr "Mélanger les données du profil"
 msgid "Id"
 msgstr "Id"
 
-#: admin/profile.py:104 forms/registration.py:21 models/user.py:196
+#: admin/profile.py:104 forms/registration.py:23 models/user.py:197
 msgid "Email"
 msgstr "Email"
 
-#: admin/profile.py:109 admin/user.py:91
+#: admin/profile.py:109 admin/user.py:92
 msgid "User picture"
 msgstr "Portrait utilisateur"
 
-#: admin/user.py:28
+#: admin/user.py:29
 msgid "Status"
 msgstr "État"
 
-#: admin/user.py:42
+#: admin/user.py:43
 #, python-brace-format
 msgid "{count} users have been successfully deactivated."
 msgstr "{count} utilisateurs ont été correctement désactivés."
 
-#: admin/user.py:44
+#: admin/user.py:45
 msgid "Disconnect selected users"
 msgstr "Déconnecter les utilisateurs sélectionnés"
 
-#: admin/user.py:50
+#: admin/user.py:51
 #, python-brace-format
 msgid "{count} users have been successfully logged out."
 msgstr "{count} utilisateurs ont été correctement déconnectés."
 
-#: admin/user.py:53
+#: admin/user.py:54
 msgid "date joined"
 msgstr "date d'inscription"
 
-#: admin/user.py:58
+#: admin/user.py:59
 msgid "last login"
 msgstr "dernière connexion"
 
-#: admin/user.py:71
+#: admin/user.py:72
 msgid "Never"
 msgstr "Jamais"
 
-#: admin/user.py:77
+#: admin/user.py:78
 msgid "Groups"
 msgstr "Groupes"
 
-#: admin/user.py:81
+#: admin/user.py:82
 msgid "(None)"
 msgstr "(Aucun(e))"
 
-#: admin/user.py:86
+#: admin/user.py:87
 msgid "Profile"
 msgstr "Profil"
 
@@ -254,88 +254,88 @@ msgid "You must provide an username or email and a password."
 msgstr ""
 "Vous devez fournir un nom d'utilisateur ou email ainsi qu'un mot de passe."
 
-#: forms/configuration.py:18
+#: forms/configuration.py:19
 msgid "15 minutes"
 msgstr "15 minutes"
 
-#: forms/configuration.py:18
+#: forms/configuration.py:19
 msgid "30 minutes"
 msgstr "30 minutes"
 
-#: forms/configuration.py:18
+#: forms/configuration.py:19
 msgid "3 hours"
 msgstr "3 heures"
 
-#: forms/configuration.py:18
+#: forms/configuration.py:19
 msgid "3 days"
 msgstr "3 jours"
 
-#: forms/configuration.py:18
+#: forms/configuration.py:19
 msgid "30 days"
 msgstr "30 jours"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:20
 msgid "5 minutes"
 msgstr "5 minutes"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:20
 msgid "1 hour"
 msgstr "1 heure"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:20
 msgid "12 hours"
 msgstr "12 heures"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:20
 msgid "2 days"
 msgstr "2 jours"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:21
 msgid "Home page"
 msgstr "Page d'accueil"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:21
 msgid "My profile"
 msgstr "Mon profil"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:21
 msgid "My messages"
 msgstr "Mes messages"
 
-#: forms/configuration.py:24
+#: forms/configuration.py:25
 msgid "Stay connected for"
 msgstr "Rester connecté pendant"
 
-#: forms/configuration.py:25
+#: forms/configuration.py:26
 msgid "Destination upon login"
 msgstr "Destination après connexion"
 
-#: forms/configuration.py:26
+#: forms/configuration.py:27
 msgid "Receive emails"
 msgstr "Recevoir des emails"
 
-#: forms/configuration.py:27
+#: forms/configuration.py:28
 msgid "Max reception rate"
 msgstr "Fréquence maximum de réception"
 
-#: forms/configuration.py:29
+#: forms/configuration.py:30
 msgid "Receive when a user sends you a message"
 msgstr "Recevoir lorsqu'un utilisateur vous envoie un message"
 
-#: forms/configuration.py:30
+#: forms/configuration.py:31
 msgid "Receive when a staff member sends you a message"
 msgstr "Recevoir lorsqu'un membre du personnel vous envoie un message"
 
-#: forms/configuration.py:31
+#: forms/configuration.py:32
 msgid "Receive when a content you've subscribed to is updated"
 msgstr "Recevoir lorsqu'un contenu auquel vous avez souscrit est mis à jour"
 
-#: forms/profile.py:29
+#: forms/profile.py:28
 #, python-brace-format
 msgid "You must be {age:d} or older."
 msgstr "Vous devez avoir au moins {age:d} ans."
 
-#: forms/profile.py:43
+#: forms/profile.py:42
 #, python-format
 msgid ""
 "%(input)s <span class='clear'>%(checkbox)s <span>Remove "
@@ -359,64 +359,64 @@ msgstr ""
 msgid "Gender"
 msgstr "Sexe"
 
-#: forms/registration.py:20 forms/user.py:66
+#: forms/registration.py:22 forms/user.py:66
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
-#: forms/registration.py:22
+#: forms/registration.py:24
 msgid "Retype email"
 msgstr "Saisissez encore l'email"
 
-#: forms/registration.py:23
+#: forms/registration.py:25
 msgid "Retype password"
-msgstr "Saisissez encore le mot de passe"
+msgstr "Répétez le mot de passe"
 
-#: forms/registration.py:30
+#: forms/registration.py:32
 #, python-brace-format
 msgid "Your password should be at least {min} characters long"
 msgstr "Votre mot de passe doit faire au moins {min} caractères"
 
-#: forms/registration.py:37
+#: forms/registration.py:39
 msgid "The password must be identical in both fields."
 msgstr "Le mot de passe doit être identique dans les deux champs."
 
-#: forms/registration.py:45
+#: forms/registration.py:47
 msgid "This e-mail address is already in use."
 msgstr "L'adresse email est déjà utilisée."
 
-#: forms/registration.py:54
+#: forms/registration.py:56
 msgid "The email addresses must be identical."
 msgstr "Les adresses email doivent être identiques."
 
-#: forms/registration.py:62
+#: forms/registration.py:64
 #, python-brace-format
 msgid "Your first name must not exceed {max} characters"
 msgstr "Votre prénom doit faire {max} caractères au maximum"
 
-#: forms/registration.py:72
+#: forms/registration.py:74
 msgid "This nickname is already in use."
 msgstr "Ce pseudonyme est déjà utilisé."
 
-#: forms/registration.py:76
+#: forms/registration.py:78
 #, python-brace-format
 msgid "Your nickname should be between {min} and {max} characters long."
 msgstr "Votre pseudonyme doit faire entre {min} et {max} caractères."
 
-#: forms/registration.py:83
+#: forms/registration.py:86
 msgid "You must accept our EULA to proceed."
 msgstr "Vous devez accepter nos CGU pour continuer."
 
-#: forms/registration.py:100 forms/registration.py:107
+#: forms/registration.py:103 forms/registration.py:111
 #, python-brace-format
 msgid "By ticking this checkbox, I abide to the {website} license agreement"
 msgstr ""
 "En cochant cette case, j'accepte les conditions d'utilisation de {website}"
 
-#: forms/registration.py:101 forms/registration.py:108
+#: forms/registration.py:105 forms/registration.py:113
 msgid "EULA"
 msgstr "CGU"
 
-#: forms/registration.py:113
+#: forms/registration.py:118
 msgid "Original"
 msgstr "Original"
 
@@ -456,12 +456,12 @@ msgstr "Bonjour, {name} !"
 msgid "Thanks for visiting."
 msgstr "Merci de votre visite."
 
-#: middleware/impersonation.py:52
+#: middleware/impersonation.py:51
 #, python-brace-format
 msgid "{name}, your impersonation session has been properly shut down."
 msgstr "{name}, votre session d'imitation a été correctement terminée."
 
-#: middleware/impersonation.py:58
+#: middleware/impersonation.py:57
 #, python-brace-format
 msgid "You are viewing {path} as {name}. <a href=\"?{exit}\">Quit</a>"
 msgstr "Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
@@ -533,19 +533,20 @@ msgstr "configuration utilisateur"
 msgid "user configurations"
 msgstr "configurations utilisateurs"
 
-#: models/profile.py:65
-msgid "Male"
-msgstr "Homme"
+#: models/profile.py:64
+msgid "a male"
+msgstr "un homme"
 
-#: models/profile.py:65
-msgid "Female"
-msgstr "Femme"
+#: models/profile.py:64
+msgid "a female"
+msgstr "une femme"
 
-#: models/profile.py:65
-msgid "Other"
-msgstr "Autre"
+#: models/profile.py:64
+msgctxt "gender"
+msgid "non-binary"
+msgstr "non binaire"
 
-#: models/profile.py:67
+#: models/profile.py:66
 msgctxt "gender"
 msgid "All"
 msgstr "Tous"
@@ -556,7 +557,6 @@ msgid "Updated"
 msgstr "Mis à jour"
 
 #: models/profile.py:75
-#| msgid "Main picture"
 msgid "Main profile picture"
 msgstr "Image principale du profil"
 
@@ -590,7 +590,7 @@ msgstr ""
 "Pas de chemin par défaut pour les imamges utilisateur. Ajoutez un chemin "
 "relatif à MEDIA_URL dans settings.USER_DEFAULT_PICTURE_PATH"
 
-#: models/user.py:185
+#: models/user.py:186
 msgid ""
 "Your name must start with a letter and can only contain letters, digits and "
 "underscores"
@@ -598,105 +598,105 @@ msgstr ""
 "Votre nom doit commencer par une lettre et ne contenir que des lettres, des "
 "chiffres et des tirets bas (_)"
 
-#: models/user.py:187
+#: models/user.py:188
 msgid "Your name can only contain letters"
 msgstr "Votre nom ne peut contenir que des lettres"
 
-#: models/user.py:193
+#: models/user.py:194
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: models/user.py:194
+#: models/user.py:195
 msgid "Name"
 msgstr "Nom"
 
-#: models/user.py:195
+#: models/user.py:196
 msgctxt "user"
 msgid "Bot"
 msgstr "Robot"
 
-#: models/user.py:197
+#: models/user.py:198
 msgctxt "user"
 msgid "Active"
 msgstr "Actif"
 
-#: models/user.py:198
+#: models/user.py:199
 msgctxt "user"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/user.py:199
+#: models/user.py:200
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 "Indique si l'utilisateur peut se connecter ou non à ce site "
 "d'administration."
 
-#: models/user.py:200
+#: models/user.py:201
 msgctxt "user"
 msgid "Staff"
 msgstr "Équipe"
 
-#: models/user.py:201
+#: models/user.py:202
 msgid "Date joined"
 msgstr "Date d'inscription"
 
-#: models/user.py:202
+#: models/user.py:203
 msgctxt "user"
 msgid "Last online"
 msgstr "Vu en ligne"
 
-#: models/user.py:203
+#: models/user.py:204
 msgid "Next possible mail for user"
 msgstr "Prochain courrier possible pour l'utilisateur"
 
-#: models/user.py:210
+#: models/user.py:211
 #, python-brace-format
 msgid "{name} (deleted)"
 msgstr "{name} (supprimé)"
 
-#: models/user.py:214
+#: models/user.py:215
 msgid "Robot"
 msgstr "Robot"
 
-#: models/user.py:240
+#: models/user.py:241
 msgid "The value passed has no login value"
 msgstr "La valeur passée ne contient pas d'information d'identification"
 
-#: models/user.py:248
+#: models/user.py:249
 msgid "Bad username and/or password."
 msgstr "Mauvais nom d'utilisateur et/ou mot de passe."
 
-#: models/user.py:250
+#: models/user.py:251
 msgid "This account is currently not active."
 msgstr "Ce compte est actuellement inactif."
 
-#: models/user.py:252
+#: models/user.py:253
 msgid "This user cannot log in."
 msgstr "Cet utilisateur ne peut pas se connecter."
 
-#: models/user.py:259
+#: models/user.py:260
 #: templates/user/display/user/templatetag/online-status.html:27
 msgid "Online"
 msgstr "En ligne"
 
-#: models/user.py:268
+#: models/user.py:269
 #: templates/user/display/user/templatetag/online-status.html:25
 msgid "Away"
 msgstr "Absent(e)"
 
-#: models/user.py:273
+#: models/user.py:274
 msgid "Online time"
 msgstr "En ligne depuis"
 
-#: models/user.py:279
+#: models/user.py:280
 msgid "Time online"
 msgstr "en ligne"
 
-#: models/user.py:532
+#: models/user.py:534
 msgid "user"
 msgstr "utilisateur"
 
-#: models/user.py:533 templates/user/dashboard/online.html.py:5
+#: models/user.py:535 templates/user/dashboard/online.html:5
 msgid "users"
 msgstr "utilisateurs"
 
@@ -712,18 +712,18 @@ msgstr "visite de profil"
 msgid "profile visits"
 msgstr "visites de profils"
 
-#: templates/admin/user/configuration/edit_inline/stacked.html:65
-#: templates/admin/user/configuration/edit_inline/tabular.html:101
+#: templates/admin/user/configuration/edit_inline/stacked.html:68
+#: templates/admin/user/configuration/edit_inline/tabular.html:105
 #, python-format
 msgid "Add another %(verbose_name)s"
 msgstr "Ajouter un autre %(verbose_name)s"
 
-#: templates/admin/user/configuration/edit_inline/stacked.html:68
-#: templates/admin/user/configuration/edit_inline/tabular.html:104
+#: templates/admin/user/configuration/edit_inline/stacked.html:71
+#: templates/admin/user/configuration/edit_inline/tabular.html:108
 msgid "Remove"
 msgstr "Supprimer"
 
-#: templates/admin/user/configuration/edit_inline/tabular.html:16
+#: templates/admin/user/configuration/edit_inline/tabular.html:17
 msgid "Delete?"
 msgstr "Effacer ?"
 
@@ -839,17 +839,23 @@ msgstr "(Recommandé)"
 msgid "Offline"
 msgstr "Hors ligne"
 
-#: templatetags/user_tags.py:168 templatetags/user_tags.py:185
+#: templatetags/user_tags.py:172 templatetags/user_tags.py:189
 msgid "yes"
 msgstr "oui"
 
-#: templatetags/user_tags.py:168 templatetags/user_tags.py:185
+#: templatetags/user_tags.py:172 templatetags/user_tags.py:189
 msgid "no"
 msgstr "non"
 
 #: util/auth.py:81
 msgid "You have no permission over this user."
 msgstr "Vous n'avez pas de permissions sur cet utilisateur."
+
+#~ msgid "Male"
+#~ msgstr "Homme"
+
+#~ msgid "Other"
+#~ msgstr "Autre"
 
 #~ msgid "Select the main profile picture"
 #~ msgstr "Choisissez la photo principale du profil"

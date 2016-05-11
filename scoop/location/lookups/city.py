@@ -2,9 +2,10 @@
 from ajax_select import LookupChannel
 from django.core.cache import cache
 from django.db import models
+from unidecode import unidecode
+
 from scoop.core.util.model.model import search_query
 from scoop.location.models.city import City
-from unidecode import unidecode
 
 
 class CityLookup(LookupChannel):
@@ -41,11 +42,8 @@ class CityLookup(LookupChannel):
 
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
-        output = "<span class='text-middle'>{country} <span class='muted'>{code}</span> <strong>{name}</strong></span><br>{parent}".format(name=obj.get_name(),
-                                                                                                                                           country=obj.get_country_icon(
-                                                                                                                                               directory="png"),
-                                                                                                                                           code=obj.get_code(),
-                                                                                                                                           parent=obj.get_auto_parent())
+        output = "<span class='text-middle'>{country} <span class='muted'>{code}</span> <strong>{name}</strong></span><br>{parent}"
+        output = output.format(name=obj.get_name(), country=obj.get_country_icon(directory="png"), code=obj.get_code(), parent=obj.get_auto_parent())
         return output
 
     def check_auth(self, request):
@@ -94,7 +92,7 @@ class CityPublicMinimalLookup(CityLookup):
     def format_item_display(self, obj):
         """ Renvoyer la représentation HTML de l'objet dans le deck """
         output = """{country} <span class="city-code">{code}</span> <span class="city-name">{name}</span> <span class="city-parent">{parent}</span>""".format(
-                name=obj.get_name(), country=obj.get_country_icon(directory="png"), code=obj.get_code(), parent=obj.get_auto_parent())
+            name=obj.get_name(), country=obj.get_country_icon(directory="png"), code=obj.get_code(), parent=obj.get_auto_parent())
         return output
 
 

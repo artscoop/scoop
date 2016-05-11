@@ -10,10 +10,9 @@ class ConfigurationForm(DataForm):
 
     # Configuration
     name = 'user.configuration'
-    defaults = {'session_timeout': 259200, 'login_destination': 0, 'receive_emails': True, 'receive_interval': 3600, 'receive_on_message': True,
-                'receive_on_staff': True,
-                'receive_on_favorite': True, 'receive_on_subscription': True}
     saved_fields = None
+    defaults = {'session_timeout': 259200, 'login_destination': 0, 'receive_emails': True, 'receive_interval': 3600,
+                'receive_on_message': True, 'receive_on_staff': True, 'receive_on_favorite': True, 'receive_on_subscription': True}
 
     # Constantes
     SESSION_DURATIONS = [[900, _("15 minutes")], [1800, _("30 minutes")], [10800, _("3 hours")], [259200, _("3 days")], [2592000, _("30 days")]]

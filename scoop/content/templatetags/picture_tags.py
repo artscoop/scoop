@@ -56,43 +56,8 @@ def display_image(context, image=None, **kwargs):
         - image_alt : attribut alt de l'élément img
     """
     request = context.get('request')
-    display = dict()
-    # Afficher une image par UUID (remplacer image par uuid)
-    if 'uuid' in kwargs:
-        image = Picture.objects.get_by_uuid(kwargs.pop('uuid', None), default=image)
-    # N'afficher que si l'objet Picture est visible pour l'objet Request
-    if image is not None and isinstance(image, (Picture, str, FieldFile)):
-        display['alias'] = kwargs.pop('alias')  # alias de vignette
-        display['options'] = kwargs.pop('options', "")  # options easy-thumbnails de type bool
-        display['image_class'] = kwargs.pop('image_class', "")
-        display['image_rel'] = kwargs.pop('image_rel', "")
-        display['link_title'] = kwargs.pop('link_title', "")
-        display['link_class'] = kwargs.pop('link_class', "")
-        display['link_id'] = kwargs.pop('link_id', "")
-        display['link_rel'] = kwargs.pop('link_rel', None)
-        display['link'] = kwargs.pop('link', True)
-        if isinstance(image, Picture) and image.is_visible(request) and image.exists():
-            display['image_url'] = image.image
-            display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image.image))
-            display['image_title'] = kwargs.pop('image_title', image.title)
-            display['image_alt'] = kwargs.pop('image_alt', image.description)
-        elif isinstance(image, (str, FieldFile)):
-            display['image_url'] = image
-            display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image))
-            display['image_title'] = kwargs.pop('image_title', "")
-            display['image_alt'] = kwargs.pop('image_alt', "")
-        else:
-            return ""
-        # Si link_target est un objet, convertir en URL
-        if 'link_target' in display and hasattr(display['link_target'], 'get_absolute_url'):
-            display['link_target'] = display['link_target'].get_absolute_url()
-        # Convertir l'image en thumbnail si possible
-        options = kwargs
-        options.update(aliases.get(display['alias']) or {'size': display['alias']})
-        options.update(string_to_dict(display['options']))
-        display['image_thumbnail'] = get_thumbnailer(display['image_url']).get_thumbnail(options)
-        return render_to_string('content/display/picture/templatetags/image.html', display)
-    return ""
+    display = Picture.get_display(request, image, **kwargs)
+    return render_to_string('content/display/picture/templatetags/image.html', display)
 
 
 @register.filter

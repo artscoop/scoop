@@ -34,6 +34,11 @@ def get_languages():
     return map(itemgetter(1), settings.LANGUAGES)
 
 
+def get_website_name():
+    """ Renvoyer le nom de site enregistré dans les settings """
+    return getattr(settings, 'SITE_NAME', 'N/A')
+
+
 def addattr(**kwargs):
     """ Définir des attributs à une méthode ou fonction """
 

@@ -7,6 +7,7 @@ def is_installed(app_name, retval=None):
     Décorateur exécutant la fonction si une ou plusieurs applications sont installées
 
     :param app_name: Nom de l'application Django (pas le app_label)
+    :param retval: valeur à renvoyer si l'app n'est pas installée
     :type app_name: str
     """
 

@@ -1,5 +1,5 @@
 # coding: utf-8
-import floppyforms as forms
+import floppyforms.__future__ as forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from scoop.user.models.user import User

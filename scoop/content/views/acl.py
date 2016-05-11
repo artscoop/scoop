@@ -25,11 +25,11 @@ def acl_file_serve(request, resource):
     :returns: un objet HTTPResponse
     """
     user = request.user
-    path_folders = filter(None, resource.split('/', 5))
+    path_folders = [chunk for chunk in resource.split('/', 5) if chunk]
     granted = not ACL_ENABLED or user.is_staff  # Autoriser par défaut si settings.CONTENT_ACL_ENABLED est False
 
     # Traiter l'autorisation par le nom du premier répertoire
-    if not granted and len(path_folders) and path_folders[0] in ACLModel.ACL_PATHS_START:
+    if not granted and path_folders and path_folders[0] in ACLModel.ACL_PATHS_START:
         if path_folders[0] == ACLModel.ACL_PATHS[ACLModel.PUBLIC]:
             granted = True
         elif path_folders[0] == ACLModel.ACL_PATHS[ACLModel.PRIVATE]:

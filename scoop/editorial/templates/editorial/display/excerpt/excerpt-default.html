@@ -1,0 +1,7 @@
+<section name="{{ excerpt.name|slugify }}">
+    <h{{ excerpt.level }}>
+        {{ excerpt.title }}
+        <a class="section-anchor" href="#{{ excerpt.name|slugify }}" alt="Indicateur section" title="Lien vers cette section">_</a>
+    </h{{ excerpt.level }}>
+    {{ excerpt.html }}
+</section>

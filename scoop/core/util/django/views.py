@@ -2,9 +2,10 @@
 from django.http.response import HttpResponseBadRequest
 
 
-def require_AJAX(function):
+def require_ajax(function):
     """
     Décorateur obligeant la requête à être une requête AJAX
+
     Renvoie une erreur HTTP 405 dans le cas contraire
     """
 

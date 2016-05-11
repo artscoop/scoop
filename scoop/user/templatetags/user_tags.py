@@ -41,8 +41,12 @@ def can_edit(user, target):
 @register.filter
 def can_see(user, target):
     """ Renvoyer si l'utilisateur peut en voir un autre """
+    if hasattr(target, 'user'):
+        target = target.user
     if user and target:
-        return user.can_see(target)
+        if user.is_authenticated():
+            return user.can_see(target)
+        return not target.is_staff
 
 
 @register.filter

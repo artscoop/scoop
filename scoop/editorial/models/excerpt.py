@@ -1,5 +1,8 @@
 # coding: utf-8
+import misaka
 import textile
+from autoslug.fields import AutoSlugField
+from django.utils.safestring import SafeString
 from markdown import Markdown
 
 from django.db import models
@@ -22,13 +25,15 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthorableModel, WeightedModel, 
     """ Extrait de texte """
 
     # Constantes
-    FORMATS = [[0, _("Plain HTML")], [1, _("Markdown")], [2, _("Textile")], ]
-    TRANSFORMS = {1: Markdown().convert, 2: textile.textile}
+    FORMATS = [[0, _("Plain HTML")], [1, _("Markdown")], [2, _("Textile")]]
+    TRANSFORMS = {1: misaka.html, 2: textile.textile}
     PLAIN_HTML, MARKDOWN, TEXTILE = 0, 1, 2
 
     # Champs
-    name = models.CharField(max_length=48, unique=True, blank=False, verbose_name=_("Name"))
-    title = models.CharField(max_length=80, unique=True, blank=False, verbose_name=_("Title"))
+    name = models.CharField(max_length=192, unique=True, blank=False, verbose_name=_("Name"))
+    level = models.SmallIntegerField(default=2, help_text=_("Header level used by default for the title"), verbose_name=_("Heading level"))
+    slug = AutoSlugField(max_length=192, populate_from='name', unique_with='id', verbose_name=_("Slug"))
+    title = models.CharField(max_length=192, unique=True, blank=False, verbose_name=_("Title"))
     visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('excerpt', "Visible"))
     format = models.SmallIntegerField(choices=FORMATS, default=PLAIN_HTML, verbose_name=_("Format"))
     description = models.TextField(default="", blank=True, verbose_name=_("Description"))
@@ -51,7 +56,7 @@ class Excerpt(TranslatableModel, DatetimeModel, AuthorableModel, WeightedModel, 
     def html(self):
         """ Renvoyer le code HTML de l'extrait (selon le format) """
         content = Excerpt.TRANSFORMS.get(int(self.format), lambda s: s)(self.get_text())
-        return content
+        return SafeString(content)
 
     def get_load_tag(self):
         """ Renvoyer le code de template pour les bibliothèques requises """

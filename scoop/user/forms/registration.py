@@ -1,14 +1,16 @@
 # coding: utf-8
-import floppyforms as forms_
+import floppyforms.__future__ as forms_
 from django import forms
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.util.shortcuts import get_website_name
 from scoop.user.util.signals import credentials_form_check_email, credentials_form_check_name, credentials_form_check_username
 
 
-class RegistrationForm(forms_.ModelForm):
+class RegistrationForm(forms.ModelForm):
     """ Formulaire d'inscription """
 
     # Constantes
@@ -19,10 +21,10 @@ class RegistrationForm(forms_.ModelForm):
     LAST_NAME_LENGTH_MAX = 40
 
     # Champs
-    username = forms_.SlugField(max_length=30, min_length=4, widget=forms_.TextInput(attrs={'size': 20}), label=_("User name"))
-    email = forms_.EmailField(widget=forms_.TextInput(attrs={'size': 20}), label=_("Email"))
-    email_confirm = forms.EmailField(label=_("Retype email"))
-    password_confirm = forms.CharField(max_length=128, widget=forms.PasswordInput(), label=_("Retype password"))
+    username = forms_.SlugField(max_length=30, min_length=4, label=_("User name"))
+    email = forms_.EmailField(label=_("Email"))
+    email_confirm = forms_.EmailField(label=_("Retype email"))
+    password_confirm = forms_.CharField(max_length=128, widget=forms_.PasswordInput(render_value=True), label=_("Retype password"))
 
     # Validation
     def clean_password(self):
@@ -43,7 +45,7 @@ class RegistrationForm(forms_.ModelForm):
         """ Valider et renvoyer les données du champ email """
         email = self.cleaned_data['email'].lower()
         credentials_form_check_email.send(sender=self, email=email)
-        if User.objects.filter(email__iexact=email).exists():
+        if get_user_model().objects.filter(email__iexact=email).exists():
             raise forms.ValidationError(_("This e-mail address is already in use."))
         return email
 
@@ -70,7 +72,7 @@ class RegistrationForm(forms_.ModelForm):
         credentials_form_check_username.send(sender=self, username=name)
         length = len(name)
         # Renvoyer une erreur si le pseudo est utilisé
-        if User.objects.filter(username__iexact=name):
+        if get_user_model().objects.filter(username__iexact=name):
             raise forms.ValidationError(_("This nickname is already in use."))
         # Renvoyer une erreur si le pseudo est trop court ou long
         if length > RegistrationForm.USERNAME_LENGTH_MAX or length < RegistrationForm.USERNAME_LENGTH_MIN:
@@ -92,17 +94,30 @@ class RegistrationForm(forms_.ModelForm):
 
     # Métadonnées
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-        widgets = {'password': forms_.PasswordInput(render_value=True, attrs={'autocomplete': 'off'}), 'username': forms.TextInput(attrs={'size': 20})}
+        model = get_user_model()
+        fields = ('username', 'email', 'email_confirm', 'password', 'password_confirm')
+        widgets = {'password': forms_.PasswordInput(render_value=True, attrs={'autocomplete': 'off'}),
+                   'password_confirm': forms_.PasswordInput(render_value=False, attrs={'autocomplete': 'off'}),
+                   'username': forms_.TextInput(attrs={'placeholder': _("4 characters minimum")}),
+                   'email': forms_.TextInput(attrs={'placeholder': _("A non disposable email")})}
 
 
-class EULAForm(forms_.Form):
+class EULAForm(forms.Form):
     """ Formulaire de validation des CGU """
-    eula = forms_.BooleanField(required=True,
-                               help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(
-                                   website=getattr(settings, 'SITE_NAME', 'N/A'))),
-                               label=_("EULA"))
+
+    # Constantes
+    CHOICES = ((False, _("I refuse to comply to the EULA and do not want to use this website")),
+               (True, _("I abide to the {website} EULA").format(website=get_website_name()))
+               )
+
+    # Champs
+    eula = forms_.BooleanField(required=True, label=_("EULA"), widget=forms.Select(choices=CHOICES))
+
+    # Constructeur
+    def __init__(self, *args, **kwargs):
+        """ Initialiser le formulaire """
+        super(EULAForm, self).__init__(*args, **kwargs)
+        self.fields['eula'].error_messages = {'required': _("You must abide to the EULA to continue")}
 
 
 class RegistrationEULAForm(RegistrationForm):
@@ -110,7 +125,7 @@ class RegistrationEULAForm(RegistrationForm):
     eula = forms_.BooleanField(required=True,
                                help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(
                                    website=getattr(settings, 'SITE_NAME', 'N/A'))),
-                               label=_("EULA"))
+                               label=_("EULA"), widget=forms.Select())
 
 
 class AccountForm(RegistrationForm):
@@ -119,6 +134,6 @@ class AccountForm(RegistrationForm):
 
     # Métadonnées
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('password', 'password_confirm', 'original')
         widgets = {'password': forms.PasswordInput(attrs={'autocomplete': 'off'})}

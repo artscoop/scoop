@@ -3,7 +3,16 @@ import re
 from io import StringIO
 
 import bleach
+from django.conf import settings
+from django.db.models.base import Model
+from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
+from ngram import NGram
+from unidecode import unidecode
+
+from scoop.core.util.data.htmlutil import linkify
 
 
 def text_to_list_of_lists(value, evaluate=False):
@@ -81,3 +90,119 @@ def clean_html(text):
         return bleach.clean(text, allowed_tags, allowed_attr, allowed_styles, strip=True)
     except:
         return text
+
+
+def truncate_repeats(value, length=5):
+    """
+    Renvoyer une chaîne débarrassée de longues suites de la même lettre
+
+    ex. « Saluuuuuuuut » devient « Salut »
+    :param value: texte en entrée
+    :param length: nombre de répétitions minimum d'une lettre à filtrer
+    """
+
+    # Sous fonction : récupère un match et le coupe
+    def cut_match(match):
+        return match.group()[0:1]
+
+    # Supprimer toutes les séquences de la même lettre par cut_match
+    pattern = r"(?i)(\w)\1{%d,100}" % (int(length))
+    result = re.sub(pattern, cut_match, str(value))
+    return result
+
+
+def truncate_ellipsis(value, length):
+    """ Renvoyer une chaîne tronquée et y ajouter une ellipse """
+    try:
+        length = int(length)
+    except ValueError:
+        return value
+    if not isinstance(value, str):
+        value = str(value)
+    if len(value) > length:
+        return value[:length].strip() + "…"
+    else:
+        return value
+
+
+def truncate_longwords(value, length=27):
+    """ Découper les mots plus long que le mot français le plus long """
+
+    def cut_match(match):
+        """ Couper une correspondance du reste du texte """
+        portion = list(match.group())
+        portion.insert(length - 1, " ")
+        return "".join(portion)
+
+    # Supprimer toutes les séquences de la même lettre par cut_match
+    pattern = r"\S{%(length)d}" % {'length': int(length)}
+    result = re.sub(pattern, cut_match, value)
+    return result
+
+
+def disemvowel(value):
+    """ Renvoyer le texte sans voyelles et sans accents """
+    value = unidecode(value)
+    value = value.replace(value, re.sub(r'[AEIOUYaeiouy]', '', value))
+    return value
+
+
+def humanize_join(values, enum_count, singular_plural=None, as_links=False):
+    """
+    Renvoyer une représentation lisible d'une liste d'éléments
+
+    Ex.:
+        - a, b et 5 autres personnes
+        - a, b, c et 1 autre carte
+        - a, b et c
+    :param values: iterable d'objets à afficher
+    :param enum_count: nombre d'éléments à lister
+    :param singular_plural: nom du type d'objet affiché, au singulier et au pluriel, séparés par un point-virgule.
+    :param as_links: afficher les éléments listés comme des liens HTML
+    """
+    values = list(values)
+    total = len(values)
+    rest = total - enum_count
+    if singular_plural is not None:
+        singular, plural = [word.strip() for word in singular_plural.split(";", 1)]
+    elif total > 0 and isinstance(values[0], Model):
+        singular, plural = values[0]._meta.verbose_name, values[0]._meta.verbose_name_plural
+    else:
+        raise TypeError("Values must be a list of Model instances or singular_plural must be passed as an argument.")
+    values = [linkify(value) for value in values] if as_links else [str(value) for value in values]
+    if rest > 0:
+        output = _("{join} and {rest} {unit}").format(join=", ".join(values[:enum_count]), rest=rest, unit=singular if rest == 1 else plural)
+    else:
+        if total == 0:
+            output = ""
+        elif total == 1:
+            output = "{item}".format(item=values[0])
+        else:
+            output = _("{join} and {last}").format(join=", ".join(values[:-1]), last=values[-1])
+    return mark_safe(output)
+
+
+def gender(value, text):
+    """
+    Renvoyer une chaîne dépendant du genre de l'objet
+
+    :param value: un genre, 0=H, 1=F ou 2=ND
+    :param text: une chaîne de trois textes séparés par des points-virgules
+    """
+    texts = text.split(';')
+    return texts[value]
+
+
+def compare(initial, other):
+    """
+    Renvoyer l'indice de similarité entre deux chaînes
+
+    :returns: un nombre entre 0 et 1
+    """
+    return NGram.compare(initial, other)
+
+
+def site_brand(value):
+    """ Remplace des occurrences de texte par une version améliorée du nom du site """
+    replacement = render_to_string("core/display/site-name.txt").strip('\n ')
+    return value.replace(settings.CORE_BRAND_NAME_MARKER, replacement)

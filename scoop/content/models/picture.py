@@ -405,12 +405,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image))
                 display['image_title'] = kwargs.pop('image_title', None)
                 display['image_alt'] = kwargs.pop('image_alt', None)
-            else:
-                display['image_url'] = None
             # Définir les autres options d'affichage si l'URL d'image est définie
-            if display['image_url']:
+            if display.get('image_url', False):
                 display['alias'] = kwargs.pop('alias')  # alias de vignette
-                display['options'] = kwargs.pop('options', None)  # options easy-thumbnails de type bool
                 display['image_class'] = kwargs.pop('image_class', None)
                 display['image_rel'] = kwargs.pop('image_rel', None)
                 display['link_title'] = kwargs.pop('link_title', None)
@@ -418,12 +415,13 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 display['link_id'] = kwargs.pop('link_id', None)
                 display['link_rel'] = kwargs.pop('link_rel', None)
                 display['link'] = kwargs.pop('link', True)
+                display['options'] = kwargs.pop('options', None)  # options easy-thumbnails de type bool
                 # Si link_target est un objet, convertir en URL
                 if 'link_target' in display and hasattr(display['link_target'], 'get_absolute_url'):
                     display['link_target'] = display['link_target'].get_absolute_url()
                 # Convertir l'image en thumbnail si possible
                 options = kwargs
-                options.update(aliases.get(display['alias']) or {'size': display['alias']})
+                options.update(aliases.get(display['alias'], None) or {'size': display['alias']})
                 options.update(string_to_dict(display['options']))
                 display['image_thumbnail'] = get_thumbnailer(display['image_url']).get_thumbnail(options)
             return display

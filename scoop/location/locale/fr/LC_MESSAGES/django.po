@@ -8,18 +8,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 07:22+0200\n"
+"POT-Creation-Date: 2016-05-09 13:14+0200\n"
 "PO-Revision-Date: 2016-04-16 07:27+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.10\n"
 
-#: __init__.py:6
+#: __init__.py:7
 msgid "Location"
 msgstr "Lieu"
 
@@ -27,7 +27,7 @@ msgstr "Lieu"
 msgid "Fetch pictures for selected venues"
 msgstr "Récupérer des images pour les lieux sélectionnés"
 
-#: admin/admin.py:38 admin/city.py:71
+#: admin/admin.py:38 admin/city.py:69
 msgid "Pictures were successfully fetched"
 msgstr "Les images ont été correctement récupérées"
 
@@ -35,110 +35,110 @@ msgstr "Les images ont été correctement récupérées"
 msgid "Update currency values"
 msgstr "Mettre à jour les valeurs des devises"
 
-#: admin/city.py:24 admin/country.py:23
+#: admin/city.py:22 admin/country.py:23
 msgid "Translation"
 msgstr "Traduction"
 
-#: admin/city.py:25 admin/country.py:24
+#: admin/city.py:23 admin/country.py:24
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/city.py:39 models/city.py:402 models/venue.py:34
+#: admin/city.py:37 models/city.py:399 models/venue.py:34
 msgid "City"
 msgstr "Ville"
 
-#: admin/city.py:40
+#: admin/city.py:38
 msgid "Geonames"
 msgstr "Geonames"
 
-#: admin/city.py:55
+#: admin/city.py:53
 msgid "Delete every city in the database"
 msgstr "Supprimer toutes les villes de la base de données"
 
-#: admin/city.py:60
+#: admin/city.py:58
 msgid "Resave cities"
 msgstr "Sauvegarder à nouveau les villes"
 
-#: admin/city.py:66
+#: admin/city.py:64
 msgid "Fetch pictures for selected cities"
 msgstr "Récupérer des images pour les villes sélectionnées"
 
-#: admin/city.py:74 admin/filters.py:8 models/city.py:200
+#: admin/city.py:72 admin/filters.py:8 models/city.py:198
 #: models/venuetype.py:13
 msgid "Parent"
 msgstr "Parent"
 
-#: admin/city.py:85 models/city.py:196 models/city.py:354
+#: admin/city.py:83 models/city.py:194 models/city.py:352
 msgid "Code"
 msgstr "Code"
 
-#: admin/country.py:36 models/city.py:193 models/country.py:175
+#: admin/country.py:36 models/city.py:191 models/country.py:173
 msgid "Country"
 msgstr "Pays"
 
-#: admin/country.py:50
+#: admin/country.py:51
 msgid "Populate everything about this country"
 msgstr "Renseigner toutes les informations de ce pays"
 
-#: admin/country.py:54
+#: admin/country.py:55
 msgid "You can autopopulate this country by setting DEBUG to False."
 msgstr ""
 "Vous pouvez renseigner automatiquement ce pays en définissant DEBUG à False."
 
-#: admin/country.py:58
+#: admin/country.py:59
 msgid "Populate country from Geonames database file"
 msgstr "Peupler les pays depuis un fichier de base de données Geonames"
 
-#: admin/country.py:64
+#: admin/country.py:65
 msgid "Set settings.DEBUG to False before populating city tables."
 msgstr ""
 "Veuillez assigner settings.DEBUG à False avant d'ajouter des villes à la "
 "base de données."
 
-#: admin/country.py:66
+#: admin/country.py:67
 msgid "You must add a country with the correct code to populate."
 msgstr "Vous devez ajouter un pays à renseigner avec un code correct."
 
-#: admin/country.py:68
+#: admin/country.py:69
 msgid "Rebuild city hierarchy in country"
 msgstr "Reconstruire la hiérarchie des villes du pays"
 
-#: admin/country.py:73
+#: admin/country.py:74
 msgid "City tree successfully rebuilt."
 msgstr "L'arborescence des villes a été correctement reconstruite."
 
-#: admin/country.py:75
+#: admin/country.py:76
 msgid "Populate country currencies"
 msgstr "Peupler les devises des pays"
 
-#: admin/country.py:81
+#: admin/country.py:82
 msgid "Rename every city with its short counterpart"
 msgstr "Renommer toutes les villes en prenant leur nom raccourci"
 
-#: admin/country.py:85
+#: admin/country.py:86
 msgid ""
 "Every city in the database had its name successfully updated when required."
 msgstr ""
 "Tous les noms de villes de la base de données ont été correctement mis à "
 "jour lorsque c'était nécessaire."
 
-#: admin/country.py:87
+#: admin/country.py:88
 msgid "Remove all cities from selected countries"
 msgstr "Supprimer toutes les villes des pays sélectionnés"
 
-#: admin/country.py:93
+#: admin/country.py:94
 msgid "Cities from selected countries have been successfully deleted."
 msgstr "Les villes des pays sélectionnés ont été correctement supprimées."
 
-#: admin/country.py:95
+#: admin/country.py:96
 msgid "Set selected countries to private"
 msgstr "Rendre privés les pays sélectionnés"
 
-#: admin/country.py:101
+#: admin/country.py:102
 msgid "Countries have been made private."
 msgstr "Les pays ont été rendus privés."
 
-#: admin/country.py:111
+#: admin/country.py:112
 msgid "Updated"
 msgstr "Mis à jour"
 
@@ -154,7 +154,7 @@ msgstr "Non"
 msgid "Has postal code"
 msgstr "Possède un code postal"
 
-#: admin/filters.py:48 models/city.py:199
+#: admin/filters.py:48 models/city.py:197
 msgid "Level"
 msgstr "Niveau"
 
@@ -167,204 +167,202 @@ msgstr "Niveau {level}"
 msgid "Populate countries from Geonames"
 msgstr "Peupler les pays depuis une base de données Geonames"
 
-#: models/city.py:188
+#: models/city.py:186
 msgid "Geonames ID"
 msgstr "ID Geonames"
 
-#: models/city.py:189
+#: models/city.py:187
 msgid "City?"
 msgstr "Ville ?"
 
-#: models/city.py:190
+#: models/city.py:188
 msgid "Type"
 msgstr "Type"
 
-#: models/city.py:191
+#: models/city.py:189
 msgid "Feature"
 msgstr "Catégorie"
 
-#: models/city.py:192
+#: models/city.py:190
 msgid "A1-4 hash"
 msgstr "Hash A1-4"
 
-#: models/city.py:194 models/city.py:328 models/city.py:404 models/city.py:405
-#: models/country.py:72 models/country.py:89 models/country.py:177
+#: models/city.py:192 models/city.py:326 models/city.py:401 models/city.py:402
+#: models/country.py:71 models/country.py:88 models/country.py:175
 #: models/currency.py:66 models/timezone.py:39 models/venue.py:32
 #: models/venuetype.py:16 models/venuetype.py:53
 msgid "Name"
 msgstr "Nom"
 
-#: models/city.py:195
+#: models/city.py:193
 msgid "ASCII"
 msgstr "Nom ASCII"
 
-#: models/city.py:197 models/country.py:77
+#: models/city.py:195 models/country.py:76
 msgid "Population"
 msgstr "Population"
 
-#: models/city.py:198
+#: models/city.py:196
 msgid "Timezone"
 msgstr "Fuseau horaire"
 
-#: models/city.py:239
+#: models/city.py:237
 #, python-brace-format
 msgid "{city}, {parent}, {country}"
 msgstr "{city}, {parent}, {country}"
 
-#: models/city.py:296 models/country.py:114
+#: models/city.py:294 models/country.py:113
 msgid "Icon"
 msgstr "Icône"
 
-#: models/city.py:305 models/city.py:391
+#: models/city.py:303 models/city.py:388
 msgid "city"
 msgstr "ville"
 
-#: models/city.py:309
+#: models/city.py:307
 msgid "Tree"
 msgstr "Arborescence"
 
-#: models/city.py:322
+#: models/city.py:320
 msgid "Formatted tree"
 msgstr "Arborescence formatée"
 
-#: models/city.py:392
+#: models/city.py:389
 msgid "cities"
 msgstr "villes"
 
-#: models/city.py:401 models/country.py:174
+#: models/city.py:398 models/country.py:172
 msgid "Alternate ID"
 msgstr "ID alternatif"
 
-#: models/city.py:403 models/country.py:176
+#: models/city.py:400 models/country.py:174
 msgid "Language name"
 msgstr "Nom de la langue"
 
-#: models/city.py:406 models/country.py:178
+#: models/city.py:403 models/country.py:176
 msgid "Preferred"
 msgstr "Préféré"
 
-#: models/city.py:407 models/country.py:179
+#: models/city.py:404 models/country.py:177
 msgid "Short version"
 msgstr "Raccourci"
 
-#: models/city.py:429
+#: models/city.py:425
 #, python-brace-format
-#| msgid "Name for {}"
 msgid "Name for {city}/{lang}"
 msgstr "Nom pour {city}/{lang}"
 
-#: models/city.py:438
+#: models/city.py:434
 msgid "city name"
 msgstr "nom de ville"
 
-#: models/city.py:439
+#: models/city.py:435
 msgid "city names"
 msgstr "noms de villes"
 
-#: models/country.py:68
+#: models/country.py:67
 msgid "Africa"
 msgstr "Afrique"
 
-#: models/country.py:68
+#: models/country.py:67
 msgid "Asia"
 msgstr "Asie"
 
-#: models/country.py:68
+#: models/country.py:67
 msgid "Europe"
 msgstr "Europe"
 
-#: models/country.py:68
+#: models/country.py:67
 msgid "North America"
 msgstr "Amérique du Nord"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Oceania"
 msgstr "Océanie"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "South America"
 msgstr "Amérique du Sud"
 
-#: models/country.py:69
+#: models/country.py:68
 msgid "Antarctica"
 msgstr "Antarctique"
 
-#: models/country.py:73
+#: models/country.py:72
 msgid "ISO Code"
 msgstr "Code ISO"
 
-#: models/country.py:74
+#: models/country.py:73
 msgid "ISO Code 3"
 msgstr "Code ISO 3"
 
-#: models/country.py:75
+#: models/country.py:74
 msgid "Phone prefix"
 msgstr "Préfixe téléphonique"
 
-#: models/country.py:76
+#: models/country.py:75
 msgid "Continent"
 msgstr "Continent"
 
-#: models/country.py:78 models/country.py:119
+#: models/country.py:77 models/country.py:118
 msgctxt "country"
 msgid "Area"
 msgstr "Superficie"
 
-#: models/country.py:79
+#: models/country.py:78
 msgctxt "country"
 msgid "Capital"
 msgstr "Capitale"
 
-#: models/country.py:80
+#: models/country.py:79
 msgid "Currency"
 msgstr "Devise"
 
-#: models/country.py:81
+#: models/country.py:80
 msgid "Regional level"
 msgstr "Niveau régional"
 
-#: models/country.py:82
+#: models/country.py:81
 msgid "Sub-regional level"
 msgstr "Niveau sous-régional"
 
-#: models/country.py:83
+#: models/country.py:82
 msgctxt "country"
 msgid "Public"
 msgstr "Public"
 
-#: models/country.py:84
+#: models/country.py:83
 msgctxt "country"
 msgid "Safe"
 msgstr "Sûr"
 
-#: models/country.py:85
+#: models/country.py:84
 msgctxt "country"
 msgid "Last update"
 msgstr "Dernière mise à jour"
 
-#: models/country.py:103
+#: models/country.py:102
 msgid "City count"
 msgstr "Nombre de villes"
 
-#: models/country.py:165
+#: models/country.py:163
 msgid "country"
 msgstr "pays"
 
-#: models/country.py:166
+#: models/country.py:164
 msgid "countries"
 msgstr "pays"
 
-#: models/country.py:184
+#: models/country.py:182
 #, python-brace-format
-#| msgid "Name for {}"
 msgid "Name for {country}/{lang}"
 msgstr "Nom pour {country}/{lang}"
 
-#: models/country.py:188
+#: models/country.py:186
 msgid "country name"
 msgstr "nom de pays"
 
-#: models/country.py:189
+#: models/country.py:187
 msgid "country names"
 msgstr "noms de pays"
 
@@ -390,15 +388,15 @@ msgstr "devise"
 msgid "currencies"
 msgstr "devises"
 
-#: models/position.py:69
+#: models/position.py:67
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/position.py:88
+#: models/position.py:86
 msgid "user position"
 msgstr "position utilisateur"
 
-#: models/position.py:89
+#: models/position.py:87
 msgid "user positioning"
 msgstr "positions utilisateurs"
 
@@ -443,7 +441,6 @@ msgid "Way"
 msgstr "Voie"
 
 #: models/venue.py:35
-#| msgid "Full address, lines separated by semicolons"
 msgid "Full address, lines separated by semicolons or returns"
 msgstr ""
 "Adresse complète, lignes séparées par des points-virgules ou retours chariot"
@@ -497,7 +494,7 @@ msgstr "type de lieu"
 msgid "venue types"
 msgstr "types de lieux"
 
-#: tasks/geonames.py:24
+#: tasks/geonames.py:22
 msgid "population has failed. please investigate."
 msgstr "Le remplissage a échoué. Veuillez enquêter sur l'erreur."
 
