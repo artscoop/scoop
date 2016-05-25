@@ -156,11 +156,11 @@ class BaseSearchForm(forms.Form):
                 match_expr = ' + '.join(match_bits)
 
                 qs = qs.extra(
-                        select={'relevance': match_expr},
-                        where=(match_expr,),
-                        params=params,
-                        select_params=params,
-                        order_by=('-relevance',)
+                    select={'relevance': match_expr},
+                    where=(match_expr,),
+                    params=params,
+                    select_params=params,
+                    order_by=('-relevance',)
                 )
 
             else:

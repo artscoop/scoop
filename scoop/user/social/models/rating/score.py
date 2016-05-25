@@ -43,7 +43,7 @@ class Score(DatetimeModel):
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='score_given', verbose_name=_("Author"))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='score_received', verbose_name=_("User"))
-    axis = models.SmallIntegerField(choices=SCORE_AXIS, default=0, unique=True, verbose_name=_("Axis"))
+    axis = models.SmallIntegerField(choices=SCORE_AXIS, default=0, verbose_name=_("Axis"))
     score = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name=_("Score"))
     objects = ScoreManager()
 

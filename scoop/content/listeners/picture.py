@@ -29,7 +29,7 @@ def picture_created(sender, instance, **kwargs):
     if kwargs.get('created', False):
         Animation.objects.create_from_animation(instance)
         instance.resize()
-        instance._fix_exif()
+        instance.fix_exif()
         instance.optimize()
         instance.set_correct_extension()
         instance.update_size()

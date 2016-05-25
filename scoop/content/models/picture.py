@@ -42,6 +42,7 @@ from scoop.core.util.data.typeutil import string_to_dict
 from scoop.core.util.django.templateutil import render_to
 from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
+from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
 
@@ -181,12 +182,12 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     """ Image """
 
     # Constantes
-    DATA_KEYS = ['colors', 'clones']
+    DATA_KEYS = ['colors', 'clones', 'features']
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL,
                                verbose_name=_("Author"))
-    image = WebImageField(upload_to=ACLModel.get_acl_upload_path, max_length=200, db_index=True, width_field='width', height_field='height',
+    image = WebImageField(upload_to=ACLModel.get_acl_upload_path, max_length=240, db_index=True, width_field='width', height_field='height',
                           min_dimensions=(64, 64),
                           help_text=_("Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_("Image"))
     title = models.CharField(max_length=96, blank=True, verbose_name=_("Title"))
@@ -590,7 +591,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                     except Exception as e:
                         logger.warning(e)
 
-    def _fix_exif(self):
+    def fix_exif(self):
         """ Réorienter l'image jpeg avec un champ EXIF Rotation différent de 0 """
         if self.get_extension() in {'.jpg', '.jpeg'}:
             subprocess.call(["exiftran", "-a", "-i", "-p", self.image.path], stderr=open(os.devnull, 'wb'))
@@ -662,10 +663,26 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             r = convex_hull_to_rect(hull)
             subprocess.call(["convert", self.image.path, "-crop", "{0}x{1}+{2}x{3}".format(r[2] - r[0], r[3] - r[1], r[0], r[1]), self.image.path])
             self.update_size()
-        else:
-            logger.warning("OpenCV not available for feature detection, using basic cropping instead.")
-            print("OpenCV not available for feature detection, using basic cropping instead.")
-            self.autocrop()
+
+    def detect_features(self, name, cascades=None):
+        """
+        Inscrire les 'caractéristiques' trouvées dans l'image
+
+        Inscrit dans les données 'data' de l'image les informations
+        sur les coordonnées des types d'objet cherchés, via OpenCV
+        :param name: Nom de la feature à retrouver. Si aucun fichier de cascade Haar n'existe, ne cherche rien.
+        """
+        if 'features' not in self.data:
+            self.data['features'] = dict()
+        self.data['features'][name] = list()
+        image = cv2.cvtColor(cv2.imread(self.image.path), cv2.COLOR_BGR2GRAY)  # Image en noir et blanc
+        for cascade in cascades:
+            cascade_file = join(Paths.get_root_dir('isolated', 'database', 'opencv', 'haar'), 'haarcascade_{0}.xml'.format(cascade))
+            classifier = cv2.CascadeClassifier(cascade_file)  # Créer un classifieur avec les données de cascade
+            features = classifier.detectMultiScale(image, scaleFactor=1.1, minNeighbors=3, minSize=(32, 32), maxSize=(2048, 2048))
+            rectangles = [(x, y, x + w, y + h) for (x, y, w, h) in features]
+            self.data['features'][name] += rectangles
+        self.save(update_fields=['data'])
 
     def quantize(self, save=True):
         """ Convertir l'image en 8 bits avec tramage """

@@ -77,7 +77,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     """ Annonce publicitaire """
 
     # Constantes
-    NETWORKS = [['gg', "Google Adsense"], ['af', "AdFever"], ['na', _("Custom")], ['ot', pgettext_lazy('adnetwork', "Other")]]
+    NETWORKS = [['google-adsense', "Google Adsense"], ['miscellaneous', pgettext_lazy('adnetwork', "Other")]]
 
     # Champs
     name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
@@ -86,7 +86,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     code = models.TextField(blank=False, help_text=_("Django template code for HTML/JS"), verbose_name=_("HTML/JS Snippet"))
     views = models.IntegerField(default=0, editable=False, verbose_name=_("Views"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
-    network = models.CharField(choices=NETWORKS, default='na', max_length=4, db_index=True, verbose_name=_("Ad network"))
+    network = models.CharField(choices=NETWORKS, default='na', max_length=24, db_index=True, verbose_name=_("Ad network"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('advertisement', "Updated"))
     objects = AdvertisementManager()
 

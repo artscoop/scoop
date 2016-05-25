@@ -60,6 +60,7 @@ class LikeManager(SingleDeleteManager):
 
 class Like(DatetimeModel):
     """ Annotation "J'aime" sur un objet arbitraire. """
+
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='likees', verbose_name=_("Author"))
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=False, verbose_name=_("Content type"),

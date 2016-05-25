@@ -10,9 +10,8 @@ from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
-from unidecode import unidecode
-
 from scoop.core.util.data.htmlutil import linkify
+from unidecode import unidecode
 
 
 def text_to_list_of_lists(value, evaluate=False):
@@ -29,8 +28,8 @@ def text_to_list_of_lists(value, evaluate=False):
         lines = reader.readlines()
         result = [[one_line(part) for part in line.split(":")] for line in lines if not line.startswith('#')]
         if evaluate is True:
-            for outer, _ in enumerate(result):
-                for inner, _ in enumerate(result[outer]):
+            for outer, _a in enumerate(result):
+                for inner, _b in enumerate(result[outer]):
                     result[outer][inner] = eval(result[outer][inner], {'__builtin__': {}})
     return result
 

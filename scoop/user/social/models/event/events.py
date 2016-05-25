@@ -13,6 +13,7 @@ from scoop.core.abstract.social.access import PrivacyModel
 from scoop.core.abstract.social.invite import InviteTargetModel
 from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
+from scoop.user.social.models.event.attendance import Attendance
 
 
 class OccurrenceQuerySetMixin(object):
@@ -155,7 +156,7 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
         return self.end < timezone.now()
 
     # Setter
-    def add_attendance(self, user, forecast=1):
+    def add_attendance(self, user, forecast=Attendance.WONT):
         """ Ajouter un participant """
         if user and user.is_active:
             from scoop.user.social.models import Attendance

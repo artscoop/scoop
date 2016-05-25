@@ -30,7 +30,7 @@ class FlagManager(SingleDeleteManager):
         return super(FlagManager, self).get_queryset()
 
     # Getter
-    def get_flags(self, **kwargs):
+    def filter(self, **kwargs):
         """
         Filtrer les flags dont le type est celui de app.model
 
@@ -39,16 +39,16 @@ class FlagManager(SingleDeleteManager):
         :type model: str
         :type days: int
         """
-        if 'model' in kwargs:
-            app_model = kwargs['model'].split('.')
+        app_model = [part for part in kwargs.pop('model', '').split('.', 1) if part]
+        days = kwargs.pop('days', None)
+
+        if app_model:
             content_type = ContentType.objects.get(app_label=app_model[0], model=app_model[1])
-            flags = self.filter(type__content_type=content_type).order_by('-id')
-        else:
-            flags = self.all()
-        # Uniquement les flags plus récents qu'une date
-        if 'days' in kwargs:
-            flags = flags.filter(time__gt=Flag.get_last_days(kwargs['days']))
-        return flags
+            kwargs['type__content_type'] = content_type
+
+        if days is not None:
+            kwargs['time__gt'] = Flag.get_last_days(days)
+        return super(FlagManager, self).filter(**kwargs)
 
     def get_user_flag_count(self, user):
         """ Renvoyer le nombre de signalements envoyés par un utilisateur """
@@ -69,23 +69,21 @@ class FlagManager(SingleDeleteManager):
         return self.for_target(target).count()
 
     # Setter
-    def flag(self, item, *args, **kwargs):
+    def flag(self, item, **kwargs):
         """ Signaler un objet """
         if 'author' not in kwargs or kwargs['author'].has_perm('rogue.can_flag'):
             try:
                 from scoop.rogue.models import FlagType
                 # Permettre d'utiliser une chaîne pour type en utilisant typename
-                if kwargs.get('typename', False):
-                    kwargs['type'] = FlagType.objects.get_by_name(kwargs.get('typename'))
-                    kwargs.pop('typename')
+                if 'typename' in kwargs:
+                    kwargs['type'] = FlagType.objects.get_by_name(kwargs.pop('typename'))
                 # Les flags auto ont un auteur robot ou admin
-                if kwargs.get('automatic', False):
+                if 'automatic' in kwargs:
                     kwargs['author'] = get_user_model().objects.get_bot_or_admin()
                 # Créer le flag
                 flag = Flag(**kwargs)
-                flag.content_object = item
-                flag.save()
-                flag_created.send(sender=flag, flag=flag)
+                flag.update(content_object=item)
+                flag_created.send(sender=flag.content_type, flag=flag)
                 return True
             except (TransactionManagementError, OperationalError):
                 pass
@@ -144,6 +142,10 @@ class Flag(DatetimeModel):
         """ Renvoyer le nombre de signalements avec la même cible, et du même type """
         return self.get_clones().count() - (1 if exclude else 0)
 
+    def get_moderators(self):
+        """ Renvoyer les modérateurs du signalement """
+        return self.moderators.all()
+
     def is_moderated_by(self, user):
         """ Renvoyer si un utilisateur est modérateur du signalement """
         moderator = self.moderators.filter(pk=user.pk).exists()
@@ -190,7 +192,7 @@ class Flag(DatetimeModel):
             self.save(update_fields=['status'])
             flag_closed.send(sender=self)
 
-    def update(self, *args, **kwargs):
+    def update_status(self, *args, **kwargs):
         """ Mettre à jour le statut du signalement """
         self.status = kwargs.get('status', self.status)
         self.details = kwargs.get('details', self.details)
@@ -265,13 +267,15 @@ class FlagTypeManager(SingleDeleteManager):
         """ Renvoyer les types de signalement selon leur nom """
         try:
             result = self.get(short_name__iexact=name)
-        except:
+        except FlagType.DoesNotExist:
             result = None
         return result
 
 
 class FlagType(TranslatableModel, IconModel):
     """ Type de signalement """
+
+    # Champs
     limit = limit_to_model_names('user.user', 'content.content', 'content.picture')
     short_name = models.CharField(max_length=20, verbose_name=_("Identifier"))
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, verbose_name=_("Content type"), limit_choices_to=limit)
@@ -284,14 +288,14 @@ class FlagType(TranslatableModel, IconModel):
         """ Renvoyer le nom du type de signalement """
         try:
             return self.get_translation().name
-        except:
+        except FlagTypeTranslation.DoesNotExist:
             return _("(No name)")
 
     @addattr(short_description=_("Description"))
     def get_description(self):
         try:
             return self.get_translation().description
-        except:
+        except FlagTypeTranslation.DoesNotExist:
             return _("(No description)")
 
     # Propriétés
@@ -306,10 +310,7 @@ class FlagType(TranslatableModel, IconModel):
 
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        try:
-            return self.get_translation().name
-        except:
-            return _("None")
+        return self.get_name()
 
     # Métadonnées
     class Meta:
@@ -320,6 +321,8 @@ class FlagType(TranslatableModel, IconModel):
 
 class FlagTypeTranslation(get_translation_model(FlagType, "flagtype"), TranslationModel):
     """ Traduction de type de signalement """
+
+    # Champs
     name = models.CharField(max_length=96, blank=False, verbose_name=_("Name"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
 

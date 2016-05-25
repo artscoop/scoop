@@ -5,12 +5,11 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.shortcuts import get_website_name
 from scoop.user.util.signals import credentials_form_check_email, credentials_form_check_name, credentials_form_check_username
 
 
-class RegistrationForm(forms.ModelForm):
+class UserNewForm(forms.ModelForm):
     """ Formulaire d'inscription """
 
     # Constantes
@@ -21,8 +20,9 @@ class RegistrationForm(forms.ModelForm):
     LAST_NAME_LENGTH_MAX = 40
 
     # Champs
-    username = forms_.SlugField(max_length=30, min_length=4, label=_("User name"))
-    email = forms_.EmailField(label=_("Email"))
+    username = forms_.SlugField(max_length=30, min_length=4, label=_("User name"),
+                                widget=forms_.TextInput(attrs={'placeholder': _("Letters, digits and underscores")}))
+    email = forms_.EmailField(label=_("Email"), widget=forms_.TextInput(attrs={'placeholder': _("A non disposable email")}))
     email_confirm = forms_.EmailField(label=_("Retype email"))
     password_confirm = forms_.CharField(max_length=128, widget=forms_.PasswordInput(render_value=True), label=_("Retype password"))
 
@@ -30,8 +30,8 @@ class RegistrationForm(forms.ModelForm):
     def clean_password(self):
         """" Valider et renvoyer les données du champ mot de passe """
         password = self.cleaned_data['password']
-        if not password or len(password) < RegistrationForm.PASSWORD_LENGTH_MIN:
-            raise forms.ValidationError(_("Your password should be at least {min} characters long").format(min=RegistrationForm.PASSWORD_LENGTH_MIN))
+        if not password or len(password) < UserNewForm.PASSWORD_LENGTH_MIN:
+            raise forms.ValidationError(_("Your password should be at least {min} characters long").format(min=UserNewForm.PASSWORD_LENGTH_MIN))
         return password
 
     def clean_password_confirm(self):
@@ -62,8 +62,8 @@ class RegistrationForm(forms.ModelForm):
         """ Valider et renvoyer les données du champ nom """
         name = self.cleaned_data['name']
         credentials_form_check_name.send(sender=self, name=name)
-        if len(name) > RegistrationForm.FIRST_NAME_LENGTH_MAX:
-            raise forms.ValidationError(_("Your first name must not exceed {max} characters").format(max=RegistrationForm.FIRST_NAME_LENGTH_MAX))
+        if len(name) > UserNewForm.FIRST_NAME_LENGTH_MAX:
+            raise forms.ValidationError(_("Your first name must not exceed {max} characters").format(max=UserNewForm.FIRST_NAME_LENGTH_MAX))
         return name
 
     def clean_username(self):
@@ -75,10 +75,10 @@ class RegistrationForm(forms.ModelForm):
         if get_user_model().objects.filter(username__iexact=name):
             raise forms.ValidationError(_("This nickname is already in use."))
         # Renvoyer une erreur si le pseudo est trop court ou long
-        if length > RegistrationForm.USERNAME_LENGTH_MAX or length < RegistrationForm.USERNAME_LENGTH_MIN:
+        if length > UserNewForm.USERNAME_LENGTH_MAX or length < UserNewForm.USERNAME_LENGTH_MIN:
             raise forms.ValidationError(
-                _("Your nickname should be between {min} and {max} characters long.").format(min=RegistrationForm.USERNAME_LENGTH_MIN,
-                                                                                             max=RegistrationForm.USERNAME_LENGTH_MAX))
+                _("Your nickname should be between {min} and {max} characters long.").format(min=UserNewForm.USERNAME_LENGTH_MIN,
+                                                                                             max=UserNewForm.USERNAME_LENGTH_MAX))
         return name.lower()
 
     def clean_eula(self):
@@ -90,7 +90,7 @@ class RegistrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le formulaire """
-        super(RegistrationForm, self).__init__(*args, **kwargs)
+        super(UserNewForm, self).__init__(*args, **kwargs)
 
     # Métadonnées
     class Meta:
@@ -99,7 +99,18 @@ class RegistrationForm(forms.ModelForm):
         widgets = {'password': forms_.PasswordInput(render_value=True, attrs={'autocomplete': 'off'}),
                    'password_confirm': forms_.PasswordInput(render_value=False, attrs={'autocomplete': 'off'}),
                    'username': forms_.TextInput(attrs={'placeholder': _("4 characters minimum")}),
-                   'email': forms_.TextInput(attrs={'placeholder': _("A non disposable email")})}
+                   }
+
+
+class UserEditForm(UserNewForm):
+    """ Formulaire de modification du mot de passe du compte """
+    original = forms.CharField(widget=forms.PasswordInput(), label=_("Original"))
+
+    # Métadonnées
+    class Meta:
+        model = get_user_model()
+        fields = ('password', 'password_confirm', 'original')
+        widgets = {'password': forms.PasswordInput(attrs={'autocomplete': 'off'})}
 
 
 class EULAForm(forms.Form):
@@ -118,22 +129,3 @@ class EULAForm(forms.Form):
         """ Initialiser le formulaire """
         super(EULAForm, self).__init__(*args, **kwargs)
         self.fields['eula'].error_messages = {'required': _("You must abide to the EULA to continue")}
-
-
-class RegistrationEULAForm(RegistrationForm):
-    """ Formulaire d'inscription avec CGU à valider """
-    eula = forms_.BooleanField(required=True,
-                               help_text=mark_safe(_("By ticking this checkbox, I abide to the {website} license agreement").format(
-                                   website=getattr(settings, 'SITE_NAME', 'N/A'))),
-                               label=_("EULA"), widget=forms.Select())
-
-
-class AccountForm(RegistrationForm):
-    """ Formulaire de modification du mot de passe du compte """
-    original = forms.CharField(widget=forms.PasswordInput(), label=_("Original"))
-
-    # Métadonnées
-    class Meta:
-        model = get_user_model()
-        fields = ('password', 'password_confirm', 'original')
-        widgets = {'password': forms.PasswordInput(attrs={'autocomplete': 'off'})}

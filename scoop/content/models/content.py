@@ -111,10 +111,9 @@ class ContentQuerySetMixin(object):
                                **({'category': category} if category is not None else {}))  # filtrer les contenus contenant le mot le plus long
         try:
             closest = max(
-                    [{'ratio': similarity, 'content': content} for content, similarity in
-                     zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if
-                     similarity > 7500
-                     ], key=operator.itemgetter('ratio'))
+                [{'ratio': similarity, 'content': content} for content, similarity in
+                 zip(contents, map(lambda x: fuzz.ratio(slug, x.slug) * fuzz.partial_ratio(slug, x.slug), contents)) if similarity > 7500
+                 ], key=itemgetter('ratio'))
             return closest['content']
         except ValueError:
             return None
@@ -246,7 +245,7 @@ class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manag
         :param visible: définir si le contenu est visible du public
         """
         try:
-            [kwargs.pop(name, None) for name in ['category', 'title', 'body', 'visible']]
+            [kwargs.pop(name, None) for name in ['authors', 'category', 'title', 'body', 'visible']]
             category_instance = Category.objects.get_by_name(category)
             content, _ = self.get_or_create(category=category_instance, title=title, body=body, published=visible, **kwargs)
             authors = make_iterable(authors, list)

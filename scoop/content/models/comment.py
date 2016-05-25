@@ -18,6 +18,7 @@ from scoop.core.abstract.core.moderation import ModeratedModel, ModeratedQuerySe
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.user.ippoint import IPPointableModel
 from scoop.core.util.data.dateutil import now
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 
@@ -37,9 +38,14 @@ class CommentQuerySetMixin(object):
 
     # Setter
     def hide_from_author(self, author=None):
-        """ Rendre invisible les contenus d'un auteur """
-        if author is not None:
-            return self.filter(author=author).update(visible=False)
+        """
+        Rendre invisible les contenus d'un auteur
+
+        :param author: utilisateur ou liste d'utilisateurs
+        """
+        if author:
+            author = make_iterable(author)
+            return self.filter(author__in=author).update(visible=False)
 
 
 class CommentQuerySet(models.QuerySet, CommentQuerySetMixin, SingleDeleteQuerySetMixin, ModeratedQuerySetMixin):

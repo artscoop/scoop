@@ -4,14 +4,14 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 from scoop.core.models.optiongroup import OptionGroupTranslation
-from scoop.help.models.faq import FAQ
+from scoop.help.models.faq import FAQ, FAQTranslation
 
 
 class FAQTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin de traduction des groupes d'options """
     verbose_name = _("Translation")
     verbose_name_plural = _("Translations")
-    model = OptionGroupTranslation
+    model = FAQTranslation
     max_num = len(settings.LANGUAGES)
     extra = 4
 

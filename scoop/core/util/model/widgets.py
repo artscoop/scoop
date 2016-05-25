@@ -164,8 +164,7 @@ class ColumnCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
                 else:
                     label_for = ''
 
-                cb = forms.CheckboxInput(
-                        final_attrs, check_test=lambda value: value in str_values)
+                cb = forms.CheckboxInput(final_attrs, check_test=lambda v: v in str_values)
                 option_value = str(option_value)
                 rendered_cb = cb.render(name, option_value)
                 option_label = conditional_escape(str(option_label))

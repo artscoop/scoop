@@ -1,12 +1,12 @@
 # coding: utf-8
-import misaka
 import textile
-from autoslug.fields import AutoSlugField
-from django.utils.safestring import SafeString
 from markdown import Markdown
 
+import misaka
+from autoslug.fields import AutoSlugField
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils.safestring import SafeString
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django_languages.languages import LANGUAGES

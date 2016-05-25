@@ -29,9 +29,9 @@ class FriendListManager(SingleDeleteManager):
         return self.get(user=user)
 
     # Setter
-    def add_pending(self, user, user_from, when=None):
+    def add_pending(self, user1, user2, when=None):
         """ Ajouter une demande vers un utilisateur """
-        return user.friends.add_sent(user, when=when)
+        return user1.friends.add_sent(user2, when=when)
 
     def add_friends(self, user1, user2, when=None):
         """ Assigner deux utilisateurs comme amis """

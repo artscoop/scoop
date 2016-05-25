@@ -120,7 +120,7 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
         if forced == 'all':
             return self.process(forced=False, bypass_delay=bypass_delay) + self.process(forced=True, bypass_delay=bypass_delay)
         # Pas besoin de process si aucun mail à expédier
-        if self.filter(sent=False, discarded=False, forced=forced).count() == 0:
+        if not self.filter(sent=False, discarded=False).exists():
             return 0
         # Adresse du sender (selon template+settings)
         sender = render_to_string('messaging/mail/layout/sender.txt', {'settings': settings}, default_context())
@@ -141,7 +141,7 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
                 user = get_user_model().objects.get(email=email)
             except get_user_model().DoesNotExist:
                 user = None
-            if (user is None or user.can_send_mail() or bypass_delay) and mail_counter < mail_ceiling:
+            if (user is None or user.can_send_mail() or bypass_delay or forced) and mail_counter < mail_ceiling:
                 # Traiter les mails non marqués comme *forcés*
                 mails = self.filter(sent_email=email, forced=forced, sent=False, discarded=False)
                 # Envoyer chaque mail si son heure minimum d'envoi est atteinte
@@ -185,7 +185,7 @@ class MailEvent(UUID128Model, DataModel):
     @addattr(boolean=True, short_description=_("Can be sent now"))
     def can_send(self):
         """ Renvoyer si cet événement peut être distribué """
-        return self.minimum_time <= timezone.now() or self.forced
+        return (self.minimum_time <= timezone.now()) or self.forced
 
     @addattr(short_description=_("Delivery"))
     def get_delivery_delay(self):
@@ -195,13 +195,12 @@ class MailEvent(UUID128Model, DataModel):
     @addattr(allow_tags=True, short_description=_("Rendering"))
     def render(self):
         """ Renvoyer les informations de rendu de l'événement """
-        context = default_context()
         template = 'messaging/mail/{name}.html'.format(name=self.type.template)
         data_set = {key: list(set(self.data[key])) for key in self.data}
         data_set.update({'event': self})
-        title, text, html = [render_block_to_string(template, label, data_set, context_instance=context) for label in ['title', 'text', 'html']]
+        title, text, html = [render_block_to_string(template, label, data_set) for label in ['title', 'text', 'html']]
         title = one_line(title)
-        return {'title': title, 'text': text, 'html': html}
+        return {'title': title, 'text': text, 'html': render_to_string('messaging/mail/layout/html.html', {'html': html})}
 
     # Setter
     def postpone(self, minutes):

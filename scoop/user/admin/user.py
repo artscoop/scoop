@@ -26,7 +26,9 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ['username', 'email', 'id']
     exclude = ('last_login',)
     fieldsets = ((_("User"), {'fields': ('username', 'email', 'password', 'name')}),
-                 (_("Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),)
+                 (_("Status"), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+                 (_("Plus"), {'fields': ('next_mail',)})
+                 )
     form = make_ajax_form(get_user_model(), {'user_permissions': 'permission', 'groups': 'group'}, UserAdminForm)
     inlines = [ProfileInlineAdmin]
     save_on_top = False

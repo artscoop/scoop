@@ -50,7 +50,7 @@ class AlertManager(SingleDeleteManager):
         context = default_context()
         mailtype = MailType.objects.get_named(mailtype_name)
         template = 'messaging/alert/{name}.html'.format(name=mailtype.template)
-        title, html = [render_block_to_string(template, label, data, context_instance=context) for label in ['title', 'html']]
+        title, html = [render_block_to_string(template, label, data, context=context) for label in ['title', 'html']]
         title = one_line(title)
         alerts = []
         for recipient in recipients:

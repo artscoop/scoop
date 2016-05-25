@@ -3,6 +3,8 @@ import os
 from os.path import join
 
 from django.test import TestCase
+
+from scoop.content.models.album import Album
 from scoop.content.models.picture import Picture
 from scoop.user.models.activation import Activation
 from scoop.user.models.user import User
@@ -32,7 +34,8 @@ class PictureTest(TestCase):
     def test_picture(self):
         """ Tester l'état des images téléchargées """
         # Créer des images, une via Google Search, et une par URL
-        picture1 = Picture.objects.create_from_uri("find://flower?id=0", author=self.user, title="Flower")
+        picture1 = Picture.objects.create_from_uri("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/800px-Flower_poster_2.jpg",
+                                                   author=self.user, title="Flower")
         picture2 = Picture.objects.create_from_file(join(path, 'images', 'banana.gif'), author=self.user, title="Banana")
         self.assertIsNotNone(picture2, "picture 2 should not be None")
         self.assertIsNone(picture1.moderated, "picture 1 was moderated but should not by default")
@@ -102,3 +105,11 @@ class PictureTest(TestCase):
         self.assertEqual(picture1.get_license_id(), 1)
         self.assertEqual(picture1.get_license_name().lower(), 'copyright')
         self.assertEqual(picture1.get_license_creator(), 'Robert Doisneau')
+
+    def test_album(self):
+        """ Tester la création d'album """
+        picture1 = Picture.objects.create_from_file(join(path, 'images', 'croppable.jpg'), author=self.user, title='marked picture')
+        album1 = Album.objects.create_with('album1', [picture1])
+        self.assertIsNotNone(album1.get_default_picture())
+        self.assertEqual(album1.get_picture_count(filtering={}), 1)
+

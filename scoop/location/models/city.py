@@ -153,9 +153,13 @@ class CityQuerySetMixin(object):
         if result is not None:
             return self.get(id=result)
         # Ou retrouver la ville la plus proche
-        cities = self.filter(alternates__ascii=name, city=True).in_square(point, 64).distinct()  # recherche par cityname.ascii -> 128km
-        cities = cities if cities.exists() else self.filter(city=True, ascii=name).in_square(point, 64).distinct()  # recherche par city.ascii -> 128km
-        cities = cities if cities.exists() else self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
+        cities = self.filter(ascii=name, city=True).in_square(point, 64)
+        if not cities.exists():
+            cities = self.filter(alternates__ascii=name, city=True).in_square(point, 64).distinct()
+            if not cities.exists():
+                cities = self.filter(city=True, ascii=name).in_square(point, 64).distinct()  # recherche par city.ascii -> 128km
+                if not cities.exists():
+                    cities = self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
         if cities.exists():
             if quick is False:
                 cities = cities.annotate(distance=Distance('position', Point(point[1], point[0], srid=4326))).order_by('distance')

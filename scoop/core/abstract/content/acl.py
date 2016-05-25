@@ -116,7 +116,7 @@ class ACLModel(models.Model):
         :returns: un sous-chemin de 3 répertoires, 6 caractères hexa.
         """
         digest = hashlib.sha256(name.encode('utf-8')).digest()
-        for _ in range(79):
+        for _hi in range(79):
             digest = hashlib.sha256(digest).digest()
         digest = digest.hex()
         parts = [digest[idx:idx + 2] for idx in range(0, 6, 2)]
