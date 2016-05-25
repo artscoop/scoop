@@ -28,7 +28,7 @@ def patch_methods(cls, *bases):
             setattr(cls, base.__name__, base)
 
 
-class DummyModel():
+class DummyModel:
     """ Instanciation d'un objet avec des attributs pour bulk_create """
 
     def __init__(self, *args, **kwargs):
@@ -36,9 +36,10 @@ class DummyModel():
             setattr(self, kwarg, kwargs[kwarg])
 
 
-class DictUpdateModel():
+class DictUpdateModel:
     """
     Mixin pour Model ajoutant une fonction update
+
     Monkey-patching done in scoop.core.__init__
     """
 
@@ -46,6 +47,7 @@ class DictUpdateModel():
     def update(self, save=False, **kwargs):
         """
         Mettre à jour les champs du modèle
+
         :param save: Enregistrer l'instance après avoir modifié les champs
         :param kwargs: Attributs de l'instance à modifier
         :type self: django.db.models.Model

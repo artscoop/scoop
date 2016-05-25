@@ -48,8 +48,10 @@ class MailBlockManager(models.Manager):
 
 class MailBlock(DatetimeModel):
     """ Blocage d'adresse email """
+
     # Constantes
     REASONS = [[0, _("Fake accounts")], [1, _("Raw behaviour")]]
+
     # Champs
     email = models.CharField(max_length=48, db_index=True, unique=True, verbose_name=_("Email address"))
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=_("User"))

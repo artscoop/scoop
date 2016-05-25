@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.conf import settings
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from scoop.help.models.page import Page, PageTranslation
 
@@ -17,11 +18,11 @@ class PageTranslationInlineAdmin(admin.TabularInline):
 class PageAdmin(admin.ModelAdmin):
     """ Administration des pages d'aide """
     list_select_related = True
-    list_display = ['pk', 'uuid', 'title', 'active']
+    list_display = ['id', 'uuid', 'title', 'active']
     list_filter = []
     list_editable = ['active']
     search_fields = ['uuid', 'text', 'keywords']
-    ordering = ['-pk']
+    ordering = ['-id']
     actions = []
     inlines = [PageTranslationInlineAdmin]
 

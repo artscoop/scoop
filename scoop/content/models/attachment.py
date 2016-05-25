@@ -150,5 +150,5 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model, ACLModel):
     class Meta:
         verbose_name = _("attachment")
         verbose_name_plural = _("attachments")
-        permissions = (("can_join_files", "Can join files"),)
+        permissions = (('can_attach_files', "Can attach files"),)
         app_label = "content"

@@ -3,9 +3,7 @@ import logging
 
 from django.conf import settings
 from django.utils import timezone
-
 from scoop.core.util.django.templateutil import do_render
-
 
 logger = logging.getLogger(__name__)
 

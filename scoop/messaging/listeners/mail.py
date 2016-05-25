@@ -19,7 +19,7 @@ def default_mail_send(sender, mailtype, recipient, data, **kwargs):
     :type mailtype: str | MailType
     :type recipient: str | User
     """
-    category_option = {'message': 'receive_on_message', 'staff': 'receive_on_staff', 'subscription': 'receive_on_scubscription'}
+    category_option = {'message': 'receive_on_message', 'staff': 'receive_on_staff', 'subscription': 'receive_on_subscription'}
 
     # Récupérer l'obet MailType correspondant au mailtype passé
     mailtype = MailType.objects.get_named(mailtype) if isinstance(mailtype, str) else mailtype

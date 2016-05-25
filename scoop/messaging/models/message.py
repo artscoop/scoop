@@ -119,7 +119,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
     # Constantes
     DATA_KEYS = {'pasted', 'similar'}  # clés autorisées par datamodel
     SPAM_THRESHOLD = 0.83
-    classifications = {'spam': ('y', 'n')}
+    classifications = {'spam': ('1', '0')}
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="messages_sent", on_delete=models.SET_NULL, verbose_name=_("Author"))
@@ -186,7 +186,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
     # Privé
     def _get_similar_messages(self, messages, ratio=0.8):
         """ Renvoyer le nombre de messages similaires dans un queryset de messages """
-        return len([True for message in messages if self.get_similarity(message) >= ratio])
+        return len([True for message in messages if self.get_similarity(message) >= ratio])  # TODO: DataModel similar
 
     def get_document(self):
         """ Renvoyer une représentation tokenisée du texte de message pour la classification """

@@ -66,10 +66,11 @@ class QuotaAdmin(admin.ModelAdmin):
 class MailEventAdmin(admin.ModelAdmin):
     """ Administration des courriers électroniques """
     list_select_related = True
-    list_display = ['id', 'type', 'recipient', 'get_data_repr', 'forced', 'sent']
+    list_display = ['id', 'type', 'recipient', 'sent_email', 'get_data_repr', 'forced', 'sent', 'discarded', 'minimum_time']
     list_display_links = ['id']
-    list_filter = []
+    list_filter = ['sent', 'discarded', 'forced', 'type']
     readonly_fields = []
+    form = make_ajax_form(MailEvent, {'recipient': "user"})
 
 
 class AlertAdmin(admin.ModelAdmin):

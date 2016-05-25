@@ -4,12 +4,13 @@ from django.core.urlresolvers import reverse_lazy
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from scoop.core.abstract.content.picture import PicturedModel
+from scoop.core.abstract.content.picture import PicturedModel, PicturedBaseModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.social.access import PrivacyModel
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager
 
 
@@ -37,15 +38,13 @@ class AlbumManager(SingleDeleteManager):
         """ Créer un album et y intégrer une liste d'images """
         description = kwargs.get('description', '')
         author = kwargs.get('author', None)
-        album = self.create(name=name, description=description, author=author)
-        for picture in pictures:
-            try:
-                album.pictures.add(picture)
-            except (ValueError,):
-                pass
+        album = Album(name=name, description=description, author=author)
+        album.save()
+        album.add(pictures)
+        return album
 
 
-class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UUID64Model, WeightedModel):
+class Album(NullableGenericModel, DatetimeModel, PicturedBaseModel, PrivacyModel, UUID64Model, WeightedModel):
     """ Album d'images """
 
     # Champs
@@ -55,12 +54,14 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('album', "Updated"))
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Parent"))
     visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('album', "Visible"))
+    pictured = models.BooleanField(default=False, db_index=True, verbose_name=_("\U0001f58c"))
+    pictures = models.ManyToManyField('content.Picture', through='content.albumpicture', blank=True, verbose_name=_("Pictures"))
     objects = AlbumManager()
 
     # Getter
     def get_default_picture(self):
         """ Renvoyer l'image la plus importante de l'album """
-        pictures = self.pictures.all().order_by('-weight')
+        pictures = self.pictures.all().order_by('-album_data__weight')
         return pictures[0] if pictures.exists() else None
 
     def get_children_count(self, recursive=True):
@@ -79,9 +80,10 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
     # Setter
     def add(self, pictures):
         """ Insérer une image dans l'album """
-        pictures = [pictures] if not isinstance(pictures, list) else pictures
+        pictures = make_iterable(pictures)
         for picture in pictures:
-            self.pictures.add(picture)
+            AlbumPicture.objects.get_or_create(album=self, picture=picture)
+        self.save()  # Mettre à jour l'état pictured
 
     # Overrides
     def save(self, *args, **kwargs):
@@ -102,4 +104,27 @@ class Album(NullableGenericModel, DatetimeModel, PicturedModel, PrivacyModel, UU
     class Meta:
         verbose_name = _("picture album")
         verbose_name_plural = _("picture albums")
+        app_label = 'content'
+
+
+class AlbumPicture(WeightedModel):
+    """
+    Table intermédiaire pour organiser les images dans un album
+
+    Ajoute des informations de notes sur les images ainsi qu'un poids,
+    afin de pouvoir réorganiser les images dans l'album.
+    (Les images possèdent aussi un poids, qui lui est utilisé globalement)
+    """
+
+    # Champs
+    album = models.ForeignKey('content.album', related_name='picture_data', on_delete=models.CASCADE, verbose_name=_("Album"))
+    picture = models.ForeignKey('content.picture', related_name='album_data', on_delete=models.CASCADE, verbose_name=_("Picture"))
+    notes = models.CharField(max_length=512, blank=True, verbose_name=_("Notes"))
+
+    # Métadonnées
+    class Meta:
+        verbose_name = _("album picture")
+        db_table = 'content_album_pictures_weighted'
+        unique_together = [['picture', 'album']]
+        ordering = ['weight', 'pk']
         app_label = 'content'

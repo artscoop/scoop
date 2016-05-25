@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from scoop.core.models.recorder import ActionType, Record
+from scoop.core.models.recorder import RecordType, Record
 from scoop.core.util.shortcuts import addattr
 
 
@@ -60,5 +60,5 @@ class RecordAdmin(admin.ModelAdmin):
 
 
 # Enregistrer les classes d'administration
-admin.site.register(ActionType, ActionTypeAdmin)
+admin.site.register(RecordType, ActionTypeAdmin)
 admin.site.register(Record, RecordAdmin)

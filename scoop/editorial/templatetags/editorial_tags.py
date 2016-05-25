@@ -1,12 +1,11 @@
 # coding: utf-8
+from functools import lru_cache
+
 from django import template
 from django.db.models import Q
 from django.template.loader import render_to_string
-from functools import lru_cache
-
 from scoop.editorial.models.excerpt import Excerpt
 from scoop.editorial.models.page import Page
-
 
 register = template.Library()
 

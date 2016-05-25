@@ -192,7 +192,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     username = models.CharField(max_length=32, unique=True,
                                 validators=[RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE), MinLengthValidator(4)],
                                 verbose_name=_("Username"))
-    name = models.CharField(max_length=24, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_("Name"))
+    name = models.CharField(max_length=48, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_("Name"))
     bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', "Bot"))
     email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_("Email"))
     is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', "Active"))
@@ -201,7 +201,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
                                    verbose_name=pgettext_lazy('user', "Staff"))
     date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_("Date joined"))
     last_online = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))
-    next_mail = models.DateTimeField(default=timezone.now, editable=False, verbose_name=_("Next possible mail for user"))
+    next_mail = models.DateTimeField(default=timezone.now, editable=True, verbose_name=_("Next possible mail for user"))
     objects = UserManager()
 
     # Overrides
@@ -341,8 +341,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         if user_id not in user_ids:
             count = User.get_online_count(compute=False)
             user_ids.add(user_id)
-            cache.set(User.CACHE_KEY['online.set'], user_ids, 2592000)
-            cache.set(User.CACHE_KEY['online.count'], count + 1, 2592000)
+            cache.set_many({User.CACHE_KEY['online.set']: user_ids, User.CACHE_KEY['online.count']: count + 1}, 2592000)
 
     @staticmethod
     def _clean_online_list():
@@ -447,10 +446,11 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             return True
         return False
 
-    def encrypt_password(self):
+    def encrypt_password(self, save=True):
         """ Crypter le mot de passe stocké en clair """
         self.set_password(self.password)
-        self.save()
+        if save:
+            self.save()
 
     def reset_next_mail(self, snooze=None):
         """
@@ -465,7 +465,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             delta = datetime.timedelta(seconds=ConfigurationForm.get_option_for(self, 'receive_interval'))
         else:
             delta = datetime.timedelta(minutes=snooze)
-        self.next_mail += delta
+        self.next_mail = timezone.now() + delta
         self.save(update_fields=['next_mail'])
 
     def set_inactive(self):

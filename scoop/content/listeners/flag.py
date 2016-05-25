@@ -9,7 +9,7 @@ def resolve_content_flag(sender, flag, iteration, **kwargs):
     """ Résoudre automatiquement un flag sur un contenu """
     target = flag.content_object
     # Verrouiller le contenu au bout du 3e flag
-    if iteration == 3:
+    if iteration >= 3:
         target.locked = True
         target.publish_plain(False)
         return True

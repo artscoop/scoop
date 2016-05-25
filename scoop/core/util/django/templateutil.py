@@ -4,9 +4,12 @@ from functools import wraps
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.template import Context, RequestContext, loader
+from django.template.context import RenderContext
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
-from scoop.core.util.stream.request import default_context
+
+from scoop.core.templatetags.repeat import MacroRoot
+from scoop.core.util.stream.request import default_context, default_request
 
 
 def render_to_code(request, template, context, status_code=200):
@@ -32,83 +35,31 @@ def _get_template(template):
     return loader.get_template(template)
 
 
-class BlockNotFound(Exception):
-    """The requested block did not exist."""
-    pass
-
-
-def render_template_block(template, block, context):
-    """ Effectuer le rendu d'un bloc unique d'un template Django """
-    template.render(context)
-    return _render_template_block_nodelist(template.template.nodelist, block, context)
-
-
-def _render_template_block_nodelist(nodelist, block, context):
-    """ Parcourir un template Django à la recherche d'un noeud de type block """
-    for node in nodelist:
-        if isinstance(node, BlockNode) and node.name == block:
-            return node.render(context)
-        for key in ('nodelist', 'nodelist_true', 'nodelist_false'):
-            if hasattr(node, key):
-                try:
-                    rendered = _render_template_block_nodelist(getattr(node, key), block, context)
-                except:
-                    pass
-                else:
-                    return rendered
-    for node in nodelist:
-        if isinstance(node, ExtendsNode):
-            try:
-                resolve_parent = node.parent_name.resolve(context)
-                rendered = render_template_block(loader.get_template(resolve_parent), block, context)
-            except BlockNotFound:
-                pass
-            else:
-                return rendered
-    raise BlockNotFound
-
-
-def render_block_to_string(template_name, block, extra_context=None, context_instance=None):
-    """
-    Rendre un seul block de template Django dans une chaîne
-
-    :param extra_context: contexte supplémentaire à passer
-    :param block: nom du bloc à rendre
-    :param context_instance: objet Context ou RequestContext
-    :type template_name: str | list | tuple
-    """
-    extra_context = extra_context or {}
-    template = _get_template(template_name)
-    if context_instance:
-        context_instance.update(extra_context)
+def render_block_to_string(template_name, block_name, data=None, context=None):
+    data = data or {}
+    if context:
+        context.update(data)
     else:
-        context_instance = Context(extra_context)
-    return render_template_block(template, block, context_instance)
+        context = RequestContext(default_request(), data)
 
+    t = loader.get_template(template_name)
+    with context.bind_template(t.template):
+        t.template.render(context)
 
-def render_block_to_response(request, template, block, extra_context=None, content_type=None, **kwargs):
-    """
-    Rendre un seul block de template Django dans un objet HTTPResponse
+        to_visit = t.template.nodelist
+        while to_visit:
+            node = to_visit.pop()
+            if isinstance(node, BlockNode):
+                print(node.origin)
+            if isinstance(node, BlockNode) and node.name == block_name:
+                return node.render(context)
+            elif hasattr(node, 'nodelist'):
+                to_visit += node.nodelist
+            if isinstance(node, (ExtendsNode, MacroRoot)):
+                "Nodes  dded Extend"
+                to_visit += node.get_parent(context).nodelist
 
-    :param request: objet Request
-    :param template: nom du template à parcourir
-    :param block: nom du bloc à rendre
-    :param extra_context: contexte supplémentaire à passer
-    :param content_type: type MIME de la sortie, ex.:text/html
-    :type template: str | list | tuple
-    """
-    if extra_context is None:
-        extra_context = {}
-    dictionary = {'params': kwargs}
-    for key, value in extra_context.items():
-        if callable(value):
-            dictionary[key] = value()
-        else:
-            dictionary[key] = value
-    c = RequestContext(request, dictionary)
-    template = _get_template(template)
-    template.render(c)
-    return HttpResponse(render_template_block(template, block, c), content_type=content_type or 'text/html')
+    raise RuntimeError('Block not found')
 
 
 def render_to(template=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):

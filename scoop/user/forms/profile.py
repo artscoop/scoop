@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from form_utils.fields import ClearableImageField
-
 from scoop.content.models.picture import Picture
 from scoop.content.util.widgets import PictureInlineWidget
 from scoop.core.util.data.dateutil import date_age

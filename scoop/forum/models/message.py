@@ -65,7 +65,7 @@ class MessageManager(SingleDeleteManager):
 
 
 class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, ClassifiableModel):
-    """ Message de discussion """
+    """ Message de discussion publique """
 
     # Constantes
     DATA_KEYS = {'pasted', 'similar'}  # clés autorisées par datamodel
@@ -169,4 +169,4 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
         verbose_name = _("message")
         verbose_name_plural = _("messages")
         permissions = (("can_force_send", "Can force send messages"),)
-        app_label = "forum"
+        app_label = 'forum'

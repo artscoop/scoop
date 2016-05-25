@@ -19,7 +19,7 @@ class Language(Tag):
     """ Tag remplaçant les erreurs de langage, ex. « de le » devient « du » """
     name = 'language'
     options = Options(
-            blocks=[('endlanguage', 'nodelist')],
+        blocks=[('endlanguage', 'nodelist')],
     )
 
     def render_tag(self, context, **kwargs):

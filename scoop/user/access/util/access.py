@@ -31,8 +31,8 @@ def reverse_lookup(ip):
     address = reversename.from_address(ip)
     resolver = dnsresolver.Resolver()
     # Configurer le resolver
-    resolver.timeout = 2.0  # par serveur dns
-    resolver.lifetime = 6.0  # timeout total
+    resolver.timeout = 1.25  # par serveur dns
+    resolver.lifetime = 3.75  # timeout total
     # Demander le RRSet PTR, renvoyer timeout si timeout
     try:
         ptr_rrset = resolver.query(address, 'PTR').rrset

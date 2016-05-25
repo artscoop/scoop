@@ -1,6 +1,6 @@
 [
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 1,
     "fields": {
       "codename": "content.create.flag",
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 2,
     "fields": {
       "codename": "content.create.picture",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 3,
     "fields": {
       "codename": "user.ban.user",
@@ -27,7 +27,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 4,
     "fields": {
       "codename": "content.delete.picture",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 5,
     "fields": {
       "codename": "content.lock.content",
@@ -45,7 +45,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 6,
     "fields": {
       "codename": "content.create.content",
@@ -54,7 +54,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 7,
     "fields": {
       "codename": "messaging.create.message",
@@ -63,7 +63,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 8,
     "fields": {
       "codename": "messaging.create.thread",
@@ -72,7 +72,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 9,
     "fields": {
       "codename": "user.login",
@@ -81,7 +81,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 10,
     "fields": {
       "codename": "user.logout",
@@ -90,7 +90,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 11,
     "fields": {
       "codename": "user.activate.user",
@@ -99,7 +99,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 12,
     "fields": {
       "codename": "user.demote",
@@ -108,7 +108,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 13,
     "fields": {
       "codename": "content.allow.picture",
@@ -117,7 +117,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 14,
     "fields": {
       "codename": "content.deny.picture",
@@ -126,7 +126,7 @@
     }
   },
   {
-    "model": "core.actiontype",
+    "model": "core.recordtype",
     "pk": 15,
     "fields": {
       "codename": "user.impersonate",

@@ -75,20 +75,20 @@ class RecordManager(SingleDeleteManager):
         try:
             target_object = target if isinstance(target, models.Model) else None
             target_name = str(target) if target is not None else ""
-            action_type = ActionType.objects.get(codename=codename)
+            action_type = RecordType.objects.get(codename=codename)
             entry = Record(user=user, type=action_type, target_object=target_object, target_name=target_name,
                            container_object=container)
             entry.save()
-        except ActionType.DoesNotExist:
+        except RecordType.DoesNotExist:
             logger.warning("The action type {type} must be registered in order to create this record.".format(type=codename))
 
 
-class ActionTypeManager(SingleDeleteManager):
+class RecordTypeManager(SingleDeleteManager):
     """ Manager des types d'actions """
 
     def get_queryset(self):
         """ Renvoyer le queryset par défaut """
-        return super(ActionTypeManager, self).get_queryset()
+        return super(RecordTypeManager, self).get_queryset()
 
     # Getter
     def get_by_name(self, name):
@@ -101,10 +101,11 @@ class ActionTypeManager(SingleDeleteManager):
 
 class Record(models.Model):
     """ Action """
+
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='action_records', verbose_name=_("User"))
     name = models.CharField(max_length=32, verbose_name=_("Name"))
-    type = models.ForeignKey('core.ActionType', related_name='records', verbose_name=_("Action type"))
+    type = models.ForeignKey('core.RecordType', related_name='records', verbose_name=_("Action type"))
     created = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name=pgettext_lazy('record', "Created"))
     # Cible de l'action
     target_type = models.ForeignKey('contenttypes.ContentType', related_name='target_record', null=True, verbose_name=_("Target type"))
@@ -181,7 +182,7 @@ class Record(models.Model):
         app_label = "core"
 
 
-class ActionType(models.Model):
+class RecordType(models.Model):
     """
     Type d'action enregistrable
     codename: nom de code de la forme app.a.b.c.. etc
@@ -191,7 +192,7 @@ class ActionType(models.Model):
     codename = models.CharField(max_length=32, verbose_name=_("Code name"))
     sentence = models.CharField(max_length=48, verbose_name=_("Sentence"))  # actor, target, container, when
     verb = models.CharField(max_length=24, verbose_name=_("Verb"))
-    objects = ActionTypeManager()
+    objects = RecordTypeManager()
 
     # Getter
     @addattr(allow_tags=True, short_description=_("Color"))

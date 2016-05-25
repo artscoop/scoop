@@ -55,7 +55,7 @@ class CurrencyManager(SingleDeleteManager):
             for currency in (base_queryset if names is None else base_queryset.filter(short_name__in=names)):
                 currency.update_balance()
             return True
-        except:
+        except ValueError:
             return False
 
 
@@ -64,7 +64,8 @@ class Currency(models.Model):
 
     # Champs
     name = models.CharField(max_length=32, blank=False, verbose_name=_("Name"))
-    short_name = models.CharField(max_length=6, blank=False, unique=True, verbose_name=_("3 letter name"))
+    symbol = models.CharField(max_length=4, blank=True, verbose_name=_("Symbol"))
+    short_name = models.CharField(max_length=6, blank=False, primary_key=True, verbose_name=_("3 letter name"))
     balance = models.DecimalField(max_digits=12, decimal_places=8, default=-1, verbose_name=pgettext_lazy('currency', "Quote"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('currency', "Updated"))
     objects = CurrencyManager()

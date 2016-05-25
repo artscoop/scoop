@@ -11,7 +11,7 @@ class IPCountryFilter(SimpleListFilter):
 
     def lookups(self, request, model_admin):
         """ Renvoyer les options des pays  """
-        queryset = model_admin.queryset(request)
+        queryset = model_admin.get_queryset(request)
         results = queryset.values_list('country').order_by('country').distinct()
         data = ((code[0] or 'none', dict(COUNTRIES).get(code[0], _("None"))) for code in results if code[0] not in ['None', ''])
         return data

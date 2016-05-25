@@ -8,9 +8,10 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
 from scoop.user.access.models import UserIP
-from scoop.user.models import User
+
 
 logger = logging.getLogger(__name__)
+User = get_user_model()
 
 
 @periodic_task(run_every=timedelta(minutes=5), ignore_result=True)
@@ -25,7 +26,6 @@ def clean_online_list():
 @periodic_task(run_every=crontab(hour=0, minute=0))
 def rebuild_users():
     """ Assurer l'intégrité des liens de clés étrangères """
-    User = get_user_model()
     # Assigner des villes si absentes à celles des IP
     if apps.is_installed('scoop.location'):
         users = User.objects.filter(profile__city__isnull=True)

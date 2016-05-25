@@ -18,10 +18,10 @@ def prune_access_log():
         Access.objects.purge(days, persist=True)
 
 
-@periodic_task(run_every=timedelta(minutes=10))
+@periodic_task(run_every=timedelta(minutes=1))
 def update_ip_data():
     """ Mettre à jour périodiquement les IPs existantes """
-    oldest_ips = IP.objects.all().order_by('updated')[0:100]
+    oldest_ips = IP.objects.all().order_by('updated')[0:10]
     with transaction.atomic():
         for ip in oldest_ips:
             ip.save(force_lookup=True)

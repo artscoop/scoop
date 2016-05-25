@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-09 13:14+0200\n"
+"POT-Creation-Date: 2016-05-14 21:34+0200\n"
 "PO-Revision-Date: 2016-05-10 18:03+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 "X-Translated-Using: django-rosetta 0.7.11\n"
@@ -187,7 +187,7 @@ msgstr "Mélanger les données du profil"
 msgid "Id"
 msgstr "Id"
 
-#: admin/profile.py:104 forms/registration.py:23 models/user.py:197
+#: admin/profile.py:104 forms/registration.py:26 models/user.py:197
 msgid "Email"
 msgstr "Email"
 
@@ -254,79 +254,79 @@ msgid "You must provide an username or email and a password."
 msgstr ""
 "Vous devez fournir un nom d'utilisateur ou email ainsi qu'un mot de passe."
 
-#: forms/configuration.py:19
+#: forms/configuration.py:18
 msgid "15 minutes"
 msgstr "15 minutes"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:18
 msgid "30 minutes"
 msgstr "30 minutes"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:18
 msgid "3 hours"
 msgstr "3 heures"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:18
 msgid "3 days"
 msgstr "3 jours"
 
-#: forms/configuration.py:19
+#: forms/configuration.py:18
 msgid "30 days"
 msgstr "30 jours"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:19
 msgid "5 minutes"
 msgstr "5 minutes"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:19
 msgid "1 hour"
 msgstr "1 heure"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:19
 msgid "12 hours"
 msgstr "12 heures"
 
-#: forms/configuration.py:20
+#: forms/configuration.py:19
 msgid "2 days"
 msgstr "2 jours"
 
-#: forms/configuration.py:21
+#: forms/configuration.py:20
 msgid "Home page"
 msgstr "Page d'accueil"
 
-#: forms/configuration.py:21
+#: forms/configuration.py:20
 msgid "My profile"
 msgstr "Mon profil"
 
-#: forms/configuration.py:21
+#: forms/configuration.py:20
 msgid "My messages"
 msgstr "Mes messages"
 
-#: forms/configuration.py:25
+#: forms/configuration.py:24
 msgid "Stay connected for"
 msgstr "Rester connecté pendant"
 
-#: forms/configuration.py:26
+#: forms/configuration.py:25
 msgid "Destination upon login"
 msgstr "Destination après connexion"
 
-#: forms/configuration.py:27
+#: forms/configuration.py:26
 msgid "Receive emails"
 msgstr "Recevoir des emails"
 
-#: forms/configuration.py:28
+#: forms/configuration.py:27
 msgid "Max reception rate"
 msgstr "Fréquence maximum de réception"
 
-#: forms/configuration.py:30
+#: forms/configuration.py:29
 msgid "Receive when a user sends you a message"
 msgstr "Recevoir lorsqu'un utilisateur vous envoie un message"
 
-#: forms/configuration.py:31
+#: forms/configuration.py:30
 msgid "Receive when a staff member sends you a message"
 msgstr "Recevoir lorsqu'un membre du personnel vous envoie un message"
 
-#: forms/configuration.py:32
+#: forms/configuration.py:31
 msgid "Receive when a content you've subscribed to is updated"
 msgstr "Recevoir lorsqu'un contenu auquel vous avez souscrit est mis à jour"
 
@@ -336,87 +336,107 @@ msgid "You must be {age:d} or older."
 msgstr "Vous devez avoir au moins {age:d} ans."
 
 #: forms/profile.py:42
-#, python-format
-msgid ""
-"%(input)s <span class='clear'>%(checkbox)s <span>Remove "
-"picture</span></span>"
-msgstr ""
-"%(input)s <span class='clear'>%(checkbox)s <span>Retirer "
-"l'image</span></span>"
-
-#: forms/profile.py:43
 msgid "Main picture"
 msgstr "Image principale"
 
-#: forms/profile.py:50
+#: forms/profile.py:43
+#, python-format
+msgid ""
+"%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>"
+msgstr ""
+"%(input)s <span class='clear'>%(checkbox)s <span>Retirer l'image</span></"
+"span>"
+
+#: forms/profile.py:51
 msgid ""
 "Your picture may need to be reviewed by moderators before being visible."
 msgstr ""
-"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être"
-" visible."
+"Votre image peut nécessiter d'être examinée par des modérateurs avant d'être "
+"visible."
 
-#: forms/profile.py:61 models/profile.py:74
+#: forms/profile.py:62 models/profile.py:74
 msgid "Gender"
 msgstr "Sexe"
 
-#: forms/registration.py:22 forms/user.py:66
+#: forms/registration.py:24 forms/user.py:66
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
-#: forms/registration.py:24
+#: forms/registration.py:25
+msgid "Letters, digits and underscores"
+msgstr ""
+
+#: forms/registration.py:26
+msgid "A non disposable email"
+msgstr ""
+
+#: forms/registration.py:27
 msgid "Retype email"
 msgstr "Saisissez encore l'email"
 
-#: forms/registration.py:25
+#: forms/registration.py:28
 msgid "Retype password"
 msgstr "Répétez le mot de passe"
 
-#: forms/registration.py:32
+#: forms/registration.py:35
 #, python-brace-format
 msgid "Your password should be at least {min} characters long"
 msgstr "Votre mot de passe doit faire au moins {min} caractères"
 
-#: forms/registration.py:39
+#: forms/registration.py:42
 msgid "The password must be identical in both fields."
 msgstr "Le mot de passe doit être identique dans les deux champs."
 
-#: forms/registration.py:47
+#: forms/registration.py:50
 msgid "This e-mail address is already in use."
 msgstr "L'adresse email est déjà utilisée."
 
-#: forms/registration.py:56
+#: forms/registration.py:59
 msgid "The email addresses must be identical."
 msgstr "Les adresses email doivent être identiques."
 
-#: forms/registration.py:64
+#: forms/registration.py:67
 #, python-brace-format
 msgid "Your first name must not exceed {max} characters"
 msgstr "Votre prénom doit faire {max} caractères au maximum"
 
-#: forms/registration.py:74
+#: forms/registration.py:77
 msgid "This nickname is already in use."
 msgstr "Ce pseudonyme est déjà utilisé."
 
-#: forms/registration.py:78
+#: forms/registration.py:81
 #, python-brace-format
 msgid "Your nickname should be between {min} and {max} characters long."
 msgstr "Votre pseudonyme doit faire entre {min} et {max} caractères."
 
-#: forms/registration.py:86
+#: forms/registration.py:89
 msgid "You must accept our EULA to proceed."
 msgstr "Vous devez accepter nos CGU pour continuer."
 
-#: forms/registration.py:103 forms/registration.py:111
-#, python-brace-format
-msgid "By ticking this checkbox, I abide to the {website} license agreement"
+#: forms/registration.py:102
+msgid "4 characters minimum"
 msgstr ""
-"En cochant cette case, j'accepte les conditions d'utilisation de {website}"
 
-#: forms/registration.py:105 forms/registration.py:113
+#: forms/registration.py:110
+msgid "I refuse to comply to the EULA and do not want to use this website"
+msgstr ""
+
+#: forms/registration.py:111
+#, python-brace-format
+msgid "I abide to the {website} EULA"
+msgstr ""
+
+#: forms/registration.py:115
 msgid "EULA"
 msgstr "CGU"
 
-#: forms/registration.py:118
+#: forms/registration.py:121
+#, fuzzy
+#| msgid "You must accept our EULA to proceed."
+msgid "You must abide to the EULA to continue"
+msgstr "Vous devez accepter nos CGU pour continuer."
+
+#: forms/registration.py:126
 msgid "Original"
 msgstr "Original"
 
@@ -434,8 +454,7 @@ msgstr "Se souvenir de moi"
 
 #: listeners/activation.py:20
 msgid "Congratulations! Your account is activated, you are now logged in."
-msgstr ""
-"Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
+msgstr "Félicitations ! Votre compte est activé, vous êtes désormais en ligne."
 
 #: listeners/activation.py:23
 msgid "Congratulations! Your account is activated, you can now log in."
@@ -464,7 +483,8 @@ msgstr "{name}, votre session d'imitation a été correctement terminée."
 #: middleware/impersonation.py:57
 #, python-brace-format
 msgid "You are viewing {path} as {name}. <a href=\"?{exit}\">Quit</a>"
-msgstr "Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
+msgstr ""
+"Vous visitez {path} en tant que {name}. <a href=\"?{exit}\">Terminer</a>"
 
 #: middleware/impersonation.py:60
 #, python-brace-format
@@ -628,8 +648,7 @@ msgstr "Supprimé"
 #: models/user.py:200
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
-"Indique si l'utilisateur peut se connecter ou non à ce site "
-"d'administration."
+"Indique si l'utilisateur peut se connecter ou non à ce site d'administration."
 
 #: models/user.py:201
 msgctxt "user"
@@ -692,11 +711,11 @@ msgstr "En ligne depuis"
 msgid "Time online"
 msgstr "en ligne"
 
-#: models/user.py:534
+#: models/user.py:533
 msgid "user"
 msgstr "utilisateur"
 
-#: models/user.py:535 templates/user/dashboard/online.html:5
+#: models/user.py:534 templates/user/dashboard/online.html:5
 msgid "users"
 msgstr "utilisateurs"
 
@@ -851,6 +870,10 @@ msgstr "non"
 msgid "You have no permission over this user."
 msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
+#~ msgid "By ticking this checkbox, I abide to the {website} license agreement"
+#~ msgstr ""
+#~ "En cochant cette case, j'accepte les conditions d'utilisation de {website}"
+
 #~ msgid "Male"
 #~ msgstr "Homme"
 
@@ -901,7 +924,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 #~ msgstr "L'anniversaire d'un ami approche"
 
 #~ msgid "A member you follow has updated his publications"
-#~ msgstr "Un membre dont vous suivez l'actualité a mis à jour ses publications"
+#~ msgstr ""
+#~ "Un membre dont vous suivez l'actualité a mis à jour ses publications"
 
 #~ msgid "News have been published"
 #~ msgstr "Des nouveautés ont été publiées"
@@ -940,8 +964,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
 #~ msgid "Creating superuser with login=%(login)s and password=%(password)s"
 #~ msgstr ""
-#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de "
-#~ "passe=%(password)s"
+#~ "Création d'un superutilisateur avec le login=%(login)s et le mot de passe="
+#~ "%(password)s"
 
 #~ msgid "None"
 #~ msgstr "Aucun"
@@ -1062,8 +1086,8 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 
 #~ msgid "Configuration settings have been created for user %(user)s (%(id)s)"
 #~ msgstr ""
-#~ "Les informations de configuration ont été créées pour l'utilisateur %(user)s"
-#~ " (%(id)s)"
+#~ "Les informations de configuration ont été créées pour l'utilisateur "
+#~ "%(user)s (%(id)s)"
 
 #~ msgid "logged in"
 #~ msgstr "s'est connecté(e)"
@@ -1287,11 +1311,11 @@ msgstr "Vous n'avez pas de permissions sur cet utilisateur."
 #~ msgstr "Bienvenue !"
 
 #~ msgid ""
-#~ "We just sent you an email with a link to confirm you are the owner of your "
-#~ "email address."
+#~ "We just sent you an email with a link to confirm you are the owner of "
+#~ "your email address."
 #~ msgstr ""
-#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui confirmera "
-#~ "que vous êtes bien le détenteur de cette adresse email."
+#~ "Nous venons de vous envoyer un email avec un lien à cliquer, qui "
+#~ "confirmera que vous êtes bien le détenteur de cette adresse email."
 
 #~ msgid "%s's profile"
 #~ msgstr "Profil de %s"

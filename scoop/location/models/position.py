@@ -3,6 +3,7 @@ from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.contrib.gis.geos.point import Point
 from django.contrib.gis.measure import D
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
@@ -45,7 +46,7 @@ class PositionManager(SingleDeleteManager):
         :param lon: longitude WGS84
         """
         position, _ = self.get_or_create(user=user)
-        position.update(time=position.now(), position=Point(x=lon, y=lat))
+        position.update(time=position.now(), position=Point(x=lon, y=lat, srid=CoordinatesModel.SRID))
         position.save()
         return position
 
@@ -65,6 +66,7 @@ class Position(CoordinatesModel, DatetimeModel):
 
     # Champs
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, primary_key=True, related_name='position', verbose_name=_("User"))
+    note = models.CharField(max_length=255, blank=True, verbose_name=_("Notes"))
     objects = PositionManager()
 
     # Getter

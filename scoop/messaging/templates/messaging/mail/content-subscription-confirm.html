@@ -1,4 +1,3 @@
-{% extends "messaging/mail/layout/base.html" %}
 {% load text_tags %}
 
 {% block title %}
@@ -9,7 +8,7 @@
     Bonjour {{ event.email_sent }},
 {% endblock %}
 
-{% block html_content %}
+{% block html %}
     <p>Bonjour {{ event.email_sent }},</p>
     {{ DOMAIN_NAME }}
 {% endblock %}

@@ -90,6 +90,7 @@ class RecipientAdminForm(forms.ModelForm):
 
 class MessageSearchForm(forms.Form):
     """ Formulaire de recherche de messages """
+
     query = forms.CharField(max_length=128, required=False)
     ip = forms.GenericIPAddressField(required=False)
     q = forms.CharField(max_length=48, required=False)

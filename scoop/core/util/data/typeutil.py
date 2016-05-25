@@ -1,12 +1,10 @@
 # coding: utf-8
 import hashlib
-
 import math
-import webcolors
 
+import webcolors
 # Constantes
 from django.db.models.base import Model
-
 
 SI_PREFIXES = ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 
@@ -205,5 +203,3 @@ def is_multi_dimensional(value):
     if isinstance(value, (list, tuple)) and value:
         return isinstance(value[0], (list, tuple))
     return False
-
-

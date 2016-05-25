@@ -52,6 +52,12 @@ def load_currency_table(path, filename):
     return csv.DictReader(handle, columns, dialect='excel'), handle
 
 
+def load_currency_symbols_raw(path, filename):
+    """ Renvoyer un reader CSV vers une table de pays Geonames """
+    handle = auto_open_file(path, filename)
+    return csv.reader(handle, dialect='excel')
+
+
 def load_geoname_alternate_table_raw(path, filename):
     """ Renvoyer un reader CSV sur la table de noms alternatifs Geonames """
     handle = open_zip_file(path, filename)
@@ -251,13 +257,18 @@ def populate_currency(country):
     """ Peupler les devises """
     filename = os.path.join(settings.STATIC_ROOT, "assets", "geonames", "country")
     reader, _ = load_currency_table(filename, 'countrylist')
+    symbol_reader = load_currency_symbols_raw(filename, 'currency')
+    symbols = dict()
+    for row in symbol_reader:
+        symbols[row[0]] = row[2]
     if country.currency is None:
         for row in reader:
             if country.code3.lower() == row['iso316613lettercode'].lower():
+                code3 = row['iso4217currencycode']
                 try:
-                    currency = Currency.objects.get(name=row['iso4217currencyname'], short_name=row['iso4217currencycode'])
+                    currency = Currency.objects.get(name=row['iso4217currencyname'], short_name=code3, symbol=symbols.get('code3', ''))
                 except Currency.DoesNotExist:
-                    currency = Currency.objects.create(name=row['iso4217currencyname'], short_name=row['iso4217currencycode'])
+                    currency = Currency.objects.create(name=row['iso4217currencyname'], short_name=code3, symbol=symbols.get('code3', ''))
                 country.currency = currency
                 country.save()
                 break

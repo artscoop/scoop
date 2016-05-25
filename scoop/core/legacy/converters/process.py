@@ -68,7 +68,7 @@ class ImportProcessor(object):
                 count = len(importers)
                 # Import première passe
                 for ind, importer in enumerate(importers, start=1):
-                    with transaction.atomic(savepoint=False):
+                    with transaction.atomic():
                         print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                         i_start = time.time()
                         importer.imports()
@@ -82,6 +82,7 @@ class ImportProcessor(object):
                         importer.post_imports()
                         i_elapsed = time.time() - i_start
                         print("Model successfully updated in {:.01f}s.".format(i_elapsed))
+                        gc.collect()
                 # Import troisième passe
                 for ind, importer in enumerate(importers, start=1):
                     with transaction.atomic(savepoint=False):
@@ -90,6 +91,7 @@ class ImportProcessor(object):
                         importer.brushup()
                         i_elapsed = time.time() - i_start
                         print("End of model process updated in {:.01f}s.".format(i_elapsed))
+                        gc.collect()
                 # Touche de fin
                 with transaction.atomic(savepoint=False):
                     i_start = time.time()

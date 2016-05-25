@@ -16,7 +16,7 @@ class OptionTranslationInlineAdmin(admin.TabularInline):
     model = OptionTranslation
     max_num = len(settings.LANGUAGES)
     extra = 2
-    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget},}
+    formfield_overrides = {models.TextField: {'widget': AdminTextInputWidget}}
 
 
 class OptionAdmin(admin.ModelAdmin):
@@ -49,8 +49,8 @@ class OptionGroupTranslationInlineAdmin(admin.TabularInline):
     verbose_name_plural = _("Translations")
     model = OptionGroupTranslation
     max_num = len(settings.LANGUAGES)
+    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}}
     extra = 4
-    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget},}
 
 
 class OptionGroupAdmin(admin.ModelAdmin):
@@ -65,7 +65,7 @@ class OptionGroupAdmin(admin.ModelAdmin):
     actions = []
     save_on_top = False
     fieldsets = ((_("Option group"), {'fields': ('code', 'short_name')}),)
-    inlines = [OptionGroupTranslationInlineAdmin, ]
+    inlines = [OptionGroupTranslationInlineAdmin]
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
 
 

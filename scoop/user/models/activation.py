@@ -113,7 +113,7 @@ class Activation(DatetimeModel, UUID128Model):
             # Envoyer un mail si le site est configuré correctement
             try:
                 mailable_event.send(None, mailtype='user.activation', recipient=self.user, data={'activation': self})
-                self.resends += 1
+                self.resends = 1
                 self.last_resend = timezone.now()
                 self.save(update_fields=['resends', 'last_resend'])
                 return True

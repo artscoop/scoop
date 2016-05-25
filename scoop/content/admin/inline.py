@@ -31,5 +31,5 @@ class CategoryTranslationInlineAdmin(admin.TabularInline):
     verbose_name_plural = _("Translations")
     model = CategoryTranslation
     max_num = len(settings.LANGUAGES)
-    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget},}
+    formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}}
     extra = 1
