@@ -41,7 +41,7 @@ class NegotiationManager(SingleDeleteManager):
         """ Créer une négociation entre source et cible """
         negotiation, created = self.get_or_create(source=source, target=target)
         if created is True:
-            negotiation_sent.send(None, source=source, target=target)
+            negotiation_sent.send(None, source=source, target=target, negotiation=self)
         return negotiation
 
     def accept(self, source, target):
@@ -57,9 +57,11 @@ class NegotiationManager(SingleDeleteManager):
 
 class Negotiation(DatetimeModel):
     """ Négociation d'autorisation d'envoeyer un message """
+
     # Constantes
     STATUS = [[None, _("Pending")], [True, _("Accepted")], [False, _("Denied")]]
     PENDING, ACCEPTED, DENIED = None, True, False
+
     # Champs
     source = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name="negotiations_made", verbose_name=_("Asker"))
     target = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name="negotiations_received", verbose_name=_("Target"))
@@ -76,7 +78,7 @@ class Negotiation(DatetimeModel):
             self.status = self.ACCEPTED
             self.closed = True
             self.save()
-            return negotiation_accepted.send(self, source=self.source, target=self.target)
+            return negotiation_accepted.send(self, source=self.source, target=self.target, negotiation=self)
         return None
 
     def deny(self):
@@ -85,7 +87,7 @@ class Negotiation(DatetimeModel):
             self.status = self.DENIED
             self.closed = True
             self.save()
-            negotiation_denied.send(self, source=self.source, target=self.target)
+            negotiation_denied.send(self, source=self.source, target=self.target, negotiation=self)
         return None
 
     # Overrides
@@ -102,4 +104,5 @@ class Negotiation(DatetimeModel):
         unique_together = (('source', 'target'),)
         verbose_name = _("negotiation")
         verbose_name_plural = _("negotiations")
+        permissions = [['can_bypass_negotiation', "Can bypass negotiations"]]
         app_label = "messaging"

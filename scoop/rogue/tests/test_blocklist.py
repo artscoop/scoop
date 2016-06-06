@@ -15,14 +15,14 @@ class BlocklistTest(TestCase):
     fixtures = ['category', 'mailtype', 'options']
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         """ Définir l'environnement de test """
-        self.engine = import_module(settings.SESSION_ENGINE)
-        self.session = self.engine.SessionStore()
-        self.user1 = User.objects.create(username='user1', email='1@thread.foo', is_active=True)
-        self.user2 = User.objects.create(username='user2', email='2@thread.foo', is_active=True)
-        self.user3 = User.objects.create(username='user3', email='3@thread.foo', is_active=True)
-        self.user4 = User.objects.create(username='user4', email='4@thread.foo', is_staff=True, is_active=True)
+        cls.engine = import_module(settings.SESSION_ENGINE)
+        cls.session = cls.engine.SessionStore()
+        cls.user1 = User.objects.create(username='user1', email='1@thread.foo', is_active=True)
+        cls.user2 = User.objects.create(username='user2', email='2@thread.foo', is_active=True)
+        cls.user3 = User.objects.create(username='user3', email='3@thread.foo', is_active=True)
+        cls.user4 = User.objects.create(username='user4', email='4@thread.foo', is_staff=True, is_active=True)
         Activation.objects.activate(None, 'user1')
         Activation.objects.activate(None, 'user2')
         Activation.objects.activate(None, 'user3')

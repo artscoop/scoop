@@ -90,14 +90,14 @@ class IP(DatetimeModel, CoordinatesModel):
     PROTECTED_IPS = [r'^127\.', r'^192\.168\.'] + list(getattr(settings, 'INTERNAL_IPS', []))
 
     # Champs
-    ip = models.DecimalField(null=False, blank=True, unique=True, max_digits=39, decimal_places=0, db_index=True, verbose_name=_("Decimal"))
-    string = models.CharField(max_length=48, verbose_name=_("String"))
+    ip = models.DecimalField(null=False, blank=True, max_digits=39, decimal_places=0, primary_key=True, verbose_name=_("Decimal"))
+    string = models.CharField(max_length=45, verbose_name=_("String"))
     reverse = models.CharField(max_length=80, blank=True, verbose_name=_("Reverse"))  # état de résolution du reverse
     status = models.SmallIntegerField(default=0, choices=STATUS_CHOICES, verbose_name=_("Reverse status"))
     isp = models.CharField(max_length=64, blank=True, verbose_name=_("ISP"))
-    country = models.CharField(max_length=2, blank=True, choices=COUNTRIES.items(), db_index=True, verbose_name=_("Country"))
+    country = models.CharField(max_length=2, blank=True, choices=COUNTRIES.items(), db_index=False, verbose_name=_("Country"))
     harm = models.SmallIntegerField(default=0, db_index=True, validators=[MinValueValidator(0), MaxValueValidator(4)], verbose_name=_("Harm"))
-    blocked = models.BooleanField(default=False, db_index=True, verbose_name=_("Blocked"))
+    blocked = models.BooleanField(default=False, db_index=False, verbose_name=_("Blocked"))
     updated = models.DateTimeField(default=datetime(1970, 1, 1), verbose_name=pgettext_lazy('ip', "Updated"))
     dynamic = models.NullBooleanField(default=None, verbose_name=_("Dynamic"))  # IP dynamique ?
     city_name = models.CharField(max_length=96, blank=True, verbose_name=_("City name"))
@@ -314,8 +314,32 @@ class IP(DatetimeModel, CoordinatesModel):
         if self.has_country():
             return get_country_icon_html(self.country, self.get_country_name())
 
+    @staticmethod
+    def get_ip_information(ip):
+        """ Renvoyer un dictionnaire d'informations sur l'adresse IP (A.B.C.D) passée """
+        geoip_info, data = dict(), {'ip': IP.get_ip_value(ip), 'string': ip}
+        reverse = reverse_lookup(ip)
+        data['reverse'] = str(reverse['name']) if isinstance(reverse, dict) else reverse
+        data['status'] = reverse['status'] if isinstance(reverse, dict) else ''
+        data['isp'] = (IP.objects.geoisp.org_by_addr(ip) or "")[0:64]
+        data['updated'] = timezone.now()
+        try:
+            geoip_info = IP.objects.geoip.record_by_addr(ip) or dict()
+        except Exception:
+            pass
+        data['country'] = geoip_info.get('country_code', "").upper()
+        data['harm'] = 3 * IP.is_country_harmful(data['country'])  # 3 si True, 0 sinon
+        data['latitude'] = geoip_info.get('latitude', 0.0) or 0.0
+        data['longitude'] = geoip_info.get('longitude', 0.0) or 0.0
+        data['city_name'] = geoip_info.get('city', "") or ""
+        return data
+
     # Setter
-    def set_ip_address(self, ip_string, force_lookup=False, save=False):
+    def set_ip_information(self, data, save=True):
+        """ Mettre à jour l'IP avec un dictionnaire d'informations """
+        self.update(**data, save=save)
+
+    def set_ip_address(self, ip_string, save=False):
         """
         Définir l'adresse IP de l'objet
 
@@ -323,28 +347,8 @@ class IP(DatetimeModel, CoordinatesModel):
         :param force_lookup: forcer le lookup DNS même si l'instance IP possède déjà des informations
         :param save: Enregistrer l'IP directement après
         """
-        try:
-            self.ip = IP.get_ip_value(ip_string)
-            self.string = str(ip_string)
-            reverse_status = self.get_reverse(force_lookup=force_lookup)
-            if isinstance(reverse_status, dict):
-                self.reverse = str(reverse_status['name'])
-                self.status = reverse_status['status']
-            else:
-                self.reverse = reverse_status
-            self.isp = self.get_isp()[0:64]
-            self.country = self.get_country_code()
-            self.harm = 3 * IP.is_country_harmful(self.country)  # 3 si True, 0 sinon
-            geoip_info = self.get_geoip() or {'latitude': 0, 'longitude': 0, 'city': ''}
-            self.latitude = geoip_info['latitude']
-            self.longitude = geoip_info['longitude']
-            self.city_name = geoip_info['city'] or ""
-            self.updated = timezone.now()
-            # Sauvegarder si demandé
-            if save:
-                self.save(force_update=self.id is not None)
-        except Exception as e:
-            logger.warning(e)
+        data = IP.get_ip_information(ip_string)
+        self.set_ip_information(data, save=save)
         return self
 
     def block(self, blocked=True, harm=3, save=False):
@@ -386,8 +390,6 @@ class IP(DatetimeModel, CoordinatesModel):
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        force_lookup = kwargs.pop('force_lookup', False)
-        self.set_ip_address(self.string, force_lookup=force_lookup, save=False)
         super(IP, self).save(*args, **kwargs)
 
     # Métadonnées

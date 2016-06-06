@@ -138,6 +138,8 @@ class LabelTranslation(get_translation_model(Label, "label"), TranslationModel):
 
 
 class LabelledModel(models.Model):
+    """ Mixin de modèle associé à des étiquettes de forum """
+
     # Champs
     main_label = models.ForeignKey('forum.Label', null=True, limit_choices_to={'primary': True}, related_name='+', verbose_name=_("Main label"))
     status_label = models.ForeignKey('forum.Label', null=True, limit_choices_to={'status': True}, related_name='+', verbose_name=_("Status label"))
@@ -154,6 +156,11 @@ class LabelledModel(models.Model):
     def is_global(self):
         """ Renvoyer si l'objet apparaît dans toutes les catégories """
         return self.main_label is None
+
+    def is_label_visible(self, request_or_user):
+        """ Renvoyer si l'étiquette principale de l'objet est accessible à l'utilisateur """
+        user = getattr(request_or_user, 'user', request_or_user)
+        return self.main_label.is_visible(user)
 
     # Métadonnées
     class Meta:

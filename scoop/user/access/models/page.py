@@ -14,7 +14,7 @@ class PageManager(models.Manager):
             path = path[:-1]  # Supprimer le slash final
         try:
             page = self.get(path__iexact=path)
-        except:
+        except Page.DoesNotExist:
             page = Page(path=path)
             page.save()
         return page
@@ -22,6 +22,7 @@ class PageManager(models.Manager):
 
 class Page(models.Model):
     """ Page du site """
+
     # Champs
     path = models.CharField(max_length=192, blank=False, db_index=True, unique=True, verbose_name=_("Path"))
     objects = PageManager()

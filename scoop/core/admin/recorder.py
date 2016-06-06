@@ -5,7 +5,7 @@ from scoop.core.models.recorder import RecordType, Record
 from scoop.core.util.shortcuts import addattr
 
 
-class ActionTypeAdmin(admin.ModelAdmin):
+class RecordTypeAdmin(admin.ModelAdmin):
     """ Administration des types d'actions du recorder """
     list_select_related = True
     list_display = ['id', 'get_color_legend', 'get_codename', 'is_valid', 'get_sentence', 'verb', 'get_record_count']
@@ -60,5 +60,5 @@ class RecordAdmin(admin.ModelAdmin):
 
 
 # Enregistrer les classes d'administration
-admin.site.register(RecordType, ActionTypeAdmin)
+admin.site.register(RecordType, RecordTypeAdmin)
 admin.site.register(Record, RecordAdmin)

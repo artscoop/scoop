@@ -12,7 +12,7 @@ class IPAdmin(admin.ModelAdmin):
     """ Administration des IPs connues """
     # Configuration
     list_select_related = True
-    list_display = ['id', 'string', 'get_hex', 'get_ip_class', 'reverse', 'isp', 'harm', 'blocked', 'updated', 'country', 'city_name']
+    list_display = ['ip', 'string', 'get_hex', 'get_ip_class', 'reverse', 'isp', 'harm', 'blocked', 'updated', 'country', 'city_name']
     raw_id_fields = []
     list_filter = [IPCountryFilter, 'blocked', 'harm', 'updated']
     list_display_links = ['id', 'string']

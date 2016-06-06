@@ -38,6 +38,7 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='public_threads', verbose_name=_("Author"))
     topic = models.CharField(max_length=128, blank=True, db_index=True, verbose_name=_("Topic"))
     started = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('thread', "Was started"))
+    edited = models.DateTimeField(default=None, null=True, verbose_name=pgettext_lazy('thread', "Edited"))
     updated = models.DateTimeField(default=timezone.now, db_index=True, verbose_name=pgettext_lazy('thread', "Updated"))
     updater = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='forum_threads_where_last', on_delete=models.SET_NULL,
                                 verbose_name=_("Last speaker"))
@@ -56,6 +57,13 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
         messages = self.messages.filter(**criteria).order_by('id' if not reverse else '-id')
         return messages
 
+    def get_latest_message(self, ghost=False):
+        """ Renvoyer le dernier messages du fil """
+        messages = self.get_messages(ghost=ghost, reverse=True)
+        if messages.exists():
+            return messages.first()
+        return None
+
     @addattr(admin_order_field='counter', short_description=_("Messages"))
     def get_message_count(self, ghost=False, use_cache=False):
         """ Renvoyer le nombre de messages dans le fil """
@@ -65,6 +73,16 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
         """ Renvoyer les participants à un fil de discussion """
         return self.participants.filter(**({'active': True} if only_active else {}))
 
+    def get_updated(self):
+        """ Renvoyer la date de mise à jour (édition ou dernier message) """
+        message = self.get_latest_message()
+        dates = [self.started]
+        if message is not None:
+            dates.append(message.get_datetime())
+        if self.edited is not None:
+            dates.append(self.edited)
+        return max(dates)
+
     # Setter
     def update_message_count(self, save=True):
         """ Mettre à jour le nombre de messages du fil """
@@ -73,10 +91,34 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
             self.save(update_fields=['counter'])
         return self.counter
 
+    def lock(self, value=True):
+        """
+        Verrouiller (déverrouiller) le sujet
+
+        :returns: True si l'état de l'objet a changé, False sinon.
+        """
+        if self.locked != value:
+            self.locked = value
+            self.save()
+            return True
+        return False
+
+    def set_visible(self, value=False):
+        """
+        Changer la visibilité du sujet
+
+        :returns: True si l'état de l'objet a changé, False sinon.
+        """
+        if self.visible != value:
+            self.visible = value
+            self.save()
+            return True
+        return False
+
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        self.updated = timezone.now()
+        self.updated = self.get_updated()
         self.update_message_count(save=False)
         super(Thread, self).save(*args, **kwargs)
 

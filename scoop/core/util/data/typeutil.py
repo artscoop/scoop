@@ -156,7 +156,9 @@ def make_iterable(value, output_type=list):
 
     Renvoie un itérable vide si value est None
     """
-    if isinstance(value, (list, set, tuple)):
+    if type(value) is output_type:
+        return value
+    if isinstance(value, (list, set, tuple)) and type(value) != output_type:
         return output_type(value)
     return output_type([value]) if value is not None else output_type()
 

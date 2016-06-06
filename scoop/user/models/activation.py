@@ -33,6 +33,11 @@ class ActivationManager(models.Manager):
         user = User.objects.filter(activation__uuid=uuid)
         return user[0] if user.exists() else None
 
+    def timed_out(self):
+        """ Renvoyer les activations d'utilisateur qui ont expiré """
+        time_limit = timezone.now() - timezone.timedelta(hours=settings.USER_ACTIVATION_TIMEOUT)
+        return self.filter(active=True, last_resend__gt=time_limit)
+
     # Actions
     def activate(self, uuid, username, request=None):
         """ Tenter d'activer un utilisateur via des informations d'activation """
@@ -96,6 +101,11 @@ class Activation(DatetimeModel, UUID128Model):
         """ Renvoyer si le mail de validation peut être à nouveau envoyé """
         return self.resends < Activation.MAX_RESENDS and self.active and not self.user.is_active
 
+    def has_timed_out(self):
+        """ Renvoyer les activations d'utilisateur qui ont expiré """
+        time_limit = timezone.now() - timezone.timedelta(hours=settings.USER_ACTIVATION_TIMEOUT)
+        return self.active and self.last_resend < time_limit
+
     # Setter
     def update_uuid(self, save=True):
         """ Modifier l'UUID de l'activation """
@@ -103,7 +113,7 @@ class Activation(DatetimeModel, UUID128Model):
         self.updates += 1
         self.resends = 0
         if save:
-            self.save(update_fields=['uuid', 'updates'])
+            self.save(update_fields=['uuid', 'updates', 'resends'])
 
     # Actions
     def send_mail(self):

@@ -24,6 +24,7 @@ from fuzzywuzzy import fuzz
 from ngram import NGram
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.content.util.signals import content_format_html, content_pre_lock, content_updated
+from scoop.core.abstract.content.attachment import AttachableModel
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -271,7 +272,7 @@ class CategoryManager(SingleDeleteManager, TranslatableModelManager):
 
 
 class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, ClassifiableModel,
-              UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel):
+              UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel, AttachableModel):
     """ Contenu textuel """
 
     # Constantes
@@ -280,14 +281,14 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     FORMAT_CHOICES = FORMATS.items()
     PLAIN_HTML, MARKDOWN, TEXTILE = 0, 1, 2
     TRANSFORMS = {1: markdown.Markdown().convert, 2: textile.textile}  # fonctions de conversion vers HTML
-    DATA_KEYS = ['similar', 'admin']
+    DATA_KEYS = ['similar', 'admin', 'privacy']
     classifications = {'language-level': ('low', 'mid', 'hi')}
 
     # Champs
     authors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='contents', verbose_name=_("Authors"))
     # Contenu texte
     title = models.CharField(max_length=192, blank=False, verbose_name=_("Title"))
-    slug = AutoSlugField(max_length=128, populate_from='title', unique=True, blank=True, editable=True, unique_with=('id',))
+    slug = AutoSlugField(max_length=128, populate_from='title', unique=True, blank=True, editable=True, unique_with=['id'])
     body = models.TextField(blank=True, verbose_name=_("Text"))
     format = models.SmallIntegerField(choices=FORMAT_CHOICES, default=PLAIN_HTML, verbose_name=_("Format"))
     html = models.TextField(blank=True, help_text=_("HTML output from body"), verbose_name=_("HTML"))
@@ -500,7 +501,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
 
     # Overrides
     def __init__(self, *args, **kwargs):
-        """ Constructeur """
+        """ Initialiseur """
         super(Content, self).__init__(*args, **kwargs)
         self.__original_body = self.body
 

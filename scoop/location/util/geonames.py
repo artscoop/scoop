@@ -203,7 +203,7 @@ def populate_cities(country, output_every=8192):
                     append(city)
                     if idx % output_every == 0 or idx == rows - 1:
                         output_progress("Filling {country:>15}: {pc:>5.1f}% ({idx:>10}/{rows:>10})", idx, rows, output_every, {'country': country_name})
-                City.objects.bulk_create(bulk, batch_size=16384)
+                City.objects.bulk_create(bulk, batch_size=settings.BATCH_SIZE)
             # Les portions de ville sont ensuite marquées comme non villes
             City.objects.filter(type='PPLX').update(city=False)
             country.update(updated=timezone.now(), public=True, save=True)
@@ -242,7 +242,7 @@ def rename_cities(output_every=262144):
                 if idx % output_every == 0 or idx == ALTERNATES_COUNT:
                     output_progress("Renaming: {pc:>5.1f}% ({idx:>10}/{rows:>10}, {affected:>10} updated)", idx, ALTERNATES_COUNT, output_every,
                                     {'affected': affected})
-            CityName.objects.bulk_create(citynames)
+            CityName.objects.bulk_create(citynames, batch_size=settings.BATCH_SIZE)
             return True
         except Exception as e:
             print_exc(e)
@@ -299,7 +299,7 @@ def reparent_cities(country, clear=False, output_every=256):
             if level < 4 and parent.feature == "A" and parent.type != 'ADMD':
                 criteria['feature'] = 'A'
                 criteria['acode__startswith'] = acode[0:level * 4]
-                criteria['acode__endswith'] = "A" * (16 - 4 * (level + 1))
+                criteria['acode__endswith'] = "AAAA" * (3 - level)
                 del criteria['acode']
                 City.objects.filter(**criteria).exclude(id=parent.id).update(parent_id=parent.id, level=level)
             # Sortie logging ou console

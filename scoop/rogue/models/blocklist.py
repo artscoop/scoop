@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager
 from scoop.core.util.shortcuts import addattr
 
@@ -32,7 +33,7 @@ class BlocklistManager(SingleDeleteManager):
             return True
         if self.is_globally_listed(sender):
             return False
-        recipients = recipients if isinstance(recipients, (list, tuple, models.QuerySet)) else [recipients]
+        recipients = make_iterable(recipients)
         blocklists = self.filter(user__in=recipients)
         sender_blocks = sender.blocklist.get_data(name or DEFAULT_LIST) or []
         for recipient in recipients:

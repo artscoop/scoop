@@ -6,13 +6,16 @@ from scoop.messaging.util.signals import negotiation_accepted, negotiation_denie
 
 
 @receiver(negotiation_sent)
-def send_negotiation(sender, source, target, **kwargs):
+def send_negotiation(sender, source, target, negotiation, **kwargs):
     """ Traiter une nouvelle négociation de discussion """
     record.send(None, actor=source, action='messaging.send.negotiation', target=target)
+    # Automatiquement autoriser la négociation si l'utilisateur a la permission
+    if source.has_perm('messaging.can_bypass_negotiation'):
+        negotiation.accept()
 
 
 @receiver(negotiation_accepted)
-def accept_negotiation(sender, source, target, **kwargs):
+def accept_negotiation(sender, source, target, negotiation, **kwargs):
     """ Traiter une négociation acceptée """
     from scoop.messaging.models import Thread
     # Créer un enregistrement
@@ -25,6 +28,6 @@ def accept_negotiation(sender, source, target, **kwargs):
 
 
 @receiver(negotiation_denied)
-def deny_negotiation(sender, source, target, **kwargs):
+def deny_negotiation(sender, source, target, negotiation, **kwargs):
     """ Traiter une négociation refusée """
     record.send(None, actor=target, action='messaging.deny.negotiation', target=source)

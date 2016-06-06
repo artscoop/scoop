@@ -21,7 +21,7 @@ class LikeManager(SingleDeleteManager):
     # Setter
     def like(self, item, author):
         """ Liker un objet """
-        if author:
+        if author and author.has_perm('social.can_like'):
             item_type = ContentType.objects.get_for_model(item)
             _, created = self.get_or_create(author=author, content_type=item_type, object_id=item.pk)
             if created is True:
@@ -31,7 +31,7 @@ class LikeManager(SingleDeleteManager):
 
     def unlike(self, item, author):
         """ Ne plus liker un objet """
-        if author:
+        if author and author.has_perm('social.can_like'):
             item_type = ContentType.objects.get_for_model(item)
             deleted_count = self.filter(author=author, content_type=item_type, object_id=item.pk).delete()
             if deleted_count > 0:
@@ -41,7 +41,7 @@ class LikeManager(SingleDeleteManager):
 
     def toggle(self, item, author):
         """ Basculer un like à un objet """
-        if author and item:
+        if author and item and author.has_perm('social.can_like'):
             if self.exists(item, author):
                 self.unlike(item, author)
                 return False
@@ -85,4 +85,5 @@ class Like(DatetimeModel):
         verbose_name = _("like")
         verbose_name_plural = _("likes")
         unique_together = (('author', 'content_type', 'object_id'),)
+        permissions = [['can_like', "Can like content"]]
         app_label = 'social'

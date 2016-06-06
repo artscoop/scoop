@@ -31,6 +31,7 @@ class ModeratedQuerySetMixin(object):
 
 class ModeratedModel(models.Model):
     """ Mixin de modèle modéré """
+
     # Constantes
     MODERATED_CHOICES = [[None, _("Pending")], [False, _("Refused")], [True, _("Accepted")]]
 

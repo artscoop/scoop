@@ -47,14 +47,15 @@ def _get_distance(source, destination):
     nd_destination, tld_destination = _get_splitted(destination)
     distance_nd = Levenshtein.distance(nd_source, nd_destination)
     distance_tld = Levenshtein.distance(tld_source, tld_destination)
-    return (distance_nd, distance_tld)
+    return distance_nd, distance_tld
 
 
 def find_similar_email_domains(source, max_distance=None):
     """
     Renvoyer les noms de domaine connus les plus ressemblants
 
-    :param max_distance: tuple d'entiers de distance lenvenshtein max (ndd, tld)
+    :param source: nom de domaine, ex. iana.org
+    :param max_distance: tuple de 2 entiers de distance lenvenshtein max (ndd, tld)
     """
     if max_distance is None:
         max_distance = (len(_get_splitted(source)[0]) / 2, 3)
