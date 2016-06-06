@@ -19,7 +19,9 @@ class ProfanityManager(SingleDeleteManager):
 
 
 class Profanity(models.Model):
-    """ Filtre de grossièreté """
+    """ Filtre de grossièretés """
+
+    # Champs
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('profanity.filter', "Active"))
     language = LanguageField(default=get_language(), blank=True, verbose_name=_("Language"))
     regex = models.CharField(max_length=120, unique=True, verbose_name=_("Regex"))
@@ -29,7 +31,7 @@ class Profanity(models.Model):
 
     # Getter
     def check_text(self, text):
-        """ Renvoyer si ce filtre fonctionne sur une chaîne """
+        """ Renvoyer si ce filtre est positif pour une chaîne de caractères """
         return re.search(re.escape(str(self.regex)), text)
 
     @staticmethod

@@ -1,8 +1,10 @@
 # coding: utf-8
 from django.apps.registry import apps
-from django.contrib.contenttypes.fields import GenericRelation
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.abstract.core.data import DataModel
 
 
 class PrivacyModel(models.Model):
@@ -10,21 +12,27 @@ class PrivacyModel(models.Model):
 
     # Constantes
     ACCESS_TYPES = [[0, _("Public")], [1, _("Friends")], [2, _("Personal")], [3, _("Friend groups")], [4, _("Registered users")]]
-    PUBLIC, FRIENDS, PERSONAL, GROUPS, REGISTERED = 0, 1, 2, 3, 4
+    PUBLIC, FRIENDS, PERSONAL, CUSTOM, REGISTERED = 0, 1, 2, 3, 4
 
     if apps.is_installed('scoop.user.social'):
 
         # Champs
         access = models.SmallIntegerField(choices=ACCESS_TYPES, default=0, db_index=True, verbose_name=_("Access"))
-        group_grants = GenericRelation('social.FriendGroupGrant', related_name="%(class)s_group_grants") if apps.is_installed('scoop.user.social') else None
 
         # Getter
-        def _is_user_granted_in_group_grants(self, user):
-            """ Renvoyer si un utilisateur fait partie des groupes autorisés """
-            if self.group_grants is not None:
-                for grant in self.group_grants.all():
-                    if grant.group.has_member(user):
-                        return True
+        def is_user_granted_custom(self, user):
+            """ Renvoyer si un utilisateur fait partie des utilisateurs/groupes autorisés """
+            from scoop.user.social.models import FriendGroup
+            grants = self.get_data('privacy')
+            users = grants.get('users', [])
+            groups = grants.get('groups', [])
+            # Si l'utilisateur lui-même est répertorié, c'est bon
+            if user.pk in users:
+                return True
+            # Si l'un des groupes d'amis répertoriés contient l'utilisateur, c'est bon
+            for grant in FriendGroup.objects.filter(pk__in=groups):
+                if grant.group.has_member(user):
+                    return True
             return False
 
         def is_accessible(self, user):
@@ -40,10 +48,10 @@ class PrivacyModel(models.Model):
                     return True
             elif self.access == PrivacyModel.PERSONAL and user == self.author:  # Seulement moi
                 return True
-            elif self.access == PrivacyModel.GROUPS:  # Dans un groupe d'amis autorisé
-                return self._is_user_granted_in_group_grants(user)
             elif self.access == PrivacyModel.REGISTERED:  # Membres connectés
                 return user.is_authenticated()
+            elif self.access == PrivacyModel.CUSTOM:  # Dans un groupe d'amis autorisé
+                return self.is_user_granted_custom(user)
             return False
 
     # Métadonnées

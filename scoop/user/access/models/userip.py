@@ -31,7 +31,10 @@ class UserIPManager(models.Manager):
     def related_users(self, user, exclude_self=False, harmful=False):
         """
         Renvoyer les utilisateurs partageant des IP avec un utilisateur
+
         :type user: scoop.models.user.User | django.auth.models.User
+        :param harmful: ne compter que les IPs marquées comme dangereuses
+        :param exclude_self: ne pas inclure l'utilisateur source
         """
         exclude_criteria = {'pk': user.pk} if exclude_self is True else {}
         criteria = {'ip__harm__gt': 0} if harmful else {}  # Récupérer ceux qui utilisent les mêmes IP dangereuses
@@ -66,6 +69,7 @@ class UserIPManager(models.Manager):
 
 class UserIP(IPPointModel, DatetimeModel):
     """ IP d'un utilisateur """
+
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='userips', verbose_name=_("User"))
     objects = UserIPManager()

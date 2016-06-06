@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.content.picture import PicturedModel, PicturedBaseModel
+from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import NullableGenericModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -44,8 +45,11 @@ class AlbumManager(SingleDeleteManager):
         return album
 
 
-class Album(NullableGenericModel, DatetimeModel, PicturedBaseModel, PrivacyModel, UUID64Model, WeightedModel):
+class Album(NullableGenericModel, DatetimeModel, PicturedBaseModel, PrivacyModel, DataModel, UUID64Model, WeightedModel):
     """ Album d'images """
+
+    # Constantes
+    DATA_KEYS = ['privacy']
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="albums", on_delete=models.SET_NULL, verbose_name=_("Author"))

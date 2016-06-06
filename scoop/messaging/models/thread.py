@@ -306,6 +306,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     INBOX_NAMES = ['inbox', 'unread', 'replied', 'trash']
     DATA_KEYS = ['last_toggle']
     TOGGLE_DELAY = getattr(settings, 'MESSAGING_THREAD_TOGGLE_DELAY', 3600)
+    DELAY_ON_CLOSE_ONLY = getattr(settings, 'MESSAGING_THREAD_TOGGLE_DELAY_CLOSE_ONLY', False)
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='threads', verbose_name=_("Author"))
@@ -328,6 +329,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         """ Enregistrer l'objet dans la base de données """
         self.updated = timezone.now()
         self.update_message_count(save=False)
+        self.update_recipient_count(save=False)
         super(Thread, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -412,9 +414,8 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     def truncate(self, count=40):
         """ Réduire le nombre de messages du fil à un nombre prédéfini """
         try:
-            messages = self.messages.filter(deleted=False).order_by('-id')
-            messages = messages[count:]
-            [message.remove() for message in messages]
+            overflow_messages = self.messages.filter(deleted=False).order_by('-id')[count:]
+            [message.remove() for message in overflow_messages]
             return True
         except Exception:
             return False
@@ -426,10 +427,11 @@ class Thread(UUID64Model, LabelableModel, DataModel):
             self.save(update_fields=['counter'])
         return self.counter
 
-    def update_recipient_count(self):
+    def update_recipient_count(self, save=True):
         """ Mettre à jour le nombre de destinataires du fil """
         self.population = self.recipients.filter(active=True, user__is_active=True).count()
-        self.save()
+        if save is True:
+            self.save(update_fields=['population'])
         return self.population
 
     def undelete(self):
@@ -446,8 +448,12 @@ class Thread(UUID64Model, LabelableModel, DataModel):
             expiry = timezone.now() + datetime.timedelta(days=days)
             self.expires = expiry
             self.save(update_fields=['expires'])
+            return True
         elif days is None and self.expiry_on_read > 2:
             self.set_expiry(days=self.expiry_on_read, override=True)
+            return True
+        else:
+            return False
 
     def remove_expiry(self, permanent=False):
         """ Supprimer la date d'expiration du fil """
@@ -466,20 +472,22 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     def get_messages(self, ghost=False, reverse=False):
         """ Renvoyer les messages du fil """
         criteria = {'deleted': False} if not ghost else {}
-        messages = self.messages.filter(**criteria).order_by('id' if not reverse else '-id')
-        return messages
+        all_messages = self.messages.filter(**criteria).order_by('id' if not reverse else '-id')
+        return all_messages
 
     @addattr(short_description=_("Last message"))
     def get_last_message(self, ghost=False):
         """ Renvoyer le dernier message du sujet """
-        messages = self.get_messages(ghost=ghost).order_by('-id')
-        return messages[0]
+        last_messages = self.get_messages(ghost=ghost).order_by('-id')
+        return last_messages[0]
 
     @addattr(short_description=_("First message"))
     def get_first_message(self, ghost=False):
         """ Renvoyer le premier message du sujet """
-        messages = self.get_messages(ghost=ghost).order_by('id')
-        return messages[0]
+        all_messages = self.get_messages(ghost=ghost).order_by('id')
+        if all_messages.exists():
+            return all_messages[0]
+        return None
 
     @addattr(short_description=_("Recipients"))
     def get_recipients(self, exclude=None, only_active=True):
@@ -567,7 +575,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
 
     def get_toggle_lock_remaining(self, user):
         """ Renvoyer le temps que doit attendre un utilisateur avant de pouvoir rouvrir ou refermer un sujet """
-        if user == self.author and not user.is_staff:
+        if user == self.author and not user.is_staff and not (self.closed and Thread.DELAY_ON_CLOSE_ONLY):
             difference = self.get_data('last_toggle', self.started) + timedelta(seconds=Thread.TOGGLE_DELAY) - timezone.now()
             return difference if difference.total_seconds() > 0 else None
         return None

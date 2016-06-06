@@ -9,7 +9,7 @@ from scoop.user.models.user import User
 class UserAdminForm(forms.ModelForm):
     """ Formulaire admin des utilisateur """
 
-    # Constructeur
+    # Initialiseur
     def __init__(self, *args, **kwargs):
         super(UserAdminForm, self).__init__(*args, **kwargs)
 
@@ -67,7 +67,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(required=True, widget=forms.PasswordInput(), label=_("Password"))
     remember = forms.BooleanField(required=False, label=_("Remember me"))
 
-    # Constructeur
+    # Initialiseur
     def __init__(self, *args, **kwargs):
         """ Initialiser le formulaire """
         super(LoginForm, self).__init__(*args, **kwargs)

@@ -60,6 +60,9 @@ class OccurrenceManager(models.Manager.from_queryset(OccurrenceQuerySet), models
 class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataModel, UUID64Model):
     """ Événement """
 
+    # Constantes
+    DATA_KEYS = ['privacy']
+
     # Champs
     title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
     description = models.TextField(blank=False, verbose_name=_("Description"))

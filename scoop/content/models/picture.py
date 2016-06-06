@@ -728,8 +728,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         :param description: texte descriptif de la nouvelle image
         """
         if self.exists():
-            clone = Picture(title=self.title, author=self.author,
-                            description=description or _("Clone of picture {uuid}").format(uuid=self.uuid))
+            clone = Picture(title=self.title, author=self.author, description=description or _("Clone of picture {uuid}").format(uuid=self.uuid))
             clone.set_from_file(self.image.path)
             clones = set(self.get_data('clones') or {})
             clones.add(clone.uuid)

@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 def walk(storage, top='/', topdown=False, onerror=None):
     """
     An implementation of os.walk() which uses the Django storage for listing directories.
+
     :param storage: Django storage instance
     :param top: root directory for listing files
     :param topdown: return directories starting from the root
@@ -81,7 +82,7 @@ def open_zip_file(path, filename):
         for n in names:
             if n.lower().startswith("{}.".format(filename.lower())):
                 name = n
-                content = BufferedReader(archive.open(name, 'rU'), buffer_size=16777216)
+                content = BufferedReader(archive.open(name, 'rU'), buffer_size=16777216 * 2)
                 content = io.TextIOWrapper(content, encoding='utf-8', newline='')
                 return content
     raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
@@ -100,7 +101,7 @@ def clean_orphans(output_log=True, delete=False):
         model_class = model.model_class()
         model_class.add_to_class('all_objects', Manager())
         for field in model_class._meta.fields:
-            if (field.get_internal_type() == 'FileField' and not model_class._meta.abstract):
+            if field.get_internal_type() == 'FileField' and not model_class._meta.abstract:
                 fields.append([model_class, field.name, model_class._meta.object_name])
     # Recenser tous les liens vers des fichiers
     for field in fields:
@@ -122,7 +123,7 @@ def clean_orphans(output_log=True, delete=False):
         for item in deletable:
             try:
                 os.remove(item)
-            except:
+            except (OSError, IOError):
                 deleted -= 1
     # Sortie de journalisation
     if output_log is True:
@@ -134,7 +135,13 @@ def clean_orphans(output_log=True, delete=False):
 
 
 def check_file_extension(filename, resource_path, extensions):
-    """ Renvoyer le nom d'un fichier avec l'extension correspondant à son type MIME """
+    """
+    Renvoyer le nom d'un fichier avec l'extension correspondant à son type MIME
+
+    :param extensions: extensions autorisées pour le renommage
+    :param filename: nom de fichier
+    :param resource_path: chemin du fichier de données à analyser
+    """
     if os.path.exists(resource_path) and filename:
         # Réparer l'extension de fichier
         extension_add = True
@@ -195,6 +202,7 @@ def clean_empty_folders(path, output=True):
 def batch_execute(path, extensions, command):
     """
     Exécuter une commande shell sur tous les fichers de <path> correspondant aux
+
     extensions passées en paramètre (liste ou simple chaîne)
     :param command: chaîne contenant la commande à exécuter sur chaque fichier.
     Autorise l'utilisation du placeholder {file} pour indiquer le nom de fichier
@@ -239,7 +247,7 @@ def asset_file(*items):
     Les fichiers d'assets sont dans STATIC_URL/tool/assets/...
     :param items: éléments de nom de fichier relatifs au répertoire des assets
     """
-    path = ['tool', 'assets']
+    path = ['assets']
     path += items
     return join(settings.STATIC_URL, *path)
 

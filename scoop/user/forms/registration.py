@@ -124,7 +124,7 @@ class EULAForm(forms.Form):
     # Champs
     eula = forms_.BooleanField(required=True, label=_("EULA"), widget=forms.Select(choices=CHOICES))
 
-    # Constructeur
+    # Initialiseur
     def __init__(self, *args, **kwargs):
         """ Initialiser le formulaire """
         super(EULAForm, self).__init__(*args, **kwargs)

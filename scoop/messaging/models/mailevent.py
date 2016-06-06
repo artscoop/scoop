@@ -28,6 +28,7 @@ class MailEventQuerySetMixin(object):
     def discardable(self, user):
         """
         Renvoyer les événements supprimables si l'utilisateur passe en ligne
+
         :type self: django.db.models.Queryset
         """
         return self.filter(recipient=user, forced=False, sent=False)
@@ -35,6 +36,7 @@ class MailEventQuerySetMixin(object):
     def orphans(self):
         """
         Renvoyer les événements dont le statut est incorrect
+
         :type self: django.db.models.Queryset
         """
         return self.filter(recipient__isnull=True)

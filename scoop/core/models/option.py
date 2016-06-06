@@ -25,13 +25,7 @@ class OptionManager(SingleDeleteManager, TranslatableModelManager):
 
     def in_group(self, name):
         """ Renvoyer les options faisant partie d'un groupe nommé """
-        from scoop.core.models import OptionGroup
-        # Renvoyer un queryset vide si le groupe n'existe pas
-        try:
-            group = OptionGroup.objects.get_by_name(name)
-            return self.filter(group=group)
-        except OptionGroup.DoesNotExist:
-            return self.none()
+        return self.filter(group__short_name=name)
 
     def get_by_code(self, group, code, active_only=True):
         """ Renvoyer l'ooption d'un groupe avec un code précis """

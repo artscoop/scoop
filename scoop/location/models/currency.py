@@ -38,8 +38,11 @@ class CurrencyManager(SingleDeleteManager):
         :param destination: devise de destination, ex. USD, AUD
         :raises: models.DoesNotExist si la devise n'existe pas
         """
-        source_currency = self.get(Q(short_name__iexact=source) | Q(name__iexact=source))
-        return source_currency.get_amount(destination, amount)
+        try:
+            source_currency = self.get(Q(short_name__iexact=source) | Q(name__iexact=source))
+            return source_currency.get_amount(destination, amount)
+        except Currency.DoesNotExist:
+            return None
 
     # Setter
     def update_balances(self, names=None):
@@ -47,7 +50,7 @@ class CurrencyManager(SingleDeleteManager):
         Mettre à jour le cours des devises
 
         La méthode ne met à jour que les devises n'ayant pas été mises à jour dans les
-        48 dernières heures, ou n'ayant pas de balance valide.
+        48 dernières heures, ou n'ayant pas de cours valide.
         """
         try:
             update_limit = timezone.now() - timedelta(days=2)

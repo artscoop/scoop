@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model
@@ -36,7 +36,7 @@ class EventCategory(TranslatableModel, IconModel, UUID32Model):
 
     # Champs
     parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_("Parent"))
-    public = models.BooleanField(default=True, verbose_name=_("Public"))
+    public = models.BooleanField(default=True, verbose_name=pgettext_lazy('eventcategory', "Public"))
     objects = EventCategoryManager()
 
     # Getter
@@ -75,7 +75,7 @@ class EventCategoryTranslation(get_translation_model(EventCategory, "eventcatego
 
     # Champs
     name = models.CharField(max_length=48, blank=False, verbose_name=_("Name"))
-    description = models.TextField(default="", blank=True, verbose_name=_("Description"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
 
     # Métadonnées
     class Meta:

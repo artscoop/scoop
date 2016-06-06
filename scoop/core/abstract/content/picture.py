@@ -83,7 +83,7 @@ class PicturedBaseModel(models.Model):
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        if not isinstance(self._meta.get_field('pictures'), models.ManyToManyField) or self.pk is None:
+        if not isinstance(self._meta.get_field('pictures'), models.ManyToManyField) or self.pk is not None:
             self.pictured = bool(self.has_pictures()) or (hasattr(self, 'picture') and self.picture is not None and self.picture.moderated is True)
         super(PicturedBaseModel, self).save(*args, **kwargs)
 

@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from Levenshtein import distance
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
-from scoop.core.util.data.typeutil import make_iterable
+from scoop.core.util.data.typeutil import make_iterable, round_multiple
 from scoop.core.util.model.model import search_query
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
@@ -81,13 +81,14 @@ class CityQuerySetMixin(object):
         Renvoyer les villes correspondant à un critère sur leur population
 
         :type self: django.db.models.Manager
-        :param country_codes: liste de codes pays pour lesquels filtrer
+        :param country_codes: liste de codes pays pour lesquels filtrer, ou None
         :param value: nombre d'habitants
         :param operator: modifie la sélection par rapport à un nombre d'habitants
             opérateur entre =, <, >, <= et >=
         """
         criteria = {'population__{operator}'.format(operator=CityQuerySetMixin.OPS.get(operator, 'gte')): value}
-        return self.filter(country__code2__in=make_iterable(country_codes, list), **criteria)
+        criteria.update({'country__code2__in': make_iterable(country_codes)} if country_codes else {})
+        return self.filter(**criteria)
 
     def by_country(self, country):
         """
@@ -148,7 +149,8 @@ class CityQuerySetMixin(object):
         """
         name = unidecode(name).lower().strip() if name else '*'
         # Renvoyer le résultat en cache
-        cache_key = "location.city.find:{lat:.1f}:{lon:.1f}:{name}".format(lat=point[0], lon=point[1], name=name or '*')
+        cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=round_multiple(point[0], 0.25), lon=round_multiple(point[1], 0.25),
+                                                                           name=name or '*')
         result = cache.get(cache_key, None)
         if result is not None:
             return self.get(id=result)
@@ -167,6 +169,14 @@ class CityQuerySetMixin(object):
             cache.set(cache_key, closest_city.pk)
             return closest_city
         return None
+
+    def _prefetch_find(self):
+        """ Précacher les résultats de recherche pour les villes de plus de 2 000 habitants """
+        for city in self.by_population(['fr', 'ma', 'dz', 'be'], 2000).iterator():
+            cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=round_multiple(city.get_latitude(), 0.25),
+                                                                               lon=round_multiple(city.get_longitude(), 0.25),
+                                                                               name=city.ascii.lower().strip() or '*')
+            cache.set(cache_key, city.pk)
 
 
 class CityQuerySet(models.QuerySet, CityQuerySetMixin):

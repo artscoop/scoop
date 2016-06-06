@@ -6,6 +6,8 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.manager import Manager
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -43,7 +45,7 @@ class GroupQuerySetMixin(object):
         elif user.is_staff:
             return self.all()
         elif user.is_anonymous():
-            return self.filter(discreet=False)
+            return self.filter(discreet=False, private=False)
 
 
 class GroupQuerySet(models.QuerySet, GroupQuerySetMixin, SingleDeleteQuerySetMixin):
@@ -56,16 +58,18 @@ class GroupManager(Manager.from_queryset(GroupQuerySet), models.Manager, GroupQu
     pass
 
 
-class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, InviteTargetModel):
+class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, DataModel, UUID64Model, InviteTargetModel):
     """ Groupe d'intérêt """
 
     # Constantes
     MEMBERSHIPS = [(0, _("Anyone can join")), (1, _("Administrators must confirm first")), (2, _("Invites only"))]
+    DATA_KEYS = ['privacy']
 
     # Champs
     name = models.CharField(_("Name"), max_length=128, unique=True)
     slug = AutoSlugField(max_length=100, populate_from='name', unique=True, blank=True, editable=True, unique_with=('id',))
     discreet = models.BooleanField(default=False, help_text=_("Define if the group is not in the public listings"), verbose_name=_("Discrete group"))
+    private = models.BooleanField(default=False, verbose_name=_("Private"))
     description = models.TextField(blank=False, verbose_name=_("Description"))
     membership = models.SmallIntegerField(default=0, choices=MEMBERSHIPS, verbose_name=_("Membership type"))
 
@@ -76,6 +80,11 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, UUID64Model, 
     objects = GroupManager()
 
     # Getter
+    def is_visible(self, request_or_user):
+        """ Renvoyer si le groupe est accessible à un utilisateur """
+        user = getattr(request_or_user, 'user', request_or_user)
+        return self.private is False or user in self.users.all() or user in self.applications.all()
+
     def get_member_count(self):
         """ Renvoyer le nombre de membres du groupe """
         return self.users.all().count()

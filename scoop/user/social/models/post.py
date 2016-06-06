@@ -1,6 +1,8 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.social.access import PrivacyModel
 from scoop.core.abstract.social.like import LikableModel
@@ -33,8 +35,12 @@ class PostManager(SingleDeleteManager):
         return True
 
 
-class Post(DatetimeModel, AuthoredModel, PrivacyModel, LikableModel):
+class Post(DatetimeModel, AuthoredModel, PrivacyModel, DataModel, LikableModel):
     """ Post """
+
+    # Constantes
+    DATA_KEYS = ['privacy']
+
     # Champs
     text = models.CharField(max_length=140, verbose_name=_("Text"))
     deleted = models.BooleanField(default=False, verbose_name=_("Deleted"))

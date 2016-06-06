@@ -58,15 +58,16 @@ class DataForm(Form):
         :param user: utilisateur pour lequel récupérer l'option
         :param field: nom du champ de formulaire pour lequel récupérer la valeur
         :param version: version du formulaire enregistré pour l'utilisateur, ou None
+        :returns: la valeur attendue, ou None
         """
         return cls.get_data_for(user, version=version).get(field, None)
 
     @classmethod
     def get_data_for(cls, user, version=None):
         """
-        Renvoyer le dictionnaire de données initiales de fomulaire pour un utilisateur
+        Renvoyer le dictionnaire de données initiales de formulaire pour un utilisateur
 
-        :param user: utilisateur pour lequel récupérer des données
+        :param user: utilisateur pour lequel récupérer des données, None pour récupérer des données de template
         :param version: version des données à récupérer
         """
         if user is not None:
@@ -76,8 +77,8 @@ class DataForm(Form):
         result, defaults = dict(), cls.get_defaults(user)
         if isinstance(defaults, dict):
             result.update(defaults)
-        data = FormConfiguration.objects.get_user_config(user, cls.name, version=version) if user else FormConfiguration.objects.get_template_config(cls.name,
-                                                                                                                                                     version=version)
+        data = FormConfiguration.objects.get_user_config(user, cls.name, version=version) if user else \
+            FormConfiguration.objects.get_template_config(cls.name, version=version)
         data = cls._fix_data(data)
         result.update(data)
         return result or None
@@ -134,10 +135,14 @@ class DataForm(Form):
     def save_configuration(self, user=None, version=""):
         """
         Enregistrer les données de champs du formulaire
+
         dans les données d'utilisateur et pour la version désirée
-        Nécessite l'appel de is_valid() au préalable
+        Nécessite l'appel de Form.is_valid() au préalable
+        :returns: True en cas de succès, False sinon.
         """
         if user.is_authenticated():
             if hasattr(self, 'cleaned_data'):
                 output = {key: value for key, value in self.cleaned_data.items() if (not self.saved_fields or key in self.saved_fields)}
                 FormConfiguration.objects.set_user_config(user, self.name, output, version=version)
+                return True
+        return False
