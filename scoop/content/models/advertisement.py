@@ -40,7 +40,7 @@ class AdvertisementManager(SingleDeleteManager):
 
     def random_by_max_size(self, width, height):
         """ Renvoyer une annonce aléatoire de la dimension indiquée """
-        candidates = self.filter(width__lt=width, height__lt=height).order_by('?')
+        candidates = self.filter(width__lte=width, height__lte=height).order_by('?')
         return candidates[0] if candidates.exists() else None
 
     def random(self, group=None, **kwargs):

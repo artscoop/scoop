@@ -29,7 +29,7 @@ class DocumentExporter(object):
 
         :param ct: instance ContentType
         """
-        raise NotImplementedError("Should return an instance from the content type and object id")
+        raise NotImplementedError("Should return a model name from the content type and object id")
 
     def get_fields_data(self, obj, *fields):
         """

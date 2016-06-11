@@ -11,6 +11,7 @@ from translatable.models import get_translation_model, TranslatableModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
+from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.shortcuts import addattr
 
 
@@ -23,7 +24,7 @@ class PageManager(models.Manager):
         return self.get(uuid=uuid)
 
 
-class Page(DatetimeModel, UUID64Model, TranslatableModel):
+class Page(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
     """
     Page d'aide
 

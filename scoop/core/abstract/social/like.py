@@ -6,6 +6,7 @@ from django.db import models
 
 class LikableModel(models.Model):
     """ Objet qui peut être liké """
+
     # Champs
     likers = GenericRelation('social.Like')
 

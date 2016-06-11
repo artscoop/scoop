@@ -124,7 +124,6 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
 
     def get_picture(self, request, use_default=True):
         """ Renvoyer l'image principale du profil """
-        # Renvoyer l'image si elle est définie
         if self.picture is not None:
             if (request and request.user.is_staff) or self.picture.moderated:
                 return self.picture
