@@ -9,6 +9,7 @@ from translatable.models import get_translation_model
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID64Model
+from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.shortcuts import addattr
 
 
@@ -21,7 +22,7 @@ class FAQManager(models.Manager):
         return self.filter(group=name)
 
 
-class FAQ(DatetimeModel, UUID64Model):
+class FAQ(DatetimeModel, UUID64Model, WeightedModel):
     """ Question fréquemment posée """
 
     # Constantes

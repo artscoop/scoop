@@ -8,6 +8,7 @@ from traceback import print_exc
 
 import markdown
 import textile
+from django.utils.text import slugify
 
 from approval.models.approval import ApprovalModel
 from autoslug.fields import AutoSlugField
@@ -98,7 +99,7 @@ class ContentQuerySetMixin(object):
         :param exc: classe de l'exception à lever si le slug exact n'existe pas
         """
         assert isinstance(self, (models.QuerySet, models.Manager))
-        slug = str(slug)
+        slug = slugify(slug)
         try:
             return self.get(slug=slug)
         except Content.DoesNotExist:

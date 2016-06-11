@@ -54,6 +54,23 @@ class PrivacyModel(models.Model):
                 return self.is_user_granted_custom(user)
             return False
 
+        # Setter
+        def set_user_grants(self, users):
+            """ Définir les utilisateurs autorisés à afficher le contenu """
+            grants = self.get_data('privacy')
+            grants['users'] = [user.pk for user in users]
+            self.set_data('privacy', grants, save=True)
+
+        def set_group_grants(self, groups):
+            """ Définir les groupes autorisés à afficher le contenu """
+            grants = self.get_data('privacy')
+            grants['groups'] = [group.pk for group in groups]
+            self.set_data('privacy', grants, save=True)
+
+        def reset_custom_grants(self):
+            """ Réinitialiser les autorisations d'accès particulières """
+            self.set_data('privacy', dict(), save=True)
+
     # Métadonnées
     class Meta:
         abstract = True

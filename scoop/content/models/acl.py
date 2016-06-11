@@ -60,6 +60,11 @@ class CustomACL(UUID64Model):
         """ Renvoyer si un mot de passe correspond à cette configuration """
         return check_password(password)
 
+    def is_valid(self, request):
+        """ Renvoyer si cette configuration d'ACL autorise l'affichage dans la reqûete """
+        # TODO : Vérifier que la session contient le bon pwd pour le bon UUID
+        return False
+
     # Setter
     def set_password(self, password):
         """ Définit le mot de passe de la configuration ACL """
