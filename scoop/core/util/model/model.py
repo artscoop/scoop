@@ -196,6 +196,7 @@ class SingleDeleteQuerySetMixin(object):
     def delete(self):
         """
         Supprimer indépendamment chaque objet du queryset
+
         :type self: django.db.models.Queryset
         """
         for item in self:

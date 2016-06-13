@@ -7,6 +7,7 @@ from django.forms.fields import EmailField
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.content.models.content import Content
+from scoop.core.abstract.content.subscription import SubscribableModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModel
 from scoop.core.abstract.core.uuid import UUID64Model
@@ -51,7 +52,7 @@ class SubscriptionManager(models.Manager):
                 from scoop.rogue.models import MailBlock
                 if MailBlock.objects.is_blocked(email):
                     return False
-            if isinstance(content, Content):
+            if isinstance(content, SubscribableModel):
                 try:
                     subscription = Subscription(email=email.lower())
                     subscription.content_object = content

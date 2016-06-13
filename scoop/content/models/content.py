@@ -10,7 +10,7 @@ import markdown
 import textile
 from django.utils.text import slugify
 
-from approval.models.approval import ApprovalModel
+from approval.models.approval import ApprovalModel, ApprovedModel
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -28,6 +28,7 @@ from scoop.content.util.signals import content_format_html, content_pre_lock, co
 from scoop.core.abstract.content.attachment import AttachableModel
 from scoop.core.abstract.content.comment import CommentableModel
 from scoop.core.abstract.content.picture import PicturableModel
+from scoop.core.abstract.content.subscription import SubscribableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.generic import NullableGenericModel
 from scoop.core.abstract.core.icon import IconModel
@@ -50,7 +51,7 @@ from translatable.models import TranslatableModel, TranslatableModelManager, get
 logger = logging.getLogger(__name__)
 
 
-class ContentQuerySetMixin(object):
+class ContentQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
     """
     Mixin de Manager et Queryset
 
@@ -228,14 +229,10 @@ class ContentQuerySetMixin(object):
         return False
 
 
-class ContentQuerySet(models.QuerySet, ContentQuerySetMixin, ModeratedQuerySetMixin, SEIndexQuerySetMixin, SingleDeleteQuerySetMixin):
-    """ Queryset des contenus """
-    pass
-
-
-class ContentManager(models.Manager.from_queryset(ContentQuerySet), models.Manager, ContentQuerySetMixin, ModeratedQuerySetMixin, SEIndexQuerySetMixin):
+class ContentManager(models.Manager, ModeratedQuerySetMixin, SEIndexQuerySetMixin):
     """ Manager des contenus """
 
+    # Action
     def post(self, authors, category, title, body, visible=True, **kwargs):
         """
         Créer un nouveau contenu
@@ -272,8 +269,9 @@ class CategoryManager(SingleDeleteManager, TranslatableModelManager):
         return candidates.first() if candidates.exists() else None
 
 
-class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, ClassifiableModel,
-              UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel, AttachableModel):
+class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, ClassifiableModel,
+              UUID64Model, IPPointableModel, DataModel, WeightedModel, SEIndexModel, AttachableModel,
+              ApprovedModel, SubscribableModel):
     """ Contenu textuel """
 
     # Constantes
@@ -313,7 +311,7 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
     featured = models.BooleanField(default=False, db_index=True, help_text=_("Will appear in magazine editorial content"),
                                    verbose_name=pgettext_lazy('content', "Featured"))
     locked = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('content', "Locked"))
-    objects = ContentManager()
+    objects = ContentManager.from_queryset(ContentQuerySet)()
 
     # Getter
     @addattr(boolean=True, admin_order_field='published', short_description=_("Published"))
@@ -511,8 +509,8 @@ class Content(ModeratedModel, NullableGenericModel, PicturableModel, PrivacyMode
         self.updated = timezone.now()
         super(Content, self).save(*args, **kwargs)
         # Envoyer un signal insiquand que le contenu est mis à jour
-        if self.moderated:
-            content_updated.send(instance=self)
+        if self.approval.approved:
+            content_updated.send(sender=Content, instance=self)
 
     def auto_process(self, authors=None):
         """ Automatisation de la modération (approval) """

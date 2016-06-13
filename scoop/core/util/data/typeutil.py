@@ -5,6 +5,8 @@ import math
 import webcolors
 # Constantes
 from django.db.models.base import Model
+from django.db.models.query import QuerySet
+
 
 SI_PREFIXES = ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 
@@ -158,7 +160,7 @@ def make_iterable(value, output_type=list):
     """
     if type(value) is output_type:
         return value
-    if isinstance(value, (list, set, tuple)) and type(value) != output_type:
+    if isinstance(value, (list, set, tuple, QuerySet)) and type(value) != output_type:
         return output_type(value)
     return output_type([value]) if value is not None else output_type()
 
