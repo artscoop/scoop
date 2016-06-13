@@ -3,6 +3,8 @@ import datetime
 
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
+from reversion.admin import VersionAdmin
+
 from approval.admin.approval import ApprovableAdmin, ApprovalAdmin
 from django.contrib import admin
 from django.template.defaultfilters import date as datefilter
@@ -17,10 +19,11 @@ from scoop.core.templatetags.html_tags import list_enumerate
 from scoop.core.util.model.widgets import AdminSplitDateTime
 from scoop.core.util.shortcuts import addattr
 
-__all__ = ['ContentAdminModelAdmin', 'CategoryAdmin']
+__all__ = ['ContentAdmin', 'CategoryAdmin']
 
 
-class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmin):
+@admin.register(Content)
+class ContentAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmin, VersionAdmin):
     """ Administration des contenus """
 
     list_display = ['id', 'get_uuid_html', 'title', 'get_authors', 'get_created', 'is_published', 'featured', 'sticky', 'get_comment_count_admin', 'category',
@@ -102,23 +105,29 @@ class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmi
         """ Renvoyer le queryset par défaut """
         return Content.objects if request else Content.objects
 
+    def reversion_register(self, model, **kwargs):
+        """ Django-reversion : définir les modalités de registration """
+        if model is Content:
+            kwargs = {'fields': ['body']}
+            super().reversion_register(model, **kwargs)
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         """ Renvoyer le champ de formulaire pour un champ db """
         if db_field.name == 'created':
             kwargs['widget'] = AdminSplitDateTime()
-        return super(ContentAdminModelAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        return super(ContentAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
         """ Renvoyer le formulaire """
         self.current_content = obj
-        form = super(ContentAdminModelAdmin, self).get_form(request, obj, **kwargs)
+        form = super(ContentAdmin, self).get_form(request, obj, **kwargs)
         if not request.user.is_superuser:
             form.base_fields['picture'].queryset = Picture.objects.filter(author=request.user)
         return form
 
     def get_object(self, request, object_id, from_field=None):
         """ Renvoyer un objet """
-        obj = super(ContentAdminModelAdmin, self).get_object(request, object_id)
+        obj = super(ContentAdmin, self).get_object(request, object_id)
         if obj is not None and not obj.authors.exists():
             obj.authors = [request.user]  # Par défaut l'utilisateur en cours est l'auteur
         return obj
@@ -139,9 +148,10 @@ class ContentAdminModelAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmi
                     instance.save()
         else:
             formset.save()
-        super(ContentAdminModelAdmin, self).save_formset(request, form, formset, change)
+        super(ContentAdmin, self).save_formset(request, form, formset, change)
 
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """ Administration des types de contenus """
     list_select_related = True
@@ -154,6 +164,4 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 # Enregistrer les classes d'administration
-admin.site.register(Content, ContentAdminModelAdmin)
 admin.site.register(ContentApproval, ApprovalAdmin)
-admin.site.register(Category, CategoryAdmin)

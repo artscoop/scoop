@@ -122,7 +122,8 @@ class AlbumPicture(WeightedModel):
 
     # Champs
     album = models.ForeignKey('content.album', related_name='picture_data', on_delete=models.CASCADE, verbose_name=_("Album"))
-    picture = models.ForeignKey('content.picture', related_name='album_data', on_delete=models.CASCADE, verbose_name=_("Picture"))
+    picture = models.ForeignKey('content.picture', related_name='album_data', on_delete=models.CASCADE, help_text=_("Select a picture to link to"),
+                                verbose_name=_("Picture"))
     notes = models.CharField(max_length=512, blank=True, verbose_name=_("Notes"))
 
     # Métadonnées

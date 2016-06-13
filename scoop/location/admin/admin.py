@@ -48,10 +48,10 @@ class VenueAdmin(admin.ModelAdmin, PicturedModelAdmin):
 class CurrencyAdmin(admin.ModelAdmin):
     """ Administration des devises """
     list_select_related = False
-    list_display = ['id', 'name', 'short_name', 'balance', 'updated']
-    ordering = ['id']
+    list_display = ['pk', 'name', 'balance', 'updated']
+    ordering = ['short_name']
     list_filter = []
-    list_display_links = ['id', 'name']
+    list_display_links = ['pk', 'name']
     actions = ['update_currency']
     list_per_page = 25
     readonly_fields = []

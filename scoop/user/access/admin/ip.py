@@ -15,7 +15,7 @@ class IPAdmin(admin.ModelAdmin):
     list_display = ['ip', 'string', 'get_hex', 'get_ip_class', 'reverse', 'isp', 'harm', 'blocked', 'updated', 'country', 'city_name']
     raw_id_fields = []
     list_filter = [IPCountryFilter, 'blocked', 'harm', 'updated']
-    list_display_links = ['id', 'string']
+    list_display_links = ['ip', 'string']
     list_editable = []
     list_per_page = 50
     search_fields = ['string', 'ip', 'reverse', 'isp']

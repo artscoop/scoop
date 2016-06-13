@@ -12,6 +12,7 @@ from django.template.defaultfilters import date as datefilter
 from django.utils.timezone import localtime
 from django.utils.translation import ugettext_lazy as _
 from genericadmin.admin import GenericAdminModelAdmin
+
 from scoop.content.admin.filters import DimensionsFilter
 from scoop.content.forms.picture import PictureAdminForm, ZipUploadForm
 from scoop.content.models.picture import Picture
@@ -24,12 +25,12 @@ from scoop.core.util.stream.fileutil import clean_empty_folders, clean_orphans
 __all__ = ['PictureAdmin']
 
 
+@admin.register(Picture)
 class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
     """ Administration des images """
 
-    list_display = ['id', 'get_thumbnail', 'title', 'description', 'width', 'height', 'get_file_size',
-                    'get_content_type_info', 'get_content_object_info', 'get_uuid_html', 'get_updated_date',
-                    'get_deleted', 'acl_mode', 'moderated']
+    list_display = ['id', 'get_thumbnail', 'title', 'description', 'width', 'height', 'get_file_size', 'get_content_type_info', 'get_content_object_info',
+                    'get_uuid_html', 'get_updated_date', 'get_deleted', 'acl_mode', 'moderated']
     list_filter = ['content_type', 'deleted', DimensionsFilter, 'moderated', TimestampFilter]
     list_display_links = ['id']
     list_editable = ['title', 'moderated']
@@ -40,8 +41,8 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     ordering = ['-id']
     raw_id_fields = []
     actions = ['resave', 'clone', 'delete_pictures', 'delete_thumbnails', 'recalculate_size', 'fix_extension', 'optimize', 'update_picture_path',
-               'clean_everything', 'rien', 'quantize', 'rien', 'contrast', 'liquid', 'remove_icc', 'autocrop',
-               'autocrop_extra', 'rotate90', 'rotate180', 'rotate270', 'mirror_x', 'mirror_y', 'enhance', 'clone']
+               'clean_everything', 'rien', 'quantize', 'rien', 'contrast', 'liquid', 'remove_icc', 'autocrop', 'autocrop_extra', 'rotate90', 'rotate180',
+               'rotate270', 'mirror_x', 'mirror_y', 'enhance', 'clone']
     form = make_ajax_form(Picture, {'author': 'user'}, PictureAdminForm)
     fieldsets = ((_("Picture"), {'fields': ('author', 'license', 'content_type', 'object_id', 'image', 'title', 'description', 'weight')}),
                  (_("Plus"), {'fields': ('audience', 'acl_mode')}))
@@ -263,7 +264,3 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
         urls = super(PictureAdmin, self).get_urls()
         extra = patterns('', (r'^upload_zip/$', self.admin_site.admin_view(self.zip_upload)))
         return extra + urls
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Picture, PictureAdmin)
