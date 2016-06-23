@@ -8,11 +8,11 @@ def check_message(message):
     """ Vérifier un message """
     from scoop.rogue.models import Flag
     # Constantes
-    MAIL_STRINGS = ['.com', '.fr', '.net', '.org', '@', 'adres', 'contact', 'sky']
-    LOWER_TEXT = message.text.lower()
+    mail_strings = ['.com', '.fr', '.net', '.org', '@', 'adres', 'contact', 'sky']
+    lower_text = message.text.lower()
     # Ne vérifier que les messages qui ont quelques spécificités
-    has_mail = ([i for i in MAIL_STRINGS if i in LOWER_TEXT] != [])
-    long_enough = len(LOWER_TEXT) > 24
+    has_mail = ([i for i in mail_strings if i in lower_text] != [])
+    long_enough = len(lower_text) > 24
     # Traiter le message en signalant le posteur si pas déjà signalé
     if has_mail or long_enough:
         similar = message.get_similar_user_message_count()

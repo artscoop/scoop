@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.util.model.model import SingleDeleteManager
 
@@ -25,8 +26,8 @@ class Mutelist(DataModel):
 
     # Champs
     objects = MutelistManager()
-    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, primary_key=False, related_name='forum_mutelist',
-                             on_delete=models.CASCADE, verbose_name=_("User"))
+    user = AutoOneToOneField(settings.AUTH_USER_MODEL, null=True, primary_key=False, related_name='forum_mutelist', on_delete=models.CASCADE,
+                             verbose_name=_("User"))
 
     # Setter
     def mute(self, user):

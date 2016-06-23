@@ -80,11 +80,11 @@ class ThreadTest(TestCase):
 
     def test_quota(self):
         """ Tester les quotas """
-        self.assertFalse(Quota.objects.exceeded_for(self.user1), "user1 has sent nothing, quota not exceeded")
+        self.assertFalse(Quota.objects.exceeded_threads_for(self.user1), "user1 has sent nothing, quota not exceeded")
         for _ in range(100):
             Thread.objects.new(self.user1, [self.user2, self.user3], "Thread 1-2,3", "Thread 1-2,3 introductory message", unique=False, force=True)
         self.assertEqual(Quota.objects.get_threads_today_by(self.user1), 100, "user1 has created 100 threads")
-        self.assertTrue(Quota.objects.exceeded_for(self.user1), "user1 has sent many threads, quota exceeded")
+        self.assertTrue(Quota.objects.exceeded_threads_for(self.user1), "user1 has sent many threads, quota exceeded")
 
     def test_negotiations(self):
         """ Tester les négociations """

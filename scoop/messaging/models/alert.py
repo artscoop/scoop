@@ -5,19 +5,20 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.textutil import one_line
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
-from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.stream.request import default_context
 from scoop.messaging.util.signals import mailable_event
 
 
-class AlertManager(SingleDeleteManager):
+class AlertQuerySet(SingleDeleteQuerySet):
     """ Manager des alertes """
 
     # Getter
@@ -37,13 +38,25 @@ class AlertManager(SingleDeleteManager):
         """ Renvoyer le nombre d'alertes non lues par un utilisateur """
         return self.filter(recipient=user, read=False).count()
 
+    def by_level(self, level):
+        """ Renvoyer les alertes pour un niveau d'importance """
+        return self.filter(level=level)
+
     def read_since(self, minutes=1440):
         """ Renvoyer les alertes lues plus vieilles que n minutes """
         return self.filter(read=True, read_time__lt=timezone.now() - datetime.timedelta(minutes=minutes))
 
     # Setter
-    def alert(self, recipients, mailtype_name, data, level=0, as_mail=True, **kwargs):
-        """ Envoyer une alerte à un ou plusieurs utilisateurs """
+    def alert(self, recipients, mailtype_name, data, level=0, as_mail=None, **kwargs):
+        """
+        Envoyer une alerte à un ou plusieurs utilisateurs
+
+        :param recipients: utilisateurs destinataires
+        :param mailtype_name: nom du type de courrier/alerte à envoyer
+        :param data: dictionnaire d'infos pour le rendu de l'alerte/courrier
+        :param level: niveau d'urgence de l'alerte
+        :param as_mail: indique si un mail récapitulatif doit être envoyé. Par défaut None=n'envoie que les alertes de sécurité
+        """
         from scoop.messaging.models.mailtype import MailType
         # Maximum de 1000 membres à qui envoyer l'alerte
         recipients = make_iterable(recipients)[0:1000]
@@ -51,10 +64,10 @@ class AlertManager(SingleDeleteManager):
         mailtype = MailType.objects.get_named(mailtype_name)
         template = 'messaging/alert/{name}.html'.format(name=mailtype.template)
         title, html = [render_block_to_string(template, label, data, context=context) for label in ['title', 'html']]
-        title = one_line(title)
+        as_mail = level == Alert.SECURITY if as_mail is None else as_mail
         alerts = []
         for recipient in recipients:
-            new_alert = self.create(user=recipient, title=title, text=html, level=level)
+            new_alert = self.create(user=recipient, title=one_line(title), text=html, level=level)
             alerts.append(new_alert)
             if as_mail is True:
                 mailable_event.send(sender=None, mailtype=mailtype_name, recipient=recipient, data=data)
@@ -72,6 +85,7 @@ class Alert(DatetimeModel, DataModel):
 
     # Constantes
     ALERT_LEVELS = [[0, _("Warning")], [1, _("Important")], [2, _("Security")]]
+    WARNING, IMPORTANT, SECURITY = 0, 1, 2
 
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='alerts_received', on_delete=models.CASCADE, verbose_name=_("User"))
@@ -81,7 +95,7 @@ class Alert(DatetimeModel, DataModel):
     items = models.CharField(max_length=160, default="", blank=True, verbose_name=_("Items"))
     read = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('alert', "Read"))
     read_time = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('alert.time', "Read"))
-    objects = AlertManager()
+    objects = AlertQuerySet.as_manager()
 
     # Getter
     def get_read(self):

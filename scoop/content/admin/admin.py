@@ -18,6 +18,7 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = []
 
 
+@admin.register(Advertisement)
 class AdvertisementAdmin(AutoAuthoredModelAdmin):
     """ Administration des annonces publicitaires """
     list_select_related = True
@@ -29,6 +30,7 @@ class AdvertisementAdmin(AutoAuthoredModelAdmin):
     order_by = ['group']
 
 
+@admin.register(Attachment)
 class AttachmentAdmin(admin.ModelAdmin, GenericModelUtil):
     """ Administration des fichiers de pièces jointes """
     list_select_related = True
@@ -37,8 +39,3 @@ class AttachmentAdmin(admin.ModelAdmin, GenericModelUtil):
     search_fields = ['file', 'author__username', 'mimetype']
     readonly_fields = []
     form = make_ajax_form(Album, {'author': 'user'})
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Advertisement, AdvertisementAdmin)
-admin.site.register(Attachment, AttachmentAdmin)

@@ -8,28 +8,29 @@ from django.core.mail.message import EmailMultiAlternatives
 from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import one_line
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
-from scoop.core.util.model.model import SingleDeleteQuerySetMixin
+from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 
 
-class MailEventQuerySetMixin(object):
-    """ Mixin de manager des événements mail """
+class MailEventQuerySet(SingleDeleteQuerySet):
+    """ Manager des événements mail """
 
     # Getter
     def discardable(self, user):
         """
         Renvoyer les événements supprimables si l'utilisateur passe en ligne
 
-        :type self: django.db.models.Queryset
+        :param user: utilisateur pour lequel les messages jetables doivent être renvoyés
         """
         return self.filter(recipient=user, forced=False, sent=False)
 
@@ -48,15 +49,6 @@ class MailEventQuerySetMixin(object):
         :type self: django.db.models.Queryset
         """
         return self.update(discarded=True)
-
-
-class MailEventQuerySet(models.QuerySet, MailEventQuerySetMixin, SingleDeleteQuerySetMixin):
-    """ Queryset des fils de discussion """
-    pass
-
-
-class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.Manager, SingleDeleteQuerySetMixin, MailEventQuerySetMixin):
-    """ Manager des événements mail """
 
     def get_queue_length(self):
         """ Renvoyer le nombre d'événements en file """
@@ -171,6 +163,7 @@ class MailEventManager(models.Manager.from_queryset(MailEventQuerySet), models.M
 
 class MailEvent(UUID128Model, DataModel):
     """ Événement mail """
+
     # Champs
     type = models.ForeignKey('messaging.MailType', related_name='events', verbose_name=_("Mail type"))
     queued = models.DateTimeField(default=timezone.now, verbose_name=_("Queue time"))
@@ -179,9 +172,9 @@ class MailEvent(UUID128Model, DataModel):
     sent = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('mailevent', "Sent"))
     sent_time = models.DateTimeField(null=True, blank=True, default=None, verbose_name=_("Delivery time"))
     sent_email = models.CharField(max_length=96, default="", blank=True, verbose_name=_("Email used"))
-    minimum_time = models.DateTimeField(default=timezone.now, verbose_name=_("Minimum delivery"))
+    minimum_time = models.DateTimeField(default=timezone.now, verbose_name=_("Earliest delivery"))
     discarded = models.BooleanField(default=False, verbose_name=_("Discarded"))
-    objects = MailEventManager()
+    objects = MailEventQuerySet.as_manager()
 
     # Getter
     @addattr(boolean=True, short_description=_("Can be sent now"))

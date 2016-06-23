@@ -11,7 +11,12 @@ from scoop.core.util.shortcuts import import_fullname
 
 
 class Configuration(DatetimeModel, WeightedModel):
-    """ Configuration d'un bloc de page """
+    """
+    Configuration d'un bloc de page
+
+    Page → Position → Template → Target
+    Objet à afficher avec un template à telle position dans une page.
+    """
 
     # Champs
     page = models.ForeignKey('editorial.Page', null=False, related_name='configurations', verbose_name=_("Page"))

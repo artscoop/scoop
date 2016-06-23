@@ -14,25 +14,27 @@ from django.http.response import Http404
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import to_timestamp
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
-from scoop.core.util.model.model import SingleDeleteQuerySetMixin
+from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 from scoop.messaging.models.label import LabelableModel
 from scoop.messaging.util.signals import thread_created, thread_pre_create
 
+
 logger = logging.getLogger(__name__)
 
-__all__ = ['Thread', 'ThreadManager']
+__all__ = ['Thread']
 
 
-class ThreadQuerySetMixin(object):
+class ThreadQuerySet(SingleDeleteQuerySet):
     """ Mixin Queryset/MAnager des fils de discussion """
 
     # Getter
@@ -202,15 +204,6 @@ class ThreadQuerySetMixin(object):
             thread.delete(clear=clear)
         return count
 
-
-class ThreadQuerySet(models.QuerySet, ThreadQuerySetMixin, SingleDeleteQuerySetMixin):
-    """ Queryset des fils de discussion """
-    pass
-
-
-class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager, SingleDeleteQuerySetMixin, ThreadQuerySetMixin):
-    """ Manager des fils de discussion """
-
     # Actions
     def new(self, author, recipients, subject, body, request=None, closed=False, unique=None, as_mail=True, force=False, expiry=None):
         """
@@ -275,7 +268,7 @@ class ThreadManager(models.Manager.from_queryset(ThreadQuerySet), models.Manager
         message = Message.objects._add(thread, author, body, request, as_mail=as_mail) if body is not None else None
         return {'thread': thread, 'message': message, 'created': created}
 
-    def open_warning(self, recipients, name="warning", as_mail=True, **kwargs):
+    def new_locked(self, recipients, name="warning", as_mail=True, **kwargs):
         """ Créer un nouveau fil administration via un template """
         if not isinstance(recipients, list):
             recipients = [recipients]
@@ -319,10 +312,10 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     counter = models.IntegerField(default=0, verbose_name=_("Message count"))
     population = models.IntegerField(default=0, verbose_name=_("Recipient count"))
     closed = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Closed"))
-    # Expiration du sujet : Temps après dernier update avant suppression du message.
+    # Expiration du sujet : Temps après dernier update jusqu'à suppression du message.
     expires = models.DateTimeField(null=True, blank=True, verbose_name=_("Expires"))
     expiry_on_read = models.SmallIntegerField(default=365, help_text=_("Value in days"), verbose_name=_("Expiry on read"))
-    objects = ThreadManager()
+    objects = ThreadQuerySet.as_manager()
 
     # Overrides
     def save(self, *args, **kwargs):

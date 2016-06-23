@@ -49,17 +49,14 @@ def render_block_to_string(template_name, block_name, data=None, context=None):
         to_visit = t.template.nodelist
         while to_visit:
             node = to_visit.pop()
-            if isinstance(node, BlockNode):
-                print(node.origin)
             if isinstance(node, BlockNode) and node.name == block_name:
                 return node.render(context)
             elif hasattr(node, 'nodelist'):
                 to_visit += node.nodelist
             if isinstance(node, (ExtendsNode, MacroRoot)):
-                "Nodes  dded Extend"
                 to_visit += node.get_parent(context).nodelist
 
-    raise RuntimeError('Block not found')
+    raise RuntimeError("Block not found")
 
 
 def render_to(template=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):
@@ -99,9 +96,9 @@ def do_render(request, template=None, data=None, content_type=None, headers=None
 
     Si use_request est à False, le rendu du template s'effectue sans accès
     aux context_processors et sans accès à l'objet request.
-    Ainsi, impossible de récupérer l'utilisateur, et des données comme
+    Ainsi, impossible de récupérer l'utilisateur connecté ainsi que des données comme
     MEDIA_URL et STATIC_URL etc. Cela peut cependant légèrement améliorer
-    les performances du template, vu l'absence d'appel aux context_processors
+    les performances de rendu du template, vu l'absence d'appel aux context_processors
     (qui peuvent être inutiles avec certains tmeplates)
 
     :param data: contexte supplémentaire

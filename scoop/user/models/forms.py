@@ -77,6 +77,23 @@ class FormConfiguration(DatetimeModel):
         raw_information = self.data.get(name, default)
         return raw_information
 
+    def is_current(self):
+        """
+        Renvoyer si la configuration est celle courante pour l'utilisateur
+
+        Une configuration est considérée comme courante lorsque l'utilisateur
+        est non Null (les templates sont exclus) et la version est vide (les
+        templates utilisateur sont exclus également)
+        """
+        return self.user and not self.version
+
+    # Overrides
+    def save(self, *args, **kwargs):
+        """ Sauvegarder l'objet """
+        if self.user is not None:
+            self.description = ""
+        super().save(*args, **kwargs)
+
     # Métadonnées
     class Meta:
         verbose_name = _("user configuration")
