@@ -7,6 +7,7 @@ from scoop.core.util.django.admin import ViewOnlyModelAdmin
 from scoop.core.util.shortcuts import addattr
 
 
+@admin.register(Thumbnail)
 class ThumbnailAdmin(ViewOnlyModelAdmin):
     """ Administration des références miniatures easy-thumbnail """
     list_select_related = True
@@ -28,7 +29,3 @@ class SourceAdmin(ViewOnlyModelAdmin):
     list_display_links = ['id']
     list_filter = []
     actions = []
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Thumbnail, ThumbnailAdmin)

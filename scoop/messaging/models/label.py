@@ -5,12 +5,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.typeutil import make_iterable
-from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
 
 
-class LabelManager(SingleDeleteManager):
-    """ Manager des étiquettes """
+class LabelQuerySet(SingleDeleteQuerySet):
+    """ Queryset des étiquettes """
 
     # Getter
     def by_user(self, user):
@@ -25,7 +25,7 @@ class Label(DatetimeModel):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='thread_labels', verbose_name=_("Author"))
     name = models.CharField(max_length=40, validators=[RegexValidator(r'^[\d\w][\d\s\w]*$', _("Must contain only letters and digits"))],
                             blank=False, db_index=True, verbose_name=_("Name"))
-    objects = LabelManager()
+    objects = LabelQuerySet.as_manager()
 
     # Getter
     def get_item_count(self, model_list, per_class=False):
@@ -63,7 +63,7 @@ class Label(DatetimeModel):
     class Meta:
         verbose_name = _("label")
         verbose_name_plural = _("labels")
-        unique_together = (('author', 'name'),)
+        unique_together = [['author', 'name']]
         app_label = 'messaging'
 
 
@@ -79,7 +79,7 @@ class LabelableModel(models.Model):
         """ Renvoyer les étiquettes de l'élément """
         return self.labels.all()
 
-    def get_labels_for(self, user):
+    def labels_for(self, user):
         """ Renvoyer les étiquettes sur l'élément créées par un utilisateur """
         return self.labels.filter(author=user)
 

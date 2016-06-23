@@ -7,8 +7,10 @@ from scoop.content.models.link import Link
 from scoop.core.abstract.user.authored import AutoAuthoredModelAdmin
 
 
+@admin.register(Link)
 class LinkAdmin(AutoAuthoredModelAdmin, AjaxSelectAdmin):
     """ Administration des liens """
+
     list_select_related = True
     list_display = ['id', 'author', 'url', 'anchor', 'title', 'target', 'nofollow', 'group', 'get_uuid_html']
     list_display_links = ['id', 'url']
@@ -19,7 +21,3 @@ class LinkAdmin(AutoAuthoredModelAdmin, AjaxSelectAdmin):
                  ('Plus', {'fields': (('content_type', 'object_id'), 'remainder', 'information')}))
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     form = make_ajax_form(Link, {'author': 'user'})
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Link, LinkAdmin)

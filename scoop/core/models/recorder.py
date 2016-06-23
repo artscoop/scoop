@@ -45,7 +45,8 @@ class RecordManager(SingleDeleteManager):
     def get_time(value=None):
         """
         Renvoyer une heure, arrondie à zéro minutes
-        :returns: ex. 20h19 → 20h00
+
+        :returns: ex. 20h19 → 20h00, 20h59 → 20h00
         """
         if value is None:
             value = timezone.now()
@@ -67,6 +68,7 @@ class RecordManager(SingleDeleteManager):
         """
         Enregistrer une nouvelle action
 
+        :param user: instigateur de l'action
         :param codename: nom d'action en 3 parties séparées par des points, du type app.action.model
         :param target: objet concerné par l'action de user
         :type target: models.Model | str | object

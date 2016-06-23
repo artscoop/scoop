@@ -9,6 +9,7 @@ from scoop.content.models.animation import Animation
 from scoop.core.util.shortcuts import addattr
 
 
+@admin.register(Animation)
 class AnimationAdmin(ModelAdmin):
     """ Modération des animations vidéo (via GIF) """
 
@@ -44,7 +45,3 @@ class AnimationAdmin(ModelAdmin):
         duration = obj.get_duration()
         minutes, seconds = divmod(duration, 60.0)
         return ("{minutes:.0f}m{seconds}s" if minutes else "{seconds}s").format(minutes=minutes, seconds=localize(seconds))
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Animation, AnimationAdmin)

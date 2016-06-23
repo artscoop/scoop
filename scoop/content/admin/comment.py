@@ -22,6 +22,7 @@ class CommentInlineAdmin(GenericTabularInline):
     formfield_overrides = {models.TextField: {'widget': TextInput}}
 
 
+@admin.register(Comment)
 class CommentAdmin(AjaxSelectAdmin, admin.ModelAdmin, GenericModelUtil):
     """ Administration des commentaires """
 
@@ -50,7 +51,3 @@ class CommentAdmin(AjaxSelectAdmin, admin.ModelAdmin, GenericModelUtil):
         if db_field.name == 'body':
             kwargs['widget'] = TinyMCE()
         return super(CommentAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Comment, CommentAdmin)

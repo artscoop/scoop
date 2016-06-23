@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -42,11 +43,12 @@ class ContextHelp(models.Model):
     HELP_MARKER = 'ctx-help-'
     LANGUAGES = settings.LANGUAGES
     LANGUAGE = settings.LANGUAGE_CODE
+    NAME_HINT = _("Name must be lowercase letters, digits or hyphen, and start with a letter.")
 
     # Champs
     active = models.BooleanField(default=True, verbose_name="Active")
     language = models.CharField(max_length=5, choices=LANGUAGES, default=LANGUAGE, blank=False, db_index=True, verbose_name=_("Language"))
-    name = models.CharField(max_length=64, blank=False, verbose_name=_("Name"))
+    name = models.CharField(max_length=64, blank=False, validators=[RegexValidator(r'^[a-z][a-z0-9\-]+$')], help_text=NAME_HINT, verbose_name=_("Name"))
     text = models.TextField(blank=False, verbose_name=_("Text"))
     objects = ContextHelpQuerySet.as_manager()
 

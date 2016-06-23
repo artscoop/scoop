@@ -88,8 +88,7 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
     def html(self, mode='default', **kwargs):
         """ Renvoyer une représentation HTML de l'option """
         kwargs['item'] = self
-        return render_to_string(["mako/core/display/option-{mode}.html".format(mode=mode),
-                                 "core/display/option-{mode}.html".format(mode=mode)], kwargs)
+        return render_to_string(["mako/core/display/option-{mode}.html".format(mode=mode), "core/display/option-{mode}.html".format(mode=mode)], kwargs)
 
     # Propriétés
     name = property(get_name)
@@ -119,6 +118,7 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
 
 class OptionTranslation(get_translation_model(Option, "option"), TranslationModel):
     """ Traduction des options """
+
     name = models.CharField(max_length=120, blank=False, verbose_name=_("Name"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
 

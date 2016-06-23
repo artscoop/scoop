@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.apps.registry import apps
 from django.contrib.contenttypes.fields import ContentType
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.generic import GenericModel
 from scoop.core.abstract.core.uuid import FreeUUIDModel
@@ -24,9 +24,14 @@ class UUIDEntryManager(SingleDeleteManager):
         modelset = apps.get_models()
         for model in modelset:
             if issubclass(model, FreeUUIDModel):
-                entries = model.objects.all()
-                for entry in entries:
-                    self.add(entry)
+                with transaction.atomic():
+                    entries = model.objects.only('pk', 'uuid').all().iterator()
+                    for entry in entries:
+                        self.add(entry)
+
+    def clear(self):
+        """ Supprimer tous les UUID de tous les modèles """
+        self.all().delete()
 
     def add(self, instance):
         """ Enregistrer un nouvel UUID d'instance """

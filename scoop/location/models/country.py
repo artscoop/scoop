@@ -31,11 +31,11 @@ class CountryQuerySetMixin(object):
             return self.get(code2__iexact=code2)
         return None
 
-    def get_by_codes(self, codes):
+    def by_codes(self, codes):
         """ Renvoyer des pays selon leur code ISO à 2 lettres """
         return self.filter(code2__in=codes)
 
-    def get_by_continent_code(self, code):
+    def by_continent_code(self, code):
         """ Renvoyer des pays par continent """
         return self.filter(continent__iexact=code)
 
