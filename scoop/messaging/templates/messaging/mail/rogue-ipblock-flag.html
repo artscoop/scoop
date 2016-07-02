@@ -1,0 +1,21 @@
+{% load text_tags %}
+
+{% block title %}
+    Résumé de signalement automatique de comptes utilisateurs
+{% endblock %}
+
+{% block text %}
+    Bonjour {{ event.recipient }},
+    Voici la liste des utilisateurs ayant été signalés automatiquement :
+    {% for user in users %}
+        {{ user }}
+    {% endfor %}
+{% endblock %}
+
+{% block html %}
+    Bonjour {{ event.recipient }},
+    Voici la liste des utilisateurs ayant été signalés automatiquement :
+    {% for user in users %}
+        {{ user }}
+    {% endfor %}
+{% endblock %}

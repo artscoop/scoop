@@ -5,13 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.location.models import City, Currency
 
 
-@periodic_task(run_every=crontab(hour=0, minute=1))
+@periodic_task(run_every=crontab(hour=0, minute=1), options={'expires': 3600})
 def update_currency_balances():
     """ Mettre à jour les valeurs des devises """
     return Currency.objects.update_balances()
 
 
-@periodic_task(run_every=timedelta(minutes=30))  # 20 minutes = 48 appels/jour
+@periodic_task(run_every=timedelta(minutes=30), rate_limit='3/m', options={'expires': 3600})  # 20 minutes = 48 appels/jour
 def auto_fetch_city_pictures():
     """ Ajouter progressivement des images aux villes de 15 000+ habitants """
     cities = City.objects.by_population(['FR'], 15000).filter(city=True, pictured=False).order_by('-population')

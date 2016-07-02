@@ -3,7 +3,7 @@ import celery
 from waffle import switch_is_active
 
 
-@celery.task(name='user.access.log_access', ignore_result=True)
+@celery.task(name='user.access.log_access', ignore_result=True, expires=86400)
 def add_access(request):
     """
     Ajouter une entrée au log des accès

@@ -104,13 +104,15 @@ class Flag(DatetimeModel):
 
     # Constantes
     STATUSES = [[0, _("New")], [1, _("Being checked")], [2, _("Closed")], [3, _("Fixed")], [4, _("Will not fix")], [5, _("Postponed")], [6, _("Pending")]]
+    PRIORITIES = [[0, _("Lowest")], [1, _("Low")], [2, _("Medium")], [3, _("High")], [4, _("Critical")]]
     NEW, CHECKING, CLOSED, FIXED, WONTFIX, POSTPONED, PENDING = 0, 1, 2, 3, 4, 5, 6
+    LOWEST, LOW, MEDIUM, HIGH, CRITICAL = 0, 1, 2, 3, 4
 
     # Champs
     name = models.CharField(max_length=128, blank=True, editable=False, verbose_name=_("Object name"))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='flags_made', on_delete=models.SET_NULL, verbose_name=_("Author"))
     type = models.ForeignKey('rogue.FlagType', null=False, related_name='flags', verbose_name=_("Type"))
-    priority = models.SmallIntegerField(default=2, validators=[MaxValueValidator(5), MinValueValidator(0)], verbose_name=_("Priority"))
+    priority = models.SmallIntegerField(default=MEDIUM, choices=PRIORITIES, validators=[MaxValueValidator(4), MinValueValidator(0)], verbose_name=_("Priority"))
     status = models.SmallIntegerField(choices=STATUSES, default=NEW, null=False, db_index=True, verbose_name=_("Status"))
     details = models.CharField(max_length=128, blank=True, verbose_name=_("Details"))
     admin = models.CharField(max_length=128, blank=True, verbose_name=_("Administration notes"))
@@ -148,9 +150,9 @@ class Flag(DatetimeModel):
 
     def is_moderated_by(self, user):
         """ Renvoyer si un utilisateur est modérateur du signalement """
-        moderator = self.moderators.filter(pk=user.pk).exists()
+        moderator = self.moderators.filter(pk=user.pk)
         superuser = user.is_superuser
-        return superuser or moderator
+        return superuser or moderator.exists()
 
     @addattr(short_description=_("Author"))
     def get_author_name(self):

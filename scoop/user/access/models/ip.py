@@ -70,6 +70,7 @@ class IPManager(GeoManager):
         """ Renvoyer la liste de codes pays des """
         return self.exclude(country="").values('country').annotate(count=Count('country')).distinct().order_by('-count')
 
+    # Overrides
     def __init__(self, *args, **kwargs):
         """ Initialiser le manager """
         super(IPManager, self).__init__(*args, **kwargs)
@@ -80,6 +81,13 @@ class IPManager(GeoManager):
                 self.geoisp = GeoIP(settings.GEOISP_PATH)
             except AttributeError:
                 pass
+
+    def get_isp_by_ip(self, ip):
+        """ Renvoyer le FAI d'une IP """
+        try:
+            return self.geoisp.org_by_addr(ip) or ""
+        except ValueError:
+            return ""
 
 
 class IP(DatetimeModel, CoordinatesModel):
@@ -321,7 +329,7 @@ class IP(DatetimeModel, CoordinatesModel):
         reverse = reverse_lookup(ip)
         data['reverse'] = str(reverse['name']) if isinstance(reverse, dict) else reverse
         data['status'] = reverse['status'] if isinstance(reverse, dict) else ''
-        data['isp'] = (IP.objects.geoisp.org_by_addr(ip) or "")[0:64]
+        data['isp'] = IP.objects.get_isp_by_ip(ip)[0:64]
         data['updated'] = timezone.now()
         try:
             geoip_info = IP.objects.geoip.record_by_addr(ip) or dict()

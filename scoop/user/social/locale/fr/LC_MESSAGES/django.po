@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-14 21:34+0200\n"
-"PO-Revision-Date: 2016-03-28 06:34+0009\n"
+"POT-Creation-Date: 2016-07-01 04:39+0200\n"
+"PO-Revision-Date: 2016-07-01 04:50+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.10\n"
+"X-Translated-Using: django-rosetta 0.7.11\n"
 
 #: admin/event.py:22
 msgid "Translation"
@@ -59,7 +59,7 @@ msgstr "Je participerai peut-être"
 msgid "I will participate"
 msgstr "Je participerai"
 
-#: models/event/attendance.py:46 models/event/events.py:100
+#: models/event/attendance.py:46 models/event/events.py:104
 msgid "Event"
 msgstr "Événement"
 
@@ -67,7 +67,7 @@ msgstr "Événement"
 msgid "Forecast"
 msgstr "Prévision"
 
-#: models/event/attendance.py:48 models/event/events.py:101
+#: models/event/attendance.py:48 models/event/events.py:105
 #: models/group/invite.py:37
 msgid "Status"
 msgstr "État"
@@ -85,11 +85,13 @@ msgid "Parent"
 msgstr "Parent"
 
 #: models/event/eventcategory.py:39
+#| msgid "Public"
+msgctxt "eventcategory"
 msgid "Public"
-msgstr "Public"
+msgstr "Privée"
 
 #: models/event/eventcategory.py:43 models/event/eventcategory.py:77
-#: models/friend/friendgroup.py:27 models/group/group.py:66
+#: models/friend/friendgroup.py:27 models/group/group.py:69
 #: models/rating/rating.py:29 models/rating/rating.py:65
 msgid "Name"
 msgstr "Nom"
@@ -99,8 +101,8 @@ msgid "(No name)"
 msgstr "(Sans nom)"
 
 #: models/event/eventcategory.py:51 models/event/eventcategory.py:78
-#: models/event/events.py:64 models/event/events.py:103
-#: models/group/group.py:69 models/rating/rating.py:37
+#: models/event/events.py:68 models/event/events.py:107
+#: models/group/group.py:73 models/rating/rating.py:37
 #: models/rating/rating.py:66
 msgid "Description"
 msgstr "Description"
@@ -113,56 +115,56 @@ msgstr "(Pas de description)"
 msgid "event categories"
 msgstr "catégories d'événements"
 
-#: models/event/events.py:63 models/event/events.py:102
+#: models/event/events.py:67 models/event/events.py:106
 #: people/models/person.py:31
 msgid "Title"
 msgstr "Titre"
 
-#: models/event/events.py:65
+#: models/event/events.py:69
 msgid "Categories"
 msgstr "Catégories"
 
-#: models/event/events.py:66 models/event/events.py:105
+#: models/event/events.py:70 models/event/events.py:109
 msgid "Address"
 msgstr "Adresse"
 
-#: models/event/events.py:67 models/event/events.py:106
+#: models/event/events.py:71 models/event/events.py:110
 msgid "Max attendants"
 msgstr "Participants max"
 
-#: models/event/events.py:86
+#: models/event/events.py:90
 msgid "event"
 msgstr "événement"
 
-#: models/event/events.py:87
+#: models/event/events.py:91
 msgid "events"
 msgstr "événements"
 
-#: models/event/events.py:96
+#: models/event/events.py:100
 msgid "Open"
 msgstr "Ouvert"
 
-#: models/event/events.py:96
+#: models/event/events.py:100
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/event/events.py:96
+#: models/event/events.py:100
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: models/event/events.py:104
+#: models/event/events.py:108
 msgid "Date"
 msgstr "Date"
 
-#: models/event/events.py:107 models/friend/friendgroupgrant.py:21
+#: models/event/events.py:111
 msgid "Group"
 msgstr "Groupe"
 
-#: models/event/events.py:180
+#: models/event/events.py:184
 msgid "event occurrence"
 msgstr "occurrence d'événement"
 
-#: models/event/events.py:181
+#: models/event/events.py:185
 msgid "event occurrences"
 msgstr "occurrences d'événements"
 
@@ -207,14 +209,6 @@ msgstr "groupe d'amis"
 msgid "friend groups"
 msgstr "groupes d'amis"
 
-#: models/friend/friendgroupgrant.py:31
-msgid "friend group grant"
-msgstr "autorisation aux groupes d'amis"
-
-#: models/friend/friendgroupgrant.py:32
-msgid "friend group grants"
-msgstr "autorisations aux groupes d'amis"
-
 #: models/friend/friendlist.py:46
 msgid "Friend"
 msgstr "Ami"
@@ -227,60 +221,64 @@ msgstr "Annuler la demande"
 msgid "Add to friends"
 msgstr "Ajouter aux amis"
 
-#: models/friend/friendlist.py:243
+#: models/friend/friendlist.py:244
 #, python-brace-format
 msgid "Friendship status for {user}"
 msgstr "Statut des amitiés pour {user}"
 
-#: models/friend/friendlist.py:251
+#: models/friend/friendlist.py:252
 msgid "friend status"
 msgstr "statut d'amitié"
 
-#: models/friend/friendlist.py:252
+#: models/friend/friendlist.py:253
 msgid "friend statuses"
 msgstr "statuts d'amitié"
 
-#: models/group/group.py:63
+#: models/group/group.py:65
 msgid "Anyone can join"
 msgstr "Tout le monde peut s'inscrire"
 
-#: models/group/group.py:63
+#: models/group/group.py:65
 msgid "Administrators must confirm first"
 msgstr "Les administrateurs doivent d'abord confirmer"
 
-#: models/group/group.py:63
+#: models/group/group.py:65
 msgid "Invites only"
 msgstr "Invitations seulement"
 
-#: models/group/group.py:68
+#: models/group/group.py:71
 msgid "Define if the group is not in the public listings"
 msgstr "Définir si le groupe n'apparaît pas dans les listes publiques"
 
-#: models/group/group.py:68
+#: models/group/group.py:71
 msgid "Discrete group"
 msgstr "Groupe discret"
 
-#: models/group/group.py:70
+#: models/group/group.py:72
+msgid "Private"
+msgstr "Privé"
+
+#: models/group/group.py:74
 msgid "Membership type"
 msgstr "Type d'adhésion"
 
-#: models/group/group.py:73
+#: models/group/group.py:77
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/group/group.py:74
+#: models/group/group.py:78
 msgid "Members"
 msgstr "Membres"
 
-#: models/group/group.py:75
+#: models/group/group.py:79
 msgid "Applications"
 msgstr "Candidatures"
 
-#: models/group/group.py:138
+#: models/group/group.py:147
 msgid "group"
 msgstr "groupe"
 
-#: models/group/group.py:139
+#: models/group/group.py:148
 msgid "groups"
 msgstr "groupes"
 
@@ -312,46 +310,46 @@ msgstr "Invitation de groupe"
 msgid "Group invites"
 msgstr "groupes"
 
-#: models/post.py:39
+#: models/post.py:45
 msgid "Text"
 msgstr "Texte"
 
-#: models/post.py:40
+#: models/post.py:46
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/post.py:51
+#: models/post.py:57
 msgid "user shout"
 msgstr "statut textuel"
 
-#: models/post.py:52
+#: models/post.py:58
 msgid "user shouts"
 msgstr "statuts textuels"
 
-#: models/rating/like.py:64 models/rating/rating.py:93
+#: models/rating/like.py:65 models/rating/rating.py:93
 #: models/rating/score.py:44
 msgid "Author"
 msgstr "Auteur"
 
-#: models/rating/like.py:65 models/rating/rating.py:26
+#: models/rating/like.py:66 models/rating/rating.py:26
 #: models/rating/rating.py:96
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/rating/like.py:67 models/rating/rating.py:97
+#: models/rating/like.py:68 models/rating/rating.py:97
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: models/rating/like.py:80
+#: models/rating/like.py:81
 #, python-brace-format
 msgid "{user} likes {target}"
 msgstr "{user} aime {target}"
 
-#: models/rating/like.py:84
+#: models/rating/like.py:85
 msgid "like"
 msgstr "mention j'aime"
 
-#: models/rating/like.py:85
+#: models/rating/like.py:86
 msgid "likes"
 msgstr "mentions j'aime"
 
@@ -484,6 +482,12 @@ msgstr "personne"
 #: people/models/person.py:61
 msgid "persons"
 msgstr "personnes"
+
+#~ msgid "friend group grant"
+#~ msgstr "autorisation aux groupes d'amis"
+
+#~ msgid "friend group grants"
+#~ msgstr "autorisations aux groupes d'amis"
 
 #~ msgid "Prefix"
 #~ msgstr "Titre civil"

@@ -72,7 +72,7 @@ class PictureQuerySetMixin(object):
             return cached
         # Calculer la taille totale
         total = 0
-        for picture in self.all().iterator():
+        for picture in self.all().only('id', 'image').iterator():
             try:
                 if picture.exists():
                     total += math.ceil(picture.image.size / float(boundary)) * boundary

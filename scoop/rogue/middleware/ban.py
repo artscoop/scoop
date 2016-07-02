@@ -10,7 +10,7 @@ from django.contrib.auth import logout
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404, HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template.context import RequestContext
 from django.utils import timezone
 from scoop.core.util.shortcuts import get_fullname
@@ -106,8 +106,9 @@ class MiserizeMiddleware(object):
 
 class LockMiddleware(object):
     """
-    Bloquer un utilisateur temporairement en le redirigeant vers une page l'avertissant
-    qu'il est banni pendant n heures pour raison de comportement.
+    Bloquer un utilisateur temporairement
+
+    Le rediriger vers une page l'avertissant qu'il est banni pendant n heures pour raison de comportement.
     """
     # Liste d'URLS où effectuer un blocage divin
     LOCK_TEMPLATE = "rogue/ban/temporary_lock.html"
@@ -160,4 +161,4 @@ class LockMiddleware(object):
                         locked |= re.match(regex, get_fullname(view_func), re.I) is not None
                 if locked is True:
                     template = getattr(settings, 'LOCK_MIDDLEWARE_TEMPLATE', LockMiddleware.LOCK_TEMPLATE)
-                    return render_to_response(template, {'lock': LockMiddleware.get_lock(user)}, context_instance=RequestContext(request))
+                    return render(request, template, {'lock': LockMiddleware.get_lock(user)})

@@ -56,7 +56,7 @@ def render_block_to_string(template_name, block_name, data=None, context=None):
             if isinstance(node, (ExtendsNode, MacroRoot)):
                 to_visit += node.get_parent(context).nodelist
 
-    raise RuntimeError("Block not found")
+    raise RuntimeError("Block not found: {0}".format(block_name))
 
 
 def render_to(template=None, content_type=None, headers=None, status_code=200, string=False, use_request=True):

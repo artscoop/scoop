@@ -1,10 +1,11 @@
 # coding: utf-8
 
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from markdown import markdown
 from translatable.exceptions import MissingTranslation
-from translatable.models import get_translation_model
+from translatable.models import get_translation_model, TranslatableModelManager, TranslatableModel
 
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.translation import TranslationModel
@@ -13,7 +14,7 @@ from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.shortcuts import addattr
 
 
-class FAQManager(models.Manager):
+class FAQManager(TranslatableModelManager):
     """ Manager des questions de la FAQ """
 
     # Getter
@@ -22,7 +23,7 @@ class FAQManager(models.Manager):
         return self.filter(group=name)
 
 
-class FAQ(DatetimeModel, UUID64Model, WeightedModel):
+class FAQ(DatetimeModel, UUID64Model, WeightedModel, TranslatableModel):
     """ Question fréquemment posée """
 
     # Constantes
@@ -59,8 +60,13 @@ class FAQ(DatetimeModel, UUID64Model, WeightedModel):
             return _("(No question)")
 
     # Propriétés
-    answer = property(get_answer)
-    question = property(get_question)
+    answer = cached_property(get_answer, name='answer')
+    question = cached_property(get_question, name='question')
+
+    # Overrides
+    def __str__(self):
+        """ Renvoyer la représentation de l'objet """
+        return "FAQ - {0}".format(self.uuid)
 
     # Méta
     class Meta:

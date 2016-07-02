@@ -59,6 +59,11 @@ class ContextHelp(models.Model):
             return output
         return None
 
+    # Overrides
+    def __str__(self):
+        """ Renvoyer la représentation de l'objet """
+        return "context help - {0}".format(self.name)
+
     # Meta
     class Meta:
         verbose_name = _("Context help")

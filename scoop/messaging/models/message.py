@@ -36,7 +36,16 @@ class MessageManager(SingleDeleteManager):
 
     # Actions
     def _add(self, thread, author, body, request=None, strip_tags=False, as_mail=True):
-        """ Ajouter un message à un fil """
+        """
+        Ajouter un message à un fil de discussion
+
+        :param thread: fil de discussion dans lequel ajouter le message
+        :param author: auteur du message
+        :param body: corps du message
+        :param request: objet HttpRequest, utilisé notamment pour consigner l'IP utilisée
+        :param strip_tags: retirer tous les tags HTML
+        :param as_mail: envoyer un mail en plus du message
+        """
         from scoop.messaging.models import Recipient
         from scoop.user.access.models import IP
         from scoop.user.models import User

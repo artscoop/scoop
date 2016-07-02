@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-14 21:34+0200\n"
-"PO-Revision-Date: 2016-04-16 07:27+0009\n"
+"POT-Creation-Date: 2016-07-01 04:39+0200\n"
+"PO-Revision-Date: 2016-07-01 04:48+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Translated-Using: django-rosetta 0.7.10\n"
+"X-Translated-Using: django-rosetta 0.7.11\n"
 
 #: admin/filters.py:8
 msgid "status"
@@ -47,7 +47,7 @@ msgstr "fait"
 msgid "Flag"
 msgstr "Signalement"
 
-#: admin/flag.py:38 models/flag.py:108
+#: admin/flag.py:38 models/flag.py:106
 msgid "Will not fix"
 msgstr "Rien à faire"
 
@@ -67,7 +67,7 @@ msgstr "Les signalements sélectionnés ont été correctement résolus."
 msgid "URL"
 msgstr "URL"
 
-#: admin/flag.py:59 models/flag.py:116 models/flag.py:171
+#: admin/flag.py:59 models/flag.py:116 models/flag.py:175
 msgid "Status"
 msgstr "Statut"
 
@@ -116,8 +116,8 @@ msgid "Never"
 msgstr "Jamais"
 
 #: forms/flag.py:20
-msgid "This flag type needs details."
-msgstr "Ce type de signalement a besoin de détails."
+msgid "We need some details to better understand this flag."
+msgstr "Nous avons besoins de détails pour pouvoir traiter ce signalement."
 
 #: lookups/flag.py:13 lookups/flag.py:16
 msgid "Automatic"
@@ -131,48 +131,68 @@ msgstr "Manuel"
 msgid "All"
 msgstr "Tout"
 
-#: models/blocklist.py:103
+#: models/blocklist.py:104
 msgid "Blocker"
 msgstr "Bloqueur"
 
-#: models/blocklist.py:107
+#: models/blocklist.py:108
 msgctxt "users"
 msgid "Blacklisted"
 msgstr "Blacklistés"
 
-#: models/blocklist.py:192 models/blocklist.py:193
+#: models/blocklist.py:193 models/blocklist.py:194
 msgid "blocklists"
 msgstr "listes de blocage"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "New"
 msgstr "Nouveau"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "Being checked"
 msgstr "En vérification"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "Closed"
 msgstr "Fermé"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "Fixed"
 msgstr "Réparé"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "Postponed"
 msgstr "Retardé"
 
-#: models/flag.py:108
+#: models/flag.py:106
 msgid "Pending"
 msgstr "En attente"
+
+#: models/flag.py:107
+msgid "Lowest"
+msgstr "Minimale"
+
+#: models/flag.py:107
+msgid "Low"
+msgstr "Bas"
+
+#: models/flag.py:107
+msgid "Medium"
+msgstr "Moyen"
+
+#: models/flag.py:107
+msgid "High"
+msgstr "Élevé"
+
+#: models/flag.py:107
+msgid "Critical"
+msgstr "Critique"
 
 #: models/flag.py:112
 msgid "Object name"
 msgstr "Nom de l'objet"
 
-#: models/flag.py:113 models/flag.py:153
+#: models/flag.py:113 models/flag.py:157
 msgid "Author"
 msgstr "Auteur"
 
@@ -184,7 +204,7 @@ msgstr "Type"
 msgid "Priority"
 msgstr "Priorité"
 
-#: models/flag.py:117 models/mailblock.py:57
+#: models/flag.py:117 models/mailblock.py:59
 msgid "Details"
 msgstr "Détails"
 
@@ -206,7 +226,7 @@ msgctxt "flag"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/flag.py:123 models/flag.py:277
+#: models/flag.py:123 models/flag.py:283
 msgid "Content type"
 msgstr "Type de contenu"
 
@@ -218,52 +238,48 @@ msgstr "ID de l'objet"
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/flag.py:166
+#: models/flag.py:170
 msgid "Content"
 msgstr "Contenu"
 
-#: models/flag.py:251
+#: models/flag.py:255
 msgid "flag"
 msgstr "signalement"
 
-#: models/flag.py:252
+#: models/flag.py:256
 msgid "flags"
 msgstr "signalements"
 
-#: models/flag.py:276
+#: models/flag.py:282
 msgid "Identifier"
 msgstr "Identifiant"
 
-#: models/flag.py:278
+#: models/flag.py:284
 msgid "Needs details"
 msgstr "A besoin de détails"
 
-#: models/flag.py:282 models/flag.py:323
+#: models/flag.py:288 models/flag.py:328
 msgid "Name"
 msgstr "Nom"
 
-#: models/flag.py:288
+#: models/flag.py:294
 msgid "(No name)"
 msgstr "(sans nom)"
 
-#: models/flag.py:290 models/flag.py:324 models/ipblock.py:229
-#: models/profanity.py:27
+#: models/flag.py:296 models/flag.py:329 models/ipblock.py:229
+#: models/profanity.py:29
 msgid "Description"
 msgstr "Description"
 
-#: models/flag.py:295
+#: models/flag.py:301
 msgid "(No description)"
 msgstr "(sans description)"
 
-#: models/flag.py:312
-msgid "None"
-msgstr "Aucun"
-
-#: models/flag.py:316
+#: models/flag.py:319
 msgid "flag type"
 msgstr "type de signalement"
 
-#: models/flag.py:317
+#: models/flag.py:320
 msgid "flag types"
 msgstr "types de signalement"
 
@@ -462,68 +478,68 @@ msgstr "Autorisation du FAI {isp}"
 msgid "IP blocking"
 msgstr "Blocage d'IP"
 
-#: models/mailblock.py:52
+#: models/mailblock.py:53
 msgid "Fake accounts"
 msgstr "Faux comptes"
 
-#: models/mailblock.py:52
+#: models/mailblock.py:53
 msgid "Raw behaviour"
 msgstr "Attitude grossière"
 
-#: models/mailblock.py:54
+#: models/mailblock.py:56
 msgid "Email address"
 msgstr "Adresse email"
 
-#: models/mailblock.py:55
+#: models/mailblock.py:57
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/mailblock.py:56
+#: models/mailblock.py:58
 msgid "Reason"
 msgstr "Motif"
 
-#: models/mailblock.py:58
+#: models/mailblock.py:60
 msgctxt "mailblocking"
 msgid "Active"
 msgstr "Actif"
 
-#: models/mailblock.py:70
+#: models/mailblock.py:72
 #, python-brace-format
 msgid "Blocking of email {mail}"
 msgstr "Blocage de l'adresse email {mail}"
 
-#: models/mailblock.py:74 models/mailblock.py:75
+#: models/mailblock.py:76 models/mailblock.py:77
 msgid "mail blocking"
 msgstr "blocage de courrier"
 
-#: models/profanity.py:23
+#: models/profanity.py:25
 msgctxt "profanity.filter"
 msgid "Active"
 msgstr "Actif"
 
-#: models/profanity.py:24
+#: models/profanity.py:26
 msgid "Language"
 msgstr "Langue"
 
-#: models/profanity.py:25
+#: models/profanity.py:27
 msgid "Regex"
 msgstr "Exp.rég."
 
-#: models/profanity.py:26
+#: models/profanity.py:28
 msgctxt "profanity.filter"
 msgid "Standalone"
 msgstr "Indépendant"
 
-#: models/profanity.py:50
+#: models/profanity.py:52
 #, python-brace-format
 msgid "Profanity with pattern {regex}"
 msgstr "Grossièreté avec l'expression régulière {regex}"
 
-#: models/profanity.py:54
+#: models/profanity.py:56
 msgid "profanity"
 msgstr "grossièreté"
 
-#: models/profanity.py:55
+#: models/profanity.py:57
 msgid "profanities"
 msgstr "grossièretés"
 
@@ -557,6 +573,12 @@ msgid "The content was locked and protected from user interaction."
 msgstr ""
 "Le contenu a été verrouillé et protégé contre les interactions utilisateurs."
 
+#~ msgid "This flag type needs details."
+#~ msgstr "Ce type de signalement a besoin de détails."
+
+#~ msgid "None"
+#~ msgstr "Aucun"
+
 #~ msgid "%(user)s has been banned and reported to %(count)d users."
 #~ msgstr "%(user)s a été banni et signalé à %(count)d membres."
 
@@ -571,12 +593,6 @@ msgstr ""
 
 #~ msgid "Doubt type"
 #~ msgstr "Type de doute"
-
-#~ msgid "Low"
-#~ msgstr "Bas"
-
-#~ msgid "Medium"
-#~ msgstr "Moyen"
 
 #~ msgid "Maximum"
 #~ msgstr "Maximum"
@@ -610,9 +626,6 @@ msgstr ""
 
 #~ msgid "[{language}] {name}"
 #~ msgstr "[{language}] {name}"
-
-#~ msgid "High"
-#~ msgstr "Élevé"
 
 #~ msgid "Can flag"
 #~ msgstr "Peut signaler"

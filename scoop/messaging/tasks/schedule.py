@@ -1,15 +1,17 @@
 # coding: utf-8
 from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
+from celery import task
 from django.conf import settings
 from django.db.models import Q
 from scoop.core.abstract.core.datetime import DatetimeModel
 
 
-@periodic_task(run_every=crontab(hour=3, minute=30, day_of_week=5))
+@periodic_task(run_every=crontab(hour=3, minute=30, day_of_week=5), options={'expires': 86400})
 def prune_threads(months=36):
     """
     Supprimer les sujets dont la date de modification est vieille de n mois
+
     Utilise settings.MESSAGIN_PRUNE_MONTHS, ou utilise 6 mois par défaut (180j)
     Par défaut tous les jeudis à minuit
     Supprime aussi les messages orphelins si nécessaire
@@ -27,16 +29,16 @@ def prune_threads(months=36):
     messages.update(deleted=True)
 
 
-@periodic_task(run_every=timedelta(days=1))
+@periodic_task(run_every=timedelta(days=1), options={'expires': 30})
 def prune_alerts():
     """ Effacer les alertes lues il y a plus de n jours """
     from scoop.messaging.models.alert import Alert
     # Supptimer les alertes
-    alerts = Alert.objects.read_since(2880)
+    alerts = Alert.objects.read_since(minutes=2880)
     alerts.delete()
 
 
-@periodic_task(run_every=timedelta(minutes=2.5))
+@periodic_task(run_every=timedelta(seconds=150), options={'expires': 10})
 def send_mail_queue_non_forced():
     """ Expédier les mails de la file d'attente """
     from scoop.messaging.models.mailevent import MailEvent
@@ -44,7 +46,7 @@ def send_mail_queue_non_forced():
     return MailEvent.objects.process(forced=False)
 
 
-@periodic_task(run_every=timedelta(seconds=30))
+@periodic_task(run_every=timedelta(seconds=25), options={'expires': 10})
 def send_mail_queue_forced():
     """ Expédier les mails de la file d'attente """
     from scoop.messaging.models.mailevent import MailEvent

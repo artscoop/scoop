@@ -4,9 +4,9 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.utils import IntegrityError
 from django.forms.fields import EmailField
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-from scoop.content.models.content import Content
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.content.subscription import SubscribableModel
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModel
@@ -34,10 +34,12 @@ class SubscriptionManager(models.Manager):
         """
         Renvoyer les abonnements pour une adresse email
 
+        :param email: l'adresse email à tester
         :param confirmed: Renvoyer les abonnements confirmés (True), en attente (False) ou tous (None)
         :type confirmed: bool | None
         """
-        return self.filter(email__iexact=email, **({'confirmed': confirmed} if confirmed is not None else {})) if email else self
+        criteria = {'confirmed': confirmed} if confirmed is not None else {}
+        return self.filter(email__iexact=email, **criteria) if email else self
 
     def for_content(self, content):
         """ Renvoyer tous les abonnements confirmés pour le contenu """

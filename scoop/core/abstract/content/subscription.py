@@ -9,6 +9,11 @@ class SubscribableModel(models.Model):
     # Champs
     subscriptions = GenericRelation('content.subscription')
 
+    # Getter
+    def get_subscriptions(self):
+        """ Renvoyer les abonnements à ce contenu """
+        return self.subscriptions.all()
+
     # Métadonnées
     class Meta:
         abstract = True

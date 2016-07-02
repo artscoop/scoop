@@ -119,12 +119,13 @@ class FriendList(DataModel):
     def get_random_unknown_friend_users(self, count=10):
         """ Renvoyer une liste au hasard d'utilisateurs amis d'amis mais pas amis """
         user = get_user_model().objects.get(id=choice(self.get_friend_ids()))
-        users = self.get_distinct_users(user, False).order_by('?')[:count]
+        users = self.get_distinct_friend_users(user, False).order_by('?')[:count]
         return users
 
     def get_action_label(self, user):
         """
         Renvoyer le texte d'action par défaut par rapport au statut avec un utilisateur
+
         Si un utilisateur est déjà ami, renvoyer "Ami"
         Si une demande est en attente vers l'utilisateur, renvoyer "Annuler la demande"
         Si l'utilisateur est ni ami ni rien, renvoyer "Demander en ami"

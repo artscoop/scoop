@@ -59,4 +59,4 @@ class Person(PicturedModel, WeightedModel, BirthModel, UUID32Model):
     class Meta:
         verbose_name = _("person")
         verbose_name_plural = _("persons")
-        app_label = 'people'
+        app_label = 'social_people'

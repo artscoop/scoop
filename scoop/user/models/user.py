@@ -4,10 +4,10 @@ import time
 from datetime import timedelta
 
 import qsstats
+import re
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import UserManager as DefaultManager
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
 from django.contrib.contenttypes.fields import ContentType
 from django.core.cache import cache
@@ -18,8 +18,9 @@ from django.db import models
 from django.http import Http404
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
@@ -27,10 +28,14 @@ from scoop.core.util.shortcuts import addattr
 from scoop.user.util.signals import check_stale, online_status_updated, user_activated, user_deactivated
 
 
-class UserQuerySetMixin(object):
-    """ Mixin du QuerySet et du Manager des utilisateurs """
+class UserQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, BaseUserManager):
+    """ Queryset des utilisateurs """
 
     # Getter
+    def get_queryset(self):
+        """ Renvoyer le queryset par défaut des utilisateurs """
+        return super().get_queryset().select_related('profile').exclude(id=0)
+
     def by_request(self, request):
         """ Renvoyer les utilisateurs accessibles depuis la requête """
         return self.filter(is_active=True, deleted=False, bot=False).exclude(pk=0) if (request and not request.user.is_staff) else self
@@ -121,6 +126,10 @@ class UserQuerySetMixin(object):
         user.username = settings.ANONYMOUS_USER_NAME
         return user
 
+    def superusers(self):
+        """ Renvoyer tous les superutilisateurs """
+        return self.filter(is_superuser=True, is_active=True)
+
     def get_superuser(self, name=None):
         """ Renvoyer le superutilisateur principal """
         criteria = {} if name is None else {'username__iexact': name}
@@ -161,19 +170,6 @@ class UserQuerySetMixin(object):
             user.force_logout()
 
 
-class UserQuerySet(models.QuerySet, UserQuerySetMixin, SingleDeleteQuerySetMixin):
-    """ Queryset des utilisateurs """
-    pass
-
-
-class UserManager(DefaultManager.from_queryset(UserQuerySet), BaseUserManager, UserQuerySetMixin):
-    """ Manager des utilisateurs """
-
-    def get_queryset(self):
-        """ Renvoyer le queryset par défaut des utilisateurs """
-        return super(UserManager, self).get_queryset().select_related('profile').exclude(id=0)
-
-
 class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     """ Utilisateur """
 
@@ -182,27 +178,27 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     REQUIRED_FIELDS = ['email', 'name']
     CACHE_KEY = {'online': 'user.profile.online.{}', 'online.set': 'user.profile.online.set', 'online.count': 'user.profile.online.count',
                  'logout.force': 'user.profile.logout.{}'}
-    USERNAME_REGEX = r'^[A-Za-z0-9][A-Za-z0-9_]+$'  # Contient lettres, chiffres et underscores
+    USERNAME_REGEX = r'^[^\W_][\w]+$'  # Contient lettres, chiffres et underscores
     USERNAME_REGEX_MESSAGE = _("Your name must start with a letter and can only contain letters, digits and underscores")
-    NAME_REGEX = r'^[A-Za-z][A-Za-z0-9_\-]+$'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
+    USERNAME_VALIDATORS = [RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE, flags=re.LOCALE), MinLengthValidator(4)]
+    NAME_REGEX = r'^[^\W^d_][\w\-]+$'  # Commence par une lettre, suivie de lettres, chiffres, underscore et tirets
     NAME_REGEX_MESSAGE = _("Your name can only contain letters")
+    STAFF_HELP = _("Designates whether the user can log into this admin site.")
     ONLINE_DURATION, AWAY_DURATION = 900, 300
 
     # Champs
-    username = models.CharField(max_length=32, unique=True,
-                                validators=[RegexValidator(regex=USERNAME_REGEX, message=USERNAME_REGEX_MESSAGE), MinLengthValidator(4)],
-                                verbose_name=_("Username"))
+    username = models.CharField(max_length=32, unique=True, verbose_name=_("Username"), validators=USERNAME_VALIDATORS)
     name = models.CharField(max_length=48, blank=True, validators=[RegexValidator(regex=NAME_REGEX, message=NAME_REGEX_MESSAGE)], verbose_name=_("Name"))
     bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', "Bot"))
     email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_("Email"))
     is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', "Active"))
     deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', "Deleted"))
-    is_staff = models.BooleanField(default=False, help_text=_("Designates whether the user can log into this admin site."),
-                                   verbose_name=pgettext_lazy('user', "Staff"))
+    is_staff = models.BooleanField(default=False, help_text=STAFF_HELP, verbose_name=pgettext_lazy('user', "Staff"))
     date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_("Date joined"))
     last_online = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))
     next_mail = models.DateTimeField(default=timezone.now, editable=True, verbose_name=_("Next possible mail for user"))
-    objects = UserManager()
+    objects = UserQuerySet.as_manager()
+    objects_base = BaseUserManager()
 
     # Overrides
     def __str__(self):
@@ -238,7 +234,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
                 direct_user.update_online(online=True)
                 return direct_user
             if not username or not password:
-                raise ValidationError(_("The value passed has no login value"))
+                raise ValidationError(_("The payload passed has no login value"))
             user = auth.authenticate(username=username, password=password)
             if user is not None and user.can_login():
                 if fake is False:
@@ -354,7 +350,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         start = count = User.get_online_count()
         for user_id in user_ids:
             user_key = User.CACHE_KEY['online'].format(user_id)
-            if not online[user_key]:
+            if not online.get(user_key, None):
                 user_ids.discard(user_id)
                 count -= 1
         if start > count:
@@ -515,19 +511,19 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        fixed_username = self._get_fixed_username()
-        if self.username != fixed_username:
-            self.username = fixed_username
-        super(User, self).save(*args, **kwargs)
+        self._normalize_username()
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'utilisateur """
         return reverse_lazy('user:profile-view', kwargs={'key': str(self.id), 'name': self.username})
 
     # Privé
-    def _get_fixed_username(self):
-        """ Renvoyer le nom d'utilisateur final """
-        return slugify(str(self.username))
+    def _normalize_username(self):
+        """ Modifier le nom d'utilisateur afin de le normaliser """
+        normalized_username = self.username.lower()
+        if self.username != normalized_username:
+            self.username = normalized_username
 
     # Métadonnées
     class Meta:

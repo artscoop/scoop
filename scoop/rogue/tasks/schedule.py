@@ -8,14 +8,14 @@ from django.utils import timezone
 logger = logging.getLogger(__name__)
 
 
-@periodic_task(run_every=timedelta(days=2, hours=12))
+@periodic_task(run_every=timedelta(days=2, hours=12), options={'expires': 3600})
 def expire_ip_blocks():
     """ Faire expirer les blocages d'IP """
     from scoop.rogue.models import IPBlock
     return IPBlock.objects.expire()
 
 
-@periodic_task(run_every=crontab(hour=2, minute=15))
+@periodic_task(run_every=crontab(hour=2, minute=15), options={'expires': 60})
 def check_random_users():
     """ Contrôle de routine sur des utilisateurs récents """
     from scoop.user.models import User

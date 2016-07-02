@@ -272,7 +272,7 @@ class ThreadQuerySet(SingleDeleteQuerySet):
         """ Créer un nouveau fil administration via un template """
         if not isinstance(recipients, list):
             recipients = [recipients]
-        title, text = [render_block_to_string("messaging/warning/{}.html".format(name), label, kwargs) for label in ['title', 'text']]
+        title, text = [render_block_to_string("messaging/message/bot-lock/{}.html".format(name), label, kwargs) for label in ['title', 'text']]
         author = getattr(get_user_model().objects, 'get_bot')()
         thread = self.new(author, recipients, title, text, closed=True, as_mail=as_mail)
         return {'thread': thread}
@@ -345,22 +345,20 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     # Actions
     def add_message(self, author, body, request=None, strip_tags=False, as_mail=True):
         """ Ajouter un message au fil """
-        from scoop.messaging.models import Message
-        # Ajouter le message
-        return Message.objects._add(self, author, body, request, strip_tags, as_mail)
+        return self.messages._add(self, author, body, request, strip_tags, as_mail)
 
     def add_bot_message(self, template, as_mail=True, data=None):
         """
         Ajouter un message template d'un bot au fil
 
-        :param template: nom de fichier sans extension, relatif à messaging/message/bot
+        :param template: nom de fichier sans extension, dans le répertoire messaging/message/bot
+        :param data: données de rendu du template (par défaut, le contexte 'thread' est passé
+        :param as_mail: indique s'il faut envoyer un mail en plus du message
         """
-        from scoop.messaging.models import Message
-        # Ajouter le message
         data = data or dict()
         data.update({'thread': self})
         body = render_to_string("messaging/message/bot/{0}.html".format(template), data, context_instance=default_context())
-        return Message.objects._add(self, None, body, None, strip_tags=False, as_mail=as_mail)
+        return self.messages._add(self, None, body, None, strip_tags=False, as_mail=as_mail)
 
     def add_recipients(self, recipients):
         """ Ajouter des destinataires au fil """

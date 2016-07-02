@@ -19,10 +19,8 @@ from scoop.location.util.weather import get_open_weather
 from unidecode import unidecode
 
 
-class CityQuerySetMixin(object):
-    """
-    Mixin de Queryset/Manager des villes
-    """
+class CityQuerySet(models.QuerySet):
+    """ Queryset/Manager des villes """
 
     # Constantes
     OPS = {'=': 'exact', '<': 'lt', '<=': 'lte', '>': 'gt', '>=': 'gte'}
@@ -86,7 +84,7 @@ class CityQuerySetMixin(object):
         :param operator: modifie la sélection par rapport à un nombre d'habitants
             opérateur entre =, <, >, <= et >=
         """
-        criteria = {'population__{operator}'.format(operator=CityQuerySetMixin.OPS.get(operator, 'gte')): value}
+        criteria = {'population__{operator}'.format(operator=CityQuerySet.OPS.get(operator, 'gte')): value}
         criteria.update({'country__code2__in': make_iterable(country_codes)} if country_codes else {})
         return self.filter(**criteria)
 
@@ -170,23 +168,13 @@ class CityQuerySetMixin(object):
             return closest_city
         return None
 
-    def _prefetch_find(self):
+    def _prefetch_find(self, countries=None, limit=2000):
         """ Précacher les résultats de recherche pour les villes de plus de 2 000 habitants """
-        for city in self.by_population(['fr', 'ma', 'dz', 'be'], 2000).iterator():
+        for city in self.by_population(countries or ['fr', 'ma', 'dz', 'be'], limit).iterator():
             cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=round_multiple(city.get_latitude(), 0.25),
                                                                                lon=round_multiple(city.get_longitude(), 0.25),
                                                                                name=city.ascii.lower().strip() or '*')
             cache.set(cache_key, city.pk)
-
-
-class CityQuerySet(models.QuerySet, CityQuerySetMixin):
-    """ Queryset des villes """
-    pass
-
-
-class CityManager(models.Manager.from_queryset(CityQuerySet), models.Manager, CityQuerySetMixin):
-    """ Manager des villes """
-    pass
 
 
 class City(CoordinatesModel, PicturableModel):
@@ -210,7 +198,7 @@ class City(CoordinatesModel, PicturableModel):
     timezone = models.ForeignKey('location.Timezone', null=True, db_index=False, related_name='cities', verbose_name=_("Timezone"))
     level = models.SmallIntegerField(default=0, verbose_name=_("Level"))
     parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_("Parent"))
-    objects = CityManager()
+    objects = CityQuerySet.as_manager()
 
     # Getter
     @staticmethod
