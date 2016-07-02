@@ -29,6 +29,11 @@ def to_datetime(value):
     return datetime.datetime.fromtimestamp(value, tz_('UTC'))
 
 
+def to_naive_datetime(value):
+    """ Convertir une date avec informations de fuseau horaire en datetime naïf """
+    return value.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
+
 def date_age(date, today=None):
     """ Calcule l'âge d'une date en années. Today peut être modifié """
     # Date du jour

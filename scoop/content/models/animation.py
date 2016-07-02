@@ -56,6 +56,7 @@ class AnimationManager(SingleDeleteManager):
 
         :type picture: scoop.content.models.Picture | str
         :param reset: Supprimer les animations existantes et les recréer ?
+        :param extensions: liste des extensions de sortie, sans le point
         :type reset: bool
         """
         from scoop.content.models import Picture

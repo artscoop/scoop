@@ -80,7 +80,7 @@ class MailEventQuerySet(SingleDeleteQuerySet):
 
         :param recipient: utilisateur ou email
         :param typename: type d'email enregistré (voir MailType) ex. 'messaging.message.staff'
-        :param data: données à attacher au mail
+        :param data: données à attacher au mail. Les données sont agrégées si possible au données en file.
         :param forced: indique si le mail fait partie des contenus prioritaires
         :type data: dict
         :type forced: bool

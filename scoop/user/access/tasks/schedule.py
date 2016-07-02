@@ -6,6 +6,7 @@ from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
 from django.conf import settings
 from django.db import transaction
+from celery import task
 
 from scoop.user.access.models import IP, Access
 
@@ -13,7 +14,7 @@ from scoop.user.access.models import IP, Access
 logger = logging.getLogger(__name__)
 
 
-@periodic_task(run_every=crontab(minute='0', hour='4', day_of_month='*/2'))
+@periodic_task(run_every=crontab(minute=0, hour=2, day_of_month='*/7'), options={'expires': 3600})
 def prune_access_log():
     """ Faire expirer les blocages d'IP """
     days = getattr(settings, 'USER_ACCESS_PRUNE_DAYS', False)
@@ -21,7 +22,7 @@ def prune_access_log():
         Access.objects.purge(days, persist=True)
 
 
-@periodic_task(run_every=timedelta(seconds=36))
+@periodic_task(run_every=timedelta(seconds=36), rate_limit='6/m', options={'expires': 3600})
 def update_ip_data():
     """ Mettre à jour périodiquement les IPs existantes (environ 1 200 minutes pour 500 000 enregistrements) """
     pool = Pool(16)  # 16 "threads" simultanés pour le traitement

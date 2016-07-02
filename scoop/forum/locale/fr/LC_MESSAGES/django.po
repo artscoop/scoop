@@ -8,20 +8,46 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-14 21:34+0200\n"
-"PO-Revision-Date: 2016-04-16 07:26+0009\n"
+"POT-Creation-Date: 2016-07-01 04:39+0200\n"
+"PO-Revision-Date: 2016-07-01 04:45+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.10\n"
+"X-Translated-Using: django-rosetta 0.7.11\n"
 
 #: __init__.py:7
 msgid "Forum"
 msgstr "Forum"
+
+#: admin/forum.py:35
+msgid "Update information of selected threads"
+msgstr "Mettre à jour les informations des fils sélectionnés"
+
+#: admin/forum.py:40
+msgid "The selected threads have been successfully updated."
+msgstr "Les fils sélectionnés ont bien été mis à jour."
+
+#: admin/forum.py:42
+msgid "Lock selected threads"
+msgstr "Verrouiller les fils sélectionnés"
+
+#: admin/forum.py:48
+#, python-brace-format
+msgid "{count} threads have been locked."
+msgstr "{count} fils ont été verrouillés."
+
+#: admin/forum.py:50
+msgid "Hide selected threads"
+msgstr "Masquer les fils sélectionnés"
+
+#: admin/forum.py:56
+#, python-brace-format
+msgid "{count} threads have been hidden."
+msgstr "{count} fils ont été masqués."
 
 #: admin/poll.py:15 models/vote.py:32
 msgid "Poll"
@@ -82,7 +108,7 @@ msgstr "Étiquette de forum : [{name}]"
 msgid "Label"
 msgstr "Étiquette"
 
-#: models/label.py:116 models/label.py:144
+#: models/label.py:116 models/label.py:146
 msgid "Labels"
 msgstr "Étiquettes"
 
@@ -106,15 +132,15 @@ msgstr "traduction"
 msgid "translations"
 msgstr "traductions"
 
-#: models/label.py:142
+#: models/label.py:144
 msgid "Main label"
 msgstr "Étiquette principale"
 
-#: models/label.py:143
+#: models/label.py:145
 msgid "Status label"
 msgstr "Étiquette de statut"
 
-#: models/message.py:75 models/thread.py:34
+#: models/message.py:75 models/thread.py:38
 msgid "Author"
 msgstr "Auteur"
 
@@ -139,15 +165,15 @@ msgstr "message"
 msgid "messages"
 msgstr "messages"
 
-#: models/mutelist.py:28 models/participant.py:84 models/sanction.py:45
+#: models/mutelist.py:30 models/participant.py:84 models/sanction.py:45
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/mutelist.py:73
+#: models/mutelist.py:74
 msgid "mute list"
 msgstr "liste d'ignorés"
 
-#: models/mutelist.py:74
+#: models/mutelist.py:75
 msgid "mute lists"
 msgstr "listes d'ignorés"
 
@@ -166,7 +192,7 @@ msgctxt "thread"
 msgid "Unread time"
 msgstr "Non lu le"
 
-#: models/participant.py:89 models/thread.py:41
+#: models/participant.py:89 models/thread.py:46
 msgid "Message count"
 msgstr "Nombre de messages"
 
@@ -277,56 +303,61 @@ msgstr "sanction"
 msgid "sanctions"
 msgstr "sanctions"
 
-#: models/thread.py:35
+#: models/thread.py:39
 msgid "Topic"
 msgstr "Sujet"
 
-#: models/thread.py:36
+#: models/thread.py:40
 msgctxt "thread"
 msgid "Was started"
 msgstr "Démarré"
 
-#: models/thread.py:37
+#: models/thread.py:41
+msgctxt "thread"
+msgid "Edited"
+msgstr "Modifié"
+
+#: models/thread.py:42
 msgctxt "thread"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/thread.py:39
+#: models/thread.py:44
 msgid "Last speaker"
 msgstr "Dernier participant"
 
-#: models/thread.py:40
+#: models/thread.py:45
 msgctxt "thread"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/thread.py:42
+#: models/thread.py:47
 msgctxt "thread"
 msgid "Locked"
 msgstr "Verrouillé"
 
-#: models/thread.py:43
+#: models/thread.py:48
 msgid "Always on top"
 msgstr "Toujours en tête"
 
-#: models/thread.py:44
+#: models/thread.py:49
 msgctxt "thread"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/thread.py:48
+#: models/thread.py:53
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: models/thread.py:55
+#: models/thread.py:67
 msgid "Messages"
 msgstr "Messages"
 
-#: models/thread.py:98
+#: models/thread.py:144
 msgid "thread"
 msgstr "fil de discussion"
 
-#: models/thread.py:99
+#: models/thread.py:145
 msgid "threads"
 msgstr "fils de discussion"
 

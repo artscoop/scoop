@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 
 
-@task(name='core.add_record', ignore_result=True)
+@task(name='core.add_record', ignore_result=True, expires=120)
 def record_action_async(actor, action, target=None, content=None):
     """ Enregistrer une action """
     from scoop.core.models.recorder import Record, RecordType

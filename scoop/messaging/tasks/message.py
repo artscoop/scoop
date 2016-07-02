@@ -3,7 +3,7 @@ from celery import task
 from django.utils.translation import ugettext_lazy as _
 
 
-@task
+@task(expires=30)
 def check_message(message):
     """ Vérifier un message """
     from scoop.rogue.models import Flag

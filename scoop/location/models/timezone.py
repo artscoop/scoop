@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.util.shortcuts import addattr
 
 
-class TimezoneManager(models.QuerySet):
+class TimezoneQuerySet(models.QuerySet):
     """ Queryset des fuseaux horaires """
 
     # Getter
@@ -38,7 +38,7 @@ class Timezone(models.Model):
     # Champs
     name = models.CharField(max_length=80, blank=False, unique=True, verbose_name=_("Name"))
     code = models.BigIntegerField(primary_key=True, editable=True, help_text=_("Adler32 hash of timezone standard name"), verbose_name=_("Name hash"))
-    objects = TimezoneManager.as_manager()
+    objects = TimezoneQuerySet.as_manager()
 
     # Getter
     @staticmethod

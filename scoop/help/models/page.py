@@ -74,6 +74,11 @@ class Page(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
     text = property(get_text)
     title = property(get_title)
 
+    # Overrides
+    def __str__(self):
+        """ Renvoyer la représentation de l'objet """
+        return "help page - {0}".format(self.slug)
+
     # Métadonnées
     class Meta:
         verbose_name = _("Help page")

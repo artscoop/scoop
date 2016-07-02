@@ -1,12 +1,13 @@
 # coding: utf-8
 import logging
 
-from celery.schedules import crontab, timedelta
+from celery.schedules import timedelta
 from celery.task import periodic_task
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
+
 from scoop.user.access.models import UserIP
 
 
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
-@periodic_task(run_every=timedelta(minutes=5), ignore_result=True)
+@periodic_task(run_every=timedelta(minutes=2), options={'expires': 15})
 @transaction.atomic()
 def clean_online_list():
     """ Mettre à jour la liste des utilisateurs en ligne """
@@ -23,7 +24,7 @@ def clean_online_list():
     return True
 
 
-@periodic_task(run_every=crontab(hour=0, minute=0))
+@periodic_task(run_every=timedelta(days=1), options={'expires': 3600})
 def rebuild_users():
     """ Assurer l'intégrité des liens de clés étrangères """
     # Assigner des villes si absentes à celles des IP
@@ -37,7 +38,7 @@ def rebuild_users():
     return True
 
 
-@periodic_task(run_every=timedelta(hours=12), ignore_result=True)
+@periodic_task(run_every=timedelta(hours=6), options={'expires': 3600})
 def update_ages():
     """ Mettre à jour l'âge des profils dont c'est l'anniversaire """
     today = timezone.now()

@@ -72,7 +72,7 @@ class UserTest(TestCase):
     def test_usernames(self):
         """ Vérifier que les noms d'utilisateurs répondent toujours à un format """
         user1 = User.objects.create(username='métal1234', email="metal1234@example.com")
-        self.assertEquals(user1.username, 'metal1234', "username should be metal1234")
+        self.assertEquals(user1.username, 'métal1234', "username should be métal1234")
 
     def test_new_user_email(self):
         """ Vérifier que l'envoi d'emails fonctionne comme prévu """

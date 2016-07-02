@@ -1,0 +1,29 @@
+{% load text_tags %}
+
+{% block title %}
+    Vous avez demandé à recevoir un mail de test
+{% endblock %}
+
+{% block text %}
+    Bonjour {{ event.recipient }},
+    Voici le mail de test que vous avez demandé via la ligne de commande.
+    {% for value in items %}
+        {{ value }}
+    {% endfor %}
+{% endblock %}
+
+{% block html %}
+    Bonjour <em>{{ event.recipient }}</em>,
+    <p>
+    Voici le mail de test que vous avez demandé via la ligne de commande.
+    <br>
+    Les valeurs passées étaient :
+    {% for value in items %}
+        {{ value }}
+    {% endfor %}
+    </p>
+    Vous pouvez relancer l'action via le terminal, en tapant :
+    <code>
+    ./manage.py test_mailing
+    </code>
+{% endblock %}

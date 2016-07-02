@@ -9,7 +9,7 @@ from scoop.content.models.picture import Picture
 from scoop.core.util.django.sitemaps import ping_feed
 
 
-@periodic_task(run_every=timedelta(hours=10))
+@periodic_task(run_every=timedelta(hours=48), options={'expires': 3600})
 def clean_transient_pictures():
     """ Supprimer les images volatiles de plus de 24 heures """
     limit = timezone.now() - timedelta(hours=2)
@@ -18,7 +18,7 @@ def clean_transient_pictures():
         picture.delete(clear=True)
 
 
-@periodic_task(run_every=timedelta(minutes=8))
+@periodic_task(run_every=timedelta(hours=4), options={'expires': 3600})
 def update_unsized_pictures():
     """ Mettre à jour les dimensions des images sans dimensions """
     with transaction.atomic():
@@ -28,9 +28,10 @@ def update_unsized_pictures():
     return True
 
 
-@periodic_task(run_every=crontab(0, [2, 4], [1, 4]))  # lun+jeu à 2h et 4h
+@periodic_task(run_every=timedelta(hours=8), options={'expires': 3600})
 def create_random_picture_aliases():
     """ Créer toutes les miniatures pour des images aléatoires """
+    # TODO: Vérifier le queryset ici
     with transaction.atomic():
         pictures = Picture.objects.filter(width__in=[0, 1], height__in=[0, 1]).order_by('?')[:2048]
         for picture in pictures:
@@ -38,7 +39,7 @@ def create_random_picture_aliases():
     return True
 
 
-@periodic_task(run_every=timedelta(hours=13))
+@periodic_task(run_every=timedelta(hours=12), options={'expires': 3600})
 def web_ping():
     """ Pinger le sitemap aux moteurs RSS """
     if getattr(settings, 'CONTENT_WEBLOG_PING', False):

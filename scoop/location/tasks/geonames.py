@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 from scoop.location.util.geonames import populate_cities, populate_currency, rename_cities, reparent_cities
 
 
-@task
+@task(expires=60)
 def geonames_fill(countries, rename=True):
     """ Importer toutes les informations d'un ou plusieurs pays """
     renaming_allowed = False

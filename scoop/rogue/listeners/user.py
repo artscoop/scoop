@@ -4,6 +4,8 @@ import logging
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
 from django.template.loader import render_to_string
+
+from scoop.messaging.util.signals import mailable_event
 from scoop.rogue.util.signals import user_has_ip_blocked
 from scoop.user.models.user import User
 from scoop.user.util.signals import online_status_updated, userip_created
@@ -47,4 +49,6 @@ def user_ip_is_blocked(sender, ip, harm, **kwargs):
         from scoop.rogue.models import Flag
         # Créer un signalement si une IP est bloquée
         output = render_to_string('rogue/message/flag-user-ip.html', {'ip': ip})
-        Flag.objects.flag(sender, typename='profile-harmful', automatic=True, details=output)
+        result = Flag.objects.flag(sender, typename='profile-harmful', automatic=True, details=output)
+        if result is True:
+            mailable_event.send(sender=Flag, mailtype='rogue.ipblock.flag', recipient=sender, data={'users': sender})

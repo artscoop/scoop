@@ -27,7 +27,7 @@ class AdvertisementManager(SingleDeleteManager):
 
     def by_group(self, group):
         """ Renvoyer des annonces d'un groupe """
-        return self.filter(group__iregex=r"[^\|]{}\|?".format(group))
+        return self.filter(group__iregex=r'[^\|]{}\|?'.format(group))
 
     def by_network(self, network):
         """ Renvoyer des annonces d'un réseau d'annonceurs """
@@ -50,7 +50,7 @@ class AdvertisementManager(SingleDeleteManager):
         La probabilité qu'une annonce soit choisie augmente avec son poids
         """
         # Récupérer les annonces à afficher
-        kwargs.update({'group__iregex': r"\|?{}\|?".format(group)} if group is not None else {})
+        kwargs.update({'group__iregex': r'\|?{}\|?'.format(group)} if group is not None else {})
         population = self.filter(active=True, weight__gt=0, width__gt=0, **kwargs)
         # Calculer le poids total de ces annonces
         total = population.aggregate(total_weight=Sum('weight'))['total_weight']
@@ -95,6 +95,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('advertisement', "Updated"))
     objects = AdvertisementManager()
 
+    # Getter
     def render(self, request, view=True):
         """ Effectuer le rendu de l'annonce """
         template = Template(self.code)
@@ -109,6 +110,7 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
         else:
             return "{w}x{h} ad".format(w=self.width, h=self.height)
 
+    # Overrides
     def __str__(self):
         """ Renvoyer auformat unicode """
         return _("Advertisement {name}").format(name=self.name)

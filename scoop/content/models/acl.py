@@ -22,7 +22,7 @@ class CustomACLQuerySet(models.QuerySet):
         """
         elements = path.split('/', 6)
         if len(elements) >= 6:
-            if elements[0] == 'password':
+            if elements[0] == CustomACL.ACL_PATHS[CustomACL.PASSWORD]:
                 owner = elements[1]
                 slug = elements[2]
                 acls = self.filter(owner__username=owner, mode=0, slug=slug)

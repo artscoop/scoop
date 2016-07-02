@@ -3,7 +3,7 @@ from celery import task
 from easy_thumbnails.files import generate_all_aliases
 
 
-@task(name='content.generate_aliases', ignore_result=False)
+@task(name='content.generate_aliases', ignore_result=True, expires=60)
 def generate_aliases(model, pk, field):
     """ Générer les miniatures de l'image """
     try:
