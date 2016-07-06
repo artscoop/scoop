@@ -45,6 +45,7 @@ class CustomACL(UUID64Model):
     name = models.CharField(max_length=24, blank=False, verbose_name=_("Name"))
     slug = AutoSlugField(max_length=32, populate_from='name', unique_with=['uuid'], db_index=True, verbose_name=_("Slug"))
     password = models.CharField(max_length=128, blank=False, verbose_name=_("Password"))
+    objects = CustomACLQuerySet.as_manager()
 
     # Getter
     def get_acl_directory(self):

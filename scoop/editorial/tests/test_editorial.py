@@ -15,7 +15,7 @@ class EditorialTest(TestCase):
 
     # Configuration
     fixtures = ['mailtype', 'options']
-    urls = 'settings.urlconf.base'
+    urls = 'project.settings.urlconf.base'
 
     def setUp(self):
         """ Définir l'environnement de test """

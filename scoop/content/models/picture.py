@@ -182,14 +182,14 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     """ Image """
 
     # Constantes
-    DATA_KEYS = ['colors', 'clones', 'features']
+    DATA_KEYS = ['colors', 'clones', 'features']  # DataModel
+    IMAGE_HELP = _("Only .gif, .jpeg or .png image files, 64x64 minimum")
 
     # Champs
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=False, related_name='owned_pictures', on_delete=models.SET_NULL,
                                verbose_name=_("Author"))
     image = WebImageField(upload_to=ACLModel.get_acl_upload_path, max_length=240, db_index=True, width_field='width', height_field='height',
-                          min_dimensions=(64, 64),
-                          help_text=_("Only .gif, .jpeg or .png image files, 64x64 minimum"), verbose_name=_("Image"))
+                          min_dimensions=(64, 64), help_text=IMAGE_HELP, verbose_name=_("Image"))
     title = models.CharField(max_length=96, blank=True, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"), help_text=_("Description text. Enter an URL here to download a picture"))
     marker = models.CharField(max_length=36, blank=True, help_text=_("Comma separated"), verbose_name=_("Internal marker"))
@@ -216,10 +216,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
         :type request_user: HttpRequest | User
         """
-        if hasattr(request_user, 'user'):
-            return (self.moderated and not self.deleted) or (request_user.user.is_authenticated() and request_user.user.is_staff)
-        else:
-            return (self.moderated and not self.deleted) or (request_user.is_authenticated() and request_user.is_staff)
+        user = getattr(request_user, 'user', request_user)
+        return (self.moderated and not self.deleted) or (user.is_authenticated() and user.is_staff)
 
     def get_thumbnail(self, **kwargs):
         """
@@ -375,7 +373,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         :param image: URL d'image ou objet du modèle content.Picture
         :param request: requête HTTP
         :param kwargs: dictionnaire des paramètres
-            - alias : alias de configuration de miniature
+            - alias : alias de configuration de miniature (easy thumbnails)
             - options : chaîne décrivant les options easy-thumbails de génération
             - image_class : classe CSS de l'élément img
             - image_rel : attribut rel de l'élément img

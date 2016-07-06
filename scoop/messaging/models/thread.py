@@ -38,6 +38,10 @@ class ThreadQuerySet(SingleDeleteQuerySet):
     """ Mixin Queryset/MAnager des fils de discussion """
 
     # Getter
+    def get_by_natural_key(self, uuid):
+        """ Clé naturelle """
+        return self.get(uuid=uuid)
+
     def by_request(self, request):
         """ Renvoyer les threads non supprimés """
         return self.filter(deleted=False) if (request and not request.user.is_staff) else self

@@ -35,11 +35,14 @@ class CoreConfig(AppConfig):
 
         from django.contrib.admin.templatetags import admin_list
         from django.core.handlers.wsgi import WSGIRequest
+        from django.http.request import HttpRequest
         from django.db.models import Model
 
         # Patcher les classes HTTPRequest
         WSGIRequest.__bases__ += (RequestMixin,)
         WSGIRequest.__reduce__ = RequestMixin.__reduce__
+        HttpRequest.__reduce__ = RequestMixin.__reduce__
+        patch_methods(HttpRequest, RequestMixin)
 
         # Patcher la classe Model
         patch_methods(Model, DictUpdateModel, AdminURLUtil, ModelFormUtil, FlaggableModelUtil, get_all_related_objects)

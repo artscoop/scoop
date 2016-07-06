@@ -10,14 +10,16 @@ from scoop.core.util.django import formutil
 from scoop.core.util.django.apps import is_installed
 
 
-class RequestMixin:
+class RequestMixin(object):
     """
-    Opérations sur l'objet HttpRequest destinées à l'usage avec plusieurs
-    applications. Principalement, l'objectif de l'utilitaire est de manipuler
+    Opérations sur l'objet HttpRequest
+
+    Principalement, l'objectif de l'utilitaire est de manipuler
     IP ou autres éléments de requête HTTP.
     Monkey-patching done in scoop.core.__init__
     :type RequestMixin: django.http.HttpRequest
     """
+
     # Constantes
     CHECKS = ['HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR']
     PICKLABLE_META = ['HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR', 'REMOTE_HOST', 'SERVER_NAME', 'SERVER_PORT', 'LANG', 'LANGUAGE', 'HTTP_REFERER',

@@ -1,6 +1,10 @@
 # coding: utf-8
 import celery
+from django.core.handlers.wsgi import WSGIRequest
+from django.http.request import HttpRequest
 from waffle import switch_is_active
+
+from scoop.core.util.stream.request import RequestMixin
 
 
 @celery.task(name='user.access.log_access', ignore_result=True, expires=86400)

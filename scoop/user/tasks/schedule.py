@@ -9,6 +9,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from scoop.user.access.models import UserIP
+from scoop.user.models.activation import Activation
 
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ def clean_online_list():
 @periodic_task(run_every=timedelta(days=1), options={'expires': 3600})
 def rebuild_users():
     """ Assurer l'intégrité des liens de clés étrangères """
-    # Assigner des villes si absentes à celles des IP
+    # Assigner les villes non définies, à celles des IP
     if apps.is_installed('scoop.location'):
         users = User.objects.filter(profile__city__isnull=True)
         for user in users:
@@ -46,3 +47,9 @@ def update_ages():
     people = User.objects.filter(profile__birthday=today_id, profile__updated__lt=today.date())
     for person in people:
         person.profile.save(update_fields=['age', 'updated'])
+
+
+@periodic_task(run_every=timedelta(days=3), options={'expires': 3600})
+def fix_activations():
+    """ Désactiver les activations pour les utilisateurs déjà activés """
+    Activation.objects.fix()

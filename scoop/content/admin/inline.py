@@ -1,5 +1,4 @@
 # coding: utf-8
-from ajax_select.helpers import make_ajax_form
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
@@ -9,9 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from scoop.content.forms.album import AlbumPictureAdminInlineForm
 from scoop.content.forms.picture import PictureAdminInlineForm
-from scoop.content.models.album import AlbumPicture
-from scoop.content.models.content import Category, CategoryTranslation
-from scoop.content.models.picture import Picture
+from scoop.content.models import Category, CategoryTranslation, Picture, AlbumPicture
 from scoop.content.util.widgets import PictureInlineWidget
 
 

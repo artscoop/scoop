@@ -3,6 +3,7 @@ import os
 from os.path import join
 
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -142,7 +143,7 @@ class AccessManager(models.Manager):
             iprecord = IP.objects.get_by_ip(request.get_ip())
             UserIP.objects.set(user=request.user, ip=iprecord)
             if settings.USER_ACCESS_RECORD is True:
-                user = request.user
+                user = request.user or AnonymousUser()
                 page = Page.objects.get_page(request.path)
                 row = Access(user=user if user.is_active else None, ip=iprecord, page=page, referrer=request.get_referrer())
                 row.save()

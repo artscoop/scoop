@@ -120,8 +120,10 @@ class ImageFieldFile(FieldFile):
 
 class WebImageField(ImageField):
     """ Champ Imagefield n'acceptant que les JPEG, les GIF et les PNG """
+
     # Configuration
     attr_class = ImageFieldFile
+
     # Constantes
     ACCEPTED_FORMATS = ('GIF', 'PNG', 'JPEG')
     MINIMUM_DIMENSIONS = (64, 64)
