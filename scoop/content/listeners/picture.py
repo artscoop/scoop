@@ -24,9 +24,9 @@ def picture_presave(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Picture)
-def picture_created(sender, instance, **kwargs):
+def picture_created(sender, instance, raw, created, using, update_fields, **kwargs):
     """ Traiter une image après son enregistrement """
-    if kwargs.get('created', False):
+    if created:
         Animation.objects.create_from_animation(instance)
         instance.resize()
         instance.fix_exif()

@@ -190,6 +190,7 @@ class RecordType(models.Model):
     codename: nom de code de la forme app.a.b.c.. etc
     sentence: phrase formatable de l'action. Utilise les placeholders {actor}, {target}, {container} et {when}
     """
+
     # Champs
     codename = models.CharField(max_length=32, verbose_name=_("Code name"))
     sentence = models.CharField(max_length=48, verbose_name=_("Sentence"))  # actor, target, container, when

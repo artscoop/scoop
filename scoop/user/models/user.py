@@ -345,14 +345,17 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         now = time.time()
         user_ids = User.get_online_set()
         user_keys = [User.CACHE_KEY['online'].format(user_id) for user_id in user_ids]
+        discarded_ids = []
         values = cache.get_many(user_keys)
         online = {key: (value is not None and value + User.ONLINE_DURATION >= now) for key, value in values.items()}
         start = count = User.get_online_count()
         for user_id in user_ids:
             user_key = User.CACHE_KEY['online'].format(user_id)
             if not online.get(user_key, None):
-                user_ids.discard(user_id)
+                discarded_ids.append(user_id)
                 count -= 1
+        for discarded_id in discarded_ids:
+            user_ids.discard(discarded_id)
         if start > count:
             cache.set(User.CACHE_KEY['online.set'], user_ids, 2592000)
             cache.set(User.CACHE_KEY['online.count'], len(user_ids), 2592000)

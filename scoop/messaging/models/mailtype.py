@@ -16,6 +16,10 @@ class MailTypeManager(SingleDeleteManager, TranslatableModelManager):
     """
 
     # Getter
+    def get_by_natural_key(self, short_name):
+        """ Clé naturelle """
+        return self.get(short_name=short_name)
+
     def output_types(self):
         """ Renvoie un résumé rapide des types de mail existants """
         output = []

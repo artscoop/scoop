@@ -1,16 +1,12 @@
 # coding: utf-8
 """ Contenus texte """
 import logging
-import operator
 from datetime import date, timedelta
 from operator import itemgetter
 from traceback import print_exc
 
 import markdown
 import textile
-from django.utils.text import slugify
-
-from approval.models.approval import ApprovalModel, ApprovedModel
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -19,11 +15,15 @@ from django.template.defaultfilters import striptags, truncatewords
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
 from ngram import NGram
+
+from approval.models.approval import ApprovalModel, ApprovedModel
 from scoop.analyze.abstract.classifiable import ClassifiableModel
+from scoop.content.models.category import Category
 from scoop.content.util.signals import content_format_html, content_pre_lock, content_updated
 from scoop.core.abstract.content.attachment import AttachableModel
 from scoop.core.abstract.content.comment import CommentableModel
@@ -31,9 +31,7 @@ from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.content.subscription import SubscribableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.generic import NullableGenericModel
-from scoop.core.abstract.core.icon import IconModel
-from scoop.core.abstract.core.moderation import ModeratedModel, ModeratedQuerySetMixin
-from scoop.core.abstract.core.translation import TranslationModel
+from scoop.core.abstract.core.moderation import ModeratedQuerySetMixin
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.seo.index import SEIndexModel, SEIndexQuerySetMixin
@@ -43,10 +41,9 @@ from scoop.core.util.data.dateutil import is_new
 from scoop.core.util.data.textutil import clean_html, text_to_dict
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
-from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
+from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
-from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
+
 
 logger = logging.getLogger(__name__)
 
@@ -253,20 +250,6 @@ class ContentManager(models.Manager, ModeratedQuerySetMixin, SEIndexQuerySetMixi
         except AttributeError as e:
             print_exc(e)
             return None
-
-
-class CategoryManager(SingleDeleteManager, TranslatableModelManager):
-    """ Manager des types de contenus """
-
-    def get_by_name(self, name):
-        """ Renvoyer un type de contenu selon nom de code """
-        candidates = self.filter(short_name__iexact=name)
-        return candidates.first() if candidates.exists() else None
-
-    def get_by_url(self, url):
-        """ Renvoyer un type de contenu selon son url"""
-        candidates = self.filter(url=url.lower())
-        return candidates.first() if candidates.exists() else None
 
 
 class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableModel, ClassifiableModel,
@@ -548,97 +531,3 @@ class ContentApproval(ApprovalModel(Content)):
     # Getter
     def _get_authors(self):
         return self.source.get_authors()
-
-
-class Category(TranslatableModel, IconModel, DataModel):
-    """
-    Type de contenu
-
-    Sépare les contenus par URL de base.
-    Permet d'assigner des métadonnées à des types de contenu.
-    Permet aussi d'utiliser des templates différents selon
-    le tyoe de contenu.
-    """
-
-    # Champs
-    short_name = models.CharField(max_length=10, verbose_name=_("Identifier"))
-    url = models.CharField(max_length=16, help_text=_("e.g. blog, story or article"), verbose_name=_("URL"))
-    has_index = models.BooleanField(default=True, verbose_name=_("Has index"))
-    visible = models.BooleanField(default=True, verbose_name=_("Visible"))
-    objects = CategoryManager()
-
-    # Getter
-    @addattr(short_description=_("Name"))
-    def get_name(self):
-        """ Renvoyer le nom au singulier du type de contenu """
-        try:
-            return self.get_translation().name
-        except MissingTranslation:
-            return _("(No name)")
-
-    @addattr(short_description=_("Plural"))
-    def get_plural(self):
-        """ Renvoyer le nom au pluriel du type de contenu """
-        try:
-            return self.get_translation().plural
-        except MissingTranslation:
-            return _("(No name)")
-
-    @addattr(short_description=_("Description"))
-    def get_description(self):
-        """ Renvoyer la description du type de contenu """
-        try:
-            return self.get_translation().description
-        except MissingTranslation:
-            return _("(No description)")
-
-    def get_contents(self, **kwargs):
-        """ Renvoyer tous les contenus correspondant à ce type """
-        return self.contents.filter(**kwargs)
-
-    # Propriétés
-    name = property(get_name)
-    plural = property(get_plural)
-    description = property(get_description)
-
-    # Overrides
-    def save(self, *args, **kwargs):
-        """ Enregistrer l'objet dans la base de données """
-        self.url = self.url.lower().strip()
-        super(Category, self).save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        """ Supprimer l'objet de la base de données """
-        if not self.content_set.all().exists():
-            super(Category, self).delete(*args, **kwargs)
-
-    def __str__(self):
-        """ Renvoyer la représentation unicode de l'objet """
-        return str(self.get_name())
-
-    # Métadonnées
-    class Meta:
-        verbose_name = _("content type")
-        verbose_name_plural = _("content types")
-        app_label = 'content'
-
-
-class CategoryTranslation(get_translation_model(Category, "category"), TranslationModel):
-    """ Traduction de type de contenu """
-    # Champs
-    name = models.CharField(max_length=64, blank=False, verbose_name=_("Name"))
-    plural = models.CharField(max_length=64, blank=False, default="__", verbose_name=_("Plural"))
-    description = models.TextField(blank=True, verbose_name=_("Description"))
-
-    # Overrides
-    def save(self, *args, **kwargs):
-        """ Enregistrer l'objet dans la base de données """
-        if self.plural == self._meta.get_field('plural').default:
-            self.plural = "{}s".format(self.name)
-        super(CategoryTranslation, self).save(*args, **kwargs)
-
-    # Métadonnées
-    class Meta:
-        app_label = 'content'
-        verbose_name = _("translation")
-        verbose_name_plural = _("translations")

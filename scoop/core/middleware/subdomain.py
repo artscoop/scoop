@@ -29,5 +29,5 @@ class SubdomainsMiddleware(object):
             request.domain = '.'.join(parts[1:])
         # Remplacer le URL Conf à utiliser selon le nom de sous-domaine
         if request.subdomain in settings.SUBDOMAINS:
-            request.urlconf = 'settings.urlconf.{name}'.format(name=request.subdomain)
+            request.urlconf = 'project.settings.urlconf.{name}'.format(name=request.subdomain)
         return None

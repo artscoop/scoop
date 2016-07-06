@@ -10,7 +10,7 @@ class CeleryTestSuiteRunner(DiscoverRunner):
     def setup_test_environment(self, **kwargs):
         super(CeleryTestSuiteRunner, self).setup_test_environment(**kwargs)
         # Désactiver la communication avec celery, exécuter directement les tâches
-        settings.CELERY_ALWAYS_EAGER = True
+        settings.CELERY_ALWAYS_EAGER = False
 
 
 # Configuration settings pour les tests

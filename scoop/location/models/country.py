@@ -17,10 +17,14 @@ from unidecode import unidecode
 logger = logging.getLogger(__name__)
 
 
-class CountryQuerySetMixin(object):
+class CountryQuerySet(models.QuerySet):
     """ Mixin de Queryset/Manager des pays """
 
     # Getter
+    def get_by_natural_key(self, code2):
+        """ Clé naturelle """
+        return self.get(code2=code2)
+
     def public(self):
         """ Renvoyer les pays publics """
         return self.filter(public=True)
@@ -49,16 +53,6 @@ class CountryQuerySetMixin(object):
         return not codes or not self.filter(safe=False, code2__in=codes).exists()
 
 
-class CountryQuerySet(models.QuerySet, CountryQuerySetMixin):
-    """ Queryset des pays """
-    pass
-
-
-class CountryManager(models.Manager.from_queryset(CountryQuerySet), models.Manager, CountryQuerySetMixin):
-    """ Manager des pays """
-    pass
-
-
 class Country(CoordinatesModel, PicturableModel, DataModel):
     """ Pays """
 
@@ -82,7 +76,7 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
     public = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('country', "Public"))  # accessible aux membres ?
     safe = models.BooleanField(default=False, verbose_name=pgettext_lazy('country', "Safe"))  # considéré par le site comme un pays autorisé ?
     updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('country', "Last update"))  # utilisé pour les différentiels de mises à jour
-    objects = CountryManager()
+    objects = CountryQuerySet.as_manager()
 
     # Getter
     @addattr(admin_order_field='name', short_description=_("Name"))

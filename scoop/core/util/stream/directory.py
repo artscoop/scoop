@@ -10,7 +10,7 @@ class Paths(object):
     def get_root_dir(*sublist):
         """ Renvoyer le chemin du répertoire du projet contant manage.py """
         try:
-            import settings
+            from project import settings
             current_dir = dirname(settings.__file__)
             while not exists(join(current_dir, 'manage.py')) and len(current_dir) > 4:
                 current_dir = dirname(current_dir)

@@ -12,6 +12,15 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.shortcuts import addattr
 
 
+class TemplateQuerySet(models.QuerySet):
+    """ Queryset des templates """
+
+    # Getter
+    def get_by_natural_key(self, path):
+        """ Clé naturelle """
+        return self.get(path=path)
+
+
 class Template(DatetimeModel):
     """ Template d'affichage d'une page """
 
@@ -20,6 +29,7 @@ class Template(DatetimeModel):
     path = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_("Path"))
     full = models.BooleanField(default=False, help_text=_("Contains html, head and body tags."), verbose_name=_("Full page template"))
     positions = models.ManyToManyField('editorial.Position', blank=True, verbose_name=_("Positions"))
+    objects = TemplateQuerySet.as_manager()
 
     # Raccourcis
     @staticmethod

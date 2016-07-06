@@ -111,7 +111,7 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
     class Meta:
         verbose_name = _("option")
         verbose_name_plural = _("options")
-        unique_together = (('group', 'code'),)
+        unique_together = [['group', 'code']]
         ordering = ['code']
         app_label = 'core'
 
