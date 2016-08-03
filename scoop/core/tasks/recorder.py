@@ -3,13 +3,13 @@ from celery.task import task
 from django.conf import settings
 from django.db import models
 
+from scoop.core.models.recorder import Record, RecordType
+from scoop.user.models import User
+
 
 @task(name='core.add_record', ignore_result=True, expires=120)
 def record_action_async(actor, action, target=None, content=None):
     """ Enregistrer une action """
-    from scoop.core.models.recorder import Record, RecordType
-    from scoop.user.models import User
-    # N'enregistrer des actions que si les paramètres l'autorisent
     if getattr(settings, 'CORE_ACTION_RECORD', True):
         # L'action peut être une instance d'Action ou un codename d'action
         if isinstance(action, str):
@@ -23,3 +23,5 @@ def record_action_async(actor, action, target=None, content=None):
             entry.target_name = target_name
             entry.container_object = content
             entry.save()
+            return True
+    return False

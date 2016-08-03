@@ -125,7 +125,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
     def get_picture(self, request, use_default=True):
         """ Renvoyer l'image principale du profil """
         if self.picture is not None:
-            if (request and request.user.is_staff) or self.picture.moderated:
+            if self.picture.is_visible(request):
                 return self.picture
         # Choisir le nom de fichier par défaut
         if use_default is True:
@@ -139,7 +139,7 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
 
     def get_pictures(self, *args, **kwargs):
         """ Renvoyer toutes les images du profil sans l'image principale """
-        return super(BaseProfile, self).get_pictures(exclude={'id': self.picture.id} if self.picture else {})
+        return super().get_pictures(exclude={'id': self.picture.id} if self.picture else {})
 
     def get_gravatar_url(self, size=r'160x160'):
         """

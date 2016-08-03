@@ -60,13 +60,15 @@ class ActivationManager(models.Manager):
 
     def deactivate(self, user, admin=False):
         """ Désactiver un utilisateur """
-        user.activation.active = not admin
-        user.set_inactive()
-        user.activation.save()
+        if user.set_inactive():
+            user.activation.active = not admin
+            user.activation.save()
+            return True
+        return False
 
     def fix(self):
         """ Réparer les activations toujours actives pour un utilisateur actif """
-        self.filter(user__is_active=True, active=True).update(active=False)
+        return self.filter(user__is_active=True, active=True).update(active=False)
 
 
 class Activation(DatetimeModel, UUID128Model):

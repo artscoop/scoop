@@ -110,6 +110,7 @@ class Blocklist(DatetimeModel, DataModel):
         """ Renvoyer le nombre d'entrées dans une blocklist """
         return len(self.get_data(name or DEFAULT_LIST, []))
 
+    @addattr(short_description=pgettext_lazy('users', "Total"))
     def get_total_count(self):
         """ Renvoyer le nombre total d'entrées dans toutes les blocklists """
         return sum([self.get_count(name) for name in self.DATA_KEYS if 'list' in name])
@@ -138,10 +139,11 @@ class Blocklist(DatetimeModel, DataModel):
         :type sender: scoop.user.models.User or int
         :param name: nom de la liste de blocage
         """
-        if getattr(sender, 'pk', sender) not in self.get_ids(name) and not getattr(sender, 'is_staff', False):
+        pk = getattr(sender, 'pk', sender)
+        if pk not in self.get_ids(name) and not getattr(sender, 'is_staff', False):
             now = timezone.now()
             data = self.get_data(name or DEFAULT_LIST, {})
-            data[getattr(sender, 'pk', sender)] = [now]
+            data[pk] = [now]
             success = self.set_data(name or DEFAULT_LIST, data)
             if success:
                 self.save()
@@ -169,6 +171,7 @@ class Blocklist(DatetimeModel, DataModel):
 
         :type sender: scoop.user.models.User or int
         :param name: nom de la liste de blocage
+        :returns: False si l'utilisateur est supprimé, True si l'utilisateur est ajouté
         """
         if self.is_listed(sender, name or DEFAULT_LIST):
             self.remove(sender, name or DEFAULT_LIST)
@@ -178,9 +181,15 @@ class Blocklist(DatetimeModel, DataModel):
             return True
 
     def clear(self, name=None):
-        """ Remettre une blocklist à zéro """
-        self.set_data(name or DEFAULT_LIST, {}, save=True)
-        return True
+        """
+        Remettre une blocklist à zéro
+
+        :returns: True si une modification a été nécessaire, False sinon
+        """
+        if self.data[name] != {}:
+            self.set_data(name or DEFAULT_LIST, {}, save=True)
+            return True
+        return False
 
     # Overrides
     def save(self, *args, **kwargs):

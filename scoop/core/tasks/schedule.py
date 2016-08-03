@@ -38,6 +38,8 @@ def vacuum_postgres_database():
         cursor = connection.cursor()
         cursor.execute('VACUUM FULL')
         cursor.close()
+        return True
+    return False
 
 
 @periodic_task(run_every=timedelta(days=2), options={'expires': 3600})

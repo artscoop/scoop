@@ -235,3 +235,17 @@ def error_labels(forms):
         return humanize_join(labels, 10, "field;fields")
     else:
         return None
+
+
+def require_post_entry(name):
+    """ Demander une entrée POST correspondant au nom passé, ou renvoyer une validation à False """
+    def decorator(function):
+        def wrapper(request, *args, **kwargs):
+            if not has_post(request, name):
+                return Validation(success=False, code=1)
+            result = function(request, *args, **kwargs)
+            if result is None:
+                return Validation(success=False)
+            return result
+        return wrapper
+    return decorator

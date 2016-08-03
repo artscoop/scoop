@@ -51,12 +51,12 @@ class IPBlockManager(SingleDeleteManager):
             if allows.exists():
                 return {'blocked': False, 'level': 0, 'type': 0}
         # Vérifier l'ip
-        blocks = self.filter(ip1=ip.ip, type=0, active=True)
+        blocks = self.filter(ip1=ip.ip, type=IPBlock.SINGLE, active=True)
         if blocks.exists():
             block_item = blocks[0]
             return {'blocked': True, 'level': block_item.harm, 'type': block_item.category}
         # Vérifier que l'IP est dans une plage ou pas
-        blocks = self.filter(ip1__lte=ip.ip, ip2__gte=ip.ip, type=1, active=True)
+        blocks = self.filter(ip1__lte=ip.ip, ip2__gte=ip.ip, type=IPBlock.RANGE, active=True)
         if blocks.exists():
             return {'blocked': True, 'level': blocks[0].harm, 'type': blocks[0].category}
         # Vérifier ensuite que l'IP n'est pas un nœud TOR ou un proxy
@@ -65,22 +65,22 @@ class IPBlockManager(SingleDeleteManager):
         # Ne chercher les blocages de reverse que si l'IP a un reverse
         if ip.has_reverse():
             # Vérifier le reverse de l'enregistrement IP
-            for ipblock in self.filter(active=True, type=2).only('hostname', 'harm', 'category'):
+            for ipblock in self.filter(active=True, type=IPBlock.HOST).only('hostname', 'harm', 'category'):
                 if ipblock.hostname.lower() in ip.reverse.lower():
                     return {'blocked': True, 'level': ipblock.harm, 'type': ipblock.category}
             # Vérifier le reverse de l'enregistrement, avec exclusion
-            for ipblock in self.filter(active=True, type=3).only('hostname', 'hostname_exclude', 'harm', 'category'):
+            for ipblock in self.filter(active=True, type=IPBlock.HOST_EXCLUSION).only('hostname', 'hostname_exclude', 'harm', 'category'):
                 if ipblock.hostname.lower() in ip.reverse.lower() and not re.search(ipblock.hostname_exclude, ip.reverse):
                     return {'blocked': True, 'level': ipblock.harm, 'type': ipblock.category}
         # Ne chercher les blocages de FAI que si l'IP en a un
         if ip.has_isp():
             # Vérifier les ISP
-            for ipblock in self.filter(isp__istartswith=ip.isp, active=True, type=4).only('hostname_exclude', 'harm', 'category'):
+            for ipblock in self.filter(isp__istartswith=ip.isp, active=True, type=IPBlock.ISP_EXCLUSION).only('hostname_exclude', 'harm', 'category'):
                 if ipblock.hostname_exclude == '' or not re.search(ipblock.hostname_exclude, ip.reverse):
                     return {'blocked': True, 'level': ipblock.harm, 'type': ipblock.category}
         # Vérifier le pays
         if ip.has_country():
-            blocks = self.filter(country_code__iexact=ip.country, active=True, type=5)
+            blocks = self.filter(country_code__iexact=ip.country, active=True, type=IPBlock.COUNTRY)
             if blocks.exists():
                 return {'blocked': True, 'level': blocks[0].harm, 'type': blocks[0].category}
         # Aucun blocage trouvé
@@ -118,8 +118,8 @@ class IPBlockManager(SingleDeleteManager):
         from scoop.user.models import User
         # Calculer les IP à bloquer
         blocked_ips, allowed_ips = set(), set()
-        blocks = self.active().filter(type__lt=6, **(block_criteria or {}))
-        allows = self.active().filter(type__gte=6, **(block_criteria or {}))
+        blocks = self.active().filter(type__lt=IPBlock.ALLOWED, **(block_criteria or {}))
+        allows = self.active().filter(type__gte=IPBlock.ALLOWED, **(block_criteria or {}))
         for block in blocks:
             for ip in block.get_blocked_ip_set():
                 blocked_ips.add(ip.id)
@@ -137,9 +137,13 @@ class IPBlockManager(SingleDeleteManager):
     def block_ips(self, ips, harm=3, category=0, description=None):
         """
         Bloquer une ou plusieurs adresse IP
+
         :param ips: id ou instance d'IP ou chaîne au format A.B.C.D
         :type ips: list | tuple | set | IP | str | int
         :returns: les nouveaux blocages d'IP
+        :param harm: niveau de danger de la plage, entre 0 et 3
+        :param category: type de blocage, voir IPBlock
+        :param description: description et raison du blocage
         """
         from scoop.user.access.models.ip import IP
         ips = make_iterable(ips)
@@ -156,7 +160,7 @@ class IPBlockManager(SingleDeleteManager):
                 else:
                     raise TypeError("IPs must be strings, ints or IPs.")
                 if not ip.is_protected():
-                    block, created = self.get_or_create(type=0, ip1=ip.ip, isp=ip.isp, harm=harm, category=category, description=description or "")
+                    block, created = self.get_or_create(type=IPBlock.SINGLE, ip1=ip.ip, isp=ip.isp, harm=harm, category=category, description=description or "")
                     if created is False:
                         block.active = True
                         block.save()
@@ -169,8 +173,12 @@ class IPBlockManager(SingleDeleteManager):
     def block_ip_range(self, ip1, ip2, harm=2, category=0, description=None):
         """
         Bloquer une plage d'adresses IP
+
         :type ip1: int
         :type ip2: int
+        :param harm: niveau de danger de la plage, entre 0 et 3
+        :param category: type de blocage, voir IPBlock
+        :param description: description et raison du blocage
         """
         try:
             from scoop.user.access.models.ip import IP
@@ -178,7 +186,7 @@ class IPBlockManager(SingleDeleteManager):
             if IP.get_ip_value(ip1) > IP.get_ip_value(ip2):
                 ip1, ip2 = ip2, ip1  # inverser la plage si à l'envers
             if ip1 != ip2:  # bloquer une simple ip si les deux ip sont identiques
-                self.create(type=1, ip1=IP.get_ip_value(ip1), ip2=IP.get_ip_value(ip2), harm=harm, category=category, description=description or "")
+                self.create(type=IPBlock.RANGE, ip1=IP.get_ip_value(ip1), ip2=IP.get_ip_value(ip2), harm=harm, category=category, description=description or "")
             else:
                 self.block_ips(ip1, harm=harm)
         except IPBlock.DoesNotExist:
@@ -193,7 +201,8 @@ class IPBlockManager(SingleDeleteManager):
 
     def block_reverse(self, name, exclude=None, harm=2, category=0, description=None):
         """ Bloquer un reverse (regex) """
-        criteria = {'type': 3 if exclude else 2, 'hostname': name, 'harm': harm, 'category': category, 'description': description or ""}
+        criteria = {'type': IPBlock.HOST_EXCLUSION if exclude else IPBlock.HOST, 'hostname': name,
+                    'harm': harm, 'category': category, 'description': description or ""}
         criteria.update({'hostname_exclude': exclude} if exclude else {})
         new_block, created = self.get_or_create(**criteria)
         return new_block if created else False
@@ -202,7 +211,7 @@ class IPBlockManager(SingleDeleteManager):
         """ Bloquer toutes les IP d'un pays """
         code = code.strip().upper()
         if code in countries.OFFICIAL_COUNTRIES:
-            self.create(type=5, country_code=code, harm=harm)
+            self.create(type=IPBlock.COUNTRY, country_code=code, harm=harm)
 
 
 class IPBlock(DatetimeModel):
@@ -213,13 +222,12 @@ class IPBlock(DatetimeModel):
     """
     # Constantes
     TYPES = [[0, _("Single address")], [1, _("Address range")], [2, _("Partial host")], [3, _("Partial host with exclusion")],
-             [4, _("ISP with host exclusion")], [5, _("Country code")],
-             [6, _("Allowed host")], [7, _("Allowed ISP")]]
+             [4, _("ISP with host exclusion")], [5, _("Country code")], [8, _("Allowed host")], [9, _("Allowed ISP")]]
     CATEGORIES = [[0, _("General")], [1, _("Proxy")], [2, _("Server")], [3, _("Compromised IP")], [4, _("Repeated trouble")], [10, _("Tor network")],
-                  [11, _("Anonymous network")],
-                  [12, _("VPN")]]
+                  [11, _("Anonymous network")], [12, _("VPN")]]
     HARM = [[1, _("Rarely harmful")], [2, _("Often harmful")], [3, _("Always harmful")]]
-    SINGLE, RANGE, HOST, HOST_EXCLUSION, ISP_EXCLUSION, COUNTRY, HOST_ALLOWED, ISP_ALLOWED = 0, 1, 2, 3, 4, 5, 6, 7
+    SINGLE, RANGE, HOST, HOST_EXCLUSION, ISP_EXCLUSION, COUNTRY, HOST_ALLOWED, ISP_ALLOWED = 0, 1, 2, 3, 4, 5, 8, 9
+    ALLOWED = 8  # typz minimum des exclusions de blocage
 
     # Champs
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('ipblocking', "Active"))
@@ -312,42 +320,42 @@ class IPBlock(DatetimeModel):
 
     def clean(self):
         # Valider l'état de l'objet
-        if self.type == 0 and self.ip1 == 0:
+        if self.type == IPBlock.SINGLE and self.ip1 == 0:
             raise ValidationError(_("A single IP block must have a valid IP to block."))
-        elif self.type == 1 and ((self.ip1 == 0 or self.ip2 == 0) or (self.ip2 <= self.ip1)):
+        elif self.type == IPBlock.RANGE and ((self.ip1 == 0 or self.ip2 == 0) or (self.ip2 <= self.ip1)):
             raise ValidationError(_("A range IP block must have valid IPs to block."))
-        elif self.type in {2, 3} and self.hostname == '':
+        elif self.type in {IPBlock.HOST, IPBlock.HOST_EXCLUSION} and self.hostname == '':
             raise ValidationError(_("A hostname block must have a partial hostname to block."))
-        elif self.type == 4 and self.isp == '':
+        elif self.type == IPBlock.ISP_EXCLUSION and self.isp == '':
             raise ValidationError(_("An ISP block must have a valid ISP name to block."))
-        elif self.type == 5 and self.country_code == '':
+        elif self.type == IPBlock.COUNTRY and self.country_code == '':
             raise ValidationError(_("A country block must have a valid country code to block."))
-        elif self.type == 6 and self.hostname == '':
+        elif self.type == IPBlock.HOST_ALLOWED and self.hostname == '':
             raise ValidationError(_("A hostname permission must have a valid hostname."))
-        elif self.type == 7 and self.isp == '':
+        elif self.type == IPBlock.ISP_ALLOWED and self.isp == '':
             raise ValidationError(_("An ISP permission must have a valid ISP."))
         else:
             raise ValidationError(_("This rule type {number} is unknown.").format(number=self.type))
 
     def __str__(self):
         """ Renvoyer une représentation unicode du filtre """
-        if self.type == 0:
+        if self.type == IPBlock.SINGLE:
             return _("Blocking of {ip}").format(ip=IPy.IP(str(self.ip1)))
-        elif self.type == 1:
+        elif self.type == IPBlock.RANGE:
             return _("Blocking of IPs from {ip1} to {ip2}").format(ip1=IPy.IP(str(self.ip1)), ip2=IPy.IP(str(self.ip2)))
-        elif self.type == 2:
+        elif self.type == IPBlock.HOST:
             return _("Blocking of reverse {reverse}").format(reverse=self.hostname)
-        elif self.type == 3:
+        elif self.type == IPBlock.HOST_EXCLUSION:
             return _("Blocking of reverse {reverse} but not with {exclude}").format(reverse=self.hostname, exclude=self.hostname_exclude)
-        elif self.type == 4:
+        elif self.type == IPBlock.ISP_EXCLUSION:
             return _("Blocking of ISP {isp}").format(isp=self.isp) if self.hostname_exclude == "" else _("Blocking of ISP {isp} minus {exclude}").format(
                 isp=self.isp,
                 exclude=self.hostname_exclude)
-        elif self.type == 5:
+        elif self.type == IPBlock.COUNTRY:
             return _("Blocking of country with code {code}").format(code=self.country_code)
-        elif self.type == 6:
+        elif self.type == IPBlock.HOST_ALLOWED:
             return _("Authorization of reverse {reverse}").format(reverse=self.hostname)
-        elif self.type == 7:
+        elif self.type == IPBlock.ISP_ALLOWED:
             return _("Authorization of ISP {isp}").format(isp=self.isp)
 
     # Métadonnées

@@ -75,10 +75,10 @@ class FlagManager(SingleDeleteManager):
             try:
                 from scoop.rogue.models import FlagType
                 # Permettre d'utiliser une chaîne pour type en utilisant typename
-                if 'typename' in kwargs:
-                    kwargs['type'] = FlagType.objects.get_by_name(kwargs.pop('typename'))
+                if kwargs.get('type_name', False):
+                    kwargs['type'] = FlagType.objects.get_by_name(kwargs.pop('type_name'))
                 # Les flags auto ont un auteur robot ou admin
-                if 'automatic' in kwargs:
+                if kwargs.get('automatic', False):
                     kwargs['author'] = get_user_model().objects.get_bot_or_admin()
                 # Créer le flag
                 flag = Flag(**kwargs)
@@ -123,7 +123,8 @@ class Flag(DatetimeModel):
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, limit_choices_to=limit, verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
-    url = models.CharField(max_length=128, blank=True, verbose_name=_("URL"))
+    object_owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_("Owner"))
+    url = models.CharField(max_length=192, blank=True, verbose_name=_("URL"))
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_flags', verbose_name=_("Moderators"))
     objects = FlagManager()
 
@@ -218,8 +219,8 @@ class Flag(DatetimeModel):
             if propagate:
                 for flag in self.get_clones():
                     flag.update(admin=self.admin)
-                    flag.close(Flag.FIXED)  # fixed
-        self.close(Flag.FIXED)  # fixed
+                    flag.close(Flag.FIXED)
+        self.close(Flag.FIXED)
 
     def set_admin_notes(self, text):
         """ Définir les notes d'administration du signalement """

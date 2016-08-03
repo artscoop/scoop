@@ -1,6 +1,8 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from translatable.exceptions import MissingTranslation
+
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.util.shortcuts import addattr
@@ -9,6 +11,8 @@ from translatable.models import get_translation_model
 
 class VenueType(PicturableModel):
     """ Type de lieu """
+
+    # Champs
     short_name = models.CharField(max_length=32, blank=False, db_index=True, verbose_name=_("Short name"))
     parent = models.ForeignKey('self', null=True, related_name='children', verbose_name=_("Parent"))
 
@@ -18,7 +22,7 @@ class VenueType(PicturableModel):
         """ Renvoyer le nom du type de lieu """
         try:
             return self.get_translation().name
-        except:
+        except MissingTranslation:
             return _("(No name)")
 
     @addattr(short_description=_("Plural"))
@@ -26,7 +30,7 @@ class VenueType(PicturableModel):
         """ Renvoyer le nom du type de lieu au pluriel """
         try:
             return self.get_translation().plural
-        except:
+        except MissingTranslation:
             return _("(No name)")
 
     @addattr(short_description=_("Description"))
@@ -34,7 +38,7 @@ class VenueType(PicturableModel):
         """ Renvoyer la description du type de lieu """
         try:
             return self.get_translation().description
-        except:
+        except MissingTranslation:
             return _("(No description)")
 
     def get_children(self):
@@ -50,6 +54,7 @@ class VenueType(PicturableModel):
 
 class VenueTypeTranslation(get_translation_model(VenueType, "venuetype"), TranslationModel):
     """ Traduction de type de lieu """
+
     name = models.CharField(max_length=48, blank=False, verbose_name=_("Name"))
     plural = models.CharField(max_length=48, blank=False, default="__", verbose_name=_("Plural"))
     description = models.TextField(blank=True, verbose_name=_("Description"))

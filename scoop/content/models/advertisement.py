@@ -12,10 +12,10 @@ from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.rectangle import RectangleModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.user.authored import AuthoredModel
-from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySetMixin
 
 
-class AdvertisementManager(SingleDeleteManager):
+class AdvertisementQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
     """ Manager des annonces publicitaires """
 
     def get_by_name(self, name):
@@ -32,6 +32,10 @@ class AdvertisementManager(SingleDeleteManager):
     def by_network(self, network):
         """ Renvoyer des annonces d'un réseau d'annonceurs """
         return self.filter(network__iexact=network)
+
+    def by_keyword(self, keyword):
+        """ Renvoyer des annonces avec un mot clé """
+        return self.filter(keywords__icontains=keyword)
 
     def random_by_size(self, width, height):
         """ Renvoyer une annonce aléatoire de la dimension indiquée """
@@ -91,9 +95,10 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     code = models.TextField(blank=False, help_text=_("Django template code for HTML/JS"), verbose_name=_("HTML/JS Snippet"))
     views = models.IntegerField(default=0, editable=False, verbose_name=_("Views"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
+    keywords = models.CharField(max_length=128, blank=True, verbose_name=_("Keywords"))
     network = models.CharField(choices=NETWORKS, default='na', max_length=24, db_index=True, verbose_name=_("Ad network"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('advertisement', "Updated"))
-    objects = AdvertisementManager()
+    objects = AdvertisementQuerySet.as_manager()
 
     # Getter
     def render(self, request, view=True):

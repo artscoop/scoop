@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.django.templateutil import render_to
+from scoop.core.util.model.model import limit_to_model_names
 from scoop.core.util.shortcuts import import_fullname
 
 
@@ -23,9 +24,10 @@ class Configuration(DatetimeModel, WeightedModel):
     position = models.ForeignKey('editorial.Position', null=False, related_name='configurations', verbose_name=_("Position"))
     template = models.ForeignKey('editorial.Template', null=False, related_name='configurations', limit_choices_to={'full': False},
                                  help_text=_("Select template to use to display the target"), verbose_name=_("Template"))
+    notes = models.CharField(max_length=64, blank=True, verbose_name=_("Notes"))
     # Cible
     view_path = models.CharField(max_length=96, blank=True, help_text=_("View to display"), verbose_name=_("View path"))
-    limit = models.Q(name__in=['Excerpt', 'Picture', 'Content', 'Link'])  # limiter les modèles liés
+    limit = limit_to_model_names('editorial.excerpt', 'content.picture', 'content.content', 'content.link')  # limiter les modèles liés
     content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, verbose_name=_("Content type"), limit_choices_to=limit)
     object_id = models.PositiveIntegerField(null=False, blank=True, db_index=False, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
@@ -43,7 +45,7 @@ class Configuration(DatetimeModel, WeightedModel):
             if self.view_path:
                 try:
                     view = import_fullname(self.view_path)
-                    return render_to(string=True)(view(request))
+                    return render_to(string=True)(view(request))  # la vue peut renvoyer dict, str ou response
                 except ImportError:
                     return _("The view at path could not be imported.")
             else:

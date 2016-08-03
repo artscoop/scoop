@@ -54,6 +54,7 @@ class FormConfigurationManager(models.Manager):
         if self.filter(user=None, name=name, version=version or "").update(data=data, description=description or "") == 0:
             self.create(user=None, name=name, data=data, version=version or "", description=description or "")
             return True
+        return False
 
 
 class FormConfiguration(DatetimeModel):
@@ -98,5 +99,5 @@ class FormConfiguration(DatetimeModel):
     class Meta:
         verbose_name = _("user configuration")
         verbose_name_plural = _("user configurations")
-        unique_together = (('user', 'name', 'version'),)
+        unique_together = [['user', 'name', 'version']]
         app_label = 'user'

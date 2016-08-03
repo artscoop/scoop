@@ -41,7 +41,7 @@ class UUIDEntryManager(SingleDeleteManager):
 
     def remove(self, instance):
         """ Supprimer un UUID du registre """
-        self.filter(uuid=instance.uuid).delete()
+        return self.filter(uuid=instance.uuid).delete()
 
 
 class UUIDEntry(GenericModel):

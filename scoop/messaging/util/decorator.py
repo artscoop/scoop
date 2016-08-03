@@ -31,6 +31,7 @@ def user_can_see_thread(method):
 def user_can_see_inbox(method):
     """
     Décorateur vérifiant que l'utilisateur peut consulter une inbox
+
     La fonction décorée peut être de la forme suivante :
     - func(request, ... uuid ...). uuid est un kwarg et non un arg, selon urls.py
     """

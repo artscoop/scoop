@@ -4,6 +4,7 @@ from haystack import indexes
 
 class FlagIndex(indexes.SearchIndex, indexes.Indexable):
     """ Index haystack des signalements """
+
     text = indexes.CharField(document=True, use_template=True)
 
     # Getter

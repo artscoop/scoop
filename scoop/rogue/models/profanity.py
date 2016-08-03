@@ -17,6 +17,17 @@ class ProfanityManager(SingleDeleteManager):
         """ Renvoyer tous les filtres ayant eu un effet sur la chaîne """
         return [profanity for profanity in self.all() if profanity.check_text(text)]
 
+    # Actions
+    def process(self, text):
+        """ Renvoyer une chaîne privée de ses grosièretés """
+        return ProfanitiesFilter.filter_profanities(text)
+
+    def concatenate(self, standalone=True, language=None):
+        """ Renvoyer une expression régulière concaténant tous les filtres """
+        exps = self.filter(active=True, standalone=standalone, language__in=[language or "", ""]).iterator()
+        output = "|".join(["({exp})".format(exp=x.regex) for x in exps])
+        return output
+
 
 class Profanity(models.Model):
     """ Filtre de grossièretés """
@@ -31,20 +42,12 @@ class Profanity(models.Model):
 
     # Getter
     def check_text(self, text):
-        """ Renvoyer si ce filtre est positif pour une chaîne de caractères """
-        return re.search(re.escape(str(self.regex)), text)
+        """
+        Renvoyer si ce filtre est positif pour une chaîne de caractères
 
-    @staticmethod
-    def concatenate(standalone=True, language=None):
-        """ Concaténer tous les filtres """
-        exps = Profanity.objects.filter(active=True, standalone=standalone, language__in=[language or "", ""]).iterator()
-        output = "|".join(["({exp})".format(exp=x.regex) for x in exps])
-        return output
-
-    @staticmethod
-    def process(text):
-        """ Renvoyer une chaîne privée de ses grosièretés """
-        return ProfanitiesFilter.filter_profanities(text)
+        :returns: True si le filtre a bien détecté une grossièreté, sinon False
+        """
+        return bool(re.search(re.escape(str(self.regex)), text))
 
     # Overrides
     def __str__(self):

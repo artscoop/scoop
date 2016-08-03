@@ -51,4 +51,5 @@ def user_ip_is_blocked(sender, ip, harm, **kwargs):
         output = render_to_string('rogue/message/flag-user-ip.html', {'ip': ip})
         result = Flag.objects.flag(sender, typename='profile-harmful', automatic=True, details=output)
         if result is True:
-            mailable_event.send(sender=Flag, mailtype='rogue.ipblock.flag', recipient=sender, data={'users': sender})
+            # Si un nouveau flag est créé (= c'est la première détection pour cet utilisateur)
+            mailable_event.send(sender=Flag, mailtype='rogue.ipblock.flag', recipient=User.objects.superusers(), data={'users': sender})

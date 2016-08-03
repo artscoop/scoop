@@ -168,7 +168,7 @@ class CityQuerySet(models.QuerySet):
             return closest_city
         return None
 
-    def _prefetch_find(self, countries=None, limit=2000):
+    def prefetch_find(self, countries=None, limit=2000):
         """ Précacher les résultats de recherche pour les villes de plus de 2 000 habitants """
         for city in self.by_population(countries or ['fr', 'ma', 'dz', 'be'], limit).iterator():
             cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=round_multiple(city.get_latitude(), 0.25),
