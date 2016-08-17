@@ -5,6 +5,9 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+from scoop.core.abstract.core.datetime import DatetimeModel
+from scoop.core.abstract.core.uuid import UUID64Model
+
 
 class ContextHelpQuerySet(models.QuerySet):
     """ Manager des aides contextuelles """
@@ -25,7 +28,7 @@ class ContextHelpQuerySet(models.QuerySet):
         return self.filter(active=True)
 
 
-class ContextHelp(models.Model):
+class ContextHelp(UUID64Model, DatetimeModel):
     """
     Contenu d'aide contextuelle
 

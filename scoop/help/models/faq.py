@@ -20,7 +20,7 @@ class FAQManager(TranslatableModelManager):
     # Getter
     def by_group(self, name):
         """ Renvoyer les FAQ appartenant à un groupe """
-        return self.filter(group=name)
+        return self.filter(groups__name__iexact=name)
 
 
 class FAQ(DatetimeModel, UUID64Model, WeightedModel, TranslatableModel):
@@ -31,7 +31,7 @@ class FAQ(DatetimeModel, UUID64Model, WeightedModel, TranslatableModel):
 
     # Champs
     active = models.BooleanField(default=True, verbose_name=pgettext_lazy('faq', "Active"))
-    group = models.CharField(max_length=64, blank=True, verbose_name=_("Group"))
+    groups = models.ManyToManyField('help.helpgroup', blank=True, verbose_name=_("Groups"))
     format = models.SmallIntegerField(default=0, choices=FORMATTING, verbose_name=_("Format"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('faq', "Updated"))
     objects = FAQManager()

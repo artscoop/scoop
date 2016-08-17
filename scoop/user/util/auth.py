@@ -73,6 +73,7 @@ def check_permission(user, mode_name, app_label, model_name):
 def can_edit_or_404(request, user):
     """
     Renvoyer si l'utilisateur connecté a des droits en écriture
+
     sur un autre, sinon lever une exception 404
     """
     if not request.user.can_edit(user):

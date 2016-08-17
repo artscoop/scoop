@@ -1,10 +1,6 @@
 # coding: utf-8
-from autoslug.fields import AutoSlugField
 from django.db import models
-from django.template import Template
-from django.template.context import RequestContext
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
-from markdown import markdown
 from translatable.exceptions import MissingTranslation
 from translatable.models import get_translation_model, TranslatableModel
 
@@ -15,7 +11,7 @@ from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.shortcuts import addattr
 
 
-class PageManager(models.Manager):
+class HelpGroupManager(models.Manager):
     """ Manager de l'aide """
 
     # Getter
@@ -24,22 +20,20 @@ class PageManager(models.Manager):
         return self.get(uuid=uuid)
 
 
-class Page(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
+class HelpGroup(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
     """
-    Page d'aide
+    Groupe d'aide
 
-    Les pages d'aide sont au format Markdown, avec la possibilité
-    d'utiliser le rendu HTML comme un template Django.
+    Un groupe d'aide permet d'organiser les éléments d'aide dans des
+    catégories spécifiques.
     """
 
     # Champs
-    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('page', "Active"))
-    groups = models.ManyToManyField('help.helpgroup', blank=True, verbose_name=_("Groups"))
+    active = models.BooleanField(default=True, verbose_name=pgettext_lazy('group', "Active"))
+    name = models.CharField(max_length=32, blank=False, unique=True, verbose_name=_("Slug"))
     slug = models.SlugField(max_length=128, blank=False, verbose_name=_("Slug"))
-    path = models.CharField(max_length=64, blank=True, verbose_name=_("Path"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('page', "Updated"))
-    keywords = models.CharField(max_length=128, blank=True, verbose_name=_("Keywords"))
-    objects = PageManager()
+    objects = HelpGroupManager()
 
     # Getter
     @addattr(short_description=_("Text"))
@@ -58,19 +52,6 @@ class Page(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
         except MissingTranslation:
             return _("(No title)")
 
-    def render_html(self, request=None):
-        """
-        Renvoyer la version HTML du texte de l'aide
-
-        Rend en premier lieu la version HTML du Markdown de la page.
-        Puis rend la version HTML comme un template Django.
-        """
-        html_version = markdown(self.text)
-        template = Template(html_version)
-        context = RequestContext(request)
-        output = template.render(context)
-        return output
-
     # Propriétés
     text = property(get_text)
     title = property(get_title)
@@ -78,16 +59,16 @@ class Page(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation de l'objet """
-        return "help page - {0}".format(self.slug)
+        return "help group - {0}".format(self.slug)
 
     # Métadonnées
     class Meta:
-        verbose_name = _("Help page")
-        verbose_name_plural = _("Help pages")
+        verbose_name = _("Help group")
+        verbose_name_plural = _("Help groups")
         app_label = 'help'
 
 
-class PageTranslation(get_translation_model(Page, "page"), TranslationModel):
+class HelpGroupTranslation(get_translation_model(HelpGroup, "helpgroup"), TranslationModel):
     """ Traduction des pages """
 
     # Champs

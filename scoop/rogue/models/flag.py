@@ -123,7 +123,7 @@ class Flag(DatetimeModel):
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, blank=True, limit_choices_to=limit, verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, blank=True, db_index=True, verbose_name=_("Object Id"))
     content_object = fields.GenericForeignKey('content_type', 'object_id')
-    object_owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_("Owner"))
+    object_owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name=_("Owner"))
     url = models.CharField(max_length=192, blank=True, verbose_name=_("URL"))
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_flags', verbose_name=_("Moderators"))
     objects = FlagManager()

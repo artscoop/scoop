@@ -3,13 +3,12 @@ from functools import wraps
 
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.template import Context, RequestContext, loader
-from django.template.context import RenderContext
+from django.template import RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
 
 from scoop.core.templatetags.repeat import MacroRoot
-from scoop.core.util.stream.request import default_context, default_request
+from scoop.core.util.stream.request import default_request
 
 
 def render_to_code(request, template, context, status_code=200):
