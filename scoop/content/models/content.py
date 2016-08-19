@@ -258,7 +258,7 @@ class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableMo
     """ Contenu textuel """
 
     # Constantes
-    DEFAULT_TEASER_SIZE = 20  # Taille du teaser en mots
+    DEFAULT_TEASER_WORDS = 20  # Taille du teaser en mots
     FORMATS = {0: _("Plain HTML"), 1: _("Markdown"), 2: _("Textile")}
     FORMAT_CHOICES = FORMATS.items()
     PLAIN_HTML, MARKDOWN, TEXTILE = 0, 1, 2
@@ -348,7 +348,7 @@ class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableMo
         return sum([NGram.compare(this[label], that[label]) * weights[label] for label in labels]) / sum(weights.values())
 
     @addattr(short_description=_("Teaser"))
-    def get_teaser(self, words=DEFAULT_TEASER_SIZE):
+    def get_teaser(self, words=DEFAULT_TEASER_WORDS):
         """ Renvoyer le résumé du document (automatique) """
         if len(str(self.body)) > 8 >= len(str(self.teaser)):
             self.teaser = truncatewords(self.body, words)
@@ -525,6 +525,8 @@ class ContentApproval(ApprovalModel(Content)):
 
     Adds an approval 1:1 reverse relation to the Content model
     """
+
+    # Configuration
     approval_fields = ['body', 'published', 'publish']
     approval_default = {'published': False, 'publish': None}
 

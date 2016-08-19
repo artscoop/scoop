@@ -4,6 +4,7 @@ from distutils.core import setup
 
 from setuptools import find_packages
 
+
 setup(
     name='scoop',
     version='0.10.20160611',
@@ -17,7 +18,8 @@ setup(
     requires=['django', 'bleach', 'beautifulsoup4', 'bpython', 'coverage', 'django_autoslug', 'celery', 'django_jsonresponse', 'django_reversion',
               'django_simple_captcha', 'django_translatable', 'dj_cmd', 'dnspython3', 'flower', 'fuzzywuzzy', 'gunicorn', 'html5lib', 'ipy', 'ipython', 'isort',
               'loremipsum', 'lxml', 'markdown', 'micawber', 'mysqlclient', 'ngram', 'nltk', 'numpy', 'paramiko', 'pexpect', 'pillow', 'psycopg2', 'pyproj',
-              'python_levenshtein', 'python_dateutil', 'python_magic', 'pytz', 'rarfile', 'requests', 'simplejson', 'textblob', 'unicodecsv', 'unidecode'],
+              'python_levenshtein', 'python_dateutil', 'python_magic', 'pytz', 'rarfile', 'requests', 'simplejson', 'textblob', 'textile', 'unicodecsv',
+              'unidecode'],
     dependency_links=['https://bitbucket.org/ubernostrum/webcolors/get/default.zip',
                       'https://github.com/giampaolo/psutil/archive/master.zip',
                       'https://github.com/coleifer/micawber/archive/master.zip',
