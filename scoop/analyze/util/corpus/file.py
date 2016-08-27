@@ -27,7 +27,7 @@ class FileCorpus(BaseCorpus):
     # Attributs
     corpus = None
     corpus_shadow = None
-    classifier = None
+    classifier = None  # classifieur NLTK, initialisé dans get_corpus
 
     # Getter
     def get_corpus(self):
@@ -77,6 +77,7 @@ class FileCorpus(BaseCorpus):
             return False
 
     def train(self, document, category):
+        """ Classer un document dans une catégorie """
         self.get_corpus()
         document = format_base(document)
         signature = hash(document)
@@ -84,7 +85,12 @@ class FileCorpus(BaseCorpus):
         self.corpus.updated = time.time()
 
     def retrain(self, signature, category):
-        """ Changer la catégorie d'un document déjà classifié """
+        """
+        Changer la catégorie d'un document déjà classifié
+
+        :param signature: hash du document à reclassifier
+        :param category: nouvelle catégorie du document
+        """
         self.get_corpus()
         self.corpus[signature] = (self.corpus[signature][0], category)
         self.corpus.updated = time.time()

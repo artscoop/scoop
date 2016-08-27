@@ -24,46 +24,50 @@ class ModelFormUtil:
     """
     Mise à jour d'un objet de type Model avec certains champs d'un ModelForm
     Monkey-patching done in scoop.core.__init__
+
     - instance : objet dérivé de models.Model
     - form : objet de type forms.ModelForm dont la classe ciblée est celle de instance
     - fieldnames : liste de noms de champs à mettre à jour dans le modèle
     """
 
     @staticmethod
-    def is_field_valid(form, fieldnames):
+    def is_field_valid(form_, fieldnames):
         """ Renvoyer si un champ d'un formulaire est valide """
         for fieldname in fieldnames:
             # Récupérer le champ
-            field = form.fields[fieldname]
+            field = form_.fields[fieldname]
             # Récupérer les données du champ et valider
-            data = field.widget.value_from_datadict(form.data, form.files, form.add_prefix(fieldname))
+            data = field.widget.value_from_datadict(form_.data, form_.files, form_.add_prefix(fieldname))
             try:
-                if not hasattr(form, 'cleaned_data'):
-                    form.cleaned_data = {}
-                form.cleaned_data[fieldname] = field.clean(data)
-                if hasattr(form, 'clean_%s' % fieldname):
-                    value = getattr(form, 'clean_%s' % fieldname)()
-                    form.cleaned_data[fieldname] = value
-            except Exception:
+                if not hasattr(form_, 'cleaned_data'):
+                    form_.cleaned_data = {}
+                form_.cleaned_data[fieldname] = field.clean(data)
+                if hasattr(form_, 'clean_%s' % fieldname):
+                    value = getattr(form_, 'clean_%s' % fieldname)()
+                    form_.cleaned_data[fieldname] = value
+            except (KeyError, AttributeError):
                 return False
         return True
 
-    def update_from_form(self, form, fieldnames=None, save=True, **kwargs):
+    def update_from_form(self, form_, fieldnames=None, save=True, **kwargs):
         """
         Mettre à jour les champs de l'objet selon l'état d'un formulaire
         - La validation ne se fait que sur les champs sélectionnés et valides
+
+        :param form_: formulaire
         :param fieldnames: itérable contenant le nom des champs à mettre à jour
             Si None, met à jour l'instance via form.save. None par défaut.
+        :param save: L'objet doit-il être suavegardé
         :type fieldnames: list or tuple or set or NoneType
         """
         if isinstance(fieldnames, (list, tuple, set)):
             for fieldname in fieldnames:
-                if ModelFormUtil.is_field_valid(form, [fieldname]):
-                    setattr(self, fieldname, form.cleaned_data[fieldname])
+                if ModelFormUtil.is_field_valid(form_, [fieldname]):
+                    setattr(self, fieldname, form_.cleaned_data[fieldname])
         elif fieldnames is None:
-            self = form.save(commit=False)
+            self = form_.save(commit=False)
         else:
-            raise AttributeError("You must pass a field names iterable or None.")
+            raise AttributeError("You must pass an iterable for fieldnames or None.")
         # Terminer en sauvegardant l'objet si demandé
         if save:
             self.update(save=True, **kwargs)
@@ -125,6 +129,7 @@ def has_post(request, action=None):
     """
     Renvoyer si l'objet HttpRequest contient des données POST
 
+    :param request: requête
     :param action: nom de la donnée POST à chercher, ou None s'il faut uniquement
         vérifier que la méthode actuelle est POST
     :rtype: bool
@@ -167,6 +172,7 @@ def form(request, config, initial=None):
     Ex.:
     >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z}), initial=None)
     >> a = form(request, {A: {'instance': x}})
+    :param request: requête HTTP
     :param config: Configuration des formulaires
     :type config: Form or list[Form] or collections.OrderedDict or tuple[tuple] or dict(len=1) or list[list]
     :param initial: Valeurs des champs par défaut en l'absence de POST
@@ -199,7 +205,7 @@ def are_valid(forms):
     """ Renvoyer si tous les formulaires passés sont valides """
     if not isinstance(forms, list):
         forms = [forms]
-    valid = all([form.is_valid() for form in forms])
+    valid = all([item.is_valid() for item in forms])
     return valid
 
 
@@ -207,20 +213,24 @@ def any_valid(forms):
     """ Renvoyer si un seul des formulaires passés est valide """
     if not isinstance(forms, list):
         forms = [forms]
-    valid = any([form.is_valid() for form in forms])
+    valid = any([item.is_valid() for item in forms])
     return valid
 
 
-def has_valid_changes(form):
-    """ Renvoyer si un formulaire est valide a été modifié """
-    return form.is_valid() and form.has_changed()
+def has_valid_changes(form_):
+    """
+    Renvoyer si un formulaire est valide a été modifié
+
+    :param form_: formulaire
+    """
+    return form_.is_valid() and form_.has_changed()
 
 
 def message_on_invalid(forms, request, message, level=None, extra_tags=None):
     """ Afficher un message à l'utilisateur si un formulaire n'est pas valide """
     forms = make_iterable(forms)
-    for form in forms:
-        if not form.is_valid():
+    for item in forms:
+        if not item.is_valid():
             messages.add_message(request, level or messages.SUCCESS, message.format(errors=error_labels(forms)), extra_tags=extra_tags)
 
 
@@ -228,9 +238,9 @@ def error_labels(forms):
     """ Renvoyer la liste des étiquettes de champs pour les erreurs d'un formulaire """
     forms = make_iterable(forms)
     labels = []
-    for form in forms:
-        if form.errors:
-            labels = labels + [field.label for field in form if field.errors]
+    for item in forms:
+        if item.errors:
+            labels = labels + [field.label for field in item if field.errors]
     if labels:
         return humanize_join(labels, 10, "field;fields")
     else:

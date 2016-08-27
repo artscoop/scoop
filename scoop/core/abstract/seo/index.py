@@ -25,7 +25,11 @@ class SEIndexModel(models.Model):
     # Getter
     @addattr(boolean=True, short_description=_("Index/Follow"))
     def _update_se_indexed(self):
-        """ Mettre à jour l'état indexable automatiquement """
+        """
+        Mettre à jour l'état indexable automatiquement
+
+        :returns: l'indexabilité du contenu
+        """
         result = check_indexable.send(self._meta.model, instance=self)
         valid = [item for item in result if item[1] is True]
         self.se_indexed = any(valid)

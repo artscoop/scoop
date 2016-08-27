@@ -19,7 +19,7 @@ class FAQTranslationInlineAdmin(admin.TabularInline):
 class FAQAdmin(admin.ModelAdmin):
     """ Administration des groupes d'options """
     list_select_related = True
-    list_display = ['pk', 'uuid', 'question', 'group', 'active']
+    list_display = ['pk', 'uuid', 'question', 'active']
     list_display_links = []
     list_filter = ['active']
     list_editable = ['active']

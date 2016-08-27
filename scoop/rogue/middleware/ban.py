@@ -36,7 +36,7 @@ class BanMiddleware(object):
     """ Ajouter une information de ban au cookie d'un banni """
 
     # Liste des répertoires à ne pas compter dans le logging
-    RESOURCE_WHITELIST = {'media/', 'static/', '/ajax', '/admin/', '__debug'}
+    RESOURCE_WHITELIST = {'media/', 'static/', '/ajax', '/admin/', '/manage/', '__debug'}
     BAN_COOKIE_NAME = 'client_bmid'  # ban marker id
 
     def process_request(self, request):

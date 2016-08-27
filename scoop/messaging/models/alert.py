@@ -75,8 +75,8 @@ class AlertQuerySet(SingleDeleteQuerySet):
 
     def alert_related(self, user, mailtype_name, data, level=0, as_mail=True, **kwargs):
         """ Envoyer une alerte aux utilisateurs ayant eu contact avec celui-ci """
-        from scoop.messaging.models.thread import Thread
-        recipients = Thread.objects.related_users(user, ack=True)
+        from scoop.messaging.models import Recipient
+        recipients = Recipient.objects.related_users(user, ack=True)
         self.alert(recipients, mailtype_name, data, level, as_mail, **kwargs)
 
 

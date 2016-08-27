@@ -159,6 +159,16 @@ class Record(models.Model):
         """ Renvoyer la vignette de légende couleur de l'action """
         return self.type.get_color_legend()
 
+    @addattr(short_description=_("Verbosity"))
+    def get_verbosity(self):
+        """
+        Renvoyer le niveau de verbosité du message
+
+        Renvoie le niveau de verbosité à partir duquel l'enregistrement
+        apparaît dans une liste.
+        """
+        return self.type.verbosity
+
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
@@ -187,14 +197,16 @@ class Record(models.Model):
 class RecordType(models.Model):
     """
     Type d'action enregistrable
-    codename: nom de code de la forme app.a.b.c.. etc
-    sentence: phrase formatable de l'action. Utilise les placeholders {actor}, {target}, {container} et {when}
+
+    :attr codename: nom de code de la forme app.a.b.c.. etc
+    :attr sentence: phrase formatable de l'action. Utilise les placeholders {actor}, {target}, {container} et {when}
     """
 
     # Champs
     codename = models.CharField(max_length=32, verbose_name=_("Code name"))
     sentence = models.CharField(max_length=48, verbose_name=_("Sentence"))  # actor, target, container, when
     verb = models.CharField(max_length=24, verbose_name=_("Verb"))
+    verbosity = models.SmallIntegerField(default=0, verbose_name=_("Level of visibility"))
     objects = RecordTypeManager()
 
     # Getter
@@ -203,8 +215,8 @@ class RecordType(models.Model):
         """ Renvoyer la vignette de code couleur du type d'action """
         rgb = hash_rgb(self.codename)
         colorname = get_color_name(rgb)
-        output = """<span class="pill" style="background-color: rgb({r},{g},{b});" title="{name}"></span>""".format(r=rgb[0], g=rgb[1], b=rgb[2],
-                                                                                                                    name=colorname)
+        output = """<span class="pill" style="background-color: rgb({r},{g},{b});" title="{name}"></span>"""
+        output = output.format(r=rgb[0], g=rgb[1], b=rgb[2], name=colorname)
         return mark_safe(output)
 
     @addattr(boolean=True, short_description=_("Valid"))

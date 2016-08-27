@@ -8,10 +8,12 @@ from django.utils.translation import pgettext_lazy
 register = template.Library()
 
 BASIC_CHANGES = {
-    'fr': {"à le": "au", "de le": "du", "à les": "aux", "de les": "des"},
+    'fr': {"à le ": "au", "de le ": "du", "à les ": "aux", "de les ": "des"},
 }
 COUNTRY_IN = {
-    'fr': {'ma': "au", "mu": "à", "re": "à la", "mg": "à"}
+    'fr': {'ma': "au", "mu": "à", "re": "à la", "mg": "à", "ax": "dans les", "ad": "à", "ag": "à", "bs": "aux", "bh": "au", "bd": "au", "bz": "à",
+           "bj": "au", "bm": "aux", "bt": "au", "bw": "au", "br": "au", "bf": "au", "bi": "au", "kh": "au", "cm": "au", "ca": "au", "us": "aux", "mc": "à",
+           "lu": "au", "tg": "au"}
 }
 
 
@@ -40,6 +42,8 @@ register.tag(Language)
 def in_country(context, country):
     """
     Renvoyer une chaîne de type « dans Pays »
+
+    :param context:
     :type country: scoop.location.models.Country
     """
     language = context.get('LANGUAGE_CODE', 'en')

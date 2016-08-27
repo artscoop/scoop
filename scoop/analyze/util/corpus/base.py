@@ -3,7 +3,8 @@ from abc import ABCMeta, abstractmethod
 
 
 class BaseCorpus:
-    """ Loader de base de corpus d'entraînement """
+    """ Loader de base de corpus d'entraînement. Non utilisable en l'état """
+
     __metaclass__ = ABCMeta
 
     # Atttributs

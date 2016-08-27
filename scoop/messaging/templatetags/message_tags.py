@@ -60,7 +60,7 @@ def get_interlocutors(user, thread):
     """ Récupérer les interlocuteurs de l'utilisateur, dans un thread ou dans tous les threads """
     if thread is not None and not user.is_anonymous():
         return thread.get_users(exclude=user)
-    return Thread.objects.related_users(user)
+    return Recipient.objects.related_users(user)
 
 
 @register.filter(name="recipients")

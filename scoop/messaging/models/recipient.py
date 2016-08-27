@@ -57,6 +57,17 @@ class RecipientManager(SingleDeleteManager):
         """ Renvoyer si un utilisateur n'a pas lu un fil """
         return self.filter(thread=thread, user=user, unread=True).exists()
 
+    def related_recipients(self, user, ack=False):
+        """ Renvoyer les objets destinataires participant aux mêmes sujets que l'utilisateur """
+        # Uniquement les personnes qui ont connaissance de l'existence du fil
+        criteria = {'acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1 fois
+        return self.filter(thread__recipients__user=user, **criteria).exclude(user=user)
+
+    def related_users(self, user, ack=False):
+        """ Renvoyer les utilisateurs participant aux mêmes sujets que l'utilisateur """
+        criteria = {'user_recipients__acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1 fois
+        return get_user_model().objects.filter(user_recipients__thread__recipients__user=user, **criteria).exclude(id=user.id).distinct()
+
     # Setter
     def set_unread_by_message(self, message):
         """ Marquer comme non lu le fil du message pour tous les destinataires du message """

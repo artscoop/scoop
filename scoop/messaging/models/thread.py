@@ -76,18 +76,6 @@ class ThreadQuerySet(SingleDeleteQuerySet):
         """ Renvoyer le nombre de sujets actifs pour l'utilisateur """
         return self.user_active_threads(user).count()
 
-    def related_recipients(self, user, ack=False):
-        """ Renvoyer les objets destinataires participant aux mêmes sujets que l'utilisateur """
-        from scoop.messaging.models.recipient import Recipient
-        # Uniquement les personnes qui ont connaissance de l'existence du fil
-        criteria = {'acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1 fois
-        return Recipient.objects.filter(thread__recipients__user=user, **criteria).exclude(user=user)
-
-    def related_users(self, user, ack=False):
-        """ Renvoyer les utilisateurs participant aux mêmes sujets que l'utilisateur """
-        criteria = {'user_recipients__acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1 fois
-        return get_user_model().objects.filter(user_recipients__thread__recipients__user=user, **criteria).exclude(id=user.id).distinct()
-
     def get_replied_thread_count(self, user):
         # Renvoyer le nombre de fils dans lesquels l'utilisateur a répondu au moins une fois
         return self.filter(recipients__user=user, messages__author=user).exclude(author=user).distinct().count()
