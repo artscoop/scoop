@@ -10,8 +10,17 @@ from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
-from scoop.core.util.data.htmlutil import linkify
 from unidecode import unidecode
+
+from scoop.core.util.data.htmlutil import linkify
+
+
+def text_to_list(value):
+    """ Renvoyer une liste de chaînes depuis un texte. """
+    with StringIO(value) as reader:
+        lines = reader.readlines()
+        result = [item.strip() for item in lines]
+        return result
 
 
 def text_to_list_of_lists(value, evaluate=False):
@@ -60,10 +69,13 @@ def one_line(value):
 
 def replace_dict(instance, dictionary):
     """
-    Renvoyer un texte dont les clés du dictionnaire sont remplacés par les valeurs
+    Renvoyer un texte dont les clés du dictionnaire sont remplacées par les valeurs
 
-    ex. "Les chaussettes de la raine", {'Les': 'Le', 'chaussettes': 'saucisson'}
+    ex. "Les chaussettes de la reine", {'Les': 'Le', 'chaussettes': 'saucisson'}
     renvoie "Le saucisson de la reine"
+
+    :param instance: objet de type chaîne possédant la méthode replace
+    :param dictionary: dictionnaire, dont les clés sont remplacées par les valeurs correspondantes
     """
     result = instance
     for base in dictionary:
@@ -72,23 +84,32 @@ def replace_dict(instance, dictionary):
 
 
 def count_words(text, html=False):
-    """ Renvoyer le nombre de mots dans un texte """
+    """
+    Renvoyer le nombre de mots dans un texte
+
+    :param text: texte à analyser
+    :param html: indique si le texte est en HTML. Exclut le markup HTML du compte si True
+    :type html: bool
+    """
     text = strip_tags(text) if html else text
     count = len(re.findall(r'\w+', text))
     return count
 
 
-def clean_html(text):
-    """ Renvoyer un texte HTML filtré à certains tags et attributs """
-    allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'br', 'strong', 'em', 'strike', 'b', 'small', 'code', 'pre', 'blockquote', 'hr', 'dt', 'dd',
-                    'ul', 'li', 'ol', 'span',
-                    'center', 'site', 'address', '', 'caption']
-    allowed_attr = ['href', 'src', 'class', 'id', 'title', 'alt', 'target', 'rel', 'align', 'style']
-    allowed_styles = ['text-align']
-    try:
-        return bleach.clean(text, allowed_tags, allowed_attr, allowed_styles, strip=True)
-    except:
-        return text
+def clean_html(text, mode=None):
+    """
+    Renvoyer un texte HTML avec uniquement des attributs safe
+
+    :param text: texte HTML à filtrer
+    :param mode: niveau/mode de filtrage
+    """
+    mode = mode or 'default'
+    tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'br', 'strong', 'em', 'strike', 'b', 'small', 'code', 'pre', 'blockquote', 'hr', 'dt', 'dd',
+            'ul', 'li', 'ol', 'span', 'center', 'site', 'address', 'caption']
+    attrs = {'a': ['href', 'title', 'class', 'id']}
+    styles = ['text-align']
+    protocols = ['http', 'https']
+    return bleach.clean(text, tags=tags, attributes=attrs, styles=styles, protocols=protocols, strip=True)
 
 
 def truncate_repeats(value, length=5):

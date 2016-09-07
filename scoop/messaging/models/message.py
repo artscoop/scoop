@@ -99,7 +99,7 @@ class MessageManager(SingleDeleteManager):
         return messages
 
     def user_messages(self, user, **kwargs):
-        """ Renvoyer les messages renvoyés par un utilisateur """
+        """ Renvoyer les messages envoyés par un utilisateur """
         return user.messages_sent.filter(**kwargs)
 
     def get_last_user_message(self, user, ghost=False):

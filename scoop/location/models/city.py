@@ -287,10 +287,10 @@ class City(CoordinatesModel, PicturableModel):
         """ Renvoyer la prévision météo de la ville """
         return get_open_weather(location=self)
 
-    def render_weather_forecast(self):
+    def render_weather_forecast(self, template=None):
         """ Rendre les prévisions météo de la ville """
         forecast = self.get_weather_forecast()
-        output = render_to_string('location/display/forecast.html', {'forecast': forecast, 'city': self}, default_context())
+        output = render_to_string(template or 'location/display/forecast.html', {'forecast': forecast, 'city': self}, default_context())
         return mark_safe(output)
 
     @addattr(allow_tags=True, admin_order_field='country__code2', short_description=_("Icon"))

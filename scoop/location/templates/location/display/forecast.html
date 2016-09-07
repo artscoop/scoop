@@ -1,4 +1,5 @@
-{% load prettytimes_tags location_tags %}<h4>Prévisions météo pour {{ city }}, {{ city|area }}</h4>
+{% load prettytimes_tags location_tags %}
+<h4>Prévisions météo pour {{ city }}, {{ city|area }}</h4>
 {% for period in forecast.list %}
     {% for weather in period.weather %}
         <div class="col-xs-4">

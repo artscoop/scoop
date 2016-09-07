@@ -8,11 +8,6 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import from_now
 
 
-def get_default_expiry(_=None):
-    """ Renvoyer la date d'expiration par défaut """
-    return from_now(days=2, timestamp=False)
-
-
 class SanctionManager(models.Manager):
     """ Manager des sanctions """
 
@@ -45,7 +40,7 @@ class Sanction(DatetimeModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='sanctions', verbose_name=_("User"))
     type = models.SmallIntegerField(default=0, choices=TYPES, db_index=True, verbose_name=_("Type"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
-    expires = models.DateTimeField(default=get_default_expiry, verbose_name=_("Expiry"))
+    expires = models.DateTimeField(default=lambda: from_now(2, timestamp=False), verbose_name=_("Expiry"))
     revoked = models.BooleanField(default=False, verbose_name=pgettext_lazy('sanction', "Revoked"))
     objects = SanctionManager()
 

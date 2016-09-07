@@ -134,11 +134,15 @@ class ThreadQuerySet(SingleDeleteQuerySet):
         return self.common_threads(*users, **kwargs).count()
 
     def get_user_threads_message_count(self, user, **kwargs):
-        """ Renvoyer le nombre de messages envoyés par sujet par un utilisateur """
+        """
+        Renvoyer le nombre de messages envoyés par sujet par un utilisateur
+
+        :rtype: list<dict>|QuerySet<dict>
+        :returns: une liste de dictionnaires avec les informations de base des fils pour l'utilisateur
+        """
         from scoop.messaging.models import Recipient
-        data = Recipient.objects.filter(user=user, **kwargs).values('thread_id', 'thread__updated', 'thread__deleted',
-                                                                    'thread__updater', 'thread__closed', 'counter')
-        return data
+        data = Recipient.objects.filter(user=user, **kwargs)
+        return data.values('thread_id', 'thread__updated', 'thread__deleted', 'thread__updater', 'thread__closed', 'counter')
 
     def get_by_uuid(self, uuid, exception=Http404):
         """ Renvoyer un fil par UUID ou renvoyer une exception """
@@ -150,13 +154,17 @@ class ThreadQuerySet(SingleDeleteQuerySet):
     def by_recipient_count(self, count, modifier=None, **kwargs):
         """
         Renvoyer les fils ayant un nombre de destinataires
-        :param modifier: ex. 'gt', 'lt', 'gte' etc.
+
+        :param count: nombre de destinataires dans les fils discriminés
+        :param modifier: modifieur du la requête (lt|lte|gt|gte)
+        :returns: les fils ayant n destinataires au total (ou moins de n
+        ou plus de n destinataires selon le modifieur)
         """
         criteria = {'population__{}'.format(modifier): count} if modifier else {'population': count}
         kwargs.update(criteria)
         return self.filter(**kwargs)
 
-    def get_inbox(self, user, name=None):  # name: [inbox|unread|replied|trash]
+    def get_inbox(self, user, name=None):  # name: [inbox|unread|new|trash]
         """
         Renvoyer les informations d'une boîte de réception
 
@@ -167,18 +175,19 @@ class ThreadQuerySet(SingleDeleteQuerySet):
             - trash : boîte contenant les fils de discussion supprimés par user
             Si name est `None`, inbox est utilisé par défaut.
             Si un nom inconnu est utilisé, aucun thread n'est renvoyé
+        :param user: utilisateur propriétaire de la boîte de réception
         :type name: str | None
+        :rtype: dict
+        :returns: un dictionnaire avec les clés 'title' et 'threads', contenant respectivement
+            le titre de la boîte de réception et le queryset des fils de discussion de la
+            boîte en question
         """
         name = name or "inbox"
-        groups = {'inbox': self.user_active_threads(user),
-                  'unread': self.unread_threads(user),
-                  'replied': self.threads_not_updated_by(user),
-                  'trash': Thread.objects.closed().user_threads(user)}
-        titles = {'inbox': _("Inbox"),
-                  'unread': _("Unread threads"),
-                  'replied': _("Waiting for your reply"),
-                  'trash': _("Trash")}
-        return {'title': titles.get(name, ""), 'threads': groups.get(name, self.none())}
+        groups = {'inbox': (self.user_active_threads(user), _("Inbox")),
+                  'unread': (self.unread_threads(user), _("Unread threads")),
+                  'new': (self.threads_not_updated_by(user), _("Waiting for your reply")),
+                  'trash': (self.closed().user_threads(user), _("Trash"))}
+        return {'title': groups.get(name, (None, ''))[1], 'threads': groups.get(name, (self.none(), ''))[0]}
 
     def get_inbox_names(self):
         """ Renvoyer les noms des boîtes de réception """

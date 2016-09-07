@@ -159,7 +159,11 @@ class ContentQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
         return self.filter(tags__short_name__in=tags, **kwargs) if issubclass(ttype, str) else self.filter(terms__in=tags, **kwargs)
 
     def get_months(self, *args, **kwargs):
-        """ Renvoyer la liste des mois de publication des articles """
+        """
+        Renvoyer la liste des mois de publication des articles
+
+        :rtype: QuerySet<datetime>
+        """
         return self.visible(**kwargs).datetimes('created', 'month', order='DESC')
 
     def get_days(self, *args, **kwargs):

@@ -91,7 +91,7 @@ class RecipientManager(SingleDeleteManager):
 
     def set_all_read_for(self, user):
         """ Marquer tous les sujets comme lus pour un utilisateur """
-        self.filter(user=user).update(unread=False, acknowledged=True)
+        self.filter(user=user, unread=True).update(unread=False, acknowledged=True)
 
     def set_read(self, thread, user=None):
         """ Marquer comme lu un sujet par un utilisateur """

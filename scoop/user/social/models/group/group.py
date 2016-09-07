@@ -34,7 +34,7 @@ class GroupQuerySetMixin(object):
         return self.filter(moderators=user, **kwargs).distinct()
 
     def by_membership(self, membership, **kwargs):
-        """ Renvoyer les groupes modérés par un utilisateur """
+        """ Renvoyer les groupes avec un mode d'enrôlement """
         return self.filter(membership=membership, **kwargs).distinct()
 
     def by_request(self, request):
@@ -46,6 +46,10 @@ class GroupQuerySetMixin(object):
             return self.all()
         elif user.is_anonymous():
             return self.filter(discreet=False, private=False)
+
+    def by_member(self, user):
+        """ Renvoyer les groupes auxquels un utilisateur est inscrit """
+        return self.filter(users=user)
 
 
 class GroupQuerySet(models.QuerySet, GroupQuerySetMixin, SingleDeleteQuerySetMixin):
