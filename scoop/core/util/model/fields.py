@@ -105,17 +105,23 @@ class ImageFieldFile(FieldFile):
             from PIL import Image
             # Ouvrir l'image
             image = Image.open(file_or_path)
-            return image.size
+            size = image.size
+            image.close()
+            return size
         except IOError:
             return [None, None]
 
     def _get_image_dimensions(self):
         """ Renvoyer les dimensions de cette image """
-        if not hasattr(self, '_dimensions_cache'):
-            close = self.closed
-            self.open()
-            self._dimensions_cache = ImageFieldFile.get_image_dimensions(self, close=close)
-        return self._dimensions_cache
+        try:
+            if not hasattr(self, '_dimensions_cache'):
+                close = self.closed
+                self.open()
+                self._dimensions_cache = ImageFieldFile.get_image_dimensions(self, close=close)
+                self.close()
+            return self._dimensions_cache
+        except FileNotFoundError:
+            return [None, None]
 
 
 class WebImageField(ImageField):
@@ -155,6 +161,7 @@ class WebImageField(ImageField):
                 if sorted(image.size) < self.min_dimensions:
                     raise ValidationError(
                         _("Image not accepted. Minimum accepted size is {mw}x{mh}.").format(mw=self.min_dimensions[0], mh=self.min_dimensions[1]))
+                image.close()
             except IOError:  # PIL cannot load and handle the image
                 raise ValidationError(_("This image cannot be handled. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
             except ImportError:  # Maybe an error with PIL only on PyPy

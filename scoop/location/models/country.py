@@ -10,6 +10,7 @@ from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.location.coordinates import CoordinatesModel
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.country import get_country_icon_html
 from unidecode import unidecode
@@ -44,13 +45,19 @@ class CountryQuerySet(models.QuerySet):
         return self.filter(continent__iexact=code)
 
     def is_safe(self, code2):
-        """ Renvoyer si un pays portant un code est considéré sain """
-        return code2 == "" or code2.lower() in settings.LOCATION_SAFE_COUNTRIES or self.filter(safe=True, code2__iexact=code2).exists()
+        """
+        Renvoyer si un pays portant un code est considéré sain
 
-    def are_safe(self, codes):
-        """ Renvoyer si plusieurs pays sont sains """
-        codes = {code.upper() for code in codes}
-        return not codes or not self.filter(safe=False, code2__in=codes).exists()
+        :param code2: code pays ou liste de codes pays
+        :type code2: str | list | set | tuple
+        """
+        codes = make_iterable(code2, set)
+        codes = (code.lower().strip() for code in codes)
+        # Si un des pays est non safe
+        if codes and codes != {""}:
+            if self.filter(safe=False, code2__in=codes).exists():
+                return False
+        return True
 
 
 class Country(CoordinatesModel, PicturableModel, DataModel):
@@ -63,8 +70,8 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
 
     # Champs
     name = models.CharField(max_length=100, blank=False, verbose_name=_("Name"))
-    code2 = models.CharField(max_length=2, unique=True, db_index=True, verbose_name=_("ISO Code"))
-    code3 = models.CharField(max_length=3, unique=True, db_index=True, verbose_name=_("ISO Code 3"))
+    code2 = models.CharField(max_length=2, unique=True, verbose_name=_("ISO Code"))
+    code3 = models.CharField(max_length=3, unique=True, verbose_name=_("ISO Code 3"))
     phone = models.CharField(max_length=8, default="", blank=True, verbose_name=_("Phone prefix"))
     continent = models.CharField(max_length=2, choices=CONTINENTS, db_index=True, verbose_name=_("Continent"))
     population = models.IntegerField(default=0, verbose_name=_("Population"))
@@ -74,7 +81,7 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
     regional_level = models.SmallIntegerField(default=1, verbose_name=_("Regional level"))
     subregional_level = models.SmallIntegerField(default=2, verbose_name=_("Sub-regional level"))
     public = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('country', "Public"))  # accessible aux membres ?
-    safe = models.BooleanField(default=False, verbose_name=pgettext_lazy('country', "Safe"))  # considéré par le site comme un pays autorisé ?
+    safe = models.NullBooleanField(default=False, verbose_name=pgettext_lazy('country', "Safe"))  # considéré par le site comme un pays autorisé ?
     updated = models.DateTimeField(default=timezone.now, verbose_name=pgettext_lazy('country', "Last update"))  # utilisé pour les différentiels de mises à jour
     objects = CountryQuerySet.as_manager()
 
@@ -111,9 +118,9 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
 
     @addattr(admin_order_field='area', short_description=pgettext_lazy('country', "Area"))
     def get_area(self, unit=None):
-        """ Renvoyer la superficie du pays, en m² ou en mi² """
-        conversion = {None: 1.0, 'mi': 0.386102159}
-        unit_name = {None: 'km²', 'mi': 'mi²'}
+        """ Renvoyer la superficie du pays, en km² ou en mi² """
+        conversion = {None: 1.0, 'mi': 0.386102159, 'ha': 10, 'm': 1e6}
+        unit_name = {None: 'km²', 'mi': 'mi²', 'ha': 'ha', 'm': 'm²'}
         return "{area:.0f} {unit}".format(area=self.area * conversion.get(unit, 1.0), unit=unit_name.get(unit, 'km²'))
 
     def get_timezones(self):

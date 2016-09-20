@@ -151,7 +151,7 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     def autocrop_extra(self, request, queryset):
         """ Découper automatiquement l'image (avancé) """
         for picture in queryset:
-            picture.autocrop_feature_detection()
+            picture.autocrop_advanced()
         self.message_user(request, _("The selected pictures have been automatically cropped."))
 
     @addattr(short_description=_("Rotate 90 degrees clockwise"))

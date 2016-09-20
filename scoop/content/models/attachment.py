@@ -59,9 +59,10 @@ class AttachmentManager(SingleDeleteManager):
         filename = os.path.basename(path)
         attachment = self.create()
         try:
-            attachment.image.save(filename, File(open(path, 'rb')))
-            attachment.title = filename
-            attachment.save()
+            with open(path, 'rb') as descriptor:
+                attachment.image.save(filename, File(descriptor))
+                attachment.title = filename
+                attachment.save()
         except IOError:
             pass
 

@@ -45,6 +45,8 @@ class MessageManager(SingleDeleteManager):
         :param request: objet HttpRequest, utilisé notamment pour consigner l'IP utilisée
         :param strip_tags: retirer tous les tags HTML
         :param as_mail: envoyer un mail en plus du message
+        :returns: le nouveau message, ou lève une exception PermissionDenied
+        :rtype: Message | PermissionDenied
         """
         from scoop.messaging.models import Recipient
         from scoop.user.access.models import IP
@@ -57,7 +59,7 @@ class MessageManager(SingleDeleteManager):
         # Ne rien faire si le traitement l'interdit
         if any([result[1] is not True for result in results]):
             messages = [str(message) for message in reduce(lambda x, y: x + y, [result[1]['messages'] for result in results if result[1] is not True])]
-            raise PermissionDenied(", ".join(messages))
+            raise PermissionDenied(*messages)  # Le message est un tableau
         # Formater le corps du message
         body = format_message(body, limit=MessageManager.MESSAGE_SIZE_LIMIT, strip_tags=strip_tags and not request.user.is_staff)
         # Ajouter le message + les indicateurs de non-lecture

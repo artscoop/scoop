@@ -50,7 +50,7 @@ class PictureTest(TestCase):
     def test_exif_rotation(self):
         """ Tester le fonctionnement de l'autorotation EXIF """
         picture = Picture.objects.create_from_file(join(path, 'images', 'rotated.jpg'), author=self.user, title='rotated picture')
-        self.assertEqual(picture.get_dimension(), (235, 500))
+        self.assertEqual(picture.get_dimension(), (235, 500))  # 235x500 est la bonne dimension
         picture.rotate(90)
         self.assertEqual(picture.get_dimension(), (500, 235))
 
@@ -83,7 +83,7 @@ class PictureTest(TestCase):
         self.assertEqual(picture1.get_dimension(), (545, 310), "the picture should be 545x310 by default")
         # Tester les dimensions de l'image rognée autour de la zone importante
         picture2 = picture1.clone()
-        picture2.autocrop_feature_detection()
+        picture2.autocrop_advanced()
         self.assertLess(picture2.height, 200, "the picture should have been cropped to less than 200 pixels high")
         self.assertGreater(picture2.height, 160, "the picture viable content is more than 160 pixels high")
         # Tester les dimensions de l'image rognée par couleur de bordure

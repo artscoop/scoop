@@ -54,9 +54,12 @@ class ProfilerMiddleware(object):
 class PageStatsMiddleware(object):
     """ Middleware de statistiques de performance de la page """
 
+    # Constantes
+    REGEXP = r'(?P<cmt><!--\s*STATS:(?P<fmt>.*?)\s*-->)'
+
     def process_request(self, request):
         """ Traiter la requête """
-        connection.use_debug_cursor = True
+        connection.use_debug_cursor = True  # Activer le DEBUG de la connexion
         self.start = time()
         return None
 
@@ -70,7 +73,7 @@ class PageStatsMiddleware(object):
         stats = {'elapsed': self.elapsed, 'py_time': self.py_time, 'db_time': self.db_time, 'queries': self.queries}
         if response.content:
             output = response.content
-            regexp = re.compile(r'(?P<cmt><!--\s*STATS:(?P<fmt>.*?)-->)')
+            regexp = re.compile(PageStatsMiddleware.REGEXP)
             match = regexp.search(output)
             if match:
                 output = output[:match.start('cmt')] + match.group('fmt').format(**stats) + output[match.end('cmt'):]

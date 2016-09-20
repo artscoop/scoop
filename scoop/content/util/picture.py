@@ -43,8 +43,9 @@ def download(instance, path, screenshot=True):
         if path == instance.description:
             instance.description = ""
         # Sauver l'image dans le nouveau fichier
-        instance.image.save(filename, File(open(outfile, 'rb')))
-        super(Picture, instance).save()
+        with open(outfile, 'rb') as descriptor:
+            instance.image.save(filename, File(descriptor))
+            super(Picture, instance).save()
     except (KeyError, Exception):
         try:
             img_temp = NamedTemporaryFile(suffix='.jpg', prefix='screen-', delete=False)

@@ -118,14 +118,17 @@ class RequestMixin(object):
         """
         Renvoyer une liste d'ID cochés et décochés depuis des données POST
 
+        La méthode fonctionne si le formulaire contient pour chaque entrée :
+        - un champ caché (cela permet de recenser aussi bien les éléments cochés que non)
+        - un champ checkbox (seuls les éléments cochés sont passés via POST)
         :param full: attribut POST contenant la liste des champs hidden
         :param selected: attribut POST contenant la liste des cases cochées
         :type self: django.http.HttpRequest |
         :type full: str | MultiValueDict
         :type selected: str | MultiValueDict
         """
-        full_set = set([int(i) for i in self.POST.getlist(full)])
-        selected_set = set([int(i) for i in self.POST.getlist(selected)])
+        full_set = set([i for i in self.POST.getlist(full)])
+        selected_set = set([i for i in self.POST.getlist(selected)])
         unselected_set = full_set - selected_set
         return {'selected': selected_set, 'unselected': unselected_set}
 
@@ -159,7 +162,6 @@ class RequestMixin(object):
             # Depuis Django 1.8, user est un LazyObject qui ne peut être picklé en l'état.
             self.user = self.user._wrapped if hasattr(self.user, '_wrapped') else self.user
         meta = {k: self.META[k] for k in RequestMixin.PICKLABLE_META if k in self.META and isinstance(self.META[k], str)}
-
         return (HttpRequest, (), {'META': meta, 'POST': self.POST, 'GET': self.GET, 'user': getattr(self, 'user', None),
                                   'path': self.path, 'scheme': self.scheme, 'path_info': self.path_info,
                                   'method': self.method, 'encoding': self.encoding

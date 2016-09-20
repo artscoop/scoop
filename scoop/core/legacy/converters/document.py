@@ -53,10 +53,12 @@ class DocumentExporter(object):
         """
         Renvoyer une représentation dictionnaire d'une GenericForeignKey
 
-        :param obj: instance dont on retrouve les infos de GenericForeignKey
+        :param obj: instance de modèle contenant une GenericForeignKey
         :param representation: chaîne représentant l'objet ciblé par *obj*. None pour utiliser la représentation par défaut.
-        :param ct: nom du champ ciblant un ContentType
-        :param oi: nom du champ contenant l'ID de l'objet cible
+        :param ct: nom du champ ForeignKey vers ContentType
+        :param oi: nom du champ contenant la clé primaire de l'objet cible
+        :type ct: str
+        :type oi: str
         """
         ct = ct or 'content_type_id'
         oi = oi or 'object_id'

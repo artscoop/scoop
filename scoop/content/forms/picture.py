@@ -140,6 +140,9 @@ class ZipUploadForm(forms.Form):
                         picture = Picture(author=self.request.user)
                         picture.image.save(tfile.name, File(tfile))
                         picture.save()
+                    item.close()
+            archive.close()
+            datafile.close()
             return self.cleaned_data
         else:
             raise forms.ValidationError(_("File must be a zip or rar file"))

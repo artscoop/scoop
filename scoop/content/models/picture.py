@@ -472,9 +472,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             path = parts.path
             filename = os.path.basename(path)
             try:
-                self.image.save(filename, File(open(path, 'rb')))
-                self.title = filename
-                self.save()
+                with open(path, 'rb') as descriptor:
+                    self.image.save(filename, File(descriptor))
+                    self.title = filename
+                    self.save()
             except Exception as e:
                 traceback.print_exc(e)
                 pass
@@ -505,7 +506,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         if self.exists():
             width, height = self.width, self.height
             try:
-                self.width, self.height = Image.open(self.image.path).size
+                image = Image.open(self.image.path)
+                self.width, self.height = image.size
+                image.close()
             except IOError:
                 self.width, self.height = None, None
             if (width, height) != (self.width, self.height):
@@ -532,8 +535,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 if new_name is not None:
                     new_path = os.path.join(os.path.dirname(path), new_name)
                     os.rename(path, new_path)
-                    self.image.save(new_name, File(open(new_path)))
-                    super(Picture, self).save()
+                    with open(new_path) as descriptor:
+                        self.image.save(new_name, File(descriptor))
+                        super(Picture, self).save()
                     logger.info("Picture extension set: {}".format(new_name))
                     # Si après traitement, ce n'est toujours pas une image, supprimer
                     if self.get_extension() not in extensions:
@@ -575,6 +579,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                      'bottom': current.size[1] - overlay.size[1] + offset[1]}
         current.paste(overlay, (xposition.get(hpos, 0), yposition.get(vpos, 0)))
         current.save(self.image.path)
+        current.close()
+        overlay.close()
 
     # Actions
     def clean_thumbnail(self):
@@ -603,7 +609,8 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             new_basename = os.path.basename(self.image.path).replace(extension, '.{}'.format(ext), 1)
             new_path = "{}.{}".format(path_basename, ext)
             subprocess.call(["convert", "{}[0]".format(self.image.path), new_path])
-            self.image.save(new_basename, File(open(new_path, 'rb')))
+            with open(new_path, 'rb') as descriptor:
+                self.image.save(new_basename, File(descriptor))
             os.unlink(original_path)
 
     def optimize(self):
@@ -649,7 +656,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             subprocess.call(["convert", self.image.path, "-fuzz", "5%", "-trim", "+repage", self.image.path])
             self.update_size()
 
-    def autocrop_feature_detection(self):
+    def autocrop_advanced(self):
         """ Rogner automatiquement selon les zones d'intérêt """
         if self.exists():
             image = cv2.imread(self.image.path)
@@ -668,7 +675,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
 
         Inscrit dans les données 'data' de l'image les informations
         sur les coordonnées des types d'objet cherchés, via OpenCV
+        Typiquement, on peut détecter des visages avec cette méthode.
         :param name: Nom de la feature à retrouver. Si aucun fichier de cascade Haar n'existe, ne cherche rien.
+        :param cascades: Liste de noms de cascades. ex. 'face_front', 'face_profile'
         """
         if 'features' not in self.data:
             self.data['features'] = dict()
@@ -682,12 +691,21 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             self.data['features'][name] += rectangles
         self.save(update_fields=['data'])
 
-    def quantize(self, save=True):
-        """ Convertir l'image en 8 bits avec tramage """
+    def quantize(self, depth=8, save=True):
+        """
+        Convertir l'image en 8 bits avec tramage
+
+        :param depth: nombre de bits de l'image de sortie. Au-delà de 8 bits, ce sont des multiples de 3 bits qui sont utilisés
+        :param save: sauvegarder l'image avant de la modifier
+        """
         if self.exists():
             if save:
                 self.clone(self.description)
-            subprocess.call(["convert", self.image.path, "-dither", "FloydSteinberg", "-colors", "256", self.image.path])
+            if depth <= 8:
+                subprocess.call(["convert", self.image.path, "-dither", "FloydSteinberg", "-colors", "{0}".format(2**depth), self.image.path])
+            else:
+                subprocess.call(["convert", self.image.path, "-depth", "{0}".format(depth//3), "-ordered-dither", "threshold,{0},{0},{0}".format(2**(depth//3)),
+                                 self.image.path])
 
     def contrast(self, save=True):
         """ Augmenter le contraste dans l'espace de couleur Lab """

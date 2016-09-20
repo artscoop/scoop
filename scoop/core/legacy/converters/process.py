@@ -1,7 +1,9 @@
 # coding: utf-8
 import gc
+import threading
 import time
 
+import sys
 from django.db import transaction
 
 
@@ -57,9 +59,22 @@ class ImportProcessor(object):
     @classmethod
     def imports(cls):
         """ Importer les documents dans la base """
+
+        def _update_time(start):
+            """ Afficher le temps écoulé depuis start """
+            while _update_time.running is True:
+                elapsed = time.time() - start
+                minute, second = divmod(elapsed, 60)
+                print("\x1b[s\x1b[1;0H\x1b[K\x1b[31;47m{min:02n}:{sec:02n}\x1b[u\x1b[0m".format(min=minute, sec=int(second)), end='')
+                sys.stdout.flush()
+                time.sleep(0.25)
+
+        _update_time.running = True  # Autoriser le thread à boucler
         start_index = cls.importers.index(cls.start_with) if cls.start_with else 0
         importers = cls.importers[start_index:]
         start = time.time()
+        t = threading.Thread(target=_update_time, args=[start])
+        t.start()
         setup_cleared = cls.setup()
         if setup_cleared is True:
             if cls.importers and isinstance(cls.importers, list):
@@ -98,6 +113,7 @@ class ImportProcessor(object):
                     cls.brushup()
                     i_elapsed = time.time() - i_start
                     print("Last bit of process updated in {:.01f}s.".format(i_elapsed))
+                _update_time.running = False  # Demander au thread de quitter
                 elapsed = time.time() - start
                 minute, second = divmod(elapsed, 60)
                 print("*" * 80)

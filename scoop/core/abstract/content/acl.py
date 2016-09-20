@@ -40,7 +40,20 @@ class ACLModel(models.Model):
 
     # Getter
     def get_acl_directory(self):
-        """ Renvoyer le nom de répertoire d'ACL pour l'objet """
+        """
+        Renvoyer le nom de répertoire d'ACL pour l'objet
+
+        Les spreads permettent de disséminer des fichiers dans des sous-dossiers, afin
+        que les cas de figure suivants ne se présentent jamais :
+        - 64 000+ fichiers dans un seul répertoire (limite ext4)
+        - 1 024+ fichiers dans un seul répertoire (lenteur Nautilus)
+        Les spreads doivent être générés cryptographiquement :
+        Si la méthode de génération de spread pour un fichier est connue et facile à prédire,
+        alors on peut faire en sorte d'uploader des milliers de fichiers qui iront
+        uniquement dans ce spread. Cela est potentiellement une attaque.
+        Lorsque le spread est généré cryptographiquement, on ne peut pas utiliser cette
+        attaque pour encombrer un répertoire (potentiel déni de service)
+        """
         if self.acl_mode == self.REGISTERED:
             return self.ACL_PATHS[self.REGISTERED]
         elif self.acl_mode == self.PRIVATE:
@@ -131,24 +144,25 @@ class ACLModel(models.Model):
     # Action
     def update_file_path(self, force_name=None):
         """
-        Déplacer l'image vers son chemin par défaut
+        Déplacer le fichier vers son chemin par défaut
 
         :param force_name: Forcer un nouveau nom de fichier
         :type force_name: str
         """
         if self.exists():
-            # Supprimer les miniatures de l'image
+            # Supprimer les fichiers liés si besoin, etc.
             self.prepare_file_path_update()
             # Changer la position du fichier
             file_attribute = self.get_file_attribute()
             new_path = self.get_acl_upload_path(force_name, update=bool(force_name))
             old_path = file_attribute.name
-            # Puis recréer l'image dans le nouveau chemin
+            # Puis recréer le fichier dans le nouveau chemin
             if new_path != old_path:  # https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
                 with File(file_attribute) as original:
                     file_attribute.open()
                     file_attribute.save(new_path, original)
-                    self.save(force_update=True)
+                    file_attribute.close()
+                    self.save(force_update=True, update_fields=[self._get_file_attribute_name()])
                 default_storage.delete(old_path)
                 return True
         return False

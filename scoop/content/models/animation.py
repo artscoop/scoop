@@ -82,9 +82,10 @@ class AnimationManager(SingleDeleteManager):
                                      AnimationManager.CODECS[extension], temp_path], stderr=open(os.devnull, 'wb'))
                     animation = Animation(extension=extension, description=picture.description)
                     animation.picture = picture
-                    animation.file.save(new_filename, File(open(temp_path, 'rb')))
-                    animation.get_duration(save=True)  # Renvoie ou calcule la durée de l'animation
-                    animation.save()
+                    with open(temp_path, 'rb') as descriptor:
+                        animation.file.save(new_filename, File(descriptor))
+                        animation.get_duration(save=True)  # Renvoie ou calcule la durée de l'animation
+                        animation.save()
                     # Nettoyer les fichiers temporaires
                     os.popen('rm /{tmp}/{0}*.jpg && rm {1}'.format(sequence_name, temp_path, tmp=temp_dir))
             # Remplacer l'image GIF par un aperçu

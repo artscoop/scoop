@@ -30,6 +30,16 @@ logger = logging.getLogger(__name__)
 class IPManager(GeoManager):
     """ Manager des IP """
 
+    # Setter
+    def new(self, ip_string):
+        """ Créer une IP """
+        try:
+            new_ip = IP()
+            new_ip.set_ip_address(ip_string, save=True)
+            return new_ip
+        except IntegrityError:
+            return None
+
     # Getter
     def get_by_natural_key(self, ip):
         """ Renvoyer une IP par clé naturelle """
@@ -40,12 +50,7 @@ class IPManager(GeoManager):
         try:
             return self.get(ip=IP.get_ip_value(ip_string))
         except IP.DoesNotExist:
-            try:
-                new_ip = IP()
-                new_ip.set_ip_address(ip_string, save=True)
-                return new_ip
-            except IntegrityError:
-                return None
+            return self.new(ip_string)
 
     def get_localhost(self):
         """ Renvoyer l'objet IP pour localhost """
