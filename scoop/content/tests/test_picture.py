@@ -3,7 +3,6 @@ import os
 from os.path import join
 
 from django.test import TestCase
-
 from scoop.content.models.album import Album
 from scoop.content.models.picture import Picture
 from scoop.user.models.activation import Activation
@@ -112,4 +111,3 @@ class PictureTest(TestCase):
         album1 = Album.objects.create_with('album1', [picture1])
         self.assertIsNotNone(album1.get_default_picture())
         self.assertEqual(album1.get_picture_count(filtering={}), 1)
-

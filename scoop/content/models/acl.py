@@ -1,5 +1,4 @@
 # coding: utf-8
-
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password

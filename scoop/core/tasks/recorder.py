@@ -2,7 +2,6 @@
 from celery.task import task
 from django.conf import settings
 from django.db import models
-
 from scoop.core.models.recorder import Record, RecordType
 from scoop.user.models import User
 

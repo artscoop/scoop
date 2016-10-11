@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
 from scoop.core.templatetags.html_tags import linkify
-from scoop.core.util.data.textutil import disemvowel, truncate_ellipsis, truncate_longwords, truncate_repeats, humanize_join
+from scoop.core.util.data.textutil import disemvowel, humanize_join, truncate_ellipsis, truncate_longwords, truncate_repeats
 from unidecode import unidecode
 
 register = template.Library()

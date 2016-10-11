@@ -19,9 +19,9 @@ class OptionManager(SingleDeleteManager, TranslatableModelManager):
     """ Manager des options """
 
     # Getter
-    def get_by_natural_key(self, uuid):
+    def get_by_natural_key(self, group, code):
         """ Renvoyer une option par sa clé naturelle """
-        return self.get(uuid=uuid)
+        return self.get(group=group, code=code)
 
     def in_group(self, name):
         """ Renvoyer les options faisant partie d'un groupe nommé """
@@ -50,7 +50,7 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
     # Getter
     def natural_key(self):
         """ Renvoyer la clé naturelle de l'objet """
-        return self.uuid,
+        return self.group, self.code
 
     @addattr(short_description=_("Name"))
     def get_name(self):

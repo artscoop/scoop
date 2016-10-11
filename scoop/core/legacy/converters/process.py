@@ -1,9 +1,9 @@
 # coding: utf-8
 import gc
+import sys
 import threading
 import time
 
-import sys
 from django.db import transaction
 
 

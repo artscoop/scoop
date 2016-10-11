@@ -1,7 +1,8 @@
 # coding: utf-8
-__version__ = (1, 2015, 3)
 from django.apps.config import AppConfig
 from django.utils.translation import gettext_noop
+
+__version__ = (1, 2015, 3)
 
 
 gettext_noop("Messaging")

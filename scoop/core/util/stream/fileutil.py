@@ -3,6 +3,7 @@ import gzip
 import io
 import logging
 import os
+import platform
 import subprocess
 import time
 from io import BufferedReader
@@ -20,6 +21,19 @@ from magic import Magic
 from scoop.core.util.data.typeutil import make_iterable
 
 logger = logging.getLogger(__name__)
+
+
+def get_open_file_count():
+    """
+    Renvoyer le nombre de fichiers ouverts par le processus
+
+    :returns: le nombre de fichiers ouverts, ou -1 si non pris en charge sur le système
+    """
+    if platform.system() == 'Linux':
+        path = '/proc/self/fd/'
+        count = len([True for name in os.listdir(path) if os.path.isfile(os.path.join(path, name))])
+        return count
+    return -1
 
 
 def walk(storage, top='/', topdown=False, onerror=None):

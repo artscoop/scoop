@@ -1,6 +1,5 @@
 # coding: utf-8
 from django.contrib import admin
-
 from scoop.help.models.context import ContextHelp
 
 

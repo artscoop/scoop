@@ -10,6 +10,7 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from scoop.core.templatetags.type_tags import round_multiple
 from scoop.core.util.shortcuts import addattr
 from scoop.location.util.cardinal import ANGLE_CARDINAL, ANGLE_TICKS, RELATIVE_CARDINAL, SHORT_CARDINAL
@@ -35,6 +36,7 @@ class CoordinatesModel(models.Model):
     def set_point(self, point):
         """
         Définir les coordonnées de l'objet
+
         :param point: liste ou tuple de deux éléments lat, lon
         """
         self.set_coordinates(point[0], point[1])
@@ -47,7 +49,11 @@ class CoordinatesModel(models.Model):
 
     # Getter
     def get_point(self):
-        """ Renvoyer les coordonnées lat,lon de l'objet """
+        """
+        Renvoyer les coordonnées lat,lon de l'objet
+
+        :rtype: tuple
+        """
         return self.position.get_y(), self.position.get_x()
 
     def get_latitude(self):
@@ -63,7 +69,11 @@ class CoordinatesModel(models.Model):
         return {'latitude': self.position.get_y(), 'longitude': self.position.get_x()}
 
     def get_bounding_box(self, km):
-        """ Renvoyer les coordonnées d'un rectangle dont les coins sont à n km autour de l'objet """
+        """
+        Renvoyer les coordonnées d'un rectangle dont les coins sont à n km autour de l'objet
+
+        :rtype: list
+        """
         return CoordinatesModel.get_bounding_box_at(self.point, km)
 
     def get_bounding_poly(self, km):
@@ -93,7 +103,7 @@ class CoordinatesModel(models.Model):
     @staticmethod
     def sexagesimal_from_degrees(degrees, longitudinal=True):
         """ Renvoyer une valeur horaire depuis une valeur en degrés """
-        letters = _("WE") if longitudinal else _("SN")
+        letters = pgettext_lazy('coordinates', "WE") if longitudinal else pgettext_lazy('coordinates', "SN")
         mnt, sec = divmod(degrees * 3600, 60.0)
         deg, mnt = divmod(mnt, 60)
         letter = letters[0 if deg < 0 else 1]

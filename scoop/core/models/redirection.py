@@ -11,7 +11,6 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.generic import GenericModelMixin
 from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 
-
 logger = logging.getLogger(__name__)
 
 

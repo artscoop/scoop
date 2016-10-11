@@ -18,7 +18,7 @@ def user_can_see_thread(method):
     def wrapper(request, *args, **kwargs):
         thread = None
         if kwargs.get('uuid', None) is not None:
-            thread = Thread.objects.get_by_uuid(kwargs.get('uuid'))
+            thread = Thread.objects.get_by_uuid(kwargs['uuid'])
         elif len(args) > 0 and isinstance(args[0], Thread):
             thread = args[0]
         if thread is None or request.user.is_anonymous() or not thread.is_recipient(request.user):
@@ -38,10 +38,9 @@ def user_can_see_inbox(method):
 
     @functools.wraps(method)
     def wrapper(request, *args, **kwargs):
-        uuid = kwargs.get('uuid', None)
         user = request.user
-        if uuid is not None:
-            user = get_user_model().objects.get_by_uuid(uuid, request.user)
+        if kwargs.get('uuid', None) is not None:
+            user = get_user_model().objects.get_by_uuid(kwargs['uuid'], request.user)
         elif len(args) > 0 and isinstance(args[0], get_user_model()):
             user = args[0]
         if user is None or user.is_anonymous() or not request.user.can_edit(user) or request.user.is_anonymous():
@@ -56,10 +55,9 @@ def user_can_send_to(method):
 
     @functools.wraps(method)
     def wrapper(request, *args, **kwargs):
-        uuid = kwargs.get('uuid', None)
         user = request.user
-        if uuid is not None:
-            user = get_user_model().objects.get_by_uuid(uuid, request.user)
+        if kwargs.get('uuid', None) is not None:
+            user = get_user_model().objects.get_by_uuid(kwargs['uuid'], request.user)
         elif len(args) > 0 and isinstance(args[0], get_user_model()):
             user = args[0]
         # Si la simulation de nouveau thread échoue, alors renvoyer un 404

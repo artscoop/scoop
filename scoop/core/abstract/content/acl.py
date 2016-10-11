@@ -165,6 +165,9 @@ class ACLModel(models.Model):
                     self.save(force_update=True, update_fields=[self._get_file_attribute_name()])
                 default_storage.delete(old_path)
                 return True
+        else:
+            # Supprimer l'entrée si le fichier cible n'existe pas
+            self.delete()
         return False
 
     # Obligatoire

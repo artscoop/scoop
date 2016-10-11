@@ -12,6 +12,7 @@ from os.path import join
 from traceback import print_exc
 
 import pytz
+
 from celery import task
 from django.conf import settings
 from django.contrib.gis.db.models.aggregates import Extent

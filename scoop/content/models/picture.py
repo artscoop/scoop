@@ -702,10 +702,10 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             if save:
                 self.clone(self.description)
             if depth <= 8:
-                subprocess.call(["convert", self.image.path, "-dither", "FloydSteinberg", "-colors", "{0}".format(2**depth), self.image.path])
+                subprocess.call(["convert", self.image.path, "-dither", "FloydSteinberg", "-colors", "{0}".format(2 ** depth), self.image.path])
             else:
-                subprocess.call(["convert", self.image.path, "-depth", "{0}".format(depth//3), "-ordered-dither", "threshold,{0},{0},{0}".format(2**(depth//3)),
-                                 self.image.path])
+                subprocess.call(["convert", self.image.path, "-depth", "{0}".format(depth // 3), "-ordered-dither",
+                                 "threshold,{0},{0},{0}".format(2 ** (depth // 3)), self.image.path])
 
     def contrast(self, save=True):
         """ Augmenter le contraste dans l'espace de couleur Lab """

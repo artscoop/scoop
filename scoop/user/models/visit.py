@@ -39,11 +39,11 @@ class VisitManager(models.Manager):
         return self.filter(visitor=user).exists()
 
     # Setter
-    def create(self, visitor, target_user):
+    def new(self, visitor, target_user):
         """ Consigner ou mettre à jour une visite à un profil """
         if visitor.pk != target_user.pk:
             if self.filter(visitor=visitor, user=target_user).update(time=now()) == 0:
-                return super(VisitManager, self).create(visitor=visitor, user=target_user, time=now())
+                return self.create(visitor=visitor, user=target_user, time=now())
             return True
         return False
 

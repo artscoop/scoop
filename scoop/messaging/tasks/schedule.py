@@ -1,10 +1,11 @@
 # coding: utf-8
 from celery.schedules import crontab, timedelta
 from celery.task import periodic_task
-from celery import task
 from django.conf import settings
 from django.db.models import Q
 from scoop.core.abstract.core.datetime import DatetimeModel
+
+__all__ = ['prune_threads', 'prune_alerts', 'send_mail_queue_forced', 'send_mail_queue_non_forced']
 
 
 @periodic_task(run_every=crontab(hour=3, minute=30, day_of_week=5), options={'expires': 86400})

@@ -100,6 +100,9 @@ class RecordTypeManager(SingleDeleteManager):
         except Record.DoesNotExist:
             return None
 
+    def get_by_natural_key(self, codename):
+        return self.get(codename=codename)
+
 
 class Record(models.Model):
     """ Action """
@@ -203,7 +206,7 @@ class RecordType(models.Model):
     """
 
     # Champs
-    codename = models.CharField(max_length=32, verbose_name=_("Code name"))
+    codename = models.CharField(max_length=32, unique=True, verbose_name=_("Code name"))
     sentence = models.CharField(max_length=48, verbose_name=_("Sentence"))  # actor, target, container, when
     verb = models.CharField(max_length=24, verbose_name=_("Verb"))
     verbosity = models.SmallIntegerField(default=0, verbose_name=_("Level of visibility"))
@@ -231,6 +234,9 @@ class RecordType(models.Model):
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
         return self.verb or self.codename
+
+    def natural_key(self):
+        return self.codename,
 
     # Métadonnées
     class Meta:

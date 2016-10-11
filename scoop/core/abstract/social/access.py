@@ -3,7 +3,6 @@ from django.apps.registry import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.data import DataModel
 
 

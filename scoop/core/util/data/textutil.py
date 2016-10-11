@@ -10,9 +10,8 @@ from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from ngram import NGram
-from unidecode import unidecode
-
 from scoop.core.util.data.htmlutil import linkify
+from unidecode import unidecode
 
 
 def text_to_list(value):

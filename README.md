@@ -1,9 +1,9 @@
 # Projet Scoop
-Par S. Kossouho
-Mai 2011 - Avril 2016
+S. Kossouho
+Mai 2011 - 2016
 Séparé du projet One le 15 avril 2015
 
-Nécessite python 3.4, nginx et Django 1.9
+Nécessite python 3.5, nginx et Django 1.9
 
 ## Contenu du projet
 - `content` : objets de contenu, images et commentaires + ACL fichiers. lié à `user` et `core`.
@@ -18,6 +18,8 @@ Nécessite python 3.4, nginx et Django 1.9
 - `core` : le cœur du projet, contient tous les utilitaires et modèles utiles au moteur.
 - `user.social` : options sociales comme like, amitié et événements.
 - `user.social.people` : mise en logique de personnes réelles.
+- `help` : pages d'aide, FAQ et aide contextuelle
+- `analyze` : classes abstraites et helpers pour la classification de documents
 
 ## Settings
 

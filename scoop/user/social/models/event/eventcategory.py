@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
-from django.utils.translation import ugettext_lazy as _, pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
 from scoop.core.abstract.core.uuid import UUID32Model

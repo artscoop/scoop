@@ -146,10 +146,10 @@ class WebImageField(ImageField):
             # data can be an InMemoryUploadedFile or something else
             if hasattr(data, 'temporary_file_path'):
                 fi = data.temporary_file_path()
-                print(fi)
             else:
                 data.open()  # data est un fichier fermé, il faut l'ouvrir si possible
                 fi = BytesIO(data.read() if hasattr(data, 'read') else data['content'])
+                data.close()
             # Try to open the filename or file object
             try:
                 from PIL import Image
@@ -158,9 +158,10 @@ class WebImageField(ImageField):
                 # If opened, check against Format and dim constraints
                 if image.format not in WebImageField.ACCEPTED_FORMATS:
                     raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
-                if sorted(image.size) < self.min_dimensions:
+                if image.size[0] < self.min_dimensions[0] or image.size[1] < self.min_dimensions[1]:
                     raise ValidationError(
-                        _("Image not accepted. Minimum accepted size is {mw}x{mh}.").format(mw=self.min_dimensions[0], mh=self.min_dimensions[1]))
+                        _("Image not accepted. Minimum accepted size is {mw}x{mh}, got {iw}x{ih}").format(
+                            mw=self.min_dimensions[0], mh=self.min_dimensions[1], iw=image.size[0], ih=image.size[1]))
                 image.close()
             except IOError:  # PIL cannot load and handle the image
                 raise ValidationError(_("This image cannot be handled. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))

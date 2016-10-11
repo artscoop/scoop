@@ -4,7 +4,6 @@ from ajax_select.admin import AjaxSelectAdmin
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from genericadmin.admin import GenericAdminModelAdmin
-
 from scoop.content.admin.inline import AlbumPictureInlineAdmin
 from scoop.content.forms.album import AlbumAdminForm
 from scoop.content.models.album import Album

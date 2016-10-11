@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
-
 from scoop.core.templatetags.repeat import MacroRoot
 from scoop.core.util.stream.request import default_request
 

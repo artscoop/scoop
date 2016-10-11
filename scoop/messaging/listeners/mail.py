@@ -1,7 +1,6 @@
 # coding: utf-8
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
-
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.messaging.models import MailEvent, MailType
 from scoop.messaging.util.signals import mailable_event
@@ -22,7 +21,7 @@ def default_mail_send(sender, mailtype, recipient, data, **kwargs):
     :type recipient: str | User | list
     :param data: données à joindre au mail
     """
-    category_option = {'message': 'receive_on_message', 'staff': 'receive_on_staff', 'subscription': 'receive_on_subscription'}
+    category_option = {'message': 'email_on_message', 'staff': 'email_on_staff', 'subscription': 'email_on_subscription'}
 
     recipients = make_iterable(recipient)
     # Récupérer l'obet MailType correspondant au mailtype passé

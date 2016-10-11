@@ -1,10 +1,9 @@
 # coding: utf-8
+import gc
 import sys
 
-import gc
 from django.core.management.base import BaseCommand
 from django.utils.translation import ugettext
-
 from scoop.content.models.picture import Picture
 
 

@@ -12,7 +12,7 @@ class ConfigurationForm(DataForm):
     name = 'user.configuration'
     saved_fields = None
     defaults = {'session_timeout': 259200, 'login_destination': 0, 'receive_emails': True, 'receive_interval': 3600,
-                'receive_on_message': True, 'receive_on_staff': True, 'receive_on_favorite': True, 'receive_on_subscription': True}
+                'email_on_message': True, 'email_on_staff': True, 'receive_on_favorite': True, 'email_on_subscription': True}
 
     # Constantes
     SESSION_DURATIONS = [[900, _("15 minutes")], [1800, _("30 minutes")], [10800, _("3 hours")], [259200, _("3 days")], [2592000, _("30 days")]]
@@ -26,9 +26,9 @@ class ConfigurationForm(DataForm):
     receive_emails = forms.BooleanField(initial=True, required=False, label=_("Receive emails"))
     receive_interval = forms.TypedChoiceField(coerce=int, initial=3600, choices=MAIL_INTERVALS, required=True, label=_("Max reception rate"))
     # Options de réception de message
-    receive_on_message = forms.BooleanField(initial=True, required=False, label=_("Receive when a user sends you a message"))
-    receive_on_staff = forms.BooleanField(initial=True, required=False, label=_("Receive when a staff member sends you a message"))
-    receive_on_subscription = forms.BooleanField(initial=True, required=False, label=_("Receive when a content you've subscribed to is updated"))
+    email_on_message = forms.BooleanField(initial=True, required=False, label=_("Receive when a user sends you a message"))
+    email_on_staff = forms.BooleanField(initial=True, required=False, label=_("Receive when a staff member sends you a message"))
+    email_on_subscription = forms.BooleanField(initial=True, required=False, label=_("Receive when a content you've subscribed to is updated"))
 
     # Getter
     @classmethod

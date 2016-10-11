@@ -4,7 +4,6 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.forms.models import modelformset_factory
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.content.models.album import Album, AlbumPicture
 from scoop.core.util.model.model import limit_to_model_names
 

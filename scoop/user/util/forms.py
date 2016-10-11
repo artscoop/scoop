@@ -19,8 +19,8 @@ class DataForm(Form):
 
     # Configuration
     name = ''  # nom unique. minuscules et ., ex. user.configuration
-    defaults = None  # données par défaut
-    saved_fields = None  # champs enregistrés. None pour tous les champs
+    defaults = None  # données par défaut (dict)
+    saved_fields = None  # champs enregistrés. None pour tous les champs (list|tuple)
 
     # Actions
     @classmethod

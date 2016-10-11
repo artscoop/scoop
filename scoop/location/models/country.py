@@ -2,7 +2,7 @@
 import logging
 
 import pytz
-from django.conf import settings
+
 from django.db import models
 from django.utils import timezone, translation
 from django.utils.translation import ugettext_lazy as _

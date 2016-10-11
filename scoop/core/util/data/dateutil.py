@@ -4,8 +4,9 @@ import datetime
 import re
 from random import randrange
 
-from django.utils import timezone
 from pytz import timezone as tz_
+
+from django.utils import timezone
 
 
 def now():

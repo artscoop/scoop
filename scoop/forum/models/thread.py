@@ -5,7 +5,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
-
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.content.subscription import SubscribableModel
 from scoop.core.abstract.core.data import DataModel

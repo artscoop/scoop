@@ -4,7 +4,6 @@ from distutils.core import setup
 
 from setuptools import find_packages
 
-
 setup(
     name='scoop',
     version='0.10.20160611',

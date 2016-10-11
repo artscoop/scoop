@@ -10,7 +10,7 @@ from django.contrib.auth import logout
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404, HttpResponse
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render, render_to_response
 from django.template.context import RequestContext
 from django.utils import timezone
 from scoop.core.util.shortcuts import get_fullname

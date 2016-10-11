@@ -23,6 +23,9 @@ class OptionGroupManager(SingleDeleteManager):
         except (OptionGroup.DoesNotExist, ProgrammingError):
             return None
 
+    def get_by_natural_key(self, short_name):
+        return self.get(short_name=short_name)
+
 
 class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('scoop.content') else Model):
     """ Groupe d'options """
@@ -32,7 +35,7 @@ class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('scoop
 
     # Champs
     code = models.SmallIntegerField(null=False, blank=False, default=0, verbose_name=_("Code"))
-    short_name = models.CharField(max_length=20, verbose_name=_("Short name"))
+    short_name = models.CharField(max_length=32, unique=True, verbose_name=_("Short name"))
     objects = OptionGroupManager()
 
     # Getter
@@ -70,6 +73,9 @@ class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('scoop
         """ Enregistrer l'objet dans la base de données """
         super(OptionGroup, self).save(*args, **kwargs)
 
+    def natural_key(self):
+        return self.short_name,
+
     # Métadonnées
     class Meta:
         verbose_name = _("option group")
@@ -80,9 +86,14 @@ class OptionGroup(TranslatableModel, PicturableModel if apps.is_installed('scoop
 
 class OptionGroupTranslation(get_translation_model(OptionGroup, "optiongroup"), TranslationModel):
     """ Traduction de groupe d'options """
+
     # Champs
     name = models.CharField(max_length=80, blank=False, verbose_name=_("Name"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
+
+    # Overrides
+    def natural_key(self):
+        return self.model, self.language
 
     # Métadonnées
     class Meta:

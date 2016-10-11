@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from scoop.core.models.recorder import RecordType, Record
+from scoop.core.models.recorder import Record, RecordType
 from scoop.core.util.shortcuts import addattr
 
 

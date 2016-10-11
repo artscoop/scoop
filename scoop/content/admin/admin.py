@@ -1,7 +1,6 @@
 # coding: utf-8
 from ajax_select import make_ajax_form
 from django.contrib import admin
-
 from scoop.content.models.advertisement import Advertisement
 from scoop.content.models.album import Album
 from scoop.content.models.attachment import Attachment

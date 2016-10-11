@@ -4,7 +4,6 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 

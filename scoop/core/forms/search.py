@@ -8,9 +8,7 @@ from django.db.models.query import QuerySet
 from django.template.loader import render_to_string
 from django.utils.text import smart_split
 from django.utils.translation import ugettext_lazy as _
-
 from scoop.core.util.data.textutil import text_to_list
-
 
 # Récupérer le nom du moteur de base de données actuel
 if settings.DATABASES:

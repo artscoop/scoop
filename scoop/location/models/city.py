@@ -147,8 +147,8 @@ class CityQuerySet(models.QuerySet):
         """
         name = unidecode(name).lower().strip() if name else '*'
         # Renvoyer le résultat en cache
-        cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=round_multiple(point[0], 0.25), lon=round_multiple(point[1], 0.25),
-                                                                           name=name or '*')
+        cache_key = "location.city.find:{lat:.1f}:{lon:.1f}:{name}"
+        cache_key = cache_key.format(lat=round_multiple(point[0], 0.25), lon=round_multiple(point[1], 0.25), name=name or '*')
         result = cache.get(cache_key, None)
         if result is not None:
             return self.get(id=result)

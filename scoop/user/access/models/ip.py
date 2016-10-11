@@ -350,7 +350,7 @@ class IP(DatetimeModel, CoordinatesModel):
     # Setter
     def set_ip_information(self, data, save=True):
         """ Mettre à jour l'IP avec un dictionnaire d'informations """
-        self.update(**data, save=save)
+        self.update(save=save, **data)
 
     def set_ip_address(self, ip_string, save=False):
         """

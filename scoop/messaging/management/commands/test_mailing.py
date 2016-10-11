@@ -2,7 +2,6 @@
 from traceback import print_exc
 
 from django.core.management.base import BaseCommand
-
 from scoop.messaging.util.signals import mailable_event
 
 

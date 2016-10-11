@@ -4,7 +4,6 @@ import logging
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch.dispatcher import receiver
 from django.template.loader import render_to_string
-
 from scoop.messaging.util.signals import mailable_event
 from scoop.rogue.util.signals import user_has_ip_blocked
 from scoop.user.models.user import User

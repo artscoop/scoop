@@ -1,10 +1,10 @@
 # coding: utf-8
 import datetime
+import re
 import time
 from datetime import timedelta
 
 import qsstats
-import re
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.base_user import BaseUserManager
@@ -18,9 +18,8 @@ from django.db import models
 from django.http import Http404
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.django.apps import is_installed
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin

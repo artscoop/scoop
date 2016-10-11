@@ -7,6 +7,8 @@ from traceback import print_exc
 
 import markdown
 import textile
+
+from approval.models.approval import ApprovalModel, ApprovedModel
 from autoslug.fields import AutoSlugField
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -16,12 +18,10 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
 from ngram import NGram
-
-from approval.models.approval import ApprovalModel, ApprovedModel
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.content.models.category import Category
 from scoop.content.util.signals import content_format_html, content_pre_lock, content_updated
@@ -43,7 +43,6 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
-
 
 logger = logging.getLogger(__name__)
 
@@ -493,7 +492,6 @@ class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableMo
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        self.updated = timezone.now()
         super(Content, self).save(*args, **kwargs)
         # Envoyer un signal insiquand que le contenu est mis à jour
         if self.approval.approved:

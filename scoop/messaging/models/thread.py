@@ -14,9 +14,8 @@ from django.http.response import Http404
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import to_timestamp
@@ -27,7 +26,6 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_context
 from scoop.messaging.models.label import LabelableModel
 from scoop.messaging.util.signals import thread_created, thread_pre_create
-
 
 logger = logging.getLogger(__name__)
 
@@ -377,8 +375,8 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         self.save()
 
     def remove_recipient(self, user):
-        """ Supprimer un destinataire du fil """
-        for recipient in self.recipients.filter(user=user, thread=self):
+        """ Supprimer un ou plusieurs destinataires du fil """
+        for recipient in self.recipients.filter(user__in=make_iterable(user), thread=self):
             recipient.disable()
         # Fermer ou supprimer si plus assez de participants
         count = self.get_recipient_count()
@@ -390,6 +388,8 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         for recipient in self.recipients.all():
             recipient.disable()
         self.population = 0
+        self.delete()
+        self.set_closed(True)
         self.save()
 
     # Setter
@@ -405,12 +405,9 @@ class Thread(UUID64Model, LabelableModel, DataModel):
 
     def truncate(self, count=40):
         """ Réduire le nombre de messages du fil à un nombre prédéfini """
-        try:
-            overflow_messages = self.messages.filter(deleted=False).order_by('-id')[count:]
-            [message.remove() for message in overflow_messages]
-            return True
-        except Exception:
-            return False
+        overflow_messages = self.messages.filter(deleted=False).order_by('-id')[count:]
+        [message.remove() for message in overflow_messages]
+        return True
 
     def update_message_count(self, save=True):
         """ Mettre à jour le nombre de messages du fil """

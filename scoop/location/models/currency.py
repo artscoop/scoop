@@ -96,9 +96,9 @@ class Currency(models.Model):
         try:
             resource = requests.get('http://quote.yahoo.com/d/quotes.csv?s={}USD=X&f=l1&e=.csv'.format(self.short_name))
             result = resource.text
+            self.balance = Decimal(float(result))
         except (OSError, ValueError):
             result = 0
-        self.balance = Decimal(float(result))
         if save is True:
             self.save()
 

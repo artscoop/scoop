@@ -71,7 +71,7 @@ class Label(TranslatableModel, UUID32Model, WeightedModel):
         :param user: utilisateur
         """
         is_admin = user.is_superuser or user.is_staff
-        is_in_group = self.groups.filter(pk__in=user.groups.values_list('pk')).exists()
+        is_in_group = self.groups.filter(pk__in=user.groups.values_list('pk')).exists() or not self.groups.exists()
         is_moderator = self.moderators.filter(pk=user.pk).exists()
         return is_admin or is_moderator or (self.visible and is_in_group)
 
