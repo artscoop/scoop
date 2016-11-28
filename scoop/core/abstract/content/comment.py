@@ -9,6 +9,18 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.fileutil import asset_file
 
 
+class CommentAdminMixin:
+    """ Mixin d'actions admin pour les commentaires """
+
+    # Actions
+    @addattr(short_description=_("Mark selected comments as spam."))
+    def set_spam(self, request, queryset):
+        """ Marquer un queryset de commentaires comme spam """
+        for comment in queryset:
+            comment.set_spam(True)
+        self.message_user(request, _("Selected comments have been marked as spam."))
+
+
 class CommentableModel(models.Model):
     """ Objet pouvant recevoir et gérer des commentaires """
 

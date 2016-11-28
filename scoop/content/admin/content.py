@@ -40,7 +40,7 @@ class ContentAdmin(AjaxSelectAdmin, PicturedModelAdmin, ApprovableAdmin, Version
     form = make_ajax_form(Content, {'authors': 'user', 'picture': 'picture', 'parent': 'content'}, ContentAdminForm)
     fieldsets = ((_("Content"), {'fields': ('title', 'body', 'format', 'authors', 'category', 'published', 'sticky', 'commentable', 'picture')}),
                  (_("Plus"), {'fields': ('slug', 'parent', 'locked', 'featured', 'teaser', 'created', 'publish', 'expire', 'tags')}))
-    actions = ['publish', 'unpublish', 'stick', 'unstick']
+    actions = ['publish', 'unpublish', 'stick', 'unstick', 'spread_publish']
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
     ignore_duplicate_revisions = True
 

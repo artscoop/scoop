@@ -47,7 +47,7 @@ def send_mail_queue_non_forced():
     return MailEvent.objects.process(forced=False)
 
 
-@periodic_task(run_every=timedelta(seconds=25), options={'expires': 10})
+@periodic_task(run_every=timedelta(seconds=19), options={'expires': 10})
 def send_mail_queue_forced():
     """ Expédier les mails de la file d'attente """
     from scoop.messaging.models.mailevent import MailEvent

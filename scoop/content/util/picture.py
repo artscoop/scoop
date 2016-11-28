@@ -24,6 +24,7 @@ def download(instance, path, screenshot=True):
     Télécharger une image pour un objet Picture
 
     :param instance: Objet Picture pour lequel télécharger l'image
+    :param path: URL de l'image à télécharger, ou de la page s'il ne s'agit pas d'une image
     :param screenshot: Effectuer un screenshot d'une URL si path n'est pas une image
     """
     from scoop.content.models.picture import Picture

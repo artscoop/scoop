@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.contenttypes import fields
 from django.db import models
+from django.db.utils import IntegrityError
 from django.http.response import HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -38,10 +39,13 @@ class RedirectionManager(SingleDeleteManager):
     def record(self, base, destination):
         """ Enregistrer une nouvelle redirection """
         if hasattr(destination, 'get_absolute_url'):
-            redirection = Redirection(base=base)
-            redirection.content_object = destination
-            redirection.save()
-            return True
+            try:
+                redirection = Redirection(base=base)
+                redirection.content_object = destination
+                redirection.save()
+                return True
+            except IntegrityError:
+                return False
         return False
 
 
@@ -95,4 +99,5 @@ class Redirection(GenericModelMixin, DatetimeModel):
     class Meta:
         verbose_name = _("redirection")
         verbose_name_plural = _("redirections")
+        unique_together = [['content_type', 'object_id']]
         app_label = 'core'

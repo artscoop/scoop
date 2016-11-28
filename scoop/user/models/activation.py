@@ -59,7 +59,17 @@ class ActivationManager(models.Manager):
         return False
 
     def deactivate(self, user, admin=False):
-        """ Désactiver un utilisateur """
+        """
+        Désactiver un utilisateur
+
+        :param user: Utilisateur à désactiver
+        :param admin: définit s'il s'agit d'une opération administrative
+        :type admin: bool
+        :returns: True si l'état de l'utilisateur a bien été modifié
+        Si la désactivation est administrative (``admin=True``), alors l'utilisateur
+        ne pourra plus utiliser de code d'activation pour réactiver son compte.
+
+        """
         if user.set_inactive():
             user.activation.active = not admin
             user.activation.save()
@@ -75,7 +85,7 @@ class Activation(DatetimeModel, UUID128Model):
     """ Activation ou réactivation utilisateur """
 
     # Constantes
-    MAX_RESENDS = 5  # Maximum de renvois de mails de confirmation
+    MAX_RESENDS = 4  # Maximum de renvois de mails de confirmation
 
     # Champs
     user = AutoOneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='activation', primary_key=True, verbose_name=_("User"))

@@ -21,16 +21,16 @@ class VisitTest(TestCase):
         self.user2 = User.objects.create(username='benny', email='benny@foobar.foo')
         self.user3 = User.objects.create(username='carla', email='carla@foobar.foo')
         self.user4 = User.objects.create(username='david', email='david@foobar.foo')
-        self.v1 = Visit.objects.create(self.user1, self.user2)
-        self.v2 = Visit.objects.create(self.user1, self.user3)
-        self.v3 = Visit.objects.create(self.user1, self.user4)
-        self.v4 = Visit.objects.create(self.user2, self.user3)
-        self.v5 = Visit.objects.create(self.user3, self.user1)
-        self.v6 = Visit.objects.create(self.user3, self.user4)
-        self.v7 = Visit.objects.create(self.user4, self.user1)
-        self.v8 = Visit.objects.create(self.user4, self.user4)  # Aucun effet, renvoie False
-        self.v9 = Visit.objects.create(self.user3, self.user3)  # Aucun effet, renvoie False
-        self.v10 = Visit.objects.create(self.user3, self.user1)  # Doublon, update de v5
+        self.v1 = Visit.objects.new(self.user1, self.user2)
+        self.v2 = Visit.objects.new(self.user1, self.user3)
+        self.v3 = Visit.objects.new(self.user1, self.user4)
+        self.v4 = Visit.objects.new(self.user2, self.user3)
+        self.v5 = Visit.objects.new(self.user3, self.user1)
+        self.v6 = Visit.objects.new(self.user3, self.user4)
+        self.v7 = Visit.objects.new(self.user4, self.user1)
+        self.v8 = Visit.objects.new(self.user4, self.user4)  # Aucun effet, renvoie False
+        self.v9 = Visit.objects.new(self.user3, self.user3)  # Aucun effet, renvoie False
+        self.v10 = Visit.objects.new(self.user3, self.user1)  # Doublon, update de v5
 
     # Tests
     def test_visits(self):

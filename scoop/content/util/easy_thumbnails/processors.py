@@ -13,7 +13,7 @@ from PyQt4.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
 BLUR_LEVELS = {'low': 2, 'medium': 8, 'high': 32}
 
 
-def _PIL_to_Qt(image):
+def _pil_to_qt(image):
     """ Convertir une image PIL vers une image QT """
     width, height = image.size
     data = image.convert("RGBA").tobytes('raw', 'BGRA')
@@ -21,7 +21,7 @@ def _PIL_to_Qt(image):
     return qt_image
 
 
-def _Qt_to_PIL(image):
+def _qt_to_pil(image):
     """ Convertir une image QT vers une image PIL """
     size = (image.width(), image.height())
     data = image.bits().asstring(image.numBytes())
@@ -29,8 +29,8 @@ def _Qt_to_PIL(image):
     return pil_image
 
 
-def _Qt_canvas(image):
-    """ Créer un canevas QT des dimensions d'une image PIL """
+def _qt_canvas(image):
+    """ Créer un canevas QT aux dimensions d'une image PIL """
     width, height = image.size
     newimage = QImage(width, height, QImage.Format_ARGB32)
     newimage.fill(QColor(0, 0, 0, 0))
@@ -40,6 +40,8 @@ def _Qt_canvas(image):
 def blurring(image, blur=False, **kwargs):
     """
     Appliquer un flou gaussien sur l'image
+
+    :param image:
     :param blur: False, 'low', 'medium' ou 'high'
     :type blur: str | int
     """
@@ -52,6 +54,8 @@ def blurring(image, blur=False, **kwargs):
 def pixelation(image, pixelate=False, **kwargs):
     """
     Appliquer une pixellisation de l'image avec un effet mosaique
+
+    :param image:
     :param pixelate: False ou un nombre entre 2 et 32
     :return: Une image PIL pixellisée
     """
@@ -65,13 +69,15 @@ def pixelation(image, pixelate=False, **kwargs):
 def channel_select(image, channel_r=False, channel_g=False, channel_b=False, **kwargs):
     """
     Appliquer un mélange des canaux R, V et B de l'image
+
+    :param image:
     :param channel_r: Conserver le canal rouge
     :param channel_g: Conserver le canal vert
     :param channel_b: Conserver le canal bleu
     :return: Une image PIL dont 1 à 2 canaux manquent, sinon l'image originale
     """
     channels = [int(channel_r) * 255, int(channel_g) * 255, int(channel_b) * 255, 255]
-    if channels != [0, 0, 0, 255]:
+    if channels not in ([0, 0, 0, 255], [255, 255, 255, 255]):
         width, height = image.size[0], image.size[1]
         mix_image = Image.new("RGBA", (width, height), color=tuple(channels))
         image = ImageChops.multiply(image.convert('RGBA'), mix_image)
@@ -81,6 +87,8 @@ def channel_select(image, channel_r=False, channel_g=False, channel_b=False, **k
 def saturation(image, saturate=False, **kwargs):
     """
     Appliquer une saturation ou une désaturation de l'image
+
+    :param image:
     :param saturate: False ou un nombre flottant positif
     :return: Une image PIL saturée si saturate est True ou > 1, et désaturée en dessous de 1
     """
@@ -95,14 +103,16 @@ def saturation(image, saturate=False, **kwargs):
 def hexagon_mask(image, hexa=False, **kwargs):
     """
     Appliquer un découpage du masque de l'image en hexagone arrondi
+
+    :param image: image PIL
     :param hexa: False ou le rayon des arrondis de l'hexagone en pixels
     :return: Une image PIL dont le contour est un haxagone aux angles arrondis ou l'image originale
     """
     if hexa is not False:
         try:
-            qimage = _PIL_to_Qt(image)
+            qimage = _pil_to_qt(image)
             # Créer une image de la même taille que l'originale
-            newimage = _Qt_canvas(image)
+            newimage = _qt_canvas(image)
             painter = QPainter(newimage)
             painter.setRenderHint(QPainter.Antialiasing, True)
             # Dessiner un hexagone
@@ -117,7 +127,7 @@ def hexagon_mask(image, hexa=False, **kwargs):
             painter.setPen(pen)
             painter.drawPolygon(QPolygon(points))
             painter.end()
-            return _Qt_to_PIL(newimage)
+            return _qt_to_pil(newimage)
         except Exception:
             return image
     else:
@@ -127,11 +137,13 @@ def hexagon_mask(image, hexa=False, **kwargs):
 def rounded_corners(image, radius=0, **kwargs):
     """
     Appliquer un découpage du masque de l'image en rectangle arrondi
+
+    :param image: image PIL
     :param radius: rayon en pixels des coins arrondis
     """
     if radius == "full" or isinstance(radius, (int, float)):
-        qimage = _PIL_to_Qt(image)
-        newimage = _Qt_canvas(image)
+        qimage = _pil_to_qt(image)
+        newimage = _qt_canvas(image)
         painter = QPainter(newimage)
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setBrush(QBrush(qimage))
@@ -141,14 +153,19 @@ def rounded_corners(image, radius=0, **kwargs):
         elif isinstance(radius, (int, float)):  # découper en rectangle arrondi
             painter.drawRoundedRect(0, 0, qimage.width(), qimage.height(), radius, radius)
         painter.end()
-        return _Qt_to_PIL(newimage)
+        return _qt_to_pil(newimage)
     return image
 
 
 def draw_cross(image, crossed=False, **kwargs):
-    """ Dessiner une croix noire au milieu de l'image """
+    """
+    Dessiner une croix noire au milieu de l'image
+
+    Croix noire d'épaisseur 16px aux extrémités arrondies, cernée
+    d'un contour blanc de 3px d'épaisseur. (22px d'épaisseur totale)
+    """
     if crossed is True:
-        qimage = _PIL_to_Qt(image)
+        qimage = _pil_to_qt(image)
         painter = QPainter(qimage)
         painter.setRenderHint(QPainter.Antialiasing, True)
         # Dessiner une croix
@@ -165,7 +182,7 @@ def draw_cross(image, crossed=False, **kwargs):
         painter.drawLine(center[0] - cross_size, center[1] - cross_size, center[0] + cross_size, center[1] + cross_size)
         painter.drawLine(center[0] + cross_size, center[1] - cross_size, center[0] - cross_size, center[1] + cross_size)
         painter.end()
-        return _Qt_to_PIL(qimage)
+        return _qt_to_pil(qimage)
     else:
         return image
 
@@ -173,8 +190,11 @@ def draw_cross(image, crossed=False, **kwargs):
 def lightening(image, lighten=False, **kwargs):
     """
     Appliquer un filtre lumineux sur l'image.
+
     L'éclairage est obtenu en mode de composition PLUS, avec une
     lumière de couleur légèrement jaune.
+
+    :param image: image PIL
     :param lighten: False ou un float entre 0.0 (identité) et 1.0 (lumière max)
     """
     try:
@@ -182,11 +202,11 @@ def lightening(image, lighten=False, **kwargs):
     except ValueError:
         lighten_ = 0
     if lighten_ > 0:
-        qimage = _PIL_to_Qt(image)
+        qimage = _pil_to_qt(image)
         painter = QPainter(qimage)
         painter.setCompositionMode(QPainter.CompositionMode_Plus)
         painter.fillRect(0, 0, qimage.width(), qimage.height(), QColor(255, 217, 161, lighten_ * 255.0))
         painter.end()
-        return _Qt_to_PIL(qimage)
+        return _qt_to_pil(qimage)
     else:
         return image

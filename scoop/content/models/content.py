@@ -504,7 +504,7 @@ class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableMo
 
     def __str__(self):
         """ Renvoyer la représentation unicode """
-        return self.title
+        return self.get_name()
 
     def get_name(self):
         """ Renvoyer le nom user-friendly de l'objet """

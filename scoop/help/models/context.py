@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, get_language
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.uuid import UUID64Model
 
@@ -17,10 +17,13 @@ class ContextHelpQuerySet(models.QuerySet):
         names = [name.lower().strip()[len(ContextHelp.HELP_MARKER):] for name in identifier.split() if name.startswith(ContextHelp.HELP_MARKER)]
         return self.filter(name__in=names)
 
-    def for_language(self, language=None):
-        """ Renvoie les éléments d'aide contextuelle pour la langue (code 2) """
+    def for_language(self, language=None, fallback=True):
+        """ Renvoie les éléments d'aide contextuelle pour la langue (code de langue à 2 lettres) """
         language = language or ContextHelp.LANGUAGE
-        return self.filter(language=language)
+        items = self.filter(language=language)
+        if not items.exists() and fallback:
+            items = self.filter(language='en')
+        return items
 
     def active(self):
         """ Renvoyer les aides contextuelles actives """

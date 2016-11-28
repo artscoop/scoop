@@ -46,6 +46,7 @@ class PicturedBaseModel(models.Model):
     def _fetch_pictures(self, default, fallback, count, author=None, force=False):
         """
         Télécharger automatiquement des images pour une expression
+
         :param default: expression de recherche par défaut
         :param fallback: expression de recherche en cas d'échec
         :param count: nombre d'images à télécharger au maximum

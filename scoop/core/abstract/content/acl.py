@@ -72,7 +72,7 @@ class ACLModel(models.Model):
         Renvoyer le chemin d'upload du fichier
 
         :param self: instance d'objet. Hérite de préférence de DatetimeModel
-        :param filename: nom du fichier uploadé. Peut être None
+        :param filename: nom du fichier uploadé. Peut être None, pour conserver le nom actuel
         :param update: indique que le fichier existait déjà et est resauvegardé
         """
         filename = filename.lower() if filename else self.get_filename() if self else uuid_bits(64)
@@ -156,8 +156,8 @@ class ACLModel(models.Model):
             file_attribute = self.get_file_attribute()
             new_path = self.get_acl_upload_path(force_name, update=bool(force_name))
             old_path = file_attribute.name
-            # Puis recréer le fichier dans le nouveau chemin
-            if new_path != old_path:  # https://docs.djangoproject.com/en/1.7/_modules/django/core/files/storage/#Storage.get_available_name
+            # Puis recréer le fichier dans le nouveau chemin. Ne rien faire si le nom est inchangé, car voir commentaire suivant
+            if new_path != old_path:  # https://docs.djangoproject.com/en/1.10/_modules/django/core/files/storage/#Storage.get_available_name
                 with File(file_attribute) as original:
                     file_attribute.open()
                     file_attribute.save(new_path, original)

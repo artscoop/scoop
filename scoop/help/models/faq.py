@@ -15,13 +15,17 @@ from translatable.exceptions import MissingTranslation
 from translatable.models import TranslatableModel, TranslatableModelManager, get_translation_model
 
 
-class FAQManager(TranslatableModelManager):
+class FAQQuerySet(models.QuerySet, TranslatableModelManager):
     """ Manager des questions de la FAQ """
 
     # Getter
     def by_group(self, name):
         """ Renvoyer les FAQ appartenant à un groupe """
         return self.filter(groups__name__iexact=name)
+
+    def active(self):
+        """ Rnevoyer les FAQ actives """
+        return self.filter(active=True)
 
 
 class FAQ(DatetimeModel, UUID64Model, WeightedModel, TranslatableModel):
@@ -35,7 +39,7 @@ class FAQ(DatetimeModel, UUID64Model, WeightedModel, TranslatableModel):
     groups = models.ManyToManyField('help.helpgroup', blank=True, verbose_name=_("Groups"))
     format = models.SmallIntegerField(default=0, choices=FORMATTING, verbose_name=_("Format"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('faq', "Updated"))
-    objects = FAQManager()
+    objects = FAQQuerySet.as_manager()
 
     # Getter
     def get_answer_html(self):

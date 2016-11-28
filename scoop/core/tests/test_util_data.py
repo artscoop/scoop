@@ -22,8 +22,10 @@ class DataUtilityTest(TestCase):
     def test_dateutil(self):
         year = datetime.now().year
         past_date = datetime(year - 4, 1, 1)
+        post_date = datetime(year + 4, 1, 1)
         # Tester que la fonction renvoie bien 4 pour une date antérieure de 4 ans
         self.assertEqual(date_age(past_date), 4)
+        self.assertEqual(date_age(post_date), -4)
 
     def test_numbers(self):
         # Vérifier l'arrondi des nombres décimaux

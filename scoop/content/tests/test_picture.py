@@ -59,6 +59,13 @@ class PictureTest(TestCase):
         picture2 = picture.clone()
         self.assertTrue(picture2.exists(), "picture 2 should be a successful clone")
 
+    def test_operations(self):
+        """ Test d'opérations de base """
+        picture = Picture.objects.create_from_file(join(path, 'images', 'rotated.jpg'), author=self.user, title='rotated picture')
+        self.assertTrue(picture.paste(join(path, 'images', 'banana.gif')))
+        with self.assertRaises((OSError, IsADirectoryError, NotADirectoryError, IOError)):
+            picture.paste('/dev/null/nonexistent.jpg')
+
     def test_description_download(self):
         """ Tester les droits de download d'une image """
         picture1 = Picture(description='file://{}'.format(join(path, 'images', 'croppable.jpg')),

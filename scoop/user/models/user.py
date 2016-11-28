@@ -7,6 +7,7 @@ from datetime import timedelta
 import qsstats
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth import hashers
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser, PermissionsMixin
 from django.contrib.contenttypes.fields import ContentType
@@ -444,11 +445,12 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
             return True
         return False
 
-    def encrypt_password(self, save=True):
+    def encrypt_password(self, force=False, save=True):
         """ Crypter le mot de passe stocké en clair """
-        self.set_password(self.password)
-        if save:
-            self.save()
+        if force or not hashers.is_password_usable(self.password):
+            self.set_password(self.password)
+            if save:
+                self.save()
 
     def reset_next_mail(self, snooze=None):
         """
@@ -458,7 +460,6 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
         """
         from scoop.user.forms.configuration import ConfigurationForm
         # Calculer la date par rapport à la date actuelle
-        self.next_mail = timezone.now()
         if snooze is None:
             delta = datetime.timedelta(seconds=ConfigurationForm.get_option_for(self, 'receive_interval'))
         else:

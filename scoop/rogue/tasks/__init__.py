@@ -1,2 +1,2 @@
 # coding: utf-8
-from scoop.rogue.tasks.schedule import check_random_users, expire_ip_blocks
+from .schedule import check_random_nonrecent_users, check_recent_users, expire_ip_blocks

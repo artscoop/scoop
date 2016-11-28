@@ -11,7 +11,6 @@ from urllib import parse
 import cv2
 import simplejson
 from PIL import Image
-
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.core.cache import cache
@@ -23,11 +22,13 @@ from django.template.defaultfilters import filesizeformat, urlencode
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.models import Source, Thumbnail
+from wand.image import Image as WImage
+
 from scoop.content.util.picture import clean_thumbnails, convex_hull, convex_hull_to_rect, download
 from scoop.core.abstract.content.acl import ACLModel
 from scoop.core.abstract.content.license import AudienceModel, CreationLicenseModel
@@ -45,6 +46,7 @@ from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.directory import Paths
 from scoop.core.util.stream.fileutil import check_file_extension
 from scoop.core.util.stream.urlutil import get_url_resource
+
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +104,8 @@ class PictureQuerySetMixin(object):
         """ Renvoyer des informations d'URL d'images pour une expression """
         path = 'https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={keyword}' \
                '&searchType=image&imgType=photo&fileType=jpg&rights=cc_sharealike&alt=json'
-        response = get_url_resource(path.format(keyword=urlencode(keyword), key=settings.GOOGLE_API_KEY, cx=settings.GOOGLE_API_CX))
+        parameters = {'kayword': urlencode(keyword), 'key': settings.GOOGLE_API_KEY, 'cx': settings.GOOGLE_API_CX}
+        response = get_url_resource(path.format(**parameters))
         data = simplejson.loads(response)  # récupérer les données JSON d'images correspondant à la recherche
         images = data.get('items')
         results = [{'url': image['link'], 'title': image['title'], 'page': image.get('contextLink', '')} for image in images] if images else []
@@ -377,14 +380,14 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             - options : chaîne décrivant les options easy-thumbails de génération
             - image_class : classe CSS de l'élément img
             - image_rel : attribut rel de l'élément img
+            - image_title : attribut title de l'élément img
+            - image_alt : attribut alt de l'élément img
             - link : doit-on afficher un lien autour de l'image ?
             - link_title : attribut title de l'élément a
             - link_class : classe CSS de l'élément a
             - link_id : ID de l'élément a
             - link_rel : attribut rel de l'élément a
             - link_target : URL ou objet avec une méthode get_absolute_url
-            - image_title : attribut title de l'élément img
-            - image_alt : attribut alt de l'élément img
         :rtype: dict
         """
         display = dict()
@@ -557,30 +560,29 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
             return True
         return False
 
-    def paste(self, source_path, absolute=False, position='center center', offset=None):
+    def paste(self, source_path, relative=False, position='center center', offset=None, blending='over'):
         """
         Coller une autre image locale via son chemin sur cette image
 
         :param source_path: chemin local du fichier source, sans protocole
-        :param absolute: si False, path est relatif à STATIC_ROOT
+        :param relative: si False, path est relatif à STATIC_ROOT
         :param position: texte de positionnement, "[left|right|center] [top|bottom|center]"
         :param offset: tuple d'offset en pixels depuis le positionnement texte
+        :param blending: mode de fusion Imagemagick (http://www.imagemagick.org/Usage/compose/tables/)
         :type offset: tuple | list
         """
-        hpos, vpos = position.split(" ")
-        current = Image.open(self.image.path, 'r')
-        if absolute is False:
-            source_path = join(settings.STATIC_ROOT, source_path)
-        overlay = Image.open(source_path, 'r')
-        offset = offset or (0, 0)
-        xposition = {'left': 0 + offset[0], 'center': (current.size[0] - overlay.size[0]) / 2 + offset[0],
-                     'right': current.size[0] - overlay.size[0] + offset[0]}
-        yposition = {'top': 0 + offset[1], 'center': (current.size[1] - overlay.size[1]) / 2 + offset[1],
-                     'bottom': current.size[1] - overlay.size[1] + offset[1]}
-        current.paste(overlay, (xposition.get(hpos, 0), yposition.get(vpos, 0)))
-        current.save(self.image.path)
-        current.close()
-        overlay.close()
+        source_path = join(settings.STATIC_ROOT, source_path) if relative else source_path
+        with Image.open(self.image.path, 'r') as dst:
+            with Image.open(source_path, 'r') as src:
+                offset = offset or (0, 0)
+                xoffsets = {'left': offset[0], 'center': (dst.size[0] - src.size[0]) / 2 + offset[0], 'right': dst.size[0] - src.size[0] + offset[0]}
+                yoffsets = {'top': offset[1], 'center': (dst.size[1] - src.size[1]) / 2 + offset[1], 'bottom': dst.size[1] - src.size[1] + offset[1]}
+        # Coller via Imagemagick
+        with WImage(filename=self.image.path) as destination:
+            with WImage(filename=source_path) as source:
+                xname, yname = position.split()
+                destination.composite(source, int(xoffsets.get(xname, 0)), int(yoffsets.get(yname, 0)))  # operator=blending
+        return True
 
     # Actions
     def clean_thumbnail(self):

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-07-01 04:39+0200\n"
-"PO-Revision-Date: 2016-07-01 04:46+0009\n"
+"PO-Revision-Date: 2016-11-28 08:23+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgstr "Type de courrier"
 
 #: models/mailevent.py:169
 msgid "Queue time"
-msgstr "Heure de remise"
+msgstr "Mis en file le"
 
 #: models/mailevent.py:170
 msgid "Recipient"

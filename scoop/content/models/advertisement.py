@@ -18,6 +18,7 @@ from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySe
 class AdvertisementQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
     """ Manager des annonces publicitaires """
 
+    # Getter
     def get_by_name(self, name):
         """ Renvoyer une annonce selon son nom """
         try:
@@ -81,6 +82,10 @@ class AdvertisementQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
         else:
             return None
 
+    # Overrides
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
 
 class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, RectangleModel):
     """ Annonce publicitaire """
@@ -102,7 +107,16 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
 
     # Getter
     def render(self, request, view=True):
-        """ Effectuer le rendu de l'annonce """
+        """
+        Effectuer le rendu de l'annonce
+
+        Si l'utilisateur a les permissions de cacher l'annonce,
+        afficher un placeholders uniquement si l'utilisateur est du staff.
+
+        :param view: si True, le rendu compte pour un affichage de l'annonce
+        :param request: requête
+        :type view: bool
+        """
         template = Template(self.code)
         context = RequestContext(request)
         context.update({'ad': self})
@@ -113,7 +127,9 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
                 self.save(update_fields=['views'])
             return template.render(context)
         else:
-            return "{w}x{h} ad".format(w=self.width, h=self.height)
+            if request.user.is_staff:
+                return "{w}x{h} ad".format(w=self.width, h=self.height)
+            return ""
 
     # Overrides
     def __str__(self):
@@ -123,6 +139,10 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     def save(self, *args, **kwargs):
         """ Sauvegarder l'objet dans la base de données """
         super(Advertisement, self).save(*args, **kwargs)
+
+    def natural_key(self):
+        """ Clé naturelle """
+        return self.name,
 
     # Métadonnées
     class Meta:

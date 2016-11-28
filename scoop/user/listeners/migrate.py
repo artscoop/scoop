@@ -45,5 +45,5 @@ def create_testuser(sender, app_config, verbosity, interactive, using, **kwargs)
                 try:
                     assert get_user_model().objects.create_user(names[i], 'account-{i}@local.host'.format(i=i), names[i])
                     created_count += 1
-                except:
+                except AssertionError:
                     pass
