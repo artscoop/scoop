@@ -5,16 +5,20 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.core.admin.filters import TimestampFilter
 from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.shortcuts import addattr
+from scoop.user.admin.filters import ConfigurationCurrentFilter
 from scoop.user.models.forms import FormConfiguration
 
 __all__ = ['ConfigurationAdmin']
 
 
+@admin.register(FormConfiguration)
 class ConfigurationAdmin(admin.ModelAdmin):
     """ Administration des configurations de formulaire utilisateur """
+
+    # Configuration
     list_select_related = True
     list_display = ['id', 'user', 'name', 'get_version', 'get_data', 'get_datetime_format']
-    list_filter = ['name', 'version', TimestampFilter]
+    list_filter = ['name', 'version', TimestampFilter, ConfigurationCurrentFilter]
     list_editable = []
     list_per_page = 25
     search_fields = ['uuid']
@@ -32,7 +36,3 @@ class ConfigurationAdmin(admin.ModelAdmin):
         """ Renvoyer la représentation HTML des données de configuration """
         output = """<span title="{data}">{text}</span>""".format(data=escape(obj.data), text=truncate_ellipsis(str(obj.data), 40))
         return output
-
-
-# Enregistrer les classes d'administration
-admin.site.register(FormConfiguration, ConfigurationAdmin)

@@ -14,7 +14,11 @@ def patch_methods(cls, *bases):
     """
     Monkey-patcher une classe avec les méthodes d'autres classes
 
-    :param bases: Classes depuis lesquelles copier les fonctions
+    Le contenu de bases peut être des classes et des fonctions,
+    dans n'importe quel ordre.
+
+    :param cls: Classe à patcher
+    :param bases: Classes depuis lesquelles copier les fonctions + Méthodes
     :type bases: callable | class
     """
     for base in bases:
@@ -26,14 +30,6 @@ def patch_methods(cls, *bases):
                         setattr(cls, name, attribute)
         elif callable(base):
             setattr(cls, base.__name__, base)
-
-
-class DummyModel:
-    """ Instanciation d'un objet avec des attributs pour bulk_create """
-
-    def __init__(self, *args, **kwargs):
-        for kwarg in kwargs:
-            setattr(self, kwarg, kwargs[kwarg])
 
 
 class DictUpdateModel:
@@ -86,6 +82,7 @@ def resave_queryset(queryset, fields=None, count=None):
 def get_all_related_objects(instance, limit=2048):
     """
     Renvoyer tous les objets liés à une instance
+
     Monkey-patching done in scoop.core.__init__
     """
     # Liste à renvoyer
@@ -111,6 +108,7 @@ def get_all_related_objects(instance, limit=2048):
 def search_query(expression, fields, queryset=None):
     """
     Fabriquer une requête de recherche de mots dans plusieurs champs
+
     On passe une expression avec un ou plusieurs mots
     et une liste de champs texte dans lesquels rechercher.
     La fonction renvoie les paramètres de QuerySet utiles à la recherche.
@@ -179,6 +177,7 @@ def limit_to_model_names(*names):
 def make_lazy_picklable(*args):
     """
     request.user peut être un objet SimpleLazyObject qui ne peut pas être picklé par
+
     Celery lorsqu'il est dans une autre structure, visiblement.
     Remplacer user par user._wrapped dans ce cas
     :param symbols: normalement, passer locals()

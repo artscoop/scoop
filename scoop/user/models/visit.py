@@ -1,6 +1,8 @@
 # coding: utf-8
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.expressions import F
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.dateutil import now
@@ -18,17 +20,15 @@ class VisitManager(models.Manager):
         """ Renvoyer les visites faites à un utilisateur, ou les visiteurs """
         if as_users is False:
             return self.select_related('visitor').only('visitor', 'time').filter(user=user).order_by('-time')
-        from scoop.user.models import User
         # Renvoyer les utilisateurs, avec un champ timestamp when
-        return User.objects.active().filter(visits_maker__user=user).extra(select={'when': 'user_visit.time'})
+        return get_user_model().objects.active().filter(visits_maker__user=user).annotate(when=F('visits_receiver__time'))
 
     def by_user(self, user, as_users=False):
         """ Renvoyer les visites faites par un utilisateur, ou les utilisateurs vus """
         if as_users is False:
             return self.select_related('user').only('user', 'time').filter(visitor=user).order_by('-time')
-        from scoop.user.models import User
         # Renvoyer les utilisateurs, avec un champ timestamp when
-        return User.objects.active().filter(visits_receiver__visitor=user).extra(select={'when': 'user_visit.time'})
+        return get_user_model().objects.active().filter(visits_receiver__visitor=user).annotate(when=F('visits_receiver__time'))
 
     def has_visitors(self, user):
         """ Renvoyer si un utilisateur a eu des visiteurs """

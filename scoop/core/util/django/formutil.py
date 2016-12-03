@@ -170,7 +170,7 @@ def form(request, config, initial=None):
 
     Si request contient des données POST, créer le formulaire avec ces données.
     Ex.:
-    >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z}), initial=None)
+    >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z})), initial=None)
     >> a = form(request, {A: {'instance': x}})
     :param request: requête HTTP
     :param config: Configuration des formulaires
@@ -203,17 +203,13 @@ def form(request, config, initial=None):
 
 def are_valid(forms):
     """ Renvoyer si tous les formulaires passés sont valides """
-    if not isinstance(forms, list):
-        forms = [forms]
-    valid = all([item.is_valid() for item in forms])
+    valid = all([item.is_valid() for item in make_iterable(forms)])
     return valid
 
 
 def any_valid(forms):
     """ Renvoyer si un seul des formulaires passés est valide """
-    if not isinstance(forms, list):
-        forms = [forms]
-    valid = any([item.is_valid() for item in forms])
+    valid = any([item.is_valid() for item in make_iterable(forms)])
     return valid
 
 
@@ -240,7 +236,7 @@ def error_labels(forms):
     labels = []
     for item in forms:
         if item.errors:
-            labels = labels + [field.label for field in item if field.errors]
+            labels += [field.label for field in item if field.errors]
     if labels:
         return humanize_join(labels, 10, "field;fields")
     else:

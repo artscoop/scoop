@@ -18,6 +18,11 @@ class MonkeyPatchingTest(TestCase):
     def test_httprequest_patch(self):
         # Nom de fichier d'une URL
         self.assertTrue(hasattr(HttpRequest, 'get_ip'))
+        self.assertTrue(hasattr(HttpRequest, 'form'))
+        try:
+            self.assertTrue(callable(HttpRequest.form))
+        except (AttributeError, ValueError):
+            self.fail("HttpRequest devrait avoir une méthode form().")
 
     def test_model_patch(self):
         # Nom de fichier d'une URL

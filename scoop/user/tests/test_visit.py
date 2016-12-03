@@ -45,3 +45,9 @@ class VisitTest(TestCase):
         Visit.objects.wipe_visitee(self.user1)
         # Vérifier qu'il ne reste que 5 enregistrements
         self.assertEqual(Visit.objects.count(), 5, "only 5 visit records should remain")
+        # Vérifier que les utilisateurs récupérés depuis by_user(as_users=True) ont un attribut "when"
+        try:
+            users = Visit.objects.by_user(self.user1, as_users=True)
+            [user.when for user in users]
+        except (AttributeError, ValueError):
+            self.fail("Les utilisateurs devraient posséder un attribut 'when'.")

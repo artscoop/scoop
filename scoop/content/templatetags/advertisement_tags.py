@@ -13,7 +13,7 @@ register = template.Library()
 @register.filter(name="insert_ad")
 def ads(value, group=""):
     """ Intégrer une annonce publicitaire à un contenu """
-    soup = BeautifulSoup(value)
+    soup = BeautifulSoup(value, 'lxml')
     paragraphs = soup.findAll('p', recursive=False)
     # N'insérer le bloc que si le contenu présente au moins 2 paragraphes
     if len(paragraphs) > 1:

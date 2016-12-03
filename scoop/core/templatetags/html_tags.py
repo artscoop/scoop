@@ -51,7 +51,7 @@ def truncate_longwords_html(value, length=27):
     ex. abcdefghijklmnopqrstuvwxyzabc devient abcdefghijklmnopqrstuvwxyza bc
     """
     re.DEBUG = settings.DEBUG
-    soup = BeautifulSoup(value)
+    soup = BeautifulSoup(value, 'lxml')
     texts = soup.findAll(text=True)
 
     # Sous fonction : récupère un match et le coupe
@@ -82,14 +82,14 @@ def linkify(value):
 def html_urlize(value, autoescape=None):
     """ Transformer les textes contenant des URLs en liens, dans un texte HTML """
     IGNORED_TAGS = {'a', 'code', 'pre'}
-    soup = BeautifulSoup(value)
+    soup = BeautifulSoup(value, 'lxml')
     texts = soup.findAll(name=lambda tag: tag not in IGNORED_TAGS, text=True)
     # Supprimer toutes les séquences de la même lettre par cut_match
     for text in texts:
         new_text = urlize(text)
-        text.replaceWith(BeautifulSoup(new_text))
+        text.replaceWith(BeautifulSoup(new_text, 'lxml'))
     # Parcourir tous les liens et ajouter rel = nofollow
-    soup = BeautifulSoup(soup.renderContents())
+    soup = BeautifulSoup(soup.renderContents(), 'lxml')
     links = soup.findAll('a', limit=2)
     for link in links:
         if 'rel' in link:

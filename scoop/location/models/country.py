@@ -67,6 +67,7 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
     DATA_KEYS = ['neighbours']
     CONTINENTS = [['AF', _("Africa")], ['AS', _("Asia")], ['EU', _("Europe")], ['NA', _("North America")],
                   ['OC', _("Oceania")], ['SA', _("South America")], ['AN', _("Antarctica")]]
+    AFRICA, ASIA, EUROPE, NORTH_AMERICA, OCEANIA, SOUTH_AMERICA, ANTARCTICA = 'AF', 'AS', 'EU', 'NA', 'OC', 'SA', 'AN'
 
     # Champs
     name = models.CharField(max_length=100, blank=False, verbose_name=_("Name"))

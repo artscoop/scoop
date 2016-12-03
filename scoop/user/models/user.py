@@ -74,7 +74,15 @@ class UserQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, BaseUserManager):
         return self.get_or_raise(exception=Http404, **kwargs)
 
     def get_by_id(self, identifier, user=AnonymousUser(), exception=Http404, **kwargs):
-        """ Renvoyer un utilisateur selon son id, sinon un utilisateur par défaut ou une exception """
+        """
+        Renvoyer un utilisateur selon son id, sinon un utilisateur par défaut ou une exception
+
+        :param identifier: clé primaire de l'utilisateur à récupérer
+        :param user: Utilisateur à renvoyer si identifier == None
+        :param exception: classe d'exception à lever si l'utilisateur à renvoyer est AnonymousUser
+        :returns: Un utilisateur ou AnonymousUser
+        :raises: exception, si @param:exception n'est pas None et AnonymousUser doit être renvoyé
+        """
         [kwargs.pop(key, None) for key in {'pk', 'id'}]
         value = self.get_or_raise(pk=int(identifier), exception=exception, **kwargs) if identifier else user
         if value == AnonymousUser() and exception:
@@ -82,7 +90,11 @@ class UserQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, BaseUserManager):
         return value
 
     def get_by_name(self, name):
-        """ Renvoyer un utilisateur par son nom d'utilisateur """
+        """
+        Renvoyer un utilisateur par son nom d'utilisateur
+
+        :returns: un utilisateur, ou None si aucun utilisateur avec le nom n'a été trouvé
+        """
         return self.get_or_none(username=name)
 
     def get_by_email(self, email):

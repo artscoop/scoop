@@ -206,6 +206,7 @@ def gender(value, text):
     Renvoyer une chaîne dépendant du genre de l'objet
 
     :param value: un genre, 0=H, 1=F ou 2=ND
+    :type value: int
     :param text: une chaîne de trois textes séparés par des points-virgules
     """
     texts = text.split(';')

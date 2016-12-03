@@ -176,3 +176,24 @@ class InitialFilter(FirstLetterFilter):
                 return queryset.filter(**{'{field}__regex'.format(field=field_name): r'^\d'})
             else:
                 return queryset.filter(**{'{field}__istartswith'.format(field=field_name): value})
+
+
+class ConfigurationCurrentFilter(SimpleListFilter):
+    """ Filtre admin sur l'état des FormConfiguration """
+
+    title = _("current")
+    parameter_name = 'current'
+
+    def lookups(self, request, model_admin):
+        """ Renvoyer la liste des valeurs de filtre """
+        return (
+            ('yes', _('Is current')),
+            ('no', _('Is not current')),
+        )
+
+    def queryset(self, request, queryset):
+        """ Renvoyer les configurations correspondant aux valeurs du filtre """
+        if self.value() == 'yes':
+            return queryset.distinct().filter(version="").exclude(user=None)
+        if self.value() == 'no':
+            return queryset.distinct().filter(Q(user=None) | Q(version__gt=""))

@@ -136,6 +136,13 @@ class CityQuerySet(models.QuerySet):
         cities = self.in_square(point, km).order_by('-population')
         return cities.first() if cities.exists() else None
 
+    @staticmethod
+    def make_find_cache_key(name, lat, lon):
+        """ Générer une clé de cache pour une recherche de ville """
+        cache_key = "location.city.find:{lat:.1f}:{lon:.1f}:{name}"
+        cache_key = cache_key.format(lat=round_multiple(lat, 0.25), lon=round_multiple(lon, 0.25), name=unidecode(name).lower().strip() if name else '*')
+        return cache_key
+
     def find_by_name(self, point, name, quick=True):
         """
         Renvoyer une ville la plus proche d'un point, portant un nom si possible
@@ -145,10 +152,7 @@ class CityQuerySet(models.QuerySet):
         :param name: nom de ville à retrouver
         :param quick: ne pas trier les villes par distance
         """
-        name = unidecode(name).lower().strip() if name else '*'
-        # Renvoyer le résultat en cache
-        cache_key = "location.city.find:{lat:.1f}:{lon:.1f}:{name}"
-        cache_key = cache_key.format(lat=round_multiple(point[0], 0.25), lon=round_multiple(point[1], 0.25), name=name or '*')
+        cache_key = self.make_find_cache_key(name, point[0], point[1])
         result = cache.get(cache_key, None)
         if result is not None:
             return self.get(id=result)
@@ -169,11 +173,14 @@ class CityQuerySet(models.QuerySet):
         return None
 
     def prefetch_find(self, countries=None, limit=2000):
-        """ Précacher les résultats de recherche pour les villes de plus de 2 000 habitants """
+        """
+        Précacher les résultats de recherche pour les villes de plus de @param:limit habitants
+
+        :param countries: liste de codes pays
+        :param limit: nombre d'habitants minimum des villes à fetcher
+        """
         for city in self.by_population(countries or ['fr', 'ma', 'dz', 'be'], limit).iterator():
-            cache_key = "location.city.find:{lat:.2f}:{lon:.2f}:{name}".format(lat=round_multiple(city.get_latitude(), 0.25),
-                                                                               lon=round_multiple(city.get_longitude(), 0.25),
-                                                                               name=city.ascii.lower().strip() or '*')
+            cache_key = self.make_find_cache_key(city.ascii, city.latitude, city.longitude)
             cache.set(cache_key, city.pk)
 
 
