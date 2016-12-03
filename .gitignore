@@ -2,6 +2,7 @@
 *$
 *.BAK
 *.bak
+*.bak.sh
 *.class
 *.elc
 *.ln
