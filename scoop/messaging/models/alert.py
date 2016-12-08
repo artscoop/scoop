@@ -55,6 +55,8 @@ class AlertQuerySet(SingleDeleteQuerySet):
         :param data: dictionnaire d'infos pour le rendu de l'alerte/courrier
         :param level: niveau d'urgence de l'alerte
         :param as_mail: indique si un mail récapitulatif doit être envoyé. Par défaut None=n'envoie que les alertes de sécurité
+        :returns: la liste des alertes effectivement envoyées
+        :rtype: list<Alert>
         """
         from scoop.messaging.models.mailtype import MailType
         # Maximum de 1000 membres à qui envoyer l'alerte
@@ -65,6 +67,7 @@ class AlertQuerySet(SingleDeleteQuerySet):
         title, html = [render_block_to_string(template, label, data, context=context) for label in ['title', 'html']]
         as_mail = level == Alert.SECURITY if as_mail is None else as_mail
         alerts = []
+        # Créer une alerte pour chacun des destinataires
         for recipient in recipients:
             new_alert = self.create(user=recipient, title=one_line(title), text=html, level=level)
             alerts.append(new_alert)

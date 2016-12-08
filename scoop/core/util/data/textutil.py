@@ -1,4 +1,5 @@
 # coding: utf-8
+import ast
 import re
 from io import StringIO
 
@@ -22,23 +23,24 @@ def text_to_list(value):
         return result
 
 
-def text_to_list_of_lists(value, evaluate=False):
+def text_to_list_of_lists(value, evaluate=False, separator=':'):
     """
     Renvoyer une liste de listes depuis un texte.
 
     Chaque élément de la liste de rang 1 est séparé par un retour chariot
-    Les éléments des listes de rang 2 sont séparées par deux points (:)
+    Les éléments des listes de rang 2 sont séparés par deux points (:)
     Attention, evaluate peut représenter une faille de sécurité, n'utiliser
     qu'avec du contenu de confiance.
+    :param separator:
     :param evaluate: évaluer les valeurs, notamment les nombres
     """
     with StringIO(value) as reader:
         lines = reader.readlines()
-        result = [[one_line(part) for part in line.split(":")] for line in lines if not line.startswith('#')]
+        result = [[one_line(part) for part in line.split(separator)] for line in lines if not line.startswith('#')]
         if evaluate is True:
             for outer, _a in enumerate(result):
                 for inner, _b in enumerate(result[outer]):
-                    result[outer][inner] = eval(result[outer][inner], {'__builtin__': {}})
+                    result[outer][inner] = ast.literal_eval(result[outer][inner])
     return result
 
 
@@ -56,7 +58,7 @@ def text_to_dict(value, evaluate=False):
         result = dict([[one_line(part) for part in line.split(":", 1)] for line in lines if (':' in line and not line.startswith('#'))])
         if evaluate is True:
             for key in result.keys():
-                result[key] = eval(result[key], {'__builtin__': {}})
+                result[key] = ast.literal_eval(result[key])
     return result
 
 
@@ -189,8 +191,10 @@ def humanize_join(values, enum_count, singular_plural=None, as_links=False):
     else:
         raise TypeError("Values must be a list of Model instances or singular_plural must be passed as an argument.")
     values = [linkify(value) for value in values] if as_links else [str(value) for value in values]
-    if rest > 0:
+    if rest > 0 and enum_count > 0:
         output = _("{join} and {rest} {unit}").format(join=", ".join(values[:enum_count]), rest=rest, unit=singular if rest == 1 else plural)
+    elif rest > 0 and enum_count == 0:
+        output = _("{rest} {unit}").format(rest=rest, unit=singular if rest == 1 else plural)
     else:
         if total == 0:
             output = ""
