@@ -51,7 +51,7 @@ class AlertQuerySet(SingleDeleteQuerySet):
         Envoyer une alerte à un ou plusieurs utilisateurs
 
         :param recipients: utilisateurs destinataires
-        :param mailtype_name: nom du type de courrier/alerte à envoyer
+        :param mailtype_name: nom de code du type de courrier/alerte à envoyer, :see: messaging.models.MailType
         :param data: dictionnaire d'infos pour le rendu de l'alerte/courrier
         :param level: niveau d'urgence de l'alerte
         :param as_mail: indique si un mail récapitulatif doit être envoyé. Par défaut None=n'envoie que les alertes de sécurité

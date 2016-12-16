@@ -109,11 +109,22 @@ class FriendList(DataModel):
         mutual_ids = list(self_ids.intersection(user_ids))
         return len(mutual_ids) if count is True else get_user_model().objects.filter(pk__in=mutual_ids)
 
-    def get_distinct_friend_users(self, user, count=False):
-        """ Renvoyer les amis non communs avec un utilisateur """
+    def get_distinct_friend_users(self, user, symmetric=False, count=False):
+        """
+        Renvoyer les amis non communs avec un utilisateur
+
+        :param count: si True, renvoyer le nombre d'éléments, ou sinon les éléments eux-mêmes
+        :param user: utilisateur pour lequel on veut comparer la liste d'amis
+        :param symmetric: définit si le calcul doit être symétrique.
+        Lorsque symetric est False, on renvoie les amis de l'utilisateur courant
+        qui ne sont pas amis avec user, et les amis de user qui ne sont pas amis avec l'utilisateur
+        courant ne sont pas renvoyés.
+        Si symmetric est True, on affiche les utilisateurs des deux listes
+        d'amis qui sont présents dans une seule des deux listes (renvoie plus d'entrées)
+        """
         self_ids = set(self.get_friend_ids())
         user_ids = set(user.friends.get_friend_ids())
-        distinct_ids = list(user_ids.difference(self_ids))
+        distinct_ids = list(self_ids.symmetric_difference(user_ids)) if symmetric else list(self_ids.difference(user_ids))
         return len(distinct_ids) if count is True else get_user_model().objects.filter(pk__in=distinct_ids)
 
     def get_random_unknown_friend_users(self, count=10):
@@ -134,7 +145,7 @@ class FriendList(DataModel):
         return FriendList.ACTION_LABELS[status]
 
     def _get_active_friends(self):
-        """ Générer la liste des amis encore actifs """
+        """ Générateur : Renvoyer la liste des amis avec des comptes encore actifs """
         friends = self.get_users()
         for friend in friends:
             if friend.can_login():

@@ -31,12 +31,21 @@ class FriendlistTest(TestCase):
         user1 = User.objects.create(username='user1', email='user1@foo.bar', is_active=True)
         user2 = User.objects.create(username='user2', email='user2@foo.bar', is_active=True)
         user3 = User.objects.create(username='user3', email='user3@foo.bar')
+        user4 = User.objects.create(username='user4', email='user4@foo.bar', is_active=True)
+        user5 = User.objects.create(username='user5', email='user5@foo.bar', is_active=True)
 
         # Créer une demande d'amitié et un lien d'amitié
         user1.friends.add_sent(user3)
         user2.friends.add_friend(user3)
+        user4.friends.add_friend(user3)
+        user4.friends.add_friend(user5)
 
         self.assertTrue(user1.friends.is_sent(user3), "user1 has sent a request to user3")
+        self.assertEqual(user1.friends.get_sent_count(), 1, "user1 has sent a request to user3 only")
         self.assertFalse(user2.friends.is_sent(user3), "user2 has not sent a request to user3")
         self.assertFalse(user3.friends.is_sent(user1), "user3 has not sent a request to user1")
         self.assertTrue(user2.friends.is_friend(user3), "user2 should be friends with user3")
+        self.assertEqual(user4.friends.get_mutual_friend_users(user2, count=True), 1)  # user3 en commun
+        self.assertEqual(user4.friends.get_distinct_friend_users(user2, count=True), 1)  # user5 pas en commun
+        self.assertEqual(user2.friends.get_distinct_friend_users(user4, count=True, symmetric=True), 1)  # doit être réflexif
+        self.assertEqual(user2.friends.get_distinct_friend_users(user4, count=True, symmetric=False), 0)
