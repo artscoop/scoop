@@ -180,6 +180,12 @@ class PictureManager(models.Manager.from_queryset(PictureQuerySet), models.Manag
         """ Renvoyer les images marquées comme supprimées """
         return self.filter(deleted=True, **kwargs)
 
+    # Overrides
+    def delete(self):
+        """ Supprimer les images du Queryset """
+        for picture in self:
+            picture.delete()
+
 
 class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, FreeUUIDModel, CreationLicenseModel, AudienceModel, DataModel, ACLModel):
     """ Image """
@@ -220,7 +226,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         :type request_user: HttpRequest | User
         """
         user = getattr(request_user, 'user', request_user)
-        return (self.moderated and not self.deleted) or (user.is_authenticated() and user.is_staff)
+        return (self.moderated and not self.deleted) or (user and user.is_authenticated() and user.is_staff)
 
     def get_thumbnail(self, **kwargs):
         """

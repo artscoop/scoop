@@ -88,9 +88,9 @@ class Country(CoordinatesModel, PicturableModel, DataModel):
 
     # Getter
     @addattr(admin_order_field='name', short_description=_("Name"))
-    def get_name(self):
+    def get_name(self, language=None):
         """ Renvoyer le nom du pays """
-        language = translation.get_language()
+        language = language or (translation.get_language() or 'en')[0:2]
         names = self.alternates.filter(language=language).order_by('-preferred', '-short')
         if names.exists():
             return names[0].name

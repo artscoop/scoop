@@ -1,16 +1,15 @@
 # coding: utf-8
-import re
 import tempfile
 from os.path import join
-
-from mako import exceptions as mako_exceptions
-from mako.template import Template as MakoTemplate
 
 from django.template import TemplateDoesNotExist, TemplateSyntaxError
 from django.template.backends.base import BaseEngine
 from django.template.backends.utils import csrf_input_lazy, csrf_token_lazy
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
+from django.utils.safestring import mark_safe
+from mako import exceptions as mako_exceptions
+from mako.template import Template as MakoTemplate
 
 
 class MakoTemplates(BaseEngine):
@@ -124,4 +123,4 @@ class Template(object):
             output_context['csrf_input'] = csrf_input_lazy(request)
             output_context['csrf_token'] = csrf_token_lazy(request)
 
-        return self.template.render(**output_context)
+        return mark_safe(self.template.render(**output_context))

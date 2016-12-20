@@ -60,12 +60,12 @@ class RecipientManager(SingleDeleteManager):
     def related_recipients(self, user, ack=False):
         """ Renvoyer les objets destinataires participant aux mêmes sujets que l'utilisateur """
         # Uniquement les personnes qui ont connaissance de l'existence du fil
-        criteria = {'acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1 fois
+        criteria = {'acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1+ fois
         return self.filter(thread__recipients__user=user, **criteria).exclude(user=user)
 
     def related_users(self, user, ack=False):
         """ Renvoyer les utilisateurs participant aux mêmes sujets que l'utilisateur """
-        criteria = {'user_recipients__acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1 fois
+        criteria = {'user_recipients__acknowledged': True} if ack else {}  # si ack, uniquement les membres qui ont pris connaissance du contenu 1+ fois
         return get_user_model().objects.filter(user_recipients__thread__recipients__user=user, **criteria).exclude(id=user.id).distinct()
 
     # Setter
@@ -81,6 +81,7 @@ class RecipientManager(SingleDeleteManager):
 
         :param user: utilisateur ou requête
         :type user: django.auth.models.User | django.http.HttpRequest
+        :param thread: fil
         """
         user = user if isinstance(user, get_user_model()) else user.user
         if thread.is_recipient(user):

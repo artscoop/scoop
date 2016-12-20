@@ -45,6 +45,7 @@ class AttachmentManager(SingleDeleteManager):
     def attach(self, attachment, target, force=False):
         """
         Joindre un fichier à un objet
+
         :returns: True si le fichier a été attaché, False sinon
         """
         if isinstance(attachment, Attachment) and isinstance(target, models.Model):
@@ -96,7 +97,7 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model, ACLModel):
 
     @addattr(short_description=_("Name"))
     def get_filename(self):
-        """ Renvoyer le nom du fichier """
+        """ Renvoyer le nom du fichier sans le chemin """
         return os.path.basename(self.file.name)
 
     def _get_file_attribute_name(self):
@@ -119,8 +120,11 @@ class Attachment(DatetimeModel, AuthoredModel, UUID64Model, ACLModel):
     # Setter
     def detach(self):
         """ Détacher la pièce jointe de sa cible """
-        self.content_object = None
-        self.save()
+        if self.content_object is not None:
+            self.content_object = None
+            self.save()
+            return True
+        return False
 
     def set_mime_auto(self, save=False):
         """ Détecter et définir le type MIME du fichier """

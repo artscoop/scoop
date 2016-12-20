@@ -156,10 +156,8 @@ def populate_cities(country, output_every=8192):
             if os.path.exists(default_path):
                 filename = default_path
             else:
-                filename = download_url_resource('http://download.geonames.org/export/dump/{country}.zip'.
-                                                 format(country=country.code2.upper()),
-                                                 '{path}/geonames-country-{country}.zip'.
-                                                 format(path=tempfile.gettempdir(), country=country.code2.upper()))
+                filename = download_url_resource('http://download.geonames.org/export/dump/{country}.zip'.format(country=country.code2.upper()),
+                                                 '{path}/geonames-country-{country}.zip'.format(path=tempfile.gettempdir(), country=country.code2.upper()))
             reader, table = load_geoname_table_raw(filename, unidecode(country.code2)), dict()
             for row in reader:
                 if len(row) in {18, 19} and row[7][:3] in used_features and row[7] not in unused_features:

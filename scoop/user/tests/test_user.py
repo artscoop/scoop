@@ -34,6 +34,10 @@ class UserTest(TestCase):
         """ Vérifier l'état de création des utilisateurs """
         self.assertIsNotNone(self.user, "user testuser cannot be created")
         self.assertTrue(hasattr(self.user, 'activation'), "activation information is missing")
+        try:
+            self.assertIsNotNone(self.user.activation, "activation information is abnormally set to None")
+        except AttributeError:
+            self.fail("user has no valid link to an activation instance")
         if hasattr(self.user, 'profile'):
             self.assertTrue(hasattr(self.user.profile, 'city'), "user profile should have a city field")
             self.assertFalse(getattr(self.user.profile, 'banned', True), "user profile should have a banned field set to False")

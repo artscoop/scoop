@@ -296,7 +296,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     # Constantes
     CACHE_KEY = {'unread': 'messaging.thread.unread.{}'}
     INBOX_NAMES = ['inbox', 'unread', 'replied', 'trash']
-    DATA_KEYS = ['last_toggle']
+    DATA_KEYS = ['last_toggle', 'delete_time']
     TOGGLE_DELAY = getattr(settings, 'MESSAGING_THREAD_TOGGLE_DELAY', 3600)
     DELAY_ON_CLOSE_ONLY = getattr(settings, 'MESSAGING_THREAD_TOGGLE_DELAY_CLOSE_ONLY', False)
 
@@ -330,7 +330,8 @@ class Thread(UUID64Model, LabelableModel, DataModel):
             super(Thread, self).delete(*args, **kwargs)
         else:
             self.deleted = True
-            self.save(force_update=True, update_fields=['deleted', 'updated'])
+            self.set_data('delete_time', timezone.now())
+            self.save(force_update=True, update_fields=['deleted', 'updated', 'data'])
             self.get_messages().update(deleted=True)
 
     def __str__(self):

@@ -1,4 +1,2 @@
-{% if link %}<a href="{{ link_target }}" rel="{{ link_rel|default:'lightbox' }}"
-                {% if link_class %}class="{{ link_class }}" {% endif %}{% if link_id %}id="{{ link_id }}" {% endif %}{% if link_title %}title="{{ link_title }}"{% endif %}>{% endif %}
-<img alt="{{ image_alt }}" class="{{ image_class }}" rel="{{ image_rel|default:'tooltip' }}" title="{{ image_title }}" src="{{ image_thumbnail.url }}"
-     width="{{ image_thumbnail.width }}" height="{{ image_thumbnail.height }}">{% if link %}</a>{% endif %}
+{% if link %}<a href="{{ link_target }}" rel="{{ link_rel|default:'lightbox' }}" {% if link_class %}class="{{ link_class }}" {% endif %}{% if link_id %}id="{{ link_id }}" {% endif %}{% if link_title %}title="{{ link_title }}"{% endif %}>{% endif %}
+<img alt="{{ image_alt }}" class="{{ image_class }}" rel="{{ image_rel|default:'tooltip' }}" title="{{ image_title }}" src="{{ image_thumbnail.url }}" width="{{ image_thumbnail.width }}" height="{{ image_thumbnail.height }}">{% if link %}</a>{% endif %}

@@ -12,13 +12,13 @@ from scoop.user.util.auth import is_staff
 
 
 @user_passes_test(is_staff)
-def ban_users(request, users):
+def ban_users(request, users, mail=True):
     """ Bannir les profils et alterter les utilisateurs qui ont été en contact """
     users = make_iterable(users)
     banned = []
     for user in users:
         if user.profile.ban() is True:
-            Alert.objects.alert_related(user, 'user.profile.fake', 'security', {'profile': user.profile})
+            Alert.objects.alert_related(user, 'user.profile.fake', 'security', {'profile': user.profile}, as_mail=mail)
             banned.append(user)
     if banned:
         messages.success(request, humanize_join(banned, 3, _("user has been banned;users have been banned")))

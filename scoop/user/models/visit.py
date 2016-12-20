@@ -44,7 +44,7 @@ class VisitManager(models.Manager):
         if visitor.pk != target_user.pk:
             if self.filter(visitor=visitor, user=target_user).update(time=now()) == 0:
                 return self.create(visitor=visitor, user=target_user, time=now())
-            return True
+            return self.get(visitor=visitor, user=target_user)
         return False
 
     def wipe_visitor(self, user):

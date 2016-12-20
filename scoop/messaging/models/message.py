@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from fuzzywuzzy import fuzz
@@ -128,7 +129,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
     """ Message de discussion """
 
     # Constantes
-    DATA_KEYS = {'pasted', 'similar'}  # clés autorisées par datamodel
+    DATA_KEYS = {'pasted', 'similar', 'delete_time'}  # clés autorisées par datamodel
     SPAM_THRESHOLD = 0.83
     classifications = {'spam': ('1', '0'), 'level': ('l', 'm', 'h')}
 
@@ -226,6 +227,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
             self.thread.counter -= 1
             self.thread.save()
             self.deleted = True
+            self.set_data('delete_time', timezone.now())
             self.save()
         return True
 

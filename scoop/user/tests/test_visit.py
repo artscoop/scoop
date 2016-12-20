@@ -30,7 +30,7 @@ class VisitTest(TestCase):
         self.v7 = Visit.objects.new(self.user4, self.user1)
         self.v8 = Visit.objects.new(self.user4, self.user4)  # Aucun effet, renvoie False
         self.v9 = Visit.objects.new(self.user3, self.user3)  # Aucun effet, renvoie False
-        self.v10 = Visit.objects.new(self.user3, self.user1)  # Doublon, update de v5
+        self.v10 = Visit.objects.new(self.user3, self.user1)  # Doublon, update de v5, renvoie True
 
     # Tests
     def test_visits(self):
@@ -51,3 +51,9 @@ class VisitTest(TestCase):
             [user.when for user in users]
         except (AttributeError, ValueError):
             self.fail("Les utilisateurs devraient posséder un attribut 'when'.")
+
+    def test_consistency(self):
+        """ Vérifier l'état des visites """
+        self.assertEqual(self.v10, self.v5)
+        self.assertIsInstance(self.v5, Visit)
+        self.assertIsInstance(self.v10, Visit)
