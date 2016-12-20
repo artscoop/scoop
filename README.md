@@ -29,6 +29,7 @@ Nécessite python 3.5, nginx et Django 1.9
 - `DEFAULT_THUMBNAIL_DIMENSIONS` : *dict*, dimensions par défaut d'une miniature, avec les clés `width` et `height`
 - `CLASSIFY_LANGUAGE` : *str*, langue par défaut des stopwords, parmi ['english', 'french']
 - `CONTENT_ACL_ENABLED` : *bool* (True), si False, toujours autoriser l'accès aux fichiers media protégés par ACL 
+- `CONTENT_ACL_FOLDER` : *str* ('{Y}/{M}'), chemin des fichiers contrôlés par l'ACL, sans slash au début et à la fin 
 - `CONTENT_ACL_AUTO_UPDATE_PATHS` : *bool* (False), si True, chaque fichier ACL utilisera le modèle de nommage courant lors de sa sauvegarde.
 - `CONTENT_ACL_MEDIA_URL` : *str*, chemin de redirection vers le répertoire _location_ internal de nginx
 

@@ -77,14 +77,15 @@ class ACLModel(models.Model):
         """
         filename = filename.lower() if filename else self.get_filename() if self else uuid_bits(64)
         filename = filename.split('?')[0].split('#')[0] or uuid_bits(64)
+        folder = getattr(settings, 'CONTENT_ACL_FOLDER', '{Y}/{M}')
         # Créer les dictionnaires de données de noms de fichiers
         f = (self.get_datetime() if self else timezone.now()).strftime
         # Remplir le dictionnaire avec les informations de répertoire
         data = self.get_acl_upload_info()  # author
         data.update({'name': splitext(basename(filename))[0], 'ext': splitext(basename(filename))[1], 'type': self._meta.model_name,
-                     'acl': self.get_acl_directory(), 'Y': f("%Y"), 'M': f("%m"), 'W': f("%W"), 'h': f("%H"), 'm': f("%M"), 's': f("%S")})
+                     'acl': self.get_acl_directory(), 'Y': f("%Y"), 'M': f("%m"), 'W': f("%W"), 'd': f("%d"), 'h': f("%H"), 'm': f("%M"), 's': f("%S")})
         # Renvoyer le répertoire ou le chemin complet du fichier (documenter)
-        return "".join(["test/" if settings.TEST else "", "{acl}/{type}/{Y}/{M}", "/{author}/{name}{ext}" if not update else ""]).format(**data)
+        return "".join(["test/" if settings.TEST else "", "{acl}/{type}/", folder, "/{author}/{name}{ext}" if not update else ""]).format(**data)
 
     def get_acl_upload_info(self):
         """
