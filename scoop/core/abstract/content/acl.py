@@ -33,6 +33,7 @@ class ACLModel(models.Model):
     PUBLIC, REGISTERED, PRIVATE, FRIENDS, CUSTOM = 0, 1, 2, 3, 5
     ACL_PATHS = {0: 'public', 1: 'auth', 3: 'friends', 5: 'custom', 2: 'hidden'}
     ACL_PATHS_START = ('public', 'auth', 'friends', 'custom', 'hidden')
+    DEFAULT_ACL_FOLDER = '{Y}/{M}'
 
     # Champs
     acl_mode = models.PositiveSmallIntegerField(default=PUBLIC, choices=ACL_MODES, verbose_name=_("Mode"))
@@ -77,7 +78,7 @@ class ACLModel(models.Model):
         """
         filename = filename.lower() if filename else self.get_filename() if self else uuid_bits(64)
         filename = filename.split('?')[0].split('#')[0] or uuid_bits(64)
-        folder = getattr(settings, 'CONTENT_ACL_FOLDER', '{Y}/{M}')
+        folder = getattr(settings, 'CONTENT_ACL_FOLDER', ACLModel.DEFAULT_ACL_FOLDER)
         # Créer les dictionnaires de données de noms de fichiers
         f = (self.get_datetime() if self else timezone.now()).strftime
         # Remplir le dictionnaire avec les informations de répertoire

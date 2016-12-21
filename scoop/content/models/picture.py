@@ -18,7 +18,7 @@ from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.db import models, transaction
 from django.db.models.fields.files import FieldFile
-from django.template.defaultfilters import filesizeformat, urlencode
+from django.template.defaultfilters import filesizeformat, urlencode, slugify
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import escape
@@ -806,6 +806,15 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
     def get_absolute_url(self):
         """ Renvoyer l'URL de l'image """
         return self.content_object.get_absolute_url() if self.content_object and hasattr(self.content_object, 'get_absolute_url') else "#"
+
+    def get_acl_upload_info(self):
+        """
+        Renvoyer un dictionnaire d'informations sur l'objet, pour l'upload
+
+        :returns: un dictionnaire avec au moins les clés author
+        :rtype: dict
+        """
+        return {'author': slugify(self.author or '__no_author')}
 
     # Métadonnées
     class Meta:
