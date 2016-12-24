@@ -36,7 +36,7 @@ class RandomOrderFilter(SimpleListFilter):
 
     def lookups(self, request, model_admin):
         """ Renvoyer les valeurs possibles du filtre """
-        return (('yes', _("Yes")),)
+        return ('yes', _("Yes")),
 
     def queryset(self, request, queryset):
         """ Renvoyer un queryset mélangé ou ordonné """

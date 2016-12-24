@@ -28,8 +28,8 @@ class IPBlockTest(TestCase):
     def test_ipblock_detection(self):
         """ Tester que des IPs saines et bloquées sont détectées correctement """
         proxy_node = choice(list(get_proxy_nodes(PROXY_LIST_DIRECTORY)))
-        self.assertTrue(IPBlock.objects.is_blocked(IP.objects.get_by_ip(proxy_node))['blocked'], "The IP {} should be blocked.".format(proxy_node))
+        self.assertTrue(IPBlock.objects.get_ip_status(IP.objects.get_by_ip(proxy_node))['blocked'], "The IP {} should be blocked.".format(proxy_node))
         localhost = IP.objects.get_by_ip('127.0.0.1')
-        self.assertFalse(IPBlock.objects.is_blocked(localhost)['blocked'], "The IP {} should always be allowed.".format(localhost))
+        self.assertFalse(IPBlock.objects.get_ip_status(localhost)['blocked'], "The IP {} should always be allowed.".format(localhost))
         IPBlock.objects.block_ips('127.0.0.1')  # Même si l'IP est bloquée, elle est toujours considérée safe normalement
-        self.assertFalse(IPBlock.objects.is_blocked(localhost)['blocked'], "The IP {} should be protected here.".format(localhost))
+        self.assertFalse(IPBlock.objects.get_ip_status(localhost)['blocked'], "The IP {} should be protected here.".format(localhost))

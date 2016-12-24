@@ -287,13 +287,14 @@ class IP(DatetimeModel, CoordinatesModel):
     def get_blocked_status(self, check=False):
         """
         Renvoyer les informations de blocage de l'IP
+
         :param check: Recalculer l'état de blocage de l'IP
         """
         if check is True:
             from scoop.rogue.models import IPBlock
             # Vérifier complètement si l'IP est dangereuse et bloquée
-            return IPBlock.objects.is_blocked(self)
-        return {'blocked': self.blocked, 'harm': self.harm}
+            return IPBlock.objects.get_ip_status(self)
+        return {'blocked': self.blocked, 'level': self.harm, 'type': 0}
 
     def is_blocked(self, check=False):
         """
@@ -377,7 +378,7 @@ class IP(DatetimeModel, CoordinatesModel):
         from scoop.rogue.util.signals import ip_blocked
         # Vérifier via IPBlock si l'IP doit être bloquée
         if not self.blocked or force:
-            status = IPBlock.objects.is_blocked(self)
+            status = IPBlock.objects.get_ip_status(self)
             if status['blocked'] is True:
                 self.block(status['blocked'], status['level'], save=False)
                 ip_blocked.send(sender=self, harm=status['level'])

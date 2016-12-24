@@ -7,10 +7,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models, transaction
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from django_countries import countries
 from django_countries.fields import CountryField
+
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager
@@ -27,11 +28,12 @@ class IPBlockManager(SingleDeleteManager):
         """ Renvoyer les filtres actifs """
         return self.filter(active=True)
 
-    def is_blocked(self, ip):
+    def get_ip_status(self, ip):
         """
-        Renvoyer si une IP est bloquée
+        Renvoyer les informations de blocage concernant une IP
 
         :type ip: scoop.user.access.models.IP
+        :returns: un dictionnaire aux clés blocked, level et type
         """
         from scoop.location.models import Country
         # Ignorer les IPs protégées
@@ -87,31 +89,39 @@ class IPBlockManager(SingleDeleteManager):
         return {'blocked': False, 'level': 0, 'type': 0}
 
     @task(ignore_result=True)
-    def is_user_blocked(self, user):
-        """ Renvoyer si l'utilisateur utilise une IP bloquée par un filtre """
-        # Chemins rapides
-        if user is None or user.is_superuser or user.is_staff:
-            return False
+    def get_user_status(self, user):
+        """
+        Renvoyer si l'utilisateur utilise une IP bloquée par un filtre
+
+        :returns: un dictionnaire aux clés blocked, level et type
+        """
+        status = {'blocked': False, 'level': 0, 'type': 0}
         # Récupérer les IPs de l'utilisateur
-        from scoop.user.access.models import IP
-        # Parcourir les IPs, si une est bloquée, renvoyer Vrai
-        ips = IP.objects.for_user(user).distinct()
-        for ip in ips:
-            status = self.is_blocked(ip)
-            if status['blocked']:
-                user_has_ip_blocked.send(user, ip=ip, harm=status['level'])
-                return status
-        return False
+        if not (user is None or user.is_superuser or user.is_staff):
+            from scoop.user.access.models import IP
+            ips = IP.objects.for_user(user).distinct()
+            for ip in ips:
+                data = self.get_ip_status(ip)
+                status['blocked'] |= data['blocked']
+                status['level'] = max(status['level'], data['level'])
+                if data['blocked'] is True:
+                    user_has_ip_blocked.send(user, ip=ip, harm=status['level'])
+        return status
 
     def user_blocked_ips(self, user, value=True):
-        """ Renvoyer la liste des IPs bloquées pour un utilisateur """
+        """
+        Renvoyer la liste des IPs bloquées pour un utilisateur
+
+        :param value: si True, renvoyer les IPs bloquées, sinon les IP non bloquées
+        :param user: utilisateur
+        """
         if user is None or user.is_superuser or user.is_staff:
             return []
         # Récupérer les IPs de l'utilisateur
         from scoop.user.access.models import IP
         # Renvoyer seulement les IPs bloquées
         ips = IP.objects.for_user(user).distinct()
-        return [ip for ip in ips if self.is_blocked(ip)['blocked'] is value]
+        return [ip for ip in ips if self.get_ip_status(ip)['blocked'] is value]
 
     def blocked_users(self, block_criteria=None, user_criteria=None):
         """ Renvoyer les utilisateurs bloqués par les filtres """
@@ -224,7 +234,7 @@ class IPBlock(DatetimeModel):
     TYPES = [[0, _("Single address")], [1, _("Address range")], [2, _("Partial host")], [3, _("Partial host with exclusion")],
              [4, _("ISP with host exclusion")], [5, _("Country code")], [8, _("Allowed host")], [9, _("Allowed ISP")]]
     CATEGORIES = [[0, _("General")], [1, _("Proxy")], [2, _("Server")], [3, _("Compromised IP")], [4, _("Repeated trouble")], [10, _("Tor network")],
-                  [11, _("Anonymous network")], [12, _("VPN")]]
+                  [11, _("Anonymous network")], [12, _("VPN")], [13, _("Browser accelerator")]]
     HARM = [[1, _("Rarely harmful")], [2, _("Often harmful")], [3, _("Always harmful")]]
     SINGLE, RANGE, HOST, HOST_EXCLUSION, ISP_EXCLUSION, COUNTRY, HOST_ALLOWED, ISP_ALLOWED = 0, 1, 2, 3, 4, 5, 8, 9
     ALLOWED = 8  # typz minimum des exclusions de blocage

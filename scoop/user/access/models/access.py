@@ -174,4 +174,5 @@ class Access(DatetimeModel, IPPointableModel):
     class Meta:
         verbose_name = _("access")
         verbose_name_plural = _("accesses")
+        ordering = ['-id']
         app_label = 'access'

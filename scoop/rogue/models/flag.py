@@ -223,7 +223,11 @@ class Flag(DatetimeModel):
         self.close(Flag.FIXED)
 
     def set_admin_notes(self, text):
-        """ Définir les notes d'administration du signalement """
+        """
+        Définir les notes d'administration du signalement
+
+        :type text: str
+        """
         self.admin = text
         self.save(update_fields=['admin'])
 
@@ -238,7 +242,7 @@ class Flag(DatetimeModel):
         # Peupler l'attribut nom
         if self.content_object is not None:
             maxlength = Flag._meta.get_field('name').max_length - 4
-            self.name = truncatechars(self.content_object.__str__(), maxlength)
+            self.name = truncatechars(str(self.content_object), maxlength)
         super(Flag, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

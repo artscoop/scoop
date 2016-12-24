@@ -8,7 +8,7 @@ register = Library()
 @register.filter
 def has_ip_blocked(user):
     """ Renvoyer si un utilisateur est bloqué par IP """
-    return IPBlock.objects.is_user_blocked(user)
+    return IPBlock.objects.get_user_status(user)
 
 
 @register.filter

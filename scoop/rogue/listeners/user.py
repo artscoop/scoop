@@ -27,7 +27,7 @@ def online_status_check(sender, online, **kwargs):
     from scoop.rogue.models import IPBlock
     # Uniquement lorsque l'utilisateur est en ligne
     if sender.is_active and online is True:
-        task = getattr(IPBlock.objects, 'is_user_blocked')
+        task = getattr(IPBlock.objects, 'get_user_status')
         task.delay(sender)
 
 
@@ -36,8 +36,8 @@ def userip_creation(sender, **kwargs):
     """ Gérer la création d'une nouvelle IP utilisateur """
     from scoop.rogue.models import IPBlock
     # Vérifier que l'ip est bloquée
-    status = IPBlock.objects.is_blocked(sender.ip)
-    if status['blocked']:
+    status = IPBlock.objects.get_ip_status(sender.ip)
+    if status['blocked'] is True:
         user_has_ip_blocked.send(sender.user, ip=sender.ip, harm=status['harm'])
 
 
