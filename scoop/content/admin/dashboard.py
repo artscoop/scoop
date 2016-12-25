@@ -1,5 +1,6 @@
 # coding: utf-8
 from admin_tools.dashboard.modules import DashboardModule
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from scoop.content.models import Content, Picture
 
@@ -12,7 +13,7 @@ class BlogRollModule(DashboardModule):
     def init_with_context(self, context):
         """ Initialiser le contenu du dashboard """
         blogs = Content.objects.by_category('blog').order_by('-id')[0:5]
-        output = render_to_string("content/dashboard/blogs.html", {'blogs': blogs}, context_instance=context)
+        output = render(context['request'], "content/dashboard/blogs.html", {'blogs': blogs}).content
         self.pre_content = output
 
 
@@ -26,5 +27,5 @@ class PictureModule(DashboardModule):
         """ Initialiser le contenu du dashboard """
         pictures = Picture.objects.all().order_by('-id')
         stats = {'count': Picture.objects.count()}
-        output = render_to_string("content/dashboard/pictures.html", {'pictures': pictures, 'stats': stats}, context_instance=context)
+        output = render(context['request'], "content/dashboard/pictures.html", {'pictures': pictures, 'stats': stats}).content
         self.pre_content = output

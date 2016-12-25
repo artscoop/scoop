@@ -1,5 +1,6 @@
 # coding: utf-8
 from admin_tools.dashboard.modules import DashboardModule
+from django.shortcuts import render
 from django.template.loader import render_to_string
 
 
@@ -13,7 +14,7 @@ class IPModule(DashboardModule):
         from scoop.user.access.models import UserIP
 
         ips = UserIP.objects.all().order_by('-pk')
-        output = render_to_string("access/dashboard/ips.html", {'userips': ips}, context_instance=context)
+        output = render(context['request'], "access/dashboard/ips.html", {'userips': ips}).content
         self.pre_content = output
 
     def is_empty(self):

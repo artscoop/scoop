@@ -10,3 +10,4 @@ from .content import Content, ContentApproval
 from .category import Category, CategoryTranslation
 from .link import Link
 from .picture import Picture
+from .subscription import Subscription

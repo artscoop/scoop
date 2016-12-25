@@ -11,7 +11,6 @@ from django.utils.translation import ugettext_lazy as _
 class PipeListField(models.TextField):
     """ Champ liste séparée par des pipes (|) """
     description = _("Pipe separated values of same type")
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le champ """
@@ -20,6 +19,10 @@ class PipeListField(models.TextField):
     # Getter
     def to_python(self, value):
         """ Renvoyer la valeur python du champ """
+        return value.split("|")
+
+    def from_db_value(self, value, expression, connection, context):
+        """ Renvoyer la valeur python depuis la valeur de la db """
         return value.split("|")
 
     def get_prep_value(self, value):
@@ -43,7 +46,6 @@ class PipeListField(models.TextField):
 class LineListField(models.TextField):
     """ Champ liste/dictionnaire à index 0 séparé par des retours chariot """
     description = _("Line separated text values")
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le champ """
@@ -53,6 +55,10 @@ class LineListField(models.TextField):
     def to_python(self, value):
         """ Renvoyer la valeur python du champ """
         return OrderedDict(enumerate(value.strip().splitlines() or []))
+
+    def from_db_value(self, value, expression, connection, context):
+        """ Renvoyer la valeur python depuis la valeur de la db """
+        return self.to_python(value)
 
     def get_prep_value(self, value):
         """ Renvoyer la valeur en DB du champ """

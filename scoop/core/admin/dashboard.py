@@ -2,9 +2,12 @@
 import psutil
 from admin_tools.dashboard.modules import DashboardModule
 from django.core.cache import cache
+from django.shortcuts import render
 from django.template.loader import render_to_string
+
 from scoop.core.models.recorder import Record
 from scoop.core.util.stream.fileutil import get_free_disk_space
+
 
 PROCESS_NAMES = ['gunicorn', 'django', 'celery']
 try:
@@ -55,7 +58,7 @@ class RecordModule(DashboardModule):
     def init_with_context(self, context):
         """ Initialiser le contenu du dashboard """
         records = Record.objects.all().order_by('-id')
-        output = render_to_string("core/dashboard/recorder.html", {'records': records}, context_instance=context)
+        output = render(context['request'], "core/dashboard/recorder.html", {'records': records}).content
         self.pre_content = output
 
     def is_empty(self):

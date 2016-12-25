@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.conf import settings
-from django.core import urlresolvers
+from django import urls
 from django.core.exceptions import ViewDoesNotExist
 from django.template import Library, Node, TemplateSyntaxError, Variable
 from django.utils.translation import ugettext_lazy as _
@@ -31,12 +31,12 @@ class ViewNode(Node):
         url_or_view = Variable(self.url_or_view).resolve(context)
         try:
             urlconf = getattr(request, "urlconf", settings.ROOT_URLCONF)
-            resolver = urlresolvers.RegexURLResolver(r'^/', urlconf)
+            resolver = urls.RegexURLResolver(r'^/', urlconf)
             kwargs = {key: Variable(value).resolve(context) for (key, value) in self.kwargs.items()}
-            url_or_view = urlresolvers.reverse(url_or_view, kwargs=kwargs)
+            url_or_view = urls.reverse(url_or_view, kwargs=kwargs)
             view, args, kwargs = resolver.resolve(url_or_view)
         except:
-            view = urlresolvers.get_callable(url_or_view, True)
+            view = urls.get_callable(url_or_view)
             args = [Variable(arg).resolve(context) for arg in self.args]
             kwargs = {key: Variable(value).resolve(context) for key, value in self.kwargs.items()}
         if callable(view):
@@ -67,7 +67,7 @@ class ViewFuncNode(Node):
         # Renvoyer chaîne vide si aucune variable request à passer
         if 'request' in context:
             request = context['request']
-            view = urlresolvers.get_callable(Variable(self.view).resolve(context), True)
+            view = urls.get_callable(Variable(self.view).resolve(context))
             args = [Variable(arg).resolve(context) for arg in self.args]
             kwargs = {key: Variable(value).resolve(context) for key, value in self.kwargs.items()}
             if callable(view):

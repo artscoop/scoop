@@ -4,7 +4,8 @@ from re import split
 
 from django import template
 from django.core.urlresolvers import reverse_lazy as reverse
-from django.template import Node, Variable, resolve_variable
+from django.template import Node, Variable
+
 
 register = template.Library()
 
@@ -46,7 +47,7 @@ class AddGetParameter(Node):
 
     def render(self, context):
         """ Effectuer le rendu du nœud """
-        req = resolve_variable('request', context)
+        req = context.resolve('request')
         params = req.GET.copy()
         for key, value in self.values.items():
             params[key] = Variable(value).resolve(context)

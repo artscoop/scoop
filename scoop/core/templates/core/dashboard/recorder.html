@@ -1,4 +1,4 @@
-{% load i18n endless sorting_tags prettytimes_tags picture_tags user_tags type_tags %}
+{% load i18n el_pagination_tags sorting_tags prettytimes_tags picture_tags user_tags type_tags %}
 {% autosort records %}
 {% paginate 10 records using 'rec_p' %}
 

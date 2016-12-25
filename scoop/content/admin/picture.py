@@ -4,7 +4,7 @@ import os
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
 from django.conf import settings
-from django.conf.urls import patterns
+from django.conf.urls import url
 from django.contrib import admin
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -261,5 +261,5 @@ class PictureAdmin(GenericAdminModelAdmin, AjaxSelectAdmin, AutoAuthoredModelAdm
     def get_urls(self):
         """ Renvoyer les URLs disponibles pour cette page d'administration """
         urls = super(PictureAdmin, self).get_urls()
-        extra = patterns('', (r'^upload_zip/$', self.admin_site.admin_view(self.zip_upload)))
+        extra = [url(r'^upload_zip/$', self.admin_site.admin_view(self.zip_upload))]
         return extra + urls

@@ -10,7 +10,6 @@ from scoop.core.util.shortcuts import addattr
 
 class UUIDField(models.CharField):
     """ Champ de modèle UUID/Base64 """
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         """ Initialiser le champ """
