@@ -66,7 +66,7 @@ class FlagAdmin(AjaxSelectAdmin, AutoAuthoredModelAdmin, GenericModelUtil):
     # Overrides
     def get_queryset(self, request):
         """ Renvoyer le queryset par défaut de l'administration """
-        qs = super(FlagAdmin, self).queryset(request)
+        qs = super().get_queryset(request)
         if not request.user.is_superuser:
             return qs.filter(moderators=request.user)
         return qs

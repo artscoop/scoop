@@ -13,13 +13,16 @@ from django.conf import settings
 from django.db import connection
 from django.template.context import RequestContext
 from django.template.loader import render_to_string
+
+from scoop.core.util.django.middleware import MiddlewareBase
 from scoop.core.util.django.templateutil import render_to_code
 
 logger = logging.getLogger(__name__)
 
 
-class ProfilerMiddleware(object):
+class ProfilerMiddleware(MiddlewareBase):
     """ Middleware de profilage """
+
     # Constantes
     HTML_SIGNAL = "<!-- debug -->"
     profiler = None
@@ -31,8 +34,9 @@ class ProfilerMiddleware(object):
             args = (request,) + callback_args
             return self.profiler.runcall(callback, *args, **callback_kwargs)
 
-    def process_response(self, request, response):
+    def __call__(self, request):
         """ Traiter la réponse """
+        response = self.get_response(request)
         if settings.DEBUG and request.user.is_staff and self.profiler is not None:
             self.profiler.create_stats()
             stats = self.profiler.getstats()
@@ -81,42 +85,41 @@ class PageStatsMiddleware(object):
         return response
 
 
-class QuickPageStatsMiddleware(object):
+class QuickPageStatsMiddleware(MiddlewareBase):
     """ Middleware de statistiques de performance (sortie console) """
-
-    def process_request(self, request):
-        """ Traiter la requête """
-        self.start = time()
-        return None
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         """ Traiter la vue """
         self.view = view_func
         return None
 
-    def process_response(self, request, response):
+    def __call__(self, request):
         """ Traiter la réponse """
+        self.start = time()
+        response = self.get_response(request)
         self.elapsed = time() - self.start
         sys.stderr.write("{view:<20} {total:>8.04f}s ".format(total=self.elapsed, view=self.view.__name__ if hasattr(self, 'view') else ""))
         return response
 
 
-class SQLLogMiddleware(object):
+class SQLLogMiddleware(MiddlewareBase):
     """ Middleware répertoriant toutes les commandes SQL exécutées dans la page """
 
-    def process_response(self, request, response):
+    def __call__(self, request):
         """ Traiter la réponse """
+        response = self.get_response(request)
         time = sum([float(q['time']) for q in connection.queries])
         output = render_to_code(request, 'core/middleware/sqllog.html', {'sqllog': connection.queries, 'count': len(connection.queries), 'time': time})
         response.content += output.content
         return response
 
 
-class QuickSQLLogMiddleware(object):
+class QuickSQLLogMiddleware(MiddlewareBase):
     """ Middleware répertoriant toutes les commandes SQL exécutées (console) """
 
-    def process_response(self, request, response):
+    def __call__(self, request):
         """ Traiter la réponse """
+        response = self.get_response(request)
         time = sum([float(q['time']) for q in connection.queries])
         output = render_to_code(request, 'core/middleware/sqllog.html', {'sqllog': connection.queries, 'count': len(connection.queries), 'time': time})
         sys.stdout.write(output.content)

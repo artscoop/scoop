@@ -133,9 +133,6 @@ class ImageFieldFile(FieldFile):
 class WebImageField(ImageField):
     """ Champ Imagefield n'acceptant que les JPEG, les GIF et les PNG """
 
-    # Configuration
-    attr_class = ImageFieldFile
-
     # Constantes
     ACCEPTED_FORMATS = ('GIF', 'PNG', 'JPEG')
     MINIMUM_DIMENSIONS = (64, 64)
@@ -145,36 +142,15 @@ class WebImageField(ImageField):
         self.min_dimensions = list(kwargs.pop('min_dimensions', WebImageField.MINIMUM_DIMENSIONS))
         super(WebImageField, self).__init__(*args, **kwargs)
 
-    def to_python(self, data):
+    def clean(self, *args, **kwargs):
         """ Renvoyer la valeur python des données """
-        output = super(WebImageField, self).to_python(data)
-        if data is not None:
-            # data can be an InMemoryUploadedFile or something else
-            if hasattr(data, 'temporary_file_path'):
-                fi = data.temporary_file_path()
-            else:
-                data.open()  # data est un fichier fermé, il faut l'ouvrir si possible
-                fi = BytesIO(data.read() if hasattr(data, 'read') else data['content'])
-                data.close()
-            # Try to open the filename or file object
-            try:
-                from PIL import Image
-                # Ouvrir l'image
-                image = Image.open(fi)
-                # If opened, check against Format and dim constraints
-                if image.format not in WebImageField.ACCEPTED_FORMATS:
-                    raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
-                if image.size[0] < self.min_dimensions[0] or image.size[1] < self.min_dimensions[1]:
-                    raise ValidationError(
-                        _("Image not accepted. Minimum accepted size is {mw}x{mh}, got {iw}x{ih}").format(
-                            mw=self.min_dimensions[0], mh=self.min_dimensions[1], iw=image.size[0], ih=image.size[1]))
-                image.close()
-            except IOError:  # PIL cannot load and handle the image
-                raise ValidationError(_("This image cannot be handled. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
-            except ImportError:  # Maybe an error with PIL only on PyPy
-                raise
-            # Reset file cursor position if fi is a file object
-            if hasattr(fi, 'seek') and callable(fi.seek):
-                fi.seek(0)
-            return data
-        return output
+        data = super().clean(*args, **kwargs)
+        image = data.file.image
+        width, height = data.width, data.height
+        if image.format not in WebImageField.ACCEPTED_FORMATS:
+            raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
+        if width < self.min_dimensions[0] or height < self.min_dimensions[1]:
+            raise ValidationError(
+                _("Image not accepted. Minimum accepted size is {mw}x{mh}, got {iw}x{ih}").format(
+                    mw=self.min_dimensions[0], mh=self.min_dimensions[1], iw=width, ih=height))
+        return data

@@ -3,13 +3,16 @@ import logging
 
 from django.conf import settings
 from django.utils import timezone
+
+from scoop.core.util.django.middleware import MiddlewareBase
 from scoop.core.util.django.templateutil import do_render
 
 logger = logging.getLogger(__name__)
 
 
-class OpeningHoursMiddleware(object):
+class OpeningHoursMiddleware(MiddlewareBase):
     """ Middleware de restriction des horaires d'ouverture aux membres non autorisés """
+
     # Définir les horaires d'ouverture du site
     frames = getattr(settings, "OPENING_HOURS", [(0, 24)])
     groups = getattr(settings, "OPENING_HOURS_GROUPS_EXCLUDE", ["VIP"])
@@ -22,9 +25,10 @@ class OpeningHoursMiddleware(object):
                 return True
         return False
 
-    def process_response(self, request, response):
+    def _call__(self, request):
         """ Traiter la réponse """
         user = request.user
+        response = self.get_response(request)
         # Vérifier le groupe et les heures autorisées
         if user.is_authenticated():
             if not self.now_in_timeframes(OpeningHoursMiddleware.frames):

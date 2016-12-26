@@ -6,7 +6,7 @@ from setuptools import find_packages
 
 setup(
     name='scoop',
-    version='0.10.20160611',
+    version='0.11.20161226',
     packages=find_packages('.'),
     include_package_data=True,
     url='',

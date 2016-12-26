@@ -70,7 +70,13 @@ class FlagManager(SingleDeleteManager):
 
     # Setter
     def flag(self, item, **kwargs):
-        """ Signaler un objet """
+        """
+        Signaler un objet
+
+        :param item: Cible du signalement
+        :param kwargs:
+            type_name (obligatoire) : nom de code du type de signalement
+        """
         if 'author' not in kwargs or kwargs['author'].has_perm('rogue.can_flag'):
             try:
                 from scoop.rogue.models import FlagType
@@ -82,7 +88,7 @@ class FlagManager(SingleDeleteManager):
                     kwargs['author'] = get_user_model().objects.get_bot_or_admin()
                 # Créer le flag
                 flag = Flag(**kwargs)
-                flag.update(content_object=item)
+                flag.update(content_object=item, save=True)
                 flag_created.send(sender=flag.content_type, flag=flag)
                 return True
             except (TransactionManagementError, OperationalError):

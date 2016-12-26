@@ -22,7 +22,7 @@ class FlagFilterSet(FilterSet):
         self.filters['type'].widget = LinkWidget(attrs={'class': ''})
         self.filters['status'].widget = LinkWidget(attrs={'class': ''})
         self.filters['automatic'].widget = LinkWidget(attrs={'class': ''})
-        for _name, field in self.filters.iteritems():
+        for _name, field in self.filters.items():
             if isinstance(field, ChoiceFilter):
                 field.extra['choices'] = tuple([("", _("All"))] + list(field.extra['choices']))
 

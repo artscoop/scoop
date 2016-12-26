@@ -3,8 +3,10 @@ import re
 
 from django.conf import settings
 
+from scoop.core.util.django.middleware import MiddlewareBase
 
-class SubdomainsMiddleware(object):
+
+class SubdomainsMiddleware(MiddlewareBase):
     """
     Middleware qui remplace complètement la Root URL configuration
 
@@ -17,8 +19,9 @@ class SubdomainsMiddleware(object):
     SESSION_COOKIE_DOMAIN = ".localhost" ou ".domaine.com"
     """
 
-    def process_request(self, request):
+    def __call__(self, request):
         """ Traiter la requête """
+        response = self.get_response(request)
         # Récupérer le nom de domaine et les parties du ndd
         request.domain = request.META['HTTP_HOST']
         request.subdomain = ''
@@ -30,4 +33,4 @@ class SubdomainsMiddleware(object):
         # Remplacer le URL Conf à utiliser selon le nom de sous-domaine
         if request.subdomain in settings.SUBDOMAINS:
             request.urlconf = 'project.settings.urlconf.{name}'.format(name=request.subdomain)
-        return None
+        return response

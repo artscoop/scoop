@@ -1,12 +1,14 @@
 # coding: utf-8
 from scoop.core.models.redirection import Redirection
+from scoop.core.util.django.middleware import MiddlewareBase
 
 
-class RedirectionFallbackMiddleware(object):
+class RedirectionFallbackMiddleware(MiddlewareBase):
     """ Middleware de redirection manuelle d'URLs """
 
-    def process_response(self, request, response):
+    def __call__(self, request):
         """ Traiter la réponse """
+        response = self.get_response(request)
         # En cas autre que 404/410, renvoyer la réponse inchangée
         if response.status_code not in {404, 410}:
             return response

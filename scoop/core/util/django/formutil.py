@@ -107,7 +107,7 @@ def handle_upload(request):
       picture.image.save(unidecode(result['name']), File(open(result['path'])))
     """
     if request.FILES:
-        upload_file = request.FILES[request.FILES.keys()[0]]
+        upload_file = request.FILES[list(request.FILES.keys())[0]]
         upload_name = upload_file.name if 'name' not in request.POST else request.POST['name']
         # Par défaut, créer ou écrire à la fin du fichier existant
         file_mask = os.O_APPEND | os.O_WRONLY | os.O_CREAT if int(request.POST.get('chunk', 0)) > 0 else os.O_RDWR | os.O_CREAT | os.O_TRUNC

@@ -47,7 +47,7 @@ class AddGetParameter(Node):
 
     def render(self, context):
         """ Effectuer le rendu du nœud """
-        req = context.resolve('request')
+        req = context['request']
         params = req.GET.copy()
         for key, value in self.values.items():
             params[key] = Variable(value).resolve(context)

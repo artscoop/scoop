@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
+
+from scoop.core.util.django.middleware import MiddlewareBase
 from scoop.core.util.signals import record
 from scoop.core.util.stream.urlutil import remove_get_parameter
 
@@ -18,7 +20,7 @@ EXIT_PARAMETER = "__self"
 SESSION_ITEM = "_as_user"
 
 
-class ImpersonationMiddleware(object):
+class ImpersonationMiddleware(MiddlewareBase):
     """
     Middleware : Permet à un superutilisateur de se faire passer pour
     n'importe quel membre. Ceci est possible grâce à un paramètre d'URL,
@@ -40,7 +42,7 @@ class ImpersonationMiddleware(object):
         """ Imiter un utilisateur """
         request.session[SESSION_ITEM] = user.username if user else request.GET[IMPERSONATE_PARAMETER]
 
-    def process_request(self, request):
+    def __call__(self, request):
         """ Traiter la requête """
         if request.user.is_superuser and settings.STATIC_URL not in request.path:
             if IMPERSONATE_PARAMETER in request.GET and SESSION_ITEM not in request.session:
@@ -59,3 +61,4 @@ class ImpersonationMiddleware(object):
                 except ObjectDoesNotExist:
                     messages.error(request, _("There is no active user with the username {name}.").format(name=request.session[SESSION_ITEM]))
                     del request.session[SESSION_ITEM]
+        return self.get_response(request)

@@ -31,14 +31,13 @@ class ProfileForm(forms.ModelForm):
         """ Initialiser le formulaire """
         ProfileForm.MINIMUM_AGE = kwargs.get('minimum_age', ProfileForm.MINIMUM_AGE)
         super(ProfileForm, self).__init__(*args, **kwargs)
-        self.fields['city'].required = True
 
 
 class ProfilePictureForm(forms_.ModelForm):
     """ Formulaire d'édition d'image de profil """
 
     # Champs
-    image = ClearableImageField(widget=PictureInlineWidget, label=_("Main picture"),
+    image = ClearableImageField(widget=PictureInlineWidget, label=_("Main picture"), required=False,
                                 template=_("%(input)s <span class='clear'>%(checkbox)s <span>Remove picture</span></span>")
                                 )
 

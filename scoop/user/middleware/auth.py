@@ -9,12 +9,13 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy  # Fix pour django_extensions.reset_db
 from django.http.response import HttpResponseRedirect
 from scoop.core.util.django import formutil
+from scoop.core.util.django.middleware import MiddlewareBase
 from scoop.user.forms import LoginForm
 from scoop.user.forms.configuration import ConfigurationForm
 from scoop.user.models import User
 
 
-class LoginMiddleware(object):
+class LoginMiddleware(MiddlewareBase):
     """
     Middleware de connexion utilisateur
 
@@ -28,7 +29,7 @@ class LoginMiddleware(object):
     LOGOUT_URL = reverse_lazy('user:logout')
 
     # Exécuter le middleware
-    def process_request(self, request):
+    def __call__(self, request):
         """ Traiter la requête """
         if request.has_post('submit-login') and request.user.is_anonymous():
             form = request.form([LoginForm])
@@ -47,10 +48,10 @@ class LoginMiddleware(object):
                     return HttpResponseRedirect(settings.LOGIN_URL)
             else:
                 messages.warning(request, "".join(form.errors['__all__']))
-        return None
+        return self.get_response(request)
 
 
-class AutoLogoutMiddleware(object):
+class AutoLogoutMiddleware(MiddlewareBase):
     """
     Middleware de déconnexion automatique de l'utilisateur
 
@@ -59,11 +60,11 @@ class AutoLogoutMiddleware(object):
     - est en ligne et une déconnexion a été demandée
     """
 
-    def process_request(self, request):
+    def __call__(self, request):
         """ Traiter la requête """
         if randint(0, 5) == 0:
             user = request.user
             if user.is_authenticated() and (user.deleted or not user.is_active or user.is_logout_forced()):
                 User.sign(request, None, logout=True)
                 cache.delete(User.CACHE_KEY['logout.force'].format(user.pk))
-        return None
+        return self.get_response(request)
