@@ -1,2 +1,3 @@
 # coding: utf-8
-from scoop.forum.forms.forum import LabelAdminForm
+from .label import LabelAdminForm
+from .message import MessageForm

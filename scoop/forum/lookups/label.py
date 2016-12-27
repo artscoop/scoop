@@ -7,6 +7,8 @@ from unidecode import unidecode
 
 class LabelLookup(LookupChannel):
     """ Lookup ajax-select des forums """
+
+    # Configuration
     model = Label
     plugin_options = {'minLength': 4, 'position': {"my": "left bottom", "at": "left top", "collision": "flip"}}
 

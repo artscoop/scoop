@@ -41,7 +41,12 @@ class LabelManager(SingleDeleteQuerySet):
 
 
 class Label(TranslatableModel, UUID32Model, WeightedModel):
-    """ Étiquette d'une discussion """
+    """
+    Étiquette d'une discussion
+
+    :members primary: bool, Le tag identifie-t-il le forum principal d'un fil ?
+    :members status: bool, Le tag identifie-t-til le statut d'un fil
+    """
 
     # Champs
     parent = models.ForeignKey('self', null=True, blank=False, limit_choices_to={'primary': True}, related_name='children', verbose_name=_("Parent"))

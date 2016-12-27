@@ -6,8 +6,10 @@ from django.utils.translation import ugettext_lazy as _
 from scoop.forum.models import Poll
 
 
+@admin.register(Poll)
 class PollAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     """ Administration des sondages """
+
     list_select_related = True
     list_display = ['id', 'title', 'description', 'is_open', 'published', 'expires']
     list_filter = []
@@ -17,7 +19,3 @@ class PollAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     inlines = []
     filter_horizontal = []
     search_fields = ['title', 'description']
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Poll, PollAdmin)

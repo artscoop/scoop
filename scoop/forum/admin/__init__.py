@@ -1,2 +1,4 @@
 # coding: utf-8
-from .forum import LabelAdmin, ThreadAdmin
+from .label import LabelAdmin
+from .poll import PollAdmin
+from .thread import ThreadAdmin

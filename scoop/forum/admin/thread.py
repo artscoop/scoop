@@ -3,22 +3,12 @@ from ajax_select.admin import AjaxSelectAdmin
 from ajax_select.helpers import make_ajax_form
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.util.shortcuts import addattr
-from scoop.forum.models.label import Label
 from scoop.forum.models.thread import Thread
 
 
-class LabelAdmin(AjaxSelectAdmin, admin.ModelAdmin):
-    """ Administration de forum """
-
-    # Configuration
-    list_display = ['id', 'short_name', 'name', 'description', 'primary', 'status', 'visible']
-    list_editable = ['short_name']
-    list_filter = ['primary', 'visible', 'status', 'groups']
-    search_fields = ['short_name', 'translations__name', 'translations__description', 'translations__html']
-    list_per_page = 25
-
-
+@admin.register(Thread)
 class ThreadAdmin(AjaxSelectAdmin, admin.ModelAdmin):
     """ Administration de forum """
 
@@ -53,8 +43,3 @@ class ThreadAdmin(AjaxSelectAdmin, admin.ModelAdmin):
         for thread in queryset:
             count += 1 if thread.set_visible(False) else 0
         self.message_user(request, _("{count} threads have been hidden.").format(count=count))
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Label, LabelAdmin)
-admin.site.register(Thread, ThreadAdmin)

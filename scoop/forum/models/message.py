@@ -1,11 +1,11 @@
 # coding: utf-8
 
-from annoying.decorators import render_to
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from fuzzywuzzy import fuzz
+
 from scoop.analyze.abstract.classifiable import ClassifiableModel
 from scoop.core.abstract.content.picture import PicturableModel
 from scoop.core.abstract.core.data import DataModel
@@ -13,7 +13,9 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.ippoint import IPPointableModel, IPPointModel
 from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.data.dateutil import now
+from scoop.core.util.django.templateutil import do_render
 from scoop.core.util.model.model import SingleDeleteManager, search_query
+
 
 __all__ = ['Message']
 
@@ -80,10 +82,13 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
     objects = MessageManager()
 
     # Getter
-    @render_to("forum/message/body.html")
-    def get_text_html(self):
-        """ Renvoyer la représentation HTML du message """
-        return {'message': self}
+    def get_text_html(self, request):
+        """
+        Renvoyer la représentation HTML du message
+
+        :param request: requête Http
+        """
+        return do_render(request, "forum/message/body.html", {'message': self}, string=True)
 
     def get_document(self):
         """ Renvoyer le contenu à classifier """

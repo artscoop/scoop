@@ -1,1 +1,6 @@
-{{ message.text }}
+{% load forum_tags i18n %}
+{% if request.user | has_muted:message.author %}
+    {{ message.text }}
+{% else %}
+    <small>{{ _("This user has been muted") }}</small>
+{% endif %}
