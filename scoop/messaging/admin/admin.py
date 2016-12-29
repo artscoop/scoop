@@ -5,12 +5,12 @@ from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.templatetags.html_tags import ol
 from scoop.core.util.shortcuts import addattr
 from scoop.messaging.forms import RecipientAdminForm
 from scoop.messaging.forms.machinery import QuotaAdminForm
 from scoop.messaging.models.alert import Alert
-from scoop.messaging.models.mailevent import MailEvent
 from scoop.messaging.models.mailtype import MailType, MailTypeTranslation
 from scoop.messaging.models.quota import Quota
 from scoop.messaging.models.recipient import Recipient
@@ -63,16 +63,6 @@ class QuotaAdmin(admin.ModelAdmin):
     form = QuotaAdminForm
 
 
-class MailEventAdmin(admin.ModelAdmin):
-    """ Administration des courriers électroniques """
-    list_select_related = True
-    list_display = ['id', 'type', 'recipient', 'sent_email', 'get_data_repr', 'forced', 'sent', 'discarded', 'minimum_time']
-    list_display_links = ['id']
-    list_filter = ['sent', 'discarded', 'forced', 'type']
-    readonly_fields = []
-    form = make_ajax_form(MailEvent, {'recipient': "user"})
-
-
 class AlertAdmin(admin.ModelAdmin):
     """ Administration des alertes """
     list_select_related = True
@@ -85,5 +75,4 @@ class AlertAdmin(admin.ModelAdmin):
 # Enregistrer les classes d'administration
 admin.site.register(MailType, MailTypeAdmin)
 admin.site.register(Quota, QuotaAdmin)
-admin.site.register(MailEvent, MailEventAdmin)
 admin.site.register(Alert, AlertAdmin)

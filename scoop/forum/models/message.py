@@ -65,6 +65,17 @@ class MessageManager(SingleDeleteManager):
         """ Renvoyer les messages contenant une expression """
         return search_query(expression, ['text'], self.filter(**kwargs))
 
+    # Actions
+    def _add(self, thread, author, body, request):
+        # Par défaut un auteur None devient un bot
+        from scoop.user.models import User
+        from scoop.user.access.models import IP
+        if author is None:
+            author = User.objects.get_bot() if (request is None or request.user.is_anonymous()) else request.user
+        # Ajouter le message + les indicateurs de non-lecture
+        message = Message(thread=thread, author=author, name=author.username, text=body, ip=IP.objects.get_by_request(request))
+        message.save(force_insert=True)
+
 
 class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, ClassifiableModel):
     """ Message de discussion publique """

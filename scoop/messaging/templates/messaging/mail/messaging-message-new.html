@@ -6,8 +6,7 @@
 
 {% block text %}
     Bonjour {{ event.recipient }},
-    {% humanize_join sender 2 "membre;membres" %} {{ sender|length|pluralize:"vous a envoyé,vous ont envoyé" }}
-    {{ message|length|pluralize:"un message privé,des messages privés" }}.
+    {% humanize_join sender 2 "membre;membres" %} {{ sender|length|pluralize:"vous a envoyé,vous ont envoyé" }} {{ message|length|pluralize:"un message privé,des messages privés" }}.
     Vous pouvez consulter tous vos messages privés en vous connectant avec votre compte utilisateur, et en vous rendant à l'adresse internet suivante :
     {{ DOMAIN_NAME }}{% url "messaging:inbox" %}
 {% endblock %}

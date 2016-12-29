@@ -27,6 +27,20 @@ class ThreadQuerySet(SingleDeleteQuerySet):
         """ Renvoyer les fils invisibles """
         return self.filter(visible=False)
 
+    # Actions
+    def new(self, author, subject, body, request=None, closed=False):
+        """
+        Créer un nouveau fil de discussion avec un message
+
+        :param author: utilisateur ayant créé le fil de discussion
+        :param subject: titre du nouveau fil
+        :param body: corps du nouveau fil, en HTML
+        :param request: objet Request pour afficher des messages d'avertissement si besoin
+        :param closed: définit si le sujet doit être fermé dès sa création
+        """
+        thread = self.create(author=author, updater=author, topic=subject, deleted=False, closed=closed)
+        thread.add_message(author, body, request)
+
 
 class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableModel, SubscribableModel):
     """ Fil de discussion public """
@@ -48,6 +62,11 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
     sticky = models.BooleanField(default=False, db_index=True, verbose_name=_("Always on top"))
     visible = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('thread', "Visible"))
     objects = ThreadQuerySet.as_manager()
+
+    # Actions
+    def add_message(self, author, body, request):
+        """ Ajouter un message au fil de discussion """
+        return self.messages._add(self, author, body, request)
 
     # Getter
     @addattr(short_description=_("All messages"))

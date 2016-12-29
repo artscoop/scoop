@@ -6,7 +6,7 @@
 
 {% block text %}
     Bonjour {{ event.recipient }},
-    Voici la liste des utilisateurs ayant été signalés automatiquement :
+    Voici une liste d'utilisateurs ayant été signalés automatiquement :
     {% for user in users %}
         {{ user }}
     {% endfor %}
@@ -14,7 +14,7 @@
 
 {% block html %}
     Bonjour {{ event.recipient }},
-    Voici la liste des utilisateurs ayant été signalés automatiquement :
+    Voici une liste d'utilisateurs ayant été signalés automatiquement :
     {% for user in users %}
         {{ user }}
     {% endfor %}

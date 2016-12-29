@@ -4,13 +4,13 @@ from smtplib import SMTPException, SMTPResponseException
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.mail.message import EmailMultiAlternatives
 from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
 from pretty_times import pretty
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID128Model
 from scoop.core.util.data.textutil import one_line
@@ -18,7 +18,8 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
-from scoop.core.util.stream.request import default_context
+from scoop.core.util.stream.request import default_request
+from scoop.messaging.util.mail import EmailMultiRelated
 
 
 class MailEventQuerySet(SingleDeleteQuerySet):
@@ -64,7 +65,7 @@ class MailEventQuerySet(SingleDeleteQuerySet):
     # Setter
     def _send_mail(self, sender, to, title, text, html=None):
         """ Envoyer immédiatement un courrier """
-        message = EmailMultiAlternatives(title, text, sender, make_iterable(to))
+        message = EmailMultiRelated(title, text, sender, make_iterable(to))
         if html is not None:
             message.attach_alternative(html, "text/html")
         try:
@@ -116,7 +117,7 @@ class MailEventQuerySet(SingleDeleteQuerySet):
         if not self.filter(sent=False, discarded=False).exists():
             return 0
         # Adresse du sender (selon template+settings)
-        sender = render_to_string('messaging/mail/layout/sender.txt', {'settings': settings}, default_context())
+        sender = render_to_string('messaging/mail/layout/sender.txt', {'settings': settings}, default_request())
         # Supprimer les mails sans utilisateur et non importants
         self.orphans().delete()
         # Récupérer la liste des membres à qui envoyer un mail
@@ -196,11 +197,19 @@ class MailEvent(UUID128Model, DataModel):
         title = one_line(title)
         return {'title': title, 'text': text, 'html': render_to_string('messaging/mail/layout/html.html', {'html': html})}
 
-    # Setter
+    # Action
     def postpone(self, minutes):
         """ Retarder l'événement de n minutes """
         self.minimum_time += datetime.timedelta(minutes=minutes)
         self.save(update_fields=['minimum_time'])
+
+    def discard(self):
+        """ Annuler l'envoi """
+        if not (self.sent or self.discarded):
+            self.discarded = True
+            self.save()
+            return True
+        return False
 
     # Métadonnées
     class Meta:

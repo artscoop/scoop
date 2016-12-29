@@ -14,11 +14,10 @@ class EmailMultiRelated(EmailMultiAlternatives):
     """
     related_subtype = 'related'
 
-    def __init__(self, subject='', body='', from_email=None, to=None, bcc=None,
-                 connection=None, attachments=None, headers=None, alternatives=None):
+    def __init__(self, subject='', body='', from_email=None, to=None, bcc=None, connection=None, attachments=None, headers=None, alternatives=None):
         # self.related_ids = []
         self.related_attachments = []
-        return super(EmailMultiRelated, self).__init__(subject, body, from_email, to, bcc, connection, attachments, headers, alternatives)
+        return super().__init__(subject, body, from_email, to, bcc, connection, attachments, headers, alternatives)
 
     def attach_related(self, filename=None, content=None, mimetype=None):
         """

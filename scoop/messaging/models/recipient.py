@@ -109,11 +109,15 @@ class RecipientManager(SingleDeleteManager):
         except Recipient.DoesNotExist:
             pass
 
-    def acknowledge(self, user, threads):
+    def acknowledge(self, user=None, threads=None):
         """ Prendre connaissance de l'existence d'un fil """
-        threads = make_iterable(threads)
-        recipients = self.filter(user=user, thread__in=threads)
-        updated = recipients.update(acknowledged=True)
+        queryset = self
+        if user is not None:
+            queryset = queryset.filter(user=user)
+        if threads is not None:
+            threads = make_iterable(threads)
+            queryset = queryset.filter(thread__in=threads)
+        updated = self.update(acknowledged=True)
         return updated
 
 

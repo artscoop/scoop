@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 class DataModel(models.Model):
     """ Mixin de modèle pour stocker des données """
-    data = picklefield.PickledObjectField(default=dict, verbose_name=_("Data"))
+
+    # Champs
+    data = picklefield.PickledObjectField(default=dict, protocol=3, verbose_name=_("Data"))
 
     # Setter
     def set_data(self, key, value, save=False):

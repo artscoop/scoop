@@ -23,7 +23,7 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
-from scoop.core.util.stream.request import default_context
+from scoop.core.util.stream.request import default_context, default_request
 from scoop.messaging.models.label import LabelableModel
 from scoop.messaging.util.signals import thread_created, thread_pre_create
 
@@ -221,7 +221,6 @@ class ThreadQuerySet(SingleDeleteQuerySet):
         :returns: un dictionnaire avec les clés thread, message et created. Ou False en cas d'échec.
         :rtype: dict | bool
         """
-        from scoop.messaging.models import Message, Recipient
         # Convertir les destinataires en liste si besoin
         recipients = make_iterable(recipients, set)
         # Pré-creation du thread
@@ -255,16 +254,16 @@ class ThreadQuerySet(SingleDeleteQuerySet):
                 created = False
                 logger.info("Duplicates disabled, message added to thread with identifier {uuid}".format(uuid=thread.uuid))
         if thread is None:
-            thread = super(self.__class__, self).create(author=author, updater=author, topic=subject, deleted=False, closed=closed, expires=expiry)
+            thread = self.create(author=author, updater=author, topic=subject, deleted=False, closed=closed, expires=expiry)
             created = True
             thread_created.send(sender=Thread, author=author, thread=thread)
             logger.debug("A new thread with identifier {uuid} has been created".format(uuid=thread.uuid))
             # Ajouter les participants
             thread.add_recipients(recipients)
         # Ack auteur
-        Recipient.objects.acknowledge(author, thread)
+        thread.recipients.acknowledge(user=author)
         # Ajouter le corps du message au sujet, si fourni
-        message = Message.objects._add(thread, author, body, request, as_mail=as_mail) if body is not None else None
+        message = thread.add_message(author, body, request, as_mail=as_mail) if body is not None else None
         return {'thread': thread, 'message': message, 'created': created}
 
     def new_locked(self, recipients, name="warning", as_mail=True, **kwargs):
@@ -357,7 +356,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
         """
         data = data or dict()
         data.update({'thread': self})
-        body = render_to_string("messaging/message/bot/{0}.html".format(template), data, context_instance=default_context())
+        body = render_to_string("messaging/message/bot/{0}.html".format(template), data, default_request())
         return self.messages._add(self, None, body, None, strip_tags=False, as_mail=as_mail)
 
     def add_recipients(self, recipients):
@@ -535,9 +534,7 @@ class Thread(UUID64Model, LabelableModel, DataModel):
     @addattr(boolean=True, short_description=_("Unread"))
     def is_unread(self, user):
         """ Renvoyer si un utilisateur n'a pas lu le fil """
-        from scoop.messaging.models import Recipient
-        # Renvoyer l'état
-        return Recipient.objects.is_unread(self, user)
+        return self.recipients.is_unread(self, user)
 
     @addattr(boolean=True, short_description=_("All read"))
     def is_read_by_everyone(self):
