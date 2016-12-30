@@ -408,6 +408,9 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
                 display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image.image))
                 display['image_title'] = kwargs.pop('image_title', image.title)
                 display['image_alt'] = kwargs.pop('image_alt', image.description)
+                # Trouver un titre par défaut si l'image ne contient vraiment aucun titre
+                if display['image_alt'] == "":
+                    display['image_alt'] = "{0}/{1}".format(Picture._meta.verbose_name, image.content_object or image.author)
             elif isinstance(image, (str, FieldFile)):
                 display['image_url'] = image
                 display['link_target'] = kwargs.pop('link_target', "{}{}".format(settings.MEDIA_URL, image))

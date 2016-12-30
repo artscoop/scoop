@@ -6,6 +6,7 @@ from django.contrib.contenttypes import fields
 from django.db import models
 from django.db.utils import IntegrityError
 from django.http.response import HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -58,7 +59,7 @@ class Redirection(GenericModelMixin, DatetimeModel):
     # Champs
     active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('redirection', "Active"))
     base = models.CharField(max_length=250, unique=True, blank=False, verbose_name=_("Original URL"))
-    expires = models.DateTimeField(default=datetime.now() + timedelta(days=3650), verbose_name=_("Expiry"))  # 10 ans après démarrage du serveur
+    expires = models.DateTimeField(default=timezone.now() + timedelta(days=3650), verbose_name=_("Expiry"))  # 10 ans après démarrage du serveur
     permanent = models.BooleanField(default=True, help_text=_("Does the redirection use an HTTP 301?"), verbose_name=pgettext_lazy('redirection', "Permanent"))
     content_type = models.ForeignKey('contenttypes.ContentType', null=True, db_index=True, limit_choices_to=CONTENT_TYPE_LIMIT, verbose_name=_("Content type"))
     object_id = models.PositiveIntegerField(null=True, db_index=True, verbose_name=_("Object Id"))

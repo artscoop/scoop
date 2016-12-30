@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 
 import IPy
+import pytz
 from django.apps.registry import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -111,7 +112,7 @@ class IP(DatetimeModel, CoordinatesModel):
     country = models.CharField(max_length=2, blank=True, choices=COUNTRIES.items(), db_index=False, verbose_name=_("Country"))
     harm = models.SmallIntegerField(default=0, db_index=True, validators=[MinValueValidator(0), MaxValueValidator(4)], verbose_name=_("Harm"))
     blocked = models.BooleanField(default=False, db_index=False, verbose_name=_("Blocked"))
-    updated = models.DateTimeField(default=datetime(1970, 1, 1), verbose_name=pgettext_lazy('ip', "Updated"))
+    updated = models.DateTimeField(default=datetime(1970, 1, 1, tzinfo=pytz.utc), verbose_name=pgettext_lazy('ip', "Updated"))
     dynamic = models.NullBooleanField(default=None, verbose_name=_("Dynamic"))  # IP dynamique ?
     city_name = models.CharField(max_length=96, blank=True, verbose_name=_("City name"))
     objects = IPManager()

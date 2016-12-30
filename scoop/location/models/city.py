@@ -105,7 +105,7 @@ class CityQuerySet(models.QuerySet):
         :param box: [lat1, lon1, lat2, lon2]
         """
         polygon = Polygon.from_bbox([box[1], box[0], box[3], box[2]])
-        return self.filter(position__contained=polygon, city=True)
+        return self.filter(position__within=polygon, city=True)
 
     def in_square(self, point, km):
         """
