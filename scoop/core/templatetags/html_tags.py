@@ -38,8 +38,9 @@ def tags_keep(value, valid=None):
 def linebreaks_convert(value):
     """ Transformer les sauts de ligne en sauts HTML """
     output = re.sub(r"(\n)+", "<br>", value)
-    output = re.sub(r"(<br\s*/?>\s*){2,20}", "<br>", output, flags=re.I)
-    output = re.sub(r"^<br>", "", output, flags=re.I)  # supprimer au début de ligne
+    output = re.sub(r"(</?br\s*/?>\s*){2,20}", "<br>", output, flags=re.I)
+    output = re.sub(r"^<br>", "", output, flags=re.I)  # supprimer au début
+    output = re.sub(r"<br>$", "", output, flags=re.I)  # supprimer à la fin
     return mark_safe(output)
 
 
@@ -47,6 +48,7 @@ def linebreaks_convert(value):
 def truncate_longwords_html(value, length=27):
     """
     Couper les mots beaucoup trop longs, de type « soupe de touches »
+
     Permet de combattre les pratiques de sabotage des mises en pages
     ex. abcdefghijklmnopqrstuvwxyzabc devient abcdefghijklmnopqrstuvwxyza bc
     """
@@ -81,10 +83,10 @@ def linkify(value):
 @register.filter
 def html_urlize(value, autoescape=None):
     """ Transformer les textes contenant des URLs en liens, dans un texte HTML """
-    IGNORED_TAGS = {'a', 'code', 'pre'}
+    ignored_tags = {'a', 'code', 'pre'}
     soup = BeautifulSoup(value, 'lxml')
-    texts = soup.findAll(name=lambda tag: tag not in IGNORED_TAGS, text=True)
-    # Supprimer toutes les séquences de la même lettre par cut_match
+    texts = soup.findAll(name=lambda tag: tag not in ignored_tags, text=True)
+    # Transformer en liens tous les textes des balises non ignorées
     for text in texts:
         new_text = urlize(text)
         text.replaceWith(BeautifulSoup(new_text, 'lxml'))

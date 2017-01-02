@@ -262,9 +262,9 @@ class City(CoordinatesModel, PicturableModel):
             parent = City.objects.filter(id=result) or Country.objects.filter(id=result)  # On a en cache soit un id de ville soit de pays
             return parent.first()
         # Autrement parcourir les parents jusqu'au level désiré
-        level = self.country.subregional_level if level is None else level
+        search_level = self.country.subregional_level if level is None else level
         parent = self.parent
-        while parent and getattr(parent, 'level', 0) >= level:
+        while parent and getattr(parent, 'level', 0) >= search_level:
             parent = parent.parent
         # Si parent non trouvé, renvoyer le pays. Sinon mettre en cache
         if parent is None:
