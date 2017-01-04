@@ -192,7 +192,7 @@ class MailEvent(UUID128Model, DataModel):
         """ Renvoyer les informations de rendu de l'événement """
         template = 'messaging/mail/{name}.html'.format(name=self.type.template)
         data_set = {key: list(set(self.data[key])) for key in self.data}
-        data_set.update({'event': self})
+        data_set.update({'event': self, 'recipient': self.recipient})
         title, text, html = [render_block_to_string(template, label, data_set) for label in ['title', 'text', 'html']]
         title = one_line(title)
         return {'title': title, 'text': text, 'html': render_to_string('messaging/mail/layout/html.html', {'html': html})}

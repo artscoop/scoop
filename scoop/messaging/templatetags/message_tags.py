@@ -39,7 +39,7 @@ def get_received_messages_count(user):
         return get_received_messages(user).count()
 
 
-@register.filter(name="unread_messages")
+@register.filter(name="unread_messages_count")
 def get_unread_count(user):
     """ Renvoyer le nombre de messages non lus par un utilisateur """
     if getattr(user, 'is_authenticated', lambda: False)():

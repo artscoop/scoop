@@ -33,16 +33,14 @@ class RecipientManager(SingleDeleteManager):
             Si None, considérer tous les fils de discussion
         :type since: None | int | datetime.datetime | datetime.timedelta
         """
-        from scoop.messaging.models.thread import Thread
-        # Traiter since
         if since is not None:
             timestamp = Recipient.since(since)
             unread = self.filter(user=user, time__gt=timestamp, unread=True).count()
         else:
-            unread = cache.get(Thread.CACHE_KEY['unread.count'].format(user.id), None)
+            unread = cache.get(RecipientManager.CACHE_KEY['unread.count'].format(user.id), None)
             if unread is None:
                 unread = self.filter(user=user, unread=True).count()
-                cache.set(Thread.CACHE_KEY['unread.count'].format(user.id), int(unread), 60)
+                cache.set(RecipientManager.CACHE_KEY['unread.count'].format(user.id), int(unread), 60)
         return unread
 
     def get_acknowledged_count(self, user):
