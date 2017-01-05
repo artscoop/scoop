@@ -88,7 +88,7 @@ def get_all_related_objects(instance, limit=2048):
     # Liste à renvoyer
     result = set()
     # Récupérer les accesseurs qui seront appelés pour récupérer les objets
-    links = [rel.get_accessor_name() for rel in instance._meta.get_all_related_objects()]
+    links = [rel.get_accessor_name() for rel in instance._meta.related_objects]
     # Récupérer les accesseurs, tous les objets des accesseurs, et les ajouter
     for link in links:
         if len(result) > limit:

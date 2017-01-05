@@ -1,4 +1,6 @@
 # coding: utf-8
+from functools import lru_cache
+
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, Polygon
 from django.contrib.gis.measure import D
@@ -46,18 +48,20 @@ class CityQuerySet(models.QuerySet):
         """
         return self.filter(country=country, level=level)
 
-    def by_name(self, name, **kwargs):
+    def by_name(self, name, simple=False, **kwargs):
         """
         Renvoyer les villes portant un nom
 
         :type self: django.db.models.Manager
         :param name: nom de ville à rechercher
-        :param city: ne renvoyer que des communes
-        :type city: bool
+        :param simple: ne faire qu'une recherche simple sur champ ASCII
         """
-        fields = ['ascii', 'alternates__ascii', 'country__alternates__name']
-        final_query = search_query(unidecode(name), fields, queryset=self.filter(**kwargs))
-        return final_query.distinct().order_by('-population')
+        if not simple:
+            fields = ['ascii', 'alternates__ascii', 'country__alternates__name']
+            final_query = search_query(unidecode(name), fields, queryset=self.filter(**kwargs))
+            return final_query.distinct().order_by('-population')
+        else:
+            return self.filter(ascii__iexact=name, **kwargs)
 
     def get_by_name(self, name, **kwargs):
         """ Renvoyer la ville la plus peuplée parmi celles portant un nom """
@@ -137,10 +141,11 @@ class CityQuerySet(models.QuerySet):
         return cities.first() if cities.exists() else None
 
     @staticmethod
+    @lru_cache(maxsize=2048)
     def make_find_cache_key(name, lat, lon):
         """ Générer une clé de cache pour une recherche de ville """
         cache_key = "location.city.find:{lat:.1f}:{lon:.1f}:{name}"
-        cache_key = cache_key.format(lat=round_multiple(lat, 0.25), lon=round_multiple(lon, 0.25), name=unidecode(name).lower().strip() if name else '*')
+        cache_key = cache_key.format(lat=round_multiple(lat, 0.2), lon=round_multiple(lon, 0.2), name=unidecode(name).lower().strip() if name else '*')
         return cache_key
 
     def find_by_name(self, point, name, quick=True):
@@ -161,11 +166,9 @@ class CityQuerySet(models.QuerySet):
         if not cities.exists():
             cities = self.filter(alternates__ascii=name, city=True).in_square(point, 64).distinct()
             if not cities.exists():
-                cities = self.filter(city=True, ascii=name).in_square(point, 64).distinct()  # recherche par city.ascii -> 128km
-                if not cities.exists():
-                    cities = self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
+                cities = self.filter(city=True).in_square(point, 8)  # recherche par lat/lon -> 8km
         if cities.exists():
-            if quick is False:
+            if not quick:
                 cities = cities.annotate(distance=Distance('position', Point(point[1], point[0], srid=4326))).order_by('distance')
             closest_city = cities.first()
             cache.set(cache_key, closest_city.pk)
@@ -179,7 +182,7 @@ class CityQuerySet(models.QuerySet):
         :param countries: liste de codes pays
         :param limit: nombre d'habitants minimum des villes à fetcher
         """
-        for city in self.by_population(countries or ['fr', 'ma', 'dz', 'be'], limit).iterator():
+        for city in self.by_population(countries or ['fr', 'ma', 'dz', 'be'], limit).only('pk', 'ascii', 'position').iterator():
             cache_key = self.make_find_cache_key(city.ascii, city.latitude, city.longitude)
             cache.set(cache_key, city.pk)
 
@@ -257,7 +260,8 @@ class City(CoordinatesModel, PicturableModel):
         if self.parent_id is None:
             return self.country
         # Rechercher un résultat en cache
-        result = cache.get(City.AUTO_PARENT_CACHE_KEY.format(id=self.id, level=level), None)
+        cache_key = City.AUTO_PARENT_CACHE_KEY.format(id=self.id, level=level)
+        result = cache.get(cache_key, None)
         if result is not None:
             parent = City.objects.filter(id=result) or Country.objects.filter(id=result)  # On a en cache soit un id de ville soit de pays
             return parent.first()
@@ -269,7 +273,7 @@ class City(CoordinatesModel, PicturableModel):
         # Si parent non trouvé, renvoyer le pays. Sinon mettre en cache
         if parent is None:
             parent = self.country
-        cache.set(City.AUTO_PARENT_CACHE_KEY.format(id=self.id, level=level), parent.pk, City.LOOKUP_CACHE_TIMEOUT)  # parent peut être None
+        cache.set(cache_key, parent.pk, City.LOOKUP_CACHE_TIMEOUT)  # parent peut être None
         return parent
 
     def get_close_cities(self, km, circle=False):
@@ -284,7 +288,7 @@ class City(CoordinatesModel, PicturableModel):
 
     def get_biggest_close_city(self, km=30):
         """
-        Renvoyer la ville la plus proche dans les n km
+        Renvoyer la ville la plus peuplée dans les n km alentours
 
         :param km: distance maximum
         """
