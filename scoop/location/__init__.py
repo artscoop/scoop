@@ -15,7 +15,9 @@ class LocationConfig(AppConfig):
 
     def ready(self):
         """ Le registre d'applications est prêt """
-        from scoop.location import listeners
+        from django.conf import settings
+        if not settings.SCOOP_DISABLE_SIGNALS:
+            from scoop.location import listeners
 
 
 # Charger la configuration ci-dessus par défaut

@@ -16,7 +16,9 @@ class MessagingConfig(AppConfig):
 
     def ready(self):
         """ Le registre d'applications est prêt """
-        from scoop.messaging import listeners
+        from django.conf import settings
+        if not settings.SCOOP_DISABLE_SIGNALS:
+            from scoop.messaging import listeners
 
 
 # Charger la configuration ci-dessus par défaut

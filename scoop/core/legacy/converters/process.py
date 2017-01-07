@@ -5,6 +5,8 @@ import threading
 import time
 
 from django.db import transaction
+from django.db.models.signals import pre_save, post_save
+from factory.django import mute_signals
 
 
 class ExportProcessor(object):
@@ -65,7 +67,7 @@ class ImportProcessor(object):
             while _update_time.running is True:
                 elapsed = time.time() - start
                 minute, second = divmod(elapsed, 60)
-                print("\x1b[s\x1b[1;0H\x1b[K\x1b[31;47m{min:02n}:{sec:02n}\x1b[u\x1b[0m".format(min=minute, sec=int(second)), end='')
+                print("\x1b[s\x1b[1;80H\x1b[K\x1b[31;47m{min:02n}:{sec:02n}\x1b[u\x1b[0m".format(min=minute, sec=int(second)), end='')
                 sys.stdout.flush()
                 time.sleep(0.25)
 
@@ -75,46 +77,48 @@ class ImportProcessor(object):
         start = time.time()
         t = threading.Thread(target=_update_time, args=[start])
         t.start()
-        setup_cleared = cls.setup()
-        if setup_cleared is True:
-            if cls.importers and isinstance(cls.importers, list):
-                # Import première passe
-                importers = [importer() for importer in importers]
-                count = len(importers)
-                # Import première passe
-                for ind, importer in enumerate(importers, start=1):
-                    with transaction.atomic():
-                        print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
-                        i_start = time.time()
-                        importer.imports()
-                        i_elapsed = time.time() - i_start
-                        print("Model successfully imported in {:.01f}s.".format(i_elapsed))
-                # Import deuxième passe
-                for ind, importer in enumerate(importers, start=1):
+        try:
+            setup_cleared = cls.setup()
+            if setup_cleared is True:
+                if cls.importers and isinstance(cls.importers, list):
+                    # Import première passe
+                    importers = [importer() for importer in importers]
+                    count = len(importers)
+                    # Import première passe
+                    for ind, importer in enumerate(importers, start=1):
+                        with transaction.atomic(savepoint=False):
+                            print("Importing model {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
+                            i_start = time.time()
+                            importer.imports()
+                            i_elapsed = time.time() - i_start
+                            print("Model successfully imported in {:.01f}s.".format(i_elapsed))
+                    # Import deuxième passe
+                    for ind, importer in enumerate(importers, start=1):
+                        with transaction.atomic(savepoint=False):
+                            print("Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
+                            i_start = time.time()
+                            importer.post_imports()
+                            i_elapsed = time.time() - i_start
+                            print("Model successfully updated in {:.01f}s.".format(i_elapsed))
+                            gc.collect()
+                    # Import troisième passe
+                    for ind, importer in enumerate(importers, start=1):
+                        with transaction.atomic(savepoint=False):
+                            print("Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
+                            i_start = time.time()
+                            importer.brushup()
+                            i_elapsed = time.time() - i_start
+                            print("End of model process updated in {:.01f}s.".format(i_elapsed))
+                            gc.collect()
+                    # Touche de fin
                     with transaction.atomic(savepoint=False):
-                        print("Updating imports {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
                         i_start = time.time()
-                        importer.post_imports()
+                        cls.brushup()
                         i_elapsed = time.time() - i_start
-                        print("Model successfully updated in {:.01f}s.".format(i_elapsed))
-                        gc.collect()
-                # Import troisième passe
-                for ind, importer in enumerate(importers, start=1):
-                    with transaction.atomic(savepoint=False):
-                        print("Finishing {ind}/{count} using {name}".format(ind=ind, count=count, name=importer.__class__.__name__))
-                        i_start = time.time()
-                        importer.brushup()
-                        i_elapsed = time.time() - i_start
-                        print("End of model process updated in {:.01f}s.".format(i_elapsed))
-                        gc.collect()
-                # Touche de fin
-                with transaction.atomic(savepoint=False):
-                    i_start = time.time()
-                    cls.brushup()
-                    i_elapsed = time.time() - i_start
-                    print("Last bit of process updated in {:.01f}s.".format(i_elapsed))
-                _update_time.running = False  # Demander au thread de quitter
-                elapsed = time.time() - start
-                minute, second = divmod(elapsed, 60)
-                print("*" * 80)
-                print("Import completed in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second))
+                        print("Last bit of process updated in {:.01f}s.".format(i_elapsed))
+                    elapsed = time.time() - start
+                    minute, second = divmod(elapsed, 60)
+                    print("*" * 80)
+                    print("Import completed in {min:.0f}m{sec:.0f}s.".format(min=minute, sec=second))
+        finally:
+            _update_time.running = False  # Demander au thread de quitter

@@ -18,7 +18,9 @@ class RogueConfig(AppConfig):
 
     def ready(self):
         """ Le registre d'applications est prêt """
-        from scoop.rogue import listeners
+        from django.conf import settings
+        if not settings.SCOOP_DISABLE_SIGNALS:
+            from scoop.rogue import listeners
 
 
 # Charger la configuration ci-dessus par défaut

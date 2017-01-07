@@ -119,6 +119,7 @@ class DocumentExporter(object):
 class DocumentImporter(object):
     """ Mixin d'import de document """
     name = None  # Nom de fichier à lire (sans extension)
+    data_bits = None
 
     # Getter
     def progress(self, ind, total, every=None, label=None):
@@ -133,9 +134,10 @@ class DocumentImporter(object):
     def get_data(self, name=None):
         """ Renvoyer les données du fichier exporté """
         path = join(Paths.get_root_dir('files', 'legacy'), '{}.pickle'.format(name or self.name))
-        with io.open(path, 'rb') as f:
-            data = pickle.load(f)
-        return data
+        if not self.__class__.data_bits:
+            with io.open(path, 'rb') as f:
+                self.__class__.data_bits = pickle.load(f)
+        return self.__class__.data_bits
 
     def get_data_fields(self, item, *fields):
         """ Renvoyer un dictionnaire de champs d'un élément du document """
@@ -143,7 +145,7 @@ class DocumentImporter(object):
 
     def get_generic_data(self, ct, oi):
         """ Renvoyer une instance d'objet via un type de contenu et un id """
-        raise NotImplementedError()
+        return None
 
     # Propriétés
     data = property(get_data)

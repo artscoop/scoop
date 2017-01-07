@@ -12,7 +12,9 @@ class SocialConfig(AppConfig):
 
     def ready(self):
         """ Le registre d'applications est prêt """
-        from scoop.user.social import listeners
+        from django.conf import settings
+        if not settings.SCOOP_DISABLE_SIGNALS:
+            from scoop.user.social import listeners
 
 
 # Charger la configuration ci-dessus par défaut

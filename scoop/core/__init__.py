@@ -50,6 +50,11 @@ class CoreConfig(AppConfig):
         # Patcher l'admin
         admin_list._boolean_icon = _boolean_icon
 
+        # Activer les listeners
+        from django.conf import settings
+        if not settings.SCOOP_DISABLE_SIGNALS:
+            from scoop.core import listeners
+
 
 # Charger la configuration ci-dessus par défaut
 default_app_config = 'scoop.core.CoreConfig'

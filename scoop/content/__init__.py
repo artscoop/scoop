@@ -16,7 +16,9 @@ class ContentConfig(AppConfig):
 
     def ready(self):
         """ Lorsque le registre est prêt """
-        from scoop.content import listeners
+        from django.conf import settings
+        if not settings.SCOOP_DISABLE_SIGNALS:
+            from scoop.content import listeners
 
 
 # Charger la configuration ci-dessus par défaut
