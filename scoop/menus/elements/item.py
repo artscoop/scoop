@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 
 
 class Item(object):
@@ -41,6 +42,10 @@ class Item(object):
         """ Renvoyer si des sous-menus existent """
         return self.children is not None
 
+    def get_label(self, request):
+        """ Renvoyer le libellé HTML de l'élément """
+        return mark_safe(self.label)
+
     # Setter
     def add_children(self, *items):
         """ Ajouter un sousèmenu à l'élément """
@@ -53,31 +58,8 @@ class Item(object):
 
     # Rendu
     def render(self, request):
-        data = {'menu': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request)}
-        output = [render_to_string("core/menus/menu-item.html", data, request)]
-        if self.has_children():
-            for child in self.children:
-                if isinstance(child, Item):
-                    output.append(child.render(request))
-        return "".join(output)
-
-
-class Menu(object):
-    """ Menu complet """
-
-    children = None
-
-    # Setter
-    def add_children(self, *items):
-        """ Ajouter un sousèmenu à l'élément """
-        if self.children is None:
-            self.children = []
-        for item in items:
-            if isinstance(item, Item):
-                self.children.append(item)
-
-    # Rendu
-    def render(self, request):
-        """ Rendre le menu """
-        outputs = [child.render(request) for child in self.children]
-        return "".join(outputs)
+        if self.is_visible(request):
+            data = {'menu': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request)}
+            output = render_to_string("menus/menu-item.html", data, request)
+            return output
+        return ""  # Ne rien rendre si le menu est invisible

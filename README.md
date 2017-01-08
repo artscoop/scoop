@@ -36,6 +36,7 @@ Nécessite python 3.5, nginx et Django 1.9
 ### Core
 - `CORE_ACTION_RECORD` : *bool*, faut-il enregistrer les actions core.Record dans la base de données
 - `CORE_BRAND_NAME_MARKER` : *str*, lorsque le tag text_tags.brand est utilisé, quel texte doit être remplacé par le nom du site ? ex. '%brand%'
+- `MENU_ALIASES` : *dict*, alias de menus (nom: objet Menu)
 - `FORM_ALIASES` : *dict*, alias utilisés pour identifier les formulaires à valider en AJAX (voir scoop.core.views.ajax.validate_form)
 - `MAKEMESSAGES_DIRS` : *list*, liste de répertoires racines à parcourir à la recherche de locales à traduire
 - `OPENING_HOURS` : *list*, liste de plages d'heures d'ouverture du site, si le middleware opening est actif.
@@ -48,6 +49,9 @@ Nécessite python 3.5, nginx et Django 1.9
 - `MESSAGING_BLACKLIST_ENABLE` : *bool*, autoriser la mise en liste noire pour la messagerie. False par défaut
 - `MESSAGING_THREAD_UNIQUE` : *bool*, la création de thread doit-elle réutiliser les threads existants. True par défaut
 - `MESSAGING_THREAD_TOGGLE_DELAY` : *int*, délai minimum en secondes avant de pouvoir modifier l'état ouvert/fermé d'un thread. 3600 par défaut
+
+### Scoop
+- `SCOOP_DISABLE_SIGNALS` : *bool*, désactiver les listeners de toutes les applications de scoop
 
 ### Migrations
 - Créer les migrations avec ```dj makemigrations content core editorial forum location messaging rogue user access social```

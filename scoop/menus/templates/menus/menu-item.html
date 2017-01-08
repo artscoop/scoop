@@ -1,0 +1,8 @@
+{% load menus %}
+<a href="{{ menu.get_absolute_url }}">{{ menu.get_label }}</a>
+{% if menu.has_children %}
+    {# Normalement insérer un markup de sous-menu autour des enfants #}
+    {% for child in menu.children %}
+        {% menu child %}
+    {% endfor %}
+{% endif %}
