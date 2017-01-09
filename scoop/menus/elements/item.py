@@ -21,7 +21,7 @@ class Item(object):
         self.target = kwargs.get('target', None)
 
     # Getter
-    def get_absolute_url(self, request):
+    def get_absolute_url(self, request=None):
         """ Renvoyer l'URL cible de l'élément de menu """
         if isinstance(self.target, str):
             return self.target
@@ -42,9 +42,20 @@ class Item(object):
         """ Renvoyer si des sous-menus existent """
         return self.children is not None
 
-    def get_label(self, request):
+    def get_label(self, request=None):
         """ Renvoyer le libellé HTML de l'élément """
         return mark_safe(self.label)
+
+    def get_html_id(self):
+        """ Renvoyer l'ID HTML de l'élément """
+        return "menu-id-{0}".format(self.identifier)
+
+    def get_tree(self):
+        """ Renvoyer tous les descendants de l'objet """
+        tree = self.children or []
+        for child in self.children:
+            tree += child.get_tree()
+        return tree
 
     # Setter
     def add_children(self, *items):
@@ -57,9 +68,9 @@ class Item(object):
                 self.children.append(item)
 
     # Rendu
-    def render(self, request):
+    def render(self, request, style=None):
         if self.is_visible(request):
-            data = {'menu': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request)}
-            output = render_to_string("menus/menu-item.html", data, request)
+            data = {'menu': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request), 'style': style or 'nav'}
+            output = render_to_string(["menus/menu-item-{style}.html".format(style=style), "menus/menu-item.html"], data, request)
             return output
         return ""  # Ne rien rendre si le menu est invisible

@@ -2,7 +2,7 @@
 
 from django import template
 
-from scoop.core.menus.util import get_menu
+from scoop.menus.util import get_menu
 
 
 register = template.Library()

@@ -6,6 +6,7 @@ class Menu(object):
     """ Menu complet (racine contenant les Items) """
 
     children = None
+    style = 'default'
 
     # Setter
     def add_children(self, *items):
@@ -19,5 +20,5 @@ class Menu(object):
     # Rendu
     def render(self, request):
         """ Rendre le menu """
-        outputs = [child.render(request) for child in self.children]
+        outputs = [child.render(request, style=self.style) for child in self.children]
         return "".join(outputs)
