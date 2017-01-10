@@ -4,6 +4,7 @@ import datetime
 import re
 from random import randrange
 
+import pytz
 from pytz import timezone as tz_
 
 from django.utils import timezone
@@ -116,7 +117,7 @@ def datetime_round_hour(value=None):
 def datetime_round_day(value=None):
     """ Arrondir un objet datetime au jour à minuit """
     value = value or timezone.now()
-    result = datetime.datetime(value.year, value.month, value.day, 0, 0, 0, 0)
+    result = datetime.datetime(value.year, value.month, value.day, 0, 0, 0, 0, tzinfo=pytz.utc)
     return result
 
 

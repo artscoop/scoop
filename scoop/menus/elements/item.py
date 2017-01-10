@@ -16,17 +16,21 @@ class Item(object):
     def __init__(self, *args, **kwargs):
         """ Initialiser les propriétés de l'élément de menu """
         super().__init__()
-        self.identifier = kwargs.get('identifier', None)
-        self.label = kwargs.get('label', None)
-        self.target = kwargs.get('target', None)
+        self.identifier = kwargs.get('identifier', self.identifier)
+        self.label = kwargs.get('label', self.label)
+        self.target = kwargs.get('target', self.target)
+
+    # Overrides
+    def __str__(self):
+        return "Menu {id} → {url}".format(id=self.identifier, url=self.get_absolute_url())
 
     # Getter
     def get_absolute_url(self, request=None):
         """ Renvoyer l'URL cible de l'élément de menu """
-        if isinstance(self.target, str):
-            return self.target
-        elif callable(self.target):
+        if callable(self.target):
             return self.target(request)
+        elif self.target is not None:
+            return str(self.target)
         return "#"  # Renvoyer une URL par défaut
 
     def is_active(self, request):
@@ -70,7 +74,8 @@ class Item(object):
     # Rendu
     def render(self, request, style=None):
         if self.is_visible(request):
-            data = {'menu': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request), 'style': style or 'nav'}
+            print(self.get_absolute_url(request), self.is_active(request))
+            data = {'menu_item': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request), 'style': style or 'nav'}
             output = render_to_string(["menus/menu-item-{style}.html".format(style=style), "menus/menu-item.html"], data, request)
             return output
         return ""  # Ne rien rendre si le menu est invisible

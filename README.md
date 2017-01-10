@@ -3,7 +3,7 @@ S. Kossouho
 Mai 2011 - 2016
 Séparé du projet One le 15 avril 2015
 
-Nécessite python 3.5, nginx et Django 1.9
+Nécessite python 3.5, nginx et Django 1.10
 
 ## Contenu du projet
 - `content` : objets de contenu, images et commentaires + ACL fichiers. lié à `user` et `core`.
@@ -20,6 +20,7 @@ Nécessite python 3.5, nginx et Django 1.9
 - `user.social.people` : mise en logique de personnes réelles.
 - `help` : pages d'aide, FAQ et aide contextuelle
 - `analyze` : classes abstraites et helpers pour la classification de documents
+- `menus` : menus créés programmatiquement 
 
 ## Settings
 
@@ -36,11 +37,13 @@ Nécessite python 3.5, nginx et Django 1.9
 ### Core
 - `CORE_ACTION_RECORD` : *bool*, faut-il enregistrer les actions core.Record dans la base de données
 - `CORE_BRAND_NAME_MARKER` : *str*, lorsque le tag text_tags.brand est utilisé, quel texte doit être remplacé par le nom du site ? ex. '%brand%'
-- `MENU_ALIASES` : *dict*, alias de menus (nom: objet Menu)
 - `FORM_ALIASES` : *dict*, alias utilisés pour identifier les formulaires à valider en AJAX (voir scoop.core.views.ajax.validate_form)
 - `MAKEMESSAGES_DIRS` : *list*, liste de répertoires racines à parcourir à la recherche de locales à traduire
 - `OPENING_HOURS` : *list*, liste de plages d'heures d'ouverture du site, si le middleware opening est actif.
 - `OPENING_HOURS_GROUPS_EXCLUDE` : *list*, permet aux groupes d'outrepasser les heures de fermeture
+
+### Menus
+- `MENU_ALIASES` : *dict*, alias de menus (nom: objet Menu)
 
 ### Messaging
 - `MESSAGING_MAX_BATCH` : *int*, nombre de mails à envoyer au maximum par batch d'envoi. 30 par défaut

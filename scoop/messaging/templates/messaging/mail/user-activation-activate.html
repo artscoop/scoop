@@ -11,6 +11,8 @@
 
 {% block html %}
     <p>Bonjour {{ event.recipient }},</p>
-    <p>Veuillez cliquer sur ce lien pour activer votre profil : <a
-            href="{{ DOMAIN_NAME }}{% url "user:profile-activate" username=event.recipient.username uuid=activation.0.uuid %}">Votre lien d'activation</a></p>
+    <p>
+        Veuillez cliquer sur ce lien pour activer votre profil :
+        <a href="{{ DOMAIN_NAME }}{% url "user:profile-activate" username=event.recipient.username uuid=activation.0.uuid %}">Votre lien d'activation</a>
+    </p>
 {% endblock %}

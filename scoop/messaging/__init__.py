@@ -11,6 +11,7 @@ gettext_noop("Smileys")
 
 class MessagingConfig(AppConfig):
     """ Configuration de l'application Messaging """
+
     name = 'scoop.messaging'
     label = 'messaging'
 

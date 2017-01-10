@@ -18,5 +18,5 @@ TEST_CONFIGURATION = {
     'EMAIL_BACKEND': 'django.core.mail.backends.filebased.EmailBackend',
     'EMAIL_FILE_PATH': Paths.get_root_dir('files', 'tests', 'mail'),
     'DEFAULT_FROM_EMAIL': 'admin@test.com',
-    'MESSAGING_DEFAULT_THREAD_QUOTA': 32
+    'MESSAGING_DEFAULT_THREAD_QUOTA': 32,
 }

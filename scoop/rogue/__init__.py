@@ -13,6 +13,7 @@ __version__ = (1, 2016, 1)
 
 class RogueConfig(AppConfig):
     """ Configuration de l'application Rogue """
+
     name = 'scoop.rogue'
     label = 'rogue'
 

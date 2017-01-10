@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.urls.base import reverse
+from django.urls.base import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 from scoop.menus.elements.item import Item
@@ -10,7 +10,7 @@ class Login(Item):
 
     # Configuration
     label = _("Login")
-    target = reverse('user:login')
+    target = reverse_lazy('user:login')
 
     # Overrides
     def is_visible(self, request):
@@ -22,7 +22,7 @@ class Logout(Item):
 
     # Configuration
     label = _("Logout")
-    target = reverse('user:logout')
+    target = reverse_lazy('user:logout')
 
     # Overrides
     def is_visible(self, request):
@@ -34,7 +34,7 @@ class Admin(Item):
 
     # Configuration
     label = _("Manage")
-    target = reverse('admin:index')
+    target = reverse_lazy('admin:index')
 
     # Overrides
     def is_visible(self, request):

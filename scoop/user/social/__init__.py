@@ -7,6 +7,7 @@ __version__ = (1, 2014, 7)
 
 class SocialConfig(AppConfig):
     """ Configuratoin de l'application Social """
+
     name = 'scoop.user.social'
     label = 'social'
 

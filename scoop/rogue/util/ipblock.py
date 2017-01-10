@@ -26,8 +26,8 @@ def get_tor_nodes(path='http://torstatus.blutmagie.de/ip_list_exit.php/Tor_ip_li
         return cached
     # Sinon, mettre le fichier distant en cache
     try:
-        data = requests.get(path)
-        results = frozenset([row.strip() for row in data.content.split('\n') if row.strip()])
+        data = requests.get(path).text
+        results = frozenset([row.strip() for row in data.split('\n') if row.strip()])
         cache.set('rogue.torlist', results, timeout=86400 * 3)
     except (IOError, HTTPError):
         results = frozenset()

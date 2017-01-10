@@ -33,3 +33,13 @@ class IPBlockTest(TestCase):
         self.assertFalse(IPBlock.objects.get_ip_status(localhost)['blocked'], "The IP {} should always be allowed.".format(localhost))
         IPBlock.objects.block_ips('127.0.0.1')  # Même si l'IP est bloquée, elle est toujours considérée safe normalement
         self.assertFalse(IPBlock.objects.get_ip_status(localhost)['blocked'], "The IP {} should be protected here.".format(localhost))
+
+    def test_ipblock_host_regex(self):
+        """ Tester le blocage d'IP """
+        ipblock = IPBlock.objects.block_reverse(r'^host.*', regex=True)
+        ip1 = IP.objects.create(string="1.2.3.4", ip=1, reverse="hostodyssey.com")  # bloqué
+        ip2 = IP.objects.create(string="1.2.3.5", ip=2, reverse="lostodyssey.com")  # non bloqué
+        self.assertTrue(IPBlock.objects.get_ip_status(ip1)['blocked'])
+        self.assertEqual(IPBlock.objects.get_ip_status(ip1)['type'], IPBlock.HOST_REGEX)
+        self.assertFalse(IPBlock.objects.get_ip_status(ip2)['blocked'])
+        self.assertEqual(ipblock.get_blocked_ip_set().count(), 1)

@@ -21,6 +21,7 @@ _("language"), _("gender"), _("Profiles"), _("Profile")
 
 class CoreConfig(AppConfig):
     """ Configuration de l'application Core """
+
     name = 'scoop.core'
     label = 'core'
 

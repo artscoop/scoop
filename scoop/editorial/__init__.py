@@ -10,6 +10,7 @@ gettext_noop("Editorial")
 
 class EditorialConfig(AppConfig):
     """ Configuration de l'application Editorial """
+
     name = 'scoop.editorial'
     label = 'editorial'
 

@@ -14,8 +14,9 @@ from django.http.response import Http404
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import to_timestamp
@@ -23,9 +24,10 @@ from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.django.templateutil import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
-from scoop.core.util.stream.request import default_context, default_request
+from scoop.core.util.stream.request import default_request
 from scoop.messaging.models.label import LabelableModel
 from scoop.messaging.util.signals import thread_created, thread_pre_create
+
 
 logger = logging.getLogger(__name__)
 

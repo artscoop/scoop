@@ -11,6 +11,7 @@ gettext_noop("Content")
 
 class ContentConfig(AppConfig):
     """ Configuration de l'application Contenu """
+
     name = 'scoop.content'
     label = 'content'
 

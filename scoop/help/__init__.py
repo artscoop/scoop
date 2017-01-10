@@ -10,6 +10,7 @@ gettext_noop("Help")
 
 class HelpConfig(AppConfig):
     """ Configuration de l'application Help """
+
     name = 'scoop.help'
     label = 'help'
 

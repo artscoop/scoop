@@ -18,6 +18,7 @@ from scoop.user.models.user import User
 @override_settings(**TEST_CONFIGURATION)
 class ThreadTest(TestCase):
     """ Test des fils de discussion """
+
     fixtures = ['mailtype', 'options']
 
     def setUp(self):

@@ -75,7 +75,7 @@ class TemplateTagsTest(TestCase):
         self.assertNotEqual(filtered_sane, tt_sanitize(filtered_sane))  # style non conservé
 
         # linebreaks_convert
-        self.assertEqual(tt_linebreaks(lined_text).count('<br>'), 2)  # les retours chariot en début de ligne sont enlevés
+        self.assertEqual(tt_linebreaks(lined_text).count('<br>'), 1)  # les retours chariot en début et fin de ligne sont enlevés
 
         # html_urlize
         self.assertEqual(tt_html_urlize(urlizable).count('</a>'), 1)

@@ -9,8 +9,11 @@ register = template.Library()
 
 
 @register.simple_tag(name='menu', takes_context=True)
-def render_menu(context, alias='default'):
+def render_menu(context, alias='nav', item=None):
     """ Afficher le menu correspondant à l'alias passé """
-    menu = get_menu(alias) if isinstance(alias, str) else alias
+    menu = item
+    if menu is None:
+        menu = get_menu(alias) if isinstance(alias, str) else alias
+    print(menu)
     request = context['request']
     return menu.render(request=request)

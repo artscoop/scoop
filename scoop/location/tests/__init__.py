@@ -1,2 +1,3 @@
 # coding: utf-8
-from scoop.location.tests.test_city import CityTest
+from .test_city import *
+from .test_coordinates import *

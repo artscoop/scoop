@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.template.loader import render_to_string
 from django.template.loader_tags import BlockNode, ExtendsNode
+
 from scoop.core.templatetags.repeat import MacroRoot
 from scoop.core.util.stream.request import default_request
 
@@ -44,9 +45,9 @@ def render_block_to_string(template_name, block_name, data=None, context=None):
     with context.bind_template(t.template):
         t.template.render(context)
 
-        to_visit = t.template.nodelist
+        to_visit = list(t.template.nodelist)  # Copier la liste car la liste de nœuds du template est globale (Django 1.10)
         while to_visit:
-            node = to_visit.pop()
+            node = to_visit.pop()  # ici on modifie la liste, d'où la nécessité de la copier auparavant
             if isinstance(node, BlockNode) and node.name == block_name:
                 return node.render(context)
             elif hasattr(node, 'nodelist'):
