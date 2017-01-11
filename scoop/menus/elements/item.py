@@ -74,7 +74,6 @@ class Item(object):
     # Rendu
     def render(self, request, style=None):
         if self.is_visible(request):
-            print(self.get_absolute_url(request), self.is_active(request))
             data = {'menu_item': self, 'active': self.is_active(request), 'url': self.get_absolute_url(request), 'style': style or 'nav'}
             output = render_to_string(["menus/menu-item-{style}.html".format(style=style), "menus/menu-item.html"], data, request)
             return output

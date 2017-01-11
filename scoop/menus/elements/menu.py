@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from .item import Item
@@ -7,6 +8,7 @@ from .item import Item
 class Menu(object):
     """ Menu complet (racine contenant les Items) """
 
+    name = "Menu container"
     children = None
     style = 'nav'
 
@@ -21,7 +23,7 @@ class Menu(object):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation de l'objet """
-        return "Menu {name} ({count} enfants)".format(name=self.__class__.__name__, count=len(self.children))
+        return "Menu {name} ({count} enfants)".format(name=self.name, count=len(self.children))
 
     # Setter
     def add_children(self, *items):
@@ -36,4 +38,5 @@ class Menu(object):
     def render(self, request):
         """ Rendre le menu """
         outputs = [child.render(request, style=self.style) for child in self.children]
-        return mark_safe("".join(outputs))
+        data = {'children': outputs, 'menu': self}
+        return render_to_string('menus/menu-menu-{style}.html'.format(style=self.style or 'nav'), data, request)
