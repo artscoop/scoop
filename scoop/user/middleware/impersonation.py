@@ -22,8 +22,9 @@ SESSION_ITEM = "_as_user"
 
 class ImpersonationMiddleware(MiddlewareBase):
     """
-    Middleware : Permet à un superutilisateur de se faire passer pour
-    n'importe quel membre. Ceci est possible grâce à un paramètre d'URL,
+    Middleware : Permet à un superutilisateur de se faire passer pour n'importe quel membre.
+
+    Ceci est rendu possible grâce à un paramètre d'URL,
     nommé __as=id. Il est ensuite possible de retrouver son identité
     avec le paramètre d'URL __self
     """

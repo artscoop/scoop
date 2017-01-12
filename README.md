@@ -56,5 +56,7 @@ Nécessite python 3.5, nginx et Django 1.10
 ### Scoop
 - `SCOOP_DISABLE_SIGNALS` : *bool*, désactiver les listeners de toutes les applications de scoop
 
+### User
+- `USER_DEFAULT_PICTURE_NAME` : *str* ou *callable*. Si *str*, format du nom de fichier, ex. "image-{0.age}.jpg". {0} est une instance de user.Profile
 ### Migrations
 - Créer les migrations avec ```dj makemigrations content core editorial forum location messaging rogue user access social```

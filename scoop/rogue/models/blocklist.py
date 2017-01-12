@@ -95,7 +95,7 @@ class BlocklistManager(SingleDeleteManager):
 
 
 class Blocklist(DatetimeModel, DataModel):
-    """ Blocklist """
+    """ Liste noire : bloquer des membres """
 
     # Constantes
     DATA_KEYS = ['blacklist', 'hidelist']

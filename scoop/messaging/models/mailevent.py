@@ -50,10 +50,6 @@ class MailEventQuerySet(SingleDeleteQuerySet):
         """
         return self.update(discarded=True)
 
-    def get_queue_length(self):
-        """ Renvoyer le nombre d'événements en file """
-        return self.filter(sent=False, discarded=False).count()
-
     def unsent(self):
         """ Renvoyer les événements non expédiés """
         return self.filter(sent=False, discarded=False)
@@ -61,6 +57,10 @@ class MailEventQuerySet(SingleDeleteQuerySet):
     def get_unsent_count(self):
         """ Renvoyer le nombre d'événements non expédiés """
         return self.unsent().count()
+
+    def get_queue_length(self):
+        """ Renvoyer le nombre d'événements non expédiés """
+        return self.get_unsent_count()
 
     # Setter
     def _send_mail(self, sender, to, title, text, html=None):

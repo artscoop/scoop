@@ -1,4 +1,6 @@
 {% load menus %}
-{% for output in children %}
-    {{ output }}
-{% endfor %}
+<ul class="navmenu__nav">
+    {% for output in children %}
+        {{ output }}
+    {% endfor %}
+</ul>

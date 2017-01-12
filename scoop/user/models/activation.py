@@ -5,6 +5,7 @@ from annoying.fields import AutoOneToOneField
 from django.conf import settings
 from django.db import models
 from django.template.loader import render_to_string
+from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -158,6 +159,10 @@ class Activation(DatetimeModel, UUID128Model):
         """ Initialiser l'objet """
         self._meta.get_field('question')._choices = text_to_list_of_lists(render_to_string("user/data/activate-question-choices.txt"), evaluate=False)
         super(Activation, self).__init__(*args, **kwargs)
+
+    def get_absolute_url(self):
+        """ Renvoyer l'URL de l'objet """
+        return reverse('user:profile-activate', kwargs={'username': self.user.username, 'uuid': self.uuid})
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """

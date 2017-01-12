@@ -35,7 +35,7 @@ class Menu(object):
                 self.children.append(item)
 
     # Rendu
-    def render(self, request):
+    def render(self, request, style=None):
         """ Rendre le menu """
         outputs = [child.render(request, style=self.style) for child in self.children]
         data = {'children': outputs, 'menu': self}

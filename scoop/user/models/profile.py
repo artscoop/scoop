@@ -132,7 +132,8 @@ class BaseProfile(BirthModel, LikableModel, PicturableModel, DataModel):
             if not hasattr(settings, 'USER_DEFAULT_PICTURE_PATH'):
                 logging.warning(_("No default path for user pictures. Add a directory path relative to MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"))
             else:
-                filename = getattr(settings, 'USER_DEFAULT_PICTURE_NAME', 'user-{0.gender}.jpg').format(self)
+                filename = getattr(settings, 'USER_DEFAULT_PICTURE_NAME', 'user-{0.gender}.jpg')
+                filename = filename(self) if callable(filename) else filename.format(self)
                 fullpath = os.path.join(settings.USER_DEFAULT_PICTURE_PATH, filename)
                 return fullpath
         return ''

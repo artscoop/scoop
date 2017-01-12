@@ -57,3 +57,15 @@ class Mails(Item):
     def get_label(self, request=None):
         output = "{label} <span class='label primary'>{unread}</span>".format(label=self.label, unread=Recipient.objects.get_unread_count(request.user))
         return mark_safe(output)
+
+
+class UserSearch(Item):
+    """ Rechercher des utilisateurs """
+
+    # Configuration
+    label = _("Search")
+    target = reverse_lazy('user:profile-search')
+
+    # Overrides
+    def is_visible(self, request):
+        return request.user.is_authenticated()
