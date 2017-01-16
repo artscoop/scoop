@@ -1,32 +1,33 @@
 # coding: utf-8
+import getpass
 import os
 import subprocess
 import tempfile
-from optparse import make_option
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils.text import slugify
-from scoop.core.util.stream.request import default_context
+
+from scoop.core.util.stream.request import default_request
 
 
 class Command(BaseCommand):
     """ Commande de création de fichiers de configuration nginx pour le site actuel """
     args = ''
     help = 'Generate nginx server file for this project'
-    option_list = BaseCommand.option_list + (
-        make_option('--export', '-e', '--install', '--deploy', action='store_true', dest='export', default=False,
-                    help='Exports the configuration file directly into nginx conf folder.'),
-    )
+
+    def add_arguments(self, parser):
+        parser.add_argument('--export', '-e', '--install', '--deploy', action='store_true', dest='export', default=False,
+                            help='Exports the configuration file directly into nginx conf folder.')
 
     def handle(self, *args, **options):
         """ Traiter la commande """
-        context = default_context()
-        data = {'MEDIA_ROOT': settings.MEDIA_ROOT, 'STATIC_ROOT': settings.STATIC_ROOT}
-        output = render_to_string("core/configuration/nginx-site.conf", data, context).encode('utf-8')
-        output_base = render_to_string("core/configuration/nginx.conf", data, context).encode('utf-8')
+        username = getpass.getuser()
+        data = {'MEDIA_ROOT': settings.MEDIA_ROOT, 'STATIC_ROOT': settings.STATIC_ROOT, 'username': username}
+        output = render_to_string("core/configuration/nginx-site.conf", data, default_request()).encode('utf-8')
+        output_base = render_to_string("core/configuration/nginx.conf", data, default_request()).encode('utf-8')
         confname = slugify(Site.objects.get_current().name)
         destinations = [{'output': output, 'destination': '/etc/nginx/sites-enabled/{name}'.format(name=confname)},
                         {'output': output_base, 'destination': '/etc/nginx/nginx.conf'}]

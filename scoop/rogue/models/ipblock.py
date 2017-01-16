@@ -2,7 +2,7 @@
 import re
 
 import IPy
-from celery.contrib.methods import task
+from celery.task.base import task
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models, transaction

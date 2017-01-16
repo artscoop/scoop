@@ -2,12 +2,17 @@
 import sys
 import time
 
-import PyQt4.QtCore
-import PyQt4.QtGui
-import PyQt4.QtWebKit
+try:
+    import PyQt4.QtCore as QtCore
+    import PyQt4.QtGui as QtGui
+    import PyQt4.QtWebKit as QtWebKit
+except ImportError:
+    import PyQt5.QtCore as QtCore
+    import PyQt5.QtGui as QtGui
+    import PyQt5.QtWebKitWidgets as QtWebKit
 
 
-class Screenshot(PyQt4.QtWebKit.QWebView):
+class Screenshot(QtWebKit.QWebView):
     """
     Capture de pages web
     Exemple :
@@ -18,8 +23,8 @@ class Screenshot(PyQt4.QtWebKit.QWebView):
 
     def __init__(self):
         """ Initialiser le captureur d'URL """
-        self.app = PyQt4.QtGui.QApplication(sys.argv)
-        PyQt4.QtWebKit.QWebView.__init__(self)
+        self.app = QtGui.QApplication(sys.argv)
+        QtWebKit.QWebView.__init__(self)
         self._loaded = False
         self.loadFinished.connect(self._loadFinished)
 
@@ -31,14 +36,14 @@ class Screenshot(PyQt4.QtWebKit.QWebView):
         :param size: liste ou tuple des dimensions
         """
         size = size or [1024, 0]
-        self.load(PyQt4.QtCore.QUrl(url))
+        self.load(QtCore.QUrl(url))
         self._wait_load()
         # Récupérer la frame document et créer un viewport de la taille du contenu
         frame = self.page().mainFrame()
-        self.page().setViewportSize(PyQt4.QtCore.QSize(size[0], size[1] if size[1] >= 240 else frame.contentsSize().height()))
+        self.page().setViewportSize(QtCore.QSize(size[0], size[1] if size[1] >= 240 else frame.contentsSize().height()))
         # Créer une image Qt de la taille du viewport et y peindre le viewport
-        image = PyQt4.QtGui.QImage(self.page().viewportSize(), PyQt4.QtGui.QImage.Format_ARGB32)
-        painter = PyQt4.QtGui.QPainter(image)
+        image = QtGui.QImage(self.page().viewportSize(), QtGui.QImage.Format_ARGB32)
+        painter = QtGui.QPainter(image)
         frame.render(painter)
         painter.end()
         image.save(output_file)

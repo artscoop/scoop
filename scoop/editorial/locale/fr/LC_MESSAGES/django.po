@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 04:39+0200\n"
-"PO-Revision-Date: 2016-07-01 04:42+0009\n"
+"POT-Creation-Date: 2017-01-15 23:32+0100\n"
+"PO-Revision-Date: 2017-01-15 23:37+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.11\n"
+"X-Translated-Using: django-rosetta 0.7.13\n"
 
 #: __init__.py:8
 msgid "Editorial"
@@ -31,7 +31,7 @@ msgstr "Configuration"
 msgid "Configurations"
 msgstr "Configurations"
 
-#: admin/admin.py:44 models/configuration.py:22
+#: admin/admin.py:44 models/configuration.py:23
 msgid "Page"
 msgstr "Page"
 
@@ -55,56 +55,60 @@ msgstr "Remplir automatiquement les informations des gabarits sélectionnés"
 msgid "The selected templates have been updated."
 msgstr "Les gabarits sélectionnés ont été mis à jour."
 
-#: admin/admin.py:104 models/template.py:22
+#: admin/admin.py:104 models/template.py:31
 msgid "Positions"
 msgstr "Positions"
 
-#: models/configuration.py:23
+#: models/configuration.py:24
 msgid "Position"
 msgstr "Position"
 
-#: models/configuration.py:25
+#: models/configuration.py:26
 msgid "Select template to use to display the target"
 msgstr "Sélectionnez le gabarit à utiliser pour afficher la cible"
 
-#: models/configuration.py:25 models/page.py:53
+#: models/configuration.py:26 models/page.py:53
 msgid "Template"
 msgstr "Gabarit"
 
 #: models/configuration.py:27
+msgid "Notes"
+msgstr "Notes"
+
+#: models/configuration.py:29
 msgid "View to display"
 msgstr "Vue à afficher"
 
-#: models/configuration.py:27
+#: models/configuration.py:29
 msgid "View path"
 msgstr "Chemin de la vue"
 
-#: models/configuration.py:29
+#: models/configuration.py:31
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: models/configuration.py:30
+#: models/configuration.py:32
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: models/configuration.py:48
+#: models/configuration.py:50
 msgid "The view at path could not be imported."
 msgstr "La vue correspondant au chemin n'a pas pu être importée."
 
-#: models/configuration.py:52
+#: models/configuration.py:54
 msgid "The block could not be rendered."
 msgstr "Impossible d'effectuer le rendu du bloc."
 
-#: models/configuration.py:73
+#: models/configuration.py:75
 #, python-format
 msgid "%(page)s/%(item)s at %(position)s"
 msgstr "%(page)s/%(item)s à %(position)s"
 
-#: models/configuration.py:81
+#: models/configuration.py:83
 msgid "block configuration"
 msgstr "configuration de bloc"
 
-#: models/configuration.py:82
+#: models/configuration.py:84
 msgid "block configurations"
 msgstr "configurations de blocs"
 
@@ -121,7 +125,7 @@ msgid "Textile"
 msgstr "Textile"
 
 #: models/excerpt.py:33 models/page.py:47 models/position.py:20
-#: models/template.py:19
+#: models/template.py:28
 msgid "Name"
 msgstr "Nom"
 
@@ -130,7 +134,6 @@ msgid "Header level used by default for the title"
 msgstr "Niveau d'en-tête (header) utilisé par défaut pour le titre"
 
 #: models/excerpt.py:34
-#| msgid "Heading"
 msgid "Heading level"
 msgstr "Niveau d'en-tête"
 
@@ -191,7 +194,7 @@ msgstr "Mots-clés"
 msgid "Page URL"
 msgstr "URL de la page"
 
-#: models/page.py:51 models/template.py:20
+#: models/page.py:51 models/template.py:29
 msgid "Path"
 msgstr "Chemin"
 
@@ -264,31 +267,31 @@ msgstr "position"
 msgid "positions"
 msgstr "positions"
 
-#: models/template.py:21
+#: models/template.py:30
 msgid "Contains html, head and body tags."
 msgstr "Contient les balises html, head et body."
 
-#: models/template.py:21
+#: models/template.py:30
 msgid "Full page template"
 msgstr "Gabarit de page complète"
 
-#: models/template.py:52
+#: models/template.py:62
 msgid "File exists"
 msgstr "Le fichier existe"
 
-#: models/template.py:61
+#: models/template.py:71
 msgid "Has inner blocks"
 msgstr "Possède des blocs internes"
 
-#: models/template.py:70 models/template.py:83
+#: models/template.py:80 models/template.py:93
 msgid "Inner blocks"
 msgstr "Blocs internes"
 
-#: models/template.py:134
+#: models/template.py:144
 msgid "template"
 msgstr "gabarit"
 
-#: models/template.py:135
+#: models/template.py:145
 msgid "templates"
 msgstr "gabarits"
 

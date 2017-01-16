@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 04:39+0200\n"
-"PO-Revision-Date: 2016-05-01 15:44+0009\n"
+"POT-Creation-Date: 2017-01-15 23:32+0100\n"
+"PO-Revision-Date: 2017-01-15 23:37+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
 "Language: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.11\n"
+"X-Translated-Using: django-rosetta 0.7.13\n"
 
 #: __init__.py:19
 msgid "language"
@@ -68,25 +68,33 @@ msgctxt "acl"
 msgid "Custom"
 msgstr "Personnalisé"
 
-#: abstract/content/acl.py:38
+#: abstract/content/acl.py:39
 msgid "Mode"
 msgstr "Mode"
 
-#: abstract/content/acl.py:39
+#: abstract/content/acl.py:40
 msgid "ACL configuration"
 msgstr "configuration ACL"
 
-#: abstract/content/attachment.py:12 abstract/content/picture.py:99
-#: abstract/content/picture.py:111
+#: abstract/content/attachment.py:12 abstract/content/picture.py:100
+#: abstract/content/picture.py:112
 msgid "\\U0001f58c"
 msgstr "\\U0001f58c"
 
-#: abstract/content/comment.py:16 abstract/content/comment.py:52
+#: abstract/content/comment.py:16
+msgid "Mark selected comments as spam."
+msgstr "Marquer les commentaires sélectionnés comme spam."
+
+#: abstract/content/comment.py:21
+msgid "Selected comments have been marked as spam."
+msgstr "Les commentaires sélectionnés ont été marqués comme spam."
+
+#: abstract/content/comment.py:28 abstract/content/comment.py:64
 msgid "Commentable"
 msgstr "Commentable"
 
-#: abstract/content/comment.py:17 abstract/content/comment.py:42
-#: abstract/content/comment.py:47
+#: abstract/content/comment.py:29 abstract/content/comment.py:54
+#: abstract/content/comment.py:59
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -115,7 +123,7 @@ msgstr "Adultes uniquement"
 msgid "Audience rating"
 msgstr "Type de public"
 
-#: abstract/content/picture.py:112
+#: abstract/content/picture.py:113
 msgid "Pictures"
 msgstr "Images"
 
@@ -187,50 +195,50 @@ msgstr "Anniversaire"
 msgid "Sign"
 msgstr "Signe"
 
-#: abstract/core/data.py:15 abstract/core/data.py:54 abstract/core/data.py:78
+#: abstract/core/data.py:17 abstract/core/data.py:56 abstract/core/data.py:80
 msgid "Data"
 msgstr "Données"
 
-#: abstract/core/data.py:61
+#: abstract/core/data.py:63
 #, python-brace-format
 msgid "{count} items"
 msgstr "{count} éléments"
 
-#: abstract/core/data.py:66
+#: abstract/core/data.py:68
 msgid "Unknown data"
 msgstr "Données inconnues"
 
-#: abstract/core/datetime.py:21
+#: abstract/core/datetime.py:22
 msgid "Timestamp"
 msgstr "Horodatage"
 
-#: abstract/core/datetime.py:41 abstract/core/datetime.py:46
-#: abstract/core/datetime.py:51 abstract/core/datetime.py:56
-#: models/recorder.py:140
+#: abstract/core/datetime.py:42 abstract/core/datetime.py:47
+#: abstract/core/datetime.py:52 abstract/core/datetime.py:57
+#: models/recorder.py:143
 msgctxt "datetime"
 msgid "Time"
 msgstr "Heure"
 
-#: abstract/core/datetime.py:61
+#: abstract/core/datetime.py:62
 msgctxt "datetime"
 msgid "Date"
 msgstr "Date"
 
-#: abstract/core/datetime.py:106
+#: abstract/core/datetime.py:107
 msgid "New"
 msgstr "Nouveau"
 
 #: abstract/core/generic.py:40 abstract/core/generic.py:52
-#: models/redirection.py:60
+#: models/redirection.py:64
 msgid "Content type"
 msgstr "Type de contenu"
 
 #: abstract/core/generic.py:41 abstract/core/generic.py:53
-#: models/redirection.py:61
+#: models/redirection.py:65
 msgid "Object Id"
 msgstr "Id de l'objet"
 
-#: abstract/core/generic.py:43 models/redirection.py:63
+#: abstract/core/generic.py:43 models/redirection.py:67
 msgid "Content object"
 msgstr "Objet de contenu"
 
@@ -300,8 +308,8 @@ msgstr "Ratio"
 msgid "[{language}] {name}"
 msgstr "[{language}] {name}"
 
-#: abstract/core/uuid.py:72 abstract/core/uuid.py:81 abstract/core/uuid.py:90
-#: models/option.py:45 models/optiongroup.py:34
+#: abstract/core/uuid.py:71 abstract/core/uuid.py:80 abstract/core/uuid.py:89
+#: models/option.py:45 models/optiongroup.py:37
 msgid "Code"
 msgstr "Code"
 
@@ -321,19 +329,23 @@ msgstr "Les éléments aux poids les plus élevés sont prioritaires "
 msgid "Sites"
 msgstr "Sites"
 
-#: abstract/location/coordinates.py:96
+#: abstract/location/coordinates.py:106
+#| msgid "WE"
+msgctxt "coordinates"
 msgid "WE"
 msgstr "OE"
 
-#: abstract/location/coordinates.py:96
+#: abstract/location/coordinates.py:106
+#| msgid "SN"
+msgctxt "coordinates"
 msgid "SN"
 msgstr "SN"
 
-#: abstract/location/coordinates.py:104
+#: abstract/location/coordinates.py:114
 msgid "Coordinates"
 msgstr "Coordonnées"
 
-#: abstract/location/coordinates.py:111
+#: abstract/location/coordinates.py:121
 msgid "Sexagesimal"
 msgstr "Sexagésimal"
 
@@ -345,39 +357,39 @@ msgstr "Indexer dans les moteurs de recherche"
 msgid "Index/Follow"
 msgstr "Index/Follow"
 
-#: abstract/social/access.py:14 abstract/social/access.py:83
+#: abstract/social/access.py:13 abstract/social/access.py:82
 msgid "Public"
 msgstr "Public"
 
-#: abstract/social/access.py:14
+#: abstract/social/access.py:13
 msgid "Friends"
 msgstr "Amis"
 
-#: abstract/social/access.py:14
+#: abstract/social/access.py:13
 msgid "Personal"
 msgstr "Personnel"
 
-#: abstract/social/access.py:14
+#: abstract/social/access.py:13
 msgid "Friend groups"
 msgstr "Groupes d'amis"
 
-#: abstract/social/access.py:14
+#: abstract/social/access.py:13
 msgid "Registered users"
 msgstr "Utilisateurs inscrits"
 
-#: abstract/social/access.py:20
+#: abstract/social/access.py:19
 msgid "Access"
 msgstr "Accès"
 
-#: abstract/social/access.py:83
+#: abstract/social/access.py:82
 msgid "Members only"
 msgstr "Membres uniquement"
 
-#: abstract/social/access.py:83
+#: abstract/social/access.py:82
 msgid "Staff only"
 msgstr "Équipe uniquement"
 
-#: abstract/social/access.py:87
+#: abstract/social/access.py:86
 msgid "Access level"
 msgstr "Niveau d'accès"
 
@@ -386,7 +398,7 @@ msgstr "Niveau d'accès"
 msgid "Author"
 msgstr "Auteur"
 
-#: abstract/user/authored.py:31 models/recorder.py:108
+#: abstract/user/authored.py:31 models/recorder.py:111
 msgid "User"
 msgstr "Utilisateur"
 
@@ -470,7 +482,7 @@ msgstr "Traductions"
 msgid "Option"
 msgstr "Option"
 
-#: admin/option.py:40 models/optiongroup.py:35
+#: admin/option.py:40 models/optiongroup.py:38
 msgid "Short name"
 msgstr "Nom court"
 
@@ -486,7 +498,7 @@ msgstr "Nombre d'entrées"
 msgid "Codename"
 msgstr "Nom de code"
 
-#: admin/recorder.py:37 models/recorder.py:195
+#: admin/recorder.py:37 models/recorder.py:210
 msgid "Sentence"
 msgstr "Phrase"
 
@@ -494,7 +506,7 @@ msgstr "Phrase"
 msgid "Expires"
 msgstr "Expire"
 
-#: forms/search.py:64
+#: forms/search.py:35
 msgid "Search"
 msgstr "Recherccher"
 
@@ -511,22 +523,22 @@ msgstr "Active"
 msgid "Parent"
 msgstr "Parent"
 
-#: models/option.py:55 models/option.py:122 models/optiongroup.py:39
-#: models/optiongroup.py:84 models/recorder.py:109
+#: models/option.py:55 models/option.py:122 models/optiongroup.py:42
+#: models/optiongroup.py:91 models/recorder.py:112
 #: templates/core/middleware/profiling.html:7
 msgid "Name"
 msgstr "Nom"
 
-#: models/option.py:61 models/optiongroup.py:45
+#: models/option.py:61 models/optiongroup.py:48
 msgid "(No name)"
 msgstr "(sans nom)"
 
-#: models/option.py:63 models/option.py:123 models/optiongroup.py:47
-#: models/optiongroup.py:85 models/recorder.py:127
+#: models/option.py:63 models/option.py:123 models/optiongroup.py:50
+#: models/optiongroup.py:92 models/recorder.py:130
 msgid "Description"
 msgstr "Description"
 
-#: models/option.py:69 models/optiongroup.py:53
+#: models/option.py:69 models/optiongroup.py:56
 msgid "(No description)"
 msgstr "(sans description)"
 
@@ -538,123 +550,132 @@ msgstr "option"
 msgid "options"
 msgstr "options"
 
-#: models/optiongroup.py:75
+#: models/optiongroup.py:81
 msgid "option group"
 msgstr "groupe d'options"
 
-#: models/optiongroup.py:76
+#: models/optiongroup.py:82
 msgid "option groups"
 msgstr "groupes d'options"
 
-#: models/recorder.py:110
+#: models/recorder.py:113
 msgid "Action type"
 msgstr "Type d'action"
 
-#: models/recorder.py:111
+#: models/recorder.py:114
 msgctxt "record"
 msgid "Created"
 msgstr "Créé"
 
-#: models/recorder.py:113
+#: models/recorder.py:116
 msgid "Target type"
 msgstr "Type de la cible"
 
-#: models/recorder.py:114
+#: models/recorder.py:117
 msgid "Target Id"
 msgstr "Id de la cible"
 
-#: models/recorder.py:116 util/django/admin.py:17
+#: models/recorder.py:119 util/django/admin.py:17
 msgid "Target"
 msgstr "Cible"
 
-#: models/recorder.py:117
+#: models/recorder.py:120
 msgid "Target name"
 msgstr "Nom de la cible"
 
-#: models/recorder.py:119
+#: models/recorder.py:122
 msgid "Container type"
 msgstr "Type du conteneur"
 
-#: models/recorder.py:120
+#: models/recorder.py:123
 msgid "Container Id"
 msgstr "Id du conteneur"
 
-#: models/recorder.py:122
+#: models/recorder.py:125
 msgid "Container"
 msgstr "Conteneur"
 
-#: models/recorder.py:123
+#: models/recorder.py:126
 msgid "Container name"
 msgstr "Nom du conteneur"
 
-#: models/recorder.py:135
+#: models/recorder.py:138
 msgid "Hour"
 msgstr "Heure"
 
-#: models/recorder.py:157 models/recorder.py:200
+#: models/recorder.py:160 models/recorder.py:216
 msgid "Color"
 msgstr "Couleur"
 
-#: models/recorder.py:182
+#: models/recorder.py:165
+#| msgid "Verb"
+msgid "Verbosity"
+msgstr "Verbosité"
+
+#: models/recorder.py:195
 msgid "record"
 msgstr "enregistrement"
 
-#: models/recorder.py:183
+#: models/recorder.py:196
 msgid "records"
 msgstr "enregistrements"
 
-#: models/recorder.py:194
+#: models/recorder.py:209
 msgid "Code name"
 msgstr "Nom de code"
 
-#: models/recorder.py:196
+#: models/recorder.py:211
 msgid "Verb"
 msgstr "Verbe"
 
-#: models/recorder.py:209
+#: models/recorder.py:212
+msgid "Level of visibility"
+msgstr "Niveau de visibilité"
+
+#: models/recorder.py:225
 msgid "Valid"
 msgstr "Valide"
 
-#: models/recorder.py:224
+#: models/recorder.py:243
 msgid "action type"
 msgstr "type d'action"
 
-#: models/recorder.py:225
+#: models/recorder.py:244
 msgid "action types"
 msgstr "types d'actions"
 
-#: models/redirection.py:56
+#: models/redirection.py:60
 msgctxt "redirection"
 msgid "Active"
 msgstr "Active"
 
-#: models/redirection.py:57
+#: models/redirection.py:61
 msgid "Original URL"
 msgstr "URL originale"
 
-#: models/redirection.py:58
+#: models/redirection.py:62
 msgid "Expiry"
 msgstr "Expiration"
 
-#: models/redirection.py:59
+#: models/redirection.py:63
 msgid "Does the redirection use an HTTP 301?"
 msgstr "La redirection utilise-t-elle un code HTTP 301 ?"
 
-#: models/redirection.py:59
+#: models/redirection.py:63
 msgctxt "redirection"
 msgid "Permanent"
 msgstr "Permanente"
 
-#: models/redirection.py:93
+#: models/redirection.py:97
 #, python-brace-format
 msgid "HTTP {http} Redirection from {base} to {new}"
 msgstr "Redirection HTTP {http} de {base} vers {new}"
 
-#: models/redirection.py:97
+#: models/redirection.py:101
 msgid "redirection"
 msgstr "redirection"
 
-#: models/redirection.py:98
+#: models/redirection.py:102
 msgid "redirections"
 msgstr "redirections"
 
@@ -741,12 +762,12 @@ msgstr "En-ligne"
 msgid "Options cheat sheet"
 msgstr "Fiche mémoire des options"
 
-#: templatetags/html_tags.py:77 templatetags/html_tags.py:106
+#: templatetags/html_tags.py:79 templatetags/html_tags.py:108
 #: util/data/htmlutil.py:69 util/data/htmlutil.py:96
 msgid "None"
 msgstr "Aucun(e)"
 
-#: templatetags/html_tags.py:133 util/data/htmlutil.py:120
+#: templatetags/html_tags.py:135 util/data/htmlutil.py:120
 msgid " and "
 msgstr " et "
 
@@ -764,12 +785,18 @@ msgstr ""
 "{viewname} n'est ni une méthode ni une fonction et ne peut donc pas être "
 "appelée"
 
-#: util/data/textutil.py:173
+#: util/data/textutil.py:195
 #, python-brace-format
 msgid "{join} and {rest} {unit}"
 msgstr "{join} et {rest} {unit}"
 
-#: util/data/textutil.py:180
+#: util/data/textutil.py:197
+#, python-brace-format
+#| msgid "{join} and {rest} {unit}"
+msgid "{rest} {unit}"
+msgstr "{rest} {unit}"
+
+#: util/data/textutil.py:204
 #, python-brace-format
 msgid "{join} and {last}"
 msgstr "{join} et {last}"
@@ -800,11 +827,11 @@ msgstr "Non"
 msgid "Pipe separated values of same type"
 msgstr "Valeurs de même type séparées par des pipes (|)"
 
-#: util/model/fields.py:45
+#: util/model/fields.py:48
 msgid "Line separated text values"
 msgstr "Valeurs texte, une par ligne"
 
-#: util/model/fields.py:61
+#: util/model/fields.py:67
 msgid ""
 "Yes\n"
 "No"
@@ -812,24 +839,22 @@ msgstr ""
 "Oui\n"
 "Non"
 
-#: util/model/fields.py:152
+#: util/model/fields.py:151
 msgid "Image not accepted. Accepted formats: {}."
 msgstr "Image refusée. Formats acceptés : {}."
 
-#: util/model/fields.py:155
+#: util/model/fields.py:154
 #, python-brace-format
-msgid "Image not accepted. Minimum accepted size is {mw}x{mh}."
-msgstr "Image refusée. La taille minimum acceptée est {mw}x{mh}."
-
-#: util/model/fields.py:157
-msgid "This image cannot be handled. Accepted formats: {}."
-msgstr "Impossible de gérer cette image. Formats acceptés : {}."
+#| msgid "Image not accepted. Minimum accepted size is {mw}x{mh}."
+msgid "Image not accepted. Minimum accepted size is {mw}x{mh}, got {iw}x{ih}"
+msgstr ""
+"Image refusée. La taille minimum acceptée est {mw}x{mh} ({iw}x{ih} reçue)."
 
 #: util/model/widgets.py:207
 msgid "Date"
 msgstr "Date"
 
-#: util/stream/fileutil.py:74 util/stream/fileutil.py:88
+#: util/stream/fileutil.py:88 util/stream/fileutil.py:102
 #, python-format
 msgid "A file named %(file)s was not found in %(path)s"
 msgstr "Aucun fichier nommé %(file)s n'a été trouvé dans %(path)s"
@@ -839,6 +864,9 @@ msgstr "Aucun fichier nommé %(file)s n'a été trouvé dans %(path)s"
 msgid "The download destination file at {path} already exists. Skipped."
 msgstr ""
 "Le fichier de destination du téléchargement à {path} existe déjà. Ignoré."
+
+#~ msgid "This image cannot be handled. Accepted formats: {}."
+#~ msgstr "Impossible de gérer cette image. Formats acceptés : {}."
 
 #~ msgid "%(join)s and %(rest)d %(unit)s"
 #~ msgstr "%(join)s et %(rest)d %(unit)s"
@@ -1064,8 +1092,8 @@ msgstr ""
 #~ "MEDIA_URL in settings.USER_DEFAULT_PICTURE_PATH"
 #~ msgstr ""
 #~ "Aucun chemin par défaut pour les portraits utilisateurs. Définissez un "
-#~ "chemin de dossier relatif à MEDIA_URL dans settings."
-#~ "USER_DEFAULT_PICTURE_PATH"
+#~ "chemin de dossier relatif à MEDIA_URL dans "
+#~ "settings.USER_DEFAULT_PICTURE_PATH"
 
 #~ msgid "Updating locale messages for %(dir)s"
 #~ msgstr "Mise à jour des messages pour %(dir)s"
@@ -1122,8 +1150,7 @@ msgstr ""
 #~ msgstr "Utilisé"
 
 #~ msgid "%(viewname)r is not callable"
-#~ msgstr ""
-#~ "%(viewname)r n'est pas un 'callable' et ne peut donc pas être exécuté"
+#~ msgstr "%(viewname)r n'est pas un 'callable' et ne peut donc pas être exécuté"
 
 #~ msgid "Help text"
 #~ msgstr "Texte d'aide"

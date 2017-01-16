@@ -8,172 +8,172 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 04:39+0200\n"
-"PO-Revision-Date: 2016-07-01 04:45+0009\n"
+"POT-Creation-Date: 2017-01-15 23:32+0100\n"
+"PO-Revision-Date: 2017-01-15 23:38+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Translated-Using: django-rosetta 0.7.11\n"
+"X-Translated-Using: django-rosetta 0.7.13\n"
 
-#: __init__.py:7
+#: __init__.py:8
 msgid "Forum"
 msgstr "Forum"
 
-#: admin/forum.py:35
+#: admin/poll.py:17 models/vote.py:32
+msgid "Poll"
+msgstr "Sondage"
+
+#: admin/thread.py:24
 msgid "Update information of selected threads"
 msgstr "Mettre à jour les informations des fils sélectionnés"
 
-#: admin/forum.py:40
+#: admin/thread.py:29
 msgid "The selected threads have been successfully updated."
 msgstr "Les fils sélectionnés ont bien été mis à jour."
 
-#: admin/forum.py:42
+#: admin/thread.py:31
 msgid "Lock selected threads"
 msgstr "Verrouiller les fils sélectionnés"
 
-#: admin/forum.py:48
+#: admin/thread.py:37
 #, python-brace-format
 msgid "{count} threads have been locked."
 msgstr "{count} fils ont été verrouillés."
 
-#: admin/forum.py:50
+#: admin/thread.py:39
 msgid "Hide selected threads"
 msgstr "Masquer les fils sélectionnés"
 
-#: admin/forum.py:56
+#: admin/thread.py:45
 #, python-brace-format
 msgid "{count} threads have been hidden."
 msgstr "{count} fils ont été masqués."
 
-#: admin/poll.py:15 models/vote.py:32
-msgid "Poll"
-msgstr "Sondage"
-
-#: models/label.py:47
+#: models/label.py:52
 msgid "Parent"
 msgstr "Parent"
 
-#: models/label.py:48
+#: models/label.py:53
 msgid "Short name"
 msgstr "Nom court"
 
-#: models/label.py:50
+#: models/label.py:55
 msgid "Can be set at thread creation"
 msgstr "Peut-être défini à la création du fil"
 
-#: models/label.py:50
+#: models/label.py:55
 msgctxt "label"
 msgid "Primary"
 msgstr "Primaire"
 
-#: models/label.py:51
+#: models/label.py:56
 msgid "Does the label define the status of the thread"
 msgstr "L'étiquette définit-elle le statut du fil ?"
 
-#: models/label.py:51
+#: models/label.py:56
 msgid "Status"
 msgstr "Statut"
 
-#: models/label.py:52
+#: models/label.py:57
 msgctxt "label"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/label.py:53
+#: models/label.py:58
 msgid "Groups allowed"
 msgstr "Groupes autorisés"
 
-#: models/label.py:55
+#: models/label.py:60
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/label.py:83
+#: models/label.py:88
 msgid "Unnamed"
 msgstr "Sans nom"
 
-#: models/label.py:90 models/label.py:97
+#: models/label.py:95 models/label.py:102
 msgid "No description"
 msgstr "Aucune description"
 
-#: models/label.py:106
+#: models/label.py:111
 #, python-brace-format
 msgid "Forum label: [{name}]"
 msgstr "Étiquette de forum : [{name}]"
 
-#: models/label.py:115
+#: models/label.py:120
 msgid "Label"
 msgstr "Étiquette"
 
-#: models/label.py:116 models/label.py:146
+#: models/label.py:121 models/label.py:151
 msgid "Labels"
 msgstr "Étiquettes"
 
-#: models/label.py:124 models/message.py:76
+#: models/label.py:129 models/message.py:89
 msgid "Name"
 msgstr "Nom"
 
-#: models/label.py:125 models/poll.py:54 models/sanction.py:47
+#: models/label.py:130 models/poll.py:54 models/sanction.py:42
 msgid "Description"
 msgstr "Description"
 
-#: models/label.py:126
+#: models/label.py:131
 msgid "HTML description"
 msgstr "Description HTML"
 
-#: models/label.py:135
+#: models/label.py:140
 msgid "translation"
 msgstr "traduction"
 
-#: models/label.py:136
+#: models/label.py:141
 msgid "translations"
 msgstr "traductions"
 
-#: models/label.py:144
+#: models/label.py:149
 msgid "Main label"
 msgstr "Étiquette principale"
 
-#: models/label.py:145
+#: models/label.py:150
 msgid "Status label"
 msgstr "Étiquette de statut"
 
-#: models/message.py:75 models/thread.py:38
+#: models/message.py:88 models/thread.py:52
 msgid "Author"
 msgstr "Auteur"
 
-#: models/message.py:77 models/participant.py:85 models/poll.py:60
+#: models/message.py:90 models/participant.py:85 models/poll.py:60
 msgid "Thread"
 msgstr "Fil de discussion"
 
-#: models/message.py:78
+#: models/message.py:91
 msgid "Text"
 msgstr "Texte"
 
-#: models/message.py:79
+#: models/message.py:92
 msgctxt "message"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/message.py:169
+#: models/message.py:185
 msgid "message"
 msgstr "message"
 
-#: models/message.py:170
+#: models/message.py:186
 msgid "messages"
 msgstr "messages"
 
-#: models/mutelist.py:30 models/participant.py:84 models/sanction.py:45
+#: models/mutelist.py:29 models/participant.py:84 models/sanction.py:40
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/mutelist.py:74
+#: models/mutelist.py:73
 msgid "mute list"
 msgstr "liste d'ignorés"
 
-#: models/mutelist.py:75
+#: models/mutelist.py:74
 msgid "mute lists"
 msgstr "listes d'ignorés"
 
@@ -192,7 +192,7 @@ msgctxt "thread"
 msgid "Unread time"
 msgstr "Non lu le"
 
-#: models/participant.py:89 models/thread.py:46
+#: models/participant.py:89 models/thread.py:60
 msgid "Message count"
 msgstr "Nombre de messages"
 
@@ -254,110 +254,110 @@ msgstr "sondage"
 msgid "polls"
 msgstr "sondages"
 
-#: models/sanction.py:41
+#: models/sanction.py:36
 msgid "Posting disabled"
 msgstr "Réponses désactivées"
 
-#: models/sanction.py:41
+#: models/sanction.py:36
 msgid "Reading disabled"
 msgstr "Lecture désactivée"
 
-#: models/sanction.py:42
+#: models/sanction.py:37
 msgid "2 hours"
 msgstr "2 heures"
 
-#: models/sanction.py:42
+#: models/sanction.py:37
 msgid "1 day"
 msgstr "1 jour"
 
-#: models/sanction.py:42
+#: models/sanction.py:37
 msgid "3 days"
 msgstr "3 jours"
 
-#: models/sanction.py:42
+#: models/sanction.py:37
 msgid "1 week"
 msgstr "1 semaine"
 
-#: models/sanction.py:42
+#: models/sanction.py:37
 msgid "30 days"
 msgstr "30 jours"
 
-#: models/sanction.py:46
+#: models/sanction.py:41
 msgid "Type"
 msgstr "Type"
 
-#: models/sanction.py:48
+#: models/sanction.py:43
 msgid "Expiry"
 msgstr "Expiration"
 
-#: models/sanction.py:49
+#: models/sanction.py:44
 msgctxt "sanction"
 msgid "Revoked"
 msgstr "Révoquée"
 
-#: models/sanction.py:65
+#: models/sanction.py:60
 msgid "sanction"
 msgstr "sanction"
 
-#: models/sanction.py:66
+#: models/sanction.py:61
 msgid "sanctions"
 msgstr "sanctions"
 
-#: models/thread.py:39
+#: models/thread.py:53
 msgid "Topic"
 msgstr "Sujet"
 
-#: models/thread.py:40
+#: models/thread.py:54
 msgctxt "thread"
 msgid "Was started"
 msgstr "Démarré"
 
-#: models/thread.py:41
+#: models/thread.py:55
 msgctxt "thread"
 msgid "Edited"
 msgstr "Modifié"
 
-#: models/thread.py:42
+#: models/thread.py:56
 msgctxt "thread"
 msgid "Updated"
 msgstr "Mis à jour"
 
-#: models/thread.py:44
+#: models/thread.py:58
 msgid "Last speaker"
 msgstr "Dernier participant"
 
-#: models/thread.py:45
+#: models/thread.py:59
 msgctxt "thread"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/thread.py:47
+#: models/thread.py:61
 msgctxt "thread"
 msgid "Locked"
 msgstr "Verrouillé"
 
-#: models/thread.py:48
+#: models/thread.py:62
 msgid "Always on top"
 msgstr "Toujours en tête"
 
-#: models/thread.py:49
+#: models/thread.py:63
 msgctxt "thread"
 msgid "Visible"
 msgstr "Visible"
 
-#: models/thread.py:53
+#: models/thread.py:72
 msgid "All messages"
 msgstr "Tous les messages"
 
-#: models/thread.py:67
+#: models/thread.py:86
 msgid "Messages"
 msgstr "Messages"
 
-#: models/thread.py:144
+#: models/thread.py:163
 msgid "thread"
 msgstr "fil de discussion"
 
-#: models/thread.py:145
+#: models/thread.py:164
 msgid "threads"
 msgstr "fils de discussion"
 
@@ -377,6 +377,10 @@ msgstr "a des votes"
 #: models/vote.py:45
 msgid "votes"
 msgstr "votes"
+
+#: templates/forum/message/body.html:5
+msgid "This user has been muted"
+msgstr "Cet utilisateur a été mis en sourdine"
 
 #~ msgid "Settings"
 #~ msgstr "Paramètres"

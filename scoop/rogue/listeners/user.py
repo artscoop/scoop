@@ -28,7 +28,7 @@ def online_status_check(sender, online, **kwargs):
     # Uniquement lorsque l'utilisateur est en ligne
     if sender.is_active and online is True:
         task = getattr(IPBlock.objects, 'get_user_status')
-        task.delay(sender)
+        task.delay(IPBlock.objects, sender)
 
 
 @receiver([userip_created])

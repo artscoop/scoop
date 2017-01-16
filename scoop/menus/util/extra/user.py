@@ -7,7 +7,7 @@ from scoop.messaging.models.recipient import Recipient
 from scoop.menus.elements.item import Item
 
 
-class Login(Item):
+class UserLogin(Item):
     """ Menu connexion """
 
     # Configuration
@@ -19,7 +19,7 @@ class Login(Item):
         return request.user.is_anonymous()
 
 
-class Logout(Item):
+class UserLogout(Item):
     """ Menu connexion """
 
     # Configuration
@@ -31,32 +31,28 @@ class Logout(Item):
         return request.user.is_authenticated()
 
 
-class Admin(Item):
-    """ Menu admin """
+class UserSelf(Item):
+    """ Afficher son propre profil """
 
     # Configuration
-    label = _("Manage")
-    target = reverse_lazy('admin:index')
-
-    # Overrides
-    def is_visible(self, request):
-        return request.user.is_superuser
-
-
-class Mails(Item):
-    """ Menu Inbox (messaging) """
-
-    # Configuration
-    label = _("Inbox")
-    target = reverse_lazy('messaging:inbox')
+    label = _("My profile")
+    target = reverse_lazy('user:self-view')
 
     # Overrides
     def is_visible(self, request):
         return request.user.is_authenticated()
 
-    def get_label(self, request=None):
-        output = "{label} <span class='label primary'>{unread}</span>".format(label=self.label, unread=Recipient.objects.get_unread_count(request.user))
-        return mark_safe(output)
+
+class UserEditSelf(Item):
+    """ Modifier son propre profil """
+
+    # Configuration
+    label = _("Edit my profile")
+    target = reverse_lazy('user:self-edit')
+
+    # Overrides
+    def is_visible(self, request):
+        return request.user.is_authenticated()
 
 
 class UserSearch(Item):

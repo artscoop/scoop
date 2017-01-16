@@ -7,8 +7,14 @@ Tous ces processeurs utilisent les fonctionnalités d'image de PyQt4 et PIL
 """
 
 from PIL import Image, ImageChops, ImageEnhance, ImageFilter
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
+
+try:
+    from PyQt4.QtCore import Qt
+    from PyQt4.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
+except ImportError:
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPolygon
+
 
 BLUR_LEVELS = {'low': 2, 'medium': 8, 'high': 32}
 
@@ -24,7 +30,7 @@ def _pil_to_qt(image):
 def _qt_to_pil(image):
     """ Convertir une image QT vers une image PIL """
     size = (image.width(), image.height())
-    data = image.bits().asstring(image.numBytes())
+    data = image.bits().asstring(image.byteCount())
     pil_image = Image.frombuffer('RGBA', size, data, 'raw', 'BGRA', 0, 1)
     return pil_image
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 04:39+0200\n"
+"POT-Creation-Date: 2017-01-15 23:32+0100\n"
 "PO-Revision-Date: 2015-04-27 15:05+0009\n"
 "Last-Translator: Anonymous User <steve.kossouho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,8 @@ msgstr ""
 msgid "Purge selected access log entries"
 msgstr "Purger les entrées sélectionnées du journal d'accès"
 
-#: admin/access.py:31 admin/filters.py:9 admin/filters.py:30 models/ip.py:98
-#: models/ip.py:138 models/ip.py:144 models/ip.py:153
+#: admin/access.py:31 admin/filters.py:9 admin/filters.py:30 models/ip.py:112
+#: models/ip.py:152 models/ip.py:158 models/ip.py:167
 msgid "Country"
 msgstr "Pays"
 
@@ -49,98 +49,98 @@ msgstr "{} adresses IP ont été correctement mises à jour."
 msgid "Harmful"
 msgstr "Dangereux"
 
-#: admin/userip.py:30 models/ip.py:97 models/ip.py:175
+#: admin/userip.py:30 models/ip.py:111 models/ip.py:189
 #: templates/access/dashboard/ips.html:18
 msgid "ISP"
 msgstr "FAI"
 
-#: models/access.py:157 models/userip.py:74
+#: models/access.py:158 models/userip.py:74
 msgid "User"
 msgstr "Utilisateur"
 
-#: models/access.py:158
+#: models/access.py:159
 msgid "Page"
 msgstr "Page"
 
-#: models/access.py:159
+#: models/access.py:160
 msgid "Referrer"
 msgstr "Référent"
 
-#: models/access.py:165
+#: models/access.py:166
 #, python-brace-format
 msgid "{who} has visited {what}"
 msgstr "{who} à visité {what}"
 
-#: models/access.py:174
+#: models/access.py:175
 msgid "access"
 msgstr "accès"
 
-#: models/access.py:175
+#: models/access.py:176
 msgid "accesses"
 msgstr "accès"
 
-#: models/ip.py:93
+#: models/ip.py:107
 msgid "Decimal"
 msgstr "Décimal"
 
-#: models/ip.py:94
+#: models/ip.py:108
 msgid "String"
 msgstr "Chaîne"
 
-#: models/ip.py:95 models/ip.py:186 templates/access/dashboard/ips.html:17
+#: models/ip.py:109 models/ip.py:200 templates/access/dashboard/ips.html:17
 msgid "Reverse"
 msgstr "Inversé"
 
-#: models/ip.py:96
+#: models/ip.py:110
 msgid "Reverse status"
 msgstr "Statut inversé"
 
-#: models/ip.py:99
+#: models/ip.py:113
 msgid "Harm"
 msgstr "Danger"
 
-#: models/ip.py:100
+#: models/ip.py:114
 msgid "Blocked"
 msgstr "Bloqué"
 
-#: models/ip.py:101
+#: models/ip.py:115
 msgctxt "ip"
 msgid "Updated"
 msgstr "Mise à jour"
 
-#: models/ip.py:102
+#: models/ip.py:116
 msgid "Dynamic"
 msgstr "Dynamique"
 
-#: models/ip.py:103 models/ip.py:181
+#: models/ip.py:117 models/ip.py:195
 msgid "City name"
 msgstr "Nom de ville"
 
-#: models/ip.py:115
+#: models/ip.py:129
 msgid "Class"
 msgstr "Classe"
 
-#: models/ip.py:184
+#: models/ip.py:198
 msgid "N/D"
 msgstr "N/D"
 
-#: models/ip.py:193
+#: models/ip.py:207
 msgid "Short reverse"
 msgstr "Reverse court"
 
-#: models/ip.py:214
+#: models/ip.py:228
 msgid "Hexadecimal"
 msgstr "Hexadécimal"
 
-#: models/ip.py:223
+#: models/ip.py:237
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: models/ip.py:229
+#: models/ip.py:243
 msgid "Number of users"
 msgstr "Nombre d'utilisateurs"
 
-#: models/ip.py:311
+#: models/ip.py:326
 msgid "Icon"
 msgstr "Icône"
 

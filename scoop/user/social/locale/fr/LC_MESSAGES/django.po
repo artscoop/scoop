@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 04:39+0200\n"
+"POT-Creation-Date: 2017-01-15 23:32+0100\n"
 "PO-Revision-Date: 2016-07-01 04:50+0009\n"
 "Last-Translator: b'Anonymous User <steve.kossouho@gmail.com>'\n"
 "Language-Team: français <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Translated-Using: django-rosetta 0.7.11\n"
 
@@ -27,7 +27,7 @@ msgstr "Traduction"
 msgid "Translations"
 msgstr "Traductions"
 
-#: admin/event.py:39 models/event/eventcategory.py:68
+#: admin/event.py:39 models/event/eventcategory.py:69
 msgid "event category"
 msgstr "catégorie d'événement"
 
@@ -80,43 +80,41 @@ msgstr "participation"
 msgid "attendances"
 msgstr "participations"
 
-#: models/event/eventcategory.py:38
+#: models/event/eventcategory.py:39
 msgid "Parent"
 msgstr "Parent"
 
-#: models/event/eventcategory.py:39
-#| msgid "Public"
+#: models/event/eventcategory.py:40
 msgctxt "eventcategory"
 msgid "Public"
 msgstr "Privée"
 
-#: models/event/eventcategory.py:43 models/event/eventcategory.py:77
-#: models/friend/friendgroup.py:27 models/group/group.py:69
+#: models/event/eventcategory.py:44 models/event/eventcategory.py:78
+#: models/friend/friendgroup.py:27 models/group/group.py:72
 #: models/rating/rating.py:29 models/rating/rating.py:65
 msgid "Name"
 msgstr "Nom"
 
-#: models/event/eventcategory.py:49 models/rating/rating.py:35
+#: models/event/eventcategory.py:50 models/rating/rating.py:35
 msgid "(No name)"
 msgstr "(Sans nom)"
 
-#: models/event/eventcategory.py:51 models/event/eventcategory.py:78
+#: models/event/eventcategory.py:52 models/event/eventcategory.py:79
 #: models/event/events.py:68 models/event/events.py:107
-#: models/group/group.py:73 models/rating/rating.py:37
+#: models/group/group.py:76 models/rating/rating.py:37
 #: models/rating/rating.py:66
 msgid "Description"
 msgstr "Description"
 
-#: models/event/eventcategory.py:57 models/rating/rating.py:43
+#: models/event/eventcategory.py:58 models/rating/rating.py:43
 msgid "(No description)"
 msgstr "(Pas de description)"
 
-#: models/event/eventcategory.py:69
+#: models/event/eventcategory.py:70
 msgid "event categories"
 msgstr "catégories d'événements"
 
 #: models/event/events.py:67 models/event/events.py:106
-#: people/models/person.py:31
 msgid "Title"
 msgstr "Titre"
 
@@ -193,7 +191,7 @@ msgid "Friends 3"
 msgstr "Amis 3"
 
 #: models/friend/friendgroup.py:26 models/friend/friendlist.py:49
-#: models/rating/score.py:45 people/models/person.py:29
+#: models/rating/score.py:45
 msgid "User"
 msgstr "Utilisateur"
 
@@ -221,64 +219,64 @@ msgstr "Annuler la demande"
 msgid "Add to friends"
 msgstr "Ajouter aux amis"
 
-#: models/friend/friendlist.py:244
+#: models/friend/friendlist.py:255
 #, python-brace-format
 msgid "Friendship status for {user}"
 msgstr "Statut des amitiés pour {user}"
 
-#: models/friend/friendlist.py:252
+#: models/friend/friendlist.py:263
 msgid "friend status"
 msgstr "statut d'amitié"
 
-#: models/friend/friendlist.py:253
+#: models/friend/friendlist.py:264
 msgid "friend statuses"
 msgstr "statuts d'amitié"
 
-#: models/group/group.py:65
+#: models/group/group.py:68
 msgid "Anyone can join"
 msgstr "Tout le monde peut s'inscrire"
 
-#: models/group/group.py:65
+#: models/group/group.py:68
 msgid "Administrators must confirm first"
 msgstr "Les administrateurs doivent d'abord confirmer"
 
-#: models/group/group.py:65
+#: models/group/group.py:68
 msgid "Invites only"
 msgstr "Invitations seulement"
 
-#: models/group/group.py:71
+#: models/group/group.py:74
 msgid "Define if the group is not in the public listings"
 msgstr "Définir si le groupe n'apparaît pas dans les listes publiques"
 
-#: models/group/group.py:71
+#: models/group/group.py:74
 msgid "Discrete group"
 msgstr "Groupe discret"
 
-#: models/group/group.py:72
+#: models/group/group.py:75
 msgid "Private"
 msgstr "Privé"
 
-#: models/group/group.py:74
+#: models/group/group.py:77
 msgid "Membership type"
 msgstr "Type d'adhésion"
 
-#: models/group/group.py:77
+#: models/group/group.py:80
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: models/group/group.py:78
+#: models/group/group.py:81
 msgid "Members"
 msgstr "Membres"
 
-#: models/group/group.py:79
+#: models/group/group.py:82
 msgid "Applications"
 msgstr "Candidatures"
 
-#: models/group/group.py:147
+#: models/group/group.py:150
 msgid "group"
 msgstr "groupe"
 
-#: models/group/group.py:148
+#: models/group/group.py:151
 msgid "groups"
 msgstr "groupes"
 
@@ -310,19 +308,19 @@ msgstr "Invitation de groupe"
 msgid "Group invites"
 msgstr "groupes"
 
-#: models/post.py:45
+#: models/post.py:44
 msgid "Text"
 msgstr "Texte"
 
-#: models/post.py:46
+#: models/post.py:45
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: models/post.py:57
+#: models/post.py:56
 msgid "user shout"
 msgstr "statut textuel"
 
-#: models/post.py:58
+#: models/post.py:57
 msgid "user shouts"
 msgstr "statuts textuels"
 
@@ -407,81 +405,62 @@ msgstr "score utilisateur"
 msgid "user points"
 msgstr "points utilisateur"
 
-#: people/models/person.py:26
-msgid "Mister"
-msgstr "Monsieur"
+#~ msgid "Mister"
+#~ msgstr "Monsieur"
 
-#: people/models/person.py:26
-msgid "Miss'ess"
-msgstr "Madame"
+#~ msgid "Miss'ess"
+#~ msgstr "Madame"
 
-#: people/models/person.py:26
-msgid "Miss"
-msgstr "Mademoiselle"
+#~ msgid "Miss"
+#~ msgstr "Mademoiselle"
 
-#: people/models/person.py:26
-msgid "Doctor"
-msgstr "Docteur"
+#~ msgid "Doctor"
+#~ msgstr "Docteur"
 
-#: people/models/person.py:30
-msgid "Full name"
-msgstr "Nom complet"
+#~ msgid "Full name"
+#~ msgstr "Nom complet"
 
-#: people/models/person.py:32 people/models/person.py:33
-msgid "Name given at birth"
-msgstr "Prénom"
+#~ msgid "Name given at birth"
+#~ msgstr "Prénom"
 
-#: people/models/person.py:34
-msgid "Family name"
-msgstr "Nom de famille"
+#~ msgid "Family name"
+#~ msgstr "Nom de famille"
 
-#: people/models/person.py:35
-msgid "Nickname"
-msgstr "Surnom"
+#~ msgid "Nickname"
+#~ msgstr "Surnom"
 
-#: people/models/person.py:36
-msgid "Personal page"
-msgstr "Page personnelle"
+#~ msgid "Personal page"
+#~ msgstr "Page personnelle"
 
-#: people/models/person.py:37
-msgid "Email"
-msgstr "Email"
+#~ msgid "Email"
+#~ msgstr "Email"
 
-#: people/models/person.py:38
-msgid "ex. Home:1114567, Fax:1114568, 1114569"
-msgstr "ex. Domicile:0123456789, Fax:0123456788, 0123456787"
+#~ msgid "ex. Home:1114567, Fax:1114568, 1114569"
+#~ msgstr "ex. Domicile:0123456789, Fax:0123456788, 0123456787"
 
-#: people/models/person.py:38
-msgid "Phone numbers"
-msgstr "Numéros de téléphone"
+#~ msgid "Phone numbers"
+#~ msgstr "Numéros de téléphone"
 
-#: people/models/person.py:39
-msgid "Additional notes"
-msgstr "Notes supplémentaires"
+#~ msgid "Additional notes"
+#~ msgstr "Notes supplémentaires"
 
-#: people/models/person.py:42
-msgid "Street number, name and appartment/suite"
-msgstr "Numéro de voie, nom et appartement"
+#~ msgid "Street number, name and appartment/suite"
+#~ msgstr "Numéro de voie, nom et appartement"
 
-#: people/models/person.py:42
-msgid "Street address"
-msgstr "Adresse (rue)"
+#~ msgid "Street address"
+#~ msgstr "Adresse (rue)"
 
-#: people/models/person.py:43
-msgid "City"
-msgstr "Ville"
+#~ msgid "City"
+#~ msgstr "Ville"
 
-#: people/models/person.py:44
-msgid "Postal code"
-msgstr "Code postal"
+#~ msgid "Postal code"
+#~ msgstr "Code postal"
 
-#: people/models/person.py:60
-msgid "person"
-msgstr "personne"
+#~ msgid "person"
+#~ msgstr "personne"
 
-#: people/models/person.py:61
-msgid "persons"
-msgstr "personnes"
+#~ msgid "persons"
+#~ msgstr "personnes"
 
 #~ msgid "friend group grant"
 #~ msgstr "autorisation aux groupes d'amis"
