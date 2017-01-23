@@ -6,15 +6,18 @@ try:
     import PyQt4.QtCore as QtCore
     import PyQt4.QtGui as QtGui
     import PyQt4.QtWebKit as QtWebKit
+    from PyQt4.QtGui import QApplication
 except ImportError:
     import PyQt5.QtCore as QtCore
     import PyQt5.QtGui as QtGui
     import PyQt5.QtWebKitWidgets as QtWebKit
+    from PyQt5.QtWidgets import QApplication
 
 
 class Screenshot(QtWebKit.QWebView):
     """
     Capture de pages web
+
     Exemple :
     >> s = Screenshot()
     >> s.capture('http://sitescraper.net', 'website.png', [1024, 0])
@@ -23,7 +26,7 @@ class Screenshot(QtWebKit.QWebView):
 
     def __init__(self):
         """ Initialiser le captureur d'URL """
-        self.app = QtGui.QApplication(sys.argv)
+        self.app = QApplication(sys.argv)
         QtWebKit.QWebView.__init__(self)
         self._loaded = False
         self.loadFinished.connect(self._loadFinished)
@@ -31,6 +34,7 @@ class Screenshot(QtWebKit.QWebView):
     def capture(self, url, output_file, size=None):
         """
         Capturer l'image d'une page et l'enregistrer
+
         :param url: URL de la page
         :param output_file: chemin du fichier de sortie
         :param size: liste ou tuple des dimensions
