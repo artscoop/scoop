@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.aggregates import Sum
 from django.template.base import Template
 from django.template.context import RequestContext
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -97,7 +98,8 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
     active = models.BooleanField(default=True, blank=True, verbose_name=pgettext_lazy('advertisement', "Active"))
     group = models.CharField(max_length=48, blank=True, help_text=_("Pipe separated"), verbose_name=_("Group name"))
-    code = models.TextField(blank=False, help_text=_("Django template code for HTML/JS"), verbose_name=_("HTML/JS Snippet"))
+    template = models.CharField(max_length=24, blank=True, verbose_name=_("Rendering template"))
+    code = models.TextField(blank=False, help_text=_("Template code if <template> is empty"), verbose_name=_("HTML/JS Snippet"))
     views = models.IntegerField(default=0, editable=False, verbose_name=_("Views"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     keywords = models.CharField(max_length=128, blank=True, verbose_name=_("Keywords"))
@@ -117,15 +119,21 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
         :param request: requête
         :type view: bool
         """
-        template = Template(self.code)
-        context = RequestContext(request)
-        context.update({'ad': self})
         if not request.user.has_perm('content.can_hide_advertisement'):
             # Incrémenter le compteur d'affichages
             if view is True:
                 self.views += 1
                 self.save(update_fields=['views'])
-            return template.render(context)
+            # Utiliser template pour le rendu, ou code si template est absent
+            if not self.template:
+                template = Template(self.code)
+                context = RequestContext(request)
+                context.update({'ad': self})
+                return template.render(context)
+            else:
+                template_name = 'content/display/advertisement/render/{name}'
+                return render_to_string(template_name, {'ad': self}, request=request)
+
         else:
             if request.user.is_staff:
                 return "{w}x{h} ad".format(w=self.width, h=self.height)

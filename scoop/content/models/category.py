@@ -22,6 +22,7 @@ class CategoryManager(SingleDeleteManager, TranslatableModelManager):
         """ Clé naturelle """
         return self.get(url=url)
 
+    # Getter
     def get_by_name(self, name):
         """ Renvoyer un type de contenu selon nom de code """
         candidates = self.filter(short_name__iexact=name)
@@ -106,7 +107,7 @@ class Category(TranslatableModel, IconModel, DataModel):
         app_label = 'content'
 
 
-class CategoryTranslation(get_translation_model(Category, "category"), TranslationModel):
+class CategoryTranslation(get_translation_model(Category, "category"), TranslationModel, models.Model):
     """ Traduction de type de contenu """
 
     # Champs

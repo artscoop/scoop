@@ -37,6 +37,7 @@ class AlbumManager(SingleDeleteManager):
     # Setter
     def create_with(self, name, pictures, **kwargs):
         """ Créer un album et y intégrer une liste d'images """
+        pictures = make_iterable(pictures)
         description = kwargs.get('description', '')
         author = kwargs.get('author', None)
         album = Album(name=name, description=description, author=author)
