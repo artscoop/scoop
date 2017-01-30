@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse_lazy
 class FlaggableModelUtil:
     """
     Mixin d'objet pouvant être signalé à la modération
+
     Monkey-patching done in scoop.core.__init__
     """
 

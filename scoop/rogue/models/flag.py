@@ -15,6 +15,7 @@ from django.utils.translation import pgettext_lazy
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.icon import IconModel
 from scoop.core.abstract.core.translation import TranslationModel
+from scoop.core.util.data.typeutil import make_iterable
 from scoop.core.util.model.model import SingleDeleteManager, limit_to_model_names
 from scoop.core.util.shortcuts import addattr
 from scoop.rogue.util.signals import flag_closed, flag_created, flag_resolve
@@ -96,13 +97,21 @@ class FlagManager(SingleDeleteManager):
         return False
 
     def flag_by_lookup(self, model_name, identifier, *args, **kwargs):
-        """ Signaler un objet via app_label.model et id """
-        try:
-            item = ContentType.get_object_for_this_type(model=model_name, pk=identifier)
-            Flag.flag(item, **kwargs)
-            return True
-        except ContentType.DoesNotExist:
-            return False
+        """
+        Signaler un objet via app_label.model et id
+
+        :param model_name: nom de modèle Django
+        :param identifier: identifiant de l'objet, ou identifiants
+        :type identifier: int | list
+        """
+        identifiers = make_iterable(identifier)
+        for identifier in identifiers:
+            try:
+                item = ContentType.get_object_for_this_type(model=model_name, pk=identifier)
+                self.flag(item, **kwargs)
+                return True
+            except ContentType.DoesNotExist:
+                return False
 
 
 class Flag(DatetimeModel):
@@ -245,10 +254,12 @@ class Flag(DatetimeModel):
             self.content_object = None
         # Au minimum, l'URL doit contenir un slash
         self.url = '/' if not self.url else self.url
-        # Peupler l'attribut nom
+        # Peupler l'attribut nom et object_owner
         if self.content_object is not None:
             maxlength = Flag._meta.get_field('name').max_length - 4
             self.name = truncatechars(str(self.content_object), maxlength)
+            author = getattr(self.content_object, 'author', None)
+            self.object_owner = author
         super(Flag, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -259,7 +270,7 @@ class Flag(DatetimeModel):
 
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return "{item}@{url}".format(url=self.url, item=self.content_object)
+        return "\u26a0{item}@{url}".format(url=self.url, item=self.content_object)
 
     # Métadonnées
     class Meta:
@@ -267,8 +278,7 @@ class Flag(DatetimeModel):
         verbose_name_plural = _("flags")
         unique_together = ('author', 'content_type', 'object_id')
         permissions = (("can_flag", "Can flag"),
-                       ("can_moderate_flag", "Can moderate flags")
-                       )
+                       ("can_moderate_flag", "Can moderate flags"))
         app_label = 'rogue'
 
 
