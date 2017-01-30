@@ -25,8 +25,8 @@ class FileCorpus(BaseCorpus):
     """
 
     # Attributs
-    corpus = None
-    corpus_shadow = None
+    corpus = None  # de type Dictionary (dictionnaire auquel on peut assigner des attributs)
+    corpus_shadow = None  # copie de type List (les classifieurs NLTK utilisant des listes)
     classifier = None  # classifieur NLTK, initialisé dans get_corpus
 
     # Getter
@@ -55,12 +55,31 @@ class FileCorpus(BaseCorpus):
         return self.corpus_shadow
 
     def classify(self, document):
+        """
+        Renvoyer la catégorie la plus probable pour un document
+
+        :rtype: str
+        """
         self.get_corpus()
         return self.classifier.classify(document)
 
+    def classify_prob(self, document):
+        """
+        Renvoyer les probabilités de catégorie
+
+        :rtype: nltk.probability.DictionaryProbDist
+        """
+        self.get_corpus()
+        return self.classifier.prob_classify(document)
+
     # Actions
     def save(self):
-        """ Enregistrer le corpus sur disque """
+        """
+        Enregistrer le corpus sur disque
+
+        :rtype: bool
+        :returns: True si la sauvegarde a eu lieu, False sinon
+        """
         directory = Paths.get_root_dir(*CORPUS_PATH)
         infile = '{name}.csv'.format(name=self.pathname)
         path = join(directory, '{name}.csv.zip'.format(name=self.pathname))
@@ -77,12 +96,18 @@ class FileCorpus(BaseCorpus):
             return False
 
     def train(self, document, category):
-        """ Classer un document dans une catégorie """
+        """
+        Classer un document dans une catégorie
+
+        :returns: signature du document
+        :rtype: long
+        """
         self.get_corpus()
         document = format_base(document)
         signature = hash(document)
         self.corpus[signature] = (document, category)
         self.corpus.updated = time.time()
+        return signature
 
     def retrain(self, signature, category):
         """
@@ -92,8 +117,11 @@ class FileCorpus(BaseCorpus):
         :param category: nouvelle catégorie du document
         """
         self.get_corpus()
-        self.corpus[signature] = (self.corpus[signature][0], category)
-        self.corpus.updated = time.time()
+        if self.corpus[signature][1] != category:
+            self.corpus[signature] = (self.corpus[signature][0], category)
+            self.corpus.updated = time.time()
+            return True
+        return False
 
     def untrain(self, signature):
         """
@@ -102,9 +130,15 @@ class FileCorpus(BaseCorpus):
         :param signature: Hash du document
         """
         self.get_corpus()
-        self.corpus.pop(signature, None)
+        extracted = self.corpus.pop(signature, None)
         self.corpus.updated = time.time()
+        return extracted is not None
 
     # Overrides
     def __init__(self, pathname, *args, **kwargs):
+        """
+        Initialiser le corpus avec son nom de fichier
+
+        :param pathname: nom de fichier du  corpus sans répertoire et extension
+        """
         self.pathname = pathname
