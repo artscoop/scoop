@@ -54,6 +54,10 @@ class BaseCorpus:
         raise NotImplemented()
 
     @abstractmethod
+    def classify_prob(self, document):
+        """ Renvoyer les probabilités de chacune des classes possibles pour ce document """
+
+    @abstractmethod
     def classify(self, document):
         """ Renvoyer la classe détectée du document """
 
