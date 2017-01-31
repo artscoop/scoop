@@ -69,11 +69,12 @@ class DataForm(Form):
 
         :param user: utilisateur pour lequel récupérer des données, None pour récupérer des données de template
         :param version: version des données à récupérer
+        :returns: les données pour l'utilisateur, ou None
         """
         if user is not None:
             user = user.user if isinstance(user, HttpRequest) else user
             if not user.is_authenticated():
-                return {}
+                return None
         result, defaults = dict(), cls.get_defaults(user)
         if isinstance(defaults, dict):
             result.update(defaults)
@@ -99,6 +100,9 @@ class DataForm(Form):
         Remplacer les instances de Model en leurs clés primaires
 
         Raison : Il n'est pas toujours possible d'utiliser une instance de Model dans une initial_value
+        Mais on peut toujours utiliser l'ID de l'instance. Notamment dans le cas de listes.
+
+        :returns: données normalisées
         """
         if not isinstance(data, dict):
             return dict()
@@ -116,21 +120,31 @@ class DataForm(Form):
     # Setter
     @classmethod
     def select_version(cls, user, version):
-        """ Remplacer les donées actuelles de l'utilisateur par celles d'une autre version """
+        """
+        Remplacer les donées actuelles pour l'utilisateur par celles d'une autre version
+
+        :returns: True si la version existe, False sinon
+        """
         try:
             versioned = FormConfiguration.objects.get(name=cls.name, user=user, version=version)
             FormConfiguration.objects.filter(name=cls.name, user=user, version="").delete()
             versioned.version = ""
             versioned.save()
+            return True
         except FormConfiguration.DoesNotExist:
-            pass
+            return False
 
     @classmethod
     def set_option_for(cls, user, field, value, version=None):
-        """ Modifier l'état d'un champ de données de formulaire pour un utilisateur """
+        """
+        Modifier l'état d'un champ de données de formulaire pour un utilisateur
+
+        :returns: True si l'option a été modifiée, False sinon
+        """
         state = cls.get_data_for(user, version)
         state[field] = value
         FormConfiguration.objects.set_user_config(user, cls.name, state, version=version)
+        return True
 
     def save_configuration(self, user=None, version=""):
         """
@@ -138,6 +152,7 @@ class DataForm(Form):
 
         dans les données d'utilisateur et pour la version désirée
         Nécessite l'appel de Form.is_valid() au préalable
+
         :returns: True en cas de succès, False sinon.
         """
         if user.is_authenticated():
