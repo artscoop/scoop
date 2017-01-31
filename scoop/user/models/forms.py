@@ -58,7 +58,13 @@ class FormConfigurationManager(models.Manager):
 
 
 class FormConfiguration(DatetimeModel):
-    """ Configuration utilisateur via formulaire """
+    """
+    Configuration utilisateur via formulaire
+
+    Ces objets sont gérés via des instances de la classe DataForm
+
+    :seealso: scoop.user.util.forms.DataForm
+    """
 
     # Champs
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='configurations', on_delete=models.CASCADE, verbose_name=_("User"))
