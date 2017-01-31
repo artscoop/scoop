@@ -104,5 +104,5 @@ class Negotiation(DatetimeModel):
         unique_together = (('source', 'target'),)
         verbose_name = _("negotiation")
         verbose_name_plural = _("negotiations")
-        permissions = [['can_bypass_negotiation', "Can bypass negotiations"]]
+        permissions = [['bypass_negotiation', "Can bypass negotiations"]]
         app_label = "messaging"

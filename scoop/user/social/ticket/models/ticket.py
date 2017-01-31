@@ -98,5 +98,5 @@ class Ticket(DatetimeModel, UUID64Model):
     class Meta:
         verbose_name = _("ticket")
         verbose_name_plural = _("tickets")
-        permissions = (('can_close_ticket', "Can close a ticket"),)
+        permissions = (('close_ticket', "Can close a ticket"),)
         app_label = 'ticket'

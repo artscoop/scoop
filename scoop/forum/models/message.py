@@ -184,5 +184,5 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
     class Meta:
         verbose_name = _("message")
         verbose_name_plural = _("messages")
-        permissions = (("can_force_send", "Can force send messages"),)
+        permissions = (("force_send", "Can force send messages"),)
         app_label = 'forum'

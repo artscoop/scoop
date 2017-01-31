@@ -515,7 +515,7 @@ class Content(NullableGenericModel, PicturableModel, PrivacyModel, CommentableMo
         verbose_name = _("content")
         verbose_name_plural = _("contents")
         # Pas de traduction paresseuse des permissions (https://code.djangoproject.com/ticket/13965)
-        permissions = (("can_access_all_content", "Can bypass content access"),)
+        permissions = (("access_all_content", "Can bypass content access"),)
         get_latest_by = 'updated'
         ordering = ['-edited']
         app_label = 'content'

@@ -149,6 +149,6 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, DataModel, UU
     class Meta(object):
         verbose_name = _("group")
         verbose_name_plural = _("groups")
-        permissions = [["can_join_groups", "Can join groups"],
-                       ["can_toggle_groups", "Can change group visibility"]]
+        permissions = [["join_groups", "Can join groups"],
+                       ["toggle_groups", "Can change group visibility"]]
         app_label = "social"

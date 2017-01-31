@@ -156,5 +156,5 @@ class Advertisement(WeightedModel, DatetimeModel, AuthoredModel, IconModel, Rect
     class Meta:
         verbose_name = _("advertisement")
         verbose_name_plural = _("advertisements")
-        permissions = [('can_hide_advertisements', "Can hide advertisements")]
+        permissions = [('hide_advertisements', "Can hide advertisements")]
         app_label = 'content'

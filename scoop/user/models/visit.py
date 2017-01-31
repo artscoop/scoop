@@ -80,5 +80,5 @@ class Visit(DatetimeModel):
         verbose_name_plural = _("profile visits")
         unique_together = (('visitor', 'user'),)
         # Pas de traduction paresseuse des permissions (https://code.djangoproject.com/ticket/13965)
-        permissions = (("can_ghost_visit", "Can visit stealth"),)
+        permissions = (("ghost_visit", "Can visit stealth"),)
         app_label = 'user'

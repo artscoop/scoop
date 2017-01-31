@@ -251,7 +251,7 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
     class Meta:
         verbose_name = _("message")
         verbose_name_plural = _("messages")
-        permissions = (("can_force_send", "Can force send messages"),
-                       ("can_broadcast", "Can broadcast messages"),
+        permissions = (("force_send_message", "Can force send messages"),
+                       ("broadcast_message", "Can broadcast messages"),
                        )
         app_label = "messaging"

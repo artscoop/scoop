@@ -201,5 +201,5 @@ class Blocklist(DatetimeModel, DataModel):
     class Meta:
         verbose_name = _("blocklists")
         verbose_name_plural = _("blocklists")
-        permissions = [['can_bypass_block', "Can bypass blocks"]]
+        permissions = [['bypass_block', "Can bypass blocks"]]
         app_label = "rogue"

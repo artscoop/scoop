@@ -194,5 +194,5 @@ class Comment(GenericModel, AcceptableModel, DatetimeModel, IPPointableModel, UU
     class Meta:
         verbose_name = _('comment')
         verbose_name_plural = _('comments')
-        permissions = (("can_edit_own_comment", "Can edit own Comment"),)
+        permissions = (("edit_own_comment", "Can edit own Comment"),)
         app_label = 'content'

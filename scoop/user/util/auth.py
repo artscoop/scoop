@@ -41,7 +41,7 @@ def is_female(user):
 
 
 def is_queer(user):
-    """ Renvoyer si l'utilisateur n'a pas un genre de base """
+    """ Renvoyer si l'utilisateur veut se catégoriser ailleurs """
     return is_authenticated(user) and user.profile.gender == BaseProfile.GENDER_OTHER
 
 

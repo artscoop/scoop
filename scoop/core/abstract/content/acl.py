@@ -215,5 +215,5 @@ class ACLModel(models.Model):
 
     # Métadonnées
     class Meta:
-        permissions = [('can_define_%(class)s_acl', "Can define ACL configurations for %(class)s")]
+        permissions = [('define_acl_%(class)s', "Can define ACL configurations for %(class)s")]
         abstract = True

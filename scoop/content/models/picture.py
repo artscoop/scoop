@@ -824,7 +824,7 @@ class Picture(DatetimeModel, WeightedModel, RectangleModel, ModeratedModel, Free
         verbose_name = _('image')
         verbose_name_plural = _('images')
         index_together = [['content_type', 'object_id']]
-        permissions = [['can_upload_picture', "Can upload a picture"],
-                       ['can_download_description_picture', "Can download a picture using a URL in description"],
-                       ['can_moderate_picture', "Can moderate pictures"]]
+        permissions = [['upload_picture', "Can upload a picture"],
+                       ['autoload_picture', "Can download a picture using a URL in description"],
+                       ['moderate_picture', "Can moderate pictures"]]
         app_label = 'content'

@@ -277,8 +277,8 @@ class Flag(DatetimeModel):
         verbose_name = _("flag")
         verbose_name_plural = _("flags")
         unique_together = ('author', 'content_type', 'object_id')
-        permissions = (("can_flag", "Can flag"),
-                       ("can_moderate_flag", "Can moderate flags"))
+        permissions = (("flag_content", "Can flag"),
+                       ("moderate_flag", "Can moderate flags"))
         app_label = 'rogue'
 
 

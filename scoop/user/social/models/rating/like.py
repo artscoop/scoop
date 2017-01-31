@@ -85,5 +85,5 @@ class Like(DatetimeModel):
         verbose_name = _("like")
         verbose_name_plural = _("likes")
         unique_together = (('author', 'content_type', 'object_id'),)
-        permissions = [['can_like', "Can like content"]]
+        permissions = [['like_content', "Can like content"]]
         app_label = 'social'
