@@ -1,6 +1,7 @@
 # coding: utf-8
 import datetime
 
+from crontab._crontab import CronTab
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
@@ -32,7 +33,7 @@ class OccurrenceQuerySetMixin(object):
         """ Renvoyer les événements des n prochaines heures """
         now = timezone.now()
         then = now + datetime.timedelta(hours=hours)
-        return self.filter(models.Q(start__range=(now, then)) | models.Q(end__range=(now, then)))
+        return self.filter(models.Q(date__range=(now, then)) | models.Q(end__range=(now, then)))
 
     def finished(self):
         """ Renvoyer les événements terminés """
@@ -45,6 +46,14 @@ class OccurrenceQuerySetMixin(object):
     def by_country(self, country, **kwargs):
         """ Renvoyer les événements par pays """
         return self.filter(address__city__country=country, **kwargs)
+
+    def at_date(self, when, event):
+        """ Indiquer si un événement est en collision avec une date """
+        return self.filter(date__lte=when, end_gte=when, event=event)
+
+    def exists_at_date(self, when, event):
+        """ Indiquer si un événement est en collision avec une date """
+        return self.at_date(when=when, event=event).exists()
 
 
 class OccurrenceQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, OccurrenceQuerySetMixin):
@@ -61,7 +70,7 @@ class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataMod
     """ Événement """
 
     # Constantes
-    DATA_KEYS = ['privacy']
+    DATA_KEYS = ['privacy', 'crontab']
 
     # Champs
     title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
@@ -80,10 +89,45 @@ class Event(AuthoredModel, DatetimeModel, PicturableModel, PrivacyModel, DataMod
         return self.occurrences.count()
 
     # Setter
-    def add_occurrence(self, when):
-        """ Ajouter une occurrence à l'événement """
-        occurrence = Occurrence(event=self, date=when, description=self.description)
-        occurrence.save()
+    def add_occurrence(self, when, force=False):
+        """
+        Ajouter une occurrence à l'événement (si elle n'existe pas)
+
+        :returns: True si l'occurrence a été ajoutée, False sinon
+        :param when: Date de l'occurrence
+        :param force: forcer l'insertion même si conflit avec une autre occurrence du même événement
+        """
+        if not Occurrence.objects.exists_at_date(when, self) or force:
+            occurrence = Occurrence(event=self, date=when, description=self.description)
+            occurrence.save()
+            return True
+        return False
+
+    def set_crontab(self, crontab):
+        """
+        Définir la récurrence via une chaîne compatible crontab
+
+        :type crontab: str
+        :param crontab: chaîne compatible avec les règles cron, voir https://github.com/josiahcarlson/parse-crontab
+        """
+        self.set_data('crontab', crontab, save=True)
+
+    def add_crontab_occurrences(self, count=2):
+        """ Ajouter des occurrences selon le crontab """
+        crontab = self.get_data('crontab', '')
+        scheduler = CronTab(crontab)
+        occurrence_time = timezone.now()
+        occurrences_added = 0
+        for index in range(count):
+            delay = scheduler.next(now=occurrence_time)
+            occurrence_time += delay
+            success = self.add_occurrence(occurrence_time)
+            occurrences_added += 1 if success else 0
+        return occurrences_added
+
+    def clear_occurrences(self):
+        """ Supprimer toutes les occurrences de l'événement """
+        self.get_occurrences().delete()
 
     # Métadonnées
     class Meta:
@@ -106,6 +150,8 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     title = models.CharField(max_length=128, blank=True, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     date = models.DateTimeField(null=False, verbose_name=_("Date"))
+    duration = models.IntegerField(default=60, validators=[MinValueValidator(15)], help_text=_("In minutes"), verbose_name=_("Duration"))
+    end = models.DateTimeField(editable=False, verbose_name=_("Auto"))  # utilisé pour l'ORM
     address = models.ForeignKey('location.Venue', null=True, blank=True, related_name='event_occurrences', verbose_name=_("Address"))
     capacity = models.IntegerField(default=DEFAULT_CAPACITY, validators=[MinValueValidator(1), MaxValueValidator(999)], verbose_name=_("Max attendants"))
     group = models.CharField(max_length=11, blank=True, db_index=True, verbose_name=_("Group"))
@@ -120,6 +166,14 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
         """ Renvoyer le nombre de places restantes pour l'événement """
         return (self.capacity - self.attendances.exclude(status=0).count()) if self.status not in {self.CLOSED, self.CANCELLED} else 0
 
+    def get_end(self):
+        """ Renvoyer la date de fin de l'événement """
+        return self.date + timezone.timedelta(minutes=self.duration)
+
+    def get_start(self):
+        """ Renvoyer la date de départ """
+        return self.date
+
     def has_attendant(self, user):
         """ Renvoyer si un utilisateur participe à l'événement """
         return self.attendances.filter(user=user).exists()
@@ -133,13 +187,13 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     def get_time_elapsed(self):
         """ Renvoyer le temps écoulé de l'événement """
         if self.has_begun() and not self.is_over():
-            return timezone.now() - self.start
+            return timezone.now() - self.get_start()
         return None
 
     def get_time_remaining(self):
         """ Renvoyer le temps restant avant la fin de l'événement """
         now = timezone.now()
-        return self.end - now if self.end > now else None
+        return self.get_end() - now if self.get_end() > now else None
 
     def get_time_completion(self):
         """ Renvoyer le pourcentage de progression de l'événement en temps réel """
@@ -148,15 +202,19 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
 
     def get_duration(self):
         """ Renvoyer la durée prévue de l'événement """
-        return self.end - self.start
+        return self.duration
+
+    def get_time_frame(self):
+        """ Renvoyer la date de début et la date de fin de l'événement """
+        return [self.get_start(), self.get_end()]
 
     def has_begun(self):
         """ Renvoyer si l'événement a commencé """
-        return self.start < timezone.now() <= self.end
+        return self.get_start() < timezone.now() <= self.get_end()
 
     def is_over(self):
         """ Renvoyer si l'événement est terminé """
-        return self.end < timezone.now()
+        return self.get_end() < timezone.now()
 
     # Setter
     def add_attendance(self, user, forecast=Attendance.WONT):
@@ -175,8 +233,9 @@ class Occurrence(DatetimeModel, InviteTargetModel, UUID64Model):
     # Overrides
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """
-        if self.end is None or self.end < self.start + timezone.timedelta(hours=1):
-            self.end = self.start + timezone.timedelta(hours=1)
+        if self.get_end() is None or self.duration < 15:
+            self.duration = 15
+        self.end = self.get_end()
         super().save(*args, **kwargs)
 
     # Métadonnées
