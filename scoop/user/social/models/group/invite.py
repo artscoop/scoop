@@ -30,7 +30,7 @@ class Invite(AuthoredModel, DatetimeModel, GenericModel):
 
     # Constantes
     STATUSES = [[0, _("Pending")], [1, _("Accepted")], [2, _("Denied")], [3, _("Permanently denied")]]
-    PENDING, ACCEPTED, DENIED, NUKED = 0, 1, 2, 3
+    PENDING, ACCEPTED, DENIED, NUKED, BANNED = 0, 1, 2, 3, 3
 
     # Champs
     target = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name="invite_targeted", verbose_name=_("Target"))

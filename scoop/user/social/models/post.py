@@ -35,7 +35,7 @@ class PostManager(SingleDeleteManager):
 
 
 class Post(DatetimeModel, AuthoredModel, PrivacyModel, DataModel, LikableModel):
-    """ Post """
+    """ Post social """
 
     # Constantes
     DATA_KEYS = ['privacy']
@@ -52,7 +52,7 @@ class Post(DatetimeModel, AuthoredModel, PrivacyModel, DataModel, LikableModel):
         self.save(update_fields=['deleted'])
 
     # Métadonnées
-    class Meta(object):
+    class Meta:
         verbose_name = _("user shout")
         verbose_name_plural = _("user shouts")
         app_label = "social"
