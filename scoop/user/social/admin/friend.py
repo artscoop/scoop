@@ -5,6 +5,7 @@ from scoop.user.social.models.friend.friendgroup import FriendGroup
 from scoop.user.social.models.friend.friendlist import FriendList
 
 
+@admin.register(FriendList)
 class FriendListAdmin(AjaxSelectAdmin):
     """ Admin des listes d'amis """
     list_select_related = True
@@ -15,6 +16,7 @@ class FriendListAdmin(AjaxSelectAdmin):
     fields = []
 
 
+@admin.register(FriendGroup)
 class FriendGroupAdmin(admin.ModelAdmin):
     """ Admin des groupes d'amis """
     list_select_related = True
@@ -22,8 +24,3 @@ class FriendGroupAdmin(admin.ModelAdmin):
     list_filter = []
     list_editable = []
     readonly_fields = ['user']
-
-
-# Enregistrer les classes d'administration
-admin.site.register(FriendList, FriendListAdmin)
-admin.site.register(FriendGroup, FriendGroupAdmin)

@@ -7,6 +7,7 @@ from scoop.user.social.models.post import Post
 from scoop.user.social.models.rating.like import Like
 
 
+@admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     """ Admin des groupes sociaux """
     list_select_related = True
@@ -17,6 +18,7 @@ class GroupAdmin(admin.ModelAdmin):
     readonly_fields = ['author', 'time', 'slug']
 
 
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     """ Admin des posts de mur """
     list_select_related = True
@@ -26,6 +28,7 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = []
 
 
+@admin.register(Like)
 class LikeAdmin(admin.ModelAdmin, GenericModelUtil):
     """ Admin des likes """
     list_select_related = True
@@ -34,9 +37,3 @@ class LikeAdmin(admin.ModelAdmin, GenericModelUtil):
     list_filter = ['content_type']
     actions = []
     save_on_top = True
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Group, GroupAdmin)
-admin.site.register(Post, PostAdmin)
-admin.site.register(Like, LikeAdmin)

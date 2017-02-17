@@ -8,6 +8,7 @@ from scoop.user.social.models.event import Event
 from scoop.user.social.models.event.eventcategory import EventCategory
 
 
+@admin.register(Event)
 class EventAdmin(AjaxSelectAdmin):
     """ Admin des événements """
     list_select_related = True
@@ -27,6 +28,7 @@ class EventCategoryInlineAdmin(admin.TabularInline):
     formfield_overrides = {models.TextField: {'widget': admin.widgets.AdminTextInputWidget}}
 
 
+@admin.register(EventCategory)
 class EventCategoryAdmin(admin.ModelAdmin):
     """ Admin des catégories d'événements """
     list_select_related = True
@@ -35,11 +37,6 @@ class EventCategoryAdmin(admin.ModelAdmin):
     list_editable = []
     search_fields = ['translations__name']
     readonly_fields = []
-    inlines = [EventCategoryInlineAdmin, ]
+    inlines = [EventCategoryInlineAdmin]
     fieldsets = ((_("event category"), {'fields': ('icon', 'parent')}),)
     change_form_template = 'admintools_bootstrap/tabbed_change_form.html'
-
-
-# Enregistrer les classes d'administration
-admin.site.register(EventCategory, EventCategoryAdmin)
-admin.site.register(Event, EventAdmin)
