@@ -9,6 +9,7 @@ from user.access.admin.filters import AccessIPCountryFilter
 __all__ = ['AccessAdmin']
 
 
+@admin.register(Access)
 class AccessAdmin(ViewOnlyModelAdmin):
     """ Administration des accès au site """
     # Configuration
@@ -52,7 +53,3 @@ class AccessAdmin(ViewOnlyModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Access, AccessAdmin)

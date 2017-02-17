@@ -8,6 +8,7 @@ from scoop.user.access.models.ip import IP
 __all__ = ['IPAdmin']
 
 
+@admin.register(IP)
 class IPAdmin(admin.ModelAdmin):
     """ Administration des IPs connues """
     # Configuration
@@ -35,7 +36,3 @@ class IPAdmin(admin.ModelAdmin):
             item.set_ip_address(item.string)
             item.save()
         self.message_user(request, _("{} IP adresses were successfully updated.").format(count))
-
-
-# Enregistrer les classes d'administration
-admin.site.register(IP, IPAdmin)

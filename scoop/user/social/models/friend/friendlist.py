@@ -117,10 +117,12 @@ class FriendList(DataModel):
         :param user: utilisateur pour lequel on veut comparer la liste d'amis
         :param symmetric: définit si le calcul doit être symétrique.
         Lorsque symetric est False, on renvoie les amis de l'utilisateur courant
-        qui ne sont pas amis avec user, et les amis de user qui ne sont pas amis avec l'utilisateur
-        courant ne sont pas renvoyés.
+        qui ne sont pas amis avec user. Les amis de user qui ne sont pas amis avec l'utilisateur
+        courant ne sont pas renvoyés. (= amis(a) ∖ amis(b), ce n'est pas un antislash mais l'opérateur)
+        de différence entre deux enesembles
         Si symmetric est True, on affiche les utilisateurs des deux listes
         d'amis qui sont présents dans une seule des deux listes (renvoie plus d'entrées)
+        (= amis(a) ∆ amis(b))
         """
         self_ids = set(self.get_friend_ids())
         user_ids = set(user.friends.get_friend_ids())

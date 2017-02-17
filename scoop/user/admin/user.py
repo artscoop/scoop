@@ -15,6 +15,7 @@ from scoop.user.forms.user import UserAdminForm
 __all__ = ['UserAdmin']
 
 
+@admin.register(get_user_model())
 class UserAdmin(admin.ModelAdmin):
     """ Administration des utilisateurs """
     list_select_related = True
@@ -97,7 +98,3 @@ class UserAdmin(admin.ModelAdmin):
         if obj.profile.picture is not None:
             return "{} <small>{}x{}</small>".format(obj.profile.picture.get_thumbnail_html(size=(48, 20)), obj.profile.picture.width,
                                                     obj.profile.picture.height)
-
-
-# Enregistrer les classes d'administration
-admin.site.register(get_user_model(), UserAdmin)
