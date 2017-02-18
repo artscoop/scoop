@@ -18,7 +18,17 @@ class DataModel(models.Model):
 
     # Setter
     def set_data(self, key, value, save=False):
-        """ Ajouter une clé-valeur aux données """
+        """
+        Ajouter une clé-valeur aux données
+
+        :param key: clé
+        :param value: valeur à assinger pour la clé
+        :param save: sauvegarder l'objet immédiatement ou non
+        :type key: str
+        :type value: int | str | list | dict | set
+        :type save: bool
+        :rtype: bool
+        """
         if (hasattr(self, 'DATA_KEYS') and key in self.DATA_KEYS) or not hasattr(self, 'DATA_KEYS'):
             if not isinstance(self.data, dict):
                 self.data = {key: value}

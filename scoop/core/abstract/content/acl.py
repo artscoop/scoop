@@ -148,8 +148,9 @@ class ACLModel(models.Model):
         """
         Déplacer le fichier vers son chemin par défaut
 
-        :param force_name: Forcer un nouveau nom de fichier
-        :type force_name: str
+        :param force_name: nouveau nom de fichier, None si le nom doit rester inchangé
+        :type force_name: str | NoneType
+        :returns: True si l'opération est un succès, False sinon
         """
         if self.exists():
             # Supprimer les fichiers liés si besoin, etc.
@@ -208,7 +209,7 @@ class ACLModel(models.Model):
     # Overrides
     def save(self, *args, **kwargs):
         """ Sauvegarder l'objet """
-        super(ACLModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if getattr(settings, 'CONTENT_ACL_AUTO_UPDATE_PATHS', False):
             if self._is_file_path_obsolete():
                 self.update_file_path()
