@@ -1,4 +1,5 @@
 # coding: utf-8
+from autoslug.fields import AutoSlugField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -8,16 +9,24 @@ from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.shortcuts import addattr
 from translatable.exceptions import MissingTranslation
-from translatable.models import TranslatableModel, get_translation_model
+from translatable.models import TranslatableModel, get_translation_model, TranslatableModelManager
 
 
-class HelpGroupManager(models.Manager):
+class HelpGroupQuerySet(models.QuerySet, TranslatableModelManager):
     """ Manager de l'aide """
 
     # Getter
+    def active(self):
+        """ Renvoyer les groupes actifs """
+        return self.filter(active=True)
+
     def get_by_uuid(self, uuid):
         """ Renvoyer une page portant un UUID """
         return self.get(uuid=uuid)
+
+    def get_by_slug(self, slug):
+        """ Renvoyer une page portant un slug """
+        return self.get(slug=slug)
 
 
 class HelpGroup(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
@@ -30,10 +39,10 @@ class HelpGroup(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
 
     # Champs
     active = models.BooleanField(default=True, verbose_name=pgettext_lazy('group', "Active"))
-    name = models.CharField(max_length=32, blank=False, unique=True, verbose_name=_("Slug"))
-    slug = models.SlugField(max_length=128, blank=False, verbose_name=_("Slug"))
+    name = models.CharField(max_length=32, blank=False, unique=True, verbose_name=_("Codename"))
+    slug = AutoSlugField(max_length=128, populate_from='name', unique_with=['id'], blank=False, verbose_name=_("Slug"))
     updated = models.DateTimeField(auto_now=True, verbose_name=pgettext_lazy('page', "Updated"))
-    objects = HelpGroupManager()
+    objects = HelpGroupQuerySet.as_manager()
 
     # Getter
     @addattr(short_description=_("Text"))

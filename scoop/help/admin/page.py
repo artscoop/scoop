@@ -7,6 +7,8 @@ from scoop.help.models.page import Page, PageTranslation
 
 class PageTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin de traduction des groupes d'options """
+
+    # Configuration
     verbose_name = _("Translation")
     verbose_name_plural = _("Translations")
     model = PageTranslation
@@ -14,8 +16,11 @@ class PageTranslationInlineAdmin(admin.TabularInline):
     extra = 3
 
 
+@admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     """ Administration des pages d'aide """
+
+    # Configuration
     list_select_related = True
     list_display = ['id', 'uuid', 'title', 'active']
     list_filter = []
@@ -24,7 +29,3 @@ class PageAdmin(admin.ModelAdmin):
     ordering = ['-id']
     actions = []
     inlines = [PageTranslationInlineAdmin]
-
-
-# Enregistrer les classes d'administration
-admin.site.register(Page, PageAdmin)

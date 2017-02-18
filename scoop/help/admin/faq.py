@@ -8,6 +8,8 @@ from scoop.help.models.faq import FAQ, FAQTranslation
 
 class FAQTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin de traduction des groupes d'options """
+
+    # Configuration
     verbose_name = _("Translation")
     verbose_name_plural = _("Translations")
     model = FAQTranslation
@@ -15,19 +17,18 @@ class FAQTranslationInlineAdmin(admin.TabularInline):
     extra = 4
 
 
+@admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
     """ Administration des groupes d'options """
+
+    # Configuration
     list_select_related = True
     list_display = ['pk', 'uuid', 'question', 'active']
     list_display_links = []
-    list_filter = ['active']
+    list_filter = ['active', 'translations__language']
     list_editable = ['active']
     readonly_fields = []
     search_fields = ['group']
     actions = []
     save_on_top = False
     inlines = [FAQTranslationInlineAdmin]
-
-
-# Enregistrer les classes d'administration
-admin.site.register(FAQ, FAQAdmin)

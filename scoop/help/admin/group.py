@@ -8,6 +8,7 @@ from scoop.help.models.group import HelpGroup, HelpGroupTranslation
 class HelpGroupTranslationInlineAdmin(admin.TabularInline):
     """ Inline admin de traduction des groupes d'aide """
 
+    # Configuration
     verbose_name = _("Translation")
     verbose_name_plural = _("Translations")
     model = HelpGroupTranslation
@@ -15,9 +16,11 @@ class HelpGroupTranslationInlineAdmin(admin.TabularInline):
     extra = 3
 
 
+@admin.register(HelpGroup)
 class HelpGroupAdmin(admin.ModelAdmin):
     """ Administration des groupes d'aide """
 
+    # Configuration
     list_select_related = True
     list_display = ['id', 'uuid', 'active', 'name', 'slug']
     list_filter = []
@@ -26,7 +29,3 @@ class HelpGroupAdmin(admin.ModelAdmin):
     ordering = ['-id']
     actions = []
     inlines = [HelpGroupTranslationInlineAdmin]
-
-
-# Enregistrer les classes d'administration
-admin.site.register(HelpGroup, HelpGroupAdmin)
