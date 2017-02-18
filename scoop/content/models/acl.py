@@ -31,7 +31,16 @@ class CustomACLQuerySet(models.QuerySet):
 
 
 class CustomACL(UUID64Model):
-    """ Configuration personnalisée d'ACL """
+    """
+    Configuration personnalisée d'ACL
+
+    Comment fonctionnent les configurations personnalisées d'ACL ?
+    Une instance de modèle ACL possède plusieurs modes d'ACL de base,
+    entre Public, Authentifié, Privé et Social. Un mode supplémentaire,
+    Personnalisé, permet à l'heure actuelle de définir des mots de passe.
+    Vous pouvez assigner plusieurs contenus ACL au même mot de passe,
+    et mélanger les modes ACL arbitrairement sur l'ensemble de vos contenus.
+    """
 
     # Constantes
     ACL_CUSTOM_MODES = [(0, _("Password"))]
@@ -49,7 +58,7 @@ class CustomACL(UUID64Model):
     # Getter
     def get_acl_directory(self):
         """ Renvoyer le nom de répertoire d'ACL pour l'objet """
-        return "{acl}/{spread}/{owner}/{name}".format(acl=self.ACL_PATHS[self.PASSWORD], name=self.get_slug(),
+        return "{acl}/{spread}/{owner}/{name}".format(acl=self.ACL_PATHS[int(self.mode)], name=self.get_slug(),
                                                       owner=self.owner.username, spread=ACLModel._get_hash_path(self.owner.username))
 
     def get_slug(self):
@@ -57,11 +66,22 @@ class CustomACL(UUID64Model):
         return self.slug or 'default'
 
     def check_password(self, password):
-        """ Renvoyer si un mot de passe correspond à cette configuration """
+        """
+        Renvoyer si un mot de passe est valide pour cette configuration d'ACL
+
+        :param password: mot de passe
+        :returns: True si le mot de passe est valide, False sinon
+        :rtype: bool
+        """
         return check_password(password, self.password)
 
     def is_valid(self, request):
-        """ Renvoyer si cette configuration d'ACL autorise l'affichage dans la reqûete """
+        """
+        Renvoyer si l'utilisateur connecté a accès au contenu
+
+        :param request: objet HttpRequest
+        :rtype: bool
+        """
         session_key = self._get_session_key()
         if session_key in request.session:
             return self.check_password(request.session[session_key])
