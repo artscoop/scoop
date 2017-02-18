@@ -12,6 +12,7 @@ def get_menu(alias):
 
     :param alias: alias de menu
     :type alias: str
+    :returns: un objet de type Menu, conservé si possible dans un cache
     """
     if alias not in menu_cache:
         aliases = settings.MENU_ALIASES
