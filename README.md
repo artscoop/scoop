@@ -1,6 +1,6 @@
 # Projet Scoop
 S. Kossouho
-Mai 2011 - 2016
+Mai 2011 - 2017
 Séparé du projet One le 15 avril 2015
 
 Nécessite python 3.5, nginx et Django 1.10
