@@ -25,6 +25,12 @@ def validate_form(request, form_classes=None, alias=None):
     - Dictionnaire {alias: [FQN de classes de formulaires]}
     - Dictionnaire {alias: FQN de classe de formulaire}
 
+    Le formulaire peut, et devrait, contenir un champ nommé "id",
+    dont la valeur est celle de l'objet en cours d'édition si applicable.
+    Ce champ id est utilisé pour initialiser correctement le formulaire
+    à valider. Les configurations avec plusieurs id (un id par formulaire)
+    ne sont pas encore prises en charge.
+
     :returns: Des données au format JSON. La clé 'valid' indique si la validation
         s'est faite correctement. Si la valeur de 'valid' est False, alors d'autres
         clés contiendront des données d'erreur. La clé '_all_' est une liste
