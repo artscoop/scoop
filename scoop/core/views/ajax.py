@@ -2,6 +2,7 @@
 import simplejson
 
 from django.conf import settings
+from django.forms.models import ModelForm
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from scoop.core.util.data.typeutil import make_iterable
@@ -43,9 +44,14 @@ def validate_form(request, form_classes=None, alias=None):
         return HttpResponseBadRequest("You need to send a form or a form alias")
     # Vérifier la validité de tous les formulaires passés
     forms = make_iterable(forms)
+    id_passed = request.POST.get('id')  # Nécessite un champ hidden nommé "id"
     output = {'valid': True, '_all_': []}
     for form in forms:
-        form = form(request.POST, request.FILES)
+        extra = dict()
+        if id_passed and issubclass(form, ModelForm):  # Ne pas utiliser d'attribut instance pour les non ModelForm
+            klass = form._meta.model
+            extra = {'instance': klass.objects.get(id=id_passed)}  # Nécessaire pour l'édition de modèle
+        form = form(request.POST, request.FILES, **extra)
         # Vérifier la validité du formulaire
         if not form.is_valid():
             output['_all_'].append(form.non_field_errors())
