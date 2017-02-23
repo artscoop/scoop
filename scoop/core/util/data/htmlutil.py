@@ -23,6 +23,8 @@ def tags_keep(value, valid=None):
     Conserver uniquement certains tags du markup HTML
     Tags autorisés : p i b u a strong pre h1 h2 h3 br
     Attributs autorisés : href src rel target class id
+
+    :param valid: Chaîne contenant la liste des tags valides, séparés par des espaces
     """
     valid_tags, valid_attrs = (valid or 'p i strong b u a h1 h2 h3 pre br').split(), 'href src rel target class id'.split()
     return bleach.clean(value, tags=valid_tags, attributes=valid_attrs)
