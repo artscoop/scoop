@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.apps.config import AppConfig
+from django.utils.translation import ugettext_lazy
 
 
 __version__ = (1, 2017, 1)
@@ -10,6 +11,7 @@ class MenusConfig(AppConfig):
 
     name = 'scoop.menus'
     label = 'menus'
+    verbose_name = ugettext_lazy("Menus")
 
     def ready(self):
         """ Le registre d'applications est prêt """

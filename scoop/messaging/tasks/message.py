@@ -5,7 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 
 @task(expires=30)
 def check_message(message):
-    """ Vérifier un message """
+    """
+    Vérifier un message et signaler l'utilisateur
+
+    À l'heure actuelle, signale l'utilisateur si le contenu
+    contient une adresse email, ou quelque chose qui s'y apparente,
+    et qui semble similaire à au moins 3 autres messages récents
+    """
     from scoop.rogue.models import Flag
     # Constantes
     mail_strings = ['.com', '.fr', '.net', '.org', '@', 'adres', 'contact', 'sky']

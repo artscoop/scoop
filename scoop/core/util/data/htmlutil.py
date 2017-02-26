@@ -24,6 +24,7 @@ def tags_keep(value, valid=None):
     Tags autorisés : p i b u a strong pre h1 h2 h3 br
     Attributs autorisés : href src rel target class id
 
+    :param value: chaîne, de préférence contenant du HTML
     :param valid: Chaîne contenant la liste des tags valides, séparés par des espaces
     """
     valid_tags, valid_attrs = (valid or 'p i strong b u a h1 h2 h3 pre br').split(), 'href src rel target class id'.split()
@@ -44,6 +45,9 @@ def truncate_longwords_html(value, length=27):
     Couper les mots beaucoup trop longs, de type « soupe de touches »
     Permet de combattre les pratiques de sabotage des mises en pages
     ex. abcdefghijklmnopqrstuvwxyzabc devient abcdefghijklmnopqrstuvwxyza bc
+
+    :param value: Texte à reformater
+    :param length: Longueur maximale d'une suite de caractères sans espace
     """
     re.DEBUG = settings.DEBUG
     soup = BeautifulSoup(value, 'lxml')

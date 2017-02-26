@@ -1,11 +1,9 @@
 # coding: utf-8
 from django.apps.config import AppConfig
-from django.utils.translation import gettext_noop
+from django.utils.translation import gettext_noop, ugettext_lazy
+
 
 __version__ = (1, 2016, 5)
-
-
-gettext_noop("Help")
 
 
 class HelpConfig(AppConfig):
@@ -13,6 +11,7 @@ class HelpConfig(AppConfig):
 
     name = 'scoop.help'
     label = 'help'
+    verbose_name = ugettext_lazy("Help")
 
     def ready(self):
         """ Le registre d'applications est prêt """

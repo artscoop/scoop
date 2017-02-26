@@ -1,12 +1,10 @@
 # coding: utf-8
 """ Contenus textuels, commentaires et fichiers media """
 from django.apps.config import AppConfig
-from django.utils.translation import gettext_noop
+from django.utils.translation import gettext_noop, ugettext_lazy
 
 
 __version__ = (1, 2015, 3)
-
-gettext_noop("Content")
 
 
 class ContentConfig(AppConfig):
@@ -14,6 +12,7 @@ class ContentConfig(AppConfig):
 
     name = 'scoop.content'
     label = 'content'
+    verbose_name = ugettext_lazy("Content")
 
     def ready(self):
         """ Lorsque le registre est prêt """

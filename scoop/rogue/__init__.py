@@ -6,6 +6,7 @@ et insultants, ainsi que les contenus insultants ou non accessibles à certains
 publics
 """
 from django.apps.config import AppConfig
+from django.utils.translation import ugettext_lazy
 
 
 __version__ = (1, 2016, 1)
@@ -16,6 +17,7 @@ class RogueConfig(AppConfig):
 
     name = 'scoop.rogue'
     label = 'rogue'
+    verbose_name = ugettext_lazy("Rogue")
 
     def ready(self):
         """ Le registre d'applications est prêt """
