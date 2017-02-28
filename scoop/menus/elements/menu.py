@@ -27,7 +27,12 @@ class Menu(object):
 
     # Setter
     def add_children(self, *items):
-        """ Ajouter un sousèmenu à l'élément """
+        """
+        Ajouter un sous-menu à l'élément
+
+        Perd son utilité si get_children est modifié et n'utilise
+        pas Menu.children.
+        """
         if self.children is None:
             self.children = []
         for item in items:
@@ -35,7 +40,7 @@ class Menu(object):
                 self.children.append(item)
 
     # Getter
-    def get_children(self, request):
+    def get_children(self, request=None):
         """
         Renvoyer les éléments enfants du menu
 
@@ -44,7 +49,7 @@ class Menu(object):
 
         :param request: requête HTTP
         """
-        return self.children
+        return self.children or tuple()
 
     # Rendu
     def render(self, request, style=None):

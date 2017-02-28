@@ -42,9 +42,13 @@ class Item(object):
         """ Renvoyer si le menu doit être rendu pour une requête """
         return True
 
-    def has_children(self):
+    def has_children(self, request=None):
         """ Renvoyer si des sous-menus existent """
-        return self.children is not None
+        return bool(self.get_children(request))
+
+    def get_children(self, request=None):
+        """ Renvoyer les éléments enfants de l'élément """
+        return self.children or []
 
     def get_label(self, request=None):
         """ Renvoyer le libellé HTML de l'élément """
@@ -54,11 +58,11 @@ class Item(object):
         """ Renvoyer l'ID HTML de l'élément """
         return "menu-id-{0}".format(self.identifier)
 
-    def get_tree(self):
+    def get_tree(self, request=None):
         """ Renvoyer tous les descendants de l'objet """
         tree = self.children or []
-        for child in self.children:
-            tree += child.get_tree()
+        for child in self.get_children(request):
+            tree += child.get_tree(request)
         return tree
 
     # Setter
