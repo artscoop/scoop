@@ -1,12 +1,15 @@
 # coding: utf-8
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
 
 from .item import Item
 
 
 class Menu(object):
-    """ Menu complet (racine contenant les Items) """
+    """
+    Menu complet (racine contenant les Items)
+
+    Un menu n'a pas de libellé, ce n'est qu'un conteneur
+    """
 
     name = "Menu container"
     children = None
@@ -23,7 +26,7 @@ class Menu(object):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation de l'objet """
-        return "Menu {name} ({count} enfants)".format(name=self.name, count=len(self.children))
+        return "Menu {name} ({count} children)".format(name=self.name, count=len(self.children))
 
     # Setter
     def add_children(self, *items):

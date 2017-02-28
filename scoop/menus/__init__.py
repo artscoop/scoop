@@ -3,7 +3,7 @@ from django.apps.config import AppConfig
 from django.utils.translation import ugettext_lazy
 
 
-__version__ = (1, 2017, 1)
+__version__ = (1, 2017, 2)
 
 
 class MenusConfig(AppConfig):

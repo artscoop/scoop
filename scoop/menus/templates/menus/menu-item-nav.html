@@ -1,4 +1,4 @@
-{% load menus %}
+{% load menus %} {# contexte: Item menu_item, str style, bool active, str url #}
 <li>
     <a href="{{ url }}" id="menu-id-{{ menu_item.get_html_id }}">{{ menu_item|menu_label:request }}</a>
     {% if menu_item.has_children %}
