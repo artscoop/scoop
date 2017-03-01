@@ -8,6 +8,7 @@ from django.utils.six import StringIO
 from scoop.analyze.util.corpus.base import BaseCorpus
 from scoop.analyze.util.extractors import extractor_base
 from scoop.analyze.util.formatters import format_base
+from scoop.analyze.util.signals import analyzer_default_format
 from scoop.analyze.util.types import Dictionary, List
 from scoop.core.util.stream.directory import Paths
 from textblob.classifiers import MaxEntClassifier
@@ -104,6 +105,9 @@ class FileCorpus(BaseCorpus):
         """
         self.get_corpus()
         document = format_base(document)
+        document_shadow = [document]
+        analyzer_default_format.send(FileCorpus, document_shadow, category)  # On passe une liste car est modifiable par les listeners
+        document = "".join(document_shadow)
         signature = hash(document)
         self.corpus[signature] = (document, category)
         self.corpus.updated = time.time()
