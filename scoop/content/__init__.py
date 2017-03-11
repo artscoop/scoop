@@ -1,7 +1,7 @@
 # coding: utf-8
 """ Contenus textuels, commentaires et fichiers media """
 from django.apps.config import AppConfig
-from django.utils.translation import gettext_noop, ugettext_lazy
+from django.utils.translation import ugettext_lazy
 
 
 __version__ = (1, 2015, 3)

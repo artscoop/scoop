@@ -5,7 +5,7 @@ from operator import itemgetter
 from django.conf import settings
 
 
-def import_fullname(name):
+def import_qualified_name(name):
     """
     Importer un attribut d'un module
 
@@ -17,7 +17,7 @@ def import_fullname(name):
     return getattr(mod, member)
 
 
-def get_fullname(item):
+def get_qualified_name(item):
     """
     Renvoyer le nom pleinement qualifié d'un objet
 

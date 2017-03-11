@@ -138,7 +138,14 @@ class ACLModel(models.Model):
         return '/'.join(parts)
 
     def _is_file_path_obsolete(self):
-        """ Renvoie si une mise à jour du chemin de fichier aura un quelconque effet """
+        """
+        Renvoie si une mise à jour du chemin de fichier aura un quelconque effet
+
+        En d'autres termes, est-ce que les paramètres de chemin de sauvegarde
+        (via get_acl_upload_path) ont été modifiés après la création de ce fichier ?
+        (ce qui signifie que ce fichier n'est pas stocké dans un répertoire
+        conforme aux règles actuelles de stockage)
+        """
         new_path = self.get_acl_upload_path(None)
         old_path = self.get_file_attribute().name
         return new_path != old_path

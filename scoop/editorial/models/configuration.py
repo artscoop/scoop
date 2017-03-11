@@ -8,7 +8,7 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.django.templateutil import render_to
 from scoop.core.util.model.model import limit_to_model_names
-from scoop.core.util.shortcuts import import_fullname
+from scoop.core.util.shortcuts import import_qualified_name
 
 
 class Configuration(DatetimeModel, WeightedModel):
@@ -44,7 +44,7 @@ class Configuration(DatetimeModel, WeightedModel):
         if force or self.is_valid():
             if self.view_path:
                 try:
-                    view = import_fullname(self.view_path)
+                    view = import_qualified_name(self.view_path)
                     return render_to(string=True)(view(request))  # la vue peut renvoyer dict, str ou response
                 except ImportError:
                     return _("The view at path could not be imported.")

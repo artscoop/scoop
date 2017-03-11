@@ -13,7 +13,7 @@ from django.http.response import Http404, HttpResponse
 from django.shortcuts import render, render_to_response
 from django.template.context import RequestContext
 from django.utils import timezone
-from scoop.core.util.shortcuts import get_fullname
+from scoop.core.util.shortcuts import get_qualified_name
 
 logger = logging.getLogger('django_misery')
 
@@ -158,7 +158,7 @@ class LockMiddleware(object):
                 locked = lock['all'] or (lock['all_post'] and request.has_post())
                 if locked is False and lock['views'] is not None:
                     for regex in lock['views']:
-                        locked |= re.match(regex, get_fullname(view_func), re.I) is not None
+                        locked |= re.match(regex, get_qualified_name(view_func), re.I) is not None
                 if locked is True:
                     template = getattr(settings, 'LOCK_MIDDLEWARE_TEMPLATE', LockMiddleware.LOCK_TEMPLATE)
                     return render(request, template, {'lock': LockMiddleware.get_lock(user)})

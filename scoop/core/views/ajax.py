@@ -6,7 +6,7 @@ from django.forms.models import ModelForm
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from scoop.core.util.data.typeutil import make_iterable
-from scoop.core.util.shortcuts import import_fullname
+from scoop.core.util.shortcuts import import_qualified_name
 
 
 @require_POST
@@ -45,7 +45,7 @@ def validate_form(request, form_classes=None, alias=None):
     elif alias:
         aliases = getattr(settings, 'FORM_ALIASES', dict())
         form_names = make_iterable(aliases.get(alias))
-        forms = [import_fullname(form_name) for form_name in form_names if '.' in form_name]
+        forms = [import_qualified_name(form_name) for form_name in form_names if '.' in form_name]
     else:
         return HttpResponseBadRequest("You need to send a form or a form alias")
     # Vérifier la validité de tous les formulaires passés

@@ -14,8 +14,9 @@ class PicturedModelAdmin():
     @addattr(allow_tags=True, admin_order_field='pictures', short_description=_("Pictures"))
     def get_picture_set(self, obj):
         """
-        Renvoyer les premières miniatures des images attachées à
-        l'objet ainsi que le nombre total d'images attachées si nécessaire
+        Renvoyer les premières miniatures des images attachées
+
+        à l'objet ainsi que le nombre total d'images attachées si nécessaire
         """
         size = (48, 20)
         if hasattr(obj, 'get_pictures') or hasattr(obj, 'pictures'):
