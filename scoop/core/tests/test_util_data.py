@@ -7,6 +7,7 @@ from scoop.core.util.data.dateutil import date_age
 from scoop.core.util.data.numbers import round_left
 from scoop.core.util.data.textutil import count_words, one_line, replace_dict, text_to_dict, text_to_list_of_lists
 from scoop.core.util.data.typeutil import closest_color, make_iterable, str_to
+from scoop.core.util.data.uuid import uuid_bits
 from scoop.core.util.django.testing import TEST_CONFIGURATION
 
 
@@ -64,3 +65,13 @@ class DataUtilityTest(TestCase):
 
         # Tester les noms de couleur
         self.assertIn(closest_color((0, 255, 255)), ('aqua', 'cyan'))
+
+    def test_uuid(self):
+        """ Tester la génération d'uuid """
+        uuid128 = uuid_bits(128)
+        uuid64 = uuid_bits(64)
+        uuid384 = uuid_bits(384)
+
+        self.assertEqual(len(uuid128), 22)
+        self.assertEqual(len(uuid64), 11)
+        self.assertEqual(len(uuid384), 64)
