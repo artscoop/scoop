@@ -7,24 +7,25 @@ from django.utils.baseconv import base64
 
 def uuid_bits(bits=64):
     """
-    Renvoyer un UUID tronqué à n bits.
+    Renvoyer un pseudo-UUID sur n bits, en base64
+    
+    Note: 6 bits = 1 caractère
 
     :param bits: nombre de bits de l'UUID. Entre 16 et 1024
     :returns: une chaîne en base64 représentant une valeur 'uuid' sur n bits
     """
-    output = []
     bits = min(1024, max(16, bits))
+    val_shift = 1
+    total = 0
     while bits > 128:
         value = str(uuid.uuid4()).replace('-', '')
-        value = int(value, 16)
-        value = base64.encode(value)
-        output.append(value)
+        total += int(value, 16) * val_shift
         bits -= 128
+        val_shift *= 2 ** 128
     value = str(uuid.uuid4()).replace('-', '')
-    value = int(value, 16) >> (128 - bits)
-    value = base64.encode(value)
-    output.append(value)
-    return ''.join(output)
+    total += (int(value, 16) >> (128 - bits)) * val_shift
+    output = base64.encode(total)
+    return output
 
 
 def int_shorten(value):
