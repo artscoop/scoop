@@ -3,16 +3,16 @@ import logging
 import os
 import re
 from urllib.error import URLError
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qsl, unquote, urlencode, urlparse, urlunparse
 
 import requests
-from urllib3.util.retry import Retry
-
 from django.conf import settings
 from django.core.files.temp import NamedTemporaryFile
 from django.core.urlresolvers import reverse_lazy as reverse
 from django.utils.translation import ugettext_lazy as _
 from unidecode import unidecode
+from urllib3.util.retry import Retry
+
 
 # Constantes
 DEFAULT_HEADERS = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/39.0'}
@@ -89,7 +89,8 @@ def remove_get_parameter(request, name):
     """
     Renvoyer l'adresse d'une requête et retirer un paramètre d'URL
 
-    :param request: Objet request ou URL
+    :param request: Objet request
+    :param name: nom du paramètre à retirer
     """
     params = request.GET.copy()
     params.pop(name, None)
@@ -101,6 +102,24 @@ def add_get_parameter(request, name, value):
     params = request.GET.copy()
     params[name] = value
     return "?{}".format(params.urlencode())
+
+
+def change_url_parameters(path, *removes, **addons):
+    """
+    Renvoyer une URL amputée et greffée de 1 ou plusieurs paramètres
+
+    :param path: URL
+    :param removes: noms des paramètres à retirer
+    :param addons: paramètres à rajouter
+    """
+    parsed = list(urlparse(path))
+    params = dict(parse_qsl(parsed[4]))
+    for n in removes:
+        params.pop(n, None)
+    for key, val in addons.items():
+        params[key] = str(val)
+    parsed[4] = urlencode(params)
+    return urlunparse(parsed)
 
 
 def add_breadcrumb(request, initial, *args, **kwargs):

@@ -2,8 +2,9 @@
 
 from django.test import TestCase
 from django.test.utils import override_settings
+
 from scoop.core.util.django.testing import TEST_CONFIGURATION
-from scoop.core.util.stream.urlutil import get_url_path, unquote_url
+from scoop.core.util.stream.urlutil import get_url_path, change_url_parameters, unquote_url
 
 
 @override_settings(**TEST_CONFIGURATION)
@@ -24,11 +25,11 @@ class URLUtilityTest(TestCase):
         self.assertEqual(unquote_url('http://a.com/the%20end'), 'http://a.com/the end')
 
         # Enlever le paramtre GET
-        # self.assertEqual(remove_get_parameter('http://a.com/a?name=11', 'name'), 'http://a.com/a')
-        # self.assertEqual(remove_get_parameter('http://a.com/a?name=11', 'code'), 'http://a.com/a?name=11')
+        self.assertEqual(change_url_parameters('http://a.com/a?name=11', 'name'), 'http://a.com/a')
+        self.assertEqual(change_url_parameters('http://a.com/a?name=11', 'code'), 'http://a.com/a?name=11')
 
         # Aouter un paramètre GET
-        # self.assertEqual(add_get_parameter('http://a.com/a', 'name', '11'), 'http://a.com/a?name=11')
+        self.assertEqual(change_url_parameters('http://a.com/a', name='11'), 'http://a.com/a?name=11')
 
     def test_urlutil_breadcrumb(self):
         # Ajouter un breadcrum à une requête
