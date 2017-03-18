@@ -13,7 +13,7 @@ from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.user.ippoint import IPPointableModel, IPPointModel
 from scoop.core.templatetags.text_tags import truncate_ellipsis
 from scoop.core.util.data.dateutil import now
-from scoop.core.util.django.templateutil import do_render
+from scoop.core.util.django.templates import do_render
 from scoop.core.util.model.model import SingleDeleteManager, search_query
 
 

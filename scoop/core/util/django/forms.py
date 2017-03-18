@@ -78,10 +78,25 @@ class Validation(object):
     """ État de validation d'un ou plusieurs formulaires """
 
     def __init__(self, success=False, code=0, message='', *args, **kwargs):
-        """ Initialiser l'objet """
+        """
+        Initialiser l'objet
+        
+        :param success: valeur de réussite de la validation de formulaire
+        :param code: entier indiquant le type d'erreur si besoin
+        :param message: chaîne ou objet envoyé comme payload
+        :param args: 
+        :param kwargs: 
+        :type code: int
+        :type message: object | str
+        :type success: bool
+        """
         self.success = success  # bool
         self.code = code  # int
         self.message = message  # str ou object
+
+    # Opérateurs
+    def __bool__(self):
+        return self.is_successful()
 
     # Getter
     def is_successful(self):

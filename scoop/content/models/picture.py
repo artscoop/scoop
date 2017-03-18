@@ -40,7 +40,7 @@ from scoop.core.abstract.core.uuid import FreeUUIDModel, UUIDField
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.data.dateutil import now
 from scoop.core.util.data.typeutil import string_to_dict
-from scoop.core.util.django.templateutil import render_to
+from scoop.core.util.django.templates import render_to
 from scoop.core.util.model.fields import WebImageField
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.directory import Paths

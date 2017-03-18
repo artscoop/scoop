@@ -15,7 +15,7 @@ from django.template.context import RequestContext
 from django.template.loader import render_to_string
 
 from scoop.core.util.django.middleware import MiddlewareBase
-from scoop.core.util.django.templateutil import render_to_code
+from scoop.core.util.django.templates import render_to_code
 
 logger = logging.getLogger(__name__)
 

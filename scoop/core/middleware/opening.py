@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from scoop.core.util.django.middleware import MiddlewareBase
-from scoop.core.util.django.templateutil import do_render
+from scoop.core.util.django.templates import do_render
 
 logger = logging.getLogger(__name__)
 

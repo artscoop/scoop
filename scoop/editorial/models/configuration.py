@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
 from scoop.core.abstract.core.weight import WeightedModel
-from scoop.core.util.django.templateutil import render_to
+from scoop.core.util.django.templates import render_to
 from scoop.core.util.model.model import limit_to_model_names
 from scoop.core.util.shortcuts import import_qualified_name
 

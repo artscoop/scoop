@@ -76,6 +76,11 @@ class Page(DatetimeModel, UUID64Model, TranslatableModel, WeightedModel):
         output = template.render(context)
         return output
 
+    def get_keywords(self):
+        """ Renvoyer les mots clés sous forme de liste """
+        keywords = [word.strip().lower() for word in self.keywords.split(',')]
+        return keywords
+
     # Propriétés
     text = property(get_text)
     title = property(get_title)

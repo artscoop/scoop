@@ -8,7 +8,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy  # Fix pour django_extensions.reset_db
 from django.http.response import HttpResponseRedirect
-from scoop.core.util.django import formutil
+from scoop.core.util.django import forms
 from scoop.core.util.django.middleware import MiddlewareBase
 from scoop.user.forms import LoginForm
 from scoop.user.forms.configuration import ConfigurationForm
@@ -33,7 +33,7 @@ class LoginMiddleware(MiddlewareBase):
         """ Traiter la requête """
         if request.has_post('submit-login') and request.user.is_anonymous():
             form = request.form([LoginForm])
-            if formutil.are_valid([form]):
+            if forms.are_valid([form]):
                 try:
                     # Retrouver l'adresse de destination après connexion
                     user = User.sign(request, request.POST)

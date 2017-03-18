@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
-from scoop.core.util.django import formutil
+from scoop.core.util.django import forms
 from scoop.core.util.django.apps import is_installed
 
 
@@ -103,7 +103,7 @@ class RequestMixin(object):
 
     def has_post(self, action=None):
         """ Renvoyer si la requête possède un attribut dans POST """
-        return formutil.has_post(self, action)
+        return forms.has_post(self, action)
 
     def form(self, config, initial=None):
         """
@@ -112,7 +112,7 @@ class RequestMixin(object):
         Si la méthode de requete est POST, générer les formulaires depuis les données POST.
         Si la méthode de requete est GET, générer les formulaires par défaut.
         """
-        return formutil.form(self, config, initial=initial)
+        return forms.form(self, config, initial=initial)
 
     def get_id_selection(self, full, selected):
         """

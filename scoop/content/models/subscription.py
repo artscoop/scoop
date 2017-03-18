@@ -102,7 +102,7 @@ class SubscriptionManager(models.Manager):
 
 
 class Subscription(GenericModel, DatetimeModel, UUID64Model):
-    """ Abonnement """
+    """ Abonnement d'une adresse email à un contenu """
 
     # Champs
     email = models.EmailField(max_length=96, verbose_name=_("Email"))

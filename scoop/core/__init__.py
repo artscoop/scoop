@@ -28,7 +28,7 @@ class CoreConfig(AppConfig):
     def ready(self):
         """ Le registre d'applications est prêt """
         from scoop.core.util.django.admin import AdminURLUtil, _boolean_icon
-        from scoop.core.util.django.formutil import ModelFormUtil
+        from scoop.core.util.django.forms import ModelFormUtil
         from scoop.core.util.model.model import DictUpdateModel, get_all_related_objects
         from scoop.core.util.stream.request import RequestMixin
         from scoop.core.abstract.rogue.flag import FlaggableModelUtil

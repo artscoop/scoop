@@ -40,7 +40,7 @@ from scoop.core.abstract.user.ippoint import IPPointableModel
 from scoop.core.util.data.dateutil import is_new
 from scoop.core.util.data.textutil import clean_html, text_to_dict
 from scoop.core.util.data.typeutil import make_iterable
-from scoop.core.util.django.templateutil import render_block_to_string
+from scoop.core.util.django.templates import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 from scoop.core.util.shortcuts import addattr
 

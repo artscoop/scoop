@@ -9,14 +9,18 @@ class OnlineModule(DashboardModule):
     title = "Users"
 
     def init_with_context(self, context):
-        """ Initialiser le contenu du dashboard """
+        """
+        Initialiser le contenu du dashboard
+        
+        :type context: django.template.context.RequestContext
+        """
         from scoop.user.models import User
         # Informations
         users = User.get_online_users()
         count = User.get_online_count()
         total = User.objects.active().count()
         category = {'men': User.objects.active().filter(profile__gender=0).count(), 'women': User.objects.active().filter(profile__gender=1).count()}
-        output = render_to_string("user/dashboard/online.html", {'users': users, 'count': count, 'total': total, 'numbers': category}, context['request'])
+        output = render_to_string("user/dashboard/online.html", {'users': users, 'count': count, 'total': total, 'numbers': category}, context.request)
         self.pre_content = output
 
     def is_empty(self):

@@ -1,5 +1,5 @@
 # coding: utf-8
-from scoop.core.util.django.templateutil import do_render
+from scoop.core.util.django.templates import do_render
 from scoop.core.util.stream.request import default_request
 
 

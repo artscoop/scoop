@@ -21,7 +21,7 @@ from scoop.core.abstract.core.data import DataModel
 from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.util.data.dateutil import to_timestamp
 from scoop.core.util.data.typeutil import make_iterable
-from scoop.core.util.django.templateutil import render_block_to_string
+from scoop.core.util.django.templates import render_block_to_string
 from scoop.core.util.model.model import SingleDeleteQuerySet
 from scoop.core.util.shortcuts import addattr
 from scoop.core.util.stream.request import default_request

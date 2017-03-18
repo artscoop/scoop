@@ -11,9 +11,13 @@ class BlogRollModule(DashboardModule):
     title = "Blogs"
 
     def init_with_context(self, context):
-        """ Initialiser le contenu du dashboard """
+        """
+        Initialiser le contenu du dashboard
+        
+        :type context: django.template.context.RequestContext
+        """
         blogs = Content.objects.by_category('blog').order_by('-id')[0:5]
-        output = render_to_string("content/dashboard/blogs.html", {'blogs': blogs}, context['request'])
+        output = render_to_string("content/dashboard/blogs.html", {'blogs': blogs}, context.request)
         self.pre_content = output
 
 
@@ -24,8 +28,12 @@ class PictureModule(DashboardModule):
     title = "Pictures"
 
     def init_with_context(self, context):
-        """ Initialiser le contenu du dashboard """
+        """
+        Initialiser le contenu du dashboard
+
+        :type context: django.template.context.RequestContext
+        """
         pictures = Picture.objects.all().order_by('-id')
         stats = {'count': Picture.objects.count()}
-        output = render_to_string("content/dashboard/pictures.html", {'pictures': pictures, 'stats': stats}, context['request'])
+        output = render_to_string("content/dashboard/pictures.html", {'pictures': pictures, 'stats': stats}, context.request)
         self.pre_content = output

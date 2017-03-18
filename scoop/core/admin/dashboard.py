@@ -22,7 +22,11 @@ class SystemModule(DashboardModule):
     title = "System information"
 
     def init_with_context(self, context):
-        """ Initialiser le contenu du dashboard """
+        """
+        Initialiser le contenu du dashboard
+        
+        :type context: django.template.context.RequestContext
+        """
         output = cache.get('dashboard.sysinfo', None)
         if not output:
             cpu_usage = psutil.cpu_percent(interval=0, percpu=True)
@@ -55,9 +59,13 @@ class RecordModule(DashboardModule):
     title = "Activity history"
 
     def init_with_context(self, context):
-        """ Initialiser le contenu du dashboard """
+        """
+        Initialiser le contenu du dashboard
+        
+        :type context: django.template.context.RequestContext
+        """
         records = Record.objects.all().order_by('-id')
-        output = render_to_string("core/dashboard/recorder.html", {'records': records}, context['request'])
+        output = render_to_string("core/dashboard/recorder.html", {'records': records}, context.request)
         self.pre_content = output
 
     def is_empty(self):

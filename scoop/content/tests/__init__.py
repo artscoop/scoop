@@ -1,2 +1,5 @@
 # coding: utf-8
-from scoop.content.tests.test_comment import CommentTest
+from .test_comment import *
+from .test_content import *
+from .test_link import *
+from .test_picture import *

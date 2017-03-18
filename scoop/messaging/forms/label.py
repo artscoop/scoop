@@ -15,7 +15,7 @@ class LabelNewForm(forms.Form):
     def clean_label(self):
         """ Vérifier le contenu du champ label """
         label = self.cleaned_data['label']
-        user = self.request.user  # il faut initialiser le formulaire via core.util.django.formutil.form
+        user = self.request.user  # il faut initialiser le formulaire via core.util.django.forms.form
         if Label.objects.filter(author=user, name=label).exists():
             raise ValidationError("You already have created this label.")
         return label

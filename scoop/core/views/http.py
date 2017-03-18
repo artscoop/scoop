@@ -3,7 +3,7 @@ import sys
 
 from django.conf import settings
 from django.views.decorators.cache import cache_page
-from scoop.core.util.django.templateutil import render_to
+from scoop.core.util.django.templates import render_to
 
 
 @render_to("http/500.html", status_code=500)

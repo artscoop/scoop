@@ -2,7 +2,7 @@
 from django.http.response import HttpResponse
 from scoop.content.models.attachment import Attachment
 from scoop.content.models.picture import Picture
-from scoop.core.util.django.formutil import handle_upload
+from scoop.core.util.django.forms import handle_upload
 from scoop.user.models.user import User
 
 
