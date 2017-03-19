@@ -26,7 +26,7 @@ def excerpt(name, request=None, mode=None):
     try:
         item = Excerpt.objects.get(name=name)
         template_path = 'editorial/display/excerpt/excerpt-{mode}.html'.format(mode=mode or 'default')
-        data = {'excerpt': item}
+        data = {'item': item}
         if request is not None:
             data['request'] = request
             data['user'] = request.user

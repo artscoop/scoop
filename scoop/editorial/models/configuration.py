@@ -26,7 +26,7 @@ class Configuration(DatetimeModel, WeightedModel):
                                  help_text=_("Select template to use to display the target"), verbose_name=_("Template"))
     notes = models.CharField(max_length=64, blank=True, verbose_name=_("Notes"))
     # Cible
-    view_path = models.CharField(max_length=96, blank=True, help_text=_("View to display"), verbose_name=_("View path"))
+    view_path = models.CharField(max_length=96, blank=True, help_text=_("Fully qualified view to display"), verbose_name=_("View path"))
     limit = limit_to_model_names('editorial.excerpt', 'content.picture', 'content.content', 'content.link')  # limiter les modèles liés
     content_type = models.ForeignKey('contenttypes.ContentType', null=False, blank=False, verbose_name=_("Content type"), limit_choices_to=limit)
     object_id = models.PositiveIntegerField(null=False, blank=True, db_index=False, verbose_name=_("Object Id"))
@@ -49,7 +49,8 @@ class Configuration(DatetimeModel, WeightedModel):
                 except ImportError:
                     return _("The view at path could not be imported.")
             else:
-                return render_to_string(self.template.path, {'item': self.content_object, 'page': self.page})
+                result = render_to_string(self.template.path, {'item': self.content_object, 'page': self.page})
+                return result
         if settings.DEBUG:
             return _("The block could not be rendered.")
         return ""
@@ -72,7 +73,7 @@ class Configuration(DatetimeModel, WeightedModel):
     # Overrides
     def __str__(self):
         """ Renvoyer la représentation unicode de l'objet """
-        return _("%(page)s/%(item)s at %(position)s") % {'page': self.page, 'item': self.content_object}
+        return _("{page}/{item} at {position}").format(page=self.page, item=self.content_object, position=self.position)
 
     def save(self, *args, **kwargs):
         """ Enregistrer l'objet dans la base de données """

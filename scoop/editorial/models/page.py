@@ -44,7 +44,7 @@ class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexMo
     DEFAULT_CACHE_DURATION = 300
 
     # Champs
-    name = models.CharField(max_length=64, unique=True, blank=False, verbose_name=_("Name"))
+    name = models.CharField(max_length=128, unique=True, blank=False, verbose_name=_("Name"))
     title = models.CharField(max_length=128, blank=False, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     keywords = models.CharField(max_length=160, blank=True, verbose_name=_("Keywords"))
@@ -77,8 +77,8 @@ class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexMo
             if position.has_access(request):
                 content = "{{block.super}}"
                 # Récupérer les configurations appartenant à ce block
-                for configuration in self.get_configurations(position).iterator():
-                    content += configuration.render()
+                for configuration in self.get_configurations(position):
+                    content += configuration.render(request)
                 output.append("{{% block {name} %}}{content}{{% endblock %}}".format(name=position.name, content=content))
         # Utiliser le rendu comme un template
         output = "".join(output)

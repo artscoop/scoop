@@ -15,5 +15,5 @@ class EditorialFallbackMiddleware(MiddlewareBase):
         if response.status_code in {404, 410}:
             page = Page.objects.get_page(request)
             if page is not None and page.is_visible(request):
-                return HttpResponse(page.render())
+                return HttpResponse(page.render(request))
         return response
