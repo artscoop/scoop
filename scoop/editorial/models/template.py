@@ -26,7 +26,7 @@ class Template(DatetimeModel):
 
     # Champs
     name = models.CharField(max_length=32, unique=True, blank=False, verbose_name=_("Name"))
-    path = models.CharField(max_length=64, blank=False, unique=True, verbose_name=_("Path"))
+    path = models.CharField(max_length=128, blank=False, unique=True, verbose_name=_("Path"))
     full = models.BooleanField(default=False, help_text=_("Contains html, head and body tags."), verbose_name=_("Full page template"))
     positions = models.ManyToManyField('editorial.Position', blank=True, verbose_name=_("Positions"))
     objects = TemplateQuerySet.as_manager()
@@ -34,10 +34,21 @@ class Template(DatetimeModel):
     # Raccourcis
     @staticmethod
     def at_path(path, name=None):
-        if name is None:
-            name = os.path.basename(path)
-        template, _ = Template.objects.get_or_create(name=name, path=path)
-        return template
+        """
+        Renvoyer l'objet Template correspondant au chemin de template
+        
+        :param path: chemin du template django
+        :param name: nom assigné au template
+        :return: un objet Template, ou None si aucun template Django n'existe au chemin indiqué
+        """
+        try:
+            paths = path.split(',')
+            get_template(paths)
+            name = os.path.basename(paths[0]) if name is None else name
+            template, _ = Template.objects.get_or_create(name=name, path=path)
+            return template
+        except TemplateDoesNotExist:
+            return None
 
     # Actions
     def auto_fill(self):
@@ -45,7 +56,7 @@ class Template(DatetimeModel):
         from scoop.editorial.models.position import Position
         # Parcourir
         try:
-            template = get_template(self.path)
+            template = get_template(self.get_paths())
             # Créer les emplacements
             for name in Template._get_block_names(template):
                 position = Position.get(name)
@@ -63,7 +74,7 @@ class Template(DatetimeModel):
     def exists(self):
         """ Renvoyer si le chemin de template est valide """
         try:
-            get_template(self.path)
+            get_template(self.get_paths())
             return True
         except TemplateDoesNotExist:
             return False
@@ -90,6 +101,10 @@ class Template(DatetimeModel):
         except Position.DoesNotExist:
             return None
 
+    def get_paths(self):
+        """ Renvoyer les chemins de templates """
+        return self.path.split(',')
+
     @addattr(short_description=_("Inner blocks"))
     def get_position_count(self):
         """ Renvoyer le nombre de blocs existant dans le template """
@@ -114,7 +129,14 @@ class Template(DatetimeModel):
 
     @staticmethod
     def _find_html_tags(template, tags, find_all=True):
-        """ Renvoyer si des tags HTML existent dans le template """
+        """
+        Renvoyer si des tags HTML existent dans le template
+        
+        :param find_all: Ne renvoyer True que si *toutes* les balises sont trouvées
+        :param tags: liste des balises html à trouver
+        :param template: objet template Django
+        :returns: True si une/toutes les balises ont été trouvées
+        """
         nodelist = template.template.nodelist
         extendlist = nodelist.get_nodes_by_type(ExtendsNode)
         textlist = nodelist.get_nodes_by_type(TextNode)

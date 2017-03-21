@@ -41,7 +41,8 @@ class Configuration(DatetimeModel, WeightedModel):
     def is_valid(self):
         """ Renvoyer si la configuration est valide """
         if self.page.template.positions.filter(pk=self.position.pk).exists():
-            return True
+            if not self.view_path or self.get_view_callable() is not None:
+                return True
         return False
 
     def get_view_callable(self):
@@ -57,9 +58,9 @@ class Configuration(DatetimeModel, WeightedModel):
                 return view
         except ImportError:
             logger.warning("Import of symbol {name} failed.".format(name=self.view_path))
-            return lambda x: x
+            return None
         logger.warning("View {name} must be marked as an editorial view.".format(name=self.view_path))
-        return lambda x: x
+        return None
 
     def render(self, request=None, force=False):
         """ Rendre la configuration """
@@ -77,7 +78,7 @@ class Configuration(DatetimeModel, WeightedModel):
             return _("The block could not be rendered.")
         return ""
 
-    # Setter
+    # Actions
     def move_to(self, position):
         """
         Déplacer dans une autre position
