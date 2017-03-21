@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 from django.conf import settings
 from django.contrib.contenttypes import fields
 from django.db import models
@@ -9,6 +10,10 @@ from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.util.django.templates import render_to
 from scoop.core.util.model.model import limit_to_model_names
 from scoop.core.util.shortcuts import import_qualified_name
+from scoop.editorial.util.decorators import EDITORIAL_VIEW_ATTRIBUTE
+
+
+logger = logging.getLogger('editorial')
 
 
 class Configuration(DatetimeModel, WeightedModel):
@@ -39,12 +44,29 @@ class Configuration(DatetimeModel, WeightedModel):
             return True
         return False
 
+    def get_view_callable(self):
+        """
+        Renvoyer la vue selon le chemin renseigné dans view_path
+        
+        :return: un callable prenant un argument request
+        :rtype: callable
+        """
+        try:
+            view = import_qualified_name(self.view_path)
+            if callable(view) and hasattr(view, EDITORIAL_VIEW_ATTRIBUTE):
+                return view
+        except ImportError:
+            logger.warning("Import of symbol {name} failed.".format(name=self.view_path))
+            return lambda x: x
+        logger.warning("View {name} must be marked as an editorial view.".format(name=self.view_path))
+        return lambda x: x
+
     def render(self, request=None, force=False):
         """ Rendre la configuration """
         if force or self.is_valid():
             if self.view_path:
                 try:
-                    view = import_qualified_name(self.view_path)
+                    view = self.get_view_callable()
                     return render_to(string=True)(view(request))  # la vue peut renvoyer dict, str ou response
                 except ImportError:
                     return _("The view at path could not be imported.")
