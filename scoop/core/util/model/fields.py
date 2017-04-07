@@ -145,12 +145,13 @@ class WebImageField(ImageField):
     def clean(self, *args, **kwargs):
         """ Renvoyer la valeur python des données """
         data = super().clean(*args, **kwargs)
-        image = data.file.image
-        width, height = data.width, data.height
-        if image.format not in WebImageField.ACCEPTED_FORMATS:
-            raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
-        if width < self.min_dimensions[0] or height < self.min_dimensions[1]:
-            raise ValidationError(
-                _("Image not accepted. Minimum accepted size is {mw}x{mh}, got {iw}x{ih}").format(
-                    mw=self.min_dimensions[0], mh=self.min_dimensions[1], iw=width, ih=height))
+        if hasattr(data.file, 'image'):
+            image = data.file.image
+            width, height = data.width, data.height
+            if image.format not in WebImageField.ACCEPTED_FORMATS:
+                raise ValidationError(_("Image not accepted. Accepted formats: {}.").format(', '.join(WebImageField.ACCEPTED_FORMATS)))
+            if width < self.min_dimensions[0] or height < self.min_dimensions[1]:
+                raise ValidationError(
+                    _("Image not accepted. Minimum accepted size is {mw}x{mh}, got {iw}x{ih}").format(
+                        mw=self.min_dimensions[0], mh=self.min_dimensions[1], iw=width, ih=height))
         return data

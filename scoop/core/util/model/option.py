@@ -31,10 +31,10 @@ class OptionField:
 
         :param name: nom de code du groupe d'options concerné par le champ, ex. 'hair_color'
         :param verbose_name: nom user friendly du champ
-        :param null: indique si le champ peut prendre la valeur None
-        :param blank: indique si le champ peut être laissé vide (utile pour ManyToMany)
-        :param default: valeur par défaut du champ
-        :param db_index: indique s'il faut créer un index sur la colonne
+        :param null: indique si le champ peut prendre la valeur None (True)
+        :param blank: indique si le champ peut être laissé vide (utile pour ManyToMany) (True)
+        :param default: valeur par défaut du champ (None)
+        :param db_index: indique s'il faut créer un index sur la colonne (False)
         :param multiple: indique si le champ est un ManyToManyField
         :param kwargs: paramètres supplémentaires de création du champ
         """

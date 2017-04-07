@@ -20,19 +20,26 @@ class AlbumManager(SingleDeleteManager):
 
     # Getter
     def for_user(self, user):
-        """ Renvoyer les albums d'un utilisateur """
+        """
+        Renvoyer les albums d'un utilisateur
+        
+        :type user: int
+        """
         return self.filter(author=user) if user else self
 
     def get_count_for_user(self, user):
         """ Renvoyer le nombre d'albums de l'utilisateur """
         return self.for_user(user).count()
 
-    def get_by_uuid(self, uuid):
+    def get_by_uuid(self, uuid, exc=None):
         """ Renvoyer l'album ayant un UUID spécifique """
         try:
             return self.get(uuid=uuid)
         except Album.DoesNotExist:
-            return None
+            if exc is None:
+                return None
+            else:
+                raise exc
 
     # Setter
     def create_with(self, name, pictures, **kwargs):

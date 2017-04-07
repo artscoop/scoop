@@ -10,11 +10,12 @@ def csv_dump(queryset, path, compress=False):
     """
     Exporter un queryset au format CSV
 
-    param compress: Enregistrer le dump dans un fichier gzip
+    :param compress: Enregistrer le dump dans un fichier gzip
     :type queryset: django.db.models.QuerySet
-    :type path: unicode or str
+    :type path: str
     :type compress: bool
     """
+    # TODO: Vérifier qu'on passe en Python3
     model = queryset.model
     if compress and not path.endswith(".gz"):
         path += ".gz"

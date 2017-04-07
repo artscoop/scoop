@@ -41,7 +41,7 @@ class AudienceModel(models.Model):
     # Constantes
     AUDIENCES = {0: _("Everyone"), 5: _("Adults only")}
     AUDIENCE_AGES = {0: 3, 5: 18}
-    AUDIENCE_CHOICES = AUDIENCES.items()
+    AUDIENCE_CHOICES = list(AUDIENCES.items())
 
     # Champs
     audience = models.SmallIntegerField(choices=AUDIENCE_CHOICES, default=0, verbose_name=_("Audience rating"))

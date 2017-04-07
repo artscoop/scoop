@@ -5,7 +5,7 @@ from django.db import models
 from django.template.base import TextNode
 from django.template.context import Context
 from django.template.exceptions import TemplateDoesNotExist
-from django.template.loader import get_template
+from django.template.loader import get_template, select_template
 from django.template.loader_tags import BlockNode, ExtendsNode
 from django.utils.translation import ugettext_lazy as _
 from scoop.core.abstract.core.datetime import DatetimeModel
@@ -43,7 +43,7 @@ class Template(DatetimeModel):
         """
         try:
             paths = path.split(',')
-            get_template(paths)
+            select_template(paths)
             name = os.path.basename(paths[0]) if name is None else name
             template, _ = Template.objects.get_or_create(name=name, path=path)
             return template
@@ -56,7 +56,7 @@ class Template(DatetimeModel):
         from scoop.editorial.models.position import Position
         # Parcourir
         try:
-            template = get_template(self.get_paths())
+            template = select_template(self.get_paths())
             # Créer les emplacements
             for name in Template._get_block_names(template):
                 position = Position.get(name)
@@ -74,7 +74,7 @@ class Template(DatetimeModel):
     def exists(self):
         """ Renvoyer si le chemin de template est valide """
         try:
-            get_template(self.get_paths())
+            select_template(self.get_paths())
             return True
         except TemplateDoesNotExist:
             return False
@@ -85,16 +85,33 @@ class Template(DatetimeModel):
         return self.positions.exists()
 
     def has_position(self, name):
-        """ Renvoyer si des blocs existent dans le template """
+        """
+        Renvoyer si des blocs existent dans le template
+        
+        :param name: nom du bloc de position à retrouver
+        :returns: True si le bloc existe dans le template
+        :rtype: bool
+        """
         return self.positions.filter(name=name).exists()
 
     @addattr(short_description=_("Inner blocks"))
     def get_positions(self):
-        """ Renvoyer les blocs existent dans le template """
+        """
+        Renvoyer les blocs existent dans le template
+        
+        :returns: un queryset de toutes les positions recensées dans l'objet
+        :rtype: django.db.models.QuerySet
+        """
         return self.positions.all()
 
     def get_position(self, name):
-        """ Renvoyer la position portant un nom """
+        """
+        Renvoyer la position portant un nom
+        
+        :param name: nom du bloc de position
+        :returns: un objet Position, ou None si aucun ne correspond dans ce template
+        :rtype: scoop.editorial.models.Template
+        """
         from scoop.editorial.models import Position
         try:
             return self.positions.get(name=name)
@@ -102,17 +119,30 @@ class Template(DatetimeModel):
             return None
 
     def get_paths(self):
-        """ Renvoyer les chemins de templates """
+        """
+        Renvoyer les chemins de templates
+        
+        :returns: une liste de chemins de templates
+        :rtype: list<str>
+        """
         return self.path.split(',')
 
     @addattr(short_description=_("Inner blocks"))
     def get_position_count(self):
-        """ Renvoyer le nombre de blocs existant dans le template """
+        """
+        Renvoyer le nombre de blocs existant dans le template
+        
+        rtype: int
+        """
         return self.positions.count()
 
     @staticmethod
     def _get_block_names(template):
-        """ Générer la liste des noms de blocs d'un template """
+        """
+        Générer la liste des noms de blocs d'un template
+        
+        :rtype: generator<string>
+        """
         nodelist = template.template.nodelist
         extendlist = nodelist.get_nodes_by_type(ExtendsNode)
         if len(extendlist) > 0:

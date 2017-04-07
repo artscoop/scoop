@@ -51,6 +51,7 @@ class ViewNode(Node):
 class ViewFuncNode(Node):
     """
     Insérer le contenu d'une vue Django dans un template
+    
     Insertion par chemin complet de fonction
     La vue peut renvoyer une HttpReponse ou une chaîne de caractères.
     (Code basé sur un snippet de James G. Pearce, 17 juin 2009)
@@ -110,10 +111,13 @@ def do_view(parser, token):
 def do_view_func(parser, token):
     """
     Afficher le contenu d'une vue, à l'aide de son nom de fonction uniquement
+    
     ex. {% view "mymodule.views.inner" [arg_expr] [kwarg=expr] %}
     IMPORTANT : Le template appelant doit avoir une variable de contexte <request>
     NOTE : Aucun middleware n'est appelé pour les vues incluses
+    
     :type token: django.template.base.Token
+    :param parser:
     """
     # Découper les tokens envoyés au tag
     tokens = token.split_contents()[1:]  # sans le token 'panel'

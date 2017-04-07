@@ -35,9 +35,14 @@ class LabelManager(SingleDeleteQuerySet):
         else:
             return self.filter(moderators__pk=user.pk).distinct()
 
-    def get_by_slug(self, slug):
+    def get_by_slug(self, slug, exc=None):
         """ Renvoyer une étiquette selon son slug """
-        return self.get(slug=slug)
+        try:
+            return self.get(slug=slug)
+        except Label.DoesNotExist:
+            if exc is not None:
+                raise exc()
+            raise
 
 
 class Label(TranslatableModel, UUID32Model, WeightedModel):

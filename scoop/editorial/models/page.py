@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db import models
 from django.template.base import Template
@@ -35,6 +36,29 @@ class PageManager(models.Manager):
         # Trouver les pages à l'URL
         pages = self.filter(path__iexact=url, active=True)
         return pages[0] if pages.exists() else None
+
+    # Actions
+    def create_page(self, data, *blocks):
+        """
+        Créer une configuration complète de page simple
+        
+        :param data: dictionnaire de données de la page 
+        :param blocks: configuration des contenus à chaque position
+        :return: la page créée
+        """
+        from scoop.editorial.models import Template, Excerpt, Configuration
+        user = get_user_model().objects.get_superuser()
+        page_template = Template.at_path(data['template'])
+        page = Page(name=data['name'], title=data['title'], path=data['path'], template=page_template, author=user)
+        page.save()
+        for block in blocks:
+            position = page.get_position(block['position'])
+            ex_data = block['excerpt']
+            ex_template = Template.at_path(ex_data['template'])
+            excerpt = Excerpt.objects.create_translated({ex_data['lang']: {'text': ex_data['text']}}, name=ex_data['name'], title=ex_data['title'], author=user)
+            configuration = Configuration(page=page, position=position, template=ex_template, content_object=excerpt)
+            configuration.save()
+        return page
 
 
 class Page(WeightedModel, DatetimeModel, AuthorableModel, UUID64Model, SEIndexModel):

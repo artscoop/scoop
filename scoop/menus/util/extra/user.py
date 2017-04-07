@@ -64,4 +64,4 @@ class UserSearch(Item):
 
     # Overrides
     def is_visible(self, request):
-        return request.user.is_authenticated()
+        return hasattr(request, 'user') and request.user.is_authenticated()

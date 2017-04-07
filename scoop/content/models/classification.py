@@ -11,7 +11,7 @@ from scoop.core.abstract.core.icon import IconModel
 __all__ = ['Tag']
 
 
-class TagManager(models.Manager):
+class TagQuerySet(models.QuerySet):
     """ Manager des étiquettes de contenu """
 
     # Getter
@@ -19,9 +19,20 @@ class TagManager(models.Manager):
         """ Renvoyer les tags appartenant à un groupe """
         return self.filter(group__iexact=name)
 
-    def get_by_slug(self, slug):
-        """ Renvoyer le tag correspondant à un slug """
-        return self.get(short_name=slug)
+    def get_by_slug(self, slug, exc=None):
+        """
+        Renvoyer le tag correspondant à un slug
+        
+        :param slug: slug du tag
+        :param exc: exception à lever lorsque la récupération échoue, None remonte normalement
+        """
+        try:
+            return self.get(short_name=slug)
+        except Tag.DoesNotExist:
+            if exc is not None:
+                raise exc
+            raise
+
 
 
 class Tag(IconModel, PicturableModel):
@@ -35,7 +46,7 @@ class Tag(IconModel, PicturableModel):
     short_name = AutoSlugField(max_length=100, populate_from='name', unique=True, blank=True, editable=True, unique_with=('id',), verbose_name=_("Short name"))
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children', verbose_name=_("Parent"))
     active = models.BooleanField(default=True, verbose_name=pgettext_lazy('tag', "Active"))
-    objects = TagManager()
+    objects = TagQuerySet.as_manager()
 
     # Overrides
     def __str__(self):

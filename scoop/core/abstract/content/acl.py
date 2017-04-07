@@ -118,16 +118,21 @@ class ACLModel(models.Model):
         Couper un nom en hash de répertoires
 
         ex. 'jean-michel' devient 'ac/2f/1d'
-        Le chemin est calculé à partir des 24 premiers bits du hachage SHA1.
+        Le chemin est calculé à partir des 24 premiers bits du hachage SHA-256
         Le hachage en sous-répertoires a plusieurs utilités :
-        - il vaut mieux généralement avoir des répertoires pas trop peuplés. Si par exemple nous avons 100 000
-          utilisateurs, et que l'on n'utilise pas de hash, on se retrouve alors avec un répertoire /friends,
-          contenant potentiellement *tous* les noms d'utilisateur. Avec un hash, les noms d'utilisateur sont
-          distribués sur une arborescence avec maximum 256 entrées par niveau et une dispersion à 1:16 777 216
+        - il vaut mieux généralement avoir des répertoires pas trop peuplés, car en général il est plus difficile
+          et plus long de lister le contenu d'un répertoire lorsqu'il y a beaucoup d'entrées. C'est valable
+          dans une interface graphique du type Nautilus, mais c'est aussi valable en ligne de commande.
+          Si par exemple nous avons 100 000 utilisateurs, et que l'on n'utilise pas de hash,
+          on se retrouve alors avec un répertoire /friends, contenant 100 000 répertoires.
+          Avec un hash, les sous-répertoires sont distribués sur une arborescence avec maximum 256 entrées par
+          niveau et 3 niveaux (en tout cas dans le cas actuel, ça pourrait aller jusqu'à 32 niveaux théoriquement)
+          Les sous répertoires sont de la forme 0a/19/3f/cd etc...
         - il vaut mieux utiliser des hashs que les premières lettres des noms d'utilisateur. Si tout le monde
           s'appelle r'^johnny\d+', on risque une concentration élevée d'entrées dans /jo/hn/ny. Avec un hash,
           on suppose généralement que 'johnny1' se trouve complètement ailleurs que 'johnny2'
-        - un hachage solide évite d'utiliser les collisions de hash à des fins de saturation/DOS
+        - un hachage solide permet d'empêcher un utilisateur d'utiliser les collisions et provoquer un
+          dépassement du nombre d'entrées autorisées dans un répertoire (32000/64000 pour ext3/ext4)
         :returns: un sous-chemin de 3 répertoires, 6 caractères hexa.
         """
         digest = hashlib.sha256(name.encode('utf-8')).digest()

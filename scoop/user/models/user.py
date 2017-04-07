@@ -143,9 +143,16 @@ class UserQuerySet(models.QuerySet, SingleDeleteQuerySetMixin, BaseUserManager):
         return self.filter(is_superuser=True, is_active=True)
 
     def get_superuser(self, name=None):
-        """ Renvoyer le superutilisateur principal """
+        """
+        Renvoyer le superutilisateur principal
+        
+        :returns: le premier superuser, ou None si aucun
+        """
         criteria = {} if name is None else {'username__iexact': name}
-        return self.filter(is_superuser=True, **criteria).order_by('id')[0]
+        candidates = self.filter(is_superuser=True, **criteria).order_by('id')
+        if candidates.exists():
+            return candidates[0]
+        return None
 
     @is_installed(['rogue', 'access'], None)
     def similar_to(self, user, since=30):
@@ -204,7 +211,7 @@ class User(AbstractBaseUser, PermissionsMixin, UUID64Model):
     bot = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', "Bot"))
     email = models.EmailField(max_length=96, unique=True, blank=True, verbose_name=_("Email"))
     is_active = models.BooleanField(default=True, db_index=True, verbose_name=pgettext_lazy('user', "Active"))
-    deleted = models.BooleanField(default=False, db_index=True, verbose_name=pgettext_lazy('user', "Deleted"))
+    deleted = models.BooleanField(default=False, db_index=False, verbose_name=pgettext_lazy('user', "Deleted"))
     is_staff = models.BooleanField(default=False, help_text=STAFF_HELP, verbose_name=pgettext_lazy('user', "Staff"))
     date_joined = models.DateTimeField(default=timezone.now, db_index=False, verbose_name=_("Date joined"))
     last_online = models.DateTimeField(default=None, blank=True, null=True, db_index=True, verbose_name=pgettext_lazy('user', "Last online"))

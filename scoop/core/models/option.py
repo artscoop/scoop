@@ -42,7 +42,7 @@ class Option(TranslatableModel, UUID64Model, PicturableModel if apps.is_installe
 
     # Champs
     group = models.ForeignKey('core.OptionGroup', null=False, blank=False, related_name='options', verbose_name=_("Group"))
-    code = models.SmallIntegerField(null=False, blank=False, choices=CODES, db_index=True, verbose_name=_("Code"))
+    code = models.SmallIntegerField(null=False, blank=False, choices=CODES, db_index=False, verbose_name=_("Code"))
     active = models.BooleanField(default=True, verbose_name=pgettext_lazy('option', "Active"))
     parent = models.ForeignKey('core.Option', null=True, blank=True, related_name='children', on_delete=models.SET_NULL, verbose_name=_("Parent"))
     objects = OptionManager()

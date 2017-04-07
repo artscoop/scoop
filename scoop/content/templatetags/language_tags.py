@@ -17,6 +17,7 @@ COUNTRY_IN = {
 }
 
 
+@register.tag
 class Language(Tag):
     """ Tag remplaçant les erreurs de langage, ex. « de le » devient « du » """
     name = 'language'
@@ -33,9 +34,6 @@ class Language(Tag):
             for key in BASIC_CHANGES[language]:
                 output = re.sub(key, BASIC_CHANGES[language][key], output, flags=re.I)
         return output
-
-
-register.tag(Language)
 
 
 @register.simple_tag(takes_context=True)

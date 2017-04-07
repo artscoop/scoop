@@ -136,10 +136,10 @@ def datetime_round_year(value=None):
 
 
 def random_date(*date_range):
-    """ Renvoyer une date au hasard entre deux dates """
+    """ Renvoyer une date au hasard entre n dates """
     if type(date_range) in [list, tuple]:
-        start = date_range[0]
-        end = date_range[1]
+        start = min(date_range)
+        end = max(date_range)
         delta = end - start
         int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
         random_second = randrange(int_delta)

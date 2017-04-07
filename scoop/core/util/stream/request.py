@@ -126,6 +126,7 @@ class RequestMixin(object):
         :type self: django.http.HttpRequest |
         :type full: str | MultiValueDict
         :type selected: str | MultiValueDict
+        :rtype: dict
         """
         full_set = set([i for i in self.POST.getlist(full)])
         selected_set = set([i for i in self.POST.getlist(selected)])
@@ -174,8 +175,10 @@ SIMPLE_META = {'REMOTE_ADDR': '127.0.0.1', 'SERVER_NAME': '127.0.0.1', 'SERVER_P
 @lru_cache()
 def default_request():
     """ Créer une requête par défaut """
+    from django.contrib.auth.models import AnonymousUser
     request = HttpRequest()
     request.META.update(SIMPLE_META)
+    request.user = AnonymousUser()
     return request
 
 

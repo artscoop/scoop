@@ -19,7 +19,7 @@ def patch_methods(cls, *bases):
 
     :param cls: Classe à patcher
     :param bases: Classes depuis lesquelles copier les fonctions + Méthodes
-    :type bases: callable | class
+    :type bases: list<callable> | lisr<class>
     """
     for base in bases:
         if isclass(base):
@@ -146,7 +146,15 @@ def search_query(expression, fields, queryset=None):
 
 
 def shuffle_model(self, fields=None, m2m_max=4):
-    """ Randomizer les données du modèle, notamment les clés étrangères et clés M2M """
+    """
+    Randomizer les données du modèle, notamment les clés étrangères et clés M2M
+    
+    :param self:
+    :param fields: noms des champs FK/M2M à randomizer
+    :type fields: list<str>
+    :param m2m_max: nombre maximum de liens M2M à créer sur un champ M2M
+    :type m2m_max: int
+    """
     fields = fields or [self._meta.get_field_by_name(field) for field in set(self._meta.get_all_field_names())]
     for field in fields:
         field = field[0]

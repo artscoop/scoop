@@ -52,6 +52,7 @@ class PictureAdminForm(forms.ModelForm):
         super(PictureAdminForm, self).__init__(*args, **kwargs)
         try:
             self.fields['weight'].required = False
+            self.fields['author'].required = False
             self.fields['image'].required = False
             self.fields['image'].widget = PictureInlineWidget()
             self.fields['image'].help_text = _("You can also enter an URL as a Description.")

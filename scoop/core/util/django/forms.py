@@ -145,13 +145,15 @@ def has_post(request, action=None):
     Renvoyer si l'objet HttpRequest contient des données POST
 
     :param request: requête
-    :param action: nom de la donnée POST à chercher, ou None s'il faut uniquement
-        vérifier que la méthode actuelle est POST
+    :param action: nom de la donnée POST à chercher, ou liste de noms POST.
+    Si action est une liste, vérifier qu'au moins une donnée est présente.
+    Si action est None ou vide, vérifier uniquement que method == POST
     :rtype: bool
     """
     posted = (request.method == 'POST')
-    if posted and action is not None:
-        return posted and (action in request.POST)
+    action = make_iterable(action)
+    if posted and action:
+        return posted and any(name in request.POST for name in action)
     return posted
 
 

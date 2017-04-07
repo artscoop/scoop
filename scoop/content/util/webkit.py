@@ -10,11 +10,14 @@ try:
 except ImportError:
     import PyQt5.QtCore as QtCore
     import PyQt5.QtGui as QtGui
-    import PyQt5.QtWebKitWidgets as QtWebKit
+    try:
+        from PyQt5.QtWebKitWidgets import QWebView as WebView
+    except ImportError:
+        from PyQt5.QtWebEngineWidgets import QWebEngineView as WebView
     from PyQt5.QtWidgets import QApplication
 
 
-class Screenshot(QtWebKit.QWebView):
+class Screenshot(WebView):
     """
     Capture de pages web
 
@@ -27,7 +30,7 @@ class Screenshot(QtWebKit.QWebView):
     def __init__(self):
         """ Initialiser le captureur d'URL """
         self.app = QApplication(sys.argv)
-        QtWebKit.QWebView.__init__(self)
+        WebView.__init__(self)
         self._loaded = False
         self.loadFinished.connect(self._loadFinished)
 

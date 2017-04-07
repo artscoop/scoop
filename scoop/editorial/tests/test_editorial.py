@@ -2,6 +2,7 @@
 
 from django.http.response import HttpResponse
 from django.test import TestCase
+
 from scoop.core.util.stream.request import default_request
 from scoop.editorial.models.configuration import Configuration
 from scoop.editorial.models.excerpt import Excerpt
@@ -59,3 +60,19 @@ class EditorialTest(TestCase):
         self.assertTrue(configuration.move_to('title'), "the template should have been successfully moved to the Title position")
         self.assertFalse(configuration.move_to('epitome'), "the template should have not been moved at all")
         self.assertTrue(configuration.move_to('content'), "the template should have been successfully moved to the Content position")
+
+    def test_oneoff_creation(self):
+        """ Tester la méthode de création de page via le manager """
+        page = Page.objects.create_page({'name': 'p2', 'title': 'Page One', 'path': 'edito/one', 'template': 'layout/content.html'},
+                                        {'excerpt': {'template': 'editorial/display/excerpt/excerpt-default.html', 'lang': 'fr',
+                                                     'text': 'Je suis un extrait manuel',
+                                                     'name': 'excerpt1', 'title': 'Titre de extrait'}, 'position': 'content'})
+
+        # Rendu
+        request = default_request()
+        output = HttpResponse(page.render(request))
+
+        self.assertIsInstance(output, HttpResponse, "At least the output should be an HTTPResponse")
+        self.assertContains(output, '<body>')
+        self.assertContains(output, '</body>')
+        self.assertContains(output, 'Je suis un extrait')

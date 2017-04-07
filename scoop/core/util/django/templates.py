@@ -78,6 +78,7 @@ def render_to(template=None, content_type=None, headers=None, status_code=200, s
     """
 
     def renderer(function):
+        """ Décorateur """
         @wraps(function)
         def wrapper(request, *args, **kwargs):
             output = function(request, *args, **kwargs)
@@ -100,7 +101,7 @@ def do_render(request, template=None, data=None, content_type=None, headers=None
     les performances de rendu du template, vu l'absence d'appel aux context_processors
     (qui peuvent être inutiles avec certains tmeplates)
 
-    :param data: contexte supplémentaire
+    :param data: contexte de rendu de la vue.
     :param request: objet HTTPRequest
     :param template: nom du template à rendre
     :param content_type: type MIME de la sortie
@@ -108,6 +109,7 @@ def do_render(request, template=None, data=None, content_type=None, headers=None
     :param status_code: code de retour HTTP
     :param string: indique si le rendu se fait dans une chaîne plutôt que HTTPResponse
     :param use_request: use a request context with processors data added
+    :type data: dict | object
     :type template: str | list | tuple
     :type use_request: bool
     """

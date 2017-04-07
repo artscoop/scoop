@@ -52,8 +52,8 @@ class CreationLicenseWidget(forms.MultiWidget):
     @staticmethod
     def get_choices():
         """ Renvoyer les choix de licences disponibles """
-        cc_choices = [[0, pgettext_lazy('license', "None")], [_("Creative Commons"), CreationLicenseWidget.CREATIVE_COMMONS.items()],
-                      [_("Copyright"), CreationLicenseWidget.COPYRIGHTED.items()]]
+        cc_choices = [[0, pgettext_lazy('license', "None")], [_("Creative Commons"), list(CreationLicenseWidget.CREATIVE_COMMONS.items())],
+                      [_("Copyright"), list(CreationLicenseWidget.COPYRIGHTED.items())]]
         return cc_choices
 
     def decompress(self, value):
