@@ -7,7 +7,6 @@ from os.path import join
 
 from django.contrib import messages
 from django.db.models.base import Model
-from django.forms.forms import Form
 from django.forms.models import ModelForm
 from django.http.request import QueryDict
 from django.http.response import HttpResponse
@@ -15,15 +14,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
 from scoop.core.templatetags.text_tags import humanize_join
 # Choix Oui/Non et Tout
-from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable
+from scoop.core.util.data.typeutil import is_multi_dimensional, make_iterable, is_iterable
 
 CHOICES_NULLBOOLEAN = (('', _("All")), (False, _("No")), (True, _("Yes")))
 
 
-class ModelFormUtil:
+class ModelFormUtil(object):
     """
     Mise à jour d'un objet de type Model avec certains champs d'un ModelForm
+    
     Monkey-patching done in scoop.core.__init__
+    Le monkey patch se fait sur la classe django.db.models.Model
 
     - instance : objet dérivé de models.Model
     - form : objet de type forms.ModelForm dont la classe ciblée est celle de instance
@@ -52,6 +53,7 @@ class ModelFormUtil:
     def update_from_form(self, form_, fieldnames=None, save=True, **kwargs):
         """
         Mettre à jour les champs de l'objet selon l'état d'un formulaire
+        
         - La validation ne se fait que sur les champs sélectionnés et valides
 
         :param form_: formulaire
@@ -128,10 +130,9 @@ def handle_upload(request):
         file_mask = os.O_APPEND | os.O_WRONLY | os.O_CREAT if int(request.POST.get('chunk', 0)) > 0 else os.O_RDWR | os.O_CREAT | os.O_TRUNC
         file_path = join(tempfile.gettempdir(), upload_name)  # Chemin dans le répertoire temporaire de l'OS
         # Ouvrir le fichier et écrire les morceaux
-        fd = os.open(file_path, file_mask)
-        for chunk in upload_file.chunks():
-            os.write(fd, chunk)
-        os.close(fd)
+        with os.open(file_path, file_mask) as fd:
+            for chunk in upload_file.chunks():
+                os.write(fd, chunk)
         # Renvoyer le nom du fichier si le dernier chunk a été écrit
         # Ou renvoyer None si la vue appelante ne doit pas effectuer d'action
         if int(request.POST.get('chunk', 0)) + 1 == int(request.POST.get('chunks', 1)):
@@ -186,17 +187,23 @@ def form(request, config, initial=None):
     Créer un formulaire initialisé selon l'état de la requête.
 
     Si request contient des données POST, créer le formulaire avec ces données.
-    Ex.:
+    Exemple :
     >> a, b, c = form(request, ((A, None), (B, {'instance': y}), (C, {'instance': z})), initial=None)
-    >> a = form(request, {A: {'instance': x}})
+    >> [a] = form(request, {A: {'instance': x}})
+    
     :param request: requête HTTP
     :param config: Configuration des formulaires
     :type config: Form or list[Form] or collections.OrderedDict or tuple[tuple] or dict(len=1) or list[list]
     :param initial: Valeurs des champs par défaut en l'absence de POST
+    :returns: une liste de formulaires ou None
+    :rtype: list
     """
     forms = list()
-    config = make_iterable(config, list) if isinstance(config, (ModelForm, Form)) else config
-    config = OrderedDict(((item, None) for item in config) if not is_multi_dimensional(config) else config)
+    config = make_iterable(config, list)
+    if is_iterable(config) and not is_multi_dimensional(config):
+        config = OrderedDict(((item, None) for item in config))
+    else:
+        config = OrderedDict(config)
     for form_class in config.keys():
         args, kwargs = list(), dict()
         # Réunir les arguments d'initialisation du formulaire
@@ -215,7 +222,7 @@ def form(request, config, initial=None):
         temp_form.request = request
         forms.append(temp_form)
     # Renvoyer les formulaires
-    return forms if len(forms) > 1 else forms[0] if forms else None
+    return forms if forms else None
 
 
 def are_valid(forms):
