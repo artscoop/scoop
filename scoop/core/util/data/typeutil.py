@@ -2,6 +2,7 @@
 import hashlib
 import math
 
+import colorsys
 import webcolors
 # Constantes
 from django.db.models.base import Model
@@ -183,6 +184,40 @@ def closest_color(requested_color):
     return min_colors[min(min_colors.keys())]
 
 
+def float_rgb_to_html(red, green, blue):
+    """
+    Convertir un tuple RGB en float [0..1] vers une chaîne HTML
+    :param red: quantité de rouge
+    :param green:  quantité de vert
+    :param blue: quantité de bleu
+    :type red: float
+    :type green: float
+    :type blue: float
+    :return: Une chaîne HTML de couleur, ex. FFFFFF
+    """
+    red = round(red * 255.0) & 255
+    green = round(green * 255.0) & 255
+    blue = round(blue * 255.0) & 255
+    html_format = "{r:02x}{g:02x}{b:02x}".format(r=red, g=green, b=blue)
+    return html_format
+
+
+def float_hsv_to_html(hue, saturation, value):
+    """
+    Convertir un tuple HSV en float [0..1] vers une chaîne HTML
+    
+    :param hue: valeur de teinte, [0..1]
+    :param saturation: valeur de saturation, [0..1]
+    :param value: valeur, [0..1]
+    :type hue: float
+    :type saturation: float
+    :type value: float
+    :return: une chaîne HTML de couleur, ex. FFFFFF
+    """
+    red, green, blue = colorsys.hsv_to_rgb(hue, saturation, value)
+    return float_rgb_to_html(red, green, blue)
+
+
 def get_color_name(requested_color):
     """ Renvoyer le nom de la couleur CSS la plus proche """
     try:
@@ -206,3 +241,8 @@ def is_multi_dimensional(value):
     if isinstance(value, (list, tuple)) and value:
         return isinstance(value[0], (list, tuple))
     return False
+
+
+def is_iterable(value):
+    """ Renvoyer si un objet est itérable """
+    return hasattr(value, '__iter__')
