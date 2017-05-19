@@ -31,11 +31,14 @@ class MessageManager(SingleDeleteManager):
         return super(MessageManager, self).get_queryset()
 
     # Getter
-    def for_user(self, user, sorting=None):
-        """ Renvoyer les messages à l'attention de l'utilisateur """
-        messages = self.select_related('author', 'thread', 'ip').filter(thread__participant__user=user).exclude(author=user)
-        messages = messages.order_by(sorting) if isinstance(sorting, str) else messages
-        return messages
+    def visible(self, request):
+        """
+        Renvoyer les messages visibles pour l'utilisateur connecté
+        
+        :param request: requête HTTP 
+        :return: QuerySet
+        """
+        return self if request and request.user.is_staff else self.filter(deleted=False)
 
     def last_messages(self, minutes=30, **kwargs):
         """ Renvoyer les messages des n dernières minutes """
@@ -126,6 +129,15 @@ class Message(IPPointableModel, DatetimeModel, PicturableModel, DataModel, Class
         """ Renvoyer le nombre de messages similaires de tous les utilisateurs """
         messages = Message.last_messages(minutes=minutes).order_by('-id')[0:limit]
         return self._get_similar_messages(messages, ratio=ratio)
+
+    def is_visible(self, request):
+        """
+        Renvoyer si le message est visible pour l'utilisateur connecté
+        
+        :param request: 
+        :return: True si l'utilisateur en cours peut voir le message, False sinon
+        """
+        return request.user.is_staff or not self.deleted
 
     # Setter
     def remove(self):

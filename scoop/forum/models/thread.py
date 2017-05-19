@@ -19,13 +19,35 @@ class ThreadQuerySet(SingleDeleteQuerySet):
     """ Queryset des fils de discussion publics """
 
     # Getter
-    def visible(self):
-        """ Renvoyer les fils visibles """
-        return self.filter(visible=True)
+    def by_request(self, request):
+        """
+        Renvoyer les messages visibles pour l'utilisateur connecté
+
+        :param request: requête HTTP 
+        :return: QuerySet
+        """
+        result = self if request and request.user.is_staff else self.filter(visible=True, deleted=False)
+        result = result.order_by('-id')
+        return result
 
     def hidden(self):
         """ Renvoyer les fils invisibles """
         return self.filter(visible=False)
+
+    def get_by_uuid(self, uuid, exc=None):
+        """
+        Renvoyer le fil de discussion correspondant à un UUID
+        :param uuid: UUID du fil à retrouver
+        :param exc: exception à lever si introuvable, ou None pour renvoyer None
+        :return: Un fil de discussion, ou None
+        :raises: <exc>
+        """
+        try:
+            return self.get(uuid=uuid)
+        except Thread.DoesNotExist:
+            if exc is not None:
+                raise exc
+            return None
 
     # Actions
     def new(self, author, subject, body, request=None, closed=False):
@@ -70,23 +92,28 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
 
     # Getter
     @addattr(short_description=_("All messages"))
-    def get_messages(self, ghost=False, reverse=False):
-        """ Renvoyer les messages du fil """
-        criteria = {'deleted': False} if not ghost else {}
-        messages = self.messages.filter(**criteria).order_by('id' if not reverse else '-id')
+    def get_messages(self, request=None, reverse=False):
+        """
+        Renvoyer les messages du fil
+        
+        :param request: facultatif. Permet de définir quels messages sont visibles
+        :param reverse: inverser le sens de parcours des messages
+        :type reverse: bool
+        """
+        messages = self.messages.visible(request).order_by('id' if not reverse else '-id')
         return messages
 
-    def get_latest_message(self, ghost=False):
+    def get_latest_message(self):
         """ Renvoyer le dernier messages du fil """
-        messages = self.get_messages(ghost=ghost, reverse=True)
+        messages = self.get_messages(reverse=True)
         if messages.exists():
             return messages.first()
         return None
 
     @addattr(admin_order_field='counter', short_description=_("Messages"))
-    def get_message_count(self, ghost=False, use_cache=False):
+    def get_message_count(self, use_cache=False):
         """ Renvoyer le nombre de messages dans le fil """
-        return self.counter if use_cache else self.get_messages(ghost=ghost).count()
+        return self.counter if use_cache else self.get_messages().count()
 
     def get_participants(self, only_active=True):
         """ Renvoyer les participants à un fil de discussion """
@@ -105,7 +132,7 @@ class Thread(DatetimeModel, UUID64Model, LabelledModel, DataModel, PicturableMod
     # Setter
     def update_message_count(self, save=True):
         """ Mettre à jour le nombre de messages du fil """
-        self.counter = self.get_message_count(ghost=False, use_cache=False)
+        self.counter = self.get_message_count(use_cache=False)
         if save is True:
             self.save(update_fields=['counter'])
         return self.counter

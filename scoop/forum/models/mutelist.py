@@ -55,7 +55,9 @@ class Mutelist(DataModel):
     # Getter
     def is_muted(self, user):
         """ Renvoyer si un utilisateur est ignoré """
-        return user.id in (self.get_data('muted') or set())
+        if user is not None:
+            return user.id in (self.get_data('muted') or set())
+        return False
 
     def get_muted_users(self):
         """ Renvoyer les utilisateurs ignorés """
