@@ -8,13 +8,14 @@ import subprocess
 import time
 from io import BufferedReader
 from mimetypes import guess_extension
-from os.path import join
+from os.path import join, relpath
 from zipfile import ZipFile
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import default_storage
 from django.db.models.manager import Manager
+from django.db.models.signals import pre_delete, post_delete
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from magic import Magic
@@ -96,7 +97,7 @@ def open_zip_file(path, filename):
         for n in names:
             if n.lower().startswith("{}.".format(filename.lower())):
                 name = n
-                content = BufferedReader(archive.open(name, 'rU'), buffer_size=16777216 * 2)
+                content = BufferedReader(archive.open(name, 'r'), buffer_size=16777216 * 2)
                 content = io.TextIOWrapper(content, encoding='utf-8', newline='')
                 return content
     raise ImproperlyConfigured(_("A file named %(file)s was not found in %(path)s") % {'file': filename, 'path': path})
@@ -122,6 +123,18 @@ def clean_orphans(output_log=True, delete=False):
         model, field_name = field[0], field[1]
         files = model.all_objects.exclude(**{field_name: ''}).distinct().values_list(field_name, flat=True)
         files = [join(settings.MEDIA_ROOT, item) for item in files if item]
+
+        # Supprimer les entrées liées à un fichier non existant
+        for name in files:
+            if not default_storage.exists(name):
+                relative_name = relpath(name, settings.MEDIA_ROOT)
+                with default_storage.open(name, 'w'):
+                    pass  # Créer le fichier pour éviter une erreur lors de la suppression de l'instance
+                queryset = model.all_objects.filter(**{field_name: relative_name})
+                queryset.delete()
+                default_storage.delete(name)
+                deleted += 1
+
         db_files += files
     # Parcourir tous les fichiers
     for directory in dirs:
@@ -136,7 +149,7 @@ def clean_orphans(output_log=True, delete=False):
     if delete is True:
         for item in deletable:
             try:
-                os.remove(item)
+                default_storage.remove(item)
             except (OSError, IOError):
                 deleted -= 1
     # Sortie de journalisation
