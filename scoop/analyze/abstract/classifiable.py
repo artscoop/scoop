@@ -9,15 +9,15 @@ class ClassifiableModel(models.Model):
     """
     Mixin de modèle dont le contenu peut être classifié
 
-    classifications : dictionnaire dont les clés sont des noms de fichier, et les valeurs
+    Attributs à définir dans la classe enfant :
+    - classifications : dictionnaire dont les clés sont des noms de fichier, et les valeurs
     des tuples contenant les catégories possibles pour le type de classification.
     Les noms de fichiers dans classifications sont exprimés sous la forme <name>, et
     le fichier correspondant dans le système de fichiers se trouve dans CORPUS_PATH
     (par défaut 'isolated/database/classifier/corpus'), et porte l'extension .csv.zip
-
-    corpora : dictionnaire des corpus, dont les clés sont les mêmes que pour classifications.
-    Les valeurs sont des corpus. Un corpus existe sous la forme d'un dictionnaire, dont les
-    clés sont des hash de document, et dont les valeurs sont des tuples (document, catégorie)
+    - corpora : dictionnaire des corpus, dont les clés sont les mêmes que pour classifications.
+    Les valeurs sont des corpus. Un corpus hérite de Corpus/FileCorpus, voir dans analyze.util,
+    et peut être géré simplement avec des méthodes d'entraînement, d'oubli, etc.
     """
 
     __metaclass__ = ABCMeta
