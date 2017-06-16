@@ -16,7 +16,7 @@ from scoop.core.abstract.user.authored import AuthoredModel
 from scoop.core.util.model.model import SingleDeleteQuerySetMixin
 
 
-class GroupQuerySetMixin(object):
+class GroupQuerySet(models.QuerySet, SingleDeleteQuerySetMixin):
     # Mixin de Queryset des groupes
 
     # Getter
@@ -51,21 +51,12 @@ class GroupQuerySetMixin(object):
         return self.filter(users=user)
 
 
-class GroupQuerySet(models.QuerySet, GroupQuerySetMixin, SingleDeleteQuerySetMixin):
-    """ Queryset des groupes """
-    pass
-
-
-class GroupManager(Manager.from_queryset(GroupQuerySet), models.Manager, GroupQuerySetMixin):
-    """ Manager des groupes d'intérêt """
-    pass
-
-
 class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, DataModel, UUID64Model, InviteTargetModel):
     """ Groupe d'intérêt """
 
     # Constantes
     MEMBERSHIPS = [(0, _("Anyone can join")), (1, _("Administrators must confirm first")), (2, _("Invites only"))]
+    ANYONE, CONFIRMATION, INVITE_ONLY = 0, 1, 2
     DATA_KEYS = ['privacy']
 
     # Champs
@@ -80,7 +71,7 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, DataModel, UU
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='moderated_social_groups', verbose_name=_("Moderators"))
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='social_groups', verbose_name=_("Members"))
     applications = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='social_groups_applied', verbose_name=_("Applications"))
-    objects = GroupManager()
+    objects = GroupQuerySet.as_manager()
 
     # Getter
     def is_visible(self, request_or_user):
@@ -112,18 +103,21 @@ class Group(DatetimeModel, AuthoredModel, IconModel, PrivacyModel, DataModel, UU
     def join(self, user):
         """ Ajouter une demande d'adhésion (ou ajouter au groupe) """
         if user.has_perm('social.can_join_groups'):
-            if self.membership in [0]:
+            if self.membership in [Group.ANYONE]:
                 self.add_member(user)
-            elif self.membership in [1]:
+            elif self.membership in [Group.CONFIRMATION]:
                 self.applications.add(user)
 
     def invite(self, user):
-        """ Inviter un utilisateur au groupe """
-        from scoop.user.social.models import Invite
-        # Ajouter
-        Invite.add(self, user)
+        """
+        Inviter un utilisateur au groupe
 
-    def validate(self, user):
+        :rtype: bool
+        """
+        from scoop.user.social.models import Invite
+        return Invite.objects.add(self, user)
+
+    def accept(self, user):
         """ Valider la candidature d'un utilisateur """
         applications = self.applications.filter(id=user.id)
         if applications.exists():
