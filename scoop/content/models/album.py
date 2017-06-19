@@ -12,13 +12,17 @@ from scoop.core.abstract.core.uuid import UUID64Model
 from scoop.core.abstract.core.weight import WeightedModel
 from scoop.core.abstract.social.access import PrivacyModel
 from scoop.core.util.data.typeutil import make_iterable
-from scoop.core.util.model.model import SingleDeleteManager
+from scoop.core.util.model.model import SingleDeleteManager, SingleDeleteQuerySet
 
 
-class AlbumManager(SingleDeleteManager):
+class AlbumQuerySet(SingleDeleteQuerySet):
     """ Manager des albums d'images """
 
     # Getter
+    def visible(self):
+        """ Renvoyer les albums visibles """
+        return self.filter(visible=True)
+
     def for_user(self, user):
         """
         Renvoyer les albums d'un utilisateur
@@ -68,7 +72,7 @@ class Album(NullableGenericModel, DatetimeModel, PicturedBaseModel, PrivacyModel
     visible = models.BooleanField(default=True, verbose_name=pgettext_lazy('album', "Visible"))
     pictured = models.BooleanField(default=False, db_index=True, verbose_name=_("\U0001f58c"))
     pictures = models.ManyToManyField('content.Picture', through='content.albumpicture', blank=True, verbose_name=_("Pictures"))
-    objects = AlbumManager()
+    objects = AlbumQuerySet.as_manager()
 
     # Getter
     def get_default_picture(self):
@@ -88,6 +92,16 @@ class Album(NullableGenericModel, DatetimeModel, PicturedBaseModel, PrivacyModel
     def get_children(self):
         """ Renvoyer les sous-albums directs """
         return Album.objects.filter(parent=self)
+
+    def is_visible(self, user=None):
+        """
+        Renvoyer la visibilité du contenu pour l'utilisateur en cours
+        
+        :param user: utilisateur
+        :rtype: bool 
+        """
+        access = self.is_accessible(user) if user else True
+        return self.visible and access
 
     # Setter
     def add(self, pictures):
