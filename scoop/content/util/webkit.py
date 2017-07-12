@@ -3,17 +3,17 @@ import sys
 import time
 
 try:
+    import PyQt4.QtWebKit as QtWebKit
     import PyQt4.QtCore as QtCore
     import PyQt4.QtGui as QtGui
-    import PyQt4.QtWebKit as QtWebKit
     from PyQt4.QtGui import QApplication
-except ImportError:
-    import PyQt5.QtCore as QtCore
-    import PyQt5.QtGui as QtGui
+except (ImportError, RuntimeError):
     try:
         from PyQt5.QtWebKitWidgets import QWebView as WebView
-    except ImportError:
+    except (ImportError, RuntimeError):
         from PyQt5.QtWebEngineWidgets import QWebEngineView as WebView
+    import PyQt5.QtCore as QtCore
+    import PyQt5.QtGui as QtGui
     from PyQt5.QtWidgets import QApplication
 
 
